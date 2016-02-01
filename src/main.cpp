@@ -86,6 +86,12 @@ int main(int argc, char** argv) {
 			
 			if (parser.isSet(outputOpt)) {
 				QString savePath = parser.value(outputOpt);
+
+				// TODO: check why outputOpt value is empty
+				if (savePath.isEmpty())
+					savePath = "C:/temp/test-bw.png";
+				qDebug() << "saving to" << savePath;
+
 				img.save(savePath);
 			}
 
