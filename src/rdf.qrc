@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/rdf">
+	<file>../resources/img/rdf.svg</file>
+	</qresource>
+</RCC>
