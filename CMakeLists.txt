@@ -17,8 +17,6 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.1)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
-set(BINARY_NAME ${CMAKE_PROJECT_NAME})
-
 # include macros needed
 include("cmake/Utils.cmake")
 
