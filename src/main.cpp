@@ -35,10 +35,13 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QImage>
 #pragma warning(pop)
 
 #include "Utils.h"
 #include "Settings.h"
+#include "Image.h"
+#include "Binarization.h"
 
 int main(int argc, char** argv) {
 
@@ -58,14 +61,42 @@ int main(int argc, char** argv) {
 	parser.addVersionOption();
 	parser.addPositionalArgument("image", QObject::tr("An input image."));
 
-	//QCommandLineOption privateOpt(QStringList() << "p" << "private", QObject::tr("Start in private mode."));
-	//parser.addOption(privateOpt);
+	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."));
+	parser.addOption(outputOpt);
 
 	parser.process(app);
 	// CMD parser --------------------------------------------------------------------
 
+	// load settings
 	rdf::Config::instance().load();
 
+	if (!parser.positionalArguments().empty()) {
+
+		QString imgPath = parser.positionalArguments()[0].trimmed();
+		
+		QImage img;
+		img.load(imgPath);
+
+		if (!img.isNull()) {
+		
+			qDebug() << imgPath << "loaded";
+			rdf::SimpleBinarization binModule(rdf::Image::instance().qImage2Mat(img));
+			binModule.compute();
+			img = rdf::Image::instance().mat2QImage(binModule.binaryImage());
+			
+			if (parser.isSet(outputOpt)) {
+				QString savePath = parser.value(outputOpt);
+				img.save(savePath);
+			}
+
+		}
+		else {
+			qDebug() << "could not load: " << imgPath;
+		}
+
+		
+	}
 
 
+	rdf::Config::instance().save();
 }

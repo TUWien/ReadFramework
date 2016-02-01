@@ -30,26 +30,41 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "DkBinarization.h"
+#pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QSharedPointer>
+#include <QImage>
 #pragma warning(pop)
+
+#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
+
+#include "opencv2/core/core.hpp"
+
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 
 namespace rdf {
 
-// SimpleBinarization --------------------------------------------------------------------
-SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
-	mSrcImg = srcImg;
-}
 
-cv::Mat SimpleBinarization::binaryImage() const {
-	return mBwImg;
-}
+// read defines
+class DllCoreExport Image {
 
-void SimpleBinarization::compute() {
+public:
+	static Image& instance();
 
-	mBwImg = mSrcImg > mThresh;
-}
+	static cv::Mat qImage2Mat(const QImage& img);
+	static QImage mat2QImage(cv::Mat img);
 
-}
+private:
+	Image();
+};
+
+};
