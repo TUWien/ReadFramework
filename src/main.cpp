@@ -79,10 +79,11 @@ int main(int argc, char** argv) {
 
 		if (!img.isNull()) {
 		
+			rdf::Timer dt;
 			qDebug() << imgPath << "loaded";
 			rdf::SimpleBinarization binModule(rdf::Image::instance().qImage2Mat(img));
 			binModule.compute();
-			qDebug() << binModule;
+			qDebug() << binModule << "in" << dt;
 			img = rdf::Image::instance().mat2QImage(binModule.binaryImage());
 			
 			if (parser.isSet(outputOpt)) {

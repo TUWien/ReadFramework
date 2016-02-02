@@ -35,6 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
 #include <QSettings>
+#include <QTime>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
@@ -64,6 +65,34 @@ public:
 private:
 	Utils();
 	Utils(const Utils&);
+};
+
+/**
+* A small class which measures the time.
+* This class is designed to measure the time of a method, especially
+* intervals and the total time can be measured.
+**/
+class DllCoreExport Timer {
+
+public:
+
+	/**
+	* Initializes the class and stops the clock.
+	**/
+	Timer();
+
+	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Timer& t);
+	friend DllCoreExport QDebug operator<< (QDebug d, const Timer &t);
+
+	QString getTotal() const;
+	virtual QDataStream& put(QDataStream& s) const;
+	QString stringifyTime(int ct) const;
+	int elapsed() const;
+	void start();
+
+protected:
+
+	QTime mTimer;
 };
 
 };

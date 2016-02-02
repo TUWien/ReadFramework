@@ -102,7 +102,7 @@ bool SimpleBinarization::compute() {
 QString SimpleBinarization::toString() const {
 	
 	QString msg = debugName();
-	msg += "thresh: " + QString::number(mThresh);
+	msg += " thresh: " + QString::number(mThresh);
 
 	return msg;
 }
