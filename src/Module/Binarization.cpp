@@ -35,6 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QSettings>
+#include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
 namespace rdf {
@@ -106,5 +107,89 @@ QString SimpleBinarization::toString() const {
 
 	return msg;
 }
+
+// BaseBinarizationSu --------------------------------------------------------------------
+BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) {
+	mSrcImg = img;
+	mMask = mask;
+
+	mModuleName = "BaseBinarizationSu";
+	loadSettings();
+}
+
+bool BaseBinarizationSu::checkInput() const {
+
+	if (mSrcImg.depth() != CV_8U) {
+		mWarning << "illegal image depth: " << mSrcImg.depth();
+		return false;
+	}
+	if (mMask.depth() != CV_8U && mMask.channels() != 1) {
+		mWarning << "illegal image depth or channel for mask: " << mMask.depth();
+		return false;
+	}
+
+	return true;
+}
+
+bool BaseBinarizationSu::isEmpty() const {
+	return mSrcImg.empty() && mMask.empty();
+}
+
+void BaseBinarizationSu::load(const QSettings& settings) {
+
+	mErodeMaskSize = settings.value("erodeMaskSize", mErodeMaskSize).toInt();
+}
+
+void BaseBinarizationSu::save(QSettings& settings) const {
+
+	settings.setValue("erodeMaskSize", mErodeMaskSize);
+}
+
+cv::Mat BaseBinarizationSu::binaryImage() const {
+	return mBwImg;
+}
+
+bool BaseBinarizationSu::compute() {
+
+	if (!checkInput())
+		return false;
+
+	compContrastImg();
+	compBinContrastImg();
+
+
+	// I guess here is a good point to save the settings
+	saveSettings();
+	mDebug << " computed...";
+	mWarning << "a warning...";
+	mInfo << "an info...";
+
+	return true;
+}
+
+void BaseBinarizationSu::compContrastImg() {
+	
+	cv::Mat tmp = cv::Mat(mSrcImg.size(), CV_32FC1);
+	cv::Mat srcGray = mSrcImg;
+	if (mSrcImg.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	
+
+
+}
+
+void BaseBinarizationSu::compBinContrastImg() {
+
+}
+
+QString BaseBinarizationSu::toString() const {
+
+	QString msg = debugName();
+	msg += "strokeW: " + QString::number(mStrokeW);
+
+	return msg;
+}
+
+
+
 
 }
