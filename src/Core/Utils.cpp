@@ -59,7 +59,16 @@ Utils& Utils::instance() {
 	return *inst; 
 }
 
-void Utils::registerVersion() {
+void Utils::initFramework() const {
+
+	// format console
+	QString p = "%{if-info}[INFO] %{endif}%{if-warning}[WARNING] %{endif}%{if-critical}[CRITICAL] %{endif}%{if-fatal}[ERROR] %{endif}%{message}";
+	qSetMessagePattern(p);
+
+	registerVersion();
+}
+
+void Utils::registerVersion() const {
 
 #ifdef WIN32
 	// this function is based on code from:

@@ -30,81 +30,68 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "Binarization.h"
+#include "BaseModule.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QDebug>
 #include <QSettings>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
 
-// SimpleBinarization --------------------------------------------------------------------
-SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
-	mSrcImg = srcImg;
-	
-	mModuleName = "SimpleBinarization";
-	loadSettings();
+// Module --------------------------------------------------------------------
+Module::Module() {
+	mModuleName = "Generic Module";
 }
 
-bool SimpleBinarization::checkInput() const {
-	
-	if (mSrcImg.depth() != CV_8U) {
-		mWarning << "illegal image depth: " << mSrcImg.depth();
-		return false;
-	}
-
-	return true;
+QString Module::name() const {
+	return mModuleName;
 }
 
-bool SimpleBinarization::isEmpty() const {
-	return mSrcImg.empty();
+QString Module::debugName() const {
+	return "[" + mModuleName + "]";
 }
 
-void SimpleBinarization::load(const QSettings& settings) {
-	
-	mThresh = settings.value("thresh", mThresh).toInt();
+QString Module::toString() const {
+	return debugName();
 }
 
-void SimpleBinarization::save(QSettings& settings) const {
+QDataStream& operator<<(QDataStream& s, const Module& m) {
 
-	settings.setValue("thresh", mThresh);
+	// this makes the operator<< virtual (stroustrup)
+	s << m.toString();
+	return s;
 }
 
-cv::Mat SimpleBinarization::binaryImage() const {
-	return mBwImg;
+QDebug operator<<(QDebug d, const Module& m) {
+
+	d << qPrintable(m.toString());
+	return d;
 }
 
-//void SimpleBinarization::setThresh(int thresh) {
-//	mThresh = thresh;
-//}
-//
-//int SimpleBinarization::thresh() const {
-//	return mThresh;
-//}
+void Module::loadSettings() {
 
-bool SimpleBinarization::compute() {
-
-	if (!checkInput())
-		return false;
-
-	mBwImg = mSrcImg > mThresh;
-
-	// I guess here is a good point to save the settings
-	saveSettings();
-	mDebug << " computed...";
-	mWarning << "a warning...";
-	mInfo << "an info...";
-
-	return true;
+	QSettings& settings = Config::instance().settings();
+	settings.beginGroup(mModuleName);
+	load(settings);
+	settings.endGroup();
 }
 
-QString SimpleBinarization::toString() const {
-	
-	QString msg = debugName();
-	msg += "thresh: " + QString::number(mThresh);
+void Module::saveSettings() {
 
-	return msg;
+	QSettings& settings = Config::instance().settings();
+	settings.beginGroup(mModuleName);
+	save(settings);
+	settings.endGroup();
+}
+
+void Module::load(const QSettings&) {
+	// dummy
+}
+
+void Module::save(QSettings&) const {
+	// dummy
 }
 
 }

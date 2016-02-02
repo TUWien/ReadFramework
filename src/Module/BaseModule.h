@@ -33,37 +33,84 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QSharedPointer>
-#include <QSettings>
+#include <QObject>
 #pragma warning(pop)
+
+#include "opencv2/core/core.hpp"
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
 #else
-#define DllCoreExport Q_DECL_IMPORT
+#define DllModuleExport Q_DECL_IMPORT
 #endif
 #endif
 
 // Qt defines
 class QSettings;
 
-namespace rdf {	
+namespace rdf {
 
-// read defines
-class DllCoreExport Utils {
+#define mDebug		qDebug().noquote() << debugName()
+#define mWarning	qWarning().noquote() << debugName()
+#define mInfo		qInfo().noquote() << debugName()
 
+/**
+* This is the base class for all modules.
+* It provides all functions which are implemented
+* by the modules.
+**/
+class DllModuleExport Module {
+	
 public:
-	static Utils& instance();
 
-	void initFramework() const;
-	void registerVersion() const;
+	/**
+	* Default constructor.
+	**/
+	Module();
 
-private:
-	Utils();
-	Utils(const Utils&);
+	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const Module& m);
+	friend DllModuleExport QDebug operator<< (QDebug d, const Module &m);
+
+
+	/**
+	 * Returns true if the module was initialized with the default constructor.
+	 * Note, if empty is true, nothing can be computed.
+	 **/
+	virtual bool isEmpty() const = 0;
+
+	/**
+	 * Returns the module's name.
+	 * @return the module's name.
+	 **/
+	virtual QString name() const;
+
+	/**
+	 * Converts the module's parameters and results to a string.
+	 * @return a string containing all parameters and results of the module.
+	 **/
+	virtual QString toString() const;
+
+	/**
+	 * Runs the algorithm implemented by the module.
+	 * @return true on success
+	 */
+	virtual bool compute() = 0;
+
+	void loadSettings();
+	void saveSettings();
+
+protected:
+	QString mModuleName;						/**< the module's name.**/
+
+	virtual bool checkInput() const = 0;		/**< checks if all input images are in the specified format.**/
+
+	virtual void load(const QSettings& settings);
+	virtual void save(QSettings& settings) const;
+	QString debugName() const;
+
 };
 
 };

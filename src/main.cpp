@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	QCoreApplication::setOrganizationName("TU Wien");
 	QCoreApplication::setOrganizationDomain("http://www.caa.tuwien.ac.at/cvl");
 	QCoreApplication::setApplicationName("READ Framework");
-	rdf::Utils::instance().registerVersion();
+	rdf::Utils::instance().initFramework();
 
 	QApplication app(argc, (char**)argv);
 
