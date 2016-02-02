@@ -29,11 +29,12 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 - check if your builds proceeded correctly
 
 ## Build on Ubuntu
+note that Qt 5.5 is needed, thus Ubuntu version must be >= 16.04 or backports of Qt 5.5 have to be used (see .travis.yml for an ppa repository and names packages which need to be installed)
 
 Get required packages:
 
 ``` console
-sudo apt-get install debhelper cdbs qt5-qmake libqt5-dev libopencv-dev cmake git
+sudo apt-get install debhelper cdbs qt5-qmake qt5tools-dev qttools5-dev-tools qt5-default libqt5svg5 qt5-image-formats-plugins libopencv-dev cmake git
 ```
 
 Get the READ Framework sources from github:
