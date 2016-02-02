@@ -30,6 +30,6 @@ before_script:
   - cd build
 
 script:
-  - cmake $CMAKE_ARGS ../ImageLounge/.
+  - cmake $CMAKE_ARGS ..
   - make -j8
   
