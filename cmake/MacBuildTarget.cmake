@@ -55,34 +55,25 @@ set_target_properties(${DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${DLL_MODULE_NAME}d)
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${DLL_MODULE_NAME})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
 
+# mac's bundle install
+set_target_properties(${BINARY_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/macosx/Info.plist.in")
+set(MACOSX_BUNDLE_ICON_FILE nomacs.icns)
+set(MACOSX_BUNDLE_INFO_STRING "${BINARY_NAME} ${RDF_FRAMEWORK_VERSION}")
+set(MACOSX_BUNDLE_GUI_IDENTIFIER "org.nomacs")
+set(MACOSX_BUNDLE_LONG_VERSION_STRING "${RDF_FRAMEWORK_VERSION}")
+set(MACOSX_BUNDLE_BUNDLE_NAME "${BINARY_NAME}")
+set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${RDF_FRAMEWORK_VERSION}")
+set(MACOSX_BUNDLE_BUNDLE_VERSION "${RDF_FRAMEWORK_VERSION}")
+set(MACOSX_BUNDLE_COPYRIGHT "(c) CVL")
+set_source_files_properties(${CMAKE_SOURCE_DIR}/macosx/nomacs.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-# installation
-#  binary
-install(TARGETS ${BINARY_NAME} ${DLL_MODULE_NAME} ${DLL_CORE_NAME} DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX})
-#  desktop file
-#install(FILES nomacs.desktop DESTINATION share/applications)
-#  icon
-#install(FILES src/img/nomacs.svg DESTINATION share/pixmaps)
-#  translations
-#install(FILES ${NOMACS_QM} DESTINATION share/nomacs/translations)
-#  manpage
-#install(FILES Readme/nomacs.1 DESTINATION share/man/man1)
-#  appdata
-#install(FILES nomacs.appdata.xml DESTINATION /usr/share/appdata/)
+install(TARGETS ${BINARY_NAME} ${DLL_NAME} ${DLL_LOADER_NAME} ${DLL_CORE_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-
-# "make dist" target
-string(TOLOWER ${CMAKE_PROJECT_NAME} CPACK_PACKAGE_NAME)
-set(CPACK_PACKAGE_VERSION "${RDF_FRAMEWORK_VERSION}")
-set(CPACK_SOURCE_GENERATOR "TBZ2")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-set(CPACK_IGNORE_FILES "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;refresh-copyright-and-license.pl;build;release;")
-set(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
-include(CPack)
-# simulate autotools' "make dist"
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
-
+# create a "transportable" bundle - all libs into the bundle: "make bundle" after make install
+configure_file(${CMAKE_SOURCE_DIR}/macosx/bundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake @ONLY)
+add_custom_target(bundle ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake)
 
 # generate configuration file
 set(RDF_LIBS ${RDF_CORE_LIB} ${RDF_MODULE_LIB})
