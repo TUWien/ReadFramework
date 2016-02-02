@@ -9,7 +9,7 @@ compiler:
   - clang
 
 sudo: required
-dist: xenial
+dist: trusty
 
 before_script:
   # OSX dependencies
