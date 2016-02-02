@@ -32,11 +32,14 @@
 
 #pragma once
 
+#include "BaseModule.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
-#pragma warning(pop)
 
 #include "opencv2/core/core.hpp"
+#pragma warning(pop)
+
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
@@ -53,17 +56,20 @@
 namespace rdf {
 
 // read defines
-class DllModuleExport SimpleBinarization {
+class DllModuleExport SimpleBinarization : public Module {
 
 public:
 	SimpleBinarization(const cv::Mat& img);
 	
-	void compute();
+	bool isEmpty() const override;
+	bool compute() override;
 
 	cv::Mat binaryImage() const;
 
-	void setThresh(int thresh);
-	int thresh() const;
+	//void setThresh(int thresh);
+	//int thresh() const;
+
+	QString toString() const override;
 
 private:
 	cv::Mat mSrcImg;
@@ -72,6 +78,10 @@ private:
 	// parameters
 	int mThresh = 100;
 
+	bool checkInput() const override;
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
 };
 
 }

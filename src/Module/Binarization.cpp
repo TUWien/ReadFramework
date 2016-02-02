@@ -33,7 +33,8 @@
 #include "Binarization.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QDebug>
+#include <QSettings>
 #pragma warning(pop)
 
 namespace rdf {
@@ -41,23 +42,67 @@ namespace rdf {
 // SimpleBinarization --------------------------------------------------------------------
 SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
+	
+	mModuleName = "SimpleBinarization";
+	loadSettings();
+}
+
+bool SimpleBinarization::checkInput() const {
+	
+	if (mSrcImg.depth() != CV_8UC1) {
+		qWarning() << "[" << mModuleName << "] illegal image depth: " << mSrcImg.depth();
+		return false;
+	}
+
+	return true;
+}
+
+bool SimpleBinarization::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+void SimpleBinarization::load(const QSettings& settings) {
+	
+	mThresh = settings.value("thresh", mThresh).toInt();
+}
+
+void SimpleBinarization::save(QSettings& settings) const {
+
+	settings.setValue("thresh", mThresh);
 }
 
 cv::Mat SimpleBinarization::binaryImage() const {
 	return mBwImg;
 }
 
-void SimpleBinarization::setThresh(int thresh) {
-	mThresh = thresh;
-}
+//void SimpleBinarization::setThresh(int thresh) {
+//	mThresh = thresh;
+//}
+//
+//int SimpleBinarization::thresh() const {
+//	return mThresh;
+//}
 
-int SimpleBinarization::thresh() const {
-	return mThresh;
-}
+bool SimpleBinarization::compute() {
 
-void SimpleBinarization::compute() {
+	if (!checkInput())
+		return false;
 
 	mBwImg = mSrcImg > mThresh;
+
+	// I guess here is a good point to save the settings
+	saveSettings();
+	qDebug().noquote().nospace() << "[" << mModuleName << "] computed...";
+
+	return true;
+}
+
+QString SimpleBinarization::toString() const {
+	
+	QString msg = "[" + mModuleName + "] ";
+	msg += "thresh: " + QString::number(mThresh);
+
+	return msg;
 }
 
 }

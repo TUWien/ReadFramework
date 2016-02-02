@@ -65,6 +65,7 @@ public:
 
 private:
 	Image();
+	Image(const Image&);
 };
 
 };

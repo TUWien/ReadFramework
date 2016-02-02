@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
 	// CMD parser --------------------------------------------------------------------
 
 	// load settings
-	rdf::Config::instance().load();
-	QString wd = rdf::Config::global().workingDir;
+	rdf::Config& config = rdf::Config::instance();
+	config.load();
 
 	if (!parser.positionalArguments().empty()) {
 
@@ -82,12 +82,13 @@ int main(int argc, char** argv) {
 			qDebug() << imgPath << "loaded";
 			rdf::SimpleBinarization binModule(rdf::Image::instance().qImage2Mat(img));
 			binModule.compute();
+			qDebug() << binModule;
 			img = rdf::Image::instance().mat2QImage(binModule.binaryImage());
 			
 			if (parser.isSet(outputOpt)) {
 				QString savePath = parser.value(outputOpt);
 
-				if (savePath.isEmpty()) {
+				if (!savePath.isEmpty()) {
 					img.save(savePath);
 					qDebug() << "saving to" << savePath;
 				}
@@ -104,6 +105,6 @@ int main(int argc, char** argv) {
 	}
 
 	// save settings
-	rdf::Config::instance().save();
+	config.save();
 	return 0;	// thanks
 }

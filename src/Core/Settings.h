@@ -96,6 +96,8 @@ public:
 
 private:
 	Config();
+	Config(const Config&);
+
 	QString getSettingsFile() const;
 	GlobalSettings& globalIntern();
 

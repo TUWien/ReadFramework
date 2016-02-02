@@ -90,7 +90,6 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 	catch (...) {	// something went seriously wrong (e.g. out of memory)
 					//DkNoMacs::dialog(QObject::tr("Sorry, could not convert image."));
 		qDebug() << "[DkImage::qImage2Mat] could not convert image - something is seriously wrong down here...";
-
 	}
 
 	return mat2; 
