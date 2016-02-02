@@ -17,6 +17,7 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.1)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
+message(STATUS "prefix path:${CMAKE_PREFIX_PATH}")
 # include macros needed
 include("cmake/Utils.cmake")
 
