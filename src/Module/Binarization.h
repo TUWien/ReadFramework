@@ -62,6 +62,9 @@ public:
 
 	cv::Mat binaryImage() const;
 
+	void setThresh(int thresh);
+	int thresh() const;
+
 private:
 	cv::Mat mSrcImg;
 	cv::Mat mBwImg;

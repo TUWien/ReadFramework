@@ -68,6 +68,7 @@ int main(int argc, char** argv) {
 
 	// load settings
 	rdf::Config::instance().load();
+	QString wd = rdf::Config::global().workingDir;
 
 	if (!parser.positionalArguments().empty()) {
 

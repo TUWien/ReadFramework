@@ -60,8 +60,8 @@ class DllCoreExport Image {
 public:
 	static Image& instance();
 
-	static cv::Mat qImage2Mat(const QImage& img);
-	static QImage mat2QImage(cv::Mat img);
+	cv::Mat qImage2Mat(const QImage& img);
+	QImage mat2QImage(const cv::Mat& img);
 
 private:
 	Image();

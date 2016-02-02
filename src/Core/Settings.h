@@ -34,7 +34,6 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
-#include <QSettings>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface

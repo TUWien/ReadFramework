@@ -47,6 +47,14 @@ cv::Mat SimpleBinarization::binaryImage() const {
 	return mBwImg;
 }
 
+void SimpleBinarization::setThresh(int thresh) {
+	mThresh = thresh;
+}
+
+int SimpleBinarization::thresh() const {
+	return mThresh;
+}
+
 void SimpleBinarization::compute() {
 
 	mBwImg = mSrcImg > mThresh;

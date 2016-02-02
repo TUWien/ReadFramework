@@ -36,6 +36,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QCoreApplication>
+#include <QSettings>
 #pragma warning(pop)
 
 namespace rdf {

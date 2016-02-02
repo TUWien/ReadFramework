@@ -101,28 +101,25 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 * @param img supported formats CV8UC1 | CV_8UC3 | CV_8UC4
 * @return QImage the corresponding QImage
 **/ 
-QImage Image::mat2QImage(cv::Mat img) {
+QImage Image::mat2QImage(const cv::Mat& img) {
 
 	QImage qImg;
+	cv::Mat cvImg = img;
 
 	// since Mat header is copied, a new buffer should be allocated (check this!)
-	if (img.depth() == CV_32F)
-		img.convertTo(img, CV_8U, 255);
+	if (cvImg.depth() == CV_32F)
+		cvImg.convertTo(cvImg, CV_8U, 255);
 
-	if (img.type() == CV_8UC1) {
-		qImg = QImage(img.data, (int)img.cols, (int)img.rows, (int)img.step, QImage::Format_Indexed8);	// opencv uses size_t for scaling in x64 applications
-																										//Mat tmp;
-																										//cvtColor(img, tmp, CV_GRAY2RGB);	// Qt does not support writing to index8 images
-																										//img = tmp;
+	if (cvImg.type() == CV_8UC1) {
+		qImg = QImage(cvImg.data, (int)cvImg.cols, (int)cvImg.rows, (int)cvImg.step, QImage::Format_Indexed8);	// opencv uses size_t for scaling in x64 applications
 	}
-	if (img.type() == CV_8UC3) {
+	if (cvImg.type() == CV_8UC3) {
+		qImg = QImage(cvImg.data, (int)cvImg.cols, (int)cvImg.rows, (int)cvImg.step, QImage::Format_RGB888);
+	}
+	if (cvImg.type() == CV_8UC4) {
+		qImg = QImage(cvImg.data, (int)cvImg.cols, (int)cvImg.rows, (int)cvImg.step, QImage::Format_ARGB32);
+	}
 
-		//cv::cvtColor(img, img, CV_RGB2BGR);
-		qImg = QImage(img.data, (int)img.cols, (int)img.rows, (int)img.step, QImage::Format_RGB888);
-	}
-	if (img.type() == CV_8UC4) {
-		qImg = QImage(img.data, (int)img.cols, (int)img.rows, (int)img.step, QImage::Format_ARGB32);
-	}
 
 	qImg = qImg.copy();
 

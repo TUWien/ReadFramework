@@ -4,7 +4,7 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 
 [![Build Status](https://travis-ci.org/TUWien/ReadFramework.svg?branch=master)](https://travis-ci.org/TUWien/Framework)
 
-## Build READ Framework (Windows)
+## Build on Windows
 ### Compile dependencies
 - `Qt` SDK or the compiled sources (>= 5.4.0)
 - `OpenCV` (>= 3.0.0)
@@ -28,5 +28,10 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 - check if your Qt is set correctly (otherwise set the path to `qt_install_dir/qtbase/bin/qmake.exe`)
 - check if your builds proceeded correctly
 
-## Build nomacs (Ubuntu)
+## Build on Ubuntu
 
+### related links:
+[1] http://www.caa.tuwien.ac.at/cvl/
+[2] https://transkribus.eu/Transkribus/
+[3] https://github.com/TUWien/
+[4] http://nomacs.org
