@@ -51,17 +51,16 @@ int main(int argc, char** argv) {
 	rdf::Utils::instance().registerVersion();
 
 	QApplication app(argc, (char**)argv);
-	qDebug() << "argument count: " << argc;
 
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;
 
-	//parser.setApplicationDescription("Test helper");
+	parser.setApplicationDescription("READ Framework testing application.");
 	parser.addHelpOption();
 	parser.addVersionOption();
 	parser.addPositionalArgument("image", QObject::tr("An input image."));
 
-	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "output-image-path");
+	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "path");
 	parser.addOption(outputOpt);
 
 	parser.process(app);
@@ -87,19 +86,23 @@ int main(int argc, char** argv) {
 			if (parser.isSet(outputOpt)) {
 				QString savePath = parser.value(outputOpt);
 
-
-				qDebug() << "saving to" << savePath;
-				img.save(savePath);
+				if (savePath.isEmpty()) {
+					img.save(savePath);
+					qDebug() << "saving to" << savePath;
+				}
 			}
 
 		}
 		else {
 			qDebug() << "could not load: " << imgPath;
 		}
-
-		
+	}
+	else {
+		qInfo() << "Please specify an input image...";
+		parser.showHelp();
 	}
 
-
+	// save settings
 	rdf::Config::instance().save();
+	return 0;	// thanks
 }
