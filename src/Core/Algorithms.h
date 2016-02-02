@@ -60,12 +60,12 @@ namespace rdf {
 class DllCoreExport Algorithms {
 
 public:
-	enum morph_shape { SQUARE = 0, DISK };
+	enum MorphShape { SQUARE = 0, DISK };
 
 	static Algorithms& instance();
-	cv::Mat dilateImage(const cv::Mat &bwImg, int seSize, int shape = Algorithms::SQUARE);
-	cv::Mat erodeImage(const cv::Mat &bwImg, int seSize, int shape = Algorithms::SQUARE);
-	cv::Mat createStructuringElement(int seSize, int shape);
+	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
+ 	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
+	cv::Mat createStructuringElement(int seSize, int shape) const;
 
 private:
 	Algorithms();

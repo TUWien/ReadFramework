@@ -96,13 +96,19 @@ public:
 
 	QString toString() const override;
 
+protected:
+	//cv::Mat compContrastImg();
+	//cv::Mat compBinContrastImg(const cv::Mat) const;
+	//void compThrImg();
+	//void compDisHist();
+
 private:
 	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
 	cv::Mat mBwImg;										//the binarized image [0 255]
 	cv::Mat mMask;										//the mask image [0 255]
-	cv::Mat mContrastImg;
-	cv::Mat mBinContrastImg;
-	cv::Mat mThrImg;
+	//cv::Mat mContrastImg;
+	//cv::Mat mBinContrastImg;
+	//cv::Mat mThrImg;
 
 	//parameters
 	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
@@ -112,10 +118,6 @@ private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	void compContrastImg();
-	void compBinContrastImg();
-	//void compThrImg();
-	//void compDisHist();
 
 };
 

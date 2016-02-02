@@ -46,14 +46,16 @@ namespace rdf {
 Algorithms::Algorithms() {
 }
 
-cv::Mat Algorithms::dilateImage(const cv::Mat &bwImg, int seSize, int shape = Algorithms::SQUARE) {
+cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape) const {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
 	if (seSize % 2 == 0) seSize += 1;
 
-	//if (bwImg.channels() > 1)
-	//	throw DkMatException("Gray-scale image is required.", __LINE__, __FILE__);
+	if (bwImg.channels() > 1) {
+		qWarning() << "Gray-scale image is required";
+		return cv::Mat();
+	}
 
 	cv::Mat dImg;
 	// TODO: bug if 32F & DK_DISK
@@ -68,14 +70,16 @@ cv::Mat Algorithms::dilateImage(const cv::Mat &bwImg, int seSize, int shape = Al
 	return dImg;
 }
 
-cv::Mat Algorithms::erodeImage(const cv::Mat &bwImg, int seSize, int shape = Algorithms::SQUARE) {
+cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape) const {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
 	if (seSize % 2 == 0) seSize += 1;
 
-	//if (bwImg.channels() > 1)
-	//	throw DkMatException("Gray-scale image is required.", __LINE__, __FILE__);
+	if (bwImg.channels() > 1) {
+		qWarning() << "Gray-scale image is required";
+		return cv::Mat();
+	}
 
 	cv::Mat eImg;
 	cv::Mat imgU = bwImg;
@@ -95,7 +99,7 @@ cv::Mat Algorithms::erodeImage(const cv::Mat &bwImg, int seSize, int shape = Alg
 	return eImg;
 }
 
-cv::Mat Algorithms::createStructuringElement(int seSize, int shape) {
+cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 
 	cv::Mat se = cv::Mat(seSize, seSize, CV_8U);
 
