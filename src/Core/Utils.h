@@ -50,8 +50,7 @@
 // Qt defines
 class QSettings;
 
-namespace rdf {
-
+namespace rdf {	
 
 // read defines
 class DllCoreExport Utils {
@@ -63,6 +62,7 @@ public:
 
 private:
 	Utils();
+	Utils(const Utils&);
 };
 
 };
