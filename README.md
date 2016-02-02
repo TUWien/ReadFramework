@@ -28,5 +28,31 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 - check if your Qt is set correctly (otherwise set the path to `qt_install_dir/qtbase/bin/qmake.exe`)
 - check if your builds proceeded correctly
 
-## Build nomacs (Ubuntu)
+## Build READ Framework (Ubuntu)
 
+Get required packages:
+
+``` console
+sudo apt-get install debhelper cdbs qt5-qmake libqt5-dev libopencv-dev cmake git
+```
+
+Get the READ Framework sources from github:
+``` console
+git clone https://github.com/TUWien/ReadFramework
+```
+This will by default place the source into ./ReadFramework
+
+Go to the ReadFramework directory and run `cmake` to get the Makefiles:
+``` console
+cmake . 
+```
+
+Compile READ Framework: 
+``` console
+make
+```
+
+You will now have a binary (ReadFramework), which you can test (or use directly). Also the build libraries are in this directory. To install it to /usr/local/bin, use: 
+``` console
+sudo make install
+```
