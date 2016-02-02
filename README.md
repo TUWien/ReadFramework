@@ -2,7 +2,7 @@
 READ Framework is the basis for modules developed at CVL/TU Wien for the EU project READ. The READ project  has  received  funding  from  the European  Union’s  Horizon  2020 research  and innovation programme under grant agreement No 674943.
  
 
-[![Build Status](https://travis-ci.org/TUWien/ReadFramework.svg?branch=master)](https://travis-ci.org/TUWien/Framework)
+[![Build Status](https://travis-ci.org/TUWien/ReadFramework.svg?branch=master)](https://travis-ci.org/TUWien/ReadFramework)
 
 ## Build READ Framework (Windows)
 ### Compile dependencies
