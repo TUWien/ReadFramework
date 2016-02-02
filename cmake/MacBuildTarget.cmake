@@ -1,5 +1,4 @@
 set(RDF_RC src/rdf.rc) 
-set(LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/libs) #add libs directory to build dir
 
 # create the targets
 set(BINARY_NAME ${CMAKE_PROJECT_NAME})
@@ -7,7 +6,7 @@ set(DLL_CORE_NAME ${CMAKE_PROJECT_NAME}Core)
 set(DLL_MODULE_NAME ${CMAKE_PROJECT_NAME}Module)
 
 #binary
-link_directories(${OpenCV_LIBRARY_DIRS} ${LIBRARY_DIR})
+link_directories(${OpenCV_LIBRARY_DIRS})
 set(CHANGLOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/changelog.txt)
 add_executable(${BINARY_NAME} WIN32  MACOSX_BUNDLE ${MAIN_SOURCES} ${MAIN_HEADERS} ${RDF_TRANSLATIONS} ${RDF_RC} ${CHANGLOG_FILE}) #changelog is added here, so that i appears in visual studio
 set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) # define that changelog should not be compiled
