@@ -84,4 +84,40 @@ private:
 	void save(QSettings& settings) const override;
 };
 
+
+class DllModuleExport BaseBinarizationSu : public Module {
+
+public:
+	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask);
+	bool isEmpty() const override;
+	bool compute() override;
+
+	cv::Mat binaryImage() const;
+
+	QString toString() const override;
+
+private:
+	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
+	cv::Mat mBwImg;										//the binarized image [0 255]
+	cv::Mat mMask;										//the mask image [0 255]
+	cv::Mat mContrastImg;
+	cv::Mat mBinContrastImg;
+	cv::Mat mThrImg;
+
+	//parameters
+	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
+	float mStrokeW = 5;									//estimated strokeWidth
+
+	bool checkInput() const override;
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	void compContrastImg();
+	void compBinContrastImg();
+	//void compThrImg();
+	//void compDisHist();
+
+};
+
+
 }
