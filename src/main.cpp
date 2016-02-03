@@ -36,6 +36,7 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QImage>
+#include <QFileInfo>
 #pragma warning(pop)
 
 #include "Utils.h"
@@ -60,14 +61,25 @@ int main(int argc, char** argv) {
 	parser.addVersionOption();
 	parser.addPositionalArgument("image", QObject::tr("An input image."));
 
+	// output image
 	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "path");
 	parser.addOption(outputOpt);
+
+	// settings filename
+	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filename."), "filename");
+	parser.addOption(settingOpt);
 
 	parser.process(app);
 	// CMD parser --------------------------------------------------------------------
 
 	// load settings
 	rdf::Config& config = rdf::Config::instance();
+	
+	// load user defined settings
+	if (parser.isSet(settingOpt)) {
+		QString sName = parser.value(settingOpt);
+		config.setSettingsFile(sName);
+	}
 	config.load();
 
 	if (!parser.positionalArguments().empty()) {

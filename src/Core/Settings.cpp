@@ -85,7 +85,7 @@ void GlobalSettings::defaultSettings() {
 // Config --------------------------------------------------------------------
 Config::Config() {
 
-	mSettings = isPortable() ? QSharedPointer<QSettings>(new QSettings(getSettingsFile(), QSettings::IniFormat)) : QSharedPointer<QSettings>(new QSettings());
+	mSettings = isPortable() ? QSharedPointer<QSettings>(new QSettings(createSettingsFilePath(), QSettings::IniFormat)) : QSharedPointer<QSettings>(new QSettings());
 	load();
 }
 
@@ -111,13 +111,29 @@ GlobalSettings& Config::globalIntern() {
 
 bool Config::isPortable() const {
 
-	QFileInfo settingsFile = getSettingsFile();
+	QFileInfo settingsFile = createSettingsFilePath();
 	return settingsFile.isFile() && settingsFile.exists();
 }
 
-QString Config::getSettingsFile() const {
+void Config::setSettingsFile(const QString& fileName) {
 
-	return QFileInfo(QCoreApplication::applicationDirPath(), mGlobal.settingsFileName).absoluteFilePath();
+	if (fileName.isEmpty())
+		return;
+
+	QString settingsPath = createSettingsFilePath(fileName);
+	
+	if (QFileInfo(settingsPath).exists()) {
+		mSettings = QSharedPointer<QSettings>(new QSettings(settingsPath, QSettings::IniFormat));
+		mGlobal.settingsFileName = fileName;
+	}
+
+}
+
+QString Config::createSettingsFilePath(const QString& fileName) const {
+
+	QString settingsName = (!fileName.isEmpty()) ? fileName : mGlobal.settingsFileName;
+
+	return QFileInfo(QCoreApplication::applicationDirPath(), settingsName).absoluteFilePath();
 }
 
 void Config::load() {
