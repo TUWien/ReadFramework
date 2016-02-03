@@ -154,8 +154,8 @@ bool BaseBinarizationSu::compute() {
 	if (!checkInput())
 		return false;
 
-	compContrastImg();
-	compBinContrastImg();
+	//compContrastImg();
+	//compBinContrastImg();
 
 
 	// I guess here is a good point to save the settings
@@ -167,6 +167,7 @@ bool BaseBinarizationSu::compute() {
 	return true;
 }
 
+/*
 void BaseBinarizationSu::compContrastImg() {
 	
 	cv::Mat tmp = cv::Mat(mSrcImg.size(), CV_32FC1);
@@ -180,7 +181,7 @@ void BaseBinarizationSu::compContrastImg() {
 void BaseBinarizationSu::compBinContrastImg() {
 
 }
-
+*/
 QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
