@@ -33,9 +33,100 @@
 #include "Elements.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
+
+// Region --------------------------------------------------------------------
+Region::Region() {
+	
+}
+
+QString Region::typeName(const Region::Type& type) const {
+	
+	switch (type) {
+	case type_unknown:		return "Unknown";
+	case type_text_region:	return "TextRegion";
+	case type_text_line:	return "TextLine";
+	case type_word:			return "Word";
+	case type_separator:	return "Separator";
+	case type_image:		return "ImageRegion";
+	case type_graphic:		return "GraphicRegion";
+	case type_noise:		return "NoiseRegion";
+	}
+
+	return "Unknown";
+}
+
+QDataStream& operator<<(QDataStream& s, const Region& r) {
+
+	// this makes the operator<< virtual (stroustrup)
+	s << r.toString();
+	return s;
+}
+
+QDebug operator<<(QDebug d, const Region& r) {
+
+	d << qPrintable(r.toString());
+	return d;
+}
+
+
+void Region::setType(const Region::Type & type) {
+	mType = type;
+}
+
+Region::Type Region::type() const {
+	return mType;
+}
+
+void Region::setId(const QString & id) {
+	mId = id;
+}
+
+QString Region::id() const {
+	return mId;
+}
+
+void Region::setPoly(const QPolygon & polygon) {
+	mPoly = polygon;
+}
+
+QPolygon Region::polygon() const {
+	return mPoly;
+}
+
+void Region::addChild(QSharedPointer<Region> child) {
+	mChildren.append(child);
+}
+
+void Region::removeChild(QSharedPointer<Region> child) {
+	
+	int idx = mChildren.indexOf(child);
+	
+	if (idx != -1)
+		mChildren.remove(idx);
+	else
+		qWarning() << "cannot remove" << child;
+}
+
+void Region::setChildren(const QVector<QSharedPointer<Region>>& children) {
+	mChildren = children;
+}
+
+QVector<QSharedPointer<Region> > Region::children() const {
+	return mChildren;
+}
+
+QString Region::toString() const {
+
+	QString msg;
+	msg += "[" + typeName(mType) + "] ";
+	msg += "ID: " + mId;
+
+	return msg;
+}
+
 
 }

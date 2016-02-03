@@ -110,18 +110,18 @@ int main(int argc, char** argv) {
 		// flos section
 		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
 			// TODO do what ever you want
-			qDebug() << "loading flos debug code";
+			qDebug() << "loading flo's debug code";
 		}
 		// stefans section
 		else if (parser.isSet(devOpt) && parser.value(devOpt) == "stefan") {
 			// TODO do what ever you want
-			qDebug() << "loading stefans debug code";
+			qDebug() << "loading stefan's debug code";
 		}
 		// my section
 		else {
 			rdf::XmlTest test(dc);
 			test.parseXml();
-			qDebug() << "starting markus debug code";
+			qDebug() << "starting markus' debug code";
 		}
 
 	}

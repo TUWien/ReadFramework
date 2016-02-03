@@ -33,15 +33,67 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QVector>
+#include <QSharedPointer>
+#include <QPolygon>
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
 namespace rdf {
 
 // read defines
+class Region {
+
+public:
+	Region();
+
+	enum Type {
+		type_unknown = 0,
+		type_text_region,
+		type_text_line,
+		type_word,
+		type_separator,
+		type_image,
+		type_graphic,
+		type_noise,
+
+		type_end
+	};
+
+	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
+	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
+
+	void setType(const Region::Type& type);
+	Region::Type type() const;
+	QString typeName(const Region::Type& type) const;
+
+	void setId(const QString& id);
+	QString id() const;
+
+	void setPoly(const QPolygon& polygon);
+	QPolygon polygon() const;
+
+	void addChild(QSharedPointer<Region> child);
+	void removeChild(QSharedPointer<Region> child);
+	void setChildren(const QVector<QSharedPointer<Region> >& children);
+	QVector<QSharedPointer<Region> > children() const;
+
+	virtual QString toString() const;
+
+protected:
+	Type mType;
+	QString mId;
+	QPolygon mPoly;
+	QVector<QSharedPointer<Region> > mChildren;
+};
 
 };
