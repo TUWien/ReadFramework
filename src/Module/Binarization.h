@@ -97,8 +97,14 @@ public:
 	QString toString() const override;
 
 protected:
-	//cv::Mat compContrastImg();
-	//cv::Mat compBinContrastImg(const cv::Mat) const;
+	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
+	cv::Mat compBinContrastImg(const cv::Mat& contrastImg) const;
+	float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
+	void calcFilterParams(int &filterS, int &Nm) const;
+	float thresholdVal(float *mean, float *std) const;
+	float getStrokeWidth(const cv::Mat& contrastImg) const;
+	void computeDistHist(const cv::Mat& src, std::list<int> *maxDiffList, std::list<float> *localIntensity, float gSigma) const;
+	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const;
 	//void compThrImg();
 	//void compDisHist();
 
