@@ -31,11 +31,46 @@
  *******************************************************************************************************/
 
 #include "DebugFlo.h"
+#include "Image.h"
+#include "Utils.h"
+#include "Binarization.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QDebug>
+#include <QDebug>
+#include <QImage>
+#include <QFileInfo>
 #pragma warning(pop)
 
 namespace rdf {
+
+	BinarizationTest::BinarizationTest(const DebugConfig& config) {
+
+		mConfig = config;
+	}
+
+	void BinarizationTest::binarizeTest() {
+
+		qDebug() << mConfig.imagePath() << "loaded";
+
+		rdf::Timer dt;
+		QImage img;
+		img.load(mConfig.imagePath());
+
+		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
+		rdf::BaseBinarizationSu testBin(inputImg, inputImg);
+		testBin.compute();
+		cv::Mat binImg = testBin.binaryImage();
+
+		qDebug() << testBin << " in " << dt;
+
+		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
+
+		if (!mConfig.outputPath().isEmpty()) {
+				img.save(mConfig.outputPath());
+				qDebug() << "saving to" << mConfig.outputPath();
+		}
+	}
 
 }

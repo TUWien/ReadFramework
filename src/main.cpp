@@ -110,7 +110,9 @@ int main(int argc, char** argv) {
 		// flos section
 		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
 			// TODO do what ever you want
-			qDebug() << "loading flos debug code";
+			qDebug() << "starting flos debug code ...";
+			rdf::BinarizationTest test(dc);
+			test.binarizeTest();
 		}
 		// stefans section
 		else if (parser.isSet(devOpt) && parser.value(devOpt) == "stefan") {
