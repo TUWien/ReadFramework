@@ -32,6 +32,8 @@
 
 #pragma once
 
+#include "DebugUtils.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #pragma warning(pop)
@@ -43,5 +45,16 @@
 namespace rdf {
 
 // read defines
+class BinarizationTest {
+
+public:
+	BinarizationTest(const DebugConfig& config = DebugConfig());
+
+	void binarizeTest();
+
+protected:
+	DebugConfig mConfig;
+
+};
 
 };
