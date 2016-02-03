@@ -46,6 +46,15 @@ namespace rdf {
 Algorithms::Algorithms() {
 }
 
+
+Algorithms& Algorithms::instance() {
+
+	static QSharedPointer<Algorithms> inst;
+	if (!inst)
+		inst = QSharedPointer<Algorithms>(new Algorithms());
+	return *inst;
+}
+
 cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape) const {
 
 	// nothing to do in here
@@ -136,13 +145,21 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 
 }
 
-Algorithms& Algorithms::instance() {
+cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg) const {
 
-	static QSharedPointer<Algorithms> inst;
-	if (!inst)
-		inst = QSharedPointer<Algorithms>(new Algorithms());
-	return *inst;
+	if (srcImg.depth() !=  CV_8U) {
+		qWarning() << "8U is required";
+		return cv::Mat();
+	}
+
+	cv::Mat srcGray = srcImg;
+	if (srcImg.channels() != 1) cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
+
+	cv::Mat binImg;
+	cv::threshold(srcGray, binImg, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+
+	return binImg;
+
 }
-
 
 }

@@ -66,6 +66,7 @@ public:
 	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
  	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
 	cv::Mat createStructuringElement(int seSize, int shape) const;
+	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
 
 private:
 	Algorithms();
