@@ -61,12 +61,16 @@ class DllCoreExport Algorithms {
 
 public:
 	enum MorphShape { SQUARE = 0, DISK };
+	enum MorphBorder { BORDER_ZERO = 0, BORDER_FLIP };
 
 	static Algorithms& instance();
 	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
  	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
 	cv::Mat createStructuringElement(int seSize, int shape) const;
+	cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) const;
+	cv::Mat get1DGauss(double sigma) const;
 	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
+	cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO) const;
 
 private:
 	Algorithms();
