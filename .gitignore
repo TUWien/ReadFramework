@@ -5,6 +5,7 @@
 *.pdb
 *.filters
 *.htm
+*.aps
 release
 _UpgradeReport_Files
 Backup

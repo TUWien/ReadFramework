@@ -119,9 +119,9 @@ int main(int argc, char** argv) {
 		}
 		// my section
 		else {
+			qDebug() << "Servus Markus...";
 			rdf::XmlTest test(dc);
 			test.parseXml();
-			qDebug() << "starting markus' debug code";
 		}
 
 	}

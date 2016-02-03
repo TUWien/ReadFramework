@@ -67,6 +67,20 @@ private:
 	Utils(const Utils&);
 };
 
+
+class DllCoreExport Converter {
+
+public:
+	static Converter& instance();
+
+	QPolygon stringToPoly(const QString& pointList) const;
+
+private:
+	Converter();
+	Converter(const Converter&);
+};
+
+
 /**
 * A small class which measures the time.
 * This class is designed to measure the time of a method, especially

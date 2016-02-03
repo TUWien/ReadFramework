@@ -35,6 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
 #include <QDebug>
+#include <QPolygon>
 #pragma warning(pop)
 
 // needed for registering the file version
@@ -125,8 +126,49 @@ void Utils::registerVersion() const {
 
 }
 
+
+// Converter --------------------------------------------------------------------
+Converter::Converter() {
+}
+
+Converter& Converter::instance() {
+
+	static QSharedPointer<Converter> inst;
+	if (!inst)
+		inst = QSharedPointer<Converter>(new Converter());
+	return *inst;
+}
+
+QPolygon Converter::stringToPoly(const QString& pointList) const {
+
+	// we expect point pairs like that: <Coords points="1077,482 1167,482 1167,547 1077,547"/>
+	QStringList pairs = pointList.split(" ");
+	QPolygon poly;
+
+	for (const QString pair : pairs) {
+
+		QStringList points = pair.split(",");
+
+		if (points.size() != 2) {
+			qWarning() << "illegal point string: " << pair;
+			continue;
+		}
+
+		bool xok = false, yok = false;
+		int x = points[0].toInt(&xok);
+		int y = points[1].toInt(&yok);
+
+		if (xok && yok)
+			poly.append(QPoint(x, y));
+		else
+			qWarning() << "illegal point string: " << pair;
+	}
+
+	return poly;
+}
+
+
 // Timer --------------------------------------------------------------------
-// DkTimer --------------------------------------------------------------------
 /**
 * Initializes the class and stops the clock.
 **/

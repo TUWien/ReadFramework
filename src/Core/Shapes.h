@@ -30,29 +30,36 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "DebugMarkus.h"
-#include "PageParser.h"
+#pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QDebug>
+#include <QPolygon>
 #pragma warning(pop)
 
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 namespace rdf {
 
-XmlTest::XmlTest(const DebugConfig& config) {
+// read defines
 
-	mConfig = config;
-}
+class DllCoreExport Polygon {
 
-void XmlTest::parseXml() {
+public:
+	Polygon(const QPolygon& polygon = QPolygon());
 
-	PageXmlParser parser;
-	parser.read(mConfig.xmlPath());
+	void read(const QString& pointList);
+	QString write() const;
 
+protected:
+	QPolygon mPoly;
 
-	// TODO: parse
-	qDebug() << mConfig.xmlPath() << "loaded";
+};
 
-}
-
-}
+};

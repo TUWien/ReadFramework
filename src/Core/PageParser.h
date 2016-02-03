@@ -33,15 +33,61 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QString>
+#include <QSharedPointer>
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#pragma warning(disable: 4251)	// dll interface warning
+
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
+class QXmlStreamReader;
 
 namespace rdf {
 
+class PageElement;
+class Region;
+
 // read defines
+class DllCoreExport PageXmlParser {
+
+public:
+	PageXmlParser();
+
+	enum RootTags {
+		tag_page,
+		tag_meta,
+
+		attr_imageFilename,
+		attr_imageWidth,
+		attr_imageHeight,
+		attr_id,
+		attr_text_type,
+
+		attr_meta_creator,
+		attr_meta_created,
+		attr_meta_changed,
+
+		tag_end
+	};
+
+	void read(const QString& xmlPath);
+
+	QString tagName(const RootTags& tag) const;
+
+protected:
+
+	QSharedPointer<PageElement> mPage;
+
+	QSharedPointer<PageElement> parse(const QString& xmlPath) const;
+	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent, const QStringList& regionNames) const;
+};
 
 };

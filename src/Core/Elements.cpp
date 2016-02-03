@@ -34,6 +34,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+#include <QXmlStreamReader>
 #pragma warning(pop)
 
 namespace rdf {
@@ -57,6 +58,27 @@ QString Region::typeName(const Region::Type& type) const {
 	}
 
 	return "Unknown";
+}
+
+QStringList Region::typeNames() const {
+
+	QStringList tn;
+	for (int idx = 0; idx < type_end; idx++)
+		tn.append(typeName((Region::Type) idx));
+
+	return tn;
+}
+
+void Region::setType(const QString& typeName) {
+
+	QStringList tns = typeNames();
+	int typeIdx = tns.indexOf(typeName);
+
+	if (typeIdx != -1)
+		mType = (Region::Type) typeIdx;
+	else
+		qWarning() << "Unknown type: " << typeName;
+
 }
 
 QDataStream& operator<<(QDataStream& s, const Region& r) {
@@ -89,11 +111,11 @@ QString Region::id() const {
 	return mId;
 }
 
-void Region::setPoly(const QPolygon & polygon) {
+void Region::setPoly(const Polygon & polygon) {
 	mPoly = polygon;
 }
 
-QPolygon Region::polygon() const {
+Polygon Region::polygon() const {
 	return mPoly;
 }
 
@@ -127,6 +149,58 @@ QString Region::toString() const {
 
 	return msg;
 }
+
+void Region::read(QXmlStreamReader & reader) {
+
+	QString tagCoords = "Coords";
+	QString tagPoints = "points";
+
+	// append children?!
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == tagCoords) {
+		mPoly.read(reader.attributes().value(tagPoints).toString());
+	}
+	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == tagCoords) {
+
+	}
+}
+
+// PageElement --------------------------------------------------------------------
+PageElement::PageElement(const QString& xmlPath) {
+	mXmlPath = xmlPath;
+}
+
+void PageElement::setXmlPath(const QString & xmlPath) {
+	mXmlPath = xmlPath;
+}
+
+QString PageElement::xmlPath() const {
+	return mXmlPath;
+}
+
+void PageElement::setImageFileName(const QString & name) {
+	mImageFileName = name;
+}
+
+QString PageElement::imageFileName() const {
+	return mImageFileName;
+}
+
+void PageElement::setImageSize(const QSize & size) {
+	mImageSize = size;
+}
+
+QSize PageElement::imageSize() const {
+	return mImageSize;
+}
+
+void PageElement::setRootRegion(QSharedPointer<Region> region) {
+	mRoot = region;
+}
+
+QSharedPointer<Region> PageElement::rootRegion() const {
+	return mRoot;
+}
+
 
 
 }

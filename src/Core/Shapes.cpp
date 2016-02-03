@@ -30,29 +30,24 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "DebugMarkus.h"
-#include "PageParser.h"
+#include "Shapes.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QDebug>
+// Qt Includes
 #pragma warning(pop)
 
 namespace rdf {
 
-XmlTest::XmlTest(const DebugConfig& config) {
+Polygon::Polygon(const QPolygon& polygon) {
+	mPoly = polygon;
+}
+void Polygon::read(const QString & pointList) {
 
-	mConfig = config;
+	mPoly = Converter::instance().stringToPoly(pointList);
 }
 
-void XmlTest::parseXml() {
-
-	PageXmlParser parser;
-	parser.read(mConfig.xmlPath());
-
-
-	// TODO: parse
-	qDebug() << mConfig.xmlPath() << "loaded";
-
+QString Polygon::write() const {
+	return QString();	// TODO
 }
-
 }

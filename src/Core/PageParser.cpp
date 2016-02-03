@@ -31,11 +31,142 @@
  *******************************************************************************************************/
 
 #include "PageParser.h"
+#include "Elements.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QFile>
+#include <QFileInfo>
+#include <QXmlStreamReader>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
+
+PageXmlParser::PageXmlParser() {
+
+}
+
+void PageXmlParser::read(const QString & xmlPath) {
+
+	mPage = parse(xmlPath);
+
+}
+
+QString PageXmlParser::tagName(const RootTags & tag) const {
+	
+	switch (tag) {
+	case tag_page:				return "Page";
+	case attr_imageFilename:		return "imageFilename";
+	case attr_imageWidth:		return "imageWidth";
+	case attr_imageHeight:		return "imageHeight";
+	case tag_meta:				return "MetaData";
+	case attr_meta_creator:		return "Creator";
+	case attr_meta_created:		return "Created";
+	case attr_meta_changed:		return "LastChange";
+	case attr_id:				return "id";
+	case attr_text_type:		return "type";
+	}
+	
+	return "";
+}
+
+QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
+
+	Timer dt;
+	QFile f(xmlPath);
+	QSharedPointer<PageElement> pageElement;
+
+	if (!f.open(QIODevice::ReadOnly)) {
+		qWarning() << "Sorry, I could not open " << xmlPath << " for reading...";
+		return pageElement;
+	}
+
+	// load the element
+	QFileInfo xmlInfo = xmlPath;
+	QXmlStreamReader reader(f.readAll());
+	f.close();
+
+	QString pageTag = tagName(tag_page);	// cache - since it might be called a lot of time
+	QString metaTag = tagName(tag_meta);
+
+	Region dummyRegion;
+	QStringList regionNames = dummyRegion.typeNames();
+	
+	// ok - we can initialize our page element
+	pageElement = QSharedPointer<PageElement>(new PageElement());
+	QSharedPointer<Region> root = QSharedPointer<Region>(new Region());
+
+	while (!reader.atEnd()) {
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagName(tag_meta)) {
+			// TODO
+		
+		}
+		// e.g. <Page imageFilename="00001234.tif" imageWidth="1000" imageHeight="2000">
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagName(tag_page)) {
+
+
+			pageElement->setImageFileName(reader.attributes().value(tagName(attr_imageFilename)).toString());
+
+			bool wok = false, hok = false;
+			int width = reader.attributes().value(tagName(attr_imageWidth)).toInt(&wok);
+			int height = reader.attributes().value(tagName(attr_imageHeight)).toInt(&hok);
+
+			if (wok & hok)
+				pageElement->setImageSize(QSize(width, height));
+			else
+				qWarning() << "could not read image dimensions";
+		}
+		// e.g. <TextRegion id="r1" type="heading">
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && regionNames.contains(reader.qualifiedName().toString())) {
+			
+			parseRegion(reader, root, regionNames);
+		}
+
+		reader.readNext();
+	}
+
+	pageElement->setRootRegion(root);
+
+	qDebug() << xmlInfo.fileName() << "parsed in" << dt << " I found" << root->children().size() << "elements...";
+
+	return pageElement;
+}
+
+void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region> parent, const QStringList& regionNames) const {
+
+	// TODO: e.g. word needs to be a different object
+	QSharedPointer<Region> region = QSharedPointer<Region>(new Region());
+	region->setType(reader.qualifiedName().toString());
+	region->setId(reader.attributes().value(tagName(attr_id)).toString());
+	
+	parent->addChild(region);
+
+	// TODO add type to text regions
+	//region->setTextType(reader.attributes().value(tagName(attr_text_type)).toString());
+
+	while (!reader.atEnd()) {
+		reader.readNext();
+
+		QString tag = reader.qualifiedName().toString();
+
+		// are we done here?
+		if (reader.tokenType() == QXmlStreamReader::EndElement && regionNames.contains(tag))
+			break;
+
+		// append children?!
+		if (reader.tokenType() == QXmlStreamReader::StartElement && regionNames.contains(tag)) {
+			parseRegion(reader, parent, regionNames);
+		}
+		else
+			region->read(reader);	// present current line to the region
+	}
+
+	//qDebug() << "adding " << *region;
+
+}
+
+
 
 }

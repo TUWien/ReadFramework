@@ -32,11 +32,15 @@
 
 #pragma once
 
+#include "Shapes.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QVector>
 #include <QSharedPointer>
 #include <QPolygon>
 #pragma warning(pop)
+
+#pragma warning(disable: 4251)	// dll interface warning
 
 #ifndef DllCoreExport
 #ifdef DLL_CORE_EXPORT
@@ -47,11 +51,13 @@
 #endif
 
 // Qt defines
+class QXmlStreamReader;
 
 namespace rdf {
 
 // read defines
-class Region {
+
+class DllCoreExport Region {
 
 public:
 	Region();
@@ -72,15 +78,18 @@ public:
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
 
+	void setType(const QString& typeName);
 	void setType(const Region::Type& type);
 	Region::Type type() const;
+
 	QString typeName(const Region::Type& type) const;
+	QStringList typeNames() const;
 
 	void setId(const QString& id);
 	QString id() const;
 
-	void setPoly(const QPolygon& polygon);
-	QPolygon polygon() const;
+	void setPoly(const Polygon& polygon);
+	Polygon polygon() const;
 
 	void addChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
@@ -89,11 +98,38 @@ public:
 
 	virtual QString toString() const;
 
+	virtual void read(QXmlStreamReader& reader);
+
 protected:
 	Type mType;
 	QString mId;
-	QPolygon mPoly;
+	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
+};
+
+class PageElement {
+
+public:
+	PageElement(const QString& xmlPath = QString());
+
+	void setXmlPath(const QString& xmlPath);
+	QString xmlPath() const;
+
+	void setImageFileName(const QString& name);
+	QString imageFileName() const;
+
+	void setImageSize(const QSize& size);
+	QSize imageSize() const;
+
+	void setRootRegion(QSharedPointer<Region> region);
+	QSharedPointer<Region> rootRegion() const;
+
+protected:
+	QString mXmlPath;
+	QString mImageFileName;
+	QSize mImageSize;
+
+	QSharedPointer<Region> mRoot;
 };
 
 };
