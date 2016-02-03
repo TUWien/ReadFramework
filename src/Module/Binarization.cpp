@@ -458,6 +458,25 @@ QString BaseBinarizationSu::toString() const {
 }
 
 
+bool BinarizationSuAdapted::compute() {
+
+	//computeSuIpk(segImg);
+
+	//if (medianFilter)
+	//	medianBlur(segImg, segImg, 3);
+
+
+	return false;
+}
+
+QString BinarizationSuAdapted::toString() const {
+
+	QString msg = debugName();
+	msg += "strokeW: " + QString::number(mStrokeW);
+
+	return msg;
+}
+
 
 
 }

@@ -84,17 +84,20 @@ private:
 	void save(QSettings& settings) const override;
 };
 
-
+/**
+* The class binarize a grayvalue image. The segmentation algorithm is based on
+* "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
+**/
 class DllModuleExport BaseBinarizationSu : public Module {
 
 public:
 	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask);
 	bool isEmpty() const override;
-	bool compute() override;
+	virtual bool compute() override;
 
 	cv::Mat binaryImage() const;
 
-	QString toString() const override;
+	virtual QString toString() const override;
 
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
@@ -108,17 +111,18 @@ protected:
 	//void compThrImg();
 	//void compDisHist();
 
-private:
 	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
 	cv::Mat mBwImg;										//the binarized image [0 255]
 	cv::Mat mMask;										//the mask image [0 255]
-	//cv::Mat mContrastImg;
-	//cv::Mat mBinContrastImg;
-	//cv::Mat mThrImg;
+														//cv::Mat mContrastImg;
+														//cv::Mat mBinContrastImg;
+														//cv::Mat mThrImg;
 
-	//parameters
+														//parameters
 	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
-	float mStrokeW = 5;									//estimated strokeWidth
+	float mStrokeW = 4;									//estimated strokeWidth
+
+private:
 
 	bool checkInput() const override;
 	void load(const QSettings& settings) override;
@@ -127,5 +131,25 @@ private:
 
 };
 
+/**
+* The class binarize a grayvalue image. The segmentation algorithm is based on
+* "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
+* In contrast to DkSegmentationSu the ContrastImg is adapted and the strokeWidth is constant.
+**/
+
+class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
+
+public:
+	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask) : BaseBinarizationSu(img, mask) {};
+	virtual bool compute() override;
+	virtual QString toString() const override;
+
+protected:
+
+
+private:
+
+
+};
 
 }
