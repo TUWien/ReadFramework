@@ -41,8 +41,10 @@
 
 #include "Utils.h"
 #include "Settings.h"
-#include "Image.h"
-#include "Binarization.h"
+#include "DebugUtils.h"
+#include "DebugMarkus.h"
+#include "DebugFlo.h"
+#include "DebugStefan.h"
 
 int main(int argc, char** argv) {
 
@@ -65,6 +67,14 @@ int main(int argc, char** argv) {
 	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "path");
 	parser.addOption(outputOpt);
 
+	// output image
+	QCommandLineOption xmlOpt(QStringList() << "x" << "xml", QObject::tr("Path to PAGE xml."), "path");
+	parser.addOption(xmlOpt);
+
+	// output image
+	QCommandLineOption devOpt(QStringList() << "d" << "developer", QObject::tr("Developer name."), "name");
+	parser.addOption(devOpt);
+
 	// settings filename
 	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filename."), "filename");
 	parser.addOption(settingOpt);
@@ -86,31 +96,34 @@ int main(int argc, char** argv) {
 
 		QString imgPath = parser.positionalArguments()[0].trimmed();
 		
-		QImage img;
-		img.load(imgPath);
+		rdf::DebugConfig dc;
+		dc.setImagePath(imgPath);
 
-		if (!img.isNull()) {
-		
-			rdf::Timer dt;
-			qDebug() << imgPath << "loaded";
-			rdf::SimpleBinarization binModule(rdf::Image::instance().qImage2Mat(img));
-			binModule.compute();
-			qDebug() << binModule << "in" << dt;
-			img = rdf::Image::instance().mat2QImage(binModule.binaryImage());
-			
-			if (parser.isSet(outputOpt)) {
-				QString savePath = parser.value(outputOpt);
+		// add output path	
+		if (parser.isSet(outputOpt))
+			dc.setOutputPath(parser.value(outputOpt));
 
-				if (!savePath.isEmpty()) {
-					img.save(savePath);
-					qDebug() << "saving to" << savePath;
-				}
-			}
+		// add xml path	
+		if (parser.isSet(xmlOpt))
+			dc.setXmlPath(parser.value(xmlOpt));
 
+		// flos section
+		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
+			// TODO do what ever you want
+			qDebug() << "loading flos debug code";
 		}
+		// stefans section
+		else if (parser.isSet(devOpt) && parser.value(devOpt) == "stefan") {
+			// TODO do what ever you want
+			qDebug() << "loading stefans debug code";
+		}
+		// my section
 		else {
-			qDebug() << "could not load: " << imgPath;
+			rdf::XmlTest test(dc);
+			test.parseXml();
+			qDebug() << "starting markus debug code";
 		}
+
 	}
 	else {
 		qInfo() << "Please specify an input image...";
