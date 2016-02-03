@@ -32,94 +32,44 @@
 
 #pragma once
 
-#include "BaseModule.h"
-
 #pragma warning(push, 0)	// no warnings from includes
-#include <QObject>
+#include <QSharedPointer>
+#include <QSettings>
 
 #include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
-
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
+// Qt defines
 
 // Qt defines
+class QSettings;
 
 namespace rdf {
 
 // read defines
-class DllModuleExport SimpleBinarization : public Module {
+// read defines
+class DllCoreExport Algorithms {
 
 public:
-	SimpleBinarization(const cv::Mat& img);
-	
-	bool isEmpty() const override;
-	bool compute() override;
+	enum MorphShape { SQUARE = 0, DISK };
 
-	cv::Mat binaryImage() const;
-
-	//void setThresh(int thresh);
-	//int thresh() const;
-
-	QString toString() const override;
+	static Algorithms& instance();
+	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
+ 	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
+	cv::Mat createStructuringElement(int seSize, int shape) const;
 
 private:
-	cv::Mat mSrcImg;
-	cv::Mat mBwImg;
-
-	// parameters
-	int mThresh = 100;
-
-	bool checkInput() const override;
-
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
+	Algorithms();
+	Algorithms(const Algorithms&);
 };
 
-
-class DllModuleExport BaseBinarizationSu : public Module {
-
-public:
-	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask);
-	bool isEmpty() const override;
-	bool compute() override;
-
-	cv::Mat binaryImage() const;
-
-	QString toString() const override;
-
-protected:
-	//cv::Mat compContrastImg();
-	//cv::Mat compBinContrastImg(const cv::Mat) const;
-	//void compThrImg();
-	//void compDisHist();
-
-private:
-	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
-	cv::Mat mBwImg;										//the binarized image [0 255]
-	cv::Mat mMask;										//the mask image [0 255]
-	//cv::Mat mContrastImg;
-	//cv::Mat mBinContrastImg;
-	//cv::Mat mThrImg;
-
-	//parameters
-	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
-	float mStrokeW = 5;									//estimated strokeWidth
-
-	bool checkInput() const override;
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
-
-
 };
-
-
-}
