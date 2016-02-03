@@ -79,16 +79,13 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 		//	//qDebug() << "indexed...";
 		//}
 		else {
-			//qDebug() << "image flag: " << img.format();
 			cImg = img.convertToFormat(QImage::Format_ARGB32);
 			mat2 = cv::Mat(cImg.height(), cImg.width(), CV_8UC4, (uchar*)cImg.bits(), cImg.bytesPerLine());
-			//qDebug() << "I need to convert the QImage to ARGB32";
 		}
 
 		mat2 = mat2.clone();	// we need to own the pointer
 	}
 	catch (...) {	// something went seriously wrong (e.g. out of memory)
-					//DkNoMacs::dialog(QObject::tr("Sorry, could not convert image."));
 		qDebug() << "[DkImage::qImage2Mat] could not convert image - something is seriously wrong down here...";
 	}
 
