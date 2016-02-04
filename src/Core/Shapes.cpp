@@ -50,4 +50,16 @@ void Polygon::read(const QString & pointList) {
 QString Polygon::write() const {
 	return QString();	// TODO
 }
+int Polygon::size() const {
+	return mPoly.size();
+}
+void Polygon::setPolygon(const QPolygon & polygon) {
+	mPoly = polygon;
+}
+
+QPolygon Polygon::polygon() const {
+	return mPoly;
+}
+
+
 }

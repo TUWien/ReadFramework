@@ -146,6 +146,7 @@ QString Region::toString() const {
 	QString msg;
 	msg += "[" + typeName(mType) + "] ";
 	msg += "ID: " + mId;
+	msg += " poly: " + QString::number(mPoly.size());
 
 	return msg;
 }

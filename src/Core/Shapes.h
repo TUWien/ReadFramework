@@ -57,6 +57,11 @@ public:
 	void read(const QString& pointList);
 	QString write() const;
 
+	int size() const;
+
+	void setPolygon(const QPolygon& polygon);
+	QPolygon polygon() const;
+
 protected:
 	QPolygon mPoly;
 
