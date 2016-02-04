@@ -92,7 +92,8 @@ public:
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
 
-	virtual QString toString() const;
+	virtual QString toString(bool withChildren = false) const;
+	virtual QString childrenToString() const;
 
 	virtual bool read(QXmlStreamReader& reader);
 
@@ -101,6 +102,27 @@ protected:
 	QString mId;
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
+};
+
+class DllCoreExport TextLine : public Region {
+
+public:
+	TextLine();
+
+	void setBaseLine(const BaseLine& baseLine);
+	BaseLine baseLine() const;
+
+	void setText(const QString& text);
+	QString text() const;
+
+	virtual bool read(QXmlStreamReader& reader) override;
+
+	virtual QString toString(bool withChildren = false) const override;
+
+protected:
+	BaseLine mBaseLine;
+	QString mText;
+
 };
 
 
@@ -113,6 +135,8 @@ public:
 	QString typeName(const Region::Type& type) const;
 	QStringList typeNames() const;
 	bool isValidTypeName(const QString& typeName) const;
+
+	QSharedPointer<Region> createRegion(const Region::Type& type) const;
 
 private:
 	RegionManager();

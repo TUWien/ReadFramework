@@ -62,4 +62,19 @@ QPolygon Polygon::polygon() const {
 }
 
 
+// BaseLine --------------------------------------------------------------------
+BaseLine::BaseLine(const QPolygon & baseLine) {
+	mBaseLine = baseLine;
+}
+
+void BaseLine::setPolygon(QPolygon & baseLine) {
+	mBaseLine = baseLine;
+}
+
+QPolygon BaseLine::polygon() const {
+	return mBaseLine;
+}
+
+
+
 }

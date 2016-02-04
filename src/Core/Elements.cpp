@@ -47,13 +47,13 @@ Region::Region() {
 QDataStream& operator<<(QDataStream& s, const Region& r) {
 
 	// this makes the operator<< virtual (stroustrup)
-	s << r.toString();
+	s << r.toString(true);	// for now show children too
 	return s;
 }
 
 QDebug operator<<(QDebug d, const Region& r) {
 
-	d << qPrintable(r.toString());
+	d << qPrintable(r.toString(true));
 	return d;
 }
 
@@ -112,12 +112,27 @@ QVector<QSharedPointer<Region> > Region::children() const {
 /// Returns a string discribing the current Region.
 /// </summary>
 /// <returns></returns>
-QString Region::toString() const {
+QString Region::toString(bool withChildren) const {
 
 	QString msg;
 	msg += "[" + RegionManager::instance().typeName(mType) + "] ";
 	msg += "ID: " + mId;
-	msg += " poly: " + QString::number(mPoly.size());
+	msg += "\tpoly: " + QString::number(mPoly.size());
+
+	if (withChildren)
+		msg += childrenToString();
+
+	return msg;
+}
+
+QString Region::childrenToString() const {
+	
+	QString msg;
+
+	for (const QSharedPointer<Region> region : mChildren) {
+		msg += "\n  ";
+		msg += region->toString(true);
+	}
 
 	return msg;
 }
@@ -144,6 +159,74 @@ bool Region::read(QXmlStreamReader & reader) {
 		return false;
 
 	return true;
+}
+
+// TextLine --------------------------------------------------------------------
+TextLine::TextLine() : Region() {
+	mType = Region::type_text_line;
+}
+
+void TextLine::setBaseLine(const BaseLine & baseLine) {
+	mBaseLine = baseLine;
+}
+
+BaseLine TextLine::baseLine() const {
+	return mBaseLine;
+}
+
+void TextLine::setText(const QString & text) {
+	mText = text;
+}
+
+QString TextLine::text() const {
+	return mText;
+}
+
+bool TextLine::read(QXmlStreamReader & reader) {
+
+	QString tagText		= "TextEquiv";
+	QString tagUnicode	= "Unicode";
+	QString tagPlainText= "PlainText";
+
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagText) {
+
+		while (!reader.atEnd()) {
+			reader.readNext();
+
+			// are we done with reading the text?
+			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == tagText)
+				break;
+
+			// read unicode
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagUnicode) {
+				reader.readNext();
+				mText = reader.text().toUtf8();	// add text
+			}
+			// read ASCII
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagPlainText) {
+				reader.readNext();
+				mText = reader.text().toString();	// add text
+			}
+		}
+
+	}
+	else
+		return Region::read(reader);
+}
+
+QString TextLine::toString(bool withChildren) const {
+	
+	QString msg = Region::toString(false);
+
+	if (!mText.isNull()) {
+		msg += " | text: ";
+		msg += mText;
+	}
+
+	if (withChildren)
+		msg += Region::childrenToString();
+
+	return msg;
 }
 
 // RegionManager --------------------------------------------------------------------
@@ -193,6 +276,19 @@ QStringList RegionManager::typeNames() const {
 bool RegionManager::isValidTypeName(const QString & typeName) const {
 
 	return mTypeNames.contains(typeName);
+}
+
+QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) const {
+
+	switch (type) {
+	case Region::type_text_line:
+	case Region::type_word:
+		return QSharedPointer<TextLine>(new TextLine());
+		break;
+		// Add new types here...
+	}
+
+	return QSharedPointer<Region>(new Region());
 }
 
 Region::Type RegionManager::type(const QString& typeName) const {

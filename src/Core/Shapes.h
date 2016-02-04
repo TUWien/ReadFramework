@@ -67,4 +67,16 @@ protected:
 
 };
 
+class DllCoreExport BaseLine {
+
+public:
+	BaseLine(const QPolygon& baseLine = QPolygon());
+
+	void setPolygon(QPolygon& baseLine);
+	QPolygon polygon() const;
+
+protected:
+	QPolygon mBaseLine;
+};
+
 };

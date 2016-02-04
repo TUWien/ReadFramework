@@ -49,7 +49,7 @@ void XmlTest::parseXml() {
 
 	rdf::Timer dt;
 	int idx = 0;
-	for ( ; idx < 100; idx++) {
+	for ( ; idx < 1; idx++) {
 		PageXmlParser parser;
 		parser.read(mConfig.xmlPath());
 	}

@@ -57,7 +57,7 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	
 	switch (tag) {
 	case tag_page:				return "Page";
-	case attr_imageFilename:		return "imageFilename";
+	case attr_imageFilename:	return "imageFilename";
 	case attr_imageWidth:		return "imageWidth";
 	case attr_imageHeight:		return "imageHeight";
 	case tag_meta:				return "MetaData";
@@ -121,7 +121,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 			else
 				qWarning() << "could not read image dimensions";
 		}
-		// e.g. <TextRegion id="r1" type="heading">
+		// e.g. <TextLine id="r1" type="heading">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) {
 			
 			parseRegion(reader, root);
@@ -132,6 +132,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
+	qDebug() << "XML root" << *root;
 	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "parsed in" << dt << "total" << dtt;
 
 	return pageElement;
@@ -141,11 +142,12 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 
 	RegionManager& rm = RegionManager::instance();
 
-	// TODO: e.g. word needs to be a different object
-	QSharedPointer<Region> region = QSharedPointer<Region>(new Region());
-	region->setType(rm.type(reader.qualifiedName().toString()));
-	region->setId(reader.attributes().value(tagName(attr_id)).toString());
+	Region::Type rType = rm.type(reader.qualifiedName().toString());
+	QSharedPointer<Region> region = rm.createRegion(rType);
 	
+	// add region attributes
+	region->setType(rType);
+	region->setId(reader.attributes().value(tagName(attr_id)).toString());
 	parent->addChild(region);
 
 	// TODO add type to text regions
