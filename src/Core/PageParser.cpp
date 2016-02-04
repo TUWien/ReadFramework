@@ -132,8 +132,8 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	qDebug() << "XML root" << *root;
-	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "parsed in" << dt << "total" << dtt;
+	//qDebug() << "XML root" << *root;
+	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt << "total" << dtt;
 
 	return pageElement;
 }
@@ -174,10 +174,6 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 			readNextLine = region->read(reader);	// present current line to the region
 	}
 
-	//qDebug() << "adding " << *region;
-
 }
-
-
 
 }

@@ -74,6 +74,7 @@ public:
 	static Converter& instance();
 
 	QPolygon stringToPoly(const QString& pointList) const;
+	QString polyToString(const QPolygon& poly);
 
 private:
 	Converter();

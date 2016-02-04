@@ -122,7 +122,34 @@ public:
 protected:
 	BaseLine mBaseLine;
 	QString mText;
+};
 
+
+class RegionXmlHelper {
+
+public:
+	static RegionXmlHelper& instance();
+
+	enum XmlTags {
+		tag_coords,
+		tag_text_equiv,
+		tag_unicode,
+		tag_plain_text,
+		tag_baseline,
+
+		attr_points,
+
+		tag_end
+	};
+
+	QString tag(const XmlTags& tagId) const;
+
+private:
+	RegionXmlHelper();
+	RegionXmlHelper(const RegionXmlHelper&);
+
+	QStringList createTags() const;
+	QStringList mTags;
 };
 
 

@@ -43,16 +43,17 @@ Polygon::Polygon(const QPolygon& polygon) {
 	mPoly = polygon;
 }
 void Polygon::read(const QString & pointList) {
-
 	mPoly = Converter::instance().stringToPoly(pointList);
 }
 
 QString Polygon::write() const {
-	return QString();	// TODO
+	return Converter::instance().polyToString(mPoly);
 }
+
 int Polygon::size() const {
 	return mPoly.size();
 }
+
 void Polygon::setPolygon(const QPolygon & polygon) {
 	mPoly = polygon;
 }
@@ -75,6 +76,13 @@ QPolygon BaseLine::polygon() const {
 	return mBaseLine;
 }
 
+void BaseLine::read(const QString & pointList) {
+	mBaseLine = Converter::instance().stringToPoly(pointList);
+}
+
+QString BaseLine::write() const {
+	return Converter::instance().polyToString(mBaseLine);
+}
 
 
 }

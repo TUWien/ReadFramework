@@ -144,14 +144,13 @@ QString Region::childrenToString() const {
 /// <returns>false if an opening tag is unknown</returns>
 bool Region::read(QXmlStreamReader & reader) {
 
-	QString tagCoords = "Coords";
-	QString tagPoints = "points";
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
 	// append children?!
-	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == tagCoords) {
-		mPoly.read(reader.attributes().value(tagPoints).toString());
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
+		mPoly.read(reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString());
 	}
-	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == tagCoords) {
+	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 
 	}
 	// report unknown tags
@@ -184,31 +183,32 @@ QString TextLine::text() const {
 
 bool TextLine::read(QXmlStreamReader & reader) {
 
-	QString tagText		= "TextEquiv";
-	QString tagUnicode	= "Unicode";
-	QString tagPlainText= "PlainText";
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
-	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagText) {
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
 
 		while (!reader.atEnd()) {
 			reader.readNext();
 
 			// are we done with reading the text?
-			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == tagText)
+			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv))
 				break;
 
 			// read unicode
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagUnicode) {
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
 				reader.readNext();
 				mText = reader.text().toUtf8();	// add text
 			}
 			// read ASCII
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagPlainText) {
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
 				reader.readNext();
 				mText = reader.text().toString();	// add text
 			}
 		}
-
+	}
+	// read baseline
+	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_baseline)) {
+		mBaseLine.read(reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString());
 	}
 	else
 		return Region::read(reader);
@@ -228,6 +228,46 @@ QString TextLine::toString(bool withChildren) const {
 
 	return msg;
 }
+
+// RegionXmlHelper --------------------------------------------------------------------
+RegionXmlHelper::RegionXmlHelper() {
+
+	mTags = createTags();
+}
+
+RegionXmlHelper& RegionXmlHelper::instance() {
+
+	static QSharedPointer<RegionXmlHelper> inst;
+	if (!inst)
+		inst = QSharedPointer<RegionXmlHelper>(new RegionXmlHelper());
+	return *inst;
+}
+
+QStringList RegionXmlHelper::createTags() const {
+
+	QStringList tn;
+	for (int idx = 0; idx < XmlTags::tag_end; idx++)
+		tn.append(tag((XmlTags) idx));
+
+	return tn;
+}
+
+QString RegionXmlHelper::tag(const XmlTags& tagId) const {
+
+	switch (tagId) {
+	case tag_coords:		return "Coords";
+	case tag_text_equiv:	return "TextEquiv";
+	case tag_unicode:		return "Unicode";
+	case tag_plain_text:	return "PlainText";
+	case tag_baseline:		return "BaseLine";
+
+	case attr_points:		return "points";
+	}
+
+	qWarning() << "unknown tag: " << tagId;
+	return "";
+}
+
 
 // RegionManager --------------------------------------------------------------------
 RegionManager::RegionManager() {

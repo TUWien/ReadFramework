@@ -139,6 +139,12 @@ Converter& Converter::instance() {
 	return *inst;
 }
 
+/// <summary>
+/// Converts a PAGE points attribute to a polygon.
+/// the format is: p1x,p1y p2x,p2y (for two points p1, p2)
+/// </summary>
+/// <param name="pointList">A string containing the point list.</param>
+/// <returns>A QPolygon parsed from the point list.</returns>
 QPolygon Converter::stringToPoly(const QString& pointList) const {
 
 	// we expect point pairs like that: <Coords points="1077,482 1167,482 1167,547 1077,547"/>
@@ -167,6 +173,24 @@ QPolygon Converter::stringToPoly(const QString& pointList) const {
 	return poly;
 }
 
+/// <summary>
+/// Converts a QPolygon to QString according to the PAGE XML format.
+/// A line would look like this: p1x,p1y p2x,p2y
+/// </summary>
+/// <param name="polygon">The polygon to convert.</param>
+/// <returns>A string representing the polygon.</returns>
+QString Converter::polyToString(const QPolygon& polygon) {
+
+	QString polyStr;
+
+	for (const QPoint& p : polygon) {
+		polyStr += QString::number(p.x()) + "," + QString::number(p.y()) + " ";
+	}
+
+	// NOTE: we have one space at the end
+
+	return polyStr;
+}
 
 // Timer --------------------------------------------------------------------
 /**

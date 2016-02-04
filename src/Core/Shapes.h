@@ -75,6 +75,9 @@ public:
 	void setPolygon(QPolygon& baseLine);
 	QPolygon polygon() const;
 
+	void read(const QString& pointList);
+	QString write() const;
+
 protected:
 	QPolygon mBaseLine;
 };
