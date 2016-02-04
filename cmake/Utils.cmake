@@ -82,23 +82,10 @@ unset(OpenCV_DIR)
 
 find_package(OpenCV REQUIRED core imgproc)
 
-# if(OpenCV_FOUND) 
-# # OpenCV cmake does not define optimized and debug libs any longer (reallyrelease not working), thus define them ourselves
-	# unset(OpenCV_LIBS)
-	# string(REGEX REPLACE "\\." "" OpenCV_SHORT_VERSION ${OpenCV_VERSION})
-	# foreach(lib ${OpenCV_FIND_COMPONENTS_})
-		# set(OpenCV_LIBS "${OpenCV_LIBS}debug;${lib}${OpenCV_SHORT_VERSION}d.lib;optimized;${lib}${OpenCV_SHORT_VERSION}.lib;" )
-	# endforeach()
-# endif()
-# SET(OpenCV_LIBRARY_DIRS ${OpenCV_LIBRARY_DIRS} ${OpenCV_LIB_DIR_DBG} ${OpenCV_LIB_DIR_OPT} ${OpenCV_DIR}/lib/${OpenCV_LIB_DIR_DBG} ${OpenCV_DIR}/lib/${OpenCV_LIB_DIR_OPT})
 if(NOT OpenCV_FOUND)
 	message(FATAL_ERROR "OpenCV not found.") 
 else()
 	add_definitions(-DWITH_OPENCV)
-endif()
-
-if(${OpenCV_VERSION} EQUAL "2.1.0")
-	add_definitions(-DDISABLE_LANCZOS)
 endif()
 
 # unset include directories since OpenCV sets them global

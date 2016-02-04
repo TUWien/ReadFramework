@@ -58,6 +58,11 @@ You will now have a binary (ReadFramework), which you can test (or use directly)
 sudo make install
 ```
 
+### authors
+Markus Diem
+Stefan Fiel
+Florian Kleber
+
 ### related links:
 [1] http://www.caa.tuwien.ac.at/cvl/
 [2] https://transkribus.eu/Transkribus/
