@@ -55,7 +55,7 @@ void XmlTest::parseXml() {
 
 		PageXmlParser parser;
 		parser.read(mConfig.xmlPath());
-
+		
 		parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
 	}
 

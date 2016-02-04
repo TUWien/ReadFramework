@@ -73,7 +73,6 @@ public:
 		attr_imageFilename,
 		attr_imageWidth,
 		attr_imageHeight,
-		attr_id,
 		attr_text_type,
 		attr_xmlns,
 		attr_xsi,

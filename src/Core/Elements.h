@@ -53,6 +53,7 @@
 
 // Qt defines
 class QXmlStreamReader;
+class QXmlStreamWriter;
 
 namespace rdf {
 
@@ -98,6 +99,8 @@ public:
 	virtual QString childrenToString() const;
 
 	virtual bool read(QXmlStreamReader& reader);
+	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
+	virtual void writeChildren(QXmlStreamWriter& writer) const;
 
 protected:
 	Type mType;
@@ -118,6 +121,7 @@ public:
 	QString text() const;
 
 	virtual bool read(QXmlStreamReader& reader) override;
+	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 
 	virtual QString toString(bool withChildren = false) const override;
 
@@ -140,6 +144,7 @@ public:
 		tag_baseline,
 
 		attr_points,
+		attr_id,
 
 		tag_end
 	};

@@ -54,6 +54,8 @@ class DllCoreExport Polygon {
 public:
 	Polygon(const QPolygon& polygon = QPolygon());
 
+	bool isEmpty() const;
+
 	void read(const QString& pointList);
 	QString write() const;
 
@@ -71,6 +73,8 @@ class DllCoreExport BaseLine {
 
 public:
 	BaseLine(const QPolygon& baseLine = QPolygon());
+
+	bool isEmpty() const;
 
 	void setPolygon(QPolygon& baseLine);
 	QPolygon polygon() const;

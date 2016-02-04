@@ -161,6 +161,31 @@ bool Region::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) const {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	writer.writeStartElement(RegionManager::instance().typeName(mType));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
+	
+	// write polygon
+	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
+	writer.writeEndElement();	// <Coords>
+
+	if (withChildren)
+		writeChildren(writer);
+
+	if (close)
+		writer.writeEndElement();	// <Type>
+}
+
+void Region::writeChildren(QXmlStreamWriter& writer) const {
+
+	for (const QSharedPointer<Region> child : mChildren)
+		child->write(writer, true);
+}
+
 // TextLine --------------------------------------------------------------------
 TextLine::TextLine() : Region() {
 	mType = Region::type_text_line;
@@ -199,12 +224,12 @@ bool TextLine::read(QXmlStreamReader & reader) {
 			// read unicode
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
 				reader.readNext();
-				mText = reader.text().toUtf8();	// add text
+				mText = reader.text().toUtf8().trimmed();	// add text
 			}
 			// read ASCII
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
 				reader.readNext();
-				mText = reader.text().toString();	// add text
+				mText = reader.text().toString().trimmed();	// add text
 			}
 		}
 	}
@@ -218,11 +243,37 @@ bool TextLine::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) const {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+	Region::write(writer, false, false);
+
+	if (!mBaseLine.isEmpty()) {
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_baseline));
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mBaseLine.write());
+		writer.writeEndElement(); // </Baseline>
+	}
+
+	if (!mText.isEmpty()) {
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
+		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
+		writer.writeEndElement(); // </TextEquiv>
+	}
+
+	if (withChildren)
+		writeChildren(writer);
+
+	if (close)
+		writer.writeEndElement(); // </Region>
+}
+
+
 QString TextLine::toString(bool withChildren) const {
 	
 	QString msg = Region::toString(false);
 
 	if (!mText.isEmpty()) {
+		msg += " | baseline: " + QString::number(mBaseLine.polygon().size());
 		msg += " | text: ";
 		msg += mText;
 	}
@@ -263,9 +314,10 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 	case tag_text_equiv:	return "TextEquiv";
 	case tag_unicode:		return "Unicode";
 	case tag_plain_text:	return "PlainText";
-	case tag_baseline:		return "BaseLine";
+	case tag_baseline:		return "Baseline";
 
 	case attr_points:		return "points";
+	case attr_id:			return "id";
 	}
 
 	qWarning() << "unknown tag: " << tagId;
@@ -326,6 +378,7 @@ bool RegionManager::isValidTypeName(const QString & typeName) const {
 QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) const {
 
 	switch (type) {
+	case Region::type_text_region:
 	case Region::type_text_line:
 	case Region::type_word:
 		return QSharedPointer<TextLine>(new TextLine());

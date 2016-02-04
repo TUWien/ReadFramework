@@ -111,7 +111,6 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	case tag_meta_created:		return "Created";
 	case tag_meta_changed:		return "LastChange";
 
-	case attr_id:				return "id";
 	case attr_text_type:		return "type";
 	}
 	
@@ -178,7 +177,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
+	qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
 
 	return pageElement;
@@ -198,7 +197,7 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 	
 	// add region attributes
 	region->setType(rType);
-	region->setId(reader.attributes().value(tagName(attr_id)).toString());
+	region->setId(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_id)).toString());
 	parent->addChild(region);
 
 	// TODO add type to text regions
@@ -295,6 +294,12 @@ QByteArray PageXmlParser::writePageElement() const {
 	writer.writeAttribute(tagName(attr_imageFilename), mPage->imageFileName());
 	writer.writeAttribute(tagName(attr_imageWidth), QString::number(mPage->imageSize().width()));
 	writer.writeAttribute(tagName(attr_imageHeight), QString::number(mPage->imageSize().height()));
+
+	QSharedPointer<Region> root = mPage->rootRegion();
+
+	for (const QSharedPointer<Region> r : root->children()) {
+		r->write(writer);
+	}
 
 	// close
 	writer.writeEndElement();	// </Page>

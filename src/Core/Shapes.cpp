@@ -42,6 +42,9 @@ namespace rdf {
 Polygon::Polygon(const QPolygon& polygon) {
 	mPoly = polygon;
 }
+bool Polygon::isEmpty() const {
+	return mPoly.isEmpty();
+}
 void Polygon::read(const QString & pointList) {
 	mPoly = Converter::instance().stringToPoly(pointList);
 }
@@ -66,6 +69,10 @@ QPolygon Polygon::polygon() const {
 // BaseLine --------------------------------------------------------------------
 BaseLine::BaseLine(const QPolygon & baseLine) {
 	mBaseLine = baseLine;
+}
+
+bool BaseLine::isEmpty() const {
+	return mBaseLine.isEmpty();
 }
 
 void BaseLine::setPolygon(QPolygon & baseLine) {
