@@ -34,6 +34,7 @@
 #include "Image.h"
 #include "Utils.h"
 #include "Binarization.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -57,19 +58,30 @@ namespace rdf {
 		rdf::Timer dt;
 		QImage img;
 		img.load(mConfig.imagePath());
-
 		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
-		rdf::BaseBinarizationSu testBin(inputImg, inputImg);
+
+		
+		//test Otsu
+		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
+		
+		rdf::BaseBinarizationSu testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
+		rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
-
+		
 		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
-				img.save(mConfig.outputPath());
-				qDebug() << "saving to" << mConfig.outputPath();
+			qDebug() << "saving to" << mConfig.outputPath();
+
+			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
+			//binImgQt.save(mConfig.outputPath());
+			rdf::Image::instance().saveQImage(binImgQt, mConfig.outputPath());
+			
+		} else {
+			qDebug() << "no save path";
 		}
 	}
 

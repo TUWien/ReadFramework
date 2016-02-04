@@ -2,5 +2,7 @@ version 0.1
 ===========
 - XML Parser for PAGE added
 - BinarizationSu added
+- Otsu added
+- Image: imageInfo + saveFunctions
 - Settings added
 - Project infrastructure created

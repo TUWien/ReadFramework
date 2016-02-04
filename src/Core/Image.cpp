@@ -34,6 +34,9 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+#include <QBuffer>
+#include <QImageWriter>
+#include <QFileInfo>
 #pragma warning(pop)
 
 namespace rdf {
@@ -122,6 +125,120 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	return qImg;
 }
 
+bool Image::saveQImage(const QImage img, const QString savePath, int compression) const {
 
+	bool saved = false;
+
+	QFileInfo fInfo(savePath);
+	qDebug() << "extension: " << fInfo.suffix();
+
+	bool hasAlpha = alphaChannelUsed(img);
+	QImage sImg = img;
+
+	// JPEG 2000 can only handle 32 or 8bit images
+	if (!hasAlpha && img.colorTable().empty() && !fInfo.suffix().contains(QRegExp("(j2k|jp2|jpf|jpx|png)")))
+		sImg = sImg.convertToFormat(QImage::Format_RGB888);
+	else if (fInfo.suffix().contains(QRegExp("(j2k|jp2|jpf|jpx)")) && sImg.depth() != 32 && sImg.depth() != 8)
+		sImg = sImg.convertToFormat(QImage::Format_RGB32);
+
+	qDebug() << "img has alpha: " << (sImg.format() != QImage::Format_RGB888) << " img uses alpha: " << hasAlpha;
+
+	//QBuffer fileBuffer(ba.data());
+	//fileBuffer.open(QIODevice::WriteOnly);
+	//QImageWriter* imgWriter = new QImageWriter(&fileBuffer, fInfo.suffix().toStdString().c_str());
+	//imgWriter->setCompression(compression);
+	//imgWriter->setQuality(compression);
+//#if QT_VERSION >= 0x050500
+//	imgWriter->setOptimizedWrite(true);			// this saves space TODO: user option here?
+//	imgWriter->setProgressiveScanWrite(true);
+//#endif
+	//saved = imgWriter->write(sImg);
+	//delete imgWriter;
+
+	saved = sImg.save(savePath);
+
+	return saved;
+}
+
+
+bool Image::saveMatImage(const cv::Mat img, const QString savePath, int compression) const {
+
+	bool saved = false;
+
+	QImage sImg = rdf::Image::instance().mat2QImage(img);
+	saved = rdf::Image::instance().saveQImage(sImg, savePath);
+
+	return saved;
+}
+
+
+
+bool Image::alphaChannelUsed(const QImage& img) const {
+
+	if (img.format() != QImage::Format_ARGB32 && img.format() != QImage::Format_ARGB32_Premultiplied)
+		return false;
+
+	// number of used bytes per line
+	int bpl = (img.width() * img.depth() + 7) / 8;
+	int pad = img.bytesPerLine() - bpl;
+	const uchar* ptr = img.bits();
+
+	for (int rIdx = 0; rIdx < img.height(); rIdx++) {
+
+		for (int cIdx = 0; cIdx < bpl; cIdx++, ptr++) {
+
+			if (cIdx % 4 == 3 && *ptr != 255)
+				return true;
+		}
+
+		ptr += pad;
+	}
+
+	return false;
+}
+
+void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const {
+
+	qDebug() << "image info: " << name;
+	QString info;
+
+	if (img.empty()) {
+		qDebug() << "<empty image>";
+		return;
+	}
+	
+	qDebug() << "   " << img.rows << "x" << img.cols << " (rows x cols)";
+
+	qDebug() << "    channels: " << img.channels();
+
+	int depth = img.depth();
+	switch (depth) {
+	case CV_8U:
+		info = "CV_8U";
+		break;
+	case CV_32F:
+		info = "CV_32F";
+		break;
+	case CV_32S:
+		info = "CV_32S";
+		break;
+	case CV_64F:
+		info = "CV_64F";
+		break;
+	default:
+		info = "unknown";
+		break;
+	}
+	qDebug() << "    depth: " << info;
+
+	if (img.channels() == 1) {
+
+
+		double min, max;
+		minMaxLoc(img, &min, &max);
+		qDebug() << "    dynamic range: [" << min << " " << max << "]";
+	}
+
+}
 
 }
