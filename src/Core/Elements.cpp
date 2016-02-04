@@ -35,28 +35,28 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QXmlStreamReader>
+#include <QUUid>
 #pragma warning(pop)
 
 namespace rdf {
 
 // Region --------------------------------------------------------------------
 Region::Region() {
-	
+	mId = QUuid::createUuid().toString();
 }
 
 QDataStream& operator<<(QDataStream& s, const Region& r) {
 
 	// this makes the operator<< virtual (stroustrup)
-	s << r.toString(true);	// for now show children too
+	s << r.toString(false);	// for now show children too
 	return s;
 }
 
 QDebug operator<<(QDebug d, const Region& r) {
 
-	d << qPrintable(r.toString(true));
+	d << qPrintable(r.toString(false));
 	return d;
 }
-
 
 void Region::setType(const Region::Type & type) {
 	mType = type;
@@ -117,7 +117,8 @@ QString Region::toString(bool withChildren) const {
 	QString msg;
 	msg += "[" + RegionManager::instance().typeName(mType) + "] ";
 	msg += "ID: " + mId;
-	msg += "\tpoly: " + QString::number(mPoly.size());
+	//msg += "\tpoly: " + QString::number(mPoly.size());
+	msg += "\tkids: " + QString::number(mChildren.size());
 
 	if (withChildren)
 		msg += childrenToString();
@@ -130,7 +131,7 @@ QString Region::childrenToString() const {
 	QString msg;
 
 	for (const QSharedPointer<Region> region : mChildren) {
-		msg += "\n  ";
+		msg += "\n";
 		msg += region->toString(true);
 	}
 
@@ -185,6 +186,7 @@ bool TextLine::read(QXmlStreamReader & reader) {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
+	// read <TextEquiv>
 	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
 
 		while (!reader.atEnd()) {
@@ -212,13 +214,15 @@ bool TextLine::read(QXmlStreamReader & reader) {
 	}
 	else
 		return Region::read(reader);
+
+	return true;
 }
 
 QString TextLine::toString(bool withChildren) const {
 	
 	QString msg = Region::toString(false);
 
-	if (!mText.isNull()) {
+	if (!mText.isEmpty()) {
 		msg += " | text: ";
 		msg += mText;
 	}
@@ -288,6 +292,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 
 	switch (type) {
 	case Region::type_unknown:		return "Unknown";
+	case Region::type_root:			return "Root";
 	case Region::type_text_region:	return "TextRegion";
 	case Region::type_text_line:	return "TextLine";
 	case Region::type_word:			return "Word";
@@ -349,6 +354,34 @@ PageElement::PageElement(const QString& xmlPath) {
 	mXmlPath = xmlPath;
 }
 
+QDebug operator<<(QDebug d, const PageElement& p) {
+
+	d << qPrintable(p.toString());
+	return d;
+}
+
+QDataStream& operator<<(QDataStream& s, const PageElement& p) {
+
+	s << p.toString();	// for now show children too
+	return s;
+}
+
+QString PageElement::toString() const {
+
+	QString msg = xmlPath();
+	msg += "\nCreator:\t" + mCreator;
+	msg += "\nCreated on:\t" + mDateCreated.toLocalTime().toString(Qt::SystemLocaleShortDate);
+	if (mDateCreated != mDateModified)
+		msg += "\nModified on:\t" + mDateCreated.toLocalTime().toString(Qt::SystemLocaleShortDate);
+
+	msg += "\n";
+
+	if (mRoot)
+		msg += mRoot->toString(true);
+
+	return msg;
+}
+
 void PageElement::setXmlPath(const QString & xmlPath) {
 	mXmlPath = xmlPath;
 }
@@ -393,15 +426,15 @@ void PageElement::setDateCreated(const QDateTime & date) {
 	mDateCreated = date;
 }
 
-QString PageElement::dateCreated() const {
+QDateTime PageElement::dateCreated() const {
 	return mDateCreated;
 }
 
-void PageElement::setDateModified(const QDateTime & date) const {
+void PageElement::setDateModified(const QDateTime & date) {
 	mDateModified = date;
 }
 
-QString PageElement::dateModified() const {
+QDateTime PageElement::dateModified() const {
 	return mDateModified;
 }
 

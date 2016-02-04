@@ -65,6 +65,7 @@ public:
 
 	enum Type {
 		type_unknown = 0,
+		type_root,
 		type_text_region,
 		type_text_line,
 		type_word,
@@ -198,10 +199,14 @@ public:
 	QString creator() const;
 
 	void setDateCreated(const QDateTime& date);
-	QString dateCreated() const;
+	QDateTime dateCreated() const;
 
-	void setDateModified(const QDateTime& date) const;
-	QString dateModified() const;
+	void setDateModified(const QDateTime& date);
+	QDateTime dateModified() const;
+
+	friend DllCoreExport QDebug operator<< (QDebug d, const PageElement &p);
+	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const PageElement& p);
+	virtual QString toString() const;
 
 protected:
 	QString mXmlPath;

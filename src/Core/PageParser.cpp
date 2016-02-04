@@ -60,7 +60,7 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	case attr_imageFilename:	return "imageFilename";
 	case attr_imageWidth:		return "imageWidth";
 	case attr_imageHeight:		return "imageHeight";
-	case tag_meta:				return "MetaData";
+	case tag_meta:				return "Metadata";
 	case attr_meta_creator:		return "Creator";
 	case attr_meta_created:		return "Created";
 	case attr_meta_changed:		return "LastChange";
@@ -95,6 +95,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	// ok - we can initialize our page element
 	pageElement = QSharedPointer<PageElement>(new PageElement());
 	QSharedPointer<Region> root = QSharedPointer<Region>(new Region());
+	root->setType(Region::type_root);
 
 	Timer dt;
 
@@ -131,7 +132,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	//qDebug() << "XML root" << *root;
+	qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt << "total" << dtt;
 
 	return pageElement;
@@ -173,7 +174,7 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 
 		// append children?!
 		if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) 
-			parseRegion(reader, parent);
+			parseRegion(reader, region);
 		else
 			readNextLine = region->read(reader);	// present current line to the region
 	}
@@ -193,12 +194,14 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 	//	<Created>2015-03-26T12:13:19.933+01:00</Created>
 	//	<LastChange>2016-01-13T08:59:18.921+01:00</LastChange>
 	//	</Metadata>
-
 	while (!reader.atEnd()) {
 
 		reader.readNext();
-		
 		QString tag = reader.qualifiedName().toString();
+
+		// are we done?
+		if (reader.tokenType() == QXmlStreamReader::EndElement && tag == tagName(tag_meta))
+			break;
 
 		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_created)) {
 			reader.readNext();
@@ -207,6 +210,10 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_changed)) {
 			reader.readNext();
 			page->setDateModified(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
+		}
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_creator)) {
+			reader.readNext();
+			page->setCreator(reader.text().toString());
 		}
 
 	}
