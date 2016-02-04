@@ -62,9 +62,7 @@ template <typename numFmt>
 static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
 
 	QList<numFmt> values = valuesIn;
-	//values.sort();
 	qSort(values);
-	//typename std::list<numFmt>::iterator valIter = values->begin();
 
 	size_t lSize = values.size();
 	double moment = -1;

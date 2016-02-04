@@ -91,7 +91,7 @@ void Utils::registerVersion() const {
 		qWarning() << "The version info size is zero\n";
 		return;
 	}
-	std::vector<BYTE> bytes(dwSize);
+	QVector<BYTE> bytes(dwSize);
 
 	if (bytes.empty()) {
 		qWarning() << "The version info is empty\n";
@@ -231,7 +231,7 @@ QDataStream& Timer::put(QDataStream& s) const {
 }
 
 /**
-* Converts time to std::string.
+* Converts time to QString.
 * @param ct current time interval
 * @return QString the time interval as string
 **/ 

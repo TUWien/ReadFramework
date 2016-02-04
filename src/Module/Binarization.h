@@ -106,7 +106,7 @@ protected:
 	virtual void calcFilterParams(int &filterS, int &Nm) const;
 	virtual float strokeWidth(const cv::Mat& contrastImg) const;
 	float thresholdVal(float *mean, float *std) const;
-	void computeDistHist(const cv::Mat& src, std::list<int> *maxDiffList, std::list<float> *localIntensity, float gSigma) const;
+	void computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity, float gSigma) const;
 	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const;
 	bool checkInput() const override;
 	//void compThrImg();

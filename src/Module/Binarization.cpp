@@ -37,6 +37,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QSettings>
+#include <qmath.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
@@ -247,8 +248,8 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 	int dy = 1;
 	//	int cnt=0;
 	float strokeWidth = 0;
-	std::list<int> diffs;
-	std::list<float> locInt;
+	QList<int> diffs;
+	QList<float> locInt;
 	diffs.clear();
 	cv::Mat vec;
 
@@ -262,7 +263,7 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 
 	vec.create(1, 40, CV_32FC1);
 	vec = 0.0f;
-	std::list<int>::iterator iter = diffs.begin();
+	QList<int>::iterator iter = diffs.begin();
 	
 	float *ptr = vec.ptr<float>(0);
 	int idx;
@@ -292,10 +293,10 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 		return strokeWidth;
 }
 
-void BaseBinarizationSu::computeDistHist(const cv::Mat& src, std::list<int> *maxDiffList, std::list<float> *localIntensity, float gSigma) const {
+void BaseBinarizationSu::computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity, float gSigma) const {
 
-	std::list<int> localMaxList;
-	std::list<int>::iterator localMaxIter;
+	QList<int> localMaxList;
+	QList<int>::iterator localMaxIter;
 
 	cv::Mat sHist;
 	if (gSigma > 0)
@@ -589,19 +590,18 @@ void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, co
 	double l = rdf::Algorithms::instance().getThreshOtsu(histogram) / 255.0f;		//sigmoid slope, centered at l according text estimation
 	float sigmaSlopeTmp = sigmSlope / 255.0f;
 
-	float fm[256];
+	double fm[256];
 	for (int i = 0; i < 256; i++)
-		fm[i] = 1.0f / (1.0f + std::exp(((i / 255.0f) - (float)l) * (-1.0f / (sigmaSlopeTmp))));
+		fm[i] = 1.0 / (1.0 + qExp(((i / 255.0) - l) * (-1.0 / (sigmaSlopeTmp))));
 
-	for (int i = 0; i < grayImg.rows; i++)
-	{
+	for (int i = 0; i < grayImg.rows; i++) {
 		float *ptrGray = grayImg.ptr<float>(i);
 		float *ptrThr = tImg.ptr<float>(i);
 		float *ptrFgdEst = fgdEstImg.ptr<float>(i);
 		unsigned char const *ptrMask = mask.ptr<unsigned char>(i);
 
 		for (int j = 0; j < grayImg.cols; j++, ptrGray++, ptrThr++, ptrFgdEst++, ptrMask++) {
-			*ptrGray = fm[cvRound(*ptrGray*255.0f)];
+			*ptrGray = (float)fm[cvRound(*ptrGray*255.0f)];
 			*ptrThr = (*ptrMask != 0) ? *ptrThr * (*ptrFgdEst) : 0.0f;
 		}
 	}
