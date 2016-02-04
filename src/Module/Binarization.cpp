@@ -551,8 +551,7 @@ bool BinarizationSuFgdWeight::compute() {
 	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
 	weightFunction(srcGray, thrImg, erodedMask);
 
-	//cv::bitwise_and(resultSegImg, tmp <= (thrImg), resultSegImg);		//combine with Nmin condition
-
+	cv::bitwise_and(mBwImg, srcGray <= (thrImg), mBwImg);		//combine with Nmin condition
 
 	return stat;
 }

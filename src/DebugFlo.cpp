@@ -68,7 +68,11 @@ namespace rdf {
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
-		rdf::BinarizationSuAdapted testBin(inputImg);
+		//rdf::BinarizationSuAdapted testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+
+		rdf::BinarizationSuFgdWeight testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
