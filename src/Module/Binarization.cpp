@@ -32,6 +32,7 @@
 
 #include "Binarization.h"
 #include "Algorithms.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -174,6 +175,7 @@ bool BaseBinarizationSu::compute() {
 	// now we need a 32F image
 	cv::Mat srcGray = mSrcImg;
 	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f/255.0f);
 
 	cv::Mat thrImg, resultSegImg;
 	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
@@ -230,8 +232,10 @@ inline float BaseBinarizationSu::contrastVal(unsigned char* maxVal, unsigned cha
 cv::Mat BaseBinarizationSu::compBinContrastImg(const cv::Mat& contrastImg) const {
 
 	cv::Mat contrastImgThr;
-	cv::threshold(contrastImg, contrastImgThr, 0, 1.0f, CV_THRESH_BINARY | CV_THRESH_OTSU);
-	contrastImgThr.convertTo(contrastImgThr, CV_8U, 255, 0);
+	//rdf::Image::instance().imageInfo(contrastImg, "contrastImg");
+	contrastImg.convertTo(contrastImgThr, CV_8U, 255, 0); //(8U is needed for OTSU)
+	cv::threshold(contrastImgThr, contrastImgThr, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+	//contrastImgThr.convertTo(contrastImgThr, CV_8U, 255, 0);
 
 	return contrastImgThr;
 }
@@ -353,6 +357,8 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	binContrast.convertTo(contrastBin32F, CV_32FC1, 1.0f / 255.0f);
 	//DkIP::imwrite("contrastBin343.png", binContrast);
 	// compute the mean image
+	rdf::Image::instance().imageInfo(grayImg32F, "grayImg32F");
+	rdf::Image::instance().imageInfo(contrastBin32F, "contrastBin32F");
 	cv::Mat meanImg = grayImg32F.mul(contrastBin32F);	// do not overwrite the gray image
 	cv::Mat stdImg = meanImg.mul(meanImg);
 

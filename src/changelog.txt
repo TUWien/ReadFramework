@@ -1,5 +1,7 @@
 version 0.1
 ===========
 - BinarizationSu added
+- Otsu added
+- Image: imageInfo + saveFunctions
 - Settings added
 - Project infrastructure created
