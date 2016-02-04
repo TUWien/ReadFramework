@@ -65,7 +65,7 @@ public:
 	bool saveQImage(const QImage img, const QString savePath, int compression = 0) const;
 	bool saveMatImage(const cv::Mat img, const QString savePath, int compression = 0) const;
 	bool alphaChannelUsed(const QImage& img) const;
-	void imageInfo(const cv::Mat& img) const;
+	void imageInfo(const cv::Mat& img, const QString name) const;
 
 private:
 	Image();

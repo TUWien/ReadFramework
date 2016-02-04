@@ -61,21 +61,15 @@ namespace rdf {
 		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
 
 		
-		if (inputImg.depth() == CV_8U) 
-			qDebug() << "inputImg is 8U";
-		if (inputImg.channels() == 4)
-			qDebug() << "inputImg has 4 channels";
-
 		//test Otsu
-		cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
+		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		//rdf::BaseBinarizationSu testBin(inputImg, inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-		//qDebug() << testBin << " in " << dt;
+		rdf::BaseBinarizationSu testBin(inputImg);
+		testBin.compute();
+		cv::Mat binImg = testBin.binaryImage();
 
-		rdf::Image::instance().imageInfo(binImg);
-		
+		rdf::Image::instance().imageInfo(binImg, "binImg");
+		qDebug() << testBin << " in " << dt;
 		
 		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
 

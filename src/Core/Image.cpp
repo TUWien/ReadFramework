@@ -197,9 +197,9 @@ bool Image::alphaChannelUsed(const QImage& img) const {
 	return false;
 }
 
-void Image::imageInfo(const cv::Mat& img) const {
+void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const {
 
-	qDebug() << "image info:";
+	qDebug() << "image info: " << name;
 	QString info;
 
 	if (img.empty()) {
