@@ -59,30 +59,31 @@ namespace rdf {
 
 
 template <typename numFmt>
-static double statMoment(std::list<numFmt> *values, float momentValue, int interpolated = 1) {
+static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
 
-	values->sort();
-	typename std::list<numFmt>::iterator valIter = values->begin();
+	QList<numFmt> values = valuesIn;
+	//values.sort();
+	qSort(values);
+	//typename std::list<numFmt>::iterator valIter = values->begin();
 
-	size_t lSize = values->size();
+	size_t lSize = values.size();
 	double moment = -1;
 	unsigned int momIdx = cvCeil(lSize*momentValue);
 	unsigned int idx = 1;
 
 	// find the statistical moment
-	while (valIter != values->end()) {
+	for (auto val : values) {
 
 		// skip
 		if (idx < momIdx) {
-			valIter++;
 			idx++;
 			continue;
 		}
 		if (lSize % 2 == 0 && momIdx < lSize && interpolated == 1)
 			// compute mean between this and the next element
-			moment = ((double)*valIter + *++valIter)*0.5;
+			moment = ((double)val + values[idx+1])*0.5;
 		else
-			moment = (double)*valIter;
+			moment = (double)val;
 		break;
 	}
 

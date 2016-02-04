@@ -366,7 +366,7 @@ float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentVal
 	}
 
 	// init output list
-	std::list<float> samples = std::list<float>();
+	QList<float> samples = QList<float>();
 
 	// assign the step size
 	if (mask.empty()) {
@@ -420,7 +420,7 @@ float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentVal
 		}
 	}
 
-	return (float)rdf::statMoment(&samples, momentValue);
+	return (float)rdf::statMoment(samples, momentValue);
 }
 
 void Algorithms::invertImg(cv::Mat& srcImg, cv::Mat mask) {
