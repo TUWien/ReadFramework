@@ -63,7 +63,7 @@ public:
 	cv::Mat qImage2Mat(const QImage& img);
 	QImage mat2QImage(const cv::Mat& img);
 	bool saveQImage(const QImage img, const QString savePath, int compression = 0) const;
-	bool saveMatImage(const cv::Mat img, const QString savePath, int compression) const;
+	bool saveMatImage(const cv::Mat img, const QString savePath, int compression = 0) const;
 	bool alphaChannelUsed(const QImage& img) const;
 	void imageInfo(const cv::Mat& img) const;
 
