@@ -351,7 +351,11 @@ Region::Type RegionManager::type(const QString& typeName) const {
 
 // PageElement --------------------------------------------------------------------
 PageElement::PageElement(const QString& xmlPath) {
+	
 	mXmlPath = xmlPath;
+	mCreator = "CVL";
+	mDateCreated = QDateTime::currentDateTime();
+	mDateModified = QDateTime::currentDateTime();
 }
 
 QDebug operator<<(QDebug d, const PageElement& p) {

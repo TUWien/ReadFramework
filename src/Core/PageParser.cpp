@@ -39,6 +39,7 @@
 #include <QFileInfo>
 #include <QXmlStreamReader>
 #include <QDebug>
+#include <QBuffer>
 #pragma warning(pop)
 
 namespace rdf {
@@ -53,17 +54,63 @@ void PageXmlParser::read(const QString & xmlPath) {
 
 }
 
+void PageXmlParser::write(const QString & xmlPath, const QSharedPointer<PageElement> pageElement) {
+
+	mPage = pageElement;
+
+	if (!mPage) {
+		qWarning() << "[PageXmlWriter] cannot write a NULL page...";
+		return;
+	}
+
+	Timer dt;
+
+	QFileInfo fileInfo(xmlPath);
+
+	// update date created
+	if (!fileInfo.exists())
+		mPage->setDateCreated(QDateTime::currentDateTimeUtc());
+
+	// update date modified
+	mPage->setDateModified(QDateTime::currentDateTimeUtc());	// using UTC directly here - somehow the +01:00 to CET is not working here
+	
+	const QByteArray& ba = writePageElement();
+
+	QFile file(xmlPath);
+	file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+
+	qint64 success = file.write(ba);
+	file.close();
+
+	if (success > 0)
+		qDebug() << "XML written to" << xmlPath << "in" << dt;
+	else
+		qDebug() << "could not write to" << xmlPath;
+}
+
+QSharedPointer<PageElement> PageXmlParser::page() const {
+	return mPage;
+}
+
 QString PageXmlParser::tagName(const RootTags & tag) const {
 	
 	switch (tag) {
+
+	case tag_root:				return "PcGts";
+	case attr_xmlns:			return "xmlns";
+	case attr_xsi:				return "xmlns:xsi";
+	case attr_schemaLocation:	return "xsi:schemaLocation";
+
 	case tag_page:				return "Page";
 	case attr_imageFilename:	return "imageFilename";
 	case attr_imageWidth:		return "imageWidth";
 	case attr_imageHeight:		return "imageHeight";
+
 	case tag_meta:				return "Metadata";
-	case attr_meta_creator:		return "Creator";
-	case attr_meta_created:		return "Created";
-	case attr_meta_changed:		return "LastChange";
+	case tag_meta_creator:		return "Creator";
+	case tag_meta_created:		return "Created";
+	case tag_meta_changed:		return "LastChange";
+
 	case attr_id:				return "id";
 	case attr_text_type:		return "type";
 	}
@@ -73,7 +120,6 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 
 QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
-	Timer dtt;
 	QFile f(xmlPath);
 	QSharedPointer<PageElement> pageElement;
 
@@ -132,8 +178,8 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	qDebug() << "---------------------------------------------------------\n" << *pageElement;
-	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt << "total" << dtt;
+	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
+	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
 
 	return pageElement;
 }
@@ -203,15 +249,15 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 		if (reader.tokenType() == QXmlStreamReader::EndElement && tag == tagName(tag_meta))
 			break;
 
-		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_created)) {
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta_created)) {
 			reader.readNext();
 			page->setDateCreated(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
 		}
-		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_changed)) {
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta_changed)) {
 			reader.readNext();
 			page->setDateModified(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
 		}
-		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_creator)) {
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta_creator)) {
 			reader.readNext();
 			page->setCreator(reader.text().toString());
 		}
@@ -219,6 +265,66 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 	}
 }
 
+QByteArray PageXmlParser::writePageElement() const {
 
+	if (!mPage) {
+		qWarning() << "Cannot write XML if page is NULL";
+		return QByteArray();
+	}
+
+	QByteArray ba;
+	QBuffer buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+
+
+	QXmlStreamWriter writer(&buffer);
+	writer.setAutoFormatting(true);
+	writer.writeStartDocument();
+
+	// <PcGts>
+	writer.writeStartElement(tagName(tag_root));
+	writer.writeAttribute(tagName(attr_xmlns), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15");
+	writer.writeAttribute(tagName(attr_xsi), "http://www.w3.org/2001/XMLSchema-instance");
+	writer.writeAttribute(tagName(attr_schemaLocation), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd");
+
+	// <Metadata>
+	writeMetaData(writer);
+
+	// <Page>
+	writer.writeStartElement(tagName(tag_page));
+	writer.writeAttribute(tagName(attr_imageFilename), mPage->imageFileName());
+	writer.writeAttribute(tagName(attr_imageWidth), QString::number(mPage->imageSize().width()));
+	writer.writeAttribute(tagName(attr_imageHeight), QString::number(mPage->imageSize().height()));
+
+	// close
+	writer.writeEndElement();	// </Page>
+	writer.writeEndElement();	// </PcGts>
+	writer.writeEndDocument();
+
+	return ba;
+}
+
+void PageXmlParser::writeMetaData(QXmlStreamWriter& writer) const {
+
+	writer.writeStartElement(tagName(tag_meta));
+	
+	writer.writeTextElement(tagName(tag_meta_creator), mPage->creator());
+	writer.writeTextElement(tagName(tag_meta_created), mPage->dateCreated().toString(Qt::ISODate));
+	writer.writeTextElement(tagName(tag_meta_changed), mPage->dateModified().toString(Qt::ISODate));
+
+	writer.writeEndElement();	// <Metadata>
+
+}
+
+
+QString PageXmlParser::imagePathToXmlPath(const QString& path) {
+
+	// TODO: add optional xml search/save path
+	QFileInfo info(path);
+	QString xmlPath = path;
+	xmlPath = xmlPath.replace(info.suffix(), "xml");
+
+	return xmlPath;
+}
 
 }

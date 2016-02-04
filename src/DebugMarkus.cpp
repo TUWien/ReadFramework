@@ -49,9 +49,14 @@ void XmlTest::parseXml() {
 
 	rdf::Timer dt;
 	int idx = 0;
+
+	// loop for sampling time...
 	for ( ; idx < 1; idx++) {
+
 		PageXmlParser parser;
 		parser.read(mConfig.xmlPath());
+
+		parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
 	}
 
 	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed()/idx);

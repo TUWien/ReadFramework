@@ -49,6 +49,7 @@
 
 // Qt defines
 class QXmlStreamReader;
+class QXmlStreamWriter;
 
 namespace rdf {
 
@@ -62,25 +63,33 @@ public:
 	PageXmlParser();
 
 	enum RootTags {
+		tag_root,
 		tag_page,
 		tag_meta,
+		tag_meta_creator,
+		tag_meta_created,
+		tag_meta_changed,
 
 		attr_imageFilename,
 		attr_imageWidth,
 		attr_imageHeight,
 		attr_id,
 		attr_text_type,
-
-		attr_meta_creator,
-		attr_meta_created,
-		attr_meta_changed,
+		attr_xmlns,
+		attr_xsi,
+		attr_schemaLocation,
 
 		tag_end
 	};
 
 	void read(const QString& xmlPath);
+	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
 
 	QString tagName(const RootTags& tag) const;
+
+	QSharedPointer<PageElement> page() const;
+
+	static QString imagePathToXmlPath(const QString& path);
 
 protected:
 
@@ -89,6 +98,9 @@ protected:
 	QSharedPointer<PageElement> parse(const QString& xmlPath) const;
 	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 	void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
+
+	QByteArray writePageElement() const;
+	void writeMetaData(QXmlStreamWriter& writer) const;
 };
 
 };
