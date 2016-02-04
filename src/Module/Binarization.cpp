@@ -114,6 +114,10 @@ BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) 
 	mSrcImg = img;
 	mMask = mask;
 
+	if (mMask.empty()) {
+		mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
+	}
+
 	mModuleName = "BaseBinarizationSu";
 	loadSettings();
 }
@@ -124,6 +128,7 @@ bool BaseBinarizationSu::checkInput() const {
 		mWarning << "illegal image depth: " << mSrcImg.depth();
 		return false;
 	}
+
 	if (mMask.depth() != CV_8U && mMask.channels() != 1) {
 		mWarning << "illegal image depth or channel for mask: " << mMask.depth();
 		return false;

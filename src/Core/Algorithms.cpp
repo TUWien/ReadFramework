@@ -154,9 +154,10 @@ cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg) const {
 
 	cv::Mat srcGray = srcImg;
 	if (srcImg.channels() != 1) cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
+	//qDebug() << "convertedImg has " << srcGray.channels() << " channels";
 
 	cv::Mat binImg;
-	cv::threshold(srcGray, binImg, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+	cv::threshold(srcGray, binImg, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 
 	return binImg;
 

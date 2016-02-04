@@ -91,7 +91,7 @@ private:
 class DllModuleExport BaseBinarizationSu : public Module {
 
 public:
-	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask);
+	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 	bool isEmpty() const override;
 	virtual bool compute() override;
 
