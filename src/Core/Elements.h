@@ -38,6 +38,7 @@
 #include <QVector>
 #include <QSharedPointer>
 #include <QPolygon>
+#include <QDateTime>
 #pragma warning(pop)
 
 #pragma warning(disable: 4251)	// dll interface warning
@@ -193,10 +194,24 @@ public:
 	void setRootRegion(QSharedPointer<Region> region);
 	QSharedPointer<Region> rootRegion() const;
 
+	void setCreator(const QString& creator);
+	QString creator() const;
+
+	void setDateCreated(const QDateTime& date);
+	QString dateCreated() const;
+
+	void setDateModified(const QDateTime& date) const;
+	QString dateModified() const;
+
 protected:
 	QString mXmlPath;
 	QString mImageFileName;
 	QSize mImageSize;
+
+	// meta attributes
+	QString mCreator;
+	QDateTime mDateCreated;
+	QDateTime mDateModified;
 
 	QSharedPointer<Region> mRoot;
 };

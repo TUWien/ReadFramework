@@ -103,8 +103,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 		QString tag = reader.qualifiedName().toString();
 
 		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta)) {
-			// TODO
-		
+			parseMetadata(reader, pageElement);
 		}
 		// e.g. <Page imageFilename="00001234.tif" imageWidth="1000" imageHeight="2000">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_page)) {
@@ -138,6 +137,11 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	return pageElement;
 }
 
+/// <summary>
+/// Parses all regions from a PAGE XML hierarchically.
+/// </summary>
+/// <param name="reader">The XML Reader.</param>
+/// <param name="parent">The parent of the region which is parsed next.</param>
 void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region> parent) const {
 
 	RegionManager& rm = RegionManager::instance();
@@ -175,5 +179,39 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 	}
 
 }
+
+/// <summary>
+/// Parses the metadata of a PAGE XML.
+/// </summary>
+/// <param name="reader">The XML reader.</param>
+/// <param name="page">The page element.</param>
+void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<PageElement> page) const {
+
+	// That's what we expect here:
+	//	<Metadata>
+	//	<Creator>TRP</Creator>
+	//	<Created>2015-03-26T12:13:19.933+01:00</Created>
+	//	<LastChange>2016-01-13T08:59:18.921+01:00</LastChange>
+	//	</Metadata>
+
+	while (!reader.atEnd()) {
+
+		reader.readNext();
+		
+		QString tag = reader.qualifiedName().toString();
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_created)) {
+			reader.readNext();
+			page->setDateCreated(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
+		}
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(attr_meta_changed)) {
+			reader.readNext();
+			page->setDateModified(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
+		}
+
+	}
+}
+
+
 
 }

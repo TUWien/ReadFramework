@@ -381,6 +381,30 @@ QSharedPointer<Region> PageElement::rootRegion() const {
 	return mRoot;
 }
 
+void PageElement::setCreator(const QString & creator) {
+	mCreator = creator;
+}
+
+QString PageElement::creator() const {
+	return mCreator;
+}
+
+void PageElement::setDateCreated(const QDateTime & date) {
+	mDateCreated = date;
+}
+
+QString PageElement::dateCreated() const {
+	return mDateCreated;
+}
+
+void PageElement::setDateModified(const QDateTime & date) const {
+	mDateModified = date;
+}
+
+QString PageElement::dateModified() const {
+	return mDateModified;
+}
+
 
 
 }

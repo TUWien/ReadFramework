@@ -16,8 +16,8 @@ link_directories(${OpenCV_LIBRARY_DIRS} ${LIBRARY_DIR})
 set(CHANGLOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/changelog.txt)
 add_executable(${BINARY_NAME} WIN32  MACOSX_BUNDLE ${MAIN_SOURCES} ${MAIN_HEADERS} ${RDF_TRANSLATIONS} ${RDF_RC} ${CHANGLOG_FILE}) #changelog is added here, so that i appears in visual studio
 set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) # define that changelog should not be compiled
-target_link_libraries(${BINARY_NAME} ${LIB_CORE_NAME} ${LIB_MODULE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 		
+target_link_libraries(${BINARY_NAME} ${LIB_CORE_NAME} ${LIB_MODULE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 set_target_properties(${BINARY_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
 set_target_properties(${BINARY_NAME} PROPERTIES LINK_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 set_target_properties(${BINARY_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:CONSOLE")
