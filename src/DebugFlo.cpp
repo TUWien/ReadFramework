@@ -78,7 +78,7 @@ namespace rdf {
 
 			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
 			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().saveQImage(binImgQt, mConfig.outputPath());
+			rdf::Image::instance().save(binImgQt, mConfig.outputPath());
 			
 		} else {
 			qDebug() << "no save path";

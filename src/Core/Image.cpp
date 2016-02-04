@@ -125,7 +125,7 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	return qImg;
 }
 
-bool Image::saveQImage(const QImage img, const QString savePath, int compression) const {
+bool Image::save(const QImage img, const QString savePath, int compression) const {
 
 	bool saved = false;
 
@@ -155,18 +155,18 @@ bool Image::saveQImage(const QImage img, const QString savePath, int compression
 	//saved = imgWriter->write(sImg);
 	//delete imgWriter;
 
-	saved = sImg.save(savePath);
+	saved = sImg.save(savePath, 0,compression);
 
 	return saved;
 }
 
 
-bool Image::saveMatImage(const cv::Mat img, const QString savePath, int compression) const {
+bool Image::save(const cv::Mat img, const QString savePath, int compression) const {
 
 	bool saved = false;
 
 	QImage sImg = rdf::Image::instance().mat2QImage(img);
-	saved = rdf::Image::instance().saveQImage(sImg, savePath);
+	saved = rdf::Image::instance().save(sImg, savePath, compression);
 
 	return saved;
 }
@@ -199,7 +199,7 @@ bool Image::alphaChannelUsed(const QImage& img) const {
 
 void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const {
 
-	qDebug() << "image info: " << name;
+	qDebug().noquote() << "image info: " << name;
 	QString info;
 
 	if (img.empty()) {
@@ -229,14 +229,14 @@ void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const 
 		info = "unknown";
 		break;
 	}
-	qDebug() << "    depth: " << info;
+	qDebug().noquote() << "    depth: " << info;
 
 	if (img.channels() == 1) {
 
 
 		double min, max;
 		minMaxLoc(img, &min, &max);
-		qDebug() << "    dynamic range: [" << min << " " << max << "]";
+		qDebug().nospace() << "    dynamic range: [" << min << " " << max << "]";
 	}
 
 }
