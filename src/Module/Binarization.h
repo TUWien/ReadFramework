@@ -102,12 +102,13 @@ public:
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
 	cv::Mat compBinContrastImg(const cv::Mat& contrastImg) const;
-	float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
-	void calcFilterParams(int &filterS, int &Nm) const;
+	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
+	virtual void calcFilterParams(int &filterS, int &Nm) const;
+	virtual float strokeWidth(const cv::Mat& contrastImg) const;
 	float thresholdVal(float *mean, float *std) const;
-	float getStrokeWidth(const cv::Mat& contrastImg) const;
 	void computeDistHist(const cv::Mat& src, std::list<int> *maxDiffList, std::list<float> *localIntensity, float gSigma) const;
 	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const;
+	bool checkInput() const override;
 	//void compThrImg();
 	//void compDisHist();
 
@@ -124,7 +125,7 @@ protected:
 
 private:
 
-	bool checkInput() const override;
+	
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
@@ -140,12 +141,14 @@ private:
 class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
 
 public:
-	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask) : BaseBinarizationSu(img, mask) {};
+	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BaseBinarizationSu(img, mask) { mModuleName = "BaseBinarizationAdapted"; };
 	virtual bool compute() override;
 	virtual QString toString() const override;
 
 protected:
-
+	float setStrokeWidth(float strokeW);
+	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const override;
+	virtual void calcFilterParams(int &filterS, int &Nm) const override;
 
 private:
 

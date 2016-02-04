@@ -169,7 +169,7 @@ bool BaseBinarizationSu::compute() {
 	cv::Mat maskedContrastImg;
 	binContrastImg.convertTo(maskedContrastImg, CV_32F, 1.0f / 255.0f);
 	maskedContrastImg = contrastImg.mul(maskedContrastImg);
-	mStrokeW = getStrokeWidth(maskedContrastImg);
+	mStrokeW = strokeWidth(maskedContrastImg);
 	maskedContrastImg.release();
 
 	// now we need a 32F image
@@ -241,7 +241,7 @@ cv::Mat BaseBinarizationSu::compBinContrastImg(const cv::Mat& contrastImg) const
 }
 
 
-float BaseBinarizationSu::getStrokeWidth(const cv::Mat& contrastImg) const {
+float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 
 	int height = contrastImg.rows;
 	int dy = 1;
@@ -463,13 +463,47 @@ inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
 QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
-	msg += "strokeW: " + QString::number(mStrokeW);
+	//msg += "strokeW: " + QString::number(mStrokeW);
+	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }
 
 
 bool BinarizationSuAdapted::compute() {
+
+	
+	if (!checkInput())
+		return false;
+
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+
+	cv::Mat contrastImg = compContrastImg(mSrcImg, erodedMask);
+	cv::Mat binContrastImg = compBinContrastImg(contrastImg);
+
+	//mStrokeW = 4; // = default value
+
+
+	// now we need a 32F image
+	cv::Mat srcGray = mSrcImg;
+	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
+
+	cv::Mat thrImg, resultSegImg;
+	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
+
+	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
+	mBwImg = resultSegImg.clone();
+
+
+	// I guess here is a good point to save the settings
+	saveSettings();
+	mDebug << " computed...";
+	mWarning << "a warning...";
+	mInfo << "an info...";
+
+	return true;
+
 
 	//computeSuIpk(segImg);
 
@@ -480,10 +514,29 @@ bool BinarizationSuAdapted::compute() {
 	return false;
 }
 
+float BinarizationSuAdapted::contrastVal(unsigned char* maxVal, unsigned char * minVal) const {
+
+	return 2.0f*(float)(*maxVal - *minVal) / ((float)(*maxVal) + (float)(*minVal) + 255.0f + FLT_MIN);
+}
+
+
+void BinarizationSuAdapted::calcFilterParams(int &filterS, int &Nm) const {
+
+	//if (mStrokeW >= 4.5) mStrokeW = 3.0;		//eventually strokeW should be set to 3.0 as initial value!!!
+	filterS = cvRound(mStrokeW * 10);
+	if ((filterS % 2) != 1) filterS += 1;
+	Nm = cvFloor(mStrokeW * 10);
+}
+
+float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
+	return mStrokeW = strokeW;
+}
+
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
 	msg += "strokeW: " + QString::number(mStrokeW);
+	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }

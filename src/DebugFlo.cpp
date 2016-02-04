@@ -64,7 +64,11 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		rdf::BaseBinarizationSu testBin(inputImg);
+		//rdf::BaseBinarizationSu testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+
+		rdf::BinarizationSuAdapted testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
