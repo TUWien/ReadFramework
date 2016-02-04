@@ -87,7 +87,7 @@ protected:
 	QSharedPointer<PageElement> mPage;
 
 	QSharedPointer<PageElement> parse(const QString& xmlPath) const;
-	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent, const QStringList& regionNames) const;
+	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 };
 
 };

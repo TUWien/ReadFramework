@@ -44,43 +44,6 @@ Region::Region() {
 	
 }
 
-QString Region::typeName(const Region::Type& type) const {
-	
-	switch (type) {
-	case type_unknown:		return "Unknown";
-	case type_text_region:	return "TextRegion";
-	case type_text_line:	return "TextLine";
-	case type_word:			return "Word";
-	case type_separator:	return "Separator";
-	case type_image:		return "ImageRegion";
-	case type_graphic:		return "GraphicRegion";
-	case type_noise:		return "NoiseRegion";
-	}
-
-	return "Unknown";
-}
-
-QStringList Region::typeNames() const {
-
-	QStringList tn;
-	for (int idx = 0; idx < type_end; idx++)
-		tn.append(typeName((Region::Type) idx));
-
-	return tn;
-}
-
-void Region::setType(const QString& typeName) {
-
-	QStringList tns = typeNames();
-	int typeIdx = tns.indexOf(typeName);
-
-	if (typeIdx != -1)
-		mType = (Region::Type) typeIdx;
-	else
-		qWarning() << "Unknown type: " << typeName;
-
-}
-
 QDataStream& operator<<(QDataStream& s, const Region& r) {
 
 	// this makes the operator<< virtual (stroustrup)
@@ -137,21 +100,34 @@ void Region::setChildren(const QVector<QSharedPointer<Region>>& children) {
 	mChildren = children;
 }
 
+/// <summary>
+/// Childrens this instance.
+/// </summary>
+/// <returns></returns>
 QVector<QSharedPointer<Region> > Region::children() const {
 	return mChildren;
 }
 
+/// <summary>
+/// Returns a string discribing the current Region.
+/// </summary>
+/// <returns></returns>
 QString Region::toString() const {
 
 	QString msg;
-	msg += "[" + typeName(mType) + "] ";
+	msg += "[" + RegionManager::instance().typeName(mType) + "] ";
 	msg += "ID: " + mId;
 	msg += " poly: " + QString::number(mPoly.size());
 
 	return msg;
 }
 
-void Region::read(QXmlStreamReader & reader) {
+/// <summary>
+/// Adds Attributes to the current region.
+/// </summary>
+/// <param name="reader">XML reader set to the current line (inside a region type).</param>
+/// <returns>false if an opening tag is unknown</returns>
+bool Region::read(QXmlStreamReader & reader) {
 
 	QString tagCoords = "Coords";
 	QString tagPoints = "points";
@@ -163,6 +139,73 @@ void Region::read(QXmlStreamReader & reader) {
 	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == tagCoords) {
 
 	}
+	// report unknown tags
+	else if (reader.tokenType() == QXmlStreamReader::StartElement)
+		return false;
+
+	return true;
+}
+
+// RegionManager --------------------------------------------------------------------
+RegionManager::RegionManager() {
+
+	mTypeNames = createTypeNames();
+}
+
+RegionManager& RegionManager::instance() {
+
+	static QSharedPointer<RegionManager> inst;
+	if (!inst)
+		inst = QSharedPointer<RegionManager>(new RegionManager());
+	return *inst;
+}
+
+
+QString RegionManager::typeName(const Region::Type& type) const {
+
+	switch (type) {
+	case Region::type_unknown:		return "Unknown";
+	case Region::type_text_region:	return "TextRegion";
+	case Region::type_text_line:	return "TextLine";
+	case Region::type_word:			return "Word";
+	case Region::type_separator:	return "Separator";
+	case Region::type_image:		return "ImageRegion";
+	case Region::type_graphic:		return "GraphicRegion";
+	case Region::type_noise:		return "NoiseRegion";
+	}
+
+	return "Unknown";
+}
+
+QStringList RegionManager::createTypeNames() const {
+
+	QStringList tn;
+	for (int idx = 0; idx < Region::type_end; idx++)
+		tn.append(typeName((Region::Type) idx));
+
+	return tn;
+}
+
+QStringList RegionManager::typeNames() const {
+	return mTypeNames;
+}
+
+bool RegionManager::isValidTypeName(const QString & typeName) const {
+
+	return mTypeNames.contains(typeName);
+}
+
+Region::Type RegionManager::type(const QString& typeName) const {
+
+	QStringList tns = typeNames();
+	int typeIdx = tns.indexOf(typeName);
+
+	if (typeIdx != -1)
+		return (Region::Type) typeIdx;
+	else
+		qWarning() << "Unknown type: " << typeName;
+
+	return Region::type_unknown;
 }
 
 // PageElement --------------------------------------------------------------------

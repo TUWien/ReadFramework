@@ -32,6 +32,7 @@
 
 #include "DebugMarkus.h"
 #include "PageParser.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -46,12 +47,14 @@ XmlTest::XmlTest(const DebugConfig& config) {
 
 void XmlTest::parseXml() {
 
-	PageXmlParser parser;
-	parser.read(mConfig.xmlPath());
+	rdf::Timer dt;
+	int idx = 0;
+	for ( ; idx < 100; idx++) {
+		PageXmlParser parser;
+		parser.read(mConfig.xmlPath());
+	}
 
-
-	// TODO: parse
-	qDebug() << mConfig.xmlPath() << "loaded";
+	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed()/idx);
 
 }
 

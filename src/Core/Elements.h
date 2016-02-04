@@ -78,12 +78,8 @@ public:
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
 
-	void setType(const QString& typeName);
 	void setType(const Region::Type& type);
 	Region::Type type() const;
-
-	QString typeName(const Region::Type& type) const;
-	QStringList typeNames() const;
 
 	void setId(const QString& id);
 	QString id() const;
@@ -98,7 +94,7 @@ public:
 
 	virtual QString toString() const;
 
-	virtual void read(QXmlStreamReader& reader);
+	virtual bool read(QXmlStreamReader& reader);
 
 protected:
 	Type mType;
@@ -106,6 +102,28 @@ protected:
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
 };
+
+
+class DllCoreExport RegionManager {
+
+public:
+	static RegionManager& instance();
+
+	Region::Type type(const QString& typeName) const;
+	QString typeName(const Region::Type& type) const;
+	QStringList typeNames() const;
+	bool isValidTypeName(const QString& typeName) const;
+
+private:
+	RegionManager();
+	RegionManager(const RegionManager&);
+	
+	QStringList createTypeNames() const;
+
+	QStringList mTypeNames;
+
+};
+
 
 class PageElement {
 

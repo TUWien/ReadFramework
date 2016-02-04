@@ -73,7 +73,7 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 
 QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
-	Timer dt;
+	Timer dtt;
 	QFile f(xmlPath);
 	QSharedPointer<PageElement> pageElement;
 
@@ -90,21 +90,24 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	QString pageTag = tagName(tag_page);	// cache - since it might be called a lot of time
 	QString metaTag = tagName(tag_meta);
 
-	Region dummyRegion;
-	QStringList regionNames = dummyRegion.typeNames();
+	RegionManager& rm = RegionManager::instance();
 	
 	// ok - we can initialize our page element
 	pageElement = QSharedPointer<PageElement>(new PageElement());
 	QSharedPointer<Region> root = QSharedPointer<Region>(new Region());
 
+	Timer dt;
+
 	while (!reader.atEnd()) {
 
-		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagName(tag_meta)) {
+		QString tag = reader.qualifiedName().toString();
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta)) {
 			// TODO
 		
 		}
 		// e.g. <Page imageFilename="00001234.tif" imageWidth="1000" imageHeight="2000">
-		else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == tagName(tag_page)) {
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_page)) {
 
 
 			pageElement->setImageFileName(reader.attributes().value(tagName(attr_imageFilename)).toString());
@@ -119,9 +122,9 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 				qWarning() << "could not read image dimensions";
 		}
 		// e.g. <TextRegion id="r1" type="heading">
-		else if (reader.tokenType() == QXmlStreamReader::StartElement && regionNames.contains(reader.qualifiedName().toString())) {
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) {
 			
-			parseRegion(reader, root, regionNames);
+			parseRegion(reader, root);
 		}
 
 		reader.readNext();
@@ -129,38 +132,44 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	qDebug() << xmlInfo.fileName() << "parsed in" << dt << " I found" << root->children().size() << "elements...";
+	qDebug() << xmlInfo.fileName() << "with" << root->children().size() << "parsed in" << dt << "total" << dtt;
 
 	return pageElement;
 }
 
-void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region> parent, const QStringList& regionNames) const {
+void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region> parent) const {
+
+	RegionManager& rm = RegionManager::instance();
 
 	// TODO: e.g. word needs to be a different object
 	QSharedPointer<Region> region = QSharedPointer<Region>(new Region());
-	region->setType(reader.qualifiedName().toString());
+	region->setType(rm.type(reader.qualifiedName().toString()));
 	region->setId(reader.attributes().value(tagName(attr_id)).toString());
 	
 	parent->addChild(region);
 
 	// TODO add type to text regions
 	//region->setTextType(reader.attributes().value(tagName(attr_text_type)).toString());
+	bool readNextLine = true;
 
 	while (!reader.atEnd()) {
-		reader.readNext();
+		
+		if (readNextLine)
+			reader.readNext();
+		else
+			reader.readNextStartElement();
 
 		QString tag = reader.qualifiedName().toString();
 
 		// are we done here?
-		if (reader.tokenType() == QXmlStreamReader::EndElement && regionNames.contains(tag))
+		if (reader.tokenType() == QXmlStreamReader::EndElement && rm.isValidTypeName(tag))
 			break;
 
 		// append children?!
-		if (reader.tokenType() == QXmlStreamReader::StartElement && regionNames.contains(tag)) {
-			parseRegion(reader, parent, regionNames);
-		}
+		if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) 
+			parseRegion(reader, parent);
 		else
-			region->read(reader);	// present current line to the region
+			readNextLine = region->read(reader);	// present current line to the region
 	}
 
 	//qDebug() << "adding " << *region;
