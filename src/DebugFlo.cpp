@@ -64,7 +64,15 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		rdf::BaseBinarizationSu testBin(inputImg);
+		//rdf::BaseBinarizationSu testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+
+		//rdf::BinarizationSuAdapted testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+
+		rdf::BinarizationSuFgdWeight testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
@@ -78,7 +86,7 @@ namespace rdf {
 
 			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
 			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().saveQImage(binImgQt, mConfig.outputPath());
+			rdf::Image::instance().save(binImgQt, mConfig.outputPath());
 			
 		} else {
 			qDebug() << "no save path";

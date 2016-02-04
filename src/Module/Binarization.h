@@ -102,12 +102,13 @@ public:
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
 	cv::Mat compBinContrastImg(const cv::Mat& contrastImg) const;
-	float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
-	void calcFilterParams(int &filterS, int &Nm) const;
+	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
+	virtual void calcFilterParams(int &filterS, int &Nm) const;
+	virtual float strokeWidth(const cv::Mat& contrastImg) const;
 	float thresholdVal(float *mean, float *std) const;
-	float getStrokeWidth(const cv::Mat& contrastImg) const;
 	void computeDistHist(const cv::Mat& src, std::list<int> *maxDiffList, std::list<float> *localIntensity, float gSigma) const;
 	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const;
+	bool checkInput() const override;
 	//void compThrImg();
 	//void compDisHist();
 
@@ -124,7 +125,7 @@ protected:
 
 private:
 
-	bool checkInput() const override;
+	
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
@@ -136,20 +137,54 @@ private:
 * "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
 * In contrast to DkSegmentationSu the ContrastImg is adapted and the strokeWidth is constant.
 **/
-
 class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
 
 public:
-	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask) : BaseBinarizationSu(img, mask) {};
+	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BaseBinarizationSu(img, mask) { mModuleName = "BaseBinarizationAdapted"; };
 	virtual bool compute() override;
 	virtual QString toString() const override;
 
 protected:
+	float setStrokeWidth(float strokeW);
+	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const override;
+	virtual void calcFilterParams(int &filterS, int &Nm) const override;
 
+	cv::Mat contrastImg;
+	cv::Mat binContrastImg;
+	cv::Mat thrImg;
+private:
+};
+
+
+/**
+* The class binarize a rgb color image. To make the algorithm robust against noise,
+* the foreground is estimated and the image is weighted with the foreground.
+* (Foreground estimation is performed by a Mean Filter with a size of 32x32 px)
+**/
+class DllModuleExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
+
+public:
+	BinarizationSuFgdWeight(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BinarizationSuAdapted(img, mask) { mModuleName = "BinarizationSuFgdWeight"; };
+	virtual bool compute() override;
+	//virtual QString toString() const override;
+
+protected:
+	cv::Mat computeFgd() const;
+	cv::Mat computeMeanFgdEst(const cv::Mat& grayImg32F, const cv::Mat& mask) const;
+	cv::Scalar computeConfidence() const;
+	//virtual void init();
+	virtual void weightFunction(cv::Mat& grayImg, cv::Mat& thrImg, const cv::Mat& mask);
+
+	int fgdEstFilterSize = 32;								//the filter size for the foreground estimation
+	float sigmSlope = 15.0f;
+	cv::Mat fgdEstImg;
+	cv::Scalar meanContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	cv::Scalar stdContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	float confidence = -1.0f;
 
 private:
-
-
 };
+
+
 
 }

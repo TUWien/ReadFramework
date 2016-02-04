@@ -169,7 +169,7 @@ bool BaseBinarizationSu::compute() {
 	cv::Mat maskedContrastImg;
 	binContrastImg.convertTo(maskedContrastImg, CV_32F, 1.0f / 255.0f);
 	maskedContrastImg = contrastImg.mul(maskedContrastImg);
-	mStrokeW = getStrokeWidth(maskedContrastImg);
+	mStrokeW = strokeWidth(maskedContrastImg);
 	maskedContrastImg.release();
 
 	// now we need a 32F image
@@ -241,7 +241,7 @@ cv::Mat BaseBinarizationSu::compBinContrastImg(const cv::Mat& contrastImg) const
 }
 
 
-float BaseBinarizationSu::getStrokeWidth(const cv::Mat& contrastImg) const {
+float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 
 	int height = contrastImg.rows;
 	int dy = 1;
@@ -463,7 +463,8 @@ inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
 QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
-	msg += "strokeW: " + QString::number(mStrokeW);
+	//msg += "strokeW: " + QString::number(mStrokeW);
+	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }
@@ -471,23 +472,170 @@ QString BaseBinarizationSu::toString() const {
 
 bool BinarizationSuAdapted::compute() {
 
-	//computeSuIpk(segImg);
+	
+	if (!checkInput())
+		return false;
+
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+
+	contrastImg = compContrastImg(mSrcImg, erodedMask);
+	binContrastImg = compBinContrastImg(contrastImg);
+
+	//mStrokeW = 4; // = default value
+
+
+	// now we need a 32F image
+	cv::Mat srcGray = mSrcImg;
+	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
+
+	cv::Mat resultSegImg;
+	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
+
+	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
+	mBwImg = resultSegImg.clone();
+
+
+	// I guess here is a good point to save the settings
+	saveSettings();
+	mDebug << " computed...";
+	mWarning << "a warning...";
+	mInfo << "an info...";
+
+	return true;
 
 	//if (medianFilter)
 	//	medianBlur(segImg, segImg, 3);
+}
+
+float BinarizationSuAdapted::contrastVal(unsigned char* maxVal, unsigned char * minVal) const {
+
+	return 2.0f*(float)(*maxVal - *minVal) / ((float)(*maxVal) + (float)(*minVal) + 255.0f + FLT_MIN);
+}
 
 
-	return false;
+void BinarizationSuAdapted::calcFilterParams(int &filterS, int &Nm) const {
+
+	//if (mStrokeW >= 4.5) mStrokeW = 3.0;		//eventually strokeW should be set to 3.0 as initial value!!!
+	filterS = cvRound(mStrokeW * 10);
+	if ((filterS % 2) != 1) filterS += 1;
+	Nm = cvFloor(mStrokeW * 10);
+}
+
+float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
+	return mStrokeW = strokeW;
 }
 
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
 	msg += "strokeW: " + QString::number(mStrokeW);
+	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }
 
+
+
+bool BinarizationSuFgdWeight::compute() {
+
+	bool stat = BinarizationSuAdapted::compute();
+	//result is binarized image mBwImg
+	
+	meanContrast = computeConfidence();
+
+	cv::Mat srcGray = mSrcImg;
+	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
+
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+	weightFunction(srcGray, thrImg, erodedMask);
+
+	cv::bitwise_and(mBwImg, srcGray <= (thrImg), mBwImg);		//combine with Nmin condition
+
+	return stat;
+}
+
+cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
+	
+	cv::Scalar m = cv::Scalar(-1.0f, -1.0f, -1.0f, -1.0f);
+	m[1] = meanContrast[1];
+	m[2] = meanContrast[2];
+
+	if (meanContrast[0] == -1.0f) {
+		int n = cv::countNonZero(binContrastImg);
+		//TODO: prove if contrastImg in normalize and statmomentMat must be set to tmp?
+		//Mat tmp = contrastImg.clone();
+		cv::normalize(contrastImg, contrastImg, 1, 0, cv::NORM_MINMAX, -1, binContrastImg);
+		if (n > 2000)
+			m[0] = rdf::Algorithms::instance().statMomentMat(contrastImg, binContrastImg, 0.5f, 5000);
+		else
+			m[0] = 0.0f;
+	}
+
+	return m;
+}
+
+void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, const cv::Mat& mask) {
+
+	fgdEstImg = computeMeanFgdEst(grayImg, mask);					//compute foreground estimation
+
+	cv::Mat tmpMask;
+	
+	threshold(tImg, tmpMask, 0, 1.0, CV_THRESH_BINARY);
+	cv::Mat histogram = rdf::Algorithms::instance().computeHist(tImg, tmpMask);		//weight gray values with sigmoid function according
+	tmpMask.release();
+
+	double l = rdf::Algorithms::instance().getThreshOtsu(histogram) / 255.0f;		//sigmoid slope, centered at l according text estimation
+	float sigmaSlopeTmp = sigmSlope / 255.0f;
+
+	float fm[256];
+	for (int i = 0; i < 256; i++)
+		fm[i] = 1.0f / (1.0f + std::exp(((i / 255.0f) - (float)l) * (-1.0f / (sigmaSlopeTmp))));
+
+	for (int i = 0; i < grayImg.rows; i++)
+	{
+		float *ptrGray = grayImg.ptr<float>(i);
+		float *ptrThr = tImg.ptr<float>(i);
+		float *ptrFgdEst = fgdEstImg.ptr<float>(i);
+		unsigned char const *ptrMask = mask.ptr<unsigned char>(i);
+
+		for (int j = 0; j < grayImg.cols; j++, ptrGray++, ptrThr++, ptrFgdEst++, ptrMask++) {
+			*ptrGray = fm[cvRound(*ptrGray*255.0f)];
+			*ptrThr = (*ptrMask != 0) ? *ptrThr * (*ptrFgdEst) : 0.0f;
+		}
+	}
+
+}
+
+cv::Mat BinarizationSuFgdWeight::computeMeanFgdEst(const cv::Mat& grayImg32F, const cv::Mat& mask) const {
+	cv::Mat tmp;
+
+	if (fgdEstFilterSize < 3) {
+		tmp = cv::Mat(grayImg32F.size(), CV_32FC1);
+		tmp.setTo(1.0f);
+	}
+	else {
+		cv::Mat fgdEstImgInt = cv::Mat(grayImg32F.rows + 1, grayImg32F.cols + 1, CV_64FC1);
+		integral(grayImg32F, fgdEstImgInt);
+		tmp = rdf::Algorithms::instance().convolveIntegralImage(fgdEstImgInt, fgdEstFilterSize, 0, Algorithms::BORDER_ZERO);
+		fgdEstImgInt.release(); // early release
+
+								//DkIP::mulMask(fgdEstImg, mask);	// diem: otherwise values outside the mask are mutual
+		cv::normalize(tmp, tmp, 1.0f, 0, cv::NORM_MINMAX, -1, mask);  // note: values outside the mask remain outside [0 1]
+		rdf::Algorithms::instance().invertImg(tmp);
+		
+	}
+	tmp = tmp.clone();
+
+	return tmp;
+}
+
+cv::Mat BinarizationSuFgdWeight::computeFgd() const {
+
+	return cv::Mat();
+
+}
 
 
 }

@@ -345,5 +345,262 @@ cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSi
 	return dst;
 }
 
+float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentValue, int maxSamples, int area) const {
+
+	// check input
+	if (src.type() != CV_32FC1) {
+		qWarning() << "Mat must be CV_32FC1";
+		return -1;
+	}
+
+	if (!mask.empty()) {
+		if (src.rows != mask.rows || src.cols != mask.cols) {
+			qWarning() << "Matrix dimension mismatch";
+			return -1;
+		}
+
+		if (mask.depth() != CV_32F && mask.depth() != CV_8U) {
+			qWarning() << "The mask obtained is neither of type CV_32F nor CV_8U";
+			return -1;
+		}
+	}
+
+	// init output list
+	QList<float> samples = QList<float>();
+
+	// assign the step size
+	if (mask.empty()) {
+		int step = cvRound((src.cols*src.rows) / (float)maxSamples);
+		if (step <= 0) step = 1;
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx += step) {
+
+			const float* srcPtr = src.ptr<float>(rIdx);
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx += step) {
+				samples.push_back(srcPtr[cIdx]);
+			}
+		}
+	}
+	else {
+
+		if (area == -1)
+			area = countNonZero(mask);
+
+		int step = cvRound((float)area / (float)maxSamples);
+		int cStep = 0;
+
+		const void *maskPtr;
+
+		if (step <= 0) step = 1;
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx++) {
+
+			const float* srcPtr = src.ptr<float>(rIdx);
+			if (mask.depth() == CV_32F)
+				maskPtr = mask.ptr<float>(rIdx);
+			else
+				maskPtr = mask.ptr<uchar>(rIdx);
+			//maskPtr = (mask.depth() == CV_32F) ? mask.ptr<float>(rIdx) : maskPtr = mask.ptr<uchar>(rIdx);
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+
+				// skip mask pixel
+				if (mask.depth() == CV_32FC1 && ((float*)maskPtr)[cIdx] != 0.0f ||
+					mask.depth() == CV_8U && ((uchar*)maskPtr)[cIdx] != 0) {
+
+					if (cStep >= step) {
+						samples.push_back(srcPtr[cIdx]);
+						cStep = 0;
+					}
+					else
+						cStep++;
+				}
+			}
+		}
+	}
+
+	return (float)rdf::statMoment(samples, momentValue);
+}
+
+void Algorithms::invertImg(cv::Mat& srcImg, cv::Mat mask) {
+	
+	if (srcImg.depth() == CV_32F) {
+
+		int rows = srcImg.rows;
+		int cols = srcImg.cols;
+		for (int i = 0; i < rows; i++) {
+			float *ptrImg = srcImg.ptr<float>(i);
+			for (int j = 0; j < cols; j++) {
+				ptrImg[j] = ptrImg[j] * -1.0f + 1.0f;
+			}
+		}
+		Algorithms::mulMask(srcImg, mask);
+
+	}
+	else if (srcImg.depth() == CV_8U) {
+
+		bitwise_not(srcImg, srcImg);
+		Algorithms::mulMask(srcImg, mask);
+
+	}
+	else {
+		qDebug() << "[DkIP::invertImg] the input image's depth must be 32F or 8U\n";
+	}
+}
+
+void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
+	// do nothing if the mask is empty
+	if (!mask.empty()) {
+
+		if (src.depth() == CV_32F && mask.depth() == CV_32F)
+			rdf::mulMaskIntern<float, float>(src, mask);
+		else if (src.depth() == CV_32F && mask.depth() == CV_8U)
+			rdf::mulMaskIntern<float, unsigned char>(src, mask);
+		else if (src.depth() == CV_8U && mask.depth() == CV_32F)
+			rdf::mulMaskIntern<unsigned char, float>(src, mask);
+		else if (src.depth() == CV_8U && mask.depth() == CV_8U)
+			rdf::mulMaskIntern<unsigned char, unsigned char>(src, mask);
+		else if (src.depth() == CV_32S && mask.depth() == CV_8U)
+			rdf::mulMaskIntern<int, unsigned char>(src, mask);
+		else {
+			qDebug() << "The source image and the mask must be [CV_8U or CV_32F]";
+		}
+	}
+}
+
+cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
+	if (img.channels() > 1) {
+		qDebug() << "the image needs to have 1 channel";
+		return cv::Mat();
+	}
+
+	if (!mask.empty() && mask.channels() > 1) {
+		qDebug() << "the mask needs to have 1 channel";
+		return cv::Mat();
+	}
+
+	if (img.type() != CV_32FC1) {
+		qDebug() << "the image needs to be CV_32FC1";
+		return cv::Mat();
+	}
+
+	if (!mask.empty() && !(mask.type() == CV_32FC1 || mask.type() == CV_8UC1)) {
+		qDebug() << "the mask needs to be CV_32FC1";
+		return cv::Mat();
+	}
+
+	// compute gradient magnitude
+	int cols = img.cols;
+	int rows = img.rows;
+
+	// speed up for accessing elements
+	if (img.isContinuous()) {
+		cols *= rows;
+		rows = 1;
+	}
+
+	cv::Mat hist = cv::Mat(1, 256, CV_32FC1);
+	hist.setTo(0);
+
+	for (int rIdx = 0; rIdx < rows; rIdx++) {
+
+		const float* imgPtr = img.ptr<float>(rIdx);
+		const float* maskPtr32F = 0;
+		const unsigned char* maskPtr8U = 0;
+
+		float* histPtr = hist.ptr<float>();
+
+		if (!mask.empty() && mask.depth() == CV_32F) {
+			maskPtr32F = mask.ptr<float>(rIdx);
+		}
+		else if (!mask.empty() && mask.depth() == CV_8U) {
+			maskPtr8U = mask.ptr<unsigned char>(rIdx);
+		}
+
+		for (int cIdx = 0; cIdx < cols; cIdx++) {
+
+			if (mask.empty() ||
+				(mask.depth() == CV_32F && maskPtr32F[cIdx] > 0) ||
+				(mask.depth() == CV_8U  && maskPtr8U[cIdx]	> 0)) {
+				int hIdx = cvFloor(imgPtr[cIdx] * 255);
+				//printf("%.3f, %i\n", imgPtr[cIdx], hIdx);
+				if (hIdx >= 0 && hIdx < 256)	// -> bug in normalize!
+					histPtr[hIdx] ++;
+			}
+		}
+	}
+
+	return hist;
+}
+
+double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) const {
+	if (hist.channels() > 1) {
+		qDebug() << "the histogram needs to have 1 channel";
+		return -1.0;
+	}
+
+	if (hist.type() != CV_32FC1) {
+		qDebug() << "the histogram needs to be 32FC1";
+		return -1.0;
+	}
+
+	double max_val = 0;
+
+	int i, count;
+	const float* h;
+	double sum = 0, mu = 0;
+	bool uniform = false;
+	double low = 0, high = 0, delta = 0;
+	double mu1 = 0, q1 = 0;
+	double max_sigma = 0;
+
+	count = hist.cols;
+	h = hist.ptr<float>();
+
+	low = 0;
+	high = count;
+
+	delta = (high - low) / count;
+	low += delta*0.5;
+	uniform = true;
+
+	for (i = 0; i < count; i++) {
+		sum += h[i];
+		mu += (i*delta + low)*h[i];
+	}
+
+	sum = fabs(sum) > FLT_EPSILON ? 1. / sum : 0;
+	mu *= sum;
+	mu1 = 0;
+	q1 = 0;
+
+	for (i = 0; i < count; i++) {
+		double p_i, q2, mu2, val_i, sigma;
+		p_i = h[i] * sum;
+		mu1 *= q1;
+		q1 += p_i;
+		q2 = 1. - q1;
+
+		if (MIN(q1, q2) < FLT_EPSILON || MAX(q1, q2) > 1. - FLT_EPSILON)
+			continue;
+
+		val_i = i*delta + low;
+
+		mu1 = (mu1 + val_i*p_i) / q1;
+		mu2 = (mu - q1*mu1) / q2;
+		sigma = q1*q2*(mu1 - mu2)*(mu1 - mu2);
+		if (sigma > max_sigma) {
+			max_sigma = sigma;
+			max_val = val_i;
+		}
+	}
+
+	// shift threshold if the contrast is low (no over segmentation)
+	double max_val_shift = (max_val - 0.2 > 0) ? max_val - 0.2 : 0;
+
+	return (max_sigma >= otsuThresh) ? max_val : max_val_shift; // 0.0007 (for textRectangles)
+																//return max_val;
+}
 
 }
