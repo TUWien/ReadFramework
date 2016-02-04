@@ -56,7 +56,58 @@ class QSettings;
 namespace rdf {
 
 // read defines
-// read defines
+
+
+template <typename numFmt>
+static double statMoment(std::list<numFmt> *values, float momentValue, int interpolated = 1) {
+
+	values->sort();
+	typename std::list<numFmt>::iterator valIter = values->begin();
+
+	size_t lSize = values->size();
+	double moment = -1;
+	unsigned int momIdx = cvCeil(lSize*momentValue);
+	unsigned int idx = 1;
+
+	// find the statistical moment
+	while (valIter != values->end()) {
+
+		// skip
+		if (idx < momIdx) {
+			valIter++;
+			idx++;
+			continue;
+		}
+		if (lSize % 2 == 0 && momIdx < lSize && interpolated == 1)
+			// compute mean between this and the next element
+			moment = ((double)*valIter + *++valIter)*0.5;
+		else
+			moment = (double)*valIter;
+		break;
+	}
+
+	return moment;
+}
+
+template<typename sFmt, typename mFmt>
+static void mulMaskIntern(cv::Mat src, const cv::Mat mask) {
+
+	sFmt* srcPtr = (sFmt*)src.data;
+	const mFmt* mPtr = (mFmt*)mask.data;
+
+	int srcStep = (int)src.step / sizeof(sFmt);
+	int mStep = (int)mask.step / sizeof(mFmt);
+
+	for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep, mPtr += mStep) {
+
+		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+
+			if (mPtr[cIdx] == 0) srcPtr[cIdx] = 0;
+		}
+	}
+};
+
+
 class DllCoreExport Algorithms {
 
 public:
@@ -71,6 +122,11 @@ public:
 	cv::Mat get1DGauss(double sigma) const;
 	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
 	cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO) const;
+	float statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1) const;
+	void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
+	void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
+	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
+	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
 
 private:
 	Algorithms();
