@@ -84,9 +84,10 @@ add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
 
 # generate configuration file
-set(RDF_LIBS ${RDF_CORE_LIB} ${RDF_MODULE_LIB})
+set(RDF_LIBS ${DLL_CORE_NAME} ${DLL_MODULE_NAME})
 set(RDF_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 set(RDF_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/Core ${CMAKE_SOURCE_DIR}/src/Module ${CMAKE_BINARY_DIR})
 set(RDF_BUILD_DIRECTORY ${CMAKE_BINARY_DIR})
+set(RDF_BINARIES ${CMAKE_BINARY_DIR}/lib${DLL_CORE_NAME}.so ${CMAKE_BINARY_DIR}/lib${DLL_MODULE_NAME}.so)
 
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
