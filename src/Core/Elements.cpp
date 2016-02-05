@@ -35,7 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QXmlStreamReader>
-#include <QUUid>
+#include <QUuid>
 #pragma warning(pop)
 
 namespace rdf {
