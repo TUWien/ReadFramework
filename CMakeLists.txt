@@ -33,14 +33,14 @@ if (DISABLE_QT_DEBUG)
 endif()
 
 if(MSVC)
-	include(${CMAKE_SOURCE_DIR}/cmake/Win.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Win.cmake)
 elseif(APPLE)
-	include(${CMAKE_SOURCE_DIR}/cmake/Mac.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mac.cmake)
 else(UNIX)
-	include(${CMAKE_SOURCE_DIR}/cmake/Unix.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Unix.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
-	include(${CMAKE_SOURCE_DIR}/cmake/Unix.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Unix.cmake)
 endif()
 
 file(GLOB MAIN_SOURCES "src/*.cpp")
@@ -57,9 +57,9 @@ file(GLOB CORE_HEADERS "src/Core/*.h")
 # gather information for building
 include_directories (
 	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_SOURCE_DIR}/src
-	${CMAKE_SOURCE_DIR}/src/Core
-	${CMAKE_SOURCE_DIR}/src/Module
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Core
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Module
 )
 
 set(RDF_RESOURCES
@@ -73,12 +73,12 @@ QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 # QT5_ADD_TRANSLATION(RDF_QM ${RDF_TRANSLATIONS})
 
 if(MSVC)
-	include(${CMAKE_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
 else(UNIX)
-	include(${CMAKE_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
-	include(${CMAKE_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 endif()
 
 
