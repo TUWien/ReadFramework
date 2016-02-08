@@ -125,7 +125,7 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	return qImg;
 }
 
-bool Image::save(const QImage img, const QString savePath, int compression) const {
+bool Image::save(const QImage& img, const QString& savePath, int compression) const {
 
 	bool saved = false;
 
@@ -157,11 +157,13 @@ bool Image::save(const QImage img, const QString savePath, int compression) cons
 
 	saved = sImg.save(savePath, 0,compression);
 
+	if (!saved) qWarning() << "could not save " << savePath;
+
 	return saved;
 }
 
 
-bool Image::save(const cv::Mat img, const QString savePath, int compression) const {
+bool Image::save(const cv::Mat& img, const QString& savePath, int compression) const {
 
 	bool saved = false;
 

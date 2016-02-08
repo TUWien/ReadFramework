@@ -167,9 +167,13 @@ bool BaseBinarizationSu::compute() {
 	//Image::instance().imageInfo(erodedMask, "erodedMAsk");
 	//qDebug() << "mErodedMaskSize " << cvRound(mErodeMaskSize);
 	//Image::instance().save(erodedMask, "D:\\tmp\\maskTest.tif");
+	//Image::instance().save(mSrcImg, "D:\\tmp\\mSrcImg.tif");
 
 	cv::Mat contrastImg = compContrastImg(mSrcImg, erodedMask);
 	cv::Mat binContrastImg = compBinContrastImg(contrastImg);
+
+	//Image::instance().save(contrastImg, "D:\\tmp\\contrastImgBase.tif");
+	//Image::instance().save(binContrastImg, "D:\\tmp\\bincontrastBase.tif");
 
 	cv::Mat maskedContrastImg;
 	binContrastImg.convertTo(maskedContrastImg, CV_32F, 1.0f / 255.0f);
@@ -183,12 +187,16 @@ bool BaseBinarizationSu::compute() {
 
 
 	// now we need a 32F image
-	cv::Mat srcGray = mSrcImg;
+	cv::Mat srcGray = mSrcImg.clone();
 	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f/255.0f);
 
+
 	cv::Mat thrImg, resultSegImg;
 	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
+
+	//Image::instance().save(thrImg, "D:\\tmp\\thrImg.tif");
+	//Image::instance().save(resultSegImg, "D:\\tmp\\resultSegImg.tif");
 
 	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
 	mBwImg = resultSegImg.clone();
@@ -211,12 +219,18 @@ cv::Mat BaseBinarizationSu::compContrastImg(const cv::Mat& srcImg, const cv::Mat
 		return cv::Mat();
 	}
 
-	cv::Mat contrastImg = cv::Mat(srcImg.size(), CV_32FC1);
-	cv::Mat srcGray = srcImg;
-	if (srcGray.channels() != 1) cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
+	cv::Mat contrastImg(srcImg.size(), CV_32FC1);
+	cv::Mat srcGray;
+	if (srcImg.channels() != 1)
+		cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
+	else
+		srcGray = srcImg;
 
+	//Image::instance().save(srcGray, "D:\\tmp\\srcGray.tif");
 	cv::Mat maxImg = Algorithms::instance().dilateImage(srcGray, 3, Algorithms::SQUARE);
 	cv::Mat minImg = Algorithms::instance().erodeImage(srcGray, 3, Algorithms::SQUARE);
+	//Image::instance().save(maxImg, "D:\\tmp\\maxImgAdapted.tif");
+	//Image::instance().save(minImg, "D:\\tmp\\minImgAdapted.tif");
 	
 	//speed up version of opencv style
 	for (int i = 0; i < maxImg.rows; i++)
@@ -234,7 +248,7 @@ cv::Mat BaseBinarizationSu::compContrastImg(const cv::Mat& srcImg, const cv::Mat
 	return contrastImg;
 }
 
-inline float BaseBinarizationSu::contrastVal(unsigned char* maxVal, unsigned char * minVal) const {
+inline float BaseBinarizationSu::contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const {
 
 	return (float)(*maxVal - *minVal) / ((float)(*maxVal) + (float)(*minVal) + FLT_MIN);
 }
@@ -354,7 +368,7 @@ void BaseBinarizationSu::computeDistHist(const cv::Mat& src, QList<int> *maxDiff
 	}
 }
 
-void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const {
+void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) {
 	int filtersize, Nmin;
 
 	calcFilterParams(filtersize, Nmin);
@@ -367,8 +381,8 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	binContrast.convertTo(contrastBin32F, CV_32FC1, 1.0f / 255.0f);
 	//DkIP::imwrite("contrastBin343.png", binContrast);
 	// compute the mean image
-	rdf::Image::instance().imageInfo(grayImg32F, "grayImg32F");
-	rdf::Image::instance().imageInfo(contrastBin32F, "contrastBin32F");
+	//rdf::Image::instance().imageInfo(grayImg32F, "grayImg32F");
+	//rdf::Image::instance().imageInfo(contrastBin32F, "contrastBin32F");
 	cv::Mat meanImg = grayImg32F.mul(contrastBin32F);	// do not overwrite the gray image
 	cv::Mat stdImg = meanImg.mul(meanImg);
 
@@ -459,7 +473,7 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	thresholdImg = thrImgTmp;
 }
 
-inline void BaseBinarizationSu::calcFilterParams(int &filterS, int &Nm) const {
+inline void BaseBinarizationSu::calcFilterParams(int &filterS, int &Nm) {
 	filterS = cvRound(mStrokeW);
 	filterS = (filterS % 2) != 1 ? filterS + 1 : filterS;
 	Nm = filterS;
@@ -488,21 +502,24 @@ bool BinarizationSuAdapted::compute() {
 
 	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
 
-	contrastImg = compContrastImg(mSrcImg, erodedMask);
-	binContrastImg = compBinContrastImg(contrastImg);
+	mContrastImg = compContrastImg(mSrcImg, erodedMask);
+	//Image::instance().save(mContrastImg, "D:\\tmp\\contrastImgAdapted.tif");
+	mBinContrastImg = compBinContrastImg(mContrastImg);
 
 	//mStrokeW = 4; // = default value
-
-
+	//Image::instance().imageInfo(binContrastImg, "binConrtastImage");
+	//Image::instance().save(mBinContrastImg, "D:\\tmp\\binContrastAdapted.tif");
+	
 	// now we need a 32F image
-	cv::Mat srcGray = mSrcImg;
-	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
+	cv::Mat srcGray = mSrcImg.clone();
+	if (mSrcImg.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
 
 	cv::Mat resultSegImg;
-	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
+	computeThrImg(srcGray, mBinContrastImg, mThrImg, resultSegImg);					//compute threshold image
+	Image::instance().save(mThrImg, "D:\\tmp\\thrImgAdapted.tif");
 
-	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
+	cv::bitwise_and(resultSegImg, srcGray <= (mThrImg), resultSegImg);		//combine with Nmin condition
 	mBwImg = resultSegImg.clone();
 
 
@@ -518,15 +535,16 @@ bool BinarizationSuAdapted::compute() {
 	//	medianBlur(segImg, segImg, 3);
 }
 
-float BinarizationSuAdapted::contrastVal(unsigned char* maxVal, unsigned char * minVal) const {
+float BinarizationSuAdapted::contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const {
 
 	return 2.0f*(float)(*maxVal - *minVal) / ((float)(*maxVal) + (float)(*minVal) + 255.0f + FLT_MIN);
 }
 
 
-void BinarizationSuAdapted::calcFilterParams(int &filterS, int &Nm) const {
+void BinarizationSuAdapted::calcFilterParams(int &filterS, int &Nm) {
 
 	//if (mStrokeW >= 4.5) mStrokeW = 3.0;		//eventually strokeW should be set to 3.0 as initial value!!!
+	//mStrokeW = 3.0f;
 	filterS = cvRound(mStrokeW * 10);
 	if ((filterS % 2) != 1) filterS += 1;
 	Nm = cvFloor(mStrokeW * 10);
@@ -559,9 +577,9 @@ bool BinarizationSuFgdWeight::compute() {
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
 
 	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
-	weightFunction(srcGray, thrImg, erodedMask);
+	weightFunction(srcGray, mThrImg, erodedMask);
 
-	cv::bitwise_and(mBwImg, srcGray <= (thrImg), mBwImg);		//combine with Nmin condition
+	cv::bitwise_and(mBwImg, srcGray <= (mThrImg), mBwImg);		//combine with Nmin condition
 
 	return stat;
 }
@@ -573,12 +591,12 @@ cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 	m[2] = meanContrast[2];
 
 	if (meanContrast[0] == -1.0f) {
-		int n = cv::countNonZero(binContrastImg);
+		int n = cv::countNonZero(mBinContrastImg);
 		//TODO: prove if contrastImg in normalize and statmomentMat must be set to tmp?
 		//Mat tmp = contrastImg.clone();
-		cv::normalize(contrastImg, contrastImg, 1, 0, cv::NORM_MINMAX, -1, binContrastImg);
+		cv::normalize(mContrastImg, mContrastImg, 1, 0, cv::NORM_MINMAX, -1, mBinContrastImg);
 		if (n > 2000)
-			m[0] = rdf::Algorithms::instance().statMomentMat(contrastImg, binContrastImg, 0.5f, 5000);
+			m[0] = rdf::Algorithms::instance().statMomentMat(mContrastImg, mBinContrastImg, 0.5f, 5000);
 		else
 			m[0] = 0.0f;
 	}
