@@ -7,7 +7,12 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.1)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
-message(STATUS "prefix path:${CMAKE_PREFIX_PATH}")
+if(GLOBAL_READ_BUILD) # set output path when building for READ
+	SET(CMAKE_LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+	SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
+	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
+endif()
+
 # include macros needed
 include("cmake/Utils.cmake")
 
