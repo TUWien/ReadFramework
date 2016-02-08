@@ -81,15 +81,6 @@ else()
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 endif()
 
-
-if(READ_GLOBAL_BUILD)
-	set(RDF_LIBS ${RDF_LIBS} PARENT_SCOPE)
-	set(RDF_SOURCE_DIR ${RDF_SOURCE_DIR} PARENT_SCOPE)
-	set(RDF_INCLUDE_DIRECTORY ${RDF_INCLUDE_DIRECTORY} PARENT_SCOPE)
-	set(RDF_BUILD_DIRECTORY ${RDF_BUILD_DIRECTORY} PARENT_SCOPE)
-	set(RDF_BINARIES ${RDF_BINARIES})
-endif()
-
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)
 # foreach (_variableName ${_variableNames})
