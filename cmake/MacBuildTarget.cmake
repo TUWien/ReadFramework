@@ -54,7 +54,6 @@ set_target_properties(${DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${DLL_MODULE_NAME}d)
 set_target_properties(${DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${DLL_MODULE_NAME})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
 
 # mac's bundle install
 set_target_properties(${BINARY_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/macosx/Info.plist.in")
@@ -75,9 +74,10 @@ configure_file(${CMAKE_SOURCE_DIR}/macosx/bundle.cmake.in ${CMAKE_CURRENT_BINARY
 add_custom_target(bundle ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake)
 
 # generate configuration file
-set(RDF_LIBS ${RDF_CORE_LIB} ${RDF_MODULE_LIB})
+set(RDF_LIBS ${DLL_CORE_NAME} ${DLL_MODULE_NAME})
 set(RDF_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 set(RDF_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/Core ${CMAKE_SOURCE_DIR}/src/Module ${CMAKE_BINARY_DIR})
 set(RDF_BUILD_DIRECTORY ${CMAKE_BINARY_DIR})
+set(RDF_BINARIES ${CMAKE_BINARY_DIR}/lib${DLL_CORE_NAME}.so ${CMAKE_BINARY_DIR}/lib${DLL_MODULE_NAME}.so)
 
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
