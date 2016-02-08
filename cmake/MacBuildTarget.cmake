@@ -1,9 +1,9 @@
 set(RDF_RC src/rdf.rc) 
 
 # create the targets
-set(BINARY_NAME ${CMAKE_PROJECT_NAME})
-set(DLL_CORE_NAME ${CMAKE_PROJECT_NAME}Core)
-set(DLL_MODULE_NAME ${CMAKE_PROJECT_NAME}Module)
+set(BINARY_NAME ${PROJECT_NAME})
+set(DLL_CORE_NAME ${PROJECT_NAME}Core)
+set(DLL_MODULE_NAME ${PROJECT_NAME}Module)
 
 #binary
 link_directories(${OpenCV_LIBRARY_DIRS})
