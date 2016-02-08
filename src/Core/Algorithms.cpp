@@ -38,6 +38,7 @@
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "Image.h"
 #pragma warning(pop)
 
 namespace rdf {
@@ -55,7 +56,7 @@ Algorithms& Algorithms::instance() {
 	return *inst;
 }
 
-cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape) const {
+cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
@@ -74,12 +75,12 @@ cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape sha
 		bwImg.convertTo(imgU, CV_8U, 255);
 
 	cv::Mat se = createStructuringElement(seSize, shape);
-	cv::dilate(imgU, dImg, se, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, 0);
+	cv::dilate(imgU, dImg, se, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, borderValue);
 
 	return dImg;
 }
 
-cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape) const {
+cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
@@ -99,7 +100,7 @@ cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shap
 		bwImg.convertTo(imgU, CV_8U, 255);
 
 	cv::Mat se = createStructuringElement(seSize, shape);
-	cv::erode(imgU, eImg, se, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, 255);
+	cv::erode(imgU, eImg, se, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, borderValue);
 
 	imgU = eImg;
 	if (bwImg.depth() != CV_8U)

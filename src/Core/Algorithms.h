@@ -114,8 +114,8 @@ public:
 	enum MorphBorder { BORDER_ZERO = 0, BORDER_FLIP };
 
 	static Algorithms& instance();
-	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
- 	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE) const;
+	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 0) const;
+ 	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 255) const;
 	cv::Mat createStructuringElement(int seSize, int shape) const;
 	cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) const;
 	cv::Mat get1DGauss(double sigma) const;

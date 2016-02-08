@@ -60,21 +60,23 @@ namespace rdf {
 		img.load(mConfig.imagePath());
 		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
 
+		qDebug() << "image converted...";
+
 		
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		//rdf::BaseBinarizationSu testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
+		rdf::BaseBinarizationSu testBin(inputImg);
+		testBin.compute();
+		cv::Mat binImg = testBin.binaryImage();
 
 		//rdf::BinarizationSuAdapted testBin(inputImg);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
-		rdf::BinarizationSuFgdWeight testBin(inputImg);
-		testBin.compute();
-		cv::Mat binImg = testBin.binaryImage();
+		//rdf::BinarizationSuFgdWeight testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
 
 		rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;

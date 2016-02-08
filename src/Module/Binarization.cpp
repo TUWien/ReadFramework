@@ -162,7 +162,11 @@ bool BaseBinarizationSu::compute() {
 	if (!checkInput())
 		return false;
 
-	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE, 0);
+
+	//Image::instance().imageInfo(erodedMask, "erodedMAsk");
+	//qDebug() << "mErodedMaskSize " << cvRound(mErodeMaskSize);
+	//Image::instance().save(erodedMask, "D:\\tmp\\maskTest.tif");
 
 	cv::Mat contrastImg = compContrastImg(mSrcImg, erodedMask);
 	cv::Mat binContrastImg = compBinContrastImg(contrastImg);
@@ -172,6 +176,11 @@ bool BaseBinarizationSu::compute() {
 	maskedContrastImg = contrastImg.mul(maskedContrastImg);
 	mStrokeW = strokeWidth(maskedContrastImg);
 	maskedContrastImg.release();
+
+	//qDebug() << "Estimated Strokewidth: " << mStrokeW;
+	//Image::instance().save(contrastImg, "D:\\tmp\\contrastImg.tif");
+	//Image::instance().save(binContrastImg, "D:\\tmp\\bincontrastImg.tif");
+
 
 	// now we need a 32F image
 	cv::Mat srcGray = mSrcImg;
@@ -205,7 +214,7 @@ cv::Mat BaseBinarizationSu::compContrastImg(const cv::Mat& srcImg, const cv::Mat
 	cv::Mat contrastImg = cv::Mat(srcImg.size(), CV_32FC1);
 	cv::Mat srcGray = srcImg;
 	if (srcGray.channels() != 1) cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
-	
+
 	cv::Mat maxImg = Algorithms::instance().dilateImage(srcGray, 3, Algorithms::SQUARE);
 	cv::Mat minImg = Algorithms::instance().erodeImage(srcGray, 3, Algorithms::SQUARE);
 	
