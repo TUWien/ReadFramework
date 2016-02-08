@@ -56,7 +56,7 @@ file(GLOB CORE_HEADERS "src/Core/*.h")
 
 # gather information for building
 include_directories (
-	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_BINARY_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/src
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Core
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Module
