@@ -7,7 +7,21 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.1)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
-message(STATUS "prefix path:${CMAKE_PREFIX_PATH}")
+if(DEFINED GLOBAL_READ_BUILD)
+	if(${GLOBAL_READ_BUILD}) # cannot be incooperated into if one line above
+	# set output path when building for READ
+		if(MSVC)
+			SET(CMAKE_LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+			SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
+			SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
+		else()
+			SET(CMAKE_LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/READ)
+			SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/READ)
+			SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/READ)	
+		endif()
+	endif()
+endif()
+
 # include macros needed
 include("cmake/Utils.cmake")
 
@@ -36,7 +50,7 @@ if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Win.cmake)
 elseif(APPLE)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mac.cmake)
-else(UNIX)
+elseif(UNIX)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Unix.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
@@ -56,7 +70,7 @@ file(GLOB CORE_HEADERS "src/Core/*.h")
 
 # gather information for building
 include_directories (
-	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_BINARY_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/src
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Core
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Module
@@ -74,16 +88,19 @@ QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 
 if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
-else(UNIX)
+elseif(APPLE)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacBuildTarget.cmake)
+elseif(UNIX)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 endif()
 
-
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)
 # foreach (_variableName ${_variableNames})
 #     message(STATUS "${_variableName}=${${_variableName}}")
 # endforeach()
+
+

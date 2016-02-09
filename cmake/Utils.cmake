@@ -111,8 +111,12 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 elseif(!MSVC)
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
-if(NOMACS_VARS_ALREADY_SET) # most probably that this is a complete build of the READ framework, thus we need to set compiler/linker settings for ReallyRelease
-	set(CMAKE_CXX_FLAGS_REALLYRELEASE "${CMAKE_CXX_FLAGS_RELEASE}  /DQT_NO_DEBUG_OUTPUT") 
-	set(CMAKE_EXE_LINKER_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE") # /subsystem:windows does not work due to a bug in cmake (see http://public.kitware.com/Bug/view.php?id=12566)
+
+if(DEFINED GLOBAL_READ_BUILD)
+	if(${GLOBAL_READ_BUILD}) # cannot be incooperated into if one line above
+	#  this is a complete build of the READ framework, thus we need to set compiler/linker settings for ReallyRelease
+		set(CMAKE_CXX_FLAGS_REALLYRELEASE "${CMAKE_CXX_FLAGS_RELEASE}  /DQT_NO_DEBUG_OUTPUT") 
+		set(CMAKE_EXE_LINKER_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE") # /subsystem:windows does not work due to a bug in cmake (see http://public.kitware.com/Bug/view.php?id=12566)
+	endif()
 endif()
 endmacro(RDF_CHECK_COMPILER)
