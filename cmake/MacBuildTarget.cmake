@@ -1,3 +1,4 @@
+message(STATUS "using MacBuildTarget.cmake")
 set(RDF_RC src/rdf.rc) 
 
 # create the targets

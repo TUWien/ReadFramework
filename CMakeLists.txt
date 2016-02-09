@@ -88,6 +88,8 @@ QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 
 if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
+else(APPLE)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacBuildTarget.cmake)
 else(UNIX)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 else()
