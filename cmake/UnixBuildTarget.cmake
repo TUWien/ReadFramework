@@ -80,8 +80,11 @@ set(CPACK_IGNORE_FILES "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar
 set(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
 include(CPack)
 # simulate autotools' "make dist"
-if(NOT GLOBAL_READ_BUILD)
-	add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+
+if(DEFINED GLOBAL_READ_BUILD)
+	if(NOT ${GLOBAL_READ_BUILD}) # cannot be incooperated into if one line above
+		add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+	endif()
 endif()
 
 # generate configuration file
