@@ -71,8 +71,8 @@ set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/macosx/nomacs.icns PROPE
 install(TARGETS ${RDF_BINARY_NAME} ${DLL_NAME} ${DLL_LOADER_NAME} ${RDF_DLL_CORE_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 # create a "transportable" bundle - all libs into the bundle: "make bundle" after make install
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/macosx/bundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake @ONLY)
-add_custom_target(bundle ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake)
+#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/macosx/bundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake @ONLY)
+#add_custom_target(bundle ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/bundle.cmake)
 
 # generate configuration file
 set(RDF_LIBS ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME})
