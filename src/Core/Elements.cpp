@@ -89,8 +89,14 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 	p.setPen(config.pen());
 
 	// draw polygon
-	if (config.drawPoly() && !polygon().isEmpty())
-		p.drawPolygon(polygon().polygon());
+	if (config.drawPoly() && !polygon().isEmpty()) {
+		
+		QPainterPath path;
+		path.addPolygon(polygon().closedPolygon());
+
+		p.drawPath(path);
+		p.fillPath(path, config.brush());
+	}
 
 }
 

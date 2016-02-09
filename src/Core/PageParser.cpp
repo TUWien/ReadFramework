@@ -179,7 +179,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	qDebug() << "---------------------------------------------------------\n" << *pageElement;
+	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
 
 	return pageElement;

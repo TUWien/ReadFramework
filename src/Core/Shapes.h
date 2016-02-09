@@ -63,6 +63,7 @@ public:
 
 	void setPolygon(const QPolygon& polygon);
 	QPolygon polygon() const;
+	QPolygon closedPolygon() const;
 
 protected:
 	QPolygon mPoly;

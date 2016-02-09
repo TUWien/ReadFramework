@@ -65,6 +65,14 @@ QPolygon Polygon::polygon() const {
 	return mPoly;
 }
 
+QPolygon Polygon::closedPolygon() const {
+	
+	QPolygon closed = mPoly;
+	if (!mPoly.isEmpty())
+		closed.append(mPoly.first());
+
+	return closed;
+}
 
 // BaseLine --------------------------------------------------------------------
 BaseLine::BaseLine(const QPolygon & baseLine) {
