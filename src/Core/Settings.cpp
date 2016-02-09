@@ -53,6 +53,7 @@ void GlobalSettings::load(QSharedPointer<QSettings> settings) {
 	settings->beginGroup(mName);
 
 	workingDir = settings->value("workingDir", workingDir).toString();
+	xmlSubDir = settings->value("xmlSubDir", xmlSubDir).toString();
 	settingsFileName = settings->value("settingsFileName", settingsFileName).toString();
 	// add loading here...
 
@@ -67,6 +68,8 @@ void GlobalSettings::save(QSharedPointer<QSettings> settings, const GenericSetti
 
 	if (!force && workingDir != initS.workingDir)
 		settings->setValue("workingDir", workingDir);
+	if (!force && xmlSubDir != initS.xmlSubDir)
+		settings->setValue("xmlSubDir", xmlSubDir);
 	if (!force && settingsFileName != initS.settingsFileName)
 		settings->setValue("settingsFileName", settingsFileName);
 
@@ -78,9 +81,9 @@ void GlobalSettings::save(QSharedPointer<QSettings> settings, const GenericSetti
 void GlobalSettings::defaultSettings() {
 
 	workingDir = "";
-	settingsFileName = "settings.nfo";
+	xmlSubDir = "page";
+	settingsFileName = "rdf-settings.nfo";
 }
-
 
 // Config --------------------------------------------------------------------
 Config::Config() {

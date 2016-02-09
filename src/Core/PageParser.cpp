@@ -31,8 +31,9 @@
  *******************************************************************************************************/
 
 #include "PageParser.h"
-#include "Elements.h"
+#include "ElementsHelper.h"
 #include "Utils.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QFile>
@@ -40,6 +41,7 @@
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QBuffer>
+#include <QDir>
 #pragma warning(pop)
 
 namespace rdf {
@@ -326,8 +328,10 @@ QString PageXmlParser::imagePathToXmlPath(const QString& path) {
 
 	// TODO: add optional xml search/save path
 	QFileInfo info(path);
-	QString xmlPath = path;
-	xmlPath = xmlPath.replace(info.suffix(), "xml");
+	QString xmlDir = info.absolutePath() + QDir::separator() + Config::instance().global().xmlSubDir;
+	QString xmlFileName = info.fileName().replace(info.suffix(), "xml");
+
+	QString xmlPath = QFileInfo(xmlDir, xmlFileName).absoluteFilePath();
 
 	return xmlPath;
 }

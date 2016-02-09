@@ -76,6 +76,7 @@ public:
 
 	QString workingDir;
 	QString settingsFileName;
+	QString xmlSubDir;
 
 protected:
 	void defaultSettings() override;
@@ -87,6 +88,7 @@ class DllCoreExport Config {
 public:
 	static Config& instance();
 	static GlobalSettings& global();		// convenience
+	static GlobalSettings& paint();		// convenience
 	QSettings& settings();
 
 	void load();
@@ -105,6 +107,7 @@ private:
 	QSharedPointer<QSettings> mSettings;
 	GlobalSettings mGlobal;
 	GlobalSettings mGlobalInit;
+
 };
 
 };

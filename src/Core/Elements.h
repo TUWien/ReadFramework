@@ -54,10 +54,12 @@
 // Qt defines
 class QXmlStreamReader;
 class QXmlStreamWriter;
+class QPainter;
 
 namespace rdf {
 
 // read defines
+class RegionTypeConfig;
 
 class DllCoreExport Region {
 
@@ -95,6 +97,8 @@ public:
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
 
+	virtual void draw(QPainter& painter, const RegionTypeConfig& config) const;
+
 	virtual QString toString(bool withChildren = false) const;
 	virtual QString childrenToString() const;
 
@@ -130,60 +134,7 @@ protected:
 	QString mText;
 };
 
-
-class RegionXmlHelper {
-
-public:
-	static RegionXmlHelper& instance();
-
-	enum XmlTags {
-		tag_coords,
-		tag_text_equiv,
-		tag_unicode,
-		tag_plain_text,
-		tag_baseline,
-
-		attr_points,
-		attr_id,
-
-		tag_end
-	};
-
-	QString tag(const XmlTags& tagId) const;
-
-private:
-	RegionXmlHelper();
-	RegionXmlHelper(const RegionXmlHelper&);
-
-	QStringList createTags() const;
-	QStringList mTags;
-};
-
-
-class DllCoreExport RegionManager {
-
-public:
-	static RegionManager& instance();
-
-	Region::Type type(const QString& typeName) const;
-	QString typeName(const Region::Type& type) const;
-	QStringList typeNames() const;
-	bool isValidTypeName(const QString& typeName) const;
-
-	QSharedPointer<Region> createRegion(const Region::Type& type) const;
-
-private:
-	RegionManager();
-	RegionManager(const RegionManager&);
-	
-	QStringList createTypeNames() const;
-
-	QStringList mTypeNames;
-
-};
-
-
-class PageElement {
+class DllCoreExport PageElement {
 
 public:
 	PageElement(const QString& xmlPath = QString());

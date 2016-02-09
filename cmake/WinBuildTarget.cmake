@@ -88,14 +88,14 @@ foreach(qtlib ${QTLIBLIST})
 endforeach(qtlib)
 
 # create settings file for portable version while working
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/ReallyRelease/settings.nfo)
-	file(WRITE ${CMAKE_BINARY_DIR}/ReallyRelease/settings.nfo "")
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/ReallyRelease/rdf-settings.nfo)
+	file(WRITE ${CMAKE_BINARY_DIR}/ReallyRelease/rdf-settings.nfo "")
 endif()
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/Release/settings.nfo)
-	file(WRITE ${CMAKE_BINARY_DIR}/Release/settings.nfo "")
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo)
+	file(WRITE ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo "")
 endif()
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/Debug/settings.nfo)
-	file(WRITE ${CMAKE_BINARY_DIR}/Debug/settings.nfo "")
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/Debug/rdf-settings.nfo)
+	file(WRITE ${CMAKE_BINARY_DIR}/Debug/rdf-settings.nfo "")
 endif()
 
 # # copy translation files after each build

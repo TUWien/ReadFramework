@@ -31,11 +31,13 @@
  *******************************************************************************************************/
 
 #include "Elements.h"
+#include "ElementsHelper.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <QUuid>
+#include <QPainter>
 #pragma warning(pop)
 
 namespace rdf {
@@ -82,6 +84,16 @@ Polygon Region::polygon() const {
 	return mPoly;
 }
 
+void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
+
+	p.setPen(config.pen());
+
+	// draw polygon
+	if (config.drawPoly() && !polygon().isEmpty())
+		p.drawPolygon(polygon().polygon());
+
+}
+
 void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
 }
@@ -101,7 +113,7 @@ void Region::setChildren(const QVector<QSharedPointer<Region>>& children) {
 }
 
 /// <summary>
-/// Childrens this instance.
+/// Children of this instance.
 /// </summary>
 /// <returns></returns>
 QVector<QSharedPointer<Region> > Region::children() const {
@@ -282,124 +294,6 @@ QString TextLine::toString(bool withChildren) const {
 		msg += Region::childrenToString();
 
 	return msg;
-}
-
-// RegionXmlHelper --------------------------------------------------------------------
-RegionXmlHelper::RegionXmlHelper() {
-
-	mTags = createTags();
-}
-
-RegionXmlHelper& RegionXmlHelper::instance() {
-
-	static QSharedPointer<RegionXmlHelper> inst;
-	if (!inst)
-		inst = QSharedPointer<RegionXmlHelper>(new RegionXmlHelper());
-	return *inst;
-}
-
-QStringList RegionXmlHelper::createTags() const {
-
-	QStringList tn;
-	for (int idx = 0; idx < XmlTags::tag_end; idx++)
-		tn.append(tag((XmlTags) idx));
-
-	return tn;
-}
-
-QString RegionXmlHelper::tag(const XmlTags& tagId) const {
-
-	switch (tagId) {
-	case tag_coords:		return "Coords";
-	case tag_text_equiv:	return "TextEquiv";
-	case tag_unicode:		return "Unicode";
-	case tag_plain_text:	return "PlainText";
-	case tag_baseline:		return "Baseline";
-
-	case attr_points:		return "points";
-	case attr_id:			return "id";
-	}
-
-	qWarning() << "unknown tag: " << tagId;
-	return "";
-}
-
-
-// RegionManager --------------------------------------------------------------------
-RegionManager::RegionManager() {
-
-	mTypeNames = createTypeNames();
-}
-
-RegionManager& RegionManager::instance() {
-
-	static QSharedPointer<RegionManager> inst;
-	if (!inst)
-		inst = QSharedPointer<RegionManager>(new RegionManager());
-	return *inst;
-}
-
-
-QString RegionManager::typeName(const Region::Type& type) const {
-
-	switch (type) {
-	case Region::type_unknown:		return "Unknown";
-	case Region::type_root:			return "Root";
-	case Region::type_text_region:	return "TextRegion";
-	case Region::type_text_line:	return "TextLine";
-	case Region::type_word:			return "Word";
-	case Region::type_separator:	return "Separator";
-	case Region::type_image:		return "ImageRegion";
-	case Region::type_graphic:		return "GraphicRegion";
-	case Region::type_noise:		return "NoiseRegion";
-	}
-
-	return "Unknown";
-}
-
-QStringList RegionManager::createTypeNames() const {
-
-	QStringList tn;
-	for (int idx = 0; idx < Region::type_end; idx++)
-		tn.append(typeName((Region::Type) idx));
-
-	return tn;
-}
-
-QStringList RegionManager::typeNames() const {
-	return mTypeNames;
-}
-
-bool RegionManager::isValidTypeName(const QString & typeName) const {
-
-	return mTypeNames.contains(typeName);
-}
-
-QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) const {
-
-	switch (type) {
-	case Region::type_text_region:
-	case Region::type_text_line:
-	case Region::type_word:
-		return QSharedPointer<TextLine>(new TextLine());
-		break;
-		// Add new types here...
-	}
-
-	return QSharedPointer<Region>(new Region());
-}
-
-Region::Type RegionManager::type(const QString& typeName) const {
-
-	QStringList tns = typeNames();
-	int typeIdx = tns.indexOf(typeName);
-
-	if (typeIdx != -1)
-		return (Region::Type) typeIdx;
-	else
-		qWarning() << "Unknown type: " << typeName;
-
-	return Region::type_unknown;
 }
 
 // PageElement --------------------------------------------------------------------
