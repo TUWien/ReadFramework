@@ -102,12 +102,12 @@ public:
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
 	cv::Mat compBinContrastImg(const cv::Mat& contrastImg) const;
-	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const;
-	virtual void calcFilterParams(int &filterS, int &Nm) const;
+	virtual float contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const;
+	virtual void calcFilterParams(int &filterS, int &Nm);
 	virtual float strokeWidth(const cv::Mat& contrastImg) const;
 	float thresholdVal(float *mean, float *std) const;
 	void computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity, float gSigma) const;
-	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg) const;
+	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg);
 	bool checkInput() const override;
 	//void compThrImg();
 	//void compDisHist();
@@ -146,12 +146,12 @@ public:
 
 protected:
 	float setStrokeWidth(float strokeW);
-	virtual float contrastVal(unsigned char* maxVal, unsigned char * minVal) const override;
-	virtual void calcFilterParams(int &filterS, int &Nm) const override;
+	virtual float contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const override;
+	virtual void calcFilterParams(int &filterS, int &Nm) override;
 
-	cv::Mat contrastImg;
-	cv::Mat binContrastImg;
-	cv::Mat thrImg;
+	cv::Mat mContrastImg;
+	cv::Mat mBinContrastImg;
+	cv::Mat mThrImg;
 private:
 };
 
@@ -175,12 +175,12 @@ protected:
 	//virtual void init();
 	virtual void weightFunction(cv::Mat& grayImg, cv::Mat& thrImg, const cv::Mat& mask);
 
-	int fgdEstFilterSize = 32;								//the filter size for the foreground estimation
-	float sigmSlope = 15.0f;
-	cv::Mat fgdEstImg;
-	cv::Scalar meanContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
-	cv::Scalar stdContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
-	float confidence = -1.0f;
+	int mFgdEstFilterSize = 32;								//the filter size for the foreground estimation
+	float mSigmSlope = 15.0f;
+	cv::Mat mFgdEstImg;
+	cv::Scalar mMeanContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	cv::Scalar mStdContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	float mConfidence = -1.0f;
 
 private:
 };
