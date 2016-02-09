@@ -205,8 +205,8 @@ bool BaseBinarizationSu::compute() {
 	// I guess here is a good point to save the settings
 	saveSettings();
 	mDebug << " computed...";
-	mWarning << "a warning...";
-	mInfo << "an info...";
+	//mWarning << "a warning...";
+	//mInfo << "an info...";
 
 	return true;
 }
@@ -375,7 +375,7 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	//filtersize = cvRound(strokeW);
 	//filtersize = (filtersize % 2) != 1 ? filtersize+1 : filtersize;
 	//Nmin = filtersize;
-	qDebug() << "kernelsize: " << filtersize << " nMin: " << Nmin;
+	//qDebug() << "kernelsize: " << filtersize << " nMin: " << Nmin;
 
 	cv::Mat contrastBin32F;
 	binContrast.convertTo(contrastBin32F, CV_32FC1, 1.0f / 255.0f);
@@ -505,7 +505,7 @@ QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
 	//msg += "strokeW: " + QString::number(mStrokeW);
-	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
+	msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }
@@ -544,12 +544,12 @@ bool BinarizationSuAdapted::compute() {
 	cv::bitwise_and(resultSegImg, srcGray <= (mThrImg), resultSegImg);		//combine with Nmin condition
 	mBwImg = resultSegImg.clone();
 
+	if (mMedianFilter)
+		cv::medianBlur(mBwImg, mBwImg, 3);
 
 	// I guess here is a good point to save the settings
 	saveSettings();
 	mDebug << " computed...";
-	mWarning << "a warning...";
-	mInfo << "an info...";
 
 	return true;
 
@@ -579,8 +579,9 @@ float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
-	msg += "strokeW: " + QString::number(mStrokeW);
-	msg += "erodedMasksize: " + QString::number(mErodeMaskSize);
+	msg += " computed... ";
+	msg += " strokeW: " + QString::number(mStrokeW);
+	msg += " erodedMasksize: " + QString::number(mErodeMaskSize);
 
 	return msg;
 }
@@ -594,14 +595,20 @@ bool BinarizationSuFgdWeight::compute() {
 	
 	mMeanContrast = computeConfidence();
 
-	cv::Mat srcGray = mSrcImg;
+	//Image::instance().save(mBwImg, "D:\\tmp\\bwimgTest.tif");
+	//qDebug() << "meanContrast: " << mMeanContrast[0];
+
+	cv::Mat srcGray = mSrcImg.clone();
 	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
 
+	//Image::instance().save(mThrImg, "D:\\tmp\\thrFgdInput.tif");
 	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
 	weightFunction(srcGray, mThrImg, erodedMask);
 
 	cv::bitwise_and(mBwImg, srcGray <= (mThrImg), mBwImg);		//combine with Nmin condition
+
+	mDebug << " computed...";
 
 	return stat;
 }
@@ -615,7 +622,7 @@ cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 	if (mMeanContrast[0] == -1.0f) {
 		int n = cv::countNonZero(mBinContrastImg);
 		//TODO: prove if contrastImg in normalize and statmomentMat must be set to tmp?
-		//Mat tmp = contrastImg.clone();
+		//Mat tmp = mContrastImg.clone();
 		cv::normalize(mContrastImg, mContrastImg, 1, 0, cv::NORM_MINMAX, -1, mBinContrastImg);
 		if (n > 2000)
 			m[0] = rdf::Algorithms::instance().statMomentMat(mContrastImg, mBinContrastImg, 0.5f, 5000);
@@ -629,15 +636,29 @@ cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, const cv::Mat& mask) {
 
 	mFgdEstImg = computeMeanFgdEst(grayImg, mask);					//compute foreground estimation
+	//Image::instance().save(mFgdEstImg, "D:\\tmp\\thrFgdEst.tif");
 
 	cv::Mat tmpMask;
 	
-	threshold(tImg, tmpMask, 0, 1.0, CV_THRESH_BINARY);
+	//FK changes to old version:
+	//instead of threshold 0.0 -> 50/255 is used
+	//due to the filtering, values are not 0 any more...
+	cv::threshold(tImg, tmpMask, 50.0/255.0, 1.0, CV_THRESH_BINARY);
+	//cv::threshold(tImg, tmpMask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 	cv::Mat histogram = rdf::Algorithms::instance().computeHist(tImg, tmpMask);		//weight gray values with sigmoid function according
+
+	//Image::instance().save(tImg, "D:\\tmp\\tImg.tif");
+	//Image::instance().save(tmpMask, "D:\\tmp\\tmpMask.tif");
+	//Image::instance().save(histogram, "D:\\tmp\\tmpHist.tif");
+	//Image::instance().imageInfo(histogram, "histogram");
+	//qDebug().noquote() << Image::instance().printImage(histogram, "histogram");
+
 	tmpMask.release();
 
 	double l = rdf::Algorithms::instance().getThreshOtsu(histogram) / 255.0f;		//sigmoid slope, centered at l according text estimation
 	float sigmaSlopeTmp = mSigmSlope / 255.0f;
+
+	//qDebug() << "otsu: " << l << " sigmaSlope: " << sigmaSlopeTmp;
 
 	double fm[256];
 	for (int i = 0; i < 256; i++)

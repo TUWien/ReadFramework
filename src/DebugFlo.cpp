@@ -70,15 +70,15 @@ namespace rdf {
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
-		rdf::BinarizationSuAdapted testBin(inputImg);
+		//rdf::BinarizationSuAdapted testBin(inputImg);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
-		//rdf::BinarizationSuFgdWeight testBin(inputImg);
+		rdf::BinarizationSuFgdWeight testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
-		rdf::Image::instance().imageInfo(binImg, "binImg");
+		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
 		
 		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);

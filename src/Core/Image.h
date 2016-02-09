@@ -35,6 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
 #include <QImage>
+#include <QString>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
@@ -53,6 +54,34 @@
 
 namespace rdf {
 
+	template <typename numFmt>
+	static QString printMat(const cv::Mat& src, const QString varName) {
+
+		QString msg = varName;
+		msg.append(" = [");	// matlab...
+
+		int cnt = 0;
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx++) {
+
+			const numFmt* srcPtr = src.ptr<numFmt>(rIdx);
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx++, cnt++) {
+
+
+				msg.append(QString::number(srcPtr[cIdx]));
+				msg.append( (cIdx < src.cols - 1) ? " " : "; " ); // next row matlab?
+
+				if (cnt % 7 == 0)
+					msg.append("...\n");
+			}
+
+		}
+		msg.append("];");
+
+		return msg;
+	}
+
 
 // read defines
 class DllCoreExport Image {
@@ -66,6 +95,7 @@ public:
 	bool save(const cv::Mat& img, const QString& savePath, int compression = 90) const;
 	bool alphaChannelUsed(const QImage& img) const;
 	void imageInfo(const cv::Mat& img, const QString name) const;
+	QString printImage(const cv::Mat& img, const QString name) const;
 
 private:
 	Image();
