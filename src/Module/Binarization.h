@@ -143,6 +143,7 @@ public:
 	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BaseBinarizationSu(img, mask) { mModuleName = "BaseBinarizationAdapted"; };
 	virtual bool compute() override;
 	virtual QString toString() const override;
+	void setFiltering(bool medianFilter) { mMedianFilter = medianFilter; };
 
 protected:
 	float setStrokeWidth(float strokeW);
@@ -153,6 +154,7 @@ protected:
 	cv::Mat mBinContrastImg;
 	cv::Mat mThrImg;
 private:
+	bool mMedianFilter = true;
 };
 
 

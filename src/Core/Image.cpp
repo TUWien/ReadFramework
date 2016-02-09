@@ -243,4 +243,21 @@ void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const 
 
 }
 
+QString Image::printImage(const cv::Mat& img, const QString name) const {
+	QString imgInfo;
+	if (img.depth() == CV_32FC1)
+		imgInfo = rdf::printMat<float>(img, name);
+	else if (img.depth() == CV_64FC1)
+		imgInfo = rdf::printMat<double>(img, name);
+	else if (img.depth() == CV_8UC1) {
+		cv::Mat tmp;
+		img.convertTo(tmp, CV_32FC1);
+		imgInfo = rdf::printMat<float>(tmp, name);
+	}
+	else
+		imgInfo = "I could not visualize the mat";
+
+	return imgInfo;
+}
+
 }
