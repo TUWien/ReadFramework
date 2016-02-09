@@ -45,6 +45,7 @@ This will by default place the source into ./ReadFramework
 
 Go to the ReadFramework directory and run `cmake` to get the Makefiles:
 ``` console
+cd ReadFramework
 cmake . 
 ```
 
