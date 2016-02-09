@@ -384,7 +384,14 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	//rdf::Image::instance().imageInfo(grayImg32F, "grayImg32F");
 	//rdf::Image::instance().imageInfo(contrastBin32F, "contrastBin32F");
 	cv::Mat meanImg = grayImg32F.mul(contrastBin32F);	// do not overwrite the gray image
+
+														// 1-dimensional since the filter is symmetric
+	//cv::Mat sumKernel = cv::Mat(3, 1, CV_32FC1);
+	//sumKernel = 1.0/3.0;
+	//cv::filter2D(meanImg, meanImg, CV_32FC1, sumKernel);
+
 	cv::Mat stdImg = meanImg.mul(meanImg);
+	//Image::instance().save(meanImg, "D:\\tmp\\meanImgAdapted.tif");
 
 	cv::Mat intContrastBinary = contrastBin32F;
 
@@ -414,19 +421,28 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 		cv::Mat intImg;
 		integral(meanImg, intImg);
 		meanImg = Algorithms::instance().convolveIntegralImage(intImg, filtersize, 0, Algorithms::BORDER_ZERO);
+		//meanImg = Algorithms::instance().convolveIntegralImage(intImg, filtersize, 0, Algorithms::BORDER_FLIP);
 
 		// compute the standard deviation image
 		integral(stdImg, intImg);
 		stdImg = Algorithms::instance().convolveIntegralImage(intImg, filtersize, 0, Algorithms::BORDER_ZERO);
+		//stdImg = Algorithms::instance().convolveIntegralImage(intImg, filtersize, 0, Algorithms::BORDER_FLIP);
 		intImg.release(); // early release
 
 		integral(contrastBin32F, intContrastBinary);
 		contrastBin32F.release();
 		intContrastBinary = Algorithms::instance().convolveIntegralImage(intContrastBinary, filtersize, 0, Algorithms::BORDER_ZERO);
+		//intContrastBinary = Algorithms::instance().convolveIntegralImage(intContrastBinary, filtersize, 0, Algorithms::BORDER_FLIP);
 	}
 	//DkIP::imwrite("meanImg343.png", meanImg, true);
-
+	//Image::instance().save(meanImg, "D:\\tmp\\meanImg2Adapted.tif");
 	meanImg /= intContrastBinary;
+
+	//FK new filtering because of jpg artefacts - otherwise horizontal and vertical lines appear
+	cv::Mat sumKernel = cv::Mat(11, 11, CV_32FC1);
+	sumKernel = 1.0/(11.0*11.0);
+	cv::filter2D(meanImg, meanImg, CV_32FC1, sumKernel);
+	//Image::instance().save(meanImg, "D:\\tmp\\meanImg3Adapted.tif");
 
 	float *mPtr, *cPtr;
 	float *stdPtr;
@@ -481,6 +497,7 @@ inline void BaseBinarizationSu::calcFilterParams(int &filterS, int &Nm) {
 
 inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
 	return (*mean + *std / 2);
+	//return *mean/1.05;
 }
 
 
@@ -515,9 +532,14 @@ bool BinarizationSuAdapted::compute() {
 	if (mSrcImg.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
 
+	//Image::instance().save(srcGray, "D:\\tmp\\srcGrayAdapted.tif");
+	//Image::instance().save(mBinContrastImg, "D:\\tmp\\binContrastAdapted.tif");
+
 	cv::Mat resultSegImg;
 	computeThrImg(srcGray, mBinContrastImg, mThrImg, resultSegImg);					//compute threshold image
-	Image::instance().save(mThrImg, "D:\\tmp\\thrImgAdapted.tif");
+	//Image::instance().save(mThrImg, "D:\\tmp\\thrImgAdapted.tif");
+	//Image::instance().save(resultSegImg, "D:\\tmp\\resultSegAdapted.tif");
+	//Image::instance().save(srcGray <= (mThrImg), "D:\\tmp\\leqAdapted.tif");
 
 	cv::bitwise_and(resultSegImg, srcGray <= (mThrImg), resultSegImg);		//combine with Nmin condition
 	mBwImg = resultSegImg.clone();
