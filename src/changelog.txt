@@ -1,7 +1,8 @@
 version 0.1
 ===========
+- BinarizationAdapted added and tested (horizontal and vertical lines at filter border originate from jpg compression, mean filter added)
 - XML Parser for PAGE added
-- BinarizationSu added
+- BinarizationSu added and tested
 - Otsu added
 - Image: imageInfo + saveFunctions
 - Settings added

@@ -592,7 +592,7 @@ bool BinarizationSuFgdWeight::compute() {
 	bool stat = BinarizationSuAdapted::compute();
 	//result is binarized image mBwImg
 	
-	meanContrast = computeConfidence();
+	mMeanContrast = computeConfidence();
 
 	cv::Mat srcGray = mSrcImg;
 	if (srcGray.channels() != 1) cv::cvtColor(mSrcImg, srcGray, CV_RGB2GRAY);
@@ -609,10 +609,10 @@ bool BinarizationSuFgdWeight::compute() {
 cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 	
 	cv::Scalar m = cv::Scalar(-1.0f, -1.0f, -1.0f, -1.0f);
-	m[1] = meanContrast[1];
-	m[2] = meanContrast[2];
+	m[1] = mMeanContrast[1];
+	m[2] = mMeanContrast[2];
 
-	if (meanContrast[0] == -1.0f) {
+	if (mMeanContrast[0] == -1.0f) {
 		int n = cv::countNonZero(mBinContrastImg);
 		//TODO: prove if contrastImg in normalize and statmomentMat must be set to tmp?
 		//Mat tmp = contrastImg.clone();
@@ -628,7 +628,7 @@ cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 
 void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, const cv::Mat& mask) {
 
-	fgdEstImg = computeMeanFgdEst(grayImg, mask);					//compute foreground estimation
+	mFgdEstImg = computeMeanFgdEst(grayImg, mask);					//compute foreground estimation
 
 	cv::Mat tmpMask;
 	
@@ -637,7 +637,7 @@ void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, co
 	tmpMask.release();
 
 	double l = rdf::Algorithms::instance().getThreshOtsu(histogram) / 255.0f;		//sigmoid slope, centered at l according text estimation
-	float sigmaSlopeTmp = sigmSlope / 255.0f;
+	float sigmaSlopeTmp = mSigmSlope / 255.0f;
 
 	double fm[256];
 	for (int i = 0; i < 256; i++)
@@ -646,7 +646,7 @@ void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, co
 	for (int i = 0; i < grayImg.rows; i++) {
 		float *ptrGray = grayImg.ptr<float>(i);
 		float *ptrThr = tImg.ptr<float>(i);
-		float *ptrFgdEst = fgdEstImg.ptr<float>(i);
+		float *ptrFgdEst = mFgdEstImg.ptr<float>(i);
 		unsigned char const *ptrMask = mask.ptr<unsigned char>(i);
 
 		for (int j = 0; j < grayImg.cols; j++, ptrGray++, ptrThr++, ptrFgdEst++, ptrMask++) {
@@ -660,14 +660,14 @@ void BinarizationSuFgdWeight::weightFunction(cv::Mat& grayImg, cv::Mat& tImg, co
 cv::Mat BinarizationSuFgdWeight::computeMeanFgdEst(const cv::Mat& grayImg32F, const cv::Mat& mask) const {
 	cv::Mat tmp;
 
-	if (fgdEstFilterSize < 3) {
+	if (mFgdEstFilterSize < 3) {
 		tmp = cv::Mat(grayImg32F.size(), CV_32FC1);
 		tmp.setTo(1.0f);
 	}
 	else {
 		cv::Mat fgdEstImgInt = cv::Mat(grayImg32F.rows + 1, grayImg32F.cols + 1, CV_64FC1);
 		integral(grayImg32F, fgdEstImgInt);
-		tmp = rdf::Algorithms::instance().convolveIntegralImage(fgdEstImgInt, fgdEstFilterSize, 0, Algorithms::BORDER_ZERO);
+		tmp = rdf::Algorithms::instance().convolveIntegralImage(fgdEstImgInt, mFgdEstFilterSize, 0, Algorithms::BORDER_ZERO);
 		fgdEstImgInt.release(); // early release
 
 								//DkIP::mulMask(fgdEstImg, mask);	// diem: otherwise values outside the mask are mutual

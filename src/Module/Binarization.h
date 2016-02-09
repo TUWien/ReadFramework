@@ -175,12 +175,12 @@ protected:
 	//virtual void init();
 	virtual void weightFunction(cv::Mat& grayImg, cv::Mat& thrImg, const cv::Mat& mask);
 
-	int fgdEstFilterSize = 32;								//the filter size for the foreground estimation
-	float sigmSlope = 15.0f;
-	cv::Mat fgdEstImg;
-	cv::Scalar meanContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
-	cv::Scalar stdContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
-	float confidence = -1.0f;
+	int mFgdEstFilterSize = 32;								//the filter size for the foreground estimation
+	float mSigmSlope = 15.0f;
+	cv::Mat mFgdEstImg;
+	cv::Scalar mMeanContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	cv::Scalar mStdContrast = cv::Scalar(-1.0f,-1.0f,-1.0f,-1.0f);
+	float mConfidence = -1.0f;
 
 private:
 };
