@@ -91,5 +91,21 @@ QString BaseLine::write() const {
 	return Converter::instance().polyToString(mBaseLine);
 }
 
+QPoint BaseLine::startPoint() const {
+	
+	if (!mBaseLine.isEmpty())
+		return mBaseLine.first();
+
+	return QPoint();
+}
+
+QPoint BaseLine::endPoint() const {
+
+	if (!mBaseLine.isEmpty())
+		return mBaseLine.last();
+
+	return QPoint();
+}
+
 
 }

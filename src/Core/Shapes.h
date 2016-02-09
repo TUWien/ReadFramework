@@ -82,6 +82,9 @@ public:
 	void read(const QString& pointList);
 	QString write() const;
 
+	QPoint startPoint() const;
+	QPoint endPoint() const;
+
 protected:
 	QPolygon mBaseLine;
 };

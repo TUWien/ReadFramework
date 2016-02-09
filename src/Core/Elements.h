@@ -97,7 +97,7 @@ public:
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
 
-	virtual void draw(QPainter& painter, const RegionTypeConfig& config) const;
+	virtual void draw(QPainter& p, const RegionTypeConfig& config) const;
 
 	virtual QString toString(bool withChildren = false) const;
 	virtual QString childrenToString() const;
@@ -128,6 +128,8 @@ public:
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 
 	virtual QString toString(bool withChildren = false) const override;
+
+	virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
 
 protected:
 	BaseLine mBaseLine;

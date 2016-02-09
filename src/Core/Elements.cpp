@@ -296,6 +296,27 @@ QString TextLine::toString(bool withChildren) const {
 	return msg;
 }
 
+void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
+
+	Region::draw(p, config);
+
+	if (config.drawBaseline() && !mBaseLine.isEmpty())
+		p.drawPolygon(mBaseLine.polygon());
+
+	if (config.drawText() && !mText.isEmpty()) {
+		
+		QPoint sp = mBaseLine.startPoint();
+
+		if (sp.isNull() && !mPoly.isEmpty()) {
+			sp = mPoly.polygon().first();
+			p.drawText(sp, text());
+		}
+		else
+			qDebug() << "could not draw text: region has no polygon";
+	}
+
+}
+
 // PageElement --------------------------------------------------------------------
 PageElement::PageElement(const QString& xmlPath) {
 	
