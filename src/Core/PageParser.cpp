@@ -141,6 +141,8 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	
 	// ok - we can initialize our page element
 	pageElement = QSharedPointer<PageElement>(new PageElement());
+	pageElement->setXmlPath(xmlPath);
+
 	QSharedPointer<Region> root = QSharedPointer<Region>(new Region());
 	root->setType(Region::type_root);
 
