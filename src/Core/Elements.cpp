@@ -306,8 +306,14 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	Region::draw(p, config);
 
-	if (config.drawBaseline() && !mBaseLine.isEmpty())
-		p.drawPolygon(mBaseLine.polygon());
+	if (config.drawBaseline() && !mBaseLine.isEmpty()) {
+		
+		QPolygon poly = mBaseLine.polygon();
+		
+		QPainterPath path;
+		path.addPolygon(poly);
+		p.drawPath(path);
+	}
 
 	if (config.drawText() && !mText.isEmpty()) {
 		
