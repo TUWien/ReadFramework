@@ -46,6 +46,13 @@
 #include "DebugFlo.h"
 #include "DebugStefan.h"
 
+#if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
+#pragma comment (linker, "/SUBSYSTEM:CONSOLE")
+#else
+#pragma comment (linker, "/SUBSYSTEM:WINDOWS")
+#endif
+
+
 int main(int argc, char** argv) {
 
 	QCoreApplication::setOrganizationName("TU Wien");
