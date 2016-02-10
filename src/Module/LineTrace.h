@@ -30,69 +30,54 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "DebugFlo.h"
-#include "Image.h"
-#include "Utils.h"
-#include "Binarization.h"
-#include "Algorithms.h"
+#pragma once
+
+#include "BaseModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
-#include <QDebug>
-#include <QDebug>
-#include <QImage>
-#include <QFileInfo>
 #pragma warning(pop)
+
+#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
+
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 
 namespace rdf {
 
-	BinarizationTest::BinarizationTest(const DebugConfig& config) {
+// read defines
+class DllModuleExport LineTrace : public Module {
 
-		mConfig = config;
-	}
+public:
+	LineTrace(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+	bool isEmpty() const override;
+	virtual bool compute() override;
 
-	void BinarizationTest::binarizeTest() {
+	cv::Mat lineImage() const;
 
-		qDebug() << mConfig.imagePath() << "loaded";
+	virtual QString toString() const override;
 
-		rdf::Timer dt;
-		QImage img;
-		img.load(mConfig.imagePath());
-		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
+protected:
+	bool checkInput() const override;
 
-		qDebug() << "image converted...";
+	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
+	cv::Mat mLineImg;									//the line image [0 255]
+	cv::Mat mMask;										//the mask image [0 255]
 
-		
-		//test Otsu
-		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
-		
-		//rdf::BaseBinarizationSu testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
 
-		rdf::BinarizationSuAdapted testBin(inputImg);
-		testBin.compute();
-		cv::Mat binImg = testBin.binaryImage();
+private:
 
-		//rdf::BinarizationSuFgdWeight testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
+	//void load(const qsettings& settings) override;
+	//void save(qsettings& settings) const override;
 
-		//rdf::Image::instance().imageInfo(binImg, "binImg");
-		qDebug() << testBin << " in " << dt;
-		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
 
-		if (!mConfig.outputPath().isEmpty()) {
-			qDebug() << "saving to" << mConfig.outputPath();
+};
 
-			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
-			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().save(binImgQt, mConfig.outputPath());
-			
-		} else {
-			qDebug() << "no save path";
-		}
-	}
-
-}
+};

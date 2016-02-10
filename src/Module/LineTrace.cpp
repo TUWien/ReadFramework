@@ -30,69 +30,79 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "DebugFlo.h"
+#include "LineTrace.h"
 #include "Image.h"
-#include "Utils.h"
-#include "Binarization.h"
-#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QDebug>
-#include <QDebug>
-#include <QImage>
-#include <QFileInfo>
+#include <QSettings>
+#include <qmath.h>
+#include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
+
+
 
 namespace rdf {
 
-	BinarizationTest::BinarizationTest(const DebugConfig& config) {
 
-		mConfig = config;
-	}
+	// LineTrace--------------------------------------------------------------------
 
-	void BinarizationTest::binarizeTest() {
+	LineTrace::LineTrace(const cv::Mat& img, const cv::Mat& mask) {
+		mSrcImg = img;
+		mMask = mask;
 
-		qDebug() << mConfig.imagePath() << "loaded";
-
-		rdf::Timer dt;
-		QImage img;
-		img.load(mConfig.imagePath());
-		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
-
-		qDebug() << "image converted...";
-
-		
-		//test Otsu
-		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
-		
-		//rdf::BaseBinarizationSu testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-
-		rdf::BinarizationSuAdapted testBin(inputImg);
-		testBin.compute();
-		cv::Mat binImg = testBin.binaryImage();
-
-		//rdf::BinarizationSuFgdWeight testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-
-		//rdf::Image::instance().imageInfo(binImg, "binImg");
-		qDebug() << testBin << " in " << dt;
-		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
-
-		if (!mConfig.outputPath().isEmpty()) {
-			qDebug() << "saving to" << mConfig.outputPath();
-
-			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
-			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().save(binImgQt, mConfig.outputPath());
-			
-		} else {
-			qDebug() << "no save path";
+		if (mMask.empty()) {
+			mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
 		}
+
+		mModuleName = "LineTrace";
+		loadSettings();
 	}
+
+	bool LineTrace::checkInput() const {
+
+		if (mSrcImg.empty()) {
+			mWarning << "Source Image is empty";
+			return false;
+		}
+
+		return true;
+	}
+
+	bool LineTrace::isEmpty() const {
+		return mSrcImg.empty() && mMask.empty();
+	}
+
+	bool LineTrace::compute() {
+
+		return false;
+	}
+
+	QString LineTrace::toString() const {
+
+		QString msg = debugName();
+		//msg += "strokeW: " + QString::number(mStrokeW);
+		//msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
+
+		return msg;
+
+	}
+
+	//void LineTrace::load(const QSettings& settings) {
+
+	//	//mErodeMaskSize = settings.value("erodeMaskSize", mErodeMaskSize).toInt();
+	//}
+
+	//void LineTrace::save(QSettings& settings) const {
+
+	//	//settings.setValue("erodeMaskSize", mErodeMaskSize);
+	//}
+
+	cv::Mat LineTrace::lineImage() const {
+		return mLineImg;
+	}
+
+
 
 }
