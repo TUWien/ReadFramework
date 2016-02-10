@@ -301,7 +301,95 @@ namespace rdf {
 	}
 
 	void LineTrace::filter(void) {
+		//QVector<DkAttr> props;
+		//QVector<DkAttr>::iterator it;
+		//DkRect rect;
+		//float xVec, yVec;
+		//float p1X, p1Y, p2X, p2Y;
+		//float orientation, currWidth;
+		//float thickness;
 
+		//DkBlobs<DkAttr> filterHLine(this->horizontalDSCC);
+
+		////filterHLine.imgFilterArea(minArea, 100000);
+		//filterHLine.imgFilterMar(maxAspectRatio, minWidth);
+		////filterHLine.imgFilterRipple(rippleArea, rippleLen);
+		////filterHLine.calcOrientation();
+		//if (dAngle != 361.0f)
+		//	filterHLine.imgFilterOrientation((float)dAngle, maxSlopeRotat);
+		//else
+		//	filterHLine.calcOrientation();
+
+		////DkIP::imwrite("horizontalDSCC821.png", horizontalDSCC);
+
+		//props = filterHLine.getProps();
+		//it = props.begin();
+		//while (it != props.end()) {
+
+		//	rect = (*it).getMinAreaRect();
+		//	orientation = (*it).getOrientation();
+
+		//	currWidth = rect.size.height > rect.size.width ? rect.size.height : rect.size.width;
+		//	thickness = rect.size.height < rect.size.width ? rect.size.height : rect.size.width;
+
+		//	xVec = -(currWidth*0.5f*(float)cos(orientation));
+		//	yVec = (currWidth*0.5f*(float)sin(orientation));
+
+		//	p1X = rect.center.x - xVec;
+		//	p1Y = rect.center.y - yVec;
+		//	p2X = rect.center.x + xVec;
+		//	p2Y = rect.center.y + yVec;
+
+		//	if (thickness > 15) thickness = 15; //UFO bugfix
+
+		//	DkLineExt l = p1X < p2X ? DkLineExt(p1X, p1Y, p2X, p2Y, orientation, thickness) : DkLineExt(p2X, p2Y, p1X, p1Y, orientation, thickness);
+		//	//printf("orientationH: %f\n", orientation);
+		//	lineVector.push_back(l);
+		//	//lineList.insert(lineList.begin(), l);
+
+		//	++it;
+		//}
+
+		//DkBlobs<DkAttr> filterVLine(this->verticalDSCC);
+
+		////filterVLine.imgFilterArea(minArea, 100000);
+		//filterVLine.imgFilterMar(maxAspectRatio, minWidth);
+		////filterVLine.imgFilterRipple(rippleArea, rippleLen);
+		////filterVLine.calcOrientation();
+		//if (dAngle != 361.0f)
+		//	filterVLine.imgFilterOrientation((float)dAngle, maxSlopeRotat);
+		//else
+		//	filterVLine.calcOrientation();
+
+		//props = filterVLine.getProps();
+		//it = props.begin();
+		//while (it != props.end()) {
+
+		//	rect = (*it).getMinAreaRect();
+		//	orientation = (*it).getOrientation();
+
+		//	currWidth = rect.size.height > rect.size.width ? rect.size.height : rect.size.width;
+		//	thickness = rect.size.height < rect.size.width ? rect.size.height : rect.size.width;
+
+		//	xVec = -(currWidth*0.5f*(float)cos(orientation));
+		//	yVec = (currWidth*0.5f*(float)sin(orientation));
+
+		//	p1X = rect.center.x - xVec;
+		//	p1Y = rect.center.y - yVec;
+		//	p2X = rect.center.x + xVec;
+		//	p2Y = rect.center.y + yVec;
+
+		//	if (thickness > 15) thickness = 15; //UFO bugfix
+
+		//	DkLineExt l = p1X < p2X ? DkLineExt(p1X, p1Y, p2X, p2Y, orientation, thickness) : DkLineExt(p2X, p2Y, p1X, p1Y, orientation, thickness);
+		//	//printf("orientationV: %f\n", orientation);
+		//	lineVector.push_back(l);
+		//	//lineList.insert(lineList.begin(), l);
+
+		//	++it;
+		//}
+
+		////DkIP::imwrite("verticalDSCC890.png", verticalDSCC);
 	}
 
 	QString LineTrace::toString() const {
