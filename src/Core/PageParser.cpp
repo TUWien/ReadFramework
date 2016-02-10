@@ -326,12 +326,16 @@ void PageXmlParser::writeMetaData(QXmlStreamWriter& writer) const {
 
 QString PageXmlParser::imagePathToXmlPath(const QString& path) {
 
-	// TODO: add optional xml search/save path
 	QFileInfo info(path);
 	QString xmlDir = info.absolutePath() + QDir::separator() + Config::instance().global().xmlSubDir;
 	QString xmlFileName = info.fileName().replace(info.suffix(), "xml");
 
-	QString xmlPath = QFileInfo(xmlDir, xmlFileName).absoluteFilePath();
+	QFileInfo xmlInfo = QFileInfo(xmlDir, xmlFileName);
+	QString xmlPath = xmlInfo.absoluteFilePath();
+
+	// if the file cannot be found look in the image folder
+	if (!xmlInfo.exists())
+		xmlPath = QFileInfo(info.absolutePath(), xmlFileName).absoluteFilePath();
 
 	return xmlPath;
 }

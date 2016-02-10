@@ -42,7 +42,9 @@ namespace rdf {
 
 // RegionTypeConfig --------------------------------------------------------------------
 RegionTypeConfig::RegionTypeConfig(const Region::Type& type) {
+	
 	mType = type;
+	assignDefaultColor(type);
 }
 
 Region::Type RegionTypeConfig::type() const {
@@ -124,6 +126,26 @@ void RegionTypeConfig::save(QSettings & settings) const {
 	settings.endGroup();
 }
 
+void RegionTypeConfig::assignDefaultColor(const Region::Type & type) {
+
+	QColor col(100,100,100);
+
+	switch (type) {
+	case Region::type_text_region:	col = QColor(0, 102, 153);	break;
+	case Region::type_text_line:	col = QColor(0, 153, 4);	break;
+	case Region::type_word:			col = QColor(96, 202, 255); break;
+	case Region::type_separator:	col = QColor(190, 22, 22);	break;
+	case Region::type_image:		col = QColor(255, 174, 0);	break;
+	case Region::type_graphic:		col = QColor(255, 108, 0);	break;
+	case Region::type_noise:		col = QColor(204, 204, 204);break;
+	}
+
+	// assign default color
+	mPen.setColor(col);
+	col.setAlpha(25);
+	mBrush = col;
+}
+
 // RegionXmlHelper --------------------------------------------------------------------
 RegionXmlHelper::RegionXmlHelper() {
 
@@ -165,7 +187,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 }
 
 
-QVector<RegionTypeConfig> RegionManager::regionTypeConfig() const {
+QVector<QSharedPointer<RegionTypeConfig> > RegionManager::regionTypeConfig() const {
 	return mTypeConfig;
 }
 
@@ -184,25 +206,17 @@ RegionManager& RegionManager::instance() {
 	return *inst;
 }
 
-QVector<RegionTypeConfig> RegionManager::createConfig() const {
+QVector<QSharedPointer<RegionTypeConfig> > RegionManager::createConfig() const {
 
-	QVector<RegionTypeConfig> typeConfig;
+	QVector<QSharedPointer<RegionTypeConfig> > typeConfig;
 
 	for (int type = 0; type < Region::type_end; type++) {
 
-		RegionTypeConfig rc((Region::Type)type);
-		//rc.load(Config::instance().settings());
-
+		QSharedPointer<RegionTypeConfig> rc(new RegionTypeConfig((Region::Type)type));
 		typeConfig.append(rc);
 	}
 
 	return typeConfig;
-}
-
-void RegionManager::save() const {
-	
-	for (const RegionTypeConfig& c : mTypeConfig)
-		c.save(Config::instance().settings());
 }
 
 QString RegionManager::typeName(const Region::Type& type) const {
@@ -254,20 +268,20 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	return QSharedPointer<Region>(new Region());
 }
 
-void RegionManager::drawRegion(QPainter & p, QSharedPointer<rdf::Region> region, const QVector<RegionTypeConfig>& config, bool recursive) const {
+void RegionManager::drawRegion(QPainter & p, QSharedPointer<rdf::Region> region, const QVector<QSharedPointer<RegionTypeConfig> >& config, bool recursive) const {
 
 	if (!region) {
 		qWarning() << "I cannot draw a NULL region";
 		return;
 	}
 
-	QVector<RegionTypeConfig> c = config.empty() ? mTypeConfig : config;
+	QVector<QSharedPointer<RegionTypeConfig> > c = config.empty() ? mTypeConfig : config;
 
 	// do not draw this kind of region
-	if (!c[region->type()].draw())
+	if (!c[region->type()]->draw())
 		return;
 
-	region->draw(p, c[region->type()]);
+	region->draw(p, *c[region->type()]);
 
 	if (recursive) {
 

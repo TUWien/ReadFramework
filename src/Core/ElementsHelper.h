@@ -95,6 +95,7 @@ protected:
 	bool mDrawBaseline = false;
 	bool mDrawText = true;
 
+	void assignDefaultColor(const Region::Type& type);
 };
 
 class RegionXmlHelper {
@@ -137,20 +138,22 @@ public:
 
 	QSharedPointer<Region> createRegion(const Region::Type& type) const;
 
-	void drawRegion(QPainter& p, QSharedPointer<rdf::Region> region, const QVector<RegionTypeConfig>& config = QVector<RegionTypeConfig>(), bool recursive = true) const;
+	void drawRegion(QPainter& p, 
+		QSharedPointer<rdf::Region> region, 
+		const QVector<QSharedPointer<RegionTypeConfig> >& config = QVector<QSharedPointer<RegionTypeConfig> >(), 
+		bool recursive = true) const;
 
-	QVector<RegionTypeConfig> regionTypeConfig() const;
-	void save() const;
+	QVector<QSharedPointer<RegionTypeConfig> > regionTypeConfig() const;
 
 private:
 	RegionManager();
 	RegionManager(const RegionManager&);
 
 	QStringList createTypeNames() const;
-	QVector<RegionTypeConfig> createConfig() const;
+	QVector<QSharedPointer<RegionTypeConfig> > createConfig() const;
 
 	QStringList mTypeNames;
-	QVector<RegionTypeConfig> mTypeConfig;
+	QVector<QSharedPointer<RegionTypeConfig> > mTypeConfig;
 };
 
 
