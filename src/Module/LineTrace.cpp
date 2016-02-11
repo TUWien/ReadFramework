@@ -95,6 +95,9 @@ namespace rdf {
 
 		filter();
 
+		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
+		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
+
 		return true;
 	}
 

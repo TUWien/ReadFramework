@@ -34,8 +34,55 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
 namespace rdf {
+
+Blob::Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
+	mOuterContour = outerC;
+	mInnerContours = innerC;
+}
+
+bool Blob::isEmpty() const {
+
+	return (mOuterContour.size() > 0);
+}
+
+void Blob::setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
+	mOuterContour = outerC;
+	mInnerContours = innerC;
+}
+
+QVector<cv::Point> Blob::outerContour() const {
+	return mOuterContour;
+}
+
+QVector<QVector<cv::Point> > Blob::innerContours() const {
+	return mInnerContours;
+}
+
+QVector<cv::Vec4i> Blob::hierarchy() const {
+	QVector<cv::Vec4i> tmp;
+
+	if (mInnerContours.isEmpty()) {
+		tmp.append(cv::Vec4i(-1, -1, -1, -1));
+	}
+	else {
+		tmp.append(cv::Vec4i(-1, -1, 1, -1));
+		for (int i = 1; i < mInnerContours.size(); i++) {
+			tmp.append(cv::Vec4i(i + 1, i==1 ? -1 : i-1, -1, 0));
+		}
+		int prevIdx = mInnerContours.size() == 1 ? -1 : mInnerContours.size() - 1;
+		tmp.append(cv::Vec4i(-1, prevIdx, -1, 0));
+	}
+	//parent:	   -1,-1, 1,0
+	//first child:	2,-1,-1,0
+	//second child: 3, 1,-1,0
+	//third child:	4, 2,-1,0
+	//fourth child:-1, 3,-1,0
+
+	return tmp;
+}
 
 }

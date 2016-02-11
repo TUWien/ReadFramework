@@ -34,14 +34,48 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QPolygon>
+#include <QVector>
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
+#pragma warning(disable: 4251)
 // Qt defines
 
 namespace rdf {
 
-// read defines
+class DllCoreExport Blob {
+
+public:
+	Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
+
+	bool isEmpty() const;
+
+	//void read(const QString& pointList);
+	//QString write() const;
+
+	//int size() const;
+
+	void setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
+	QVector<cv::Point> outerContour() const;
+	QVector<QVector<cv::Point> > innerContours() const;
+	QVector<cv::Vec4i> hierarchy() const;
+
+protected:
+
+	QVector<cv::Point> mOuterContour;
+	QVector<QVector<cv::Point> > mInnerContours;
+	
+private:
+	QVector<cv::Vec4i> mHierarchy;
+};
 
 };
