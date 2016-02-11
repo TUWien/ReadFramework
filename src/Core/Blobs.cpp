@@ -35,6 +35,8 @@
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/highgui.h"
 #pragma warning(pop)
 
 namespace rdf {
@@ -83,6 +85,16 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 	//fourth child:-1, 3,-1,0
 
 	return tmp;
+}
+
+bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) {
+
+	if (isEmpty()) return false;
+	if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
+
+	cv::drawContours(imgSrc, mInnerContours.toStdVector() , 0, color, CV_FILLED, 8, mHierarchy.toStdVector, 0, cv::Point());
+
+	return true;
 }
 
 }

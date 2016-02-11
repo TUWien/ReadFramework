@@ -68,6 +68,7 @@ public:
 	QVector<cv::Point> outerContour() const;
 	QVector<QVector<cv::Point> > innerContours() const;
 	QVector<cv::Vec4i> hierarchy() const;
+	bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 25, 255));
 
 protected:
 
