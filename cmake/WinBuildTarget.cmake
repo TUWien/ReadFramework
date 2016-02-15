@@ -19,9 +19,6 @@ set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) #
 
 target_link_libraries(${RDF_BINARY_NAME} ${RDF_LIB_CORE_NAME} ${RDF_LIB_MODULE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 set_target_properties(${RDF_BINARY_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
-set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:CONSOLE")
-set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /SUBSYSTEM:CONSOLE")
 
 # add core
 add_library(${RDF_DLL_CORE_NAME} SHARED ${CORE_SOURCES} ${CORE_HEADERS} ${RDF_RC})
@@ -45,54 +42,44 @@ qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
 # core flags
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/libs)
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/libs)
-set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_REALLYRELEASE ${CMAKE_BINARY_DIR}/libs)
 
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES COMPILE_FLAGS "-DDLL_CORE_EXPORT -DNOMINMAX")
-set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES LINK_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_DLL_CORE_NAME}d)
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_CORE_NAME})
 
 # loader flags
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/libs)
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/libs)
-set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_REALLYRELEASE ${CMAKE_BINARY_DIR}/libs)
 
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES COMPILE_FLAGS "-DDLL_MODULE_EXPORT -DNOMINMAX")
-set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_DLL_MODULE_NAME}d)
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_MODULE_NAME})
-
-SET(CMAKE_SHARED_LINKER_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 
 # copy required dlls to the directories
 set(OpenCV_REQUIRED_MODULES core imgproc FORCE)
 foreach(opencvlib ${OpenCV_REQUIRED_MODULES})
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Release/opencv_${opencvlib}*.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Release)
-	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/ReallyRelease)
-	
+		
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Debug/opencv_${opencvlib}*d.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Debug)
+	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/RelWithDebInfo)
 endforeach(opencvlib)
 
 set(QTLIBLIST Qt5Core Qt5Gui Qt5Network Qt5Widgets Qt5PrintSupport Qt5Concurrent Qt5Svg)
 foreach(qtlib ${QTLIBLIST})
 	get_filename_component(QT_DLL_PATH_tmp ${QT_QMAKE_EXECUTABLE} PATH)
 	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}.dll DESTINATION ${CMAKE_BINARY_DIR}/Release)
-	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}.dll DESTINATION ${CMAKE_BINARY_DIR}/ReallyRelease)
+	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}.dll DESTINATION ${CMAKE_BINARY_DIR}/RelWithDebInfo)
 	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}d.dll DESTINATION ${CMAKE_BINARY_DIR}/Debug)
 endforeach(qtlib)
 
 # create settings file for portable version while working
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/ReallyRelease/rdf-settings.nfo)
-	file(WRITE ${CMAKE_BINARY_DIR}/ReallyRelease/rdf-settings.nfo "")
-endif()
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo)
 	file(WRITE ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo "")
+endif()
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/RelWithDebInfo/rdf-settings.nfo)
+	file(WRITE ${CMAKE_BINARY_DIR}/RelWithDebInfo/rdf-settings.nfo "")
 endif()
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/Debug/rdf-settings.nfo)
 	file(WRITE ${CMAKE_BINARY_DIR}/Debug/rdf-settings.nfo "")
@@ -105,12 +92,9 @@ endif()
 # endforeach(QM)
 
 # set properties for Visual Studio Projects
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;ReallyRelease" CACHE STRING "limited configs" FORCE)
 add_definitions(/Zc:wchar_t-)
 set(CMAKE_CXX_FLAGS_DEBUG "/W4 ${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_RELEASE "/W4 /O2 ${CMAKE_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_REALLYRELEASE "${CMAKE_CXX_FLAGS_RELEASE}  /DQT_NO_DEBUG_OUTPUT")
-set(CMAKE_EXE_LINKER_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 
 file(GLOB RDF_AUTOMOC "${CMAKE_BINARY_DIR}/*_automoc.cpp")
 source_group("Generated Files" FILES ${RDF_RC} ${RDF_QM} ${RDF_AUTOMOC})
