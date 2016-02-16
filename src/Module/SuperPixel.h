@@ -59,12 +59,13 @@ public:
 	bool isEmpty() const override;
 	bool compute() override;
 
-	cv::Mat binaryImage() const;
+	cv::Mat debugImage() const;
 
 	QString toString() const override;
 
 private:
 	cv::Mat mSrcImg;
+	cv::Mat mDbgImg;
 
 	bool checkInput() const override;
 

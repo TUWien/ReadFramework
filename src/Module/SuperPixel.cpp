@@ -34,6 +34,9 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/ximgproc/seeds.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -77,12 +80,33 @@ bool SuperPixel::compute() {
 	if (!checkInput())
 		return false;
 
+	cv::Mat hsvImg;
+	cv::cvtColor(mSrcImg, hsvImg, CV_RGB2HSV);
+
+	// init
+	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> seeds;
+	seeds = cv::ximgproc::createSuperpixelSEEDS(hsvImg.cols, hsvImg.rows, hsvImg.channels(), 15000, 4, 0);
+
+	// apply super pixel segmentation
+	seeds->iterate(hsvImg, 4);
+
+	// get outlines
+	cv::Mat mask;
+	seeds->getLabelContourMask(mask, true);
+
+	// save
+	mDbgImg = mSrcImg;
+	mDbgImg.setTo(cv::Scalar(0, 0, 255, 255), mask);
 
 	// I guess here is a good point to save the settings
 	saveSettings();
 	mDebug << " computed...";
 
 	return true;
+}
+
+cv::Mat SuperPixel::debugImage() const {
+	return mDbgImg;
 }
 
 QString SuperPixel::toString() const {

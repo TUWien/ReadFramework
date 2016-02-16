@@ -36,6 +36,8 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+
+#include <opencv2\highgui\highgui.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -58,6 +60,9 @@ void XmlTest::parseXml() {
 		
 		parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
 	}
+
+	cv::Mat img = cv::imread("C:\\temp\\img.tif");
+	cv::imwrite("C:\\temp\\img.jpg", img);
 
 	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed()/idx);
 
