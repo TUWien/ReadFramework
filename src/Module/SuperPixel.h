@@ -35,7 +35,6 @@
 #include "BaseModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
 #pragma warning(pop)
 
 #ifndef DllModuleExport
@@ -65,6 +64,7 @@ public:
 
 private:
 	cv::Mat mSrcImg;
+	std::vector<cv::UMat> mMask;
 
 	bool checkInput() const override;
 
