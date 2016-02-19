@@ -56,14 +56,20 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_MODULE_NAME})
 
 # copy required dlls to the directories
-set(OpenCV_REQUIRED_MODULES core imgproc FORCE)
-foreach(opencvlib ${OpenCV_REQUIRED_MODULES})
+set(OpenCV_MODULE_NAMES core imgproc stitching)
+foreach(opencvlib ${OpenCV_MODULE_NAMES})
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Release/opencv_${opencvlib}*.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Release)
-		
+	
+	set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES} ${dllpath})
+	
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Debug/opencv_${opencvlib}*d.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Debug)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/RelWithDebInfo)
+	
+	set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES} ${dllpath})
+	
+	message(STATUS "copying ${dllpath} to ${CMAKE_BINARY_DIR}/Debug")
 endforeach(opencvlib)
 
 set(QTLIBLIST Qt5Core Qt5Gui Qt5Network Qt5Widgets Qt5PrintSupport Qt5Concurrent Qt5Svg)
@@ -114,6 +120,7 @@ if(RDF_DLL_MODULE_NAME)
 	set(RDF_MODULE_LIB optimized ${CMAKE_BINARY_DIR}/libs/${MODULE_RELEASE_NAME}.lib debug  ${CMAKE_BINARY_DIR}/libs/${MODULE_DEBUG_NAME}.lib)
 endif()
 
+set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES})	# just to show it goes into cmake.in
 set(RDF_LIBS ${RDF_CORE_LIB} ${RDF_MODULE_LIB})
 set(RDF_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(RDF_INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/Core ${CMAKE_CURRENT_SOURCE_DIR}/src/Module ${CMAKE_BINARY_DIR})

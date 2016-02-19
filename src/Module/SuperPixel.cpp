@@ -34,6 +34,9 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+
+#include <opencv2/stitching/detail/seam_finders.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -77,12 +80,40 @@ bool SuperPixel::compute() {
 	if (!checkInput())
 		return false;
 
+	cv::detail::GraphCutSeamFinder seamFinder;
+
+	std::vector<cv::Point> corners;
+	corners.push_back(cv::Point(0, 0));
+	corners.push_back(cv::Point(100, 200));
+
+	cv::UMat src;
+	cv::cvtColor(mSrcImg, src, CV_RGBA2RGB);
+
+	std::vector<cv::UMat> mats;
+	mats.push_back(src);
+
+	qDebug() << "src channels: " << mSrcImg.channels();
+
+	seamFinder.find(mats, corners, mMask);
+
+	qDebug() << "mMask size: " << mMask.size();
 
 	// I guess here is a good point to save the settings
 	saveSettings();
 	mDebug << " computed...";
 
 	return true;
+}
+
+cv::Mat SuperPixel::binaryImage() const {
+	
+	if (mMask.empty())
+		return cv::Mat();
+	
+	cv::Mat img;
+	mMask[0].copyTo(img);
+
+	return img;
 }
 
 QString SuperPixel::toString() const {
