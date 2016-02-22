@@ -91,6 +91,8 @@ public:
 	bool setImage(const cv::Mat& BwImg);
 	//bool Blobs
 	void deleteBlobs();
+	QVector<Blob> blobs() const { return mBlobs; };
+	void setBlobs(const QVector<Blob>& blobs) { mBlobs.clear(); mBlobs = blobs; }
 
 	bool compute();
 
@@ -107,10 +109,28 @@ public:
 
 private:
 	QVector<Blob> mBlobs;
-	cv::Mat mBwImg = cv::Mat();
+	cv::Mat mBwImg;
 	int mApproxMethod = CV_CHAIN_APPROX_SIMPLE;
 
 	bool checkInput() const;
+};
+
+
+class DllCoreExport BlobManager {
+
+public:
+	static BlobManager& instance();
+
+	QVector<Blob> filterArea(int area, const Blobs& blobs) const;
+	QVector<Blob> filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const;
+	QVector<Blob> filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const;
+
+private:
+	BlobManager();
+	BlobManager(const BlobManager&);
+
+	//QStringList mTypeNames;
+
 };
 
 };

@@ -90,4 +90,23 @@ protected:
 	QPolygon mBaseLine;
 };
 
+//class DllCoreExport Line {
+//
+//public:
+//	Line(const QLine& line = QLine(), float thickness);
+//
+//	bool isEmpty() const;
+//
+//	void setLine(QPolygon& baseLine);
+//	QPolygon line() const;
+//
+//
+//	QPoint startPoint() const;
+//	QPoint endPoint() const;
+//
+//protected:
+//	QLine mLine;
+//	float mThickness;
+//};
+
 };

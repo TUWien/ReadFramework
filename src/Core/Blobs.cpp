@@ -31,12 +31,15 @@
  *******************************************************************************************************/
 
 #include "Blobs.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv/highgui.h"
+#include <QSharedPointer>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -165,6 +168,130 @@ void Blobs::deleteBlobs() {
 	mBlobs.clear();
 }
 
+// ---------- BlobManager ----------------------------------------------------------------------------------------------
+
+
+BlobManager::BlobManager() {
+
+}
+
+BlobManager& BlobManager::instance() {
+
+	static QSharedPointer<BlobManager> inst;
+	if (!inst)
+		inst = QSharedPointer<BlobManager>(new BlobManager());
+	return *inst;
+
+}
+
+QVector<Blob> BlobManager::filterArea(int threshArea, const Blobs& blobs) const {
+
+	//QVector<Blob> tmp = blobs.blobs();
+	QVector<Blob> filtered;
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		int blobArea = (int) std::fabs(cv::contourArea(blob.outerContour().toStdVector()));
+
+		if (blobArea > threshArea) {
+			filtered.append(blob);
+		}
+	}
+
+	return filtered;
+}
+
+QVector<Blob> BlobManager::filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const {
+
+	QVector<Blob> filtered;
+	//QVector<Blob> blobcopy = blobs.blobs();
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		cv::RotatedRect rotRect = cv::minAreaRect(cv::Mat(blob.outerContour().toStdVector()));
+
+	
+		float currWidth = rotRect.size.height > rotRect.size.width ? rotRect.size.height : rotRect.size.width;
+		float currRatio = 0;
+
+		if ((rotRect.size.width != 0) && (rotRect.size.height != 0))
+			currRatio = rotRect.size.height > rotRect.size.width ? rotRect.size.width / rotRect.size.height : rotRect.size.height / rotRect.size.width;
+
+		if ((currWidth >= minWidth) && (currRatio <= maxAspectRatio))
+			filtered.append(blob);
+
+	}
+
+	return filtered;
+}
+
+QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const {
+
+	QVector<Blob> filtered;
+	double u00, u11, u01, u10, u20, u02, num, den;
+	float o;
+	cv::Moments m;
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		m = moments(cv::Mat(blob.outerContour().toStdVector()));
+		u00 = m.m00;
+
+		if (m.m00 <= 0)
+			o = 0;
+		else {
+
+			u10 = m.m10 / u00;
+			u01 = m.m01 / u00;
+
+			u11 = -(m.m11 - m.m10 * m.m01 / u00) / u00;
+			u20 = (m.m20 - m.m10 * m.m10 / u00) / u00;
+			u02 = (m.m02 - m.m01 * m.m01 / u00) / u00;
+
+			num = 2 * u11;
+			den = u20 - u02;// + sqrt((u20 - u02)*(u20 - u02) + 4*u11*u11);
+
+			if (num != 0 && den != 00)
+			{
+				//o = (float)(180.0 + (180.0 / CV_PI) * atan( num / den ));
+				o = 0.5f*(float)(atan(num / den));
+
+				if (den < 0) {
+					o += num > 0 ? (float)CV_PI / 2.0f : (float)-CV_PI / 2.0f;;
+				}
+			}
+			else if (den == 0 && num > 0)
+				o = (float)CV_PI / 4.0f;
+			else if (den == 0 && num < 0)
+				o = (float)-CV_PI / 4.0f;
+			//covered with else
+			//else if (num == 0 && den > 0)
+			//	o = 0;
+			else if (num == 0 && den < 0)
+				o = (float)-CV_PI / 2.0f;
+			else
+				o = 0.0f;
+
+		}
+
+		float a = Algorithms::instance().normAngleRad((float)angle, 0.0f, (float)CV_PI);
+		a = a >(float)CV_PI*0.5f ? (float)CV_PI - a : a;
+		float angleNewLine = Algorithms::instance().normAngleRad(o, 0.0f, (float)CV_PI);
+		angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+
+		float diffangle = fabs(a - (float)angleNewLine);
+
+		a = a > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - a : a;
+		angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+
+		diffangle = diffangle < fabs(a - (float)angleNewLine) ? diffangle : fabs(a - (float)angleNewLine);
+
+		if (diffangle > maxAngleDiff / 180.0f*(float)CV_PI)
+			filtered.append(blob);
+	}
+
+	return filtered;
+}
 
 
 }
