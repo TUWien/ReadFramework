@@ -78,7 +78,7 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 		int prevIdx = mInnerContours.size() == 1 ? -1 : mInnerContours.size() - 1;
 		tmp.append(cv::Vec4i(-1, prevIdx, -1, 0));
 	}
-	//parent:	   -1,-1, 1,0
+	//parent:	   -1,-1, 1,-1
 	//first child:	2,-1,-1,0
 	//second child: 3, 1,-1,0
 	//third child:	4, 2,-1,0
@@ -87,14 +87,84 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 	return tmp;
 }
 
-bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) {
+bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) const {
 
 	if (isEmpty()) return false;
-	if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
+	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
+	QVector<cv::Vec4i> h = hierarchy();
 
-	cv::drawContours(imgSrc, mInnerContours.toStdVector() , 0, color, CV_FILLED, 8, mHierarchy.toStdVector, 0, cv::Point());
+	QVector<QVector<cv::Point> > contours;
+	contours.append(mOuterContour);
+	contours.append(mInnerContours);
+
+	cv::drawContours(imgSrc, contours.toStdVector() , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
 
 	return true;
 }
+
+// ----------------------------- BlobManager ----------------------------------------------------------------------------
+
+Blobs::Blobs() {
+
+}
+
+bool Blobs::isEmpty() const {
+
+	return mBlobs.isEmpty();
+}
+
+bool Blobs::checkInput() const {
+
+	if (mBwImg.empty() || mBwImg.channels() != 1 || mBwImg.depth() != CV_8U) return false;
+
+	return true;
+}
+
+bool Blobs::setImage(const cv::Mat& BwImg) {
+
+	mBwImg = BwImg;
+	return checkInput();
+
+}
+
+bool Blobs::compute() {
+	if (!checkInput()) return false;
+
+	if (mBlobs.isEmpty()) {
+
+		std::vector<std::vector<cv::Point> > contours;
+		std::vector<cv::Vec4i> hierarchy;
+		cv::findContours(mBwImg, contours, hierarchy, CV_RETR_CCOMP, mApproxMethod);
+
+
+		for (int outerIdx = 0; outerIdx >= 0; outerIdx = hierarchy[outerIdx][0]) {
+
+			QVector<cv::Point> outerContour;
+			QVector<QVector<cv::Point> > innerContours;
+
+			outerContour.fromStdVector(contours[outerIdx]);
+			int firstChild = hierarchy[outerIdx][2];
+		
+			if (firstChild != -1) {
+
+				for (int innerIdx = firstChild; innerIdx >= 0; innerIdx = hierarchy[innerIdx][0]) {
+					innerContours.append(QVector<cv::Point>::fromStdVector(contours[innerIdx]));
+				}
+			}
+
+			Blob newBlob(outerContour, innerContours);
+			mBlobs.append(newBlob);
+		}
+	}
+
+	return true;
+}
+
+void Blobs::deleteBlobs() {
+
+	mBlobs.clear();
+}
+
+
 
 }
