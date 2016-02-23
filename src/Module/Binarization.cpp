@@ -496,6 +496,7 @@ inline void BaseBinarizationSu::calcFilterParams(int &filterS, int &Nm) {
 }
 
 inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
+	//qDebug() << "Mean" << *mean << " std " << *std;
 	return (*mean + *std / 2);
 	//return *mean/1.05;
 }
@@ -543,6 +544,7 @@ bool BinarizationSuAdapted::compute() {
 
 	cv::bitwise_and(resultSegImg, srcGray <= (mThrImg), resultSegImg);		//combine with Nmin condition
 	mBwImg = resultSegImg.clone();
+	//Image::instance().save(resultSegImg, "D:\\tmp\\mBwimg.tif");
 
 	if (mMedianFilter)
 		cv::medianBlur(mBwImg, mBwImg, 3);
@@ -560,6 +562,13 @@ bool BinarizationSuAdapted::compute() {
 float BinarizationSuAdapted::contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const {
 
 	return 2.0f*(float)(*maxVal - *minVal) / ((float)(*maxVal) + (float)(*minVal) + 255.0f + FLT_MIN);
+}
+
+inline float BinarizationSuAdapted::thresholdVal(float *mean, float *std) const {
+	//qDebug() << "Mean" << *mean << " std " << *std;
+	//return *std < 0.1 ? (*mean + *std / 2) : *mean;
+	return (*mean + *std / 2);
+	//return *mean/1.05;
 }
 
 

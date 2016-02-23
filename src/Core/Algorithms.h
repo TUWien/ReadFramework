@@ -126,6 +126,7 @@ public:
 	void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
 	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
 	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
+	float normAngleRad(float angle, float startIvl, float endIvl) const;
 
 private:
 	Algorithms();

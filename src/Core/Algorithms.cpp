@@ -604,4 +604,18 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) c
 																//return max_val;
 }
 
+
+float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const {
+	// this could be a bottleneck
+	if (abs(angle) > 1000)
+		return angle;
+
+	while (angle <= startIvl)
+		angle += endIvl - startIvl;
+	while (angle > endIvl)
+		angle -= endIvl - startIvl;
+
+	return angle;
+}
+
 }

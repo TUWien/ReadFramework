@@ -115,5 +115,37 @@ QPoint BaseLine::endPoint() const {
 	return QPoint();
 }
 
+// Line ------------------------------------------------------------------------------------------------------
+
+Line::Line(const QLine& line, float thickness) {
+	mLine = line;
+	mThickness = thickness;
+}
+
+bool Line::isEmpty() const {
+	return (mLine.isNull());
+}
+
+void Line::setLine(const QLine& line, float thickness) {
+	mLine = line;
+	mThickness = thickness;
+}
+
+QLine Line::line() const {
+	return mLine;
+}
+
+float Line::thickness() const {
+	return mThickness;
+}
+
+QPoint Line::startPoint() const {
+	return mLine.p1();
+}
+
+QPoint Line::endPoint() const {
+	return mLine.p2();
+}
+
 
 }

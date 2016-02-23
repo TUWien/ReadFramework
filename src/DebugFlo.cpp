@@ -35,6 +35,8 @@
 #include "Utils.h"
 #include "Binarization.h"
 #include "Algorithms.h"
+#include "Blobs.h"
+#include "shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -42,6 +44,9 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/highgui.h"
 #pragma warning(pop)
 
 namespace rdf {
@@ -66,13 +71,30 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		//rdf::BaseBinarizationSu testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
+		//if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
+		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
+		//findContours test
+		//std::vector<std::vector<cv::Point> > contours;
+		//std::vector<cv::Vec4i> hierarchy;
+		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
-		rdf::BinarizationSuAdapted testBin(inputImg);
+		rdf::BaseBinarizationSu testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
+
+
+		rdf::Blobs binBlobs;
+		binBlobs.setImage(binImg);
+		binBlobs.compute();
+
+		//QVector<rdf::Blob> blobs = binBlobs.blobs();
+
+		cv::Mat testImg;
+		testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
+
+		//rdf::BinarizationSuAdapted testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
 
 		//rdf::BinarizationSuFgdWeight testBin(inputImg);
 		//testBin.compute();
@@ -81,7 +103,7 @@ namespace rdf {
 		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
 		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
+		QImage binImgQt = rdf::Image::instance().mat2QImage(testImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();
