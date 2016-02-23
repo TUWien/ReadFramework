@@ -74,7 +74,7 @@ public:
 	QVector<QVector<cv::Point> > innerContours() const;
 	QVector<cv::Vec4i> hierarchy() const;
 	float blobOrientation() const;
-	bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+	bool drawBlob(cv::Mat& imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
 
 protected:
 

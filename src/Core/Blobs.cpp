@@ -51,7 +51,7 @@ Blob::Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >&
 
 bool Blob::isEmpty() const {
 
-	return (mOuterContour.size() > 0);
+	return (mOuterContour.size() == 0);
 }
 
 void Blob::setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
@@ -140,25 +140,32 @@ float Blob::blobOrientation() const {
 	return o;
 }
 
-bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) const {
+bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
 
 	if (isEmpty()) return false;
 	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
 	QVector<cv::Vec4i> h = hierarchy();
 
-	for (auto i : h) {
-		qDebug() << i[0] << " " << i[1] << " " << i[2] << " " << i[3];
+	//for (auto i : h) {
+	//	qDebug() << i[0] << " " << i[1] << " " << i[2] << " " << i[3];
+	//}
+
+	//QVector<QVector<cv::Point> > contours;
+	std::vector<std::vector<cv::Point> > contours;
+	contours.push_back(mOuterContour.toStdVector());
+	for (auto ic : mInnerContours) {
+		contours.push_back(ic.toStdVector());
 	}
 
-	QVector<QVector<cv::Point> > contours;
-	contours.append(mOuterContour);
-	contours.append(mInnerContours);
+	//contours.append(mInnerContours);
 
-	qDebug() << "contourSize: " << contours.size();
-	qDebug() << "OutercontourSize: " << mOuterContour.size();
-	qDebug() << "InnercontourSize: " << mInnerContours.size();
+	//qDebug() << "contourSize: " << contours.size();
+	//qDebug() << "contourSize 0: " << contours[0].size();
+	//qDebug() << "OutercontourSize: " << mOuterContour.size();
+	//qDebug() << "InnercontourSize: " << mInnerContours.size();
+	//qDebug() << "image size: " << imgSrc.size().width << " " << imgSrc.size().height;
 
-	cv::drawContours(imgSrc, contours.toStdVector() , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
+	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
 
 	return true;
 }
@@ -183,7 +190,7 @@ bool Blobs::checkInput() const {
 
 bool Blobs::setImage(const cv::Mat& bWImg) {
 
-	mBwImg = bWImg;
+	mBwImg = bWImg.clone(); //clone is needed, because findContours changes the image
 	mSize = bWImg.size();
 	return checkInput();
 
@@ -317,6 +324,7 @@ QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Bl
 cv::Mat BlobManager::drawBlobs(const Blobs& blobs, cv::Scalar color) const {
 
 	cv::Mat newBWImg(blobs.size(), CV_8UC1);
+	newBWImg.setTo(0);
 
 	for (const Blob& blob : blobs.blobs()) {
 

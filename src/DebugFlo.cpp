@@ -78,10 +78,13 @@ namespace rdf {
 		//std::vector<cv::Vec4i> hierarchy;
 		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
-		rdf::BaseBinarizationSu testBin(inputImg);
+		//rdf::BaseBinarizationSu testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+
+		rdf::BinarizationSuAdapted testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
-
 
 		rdf::Blobs binBlobs;
 		binBlobs.setImage(binImg);
@@ -92,9 +95,7 @@ namespace rdf {
 		cv::Mat testImg;
 		testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
 
-		//rdf::BinarizationSuAdapted testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
+
 
 		//rdf::BinarizationSuFgdWeight testBin(inputImg);
 		//testBin.compute();
