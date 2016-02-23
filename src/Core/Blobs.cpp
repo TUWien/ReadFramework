@@ -165,7 +165,7 @@ bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
 	//qDebug() << "InnercontourSize: " << mInnerContours.size();
 	//qDebug() << "image size: " << imgSrc.size().width << " " << imgSrc.size().height;
 
-	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
+	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), 1, cv::Point());
 
 	return true;
 }
