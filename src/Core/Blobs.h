@@ -32,6 +32,8 @@
 
 #pragma once
 
+#include "Shapes.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QPolygon>
@@ -70,6 +72,7 @@ public:
 	QVector<cv::Point> outerContour() const;
 	QVector<QVector<cv::Point> > innerContours() const;
 	QVector<cv::Vec4i> hierarchy() const;
+	float blobOrientation() const;
 	bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
 
 protected:
@@ -122,6 +125,7 @@ public:
 	QVector<Blob> filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const;
 	QVector<Blob> filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const;
 	cv::Mat drawBlobs(const Blobs& blobs, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+	QVector<Line> lines(const Blobs& blobs) const;
 
 private:
 	BlobManager();

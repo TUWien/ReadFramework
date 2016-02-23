@@ -98,7 +98,7 @@ public:
 
 	bool isEmpty() const;
 
-	void setLine(const QLine& line, float thickness);
+	void setLine(const QLine& line, float thickness = 0);
 	QLine line() const;
 	float thickness() const;
 

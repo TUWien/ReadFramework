@@ -123,7 +123,7 @@ Line::Line(const QLine& line, float thickness) {
 }
 
 bool Line::isEmpty() const {
-	return ((mLine.isNull()) && (mThickness <= 0));
+	return (mLine.isNull());
 }
 
 void Line::setLine(const QLine& line, float thickness) {

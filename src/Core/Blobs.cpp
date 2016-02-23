@@ -90,6 +90,56 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 	return tmp;
 }
 
+float Blob::blobOrientation() const {
+
+	double u00, u11, u01, u10, u20, u02, num, den;
+	float o = 0.0f;
+	cv::Moments m;
+
+	if (!mOuterContour.isEmpty()) {
+		m = moments(cv::Mat(mOuterContour.toStdVector()));
+		u00 = m.m00;
+
+		if (m.m00 <= 0)
+			o = 0;
+		else {
+
+			u10 = m.m10 / u00;
+			u01 = m.m01 / u00;
+
+			u11 = -(m.m11 - m.m10 * m.m01 / u00) / u00;
+			u20 = (m.m20 - m.m10 * m.m10 / u00) / u00;
+			u02 = (m.m02 - m.m01 * m.m01 / u00) / u00;
+
+			num = 2 * u11;
+			den = u20 - u02;// + sqrt((u20 - u02)*(u20 - u02) + 4*u11*u11);
+
+			if (num != 0 && den != 00)
+			{
+				//o = (float)(180.0 + (180.0 / CV_PI) * atan( num / den ));
+				o = 0.5f*(float)(atan(num / den));
+
+				if (den < 0) {
+					o += num > 0 ? (float)CV_PI / 2.0f : (float)-CV_PI / 2.0f;;
+				}
+			}
+			else if (den == 0 && num > 0)
+				o = (float)CV_PI / 4.0f;
+			else if (den == 0 && num < 0)
+				o = (float)-CV_PI / 4.0f;
+			//covered with else
+			//else if (num == 0 && den > 0)
+			//	o = 0;
+			else if (num == 0 && den < 0)
+				o = (float)-CV_PI / 2.0f;
+			else
+				o = 0.0f;
+		}
+	}
+
+	return o;
+}
+
 bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) const {
 
 	if (isEmpty()) return false;
@@ -229,51 +279,11 @@ QVector<Blob> BlobManager::filterMar(int maxAspectRatio, int minWidth, const Blo
 QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const {
 
 	QVector<Blob> filtered;
-	double u00, u11, u01, u10, u20, u02, num, den;
 	float o;
-	cv::Moments m;
 
 	for (const Blob& blob : blobs.blobs()) {
 
-		m = moments(cv::Mat(blob.outerContour().toStdVector()));
-		u00 = m.m00;
-
-		if (m.m00 <= 0)
-			o = 0;
-		else {
-
-			u10 = m.m10 / u00;
-			u01 = m.m01 / u00;
-
-			u11 = -(m.m11 - m.m10 * m.m01 / u00) / u00;
-			u20 = (m.m20 - m.m10 * m.m10 / u00) / u00;
-			u02 = (m.m02 - m.m01 * m.m01 / u00) / u00;
-
-			num = 2 * u11;
-			den = u20 - u02;// + sqrt((u20 - u02)*(u20 - u02) + 4*u11*u11);
-
-			if (num != 0 && den != 00)
-			{
-				//o = (float)(180.0 + (180.0 / CV_PI) * atan( num / den ));
-				o = 0.5f*(float)(atan(num / den));
-
-				if (den < 0) {
-					o += num > 0 ? (float)CV_PI / 2.0f : (float)-CV_PI / 2.0f;;
-				}
-			}
-			else if (den == 0 && num > 0)
-				o = (float)CV_PI / 4.0f;
-			else if (den == 0 && num < 0)
-				o = (float)-CV_PI / 4.0f;
-			//covered with else
-			//else if (num == 0 && den > 0)
-			//	o = 0;
-			else if (num == 0 && den < 0)
-				o = (float)-CV_PI / 2.0f;
-			else
-				o = 0.0f;
-
-		}
+		o = blob.blobOrientation();
 
 		float a = Algorithms::instance().normAngleRad((float)angle, 0.0f, (float)CV_PI);
 		a = a >(float)CV_PI*0.5f ? (float)CV_PI - a : a;
@@ -305,6 +315,41 @@ cv::Mat BlobManager::drawBlobs(const Blobs& blobs, cv::Scalar color) const {
 	}
 
 	return newBWImg;
+}
+
+QVector<Line> BlobManager::lines(const Blobs& blobs) const {
+
+	QVector<Line> blobLines;
+	float xVec, yVec;
+	int p1X, p1Y, p2X, p2Y;
+	float orientation, currWidth;
+	float thickness;
+
+	for (const Blob& blob : blobs.blobs()) {
+		cv::RotatedRect rotRect = cv::minAreaRect(cv::Mat(blob.outerContour().toStdVector()));
+
+		currWidth = rotRect.size.height > rotRect.size.width ? rotRect.size.height : rotRect.size.width;
+		thickness = rotRect.size.height < rotRect.size.width ? rotRect.size.height : rotRect.size.width;
+
+		orientation = blob.blobOrientation();
+
+		xVec = -(currWidth*0.5f*(float)cos(orientation));
+		yVec = (currWidth*0.5f*(float)sin(orientation));
+
+		p1X = (int) (rotRect.center.x - xVec);
+		p1Y = (int) (rotRect.center.y - yVec);
+		p2X = (int) (rotRect.center.x + xVec);
+		p2Y = (int) (rotRect.center.y + yVec);
+
+		if (thickness > 15) thickness = 15; //UFO bugfix
+
+		QLine tmp(QPoint(p1X,p1Y), QPoint(p2X,p2Y));
+		Line newLine(tmp, thickness);
+
+		blobLines.append(newLine);
+	}
+
+	return blobLines;
 }
 
 
