@@ -146,9 +146,17 @@ bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) const {
 	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
 	QVector<cv::Vec4i> h = hierarchy();
 
+	for (auto i : h) {
+		qDebug() << i[0] << " " << i[1] << " " << i[2] << " " << i[3];
+	}
+
 	QVector<QVector<cv::Point> > contours;
 	contours.append(mOuterContour);
 	contours.append(mInnerContours);
+
+	qDebug() << "contourSize: " << contours.size();
+	qDebug() << "OutercontourSize: " << mOuterContour.size();
+	qDebug() << "InnercontourSize: " << mInnerContours.size();
 
 	cv::drawContours(imgSrc, contours.toStdVector() , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
 
@@ -196,7 +204,9 @@ bool Blobs::compute() {
 			QVector<cv::Point> outerContour;
 			QVector<QVector<cv::Point> > innerContours;
 
-			outerContour.fromStdVector(contours[outerIdx]);
+			//outerContour = outerContour.fromStdVector(contours[outerIdx]);
+			outerContour = QVector<cv::Point>::fromStdVector(contours[outerIdx]);
+
 			int firstChild = hierarchy[outerIdx][2];
 		
 			if (firstChild != -1) {
