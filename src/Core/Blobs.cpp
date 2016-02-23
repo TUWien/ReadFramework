@@ -123,9 +123,10 @@ bool Blobs::checkInput() const {
 	return true;
 }
 
-bool Blobs::setImage(const cv::Mat& BwImg) {
+bool Blobs::setImage(const cv::Mat& bWImg) {
 
-	mBwImg = BwImg;
+	mBwImg = bWImg;
+	mSize = bWImg.size();
 	return checkInput();
 
 }
@@ -291,6 +292,19 @@ QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Bl
 	}
 
 	return filtered;
+}
+
+cv::Mat BlobManager::drawBlobs(const Blobs& blobs, cv::Scalar color) const {
+
+	cv::Mat newBWImg(blobs.size(), CV_8UC1);
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		blob.drawBlob(newBWImg, color);
+
+	}
+
+	return newBWImg;
 }
 
 

@@ -34,6 +34,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QPolygon>
+#include <QLine>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -90,23 +91,23 @@ protected:
 	QPolygon mBaseLine;
 };
 
-//class DllCoreExport Line {
-//
-//public:
-//	Line(const QLine& line = QLine(), float thickness);
-//
-//	bool isEmpty() const;
-//
-//	void setLine(QPolygon& baseLine);
-//	QPolygon line() const;
-//
-//
-//	QPoint startPoint() const;
-//	QPoint endPoint() const;
-//
-//protected:
-//	QLine mLine;
-//	float mThickness;
-//};
+class DllCoreExport Line {
+
+public:
+	Line(const QLine& line = QLine(), float thickness = 0);
+
+	bool isEmpty() const;
+
+	void setLine(const QLine& line, float thickness);
+	QLine line() const;
+	float thickness() const;
+
+	QPoint startPoint() const;
+	QPoint endPoint() const;
+
+protected:
+	QLine mLine;
+	float mThickness;
+};
 
 };

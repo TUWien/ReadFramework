@@ -88,11 +88,12 @@ public:
 	Blobs();
 
 	bool isEmpty() const;
-	bool setImage(const cv::Mat& BwImg);
+	bool setImage(const cv::Mat& bWImg);
 	//bool Blobs
 	void deleteBlobs();
 	QVector<Blob> blobs() const { return mBlobs; };
 	void setBlobs(const QVector<Blob>& blobs) { mBlobs.clear(); mBlobs = blobs; }
+	cv::Size size() const { return mSize; };
 
 	bool compute();
 
@@ -100,17 +101,13 @@ public:
 	//QString write() const;
 
 	//int size() const;
-
-	//void setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
-	//QVector<cv::Point> outerContour() const;
-	//QVector<QVector<cv::Point> > innerContours() const;
-	//QVector<cv::Vec4i> hierarchy() const;
 	//bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
 
 private:
 	QVector<Blob> mBlobs;
 	cv::Mat mBwImg;
 	int mApproxMethod = CV_CHAIN_APPROX_SIMPLE;
+	cv::Size mSize;
 
 	bool checkInput() const;
 };
@@ -124,6 +121,7 @@ public:
 	QVector<Blob> filterArea(int area, const Blobs& blobs) const;
 	QVector<Blob> filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const;
 	QVector<Blob> filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const;
+	cv::Mat drawBlobs(const Blobs& blobs, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
 
 private:
 	BlobManager();
