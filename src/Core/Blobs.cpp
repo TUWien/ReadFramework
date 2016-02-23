@@ -34,8 +34,137 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/highgui.h"
 #pragma warning(pop)
 
 namespace rdf {
+
+Blob::Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
+	mOuterContour = outerC;
+	mInnerContours = innerC;
+}
+
+bool Blob::isEmpty() const {
+
+	return (mOuterContour.size() > 0);
+}
+
+void Blob::setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
+	mOuterContour = outerC;
+	mInnerContours = innerC;
+}
+
+QVector<cv::Point> Blob::outerContour() const {
+	return mOuterContour;
+}
+
+QVector<QVector<cv::Point> > Blob::innerContours() const {
+	return mInnerContours;
+}
+
+QVector<cv::Vec4i> Blob::hierarchy() const {
+	QVector<cv::Vec4i> tmp;
+
+	if (mInnerContours.isEmpty()) {
+		tmp.append(cv::Vec4i(-1, -1, -1, -1));
+	}
+	else {
+		tmp.append(cv::Vec4i(-1, -1, 1, -1));
+		for (int i = 1; i < mInnerContours.size(); i++) {
+			tmp.append(cv::Vec4i(i + 1, i==1 ? -1 : i-1, -1, 0));
+		}
+		int prevIdx = mInnerContours.size() == 1 ? -1 : mInnerContours.size() - 1;
+		tmp.append(cv::Vec4i(-1, prevIdx, -1, 0));
+	}
+	//parent:	   -1,-1, 1,-1
+	//first child:	2,-1,-1,0
+	//second child: 3, 1,-1,0
+	//third child:	4, 2,-1,0
+	//fourth child:-1, 3,-1,0
+
+	return tmp;
+}
+
+bool Blob::drawBlob(cv::Mat imgSrc, cv::Scalar color) const {
+
+	if (isEmpty()) return false;
+	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
+	QVector<cv::Vec4i> h = hierarchy();
+
+	QVector<QVector<cv::Point> > contours;
+	contours.append(mOuterContour);
+	contours.append(mInnerContours);
+
+	cv::drawContours(imgSrc, contours.toStdVector() , 0, color, CV_FILLED, 8, h.toStdVector(), 0, cv::Point());
+
+	return true;
+}
+
+// ----------------------------- BlobManager ----------------------------------------------------------------------------
+
+Blobs::Blobs() {
+
+}
+
+bool Blobs::isEmpty() const {
+
+	return mBlobs.isEmpty();
+}
+
+bool Blobs::checkInput() const {
+
+	if (mBwImg.empty() || mBwImg.channels() != 1 || mBwImg.depth() != CV_8U) return false;
+
+	return true;
+}
+
+bool Blobs::setImage(const cv::Mat& BwImg) {
+
+	mBwImg = BwImg;
+	return checkInput();
+
+}
+
+bool Blobs::compute() {
+	if (!checkInput()) return false;
+
+	if (mBlobs.isEmpty()) {
+
+		std::vector<std::vector<cv::Point> > contours;
+		std::vector<cv::Vec4i> hierarchy;
+		cv::findContours(mBwImg, contours, hierarchy, CV_RETR_CCOMP, mApproxMethod);
+
+
+		for (int outerIdx = 0; outerIdx >= 0; outerIdx = hierarchy[outerIdx][0]) {
+
+			QVector<cv::Point> outerContour;
+			QVector<QVector<cv::Point> > innerContours;
+
+			outerContour.fromStdVector(contours[outerIdx]);
+			int firstChild = hierarchy[outerIdx][2];
+		
+			if (firstChild != -1) {
+
+				for (int innerIdx = firstChild; innerIdx >= 0; innerIdx = hierarchy[innerIdx][0]) {
+					innerContours.append(QVector<cv::Point>::fromStdVector(contours[innerIdx]));
+				}
+			}
+
+			Blob newBlob(outerContour, innerContours);
+			mBlobs.append(newBlob);
+		}
+	}
+
+	return true;
+}
+
+void Blobs::deleteBlobs() {
+
+	mBlobs.clear();
+}
+
+
 
 }

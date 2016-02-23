@@ -42,6 +42,9 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/highgui.h"
 #pragma warning(pop)
 
 namespace rdf {
@@ -69,6 +72,13 @@ namespace rdf {
 		//rdf::BaseBinarizationSu testBin(inputImg);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
+
+		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
+		if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
+		
+		//std::vector<std::vector<cv::Point> > contours;
+		//std::vector<cv::Vec4i> hierarchy;
+		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
 		rdf::BinarizationSuAdapted testBin(inputImg);
 		testBin.compute();

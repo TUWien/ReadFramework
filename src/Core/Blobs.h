@@ -34,14 +34,83 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QPolygon>
+#include <QVector>
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
+#pragma warning(disable: 4251)
 // Qt defines
 
 namespace rdf {
 
-// read defines
+class DllCoreExport Blob {
+
+public:
+	Blob() {};
+	Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
+
+	bool isEmpty() const;
+
+	//void read(const QString& pointList);
+	//QString write() const;
+
+	//int size() const;
+
+	void setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
+	QVector<cv::Point> outerContour() const;
+	QVector<QVector<cv::Point> > innerContours() const;
+	QVector<cv::Vec4i> hierarchy() const;
+	bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+
+protected:
+
+	QVector<cv::Point> mOuterContour;
+	QVector<QVector<cv::Point> > mInnerContours;
+	
+private:
+	//QVector<cv::Vec4i> mHierarchy;
+};
+
+
+class DllCoreExport Blobs {
+
+public:
+	Blobs();
+
+	bool isEmpty() const;
+	bool setImage(const cv::Mat& BwImg);
+	//bool Blobs
+	void deleteBlobs();
+
+	bool compute();
+
+	//void read(const QString& pointList);
+	//QString write() const;
+
+	//int size() const;
+
+	//void setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC);
+	//QVector<cv::Point> outerContour() const;
+	//QVector<QVector<cv::Point> > innerContours() const;
+	//QVector<cv::Vec4i> hierarchy() const;
+	//bool drawBlob(cv::Mat imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+
+private:
+	QVector<Blob> mBlobs;
+	cv::Mat mBwImg = cv::Mat();
+	int mApproxMethod = CV_CHAIN_APPROX_SIMPLE;
+
+	bool checkInput() const;
+};
 
 };
