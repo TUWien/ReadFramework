@@ -233,12 +233,12 @@ Line Line::gapLine(const Line& l) const {
 
 float Line::diffAngle(const Line& l) const {
 
-	float angleLine, angleL, angleNewLine;
+	float angleLine, angleL;
 
 	//angleLine
-	angleLine = Algorithms::instance().normAngleRad(angle(), 0.0f, (float)CV_PI);
+	angleLine = Algorithms::instance().normAngleRad((float)angle(), 0.0f, (float)CV_PI);
 	angleLine = angleLine > (float)CV_PI*0.5f ? (float)CV_PI - angleLine : angleLine;
-	angleL = Algorithms::instance().normAngleRad(l.angle(), 0.0f, (float)CV_PI);
+	angleL = Algorithms::instance().normAngleRad((float)l.angle(), 0.0f, (float)CV_PI);
 	angleL = angleL > (float)CV_PI*0.5f ? (float)CV_PI - angleL : angleL;
 	
 	return fabs(angleLine - angleL);
