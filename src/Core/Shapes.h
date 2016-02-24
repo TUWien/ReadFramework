@@ -102,6 +102,11 @@ public:
 	QLine line() const;
 	float thickness() const;
 	float length() const;
+	double angle() const;
+	float minDistance(const Line& l) const;
+	Line merge(const Line& l) const;
+	Line gapLine(const Line& l) const;
+	float diffAngle(const Line& l) const;
 
 	QPoint startPoint() const;
 	QPoint endPoint() const;

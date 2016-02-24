@@ -32,6 +32,7 @@
 
 #include "Shapes.h"
 #include "Utils.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -146,12 +147,101 @@ float Line::length() const {
 
 }
 
+double Line::angle() const {
+
+	QPoint diff = mLine.p2() - mLine.p1();
+
+	return atan2(diff.y(), diff.x());
+
+}
+
 QPoint Line::startPoint() const {
 	return mLine.p1();
 }
 
 QPoint Line::endPoint() const {
 	return mLine.p2();
+}
+
+
+float Line::minDistance(const Line& l) const {
+
+	float dist1 = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
+	float dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
+	dist1 = (dist1 < dist2) ? dist1 : dist2;
+	dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
+	dist1 = (dist1 < dist2) ? dist1 : dist2;
+	dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+	dist1 = (dist1 < dist2) ? dist1 : dist2;
+
+	return dist1;
+}
+
+Line Line::merge(const Line& l) const {
+
+	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
+	float* ptr = dist.ptr<float>();
+
+	ptr[0] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
+	ptr[1] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
+	ptr[2] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
+	ptr[3] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+
+	cv::Point maxIdxP;
+	minMaxLoc(dist, 0, 0, 0, &maxIdxP);
+	int maxIdx = maxIdxP.x;
+
+	float thickness = mThickness < l.thickness() ? mThickness : l.thickness();
+	Line mergedLine;
+
+	switch (maxIdx) {
+	case 0: mergedLine = Line(QLine(mLine.p1(), l.line().p1()), thickness);	break;
+	case 1: mergedLine = Line(QLine(mLine.p1(), l.line().p2()), thickness);	break;
+	case 2: mergedLine = Line(QLine(mLine.p2(), l.line().p1()), thickness);	break;
+	case 3: mergedLine = Line(QLine(mLine.p2(), l.line().p2()), thickness);	break;
+	}
+
+	return mergedLine;
+}
+
+Line Line::gapLine(const Line& l) const {
+
+	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
+	float* ptr = dist.ptr<float>();
+
+	ptr[0] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
+	ptr[1] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
+	ptr[2] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
+	ptr[3] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+
+	cv::Point minIdxP;
+	minMaxLoc(dist, 0, 0, &minIdxP);
+	int minIdx = minIdxP.x;
+
+	float thickness = mThickness < l.thickness() ? mThickness : l.thickness();
+	Line gapLine;
+
+	switch (minIdx) {
+	case 0: gapLine = Line(QLine(mLine.p1(), l.line().p1()), thickness);	break;
+	case 1: gapLine = Line(QLine(mLine.p1(), l.line().p2()), thickness);	break;
+	case 2: gapLine = Line(QLine(mLine.p2(), l.line().p1()), thickness);	break;
+	case 3: gapLine = Line(QLine(mLine.p2(), l.line().p2()), thickness);	break;
+	}
+
+	return gapLine;
+}
+
+float Line::diffAngle(const Line& l) const {
+
+	float angleLine, angleL, angleNewLine;
+
+	//angleLine
+	angleLine = Algorithms::instance().normAngleRad(angle(), 0.0f, (float)CV_PI);
+	angleLine = angleLine > (float)CV_PI*0.5f ? (float)CV_PI - angleLine : angleLine;
+	angleL = Algorithms::instance().normAngleRad(l.angle(), 0.0f, (float)CV_PI);
+	angleL = angleL > (float)CV_PI*0.5f ? (float)CV_PI - angleL : angleL;
+	
+	return fabs(angleLine - angleL);
 }
 
 

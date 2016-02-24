@@ -285,8 +285,8 @@ QVector<Blob> BlobManager::filterMar(float maxAspectRatio, int minWidth, const B
 		if ((rotRect.size.width != 0) && (rotRect.size.height != 0))
 			currRatio = rotRect.size.height > rotRect.size.width ? rotRect.size.width / rotRect.size.height : rotRect.size.height / rotRect.size.width;
 
-		if (currWidth >= minWidth)
-			qDebug() << "currWidth: " << currWidth << " currRatio " << currRatio;
+		//if (currWidth >= minWidth)
+		//	qDebug() << "currWidth: " << currWidth << " currRatio " << currRatio;
 
 		if ((currWidth >= minWidth) && (currRatio <= maxAspectRatio))
 			filtered.append(blob);
@@ -317,7 +317,7 @@ QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Bl
 
 		diffangle = diffangle < fabs(a - (float)angleNewLine) ? diffangle : fabs(a - (float)angleNewLine);
 
-		if (diffangle > maxAngleDiff / 180.0f*(float)CV_PI)
+		if (diffangle <= maxAngleDiff / 180.0f*(float)CV_PI)
 			filtered.append(blob);
 	}
 

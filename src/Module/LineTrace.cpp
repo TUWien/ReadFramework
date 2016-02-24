@@ -33,6 +33,7 @@
 #include "LineTrace.h"
 #include "Image.h"
 #include "Blobs.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -94,11 +95,25 @@ namespace rdf {
 		cv::Mat transposedSrc = mSrcImg.t();
 		cv::Mat vDSCCImg = hDSCC(transposedSrc).t();
 
+		//mDAngle = 0.0;
+
 		filter(hDSCCImg, vDSCCImg);
+
+		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
+		//Image::instance().save(vDSCCImg, "D:\\tmp\\vdscc.tif");
+		//return true;
 
 		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
 		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
 
+		if (mDAngle != 361.0f) {
+			QVector<rdf::Line> tmp;
+			tmp.append(hLines);
+			tmp.append(vLines);
+
+			hLines = filterLineAngle(tmp, (float)mDAngle, mMaxSlopeRotat);
+			vLines = filterLineAngle(tmp, (float)(mDAngle+CV_PI*0.5f), mMaxSlopeRotat);
+		}
 
 		mergeLines();
 		filterLines();
@@ -114,6 +129,11 @@ namespace rdf {
 	}
 
 	void LineTrace::mergeLines() {
+
+
+
+
+
 
 	}
 
@@ -133,6 +153,27 @@ namespace rdf {
 		}
 		vLines = tmp;
 
+	}
+
+	QVector<rdf::Line> LineTrace::filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const {
+
+		QVector<rdf::Line> resultLines;
+
+		for (auto l : lines) {
+			
+			float a = Algorithms::instance().normAngleRad((float)angle, 0.0f, (float)CV_PI);
+
+			float angleNewLine = Algorithms::instance().normAngleRad((float)l.angle(), 0.0f, (float)CV_PI);
+
+			float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
+				, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
+
+
+			if (diffangle < angleDiff / 180.0f*(float)CV_PI)
+				resultLines.append(l);
+
+		}
+		return resultLines;
 	}
 
 	cv::Mat LineTrace::hDSCC(const cv::Mat& bwImg) const {

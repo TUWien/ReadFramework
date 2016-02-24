@@ -61,6 +61,7 @@ public:
 	LineTrace(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 	bool isEmpty() const override;
 	virtual bool compute() override;
+	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const;
 
 	/**
 	* Returns a vector with all calculated and merged lines.
@@ -112,7 +113,6 @@ private:
 	void filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg);
 	void mergeLines();
 	void filterLines();
-
 };
 
 };

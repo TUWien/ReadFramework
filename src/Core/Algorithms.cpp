@@ -618,4 +618,10 @@ float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const 
 	return angle;
 }
 
+float Algorithms::euclideanDistance(const QPoint& p1, const QPoint& p2) const {
+
+	return (float)sqrt((p1.x() - p2.x())*(p1.x() - p2.x()) + (p1.y() - p2.y())*(p1.y() - p2.y()));
+
+}
+
 }

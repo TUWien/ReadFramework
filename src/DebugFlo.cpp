@@ -36,7 +36,8 @@
 #include "Binarization.h"
 #include "Algorithms.h"
 #include "Blobs.h"
-#include "shapes.h"
+#include "Shapes.h"
+#include "LineTrace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -86,9 +87,12 @@ namespace rdf {
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
-		rdf::Blobs binBlobs;
-		binBlobs.setImage(binImg);
-		binBlobs.compute();
+		rdf::LineTrace linetest(binImg);
+		linetest.compute();
+
+		//rdf::Blobs binBlobs;
+		//binBlobs.setImage(binImg);
+		//binBlobs.compute();
 
 		//QVector<rdf::Blob> blobs = binBlobs.blobs();
 
@@ -96,10 +100,10 @@ namespace rdf {
 		//binBlobs.setBlobs(rdf::BlobManager::instance().filterMar(0.3f,200, binBlobs));
 		//binBlobs.setBlobs(rdf::BlobManager::instance().filterAngle(0,));
 
-		qDebug() << "blobs #: " << binBlobs.blobs().size();
+		//qDebug() << "blobs #: " << binBlobs.blobs().size();
 
-		cv::Mat testImg;
-		testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
+		//cv::Mat testImg;
+		//testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
 
 
 
@@ -110,7 +114,7 @@ namespace rdf {
 		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
 		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(testImg);
+		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();
