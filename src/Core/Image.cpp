@@ -140,6 +140,8 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 		sImg = sImg.convertToFormat(QImage::Format_RGB888);
 	else if (fInfo.suffix().contains(QRegExp("(j2k|jp2|jpf|jpx)")) && sImg.depth() != 32 && sImg.depth() != 8)
 		sImg = sImg.convertToFormat(QImage::Format_RGB32);
+	else if (fInfo.suffix().contains(QRegExp("(png)")))
+		sImg = sImg.convertToFormat(QImage::Format_RGB32);
 
 	qDebug() << "img has alpha: " << (sImg.format() != QImage::Format_RGB888) << " img uses alpha: " << hasAlpha;
 
@@ -155,7 +157,7 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 	//saved = imgWriter->write(sImg);
 	//delete imgWriter;
 
-	saved = sImg.save(savePath, 0,compression);
+	saved = sImg.save(savePath, 0, compression);
 
 	if (!saved) qWarning() << "could not save " << savePath;
 

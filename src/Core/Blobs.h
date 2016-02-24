@@ -131,9 +131,6 @@ public:
 private:
 	BlobManager();
 	BlobManager(const BlobManager&);
-
-	//QStringList mTypeNames;
-
 };
 
 };
