@@ -123,7 +123,7 @@ public:
 	static BlobManager& instance();
 
 	QVector<Blob> filterArea(int area, const Blobs& blobs) const;
-	QVector<Blob> filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const;
+	QVector<Blob> filterMar(float maxAspectRatio, int minWidth, const Blobs& blobs) const;
 	QVector<Blob> filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const;
 	cv::Mat drawBlobs(const Blobs& blobs, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
 	QVector<Line> lines(const Blobs& blobs) const;

@@ -92,6 +92,12 @@ namespace rdf {
 
 		//QVector<rdf::Blob> blobs = binBlobs.blobs();
 
+		//binBlobs.setBlobs(rdf::BlobManager::instance().filterArea(20, binBlobs));
+		//binBlobs.setBlobs(rdf::BlobManager::instance().filterMar(0.3f,200, binBlobs));
+		binBlobs.setBlobs(rdf::BlobManager::instance().filterAngle(0,));
+
+		qDebug() << "blobs #: " << binBlobs.blobs().size();
+
 		cv::Mat testImg;
 		testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
 

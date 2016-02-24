@@ -269,7 +269,7 @@ QVector<Blob> BlobManager::filterArea(int threshArea, const Blobs& blobs) const 
 	return filtered;
 }
 
-QVector<Blob> BlobManager::filterMar(int maxAspectRatio, int minWidth, const Blobs& blobs) const {
+QVector<Blob> BlobManager::filterMar(float maxAspectRatio, int minWidth, const Blobs& blobs) const {
 
 	QVector<Blob> filtered;
 	//QVector<Blob> blobcopy = blobs.blobs();
@@ -280,10 +280,13 @@ QVector<Blob> BlobManager::filterMar(int maxAspectRatio, int minWidth, const Blo
 
 	
 		float currWidth = rotRect.size.height > rotRect.size.width ? rotRect.size.height : rotRect.size.width;
-		float currRatio = 0;
+		float currRatio = 0.0f;
 
 		if ((rotRect.size.width != 0) && (rotRect.size.height != 0))
 			currRatio = rotRect.size.height > rotRect.size.width ? rotRect.size.width / rotRect.size.height : rotRect.size.height / rotRect.size.width;
+
+		if (currWidth >= minWidth)
+			qDebug() << "currWidth: " << currWidth << " currRatio " << currRatio;
 
 		if ((currWidth >= minWidth) && (currRatio <= maxAspectRatio))
 			filtered.append(blob);
