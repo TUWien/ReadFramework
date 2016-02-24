@@ -72,6 +72,7 @@ public:
 	//QVector<DkLineExt> getLines();
 
 	cv::Mat lineImage() const;
+	cv::Mat generatedLineImage() const;
 
 	virtual QString toString() const override;
 
@@ -100,7 +101,7 @@ private:
 	float mMaxSlopeDiff = 2.0f;		//filter parameter: maximal slope difference between two lines in degree (default: 3)
 	float mMaxAngleDiff = 2.0f;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 20)
 	double mDAngle = 361.0f;			//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
-	int mMinLenSecondRun = 60;    //min len to filter after merge lines
+	int mMinLenSecondRun = 40;    //min len to filter after merge lines, old value: 60
 
 	float mLineProb;
 	float mLineDistProb;

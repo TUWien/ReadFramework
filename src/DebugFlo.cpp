@@ -92,6 +92,9 @@ namespace rdf {
 
 		cv::Mat lImg = linetest.lineImage();
 
+		cv::Mat synLine = linetest.generatedLineImage();
+		Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+
 		//rdf::Blobs binBlobs;
 		//binBlobs.setImage(binImg);
 		//binBlobs.compute();

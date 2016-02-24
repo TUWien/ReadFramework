@@ -123,6 +123,9 @@ namespace rdf {
 			vLines = filterLineAngle(tmp, (float)(mDAngle+CV_PI*0.5f), mMaxSlopeRotat);
 		}
 
+		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
+		//Image::instance().save(vDSCCImg, "D:\\tmp\\vdscc.tif");
+
 		QVector<rdf::Line> gapLines;
 		gapLines      = mergeLines(hLines);
 		gapLines.append(mergeLines(vLines));
@@ -139,6 +142,32 @@ namespace rdf {
 		drawGapLines(mLineImg, gapLines);
 
 		return true;
+	}
+
+	cv::Mat LineTrace::generatedLineImage() const {
+
+		if (mSrcImg.empty()) return cv::Mat();
+
+		cv::Mat synLinImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
+		synLinImg.setTo(0);
+
+		for (auto l : hLines) {
+
+			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
+			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+
+			cv::line(synLinImg, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+		}
+
+		for (auto l : vLines) {
+
+			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
+			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+
+			cv::line(synLinImg, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+		}
+
+		return synLinImg;
 	}
 
 	QVector<rdf::Line> LineTrace::mergeLines(QVector<rdf::Line>& lines) {
@@ -199,53 +228,53 @@ namespace rdf {
 
 
 
-		//QVector<int> eraseIdx;
+		QVector<int> eraseIdx;
 
-		//// now remove small lines 'within' large lines
-		//for (lineIter = lines.begin(), lineIdx = 0, lineIdx = 0; lineIter != lines.end(); ) {
-		//	rdf::Line cLine = *lineIter;
+		// now remove small lines 'within' large lines
+		for (lineIter = lines.begin(), lineIdx = 0, lineIdx = 0; lineIter != lines.end(); ) {
+			rdf::Line cLine = *lineIter;
 
-		//	for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
+			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
 
-		//		if (lineIterCmp == lineIter) {
-		//			continue;
-		//		}
+				if (lineIterCmp == lineIter) {
+					continue;
+				}
 
-		//		rdf::Line cmpLine = *lineIterCmp;
+				rdf::Line cmpLine = *lineIterCmp;
 
-		//		if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
-		//			continue;
+				if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
+					continue;
 
-		//		if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
-		//			eraseIdx.push_back(lineIdx);
-		//		}
-		//		else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
-		//			eraseIdx.push_back(lineCmpIdx);
-		//		}
-		//	}
+				if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
+					eraseIdx.push_back(lineIdx);
+				}
+				else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
+					eraseIdx.push_back(lineCmpIdx);
+				}
+			}
 
-		//	if (lineCmpIdx == (int)lines.size()) {
-		//		lineIter++;
-		//		lineIdx++;
-		//	}
-		//}
+			if (lineCmpIdx == (int)lines.size()) {
+				lineIter++;
+				lineIdx++;
+			}
+		}
 
-		//qSort(eraseIdx.begin(), eraseIdx.end());
+		qSort(eraseIdx.begin(), eraseIdx.end());
 
-		////dout << "size: " << (int)lineVector.size() << dkendl;
-		////use tmIdx to avoid double entries... deletes additional lines and can cause an exception!
-		//int tmpIdx = -1;
+		//dout << "size: " << (int)lineVector.size() << dkendl;
+		//use tmIdx to avoid double entries... deletes additional lines and can cause an exception!
+		int tmpIdx = -1;
 
-		//for (int idx = ((int)eraseIdx.size()) - 1; idx >= 0; idx--) {
-		//	lineIter = lines.begin();
-		//	lineIter += eraseIdx[idx];
+		for (int idx = ((int)eraseIdx.size()) - 1; idx >= 0; idx--) {
+			lineIter = lines.begin();
+			lineIter += eraseIdx[idx];
 
-		//	if (tmpIdx == eraseIdx[idx])
-		//		continue;
-		//	//dout << "idx: " << eraseIdx[idx] << dkendl;
-		//	lines.erase(lineIter);
-		//	tmpIdx = eraseIdx[idx];
-		//}
+			if (tmpIdx == eraseIdx[idx])
+				continue;
+			//dout << "idx: " << eraseIdx[idx] << dkendl;
+			lines.erase(lineIter);
+			tmpIdx = eraseIdx[idx];
+		}
 
 
 
