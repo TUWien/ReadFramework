@@ -101,6 +101,7 @@ public:
 	void setLine(const QLine& line, float thickness = 0);
 	QLine line() const;
 	float thickness() const;
+	float length() const;
 
 	QPoint startPoint() const;
 	QPoint endPoint() const;

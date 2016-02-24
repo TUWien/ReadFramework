@@ -32,6 +32,7 @@
 
 #include "LineTrace.h"
 #include "Image.h"
+#include "Blobs.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -93,12 +94,45 @@ namespace rdf {
 		cv::Mat transposedSrc = mSrcImg.t();
 		cv::Mat vDSCCImg = hDSCC(transposedSrc).t();
 
-		filter();
+		filter(hDSCCImg, vDSCCImg);
 
 		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
 		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
 
+
+		mergeLines();
+		filterLines();
+
+		rdf::Blobs finalBlobs;
+		finalBlobs.setImage(mLineImg);
+		finalBlobs.compute();
+
+		finalBlobs.setBlobs(rdf::BlobManager::instance().filterMar(1.0f, mMinLenSecondRun, finalBlobs));
+		mLineImg = rdf::BlobManager::instance().drawBlobs(finalBlobs);
+
 		return true;
+	}
+
+	void LineTrace::mergeLines() {
+
+	}
+
+	void LineTrace::filterLines() {
+		QVector<rdf::Line> tmp;
+
+		for (auto l : hLines) {
+			if (l.length() > (float)mMinLenSecondRun)
+				tmp.append(l);
+		}
+		hLines = tmp;
+
+		tmp.clear();
+		for (auto l : vLines) {
+			if (l.length() > (float)mMinLenSecondRun)
+				tmp.append(l);
+		}
+		vLines = tmp;
+
 	}
 
 	cv::Mat LineTrace::hDSCC(const cv::Mat& bwImg) const {
@@ -303,96 +337,32 @@ namespace rdf {
 		return horizontalDSCC;
 	}
 
-	void LineTrace::filter(void) {
-		//QVector<DkAttr> props;
-		//QVector<DkAttr>::iterator it;
-		//DkRect rect;
-		//float xVec, yVec;
-		//float p1X, p1Y, p2X, p2Y;
-		//float orientation, currWidth;
-		//float thickness;
+	void LineTrace::filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg) {
 
-		//DkBlobs<DkAttr> filterHLine(this->horizontalDSCC);
 
-		////filterHLine.imgFilterArea(minArea, 100000);
-		//filterHLine.imgFilterMar(maxAspectRatio, minWidth);
-		////filterHLine.imgFilterRipple(rippleArea, rippleLen);
-		////filterHLine.calcOrientation();
-		//if (dAngle != 361.0f)
-		//	filterHLine.imgFilterOrientation((float)dAngle, maxSlopeRotat);
-		//else
-		//	filterHLine.calcOrientation();
+		rdf::Blobs binBlobsH;
+		binBlobsH.setImage(hDSCCImg);
+		binBlobsH.compute();
 
-		////DkIP::imwrite("horizontalDSCC821.png", horizontalDSCC);
+		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsH));
+		if (mDAngle != 361.0f)
+			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mDAngle, mMaxSlopeRotat, binBlobsH));
 
-		//props = filterHLine.getProps();
-		//it = props.begin();
-		//while (it != props.end()) {
+		hLines = rdf::BlobManager::instance().lines(binBlobsH);
+		hDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsH);
 
-		//	rect = (*it).getMinAreaRect();
-		//	orientation = (*it).getOrientation();
 
-		//	currWidth = rect.size.height > rect.size.width ? rect.size.height : rect.size.width;
-		//	thickness = rect.size.height < rect.size.width ? rect.size.height : rect.size.width;
+		rdf::Blobs binBlobsV;
+		binBlobsV.setImage(vDSCCImg);
+		binBlobsV.compute();
 
-		//	xVec = -(currWidth*0.5f*(float)cos(orientation));
-		//	yVec = (currWidth*0.5f*(float)sin(orientation));
+		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsV));
+		if (mDAngle != 361.0f)
+			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mDAngle, mMaxSlopeRotat, binBlobsV));
 
-		//	p1X = rect.center.x - xVec;
-		//	p1Y = rect.center.y - yVec;
-		//	p2X = rect.center.x + xVec;
-		//	p2Y = rect.center.y + yVec;
+		vLines = rdf::BlobManager::instance().lines(binBlobsV);
+		vDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsV);
 
-		//	if (thickness > 15) thickness = 15; //UFO bugfix
-
-		//	DkLineExt l = p1X < p2X ? DkLineExt(p1X, p1Y, p2X, p2Y, orientation, thickness) : DkLineExt(p2X, p2Y, p1X, p1Y, orientation, thickness);
-		//	//printf("orientationH: %f\n", orientation);
-		//	lineVector.push_back(l);
-		//	//lineList.insert(lineList.begin(), l);
-
-		//	++it;
-		//}
-
-		//DkBlobs<DkAttr> filterVLine(this->verticalDSCC);
-
-		////filterVLine.imgFilterArea(minArea, 100000);
-		//filterVLine.imgFilterMar(maxAspectRatio, minWidth);
-		////filterVLine.imgFilterRipple(rippleArea, rippleLen);
-		////filterVLine.calcOrientation();
-		//if (dAngle != 361.0f)
-		//	filterVLine.imgFilterOrientation((float)dAngle, maxSlopeRotat);
-		//else
-		//	filterVLine.calcOrientation();
-
-		//props = filterVLine.getProps();
-		//it = props.begin();
-		//while (it != props.end()) {
-
-		//	rect = (*it).getMinAreaRect();
-		//	orientation = (*it).getOrientation();
-
-		//	currWidth = rect.size.height > rect.size.width ? rect.size.height : rect.size.width;
-		//	thickness = rect.size.height < rect.size.width ? rect.size.height : rect.size.width;
-
-		//	xVec = -(currWidth*0.5f*(float)cos(orientation));
-		//	yVec = (currWidth*0.5f*(float)sin(orientation));
-
-		//	p1X = rect.center.x - xVec;
-		//	p1Y = rect.center.y - yVec;
-		//	p2X = rect.center.x + xVec;
-		//	p2Y = rect.center.y + yVec;
-
-		//	if (thickness > 15) thickness = 15; //UFO bugfix
-
-		//	DkLineExt l = p1X < p2X ? DkLineExt(p1X, p1Y, p2X, p2Y, orientation, thickness) : DkLineExt(p2X, p2Y, p1X, p1Y, orientation, thickness);
-		//	//printf("orientationV: %f\n", orientation);
-		//	lineVector.push_back(l);
-		//	//lineList.insert(lineList.begin(), l);
-
-		//	++it;
-		//}
-
-		////DkIP::imwrite("verticalDSCC890.png", verticalDSCC);
 	}
 
 	QString LineTrace::toString() const {

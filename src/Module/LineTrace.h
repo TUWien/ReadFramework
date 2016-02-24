@@ -33,6 +33,7 @@
 #pragma once
 
 #include "BaseModule.h"
+#include "Shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -78,6 +79,9 @@ protected:
 	cv::Mat mLineImg;									//the line image [0 255]
 	cv::Mat mMask;										//the mask image [0 255]
 
+	QVector<rdf::Line> hLines;
+	QVector<rdf::Line> vLines;
+
 
 private:
 
@@ -105,8 +109,9 @@ private:
 	//void load(const qsettings& settings) override;
 	//void save(qsettings& settings) const override;
 	cv::Mat hDSCC(const cv::Mat& bwImg) const;
-	void filter(void);
-
+	void filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg);
+	void mergeLines();
+	void filterLines();
 
 };
 

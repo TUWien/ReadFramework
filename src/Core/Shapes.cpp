@@ -139,6 +139,13 @@ float Line::thickness() const {
 	return mThickness;
 }
 
+float Line::length() const {
+	QPoint diff = mLine.p2() - mLine.p1();
+
+	return (float)sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+
+}
+
 QPoint Line::startPoint() const {
 	return mLine.p1();
 }
