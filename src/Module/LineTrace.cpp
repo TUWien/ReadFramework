@@ -115,7 +115,10 @@ namespace rdf {
 			vLines = filterLineAngle(tmp, (float)(mDAngle+CV_PI*0.5f), mMaxSlopeRotat);
 		}
 
-		mergeLines();
+		QVector<rdf::Line> gapLines;
+		gapLines      = mergeLines(hLines);
+		gapLines.append(mergeLines(vLines));
+
 		filterLines();
 
 		rdf::Blobs finalBlobs;
@@ -125,15 +128,132 @@ namespace rdf {
 		finalBlobs.setBlobs(rdf::BlobManager::instance().filterMar(1.0f, mMinLenSecondRun, finalBlobs));
 		mLineImg = rdf::BlobManager::instance().drawBlobs(finalBlobs);
 
+		drawGapLines(mLineImg, gapLines);
+
 		return true;
 	}
 
-	void LineTrace::mergeLines() {
+	QVector<rdf::Line> LineTrace::mergeLines(QVector<rdf::Line>& lines) {
+
+		QVector<rdf::Line>::iterator lineIter, lineIterCmp;
+		QVector<rdf::Line> gapLines;
+
+		int lineIdx, lineCmpIdx;
+		for (lineIter = lines.begin(), lineIdx = 0; lineIter != lines.end(); ) {
+			rdf::Line cLine = *lineIter;
+
+			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
+				if (lineIterCmp == lineIter) {
+					continue;
+				}
+
+				rdf::Line cmpLine = *lineIterCmp;
+				float dist = cLine.minDistance(cmpLine);
+
+				if (dist > mMaxGap) continue;
+
+				float diffAngle = cLine.diffAngle(cmpLine);
+				if (diffAngle > qDegreesToRadians(mMaxSlopeDiff)) continue;
+				
+				//orientation of new line differ in orientation with connecting lines by maxSlopeDiff degree
+				//difference in orientation between gapline and cline/cmpline. the larger deviation is taken
+				rdf::Line newLine, gapLine;
+				newLine = cLine.merge(cmpLine);
+
+				float angle1 = (float)newLine.diffAngle(cLine);
+				float angle2 = (float)newLine.diffAngle(cmpLine);
+				float angle = angle1 > angle2 ? angle1 : angle2;
+
+				float weight = 1.0f - (dist / mMaxGap);
+				if (angle > (weight * qDegreesToRadians(mMaxAngleDiff))) continue;
+
+				gapLine = cLine.gapLine(cmpLine);
+				angle1 = gapLine.diffAngle(cLine);
+				angle2 = gapLine.diffAngle(cmpLine);
+				angle = angle1 > angle2 ? angle1 : angle2;
+
+				weight = 1.0f - (dist / mMaxGap)*(dist / mMaxGap);
+				if (dist > 5 && angle > weight * qDegreesToRadians(20.0f)) continue;
+
+				gapLines.append(gapLine);
+
+				*lineIterCmp = newLine;
+
+				lineIter = lines.erase(lineIter);
+				break;
+			}
+
+			if (lineCmpIdx == (int)lines.size()) {
+				lineIter++;
+				lineIdx++;
+			}
+		}
+
+
+
+		//QVector<int> eraseIdx;
+
+		//// now remove small lines 'within' large lines
+		//for (lineIter = lines.begin(), lineIdx = 0, lineIdx = 0; lineIter != lines.end(); ) {
+		//	rdf::Line cLine = *lineIter;
+
+		//	for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
+
+		//		if (lineIterCmp == lineIter) {
+		//			continue;
+		//		}
+
+		//		rdf::Line cmpLine = *lineIterCmp;
+
+		//		if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
+		//			continue;
+
+		//		if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
+		//			eraseIdx.push_back(lineIdx);
+		//		}
+		//		else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
+		//			eraseIdx.push_back(lineCmpIdx);
+		//		}
+		//	}
+
+		//	if (lineCmpIdx == (int)lines.size()) {
+		//		lineIter++;
+		//		lineIdx++;
+		//	}
+		//}
+
+		//qSort(eraseIdx.begin(), eraseIdx.end());
+
+		////dout << "size: " << (int)lineVector.size() << dkendl;
+		////use tmIdx to avoid double entries... deletes additional lines and can cause an exception!
+		//int tmpIdx = -1;
+
+		//for (int idx = ((int)eraseIdx.size()) - 1; idx >= 0; idx--) {
+		//	lineIter = lines.begin();
+		//	lineIter += eraseIdx[idx];
+
+		//	if (tmpIdx == eraseIdx[idx])
+		//		continue;
+		//	//dout << "idx: " << eraseIdx[idx] << dkendl;
+		//	lines.erase(lineIter);
+		//	tmpIdx = eraseIdx[idx];
+		//}
 
 
 
 
+		return gapLines;
+	}
 
+	void LineTrace::drawGapLines(cv::Mat& img, QVector<rdf::Line> lines) {
+
+		for (auto l : lines) {
+
+			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
+			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+
+			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+		}
 
 	}
 

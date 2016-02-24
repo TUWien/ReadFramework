@@ -177,6 +177,39 @@ float Line::minDistance(const Line& l) const {
 	return dist1;
 }
 
+/**
+* Calculates the normal distance to the point given.
+* @param p a point.
+* @return the normal distance to the point p.
+**/
+float Line::distance(const QPoint p) const {
+
+	QPoint normalVec = mLine.p2() - mLine.p1();
+
+	int x = normalVec.x();
+	normalVec.setX(-normalVec.y());
+	normalVec.setY(x);
+
+	QPoint tmp = p - mLine.p2();
+
+	return (float)abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (FLT_EPSILON + sqrt(normalVec.x()*normalVec.x() + normalVec.y()*normalVec.y())));
+}
+
+/**
+* Decides whether a point is inside the two normals at the end of the line (at any distance)
+* @param p a point whose position with the two normals should be computer
+* @return true if the point lies within the two normals at the endpoints of the line (or the point is on the line), false if not
+*/
+bool Line::within(const QPoint& p) const {
+
+	QPoint tmp = mLine.p2() - mLine.p1();
+	QPoint tmp2(p.x() - mLine.p2().x(), p.y() - mLine.p2().y());	//p-end
+	QPoint tmp3(p.x() - mLine.p1().x(), p.y() - mLine.p1().y());	//p-start
+	
+	return (tmp.x()*tmp2.x() + tmp.y()*tmp2.y()) * (tmp.x()*tmp3.x() + tmp.y()*tmp3.y()) < 0;
+
+}
+
 Line Line::merge(const Line& l) const {
 
 	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);

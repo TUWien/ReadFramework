@@ -104,9 +104,11 @@ public:
 	float length() const;
 	double angle() const;
 	float minDistance(const Line& l) const;
+	float distance(const QPoint p) const;
 	Line merge(const Line& l) const;
 	Line gapLine(const Line& l) const;
 	float diffAngle(const Line& l) const;
+	bool within(const QPoint& p) const;
 
 	QPoint startPoint() const;
 	QPoint endPoint() const;

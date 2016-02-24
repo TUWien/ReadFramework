@@ -111,8 +111,9 @@ private:
 	//void save(qsettings& settings) const override;
 	cv::Mat hDSCC(const cv::Mat& bwImg) const;
 	void filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg);
-	void mergeLines();
+	QVector<rdf::Line> mergeLines(QVector<rdf::Line>& lines);
 	void filterLines();
+	void drawGapLines(cv::Mat& img, QVector<rdf::Line> lines);
 };
 
 };
