@@ -129,6 +129,7 @@ namespace rdf {
 		QVector<rdf::Line> gapLines;
 		gapLines      = mergeLines(hLines);
 		gapLines.append(mergeLines(vLines));
+		drawGapLines(mLineImg, gapLines);
 
 		filterLines();
 
@@ -138,8 +139,6 @@ namespace rdf {
 
 		finalBlobs.setBlobs(rdf::BlobManager::instance().filterMar(1.0f, mMinLenSecondRun, finalBlobs));
 		mLineImg = rdf::BlobManager::instance().drawBlobs(finalBlobs);
-
-		drawGapLines(mLineImg, gapLines);
 
 		return true;
 	}
