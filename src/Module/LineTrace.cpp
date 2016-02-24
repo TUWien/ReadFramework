@@ -86,6 +86,14 @@ namespace rdf {
 		return mSrcImg.empty() && mMask.empty();
 	}
 
+	QVector<rdf::Line> LineTrace::getHLines() const {
+		return hLines;
+	}
+
+	QVector<rdf::Line> LineTrace::getVLines() const {
+		return vLines;
+	}
+
 	bool LineTrace::compute() {
 
 		if (!checkInput())

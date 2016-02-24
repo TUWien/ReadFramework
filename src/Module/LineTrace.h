@@ -62,6 +62,8 @@ public:
 	bool isEmpty() const override;
 	virtual bool compute() override;
 	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const;
+	QVector<rdf::Line> getHLines() const;
+	QVector<rdf::Line> getVLines() const;
 
 	/**
 	* Returns a vector with all calculated and merged lines.

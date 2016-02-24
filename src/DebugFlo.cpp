@@ -90,6 +90,8 @@ namespace rdf {
 		rdf::LineTrace linetest(binImg);
 		linetest.compute();
 
+		cv::Mat lImg = linetest.lineImage();
+
 		//rdf::Blobs binBlobs;
 		//binBlobs.setImage(binImg);
 		//binBlobs.compute();
@@ -114,7 +116,7 @@ namespace rdf {
 		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
 		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
+		QImage binImgQt = rdf::Image::instance().mat2QImage(lImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();
