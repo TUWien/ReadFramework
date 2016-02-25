@@ -20,7 +20,7 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install libraw; fi
   #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install quazip; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew tap homebrew/science; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install opencv3; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install opencv3 --with-contrib; fi
 
   # Linux dependencies
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-add-repository -y ppa:beineri/opt-qt551-trusty; fi
@@ -34,6 +34,7 @@ before_script:
   - cd build
 
 script:
+  - find /
   - cmake $CMAKE_ARGS ../.
   - make -j8
   
