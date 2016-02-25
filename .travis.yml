@@ -17,7 +17,6 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt5; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then CMAKE_ARGS="-DCMAKE_PREFIX_PATH=/usr/local/opt/qt5"; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew tap homebrew/science; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install opencv3 --with-contrib; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install opencv3 --with-contrib --without-eigen --without-opencl --without-openexr --without-python --without-tests; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew ln opencv3 --force; fi
 
