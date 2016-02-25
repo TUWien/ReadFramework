@@ -105,7 +105,7 @@ protected:
 	virtual float contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const;
 	virtual void calcFilterParams(int &filterS, int &Nm);
 	virtual float strokeWidth(const cv::Mat& contrastImg) const;
-	float thresholdVal(float *mean, float *std) const;
+	virtual float thresholdVal(float *mean, float *std) const;
 	void computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity, float gSigma) const;
 	void computeThrImg(const cv::Mat& grayImg32F, const cv::Mat& binContrast, cv::Mat& thresholdImg, cv::Mat& thresholdContrastPxImg);
 	bool checkInput() const override;
@@ -147,6 +147,7 @@ public:
 
 protected:
 	float setStrokeWidth(float strokeW);
+	virtual float thresholdVal(float *mean, float *std) const;
 	virtual float contrastVal(const unsigned char* maxVal, const unsigned char * minVal) const override;
 	virtual void calcFilterParams(int &filterS, int &Nm) override;
 

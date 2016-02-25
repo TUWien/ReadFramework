@@ -33,11 +33,14 @@
 #include "DebugMarkus.h"
 #include "PageParser.h"
 #include "Utils.h"
+#include "Image.h"
+
+#include "SuperPixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
-
-#include <opencv2\highgui\highgui.hpp>
+#include <QImage>
+#include <opencv2/highgui/highgui.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -51,6 +54,15 @@ void XmlTest::parseXml() {
 
 	rdf::Timer dt;
 	int idx = 0;
+
+	qDebug() << "image path: " << mConfig.imagePath();
+
+	QImage img(mConfig.imagePath());
+	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	SuperPixel sp(imgCv);
+	sp.compute();
+	
+	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
 
 	// loop for sampling time...
 	for ( ; idx < 1; idx++) {

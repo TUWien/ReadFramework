@@ -35,7 +35,7 @@ macro(RDF_FIND_OPENCV)
 	unset(OpenCV_LIBRARY_DIRS CACHE)
 	unset(OpenCV_DIR)
  
-	find_package(OpenCV REQUIRED core imgproc ximgproc)
+	find_package(OpenCV REQUIRED core imgproc stitching imgcodecs flann features2d calib3d ximgproc)
  
 	if(NOT OpenCV_FOUND)
 	 message(FATAL_ERROR "OpenCV not found.") 

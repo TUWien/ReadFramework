@@ -35,6 +35,9 @@
 #include "Utils.h"
 #include "Binarization.h"
 #include "Algorithms.h"
+#include "Blobs.h"
+#include "Shapes.h"
+#include "LineTrace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -42,6 +45,9 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/highgui.h"
 #pragma warning(pop)
 
 namespace rdf {
@@ -66,6 +72,13 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
+		//if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
+		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
+		//findContours test
+		//std::vector<std::vector<cv::Point> > contours;
+		//std::vector<cv::Vec4i> hierarchy;
+		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
 		//rdf::BaseBinarizationSu testBin(inputImg);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
@@ -74,6 +87,31 @@ namespace rdf {
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
+		rdf::LineTrace linetest(binImg);
+		linetest.compute();
+
+		cv::Mat lImg = linetest.lineImage();
+
+		cv::Mat synLine = linetest.generatedLineImage();
+		Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+
+		//rdf::Blobs binBlobs;
+		//binBlobs.setImage(binImg);
+		//binBlobs.compute();
+
+		//QVector<rdf::Blob> blobs = binBlobs.blobs();
+
+		//binBlobs.setBlobs(rdf::BlobManager::instance().filterArea(20, binBlobs));
+		//binBlobs.setBlobs(rdf::BlobManager::instance().filterMar(0.3f,200, binBlobs));
+		//binBlobs.setBlobs(rdf::BlobManager::instance().filterAngle(0,));
+
+		//qDebug() << "blobs #: " << binBlobs.blobs().size();
+
+		//cv::Mat testImg;
+		//testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
+
+
+
 		//rdf::BinarizationSuFgdWeight testBin(inputImg);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
@@ -81,7 +119,7 @@ namespace rdf {
 		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		qDebug() << testBin << " in " << dt;
 		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(binImg);
+		QImage binImgQt = rdf::Image::instance().mat2QImage(lImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();

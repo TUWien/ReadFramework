@@ -603,4 +603,24 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) c
 																//return max_val;
 }
 
+
+float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const {
+	// this could be a bottleneck
+	if (abs(angle) > 1000)
+		return angle;
+
+	while (angle <= startIvl)
+		angle += endIvl - startIvl;
+	while (angle > endIvl)
+		angle -= endIvl - startIvl;
+
+	return angle;
+}
+
+float Algorithms::euclideanDistance(const QPoint& p1, const QPoint& p2) const {
+
+	return (float)sqrt((p1.x() - p2.x())*(p1.x() - p2.x()) + (p1.y() - p2.y())*(p1.y() - p2.y()));
+
+}
+
 }
