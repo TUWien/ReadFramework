@@ -62,7 +62,7 @@ void XmlTest::parseXml() {
 	SuperPixel sp(imgCv);
 	sp.compute();
 	
-	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
+	cv::imwrite(mConfig.outputPath().toStdString(), sp.debugImage());
 
 	// loop for sampling time...
 	for ( ; idx < 1; idx++) {
@@ -72,9 +72,6 @@ void XmlTest::parseXml() {
 		
 		parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
 	}
-
-	cv::Mat img = cv::imread("C:\\temp\\img.tif");
-	cv::imwrite("C:\\temp\\img.jpg", img);
 
 	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed()/idx);
 
