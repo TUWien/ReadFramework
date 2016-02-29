@@ -106,6 +106,24 @@ static void mulMaskIntern(cv::Mat src, const cv::Mat mask) {
 	}
 };
 
+template<typename sFmt>
+static void setBorderConstIntern(cv::Mat src, sFmt val) {
+
+	sFmt* srcPtr = (sFmt*)src.data;
+	sFmt* srcPtr2 = (sFmt*)src.ptr<sFmt*>(src.rows - 1);
+	int srcStep = (int)src.step / sizeof(sFmt);
+
+	for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+		srcPtr[cIdx] = val;
+		srcPtr2[cIdx] = val;
+	}
+
+	srcPtr = (sFmt*)src.data;
+	for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep) {
+		srcPtr[0] = val;
+		srcPtr[src.cols - 1] = val;
+	}
+};
 
 class DllCoreExport Algorithms {
 
@@ -121,9 +139,11 @@ public:
 	cv::Mat get1DGauss(double sigma) const;
 	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
 	cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO) const;
+	void setBorderConst(cv::Mat &src, float val = 0.0f) const;
 	float statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1) const;
 	void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
 	void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
+	cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
 	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
 	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
 	float normAngleRad(float angle, float startIvl, float endIvl) const;
