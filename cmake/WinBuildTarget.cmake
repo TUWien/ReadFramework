@@ -56,7 +56,7 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_MODULE_NAME})
 
 # copy required dlls to the directories
-set(OpenCV_MODULE_NAMES core imgproc stitching features2d calib3d flann imgcodecs xfeatures2d)
+set(OpenCV_MODULE_NAMES core imgproc stitching features2d calib3d flann imgcodecs xfeatures2d ml)
 foreach(opencvlib ${OpenCV_MODULE_NAMES})
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Release/opencv_${opencvlib}*.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Release)
