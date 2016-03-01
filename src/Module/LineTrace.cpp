@@ -114,13 +114,14 @@ namespace rdf {
 		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
 		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
 
-		if (mDAngle != 361.0f) {
+		//if (mDAngle != 361.0f) {
+		if (!isinf(mAngle)) {
 			QVector<rdf::Line> tmp;
 			tmp.append(hLines);
 			tmp.append(vLines);
 
-			hLines = filterLineAngle(tmp, (float)mDAngle, mMaxSlopeRotat);
-			vLines = filterLineAngle(tmp, (float)(mDAngle+CV_PI*0.5f), mMaxSlopeRotat);
+			hLines = filterLineAngle(tmp, (float)mAngle, mMaxSlopeRotat);
+			vLines = filterLineAngle(tmp, (float)(mAngle+CV_PI*0.5f), mMaxSlopeRotat);
 		}
 
 		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
@@ -542,8 +543,8 @@ namespace rdf {
 		binBlobsH.compute();
 
 		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsH));
-		if (mDAngle != 361.0f)
-			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mDAngle, mMaxSlopeRotat, binBlobsH));
+		if (!isinf(mAngle)) 
+			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mMaxSlopeRotat, binBlobsH));
 
 		hLines = rdf::BlobManager::instance().lines(binBlobsH);
 		hDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsH);
@@ -554,8 +555,8 @@ namespace rdf {
 		binBlobsV.compute();
 
 		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsV));
-		if (mDAngle != 361.0f)
-			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mDAngle, mMaxSlopeRotat, binBlobsV));
+		if (!isinf(mAngle))
+			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mMaxSlopeRotat, binBlobsV));
 
 		vLines = rdf::BlobManager::instance().lines(binBlobsV);
 		vDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsV);
