@@ -57,49 +57,58 @@ namespace rdf {
 #define mWarning	qWarning().noquote() << debugName()
 #define mInfo		qInfo().noquote() << debugName()
 
-/**
-* This is the base class for all modules.
-* It provides all functions which are implemented
-* by the modules.
-**/
-class DllModuleExport Module {
+
+/// <summary>
+/// This is the base class for all modules.
+/// It provides all functions which are implemented by the modules.
+/// </summary>
+	class DllModuleExport Module {
 	
 public:
 
-	/**
-	* Default constructor.
-	**/
+	/// <summary>
+	/// Default constructor
+	/// Initializes a new instance of the <see cref="Module"/> class.
+	/// </summary>
 	Module();
 
 	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const Module& m);
 	friend DllModuleExport QDebug operator<< (QDebug d, const Module &m);
 
 
-	/**
-	 * Returns true if the module was initialized with the default constructor.
-	 * Note, if empty is true, nothing can be computed.
-	 **/
+	 /// <summary>
+	 /// Returns true if the module was initialized with the default constructor.
+	 /// Note, if empty is true, nothing can be computed.
+	 /// </summary>
+	 /// <returns>Returns true if the module was initialized.</returns>
 	virtual bool isEmpty() const = 0;
 
-	/**
-	 * Returns the module's name.
-	 * @return the module's name.
-	 **/
+	 /// <summary>
+	 /// Returns the module's name.
+	 /// </summary>
+	 /// <returns>The module's name.</returns>
 	virtual QString name() const;
 
-	/**
-	 * Converts the module's parameters and results to a string.
-	 * @return a string containing all parameters and results of the module.
-	 **/
+	 /// <summary>
+	 /// Converts the module's parameters and results to a string.
+	 /// </summary>
+	 /// <returns>The string containing all parameters and results of the module.</returns>
 	virtual QString toString() const;
 
-	/**
-	 * Runs the algorithm implemented by the module.
-	 * @return true on success
-	 */
+	 /// <summary>
+	 /// Runs the algorithm implemented by the module.
+	 /// </summary>
+	 /// <returns>True on success.</returns>
 	virtual bool compute() = 0;
 
+	/// <summary>
+	/// Loads the settings.
+	/// </summary>
 	void loadSettings();
+
+	/// <summary>
+	/// Saves the settings.
+	/// </summary>
 	void saveSettings();
 
 protected:
