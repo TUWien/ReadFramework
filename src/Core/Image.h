@@ -54,6 +54,12 @@
 
 namespace rdf {
 
+	/// <summary>
+	/// Prints the values of a cv::Mat to copy it to Matlab.
+	/// </summary>
+	/// <param name="src">The Mat to be printed.</param>
+	/// <param name="varName">Name of the variable for matlab.</param>
+	/// <returns>The String with all values formatted for matlab.</returns>
 	template <typename numFmt>
 	static QString printMat(const cv::Mat& src, const QString varName) {
 
@@ -84,17 +90,70 @@ namespace rdf {
 
 
 // read defines
-class DllCoreExport Image {
+/// <summary>
+/// Basic image class
+/// </summary>
+	class DllCoreExport Image {
 
 public:
+	/// <summary>
+	/// Returns the current instance, otherwise created.
+	/// </summary>
+	/// <returns>Reference to current Image class.</returns>
 	static Image& instance();
 
+	/// <summary>
+	/// Converts a QImage to a cv::Mat.
+	/// </summary>
+	/// <param name="img">The Qimage.</param>
+	/// <returns>The cv__Mat image.</returns>
 	cv::Mat qImage2Mat(const QImage& img);
+
+	/// <summary>
+	/// Converts a cv::Mat to QImage.
+	/// </summary>
+	/// <param name="img">The cv::Mat img.</param>
+	/// <returns>The converted QImage.</returns>
 	QImage mat2QImage(const cv::Mat& img);
+
+	/// <summary>
+	/// Saves the specified QImage img.
+	/// </summary>
+	/// <param name="img">The img to be saved.</param>
+	/// <param name="savePath">The save path.</param>
+	/// <param name="compression">The compression.</param>
+	/// <returns>True if the image was saved.</returns>
 	bool save(const QImage& img, const QString& savePath, int compression = 90) const;
+
+	/// <summary>
+	/// Saves the specified cv::Mat img.
+	/// </summary>
+	/// <param name="img">The imgto be saved.</param>
+	/// <param name="savePath">The save path.</param>
+	/// <param name="compression">The compression.</param>
+	/// <returns>True if the image was saved.</returns>
 	bool save(const cv::Mat& img, const QString& savePath, int compression = 90) const;
+
+	/// <summary>
+	/// Checks if the alpha channel is used.
+	/// </summary>
+	/// <param name="img">The QImage img.</param>
+	/// <returns>True if the alpha channel is used.</returns>
 	bool alphaChannelUsed(const QImage& img) const;
+
+	/// <summary>
+	/// Prints the basic image information.
+	/// </summary>
+	/// <param name="img">The source img.</param>
+	/// <param name="name">The name that should be displayed in the command line.</param>
 	void imageInfo(const cv::Mat& img, const QString name) const;
+
+	/// <summary>
+	/// Prints the image as a string formatted according Matlab.
+	/// </summary>
+	/// <param name="img">The src img.</param>
+	/// <param name="name">The variable name in Matlab.</param>
+	/// <returns>A string containing the values of the image</returns>
 	QString printImage(const cv::Mat& img, const QString name) const;
 
 private:
