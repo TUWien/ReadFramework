@@ -88,15 +88,14 @@ namespace rdf {
 		cv::Mat binImg = testBin.binaryImage();
 
 		//binImg = Algorithms::instance().preFilterArea(binImg, 10);
-		cv::Mat lImg = binImg;
 
-		//rdf::LineTrace linetest(binImg);
-		//linetest.compute();
+		rdf::LineTrace linetest(binImg);
+		linetest.compute();
 
-		//cv::Mat lImg = linetest.lineImage();
+		cv::Mat lImg = linetest.lineImage();
 
-		//cv::Mat synLine = linetest.generatedLineImage();
-		//Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+		cv::Mat synLine = linetest.generatedLineImage();
+		Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
 
 		//rdf::Blobs binBlobs;
 		//binBlobs.setImage(binImg);

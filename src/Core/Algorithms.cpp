@@ -737,4 +737,121 @@ float Algorithms::euclideanDistance(const QPoint& p1, const QPoint& p2) const {
 
 }
 
+
+cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
+
+	cv::Mat srcGray = src.clone();
+	cv::Mat mask;
+
+	if (src.depth() != CV_8U && src.depth() != CV_32F) return cv::Mat();
+	if (srcGray.channels() != 1) cv::cvtColor(srcGray, srcGray, CV_RGB2GRAY);
+
+	if (srcGray.depth() == CV_32F) {
+		srcGray.convertTo(mask, CV_8U, 255);
+	}
+	else {
+		mask = srcGray.clone();
+		srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
+	}
+	//now we have a CV_32F srcGray image and a CV_8U mask
+
+	mask = Algorithms::instance().threshOtsu(mask);
+	if (preFilter)
+		mask = Algorithms::instance().preFilterArea(mask, 10);
+	//cv::Mat hist = Algorithms::instance().computeHist(srcGray);
+	//double thresh = Algorithms::instance().getThreshOtsu(hist);
+
+	// check the ratio of the border pixels if there is foreground
+	int borderPixelCount = 0;
+	for (int y = 1; y < mask.rows - 1; y++) {
+		const unsigned char* curRow = mask.ptr<unsigned char>(y);
+		borderPixelCount += curRow[0] + curRow[mask.cols - 1];
+	}
+	const unsigned char* firstRow = mask.ptr<unsigned char>(0);
+	const unsigned char* lastRow = mask.ptr<unsigned char>(mask.rows - 1);
+	for (int x = 0; x < mask.cols; x++) {
+		borderPixelCount += firstRow[x] + lastRow[x];
+	}
+
+	if (((float)borderPixelCount / 255) / ((mask.rows * 2 + 2 * mask.cols) - 4) > 0.50) {
+		qWarning() << "using empty mask in estimateMask";
+		mask.setTo(255);
+		return mask;
+	}
+
+	cv::Mat zeroBorderMask = cv::Mat(mask.rows + 2, mask.cols + 2, mask.type()); // make a zero border image because findContours uses zero borders
+	zeroBorderMask.setTo(0);
+	cv::Mat smallZeroBorderMask = zeroBorderMask(cv::Rect(1, 1, mask.cols, mask.rows)); // copyTo needs reference
+	mask.copyTo(smallZeroBorderMask);
+
+
+	rdf::Blobs binBlobs;
+	binBlobs.setImage(zeroBorderMask);
+	binBlobs.compute();
+
+	rdf::Blob bBlob = rdf::BlobManager::instance().getBiggestBlob(binBlobs);
+
+	if (!bBlob.isEmpty()) {
+		// calculate mean and standard deviation of the gray values at the border of the image
+		cv::Mat border(srcGray.rows, srcGray.cols, CV_8UC1);
+		border.setTo(255);
+		border(cv::Rect(1, 1, srcGray.cols - 2, srcGray.rows - 2)).setTo(0);
+		border = border - mask; // set pixels at the border which are detected by otsu to 0
+		cv::Scalar meanBorder;
+		cv::Scalar stdDevBorder;
+		meanStdDev(srcGray, meanBorder, stdDevBorder, border);
+
+		// if the background is perfectly uniform, the std might get < 0.003
+		if (stdDevBorder[0] < 0.051) stdDevBorder[0] = 0.051;
+
+		zeroBorderMask.setTo(0);
+		bBlob.drawBlob(zeroBorderMask, 0);
+		
+
+		for (int x = 0; x < srcGray.cols; ) {
+			cv::Rect rect;
+			cv::Point p1(x, 0);
+			cv::Point p2(x, srcGray.rows - 1);
+			if (srcGray.at<float>(p1) <= meanBorder[0])
+				floodFill(srcGray, zeroBorderMask, cv::Point(x, 0), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+			if (srcGray.at<float>(p2) <= meanBorder[0])
+				floodFill(srcGray, zeroBorderMask, cv::Point(x, srcGray.rows - 1), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+			if (srcGray.cols / 20 > 0)
+				x += srcGray.cols / 20; // 5 seed points for the first and last row
+			else
+				x++;
+		}
+		for (int y = 0; y < srcGray.rows; ) {
+			cv::Rect rect;
+			cv::Point p1(0, y);
+			cv::Point p2(srcGray.cols - 1, y);
+			if (srcGray.at<float>(p1) <= meanBorder[0])
+				floodFill(srcGray, zeroBorderMask, cv::Point(0, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+			if (srcGray.at<float>(p2) <= meanBorder[0])
+				floodFill(srcGray, zeroBorderMask, cv::Point(srcGray.cols - 1, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+
+			if (srcGray.rows / 20 > 0)
+				y += srcGray.rows / 20; // 5 seed points for the first and last col
+			else
+				y++;
+		}
+
+		zeroBorderMask = zeroBorderMask != 1;
+		mask = zeroBorderMask(cv::Rect(1, 1, mask.cols, mask.rows));
+
+		rdf::Blobs binBlobs2;
+		binBlobs2.setImage(zeroBorderMask);
+		binBlobs2.compute();
+
+		binBlobs2.setBlobs(rdf::BlobManager::instance().filterArea(mask.rows*mask.cols / 8, binBlobs2));
+		zeroBorderMask = rdf::BlobManager::instance().drawBlobs(binBlobs2, cv::Scalar(255));
+
+	} else {
+		qWarning() << "The thresholded image seems to be empty -> no mask created";
+		mask = 255;
+	}
+
+	return mask;
+}
+
 }
