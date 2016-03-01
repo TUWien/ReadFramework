@@ -250,7 +250,7 @@ public:
 	/// <param name="minArea">The blob size threshold in pixel.</param>
 	/// <param name="maxArea">The maximum area.</param>
 	/// <returns>A CV_8UC1 binary image with all blobs smaller than minArea removed.</returns>
-	//cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
+	cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
 
 	/// <summary>
 	/// Computes the histogram of an image.

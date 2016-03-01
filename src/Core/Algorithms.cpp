@@ -484,104 +484,104 @@ void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 		}
 	}
 }
-//
-//cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) const {
-//
-//	cv::Mat bwImgTmp = img.clone();
-//	cv::Mat filteredImage = img.clone();
-//
-//	setBorderConst(bwImgTmp);
-//	int w = bwImgTmp.cols;
-//	int h = bwImgTmp.rows;
-//	unsigned char *si = bwImgTmp.data + w + 1;
-//	unsigned char *sie = si + w * h - 2 * w - 2;
-//
-//	unsigned char **ppFGList = new unsigned char*[w * h];	// w*h/4 -> bug when images have large blobs [6.10.2011 markus]
-//	int fgListPos;
-//	int cur_fgListPos;
-//	unsigned char *pCurImgPos;
-//
-//#define _PUSH_FG_LIST(a) (ppFGList[fgListPos++] = (a))
-//#define _PUSH_FG_LIST_CLR(a) (ppFGList[fgListPos++] = (*a = 0, a))
-//#define _POP_FG_LIST (ppFGList[cur_fgListPos++])
-//
-//	while (si < sie)
-//	{
-//		if (*si)
-//		{
-//			fgListPos = 0;
-//			cur_fgListPos = 0;
-//			_PUSH_FG_LIST_CLR(si);
-//
-//			// 3 2 1
-//			// 4 X 8
-//			// 5 6 7
-//
-//			while (cur_fgListPos < fgListPos)
-//			{
-//				pCurImgPos = _POP_FG_LIST - 1 - w;
-//
-//				if (*pCurImgPos)
-//					// 3
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos++;
-//				if (*pCurImgPos)
-//					// 2
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos++;
-//				if (*pCurImgPos)
-//					// 1
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos += w;
-//				if (*pCurImgPos)
-//					// 8
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos -= 2;
-//				if (*pCurImgPos)
-//					// 4
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos += w;
-//				if (*pCurImgPos)
-//					// 5
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos++;
-//				if (*pCurImgPos)
-//					// 6
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//
-//				pCurImgPos++;
-//				if (*pCurImgPos)
-//					// 7
-//					_PUSH_FG_LIST_CLR(pCurImgPos);
-//			}
-//
-//			if (fgListPos <= minArea || (maxArea != -1 && fgListPos >= maxArea))
-//			{
-//				cur_fgListPos = 0;
-//
-//				while (cur_fgListPos < fgListPos)
-//				{
-//					pCurImgPos = _POP_FG_LIST;
-//
-//					*(filteredImage.data + (int(pCurImgPos) - int(bwImgTmp.data))) = 0;
-//				}
-//			}
-//		}
-//
-//		si++;
-//	}
-//
-//	delete[] ppFGList;
-//
-//	return filteredImage;
-//
-//}
+
+cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) const {
+
+	cv::Mat bwImgTmp = img.clone();
+	cv::Mat filteredImage = img.clone();
+
+	setBorderConst(bwImgTmp);
+	int w = bwImgTmp.cols;
+	int h = bwImgTmp.rows;
+	unsigned char *si = bwImgTmp.data + w + 1;
+	unsigned char *sie = si + w * h - 2 * w - 2;
+
+	unsigned char **ppFGList = new unsigned char*[w * h];	// w*h/4 -> bug when images have large blobs [6.10.2011 markus]
+	int fgListPos;
+	int cur_fgListPos;
+	unsigned char *pCurImgPos;
+
+#define _PUSH_FG_LIST(a) (ppFGList[fgListPos++] = (a))
+#define _PUSH_FG_LIST_CLR(a) (ppFGList[fgListPos++] = (*a = 0, a))
+#define _POP_FG_LIST (ppFGList[cur_fgListPos++])
+
+	while (si < sie)
+	{
+		if (*si)
+		{
+			fgListPos = 0;
+			cur_fgListPos = 0;
+			_PUSH_FG_LIST_CLR(si);
+
+			// 3 2 1
+			// 4 X 8
+			// 5 6 7
+
+			while (cur_fgListPos < fgListPos)
+			{
+				pCurImgPos = _POP_FG_LIST - 1 - w;
+
+				if (*pCurImgPos)
+					// 3
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos++;
+				if (*pCurImgPos)
+					// 2
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos++;
+				if (*pCurImgPos)
+					// 1
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos += w;
+				if (*pCurImgPos)
+					// 8
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos -= 2;
+				if (*pCurImgPos)
+					// 4
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos += w;
+				if (*pCurImgPos)
+					// 5
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos++;
+				if (*pCurImgPos)
+					// 6
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+
+				pCurImgPos++;
+				if (*pCurImgPos)
+					// 7
+					_PUSH_FG_LIST_CLR(pCurImgPos);
+			}
+
+			if (fgListPos <= minArea || (maxArea != -1 && fgListPos >= maxArea))
+			{
+				cur_fgListPos = 0;
+
+				while (cur_fgListPos < fgListPos)
+				{
+					pCurImgPos = _POP_FG_LIST;
+
+					*(filteredImage.data + (int(pCurImgPos) - int(bwImgTmp.data))) = 0;
+				}
+			}
+		}
+
+		si++;
+	}
+
+	delete[] ppFGList;
+
+	return filteredImage;
+
+}
 
 cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
 	if (img.channels() > 1) {

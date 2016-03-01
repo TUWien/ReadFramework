@@ -148,6 +148,13 @@ public:
 	/// <returns>The summary string.</returns>
 	virtual QString toString() const override;
 
+	/// <summary>
+	/// Sets the preFiltering. All blobs smaller than preFilterSize are removed if preFilter is true.
+	/// </summary>
+	/// <param name="preFilter">if set to <c>true</c> [prefilter] is applied and all blobs smaller then preFilterSize are removed.</param>
+	/// <param name="preFilterSize">Size of the prefilter.</param>
+	void setPreFiltering(bool preFilter = true, int preFilterSize = 10) { mPreFilter = preFilter; mPreFilterSize = preFilterSize; };
+
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
 	cv::Mat compBinContrastImg(const cv::Mat& contrastImg) const;
@@ -172,13 +179,13 @@ protected:
 	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
 	float mStrokeW = 4;									//estimated strokeWidth
 
-private:
+	bool mPreFilter = true;
+	int mPreFilterSize = 10;
 
+private:
 	
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
-
-
 };
 
 /// <summary>

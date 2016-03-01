@@ -199,6 +199,10 @@ bool BaseBinarizationSu::compute() {
 	//Image::instance().save(resultSegImg, "D:\\tmp\\resultSegImg.tif");
 
 	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
+
+	if (mPreFilter)
+		mBwImg = Algorithms::instance().preFilterArea(mBwImg, mPreFilterSize);
+
 	mBwImg = resultSegImg.clone();
 
 
@@ -546,8 +550,11 @@ bool BinarizationSuAdapted::compute() {
 	mBwImg = resultSegImg.clone();
 	//Image::instance().save(resultSegImg, "D:\\tmp\\mBwimg.tif");
 
-	if (mMedianFilter)
-		cv::medianBlur(mBwImg, mBwImg, 3);
+	if (mPreFilter)
+		mBwImg = Algorithms::instance().preFilterArea(mBwImg, mPreFilterSize);
+
+	//if (mMedianFilter)
+	//	cv::medianBlur(mBwImg, mBwImg, 3);
 
 	// I guess here is a good point to save the settings
 	saveSettings();
