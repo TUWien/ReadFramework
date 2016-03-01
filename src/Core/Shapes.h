@@ -91,26 +91,109 @@ protected:
 	QPolygon mBaseLine;
 };
 
+
+/// <summary>
+/// A basic line class including stroke width (thickness).
+/// </summary>
 class DllCoreExport Line {
 
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Line"/> class.
+	/// </summary>
+	/// <param name="line">The line.</param>
+	/// <param name="thickness">The stroke width.</param>
 	Line(const QLine& line = QLine(), float thickness = 0);
 
+	/// <summary>
+	/// Determines whether this instance is empty.
+	/// </summary>
+	/// <returns>True if no line is set</returns>
 	bool isEmpty() const;
 
+	/// <summary>
+	/// Sets the line.
+	/// </summary>
+	/// <param name="line">The line.</param>
+	/// <param name="thickness">The stroke width.</param>
 	void setLine(const QLine& line, float thickness = 0);
+
+	/// <summary>
+	/// Returns the line information.
+	/// </summary>
+	/// <returns>The line.</returns>
 	QLine line() const;
+
+	/// <summary>
+	/// Returns the stroke width of the line.
+	/// </summary>
+	/// <returns>The stroke width.</returns>
 	float thickness() const;
+
+	/// <summary>
+	/// Returns the line length.
+	/// </summary>
+	/// <returns>The line length.</returns>
 	float length() const;
+
+	/// <summary>
+	/// Returns the line angle.
+	/// </summary>
+	/// <returns>The line angle [-pi,+pi] in radians.</returns>
 	double angle() const;
+
+	/// <summary>
+	/// Returns the minimum distance of the line endings of line l to the line endings of the current line instance.
+	/// </summary>
+	/// <param name="l">The line l to which the minimum distance is computed.</param>
+	/// <returns>The minimum distance.</returns>
 	float minDistance(const Line& l) const;
+
+	/// <summary>
+	/// Returns the minimal distance of point p to the current line instance.
+	/// </summary>
+	/// <param name="p">The p.</param>
+	/// <returns>The distance of point p.</returns>
 	float distance(const QPoint p) const;
+
+	/// <summary>
+	/// Merges the specified line l with the current line instance.
+	/// </summary>
+	/// <param name="l">The line to merge.</param>
+	/// <returns>The merged line.</returns>
 	Line merge(const Line& l) const;
+
+	/// <summary>
+	/// Calculates the gap line between line l and the current line instance.
+	/// </summary>
+	/// <param name="l">The line l to which a gap line is calculated.</param>
+	/// <returns>The gap line.</returns>
 	Line gapLine(const Line& l) const;
+
+	/// <summary>
+	/// The angle difference of line l and the current line instance.
+	/// </summary>
+	/// <param name="l">The line l.</param>
+	/// <returns>The angle difference in rad.</returns>
 	float diffAngle(const Line& l) const;
+
+	/// <summary>
+	/// Calculated if point p is within the current line instance.
+	/// </summary>
+	/// <param name="p">The point p to be checked.</param>
+	/// <returns>True if p is within the current line instance.</returns>
 	bool within(const QPoint& p) const;
 
+	/// <summary>
+	/// Returns the start point.
+	/// </summary>
+	/// <returns>The start point.</returns>
 	QPoint startPoint() const;
+
+	/// <summary>
+	/// Returns the end point.
+	/// </summary>
+	/// <returns>The end point.</returns>
 	QPoint endPoint() const;
 
 protected:
