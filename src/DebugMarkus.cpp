@@ -62,7 +62,8 @@ void XmlTest::parseXml() {
 	SuperPixel sp(imgCv);
 	sp.compute();
 	
-	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
+	if (!mConfig.outputPath().isEmpty())
+		cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
 
 	// loop for sampling time...
 	for ( ; idx < 1; idx++) {
