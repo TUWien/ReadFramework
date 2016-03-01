@@ -257,6 +257,13 @@ public:
 	/// <returns>The line vector.</returns>
 	QVector<Line> lines(const Blobs& blobs) const;
 
+	/// <summary>
+	/// Gets the biggest BLOB.
+	/// </summary>
+	/// <param name="blobs">The blobs.</param>
+	/// <returns>The biggest blob.</returns>
+	Blob getBiggestBlob(const Blobs& blobs) const;
+
 private:
 	BlobManager();
 	BlobManager(const BlobManager&);

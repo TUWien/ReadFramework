@@ -373,5 +373,25 @@ QVector<Line> BlobManager::lines(const Blobs& blobs) const {
 	return blobLines;
 }
 
+Blob BlobManager::getBiggestBlob(const Blobs& blobs) const {
+
+	QVector<Blob> filtered;
+	Blob biggestBlob;
+
+	int maxArea = 0;
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		int blobArea = (int)std::fabs(cv::contourArea(blob.outerContour().toStdVector()));
+
+		if (blobArea > maxArea) {
+			maxArea = blobArea;
+			biggestBlob.setBlob(blob.outerContour(), blob.innerContours());
+		}
+	}
+
+	return biggestBlob;
+}
+
 
 }
