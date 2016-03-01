@@ -87,7 +87,7 @@ namespace rdf {
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
 
-		binImg = Algorithms::instance().preFilterArea(binImg, 10);
+		//binImg = Algorithms::instance().preFilterArea(binImg, 10);
 
 		rdf::LineTrace linetest(binImg);
 		linetest.compute();
