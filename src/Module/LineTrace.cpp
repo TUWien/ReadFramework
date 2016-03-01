@@ -566,11 +566,10 @@ namespace rdf {
 	QString LineTrace::toString() const {
 
 		QString msg = debugName();
-		//msg += "strokeW: " + QString::number(mStrokeW);
+		msg += "angle defining horizontal: " + QString::number(mAngle);
 		//msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
 
 		return msg;
-
 	}
 
 	//void LineTrace::load(const QSettings& settings) {
