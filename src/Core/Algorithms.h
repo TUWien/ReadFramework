@@ -132,6 +132,9 @@ static void setBorderConstIntern(cv::Mat src, sFmt val) {
 	}
 };
 
+/// <summary>
+/// Contains basic algorithms to manipulate images.
+/// </summary>
 class DllCoreExport Algorithms {
 
 public:

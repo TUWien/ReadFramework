@@ -54,9 +54,6 @@
 
 namespace rdf {
 
-// read defines
-
-
 
 /// <summary>
 /// Detects Lines in a binary image. The result is a binary image containing all line elements (pixel accurate) as well as all lines as vectors.
