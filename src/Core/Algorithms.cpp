@@ -569,7 +569,7 @@ cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) 
 				{
 					pCurImgPos = _POP_FG_LIST;
 
-					*(filteredImage.data + (int(pCurImgPos) - int(bwImgTmp.data))) = 0;
+					*(filteredImage.data + ((size_t)pCurImgPos - (size_t)bwImgTmp.data)) = 0;
 				}
 			}
 		}
