@@ -140,7 +140,7 @@ float Blob::blobOrientation() const {
 	return o;
 }
 
-bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
+bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color, int maxLevel) const {
 
 	if (isEmpty()) return false;
 	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
@@ -165,7 +165,7 @@ bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
 	//qDebug() << "InnercontourSize: " << mInnerContours.size();
 	//qDebug() << "image size: " << imgSrc.size().width << " " << imgSrc.size().height;
 
-	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), 1, cv::Point());
+	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), maxLevel, cv::Point());
 
 	return true;
 }

@@ -83,6 +83,9 @@ namespace rdf {
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
+		cv::Mat mask = Algorithms::instance().estimateMask(inputImg);
+		Image::instance().save(mask, "D:\\tmp\\mask.tif");
+
 		rdf::BinarizationSuAdapted testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();

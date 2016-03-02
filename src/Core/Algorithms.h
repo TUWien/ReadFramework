@@ -196,7 +196,7 @@ public:
 	/// </summary>
 	/// <param name="srcImg">The source img CV_8UC1 or CV_8UC3.</param>
 	/// <returns>A binary image CV_8UC1</returns>
-	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
+	cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV) const;
 
 	/// <summary>
 	/// Convolves an integral image by means of box filters.

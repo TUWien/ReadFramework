@@ -146,7 +146,7 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 
 }
 
-cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg) const {
+cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) const {
 
 	if (srcImg.depth() !=  CV_8U) {
 		qWarning() << "8U is required";
@@ -158,7 +158,7 @@ cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg) const {
 	//qDebug() << "convertedImg has " << srcGray.channels() << " channels";
 
 	cv::Mat binImg;
-	cv::threshold(srcGray, binImg, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+	cv::threshold(srcGray, binImg, 0, 255, thType | CV_THRESH_OTSU);
 
 	return binImg;
 
@@ -755,11 +755,13 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 	}
 	//now we have a CV_32F srcGray image and a CV_8U mask
 
-	mask = Algorithms::instance().threshOtsu(mask);
+	mask = Algorithms::instance().threshOtsu(mask, CV_THRESH_BINARY);
 	if (preFilter)
 		mask = Algorithms::instance().preFilterArea(mask, 10);
 	//cv::Mat hist = Algorithms::instance().computeHist(srcGray);
 	//double thresh = Algorithms::instance().getThreshOtsu(hist);
+
+	//Image::instance().save(mask, "D:\\tmp\\mask1.tif");
 
 	// check the ratio of the border pixels if there is foreground
 	int borderPixelCount = 0;
@@ -784,6 +786,8 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 	cv::Mat smallZeroBorderMask = zeroBorderMask(cv::Rect(1, 1, mask.cols, mask.rows)); // copyTo needs reference
 	mask.copyTo(smallZeroBorderMask);
 
+	//Image::instance().save(zeroBorderMask, "D:\\tmp\\zeroBorderMask1.tif");
+	//Image::instance().save(smallZeroBorderMask, "D:\\tmp\\smallzeroBorderMask1.tif");
 
 	rdf::Blobs binBlobs;
 	binBlobs.setImage(zeroBorderMask);
@@ -801,11 +805,18 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 		cv::Scalar stdDevBorder;
 		meanStdDev(srcGray, meanBorder, stdDevBorder, border);
 
+		//Image::instance().save(border, "D:\\tmp\\border1.tif");
+
 		// if the background is perfectly uniform, the std might get < 0.003
 		if (stdDevBorder[0] < 0.051) stdDevBorder[0] = 0.051;
 
 		zeroBorderMask.setTo(0);
-		bBlob.drawBlob(zeroBorderMask, 0);
+		bBlob.drawBlob(zeroBorderMask, 255, 0);
+
+		//Image::instance().save(zeroBorderMask, "D:\\tmp\\blob1.tif");
+		//Image::instance().save(srcGray, "D:\\tmp\\srcGray1.tif");
+		//Image::instance().imageInfo(srcGray, "srcGray");
+		//Image::instance().imageInfo(zeroBorderMask, "zeroBorderMask");
 		
 
 		for (int x = 0; x < srcGray.cols; ) {
@@ -813,9 +824,9 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 			cv::Point p1(x, 0);
 			cv::Point p2(x, srcGray.rows - 1);
 			if (srcGray.at<float>(p1) <= meanBorder[0])
-				floodFill(srcGray, zeroBorderMask, cv::Point(x, 0), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, 0), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.at<float>(p2) <= meanBorder[0])
-				floodFill(srcGray, zeroBorderMask, cv::Point(x, srcGray.rows - 1), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, srcGray.rows - 1), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.cols / 20 > 0)
 				x += srcGray.cols / 20; // 5 seed points for the first and last row
 			else
@@ -826,9 +837,9 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 			cv::Point p1(0, y);
 			cv::Point p2(srcGray.cols - 1, y);
 			if (srcGray.at<float>(p1) <= meanBorder[0])
-				floodFill(srcGray, zeroBorderMask, cv::Point(0, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(0, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.at<float>(p2) <= meanBorder[0])
-				floodFill(srcGray, zeroBorderMask, cv::Point(srcGray.cols - 1, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(srcGray.cols - 1, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 
 			if (srcGray.rows / 20 > 0)
 				y += srcGray.rows / 20; // 5 seed points for the first and last col

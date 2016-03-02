@@ -122,7 +122,7 @@ public:
 	/// <param name="imgSrc">The img source where the blob is drawn.</param>
 	/// <param name="color">The color of the blob.</param>
 	/// <returns>True if the blob is drawn.</returns>
-	bool drawBlob(cv::Mat& imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+	bool drawBlob(cv::Mat& imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255), int maxLevel = 1) const;
 
 protected:
 
