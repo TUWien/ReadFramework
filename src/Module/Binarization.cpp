@@ -541,7 +541,15 @@ bool BinarizationSuAdapted::compute() {
 	//Image::instance().save(mBinContrastImg, "D:\\tmp\\binContrastAdapted.tif");
 
 	cv::Mat resultSegImg;
-	computeThrImg(srcGray, mBinContrastImg, mThrImg, resultSegImg);					//compute threshold image
+
+	//FK new: inserted morphological opening to reduce jpg artefacts - must be checked in overall.
+	cv::Mat tmp = srcGray.clone();
+	cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5,5));
+	cv::erode(tmp, tmp, kernel);
+	cv::dilate(tmp, tmp, kernel);
+
+	computeThrImg(tmp, mBinContrastImg, mThrImg, resultSegImg);					//compute threshold image
+	//computeThrImg(srcGray, mBinContrastImg, mThrImg, resultSegImg);					//compute threshold image
 	//Image::instance().save(mThrImg, "D:\\tmp\\thrImgAdapted.tif");
 	//Image::instance().save(resultSegImg, "D:\\tmp\\resultSegAdapted.tif");
 	//Image::instance().save(srcGray <= (mThrImg), "D:\\tmp\\leqAdapted.tif");

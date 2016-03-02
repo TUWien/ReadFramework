@@ -72,7 +72,7 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		
-		//if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
+		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
 		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
 		//findContours test
 		//std::vector<std::vector<cv::Point> > contours;
@@ -84,11 +84,24 @@ namespace rdf {
 		//cv::Mat binImg = testBin.binaryImage();
 
 		cv::Mat mask = Algorithms::instance().estimateMask(inputImg);
-		Image::instance().save(mask, "D:\\tmp\\mask.tif");
+		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
+
+		//Image::instance().imageInfo(inputImg, "input");
+
+		//cv::Mat tmp = inputImg.clone();
+		//cv::bilateralFilter(inputImg, tmp, 5, 90, 90);
+		//inputImg = tmp;
+		//cv::medianBlur(inputImg, tmp, 41);
+		//cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7));
+		//cv::erode(inputImg, tmp, kernel);
+		//cv::dilate(tmp, tmp, kernel);
+		Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
 
 		rdf::BinarizationSuAdapted testBin(inputImg);
 		testBin.compute();
 		cv::Mat binImg = testBin.binaryImage();
+
+		Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
 
 		//binImg = Algorithms::instance().preFilterArea(binImg, 10);
 
