@@ -818,15 +818,18 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 		//Image::instance().imageInfo(srcGray, "srcGray");
 		//Image::instance().imageInfo(zeroBorderMask, "zeroBorderMask");
 		
-
+		//WARNING: original code just uses cv::FLOODFILL_MASK_ONLY only
+		//due to a bug in floodfill, see https://github.com/Itseez/opencv/issues/5123 ,
+		// cv::FLOODFILL_MASK_ONLY | 4 | 1 << 8 is used.
+		//check if that effects the estimate mask method
 		for (int x = 0; x < srcGray.cols; ) {
 			cv::Rect rect;
 			cv::Point p1(x, 0);
 			cv::Point p2(x, srcGray.rows - 1);
 			if (srcGray.at<float>(p1) <= meanBorder[0])
-				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, 0), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, 0), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY | 4 | 1 << 8); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.at<float>(p2) <= meanBorder[0])
-				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, srcGray.rows - 1), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(x, srcGray.rows - 1), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY | 4 | 1 << 8); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.cols / 20 > 0)
 				x += srcGray.cols / 20; // 5 seed points for the first and last row
 			else
@@ -837,9 +840,9 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 			cv::Point p1(0, y);
 			cv::Point p2(srcGray.cols - 1, y);
 			if (srcGray.at<float>(p1) <= meanBorder[0])
-				cv::floodFill(srcGray, zeroBorderMask, cv::Point(0, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(0, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY | 4 | 1 << 8); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 			if (srcGray.at<float>(p2) <= meanBorder[0])
-				cv::floodFill(srcGray, zeroBorderMask, cv::Point(srcGray.cols - 1, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
+				cv::floodFill(srcGray, zeroBorderMask, cv::Point(srcGray.cols - 1, y), cv::Scalar(2000), &rect, cv::Scalar(5), stdDevBorder, cv::FLOODFILL_MASK_ONLY | 4 | 1 << 8); // newVal (Scalar(2000)) is ignored when using MASK_ONLY
 
 			if (srcGray.rows / 20 > 0)
 				y += srcGray.rows / 20; // 5 seed points for the first and last col
