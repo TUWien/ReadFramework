@@ -133,6 +133,20 @@ public:
 	cv::Mat generatedLineImage() const;
 
 	/// <summary>
+	/// Sets the minimum length for the final line filtering.
+	// Default value = 60;
+	/// </summary>
+	/// <param name="len">The minimum length threshold in pixel.</param>
+	void setMinLenSecondRun(int len) { mMinLenSecondRun = len; };
+
+	/// <summary>
+	/// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
+	// Default value = 0.3.
+	/// </summary>
+	/// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
+	void setMaxAspectRatio(float ratio) { mMaxAspectRatio = ratio; };
+
+	/// <summary>
 	/// Summary of the class.
 	/// </summary>
 	/// <returns>A String containing all parameter values.</returns>
@@ -163,7 +177,7 @@ private:
 	float mMaxSlopeDiff = 2.0f;		//filter parameter: maximal slope difference between two lines in degree (default: 3)
 	float mMaxAngleDiff = 2.0f;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 20)
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
-	int mMinLenSecondRun = 60;    //min len to filter after merge lines
+	int mMinLenSecondRun = 60;    //min len to filter after merge lines; was 60
 
 	float mLineProb;
 	float mLineDistProb;

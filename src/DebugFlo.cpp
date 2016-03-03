@@ -106,6 +106,9 @@ namespace rdf {
 		//binImg = Algorithms::instance().preFilterArea(binImg, 10);
 
 		rdf::LineTrace linetest(binImg);
+		linetest.setMinLenSecondRun(40);
+		//linetest.setMaxAspectRatio(0.2f);
+		//linetest.setAngle(0.0f);
 		linetest.compute();
 
 		cv::Mat lImg = linetest.lineImage();

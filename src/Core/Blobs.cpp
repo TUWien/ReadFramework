@@ -364,7 +364,7 @@ QVector<Line> BlobManager::lines(const Blobs& blobs) const {
 
 		if (thickness > 15) thickness = 15; //UFO bugfix
 
-		QLine tmp(QPoint(p1X,p1Y), QPoint(p2X,p2Y));
+		QLine tmp = p1X < p2X ? QLine(QPoint(p1X,p1Y), QPoint(p2X,p2Y)) : QLine(QPoint(p2X, p2Y), QPoint(p1X, p1Y));
 		Line newLine(tmp, thickness);
 
 		blobLines.append(newLine);
