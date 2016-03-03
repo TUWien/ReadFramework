@@ -140,7 +140,7 @@ float Blob::blobOrientation() const {
 	return o;
 }
 
-bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
+bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color, int maxLevel) const {
 
 	if (isEmpty()) return false;
 	//if (mHierarchy.isEmpty()) mHierarchy = hierarchy();
@@ -165,7 +165,7 @@ bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color) const {
 	//qDebug() << "InnercontourSize: " << mInnerContours.size();
 	//qDebug() << "image size: " << imgSrc.size().width << " " << imgSrc.size().height;
 
-	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), 1, cv::Point());
+	cv::drawContours(imgSrc, contours , 0, color, CV_FILLED, 8, h.toStdVector(), maxLevel, cv::Point());
 
 	return true;
 }
@@ -364,13 +364,33 @@ QVector<Line> BlobManager::lines(const Blobs& blobs) const {
 
 		if (thickness > 15) thickness = 15; //UFO bugfix
 
-		QLine tmp(QPoint(p1X,p1Y), QPoint(p2X,p2Y));
+		QLine tmp = p1X < p2X ? QLine(QPoint(p1X,p1Y), QPoint(p2X,p2Y)) : QLine(QPoint(p2X, p2Y), QPoint(p1X, p1Y));
 		Line newLine(tmp, thickness);
 
 		blobLines.append(newLine);
 	}
 
 	return blobLines;
+}
+
+Blob BlobManager::getBiggestBlob(const Blobs& blobs) const {
+
+	QVector<Blob> filtered;
+	Blob biggestBlob;
+
+	int maxArea = 0;
+
+	for (const Blob& blob : blobs.blobs()) {
+
+		int blobArea = (int)std::fabs(cv::contourArea(blob.outerContour().toStdVector()));
+
+		if (blobArea > maxArea) {
+			maxArea = blobArea;
+			biggestBlob.setBlob(blob.outerContour(), blob.innerContours());
+		}
+	}
+
+	return biggestBlob;
 }
 
 

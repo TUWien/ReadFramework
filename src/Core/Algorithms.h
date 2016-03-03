@@ -40,6 +40,7 @@
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
+#include "Blobs.h"
 
 #ifndef DllCoreExport
 #ifdef DLL_CORE_EXPORT
@@ -195,7 +196,7 @@ public:
 	/// </summary>
 	/// <param name="srcImg">The source img CV_8UC1 or CV_8UC3.</param>
 	/// <returns>A binary image CV_8UC1</returns>
-	cv::Mat threshOtsu(const cv::Mat& srcImg) const;
+	cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV) const;
 
 	/// <summary>
 	/// Convolves an integral image by means of box filters.
@@ -284,6 +285,13 @@ public:
 	/// <param name="p2">Vector p2.</param>
 	/// <returns>The Euclidean distance.</returns>
 	float euclideanDistance(const QPoint& p1, const QPoint& p2) const;
+
+	/// <summary>
+	/// Estimates the mask.
+	/// </summary>
+	/// <param name="src">The source image.</param>
+	/// <returns>The estimated mask.</returns>
+	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
 
 private:
 	Algorithms();

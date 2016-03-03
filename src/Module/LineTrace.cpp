@@ -114,6 +114,8 @@ namespace rdf {
 		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
 		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
 
+		//Image::instance().save(mLineImg, "D:\\tmp\\mLineImg.tif");
+
 		//if (mDAngle != 361.0f) {
 		if (!isinf(mAngle)) {
 			QVector<rdf::Line> tmp;

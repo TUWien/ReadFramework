@@ -122,7 +122,7 @@ public:
 	/// <param name="imgSrc">The img source where the blob is drawn.</param>
 	/// <param name="color">The color of the blob.</param>
 	/// <returns>True if the blob is drawn.</returns>
-	bool drawBlob(cv::Mat& imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255)) const;
+	bool drawBlob(cv::Mat& imgSrc, cv::Scalar color = cv::Scalar(255, 255, 255), int maxLevel = 1) const;
 
 protected:
 
@@ -256,6 +256,13 @@ public:
 	/// <param name="blobs">The blobs.</param>
 	/// <returns>The line vector.</returns>
 	QVector<Line> lines(const Blobs& blobs) const;
+
+	/// <summary>
+	/// Gets the biggest BLOB.
+	/// </summary>
+	/// <param name="blobs">The blobs.</param>
+	/// <returns>The biggest blob.</returns>
+	Blob getBiggestBlob(const Blobs& blobs) const;
 
 private:
 	BlobManager();

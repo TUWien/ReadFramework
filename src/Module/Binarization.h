@@ -236,17 +236,27 @@ private:
 };
 
 
-/**
-* The class binarize a rgb color image. To make the algorithm robust against noise,
-* the foreground is estimated and the image is weighted with the foreground.
-* (Foreground estimation is performed by a Mean Filter with a size of 32x32 px)
-**/
-class DllModuleExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
+/// <summary>
+/// The class binarize a rgb color image. To make the algorithm robust against noise,
+/// the foreground is estimated and the image is weighted with the foreground.
+/// (Foreground estimation is performed by a Mean Filter with a size of 32x32 px).
+/// </summary>
+/// <seealso cref="BinarizationSuAdapted" />
+	class DllModuleExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
 
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BinarizationSuFgdWeight"/> class.
+	/// </summary>
+	/// <param name="img">The img.</param>
+	/// <param name="mask">The mask.</param>
 	BinarizationSuFgdWeight(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BinarizationSuAdapted(img, mask) { mModuleName = "BinarizationSuFgdWeight"; };
+
+	/// <summary>
+	/// Computes the foreground weighted image.
+	/// </summary>
+	/// <returns>True if the image could be computed.</returns>
 	virtual bool compute() override;
-	//virtual QString toString() const override;
 
 protected:
 	cv::Mat computeFgd() const;
