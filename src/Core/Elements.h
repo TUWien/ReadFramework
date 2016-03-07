@@ -89,7 +89,7 @@ public:
 	void setId(const QString& id);
 	QString id() const;
 
-	void setPoly(const Polygon& polygon);
+	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
 	void addChild(QSharedPointer<Region> child);

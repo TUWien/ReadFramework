@@ -43,10 +43,21 @@
 namespace rdf {
 
 // Region --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="Region"/> class.
+/// The Region is the base class for all Region elements that 
+/// are contained in the extended PAGE XML.
+/// </summary>
 Region::Region() {
 	mId = QUuid::createUuid().toString();
 }
 
+/// <summary>
+/// Writes the Region r to the data stream s
+/// </summary>
+/// <param name="s">A data stream.</param>
+/// <param name="r">A region r.</param>
+/// <returns>The data stream with the current region.</returns>
 QDataStream& operator<<(QDataStream& s, const Region& r) {
 
 	// this makes the operator<< virtual (stroustrup)
@@ -54,36 +65,72 @@ QDataStream& operator<<(QDataStream& s, const Region& r) {
 	return s;
 }
 
+/// <summary>
+/// Prints the Region r to the debug output.
+/// </summary>
+/// <param name="d">A Debug output.</param>
+/// <param name="r">The Region to be printed.</param>
+/// <returns>The debug output with the current Region.</returns>
 QDebug operator<<(QDebug d, const Region& r) {
 
 	d << qPrintable(r.toString(false));
 	return d;
 }
 
+/// <summary>
+/// Sets the Region type.
+/// </summary>
+/// <param name="type">The type.</param>
 void Region::setType(const Region::Type & type) {
 	mType = type;
 }
 
+/// <summary>
+/// The Region's type (e.g. type_text_region).
+/// </summary>
+/// <returns></returns>
 Region::Type Region::type() const {
 	return mType;
 }
 
+/// <summary>
+/// Set a unique identifier to the region.
+/// </summary>
+/// <param name="id">A unique identifier.</param>
 void Region::setId(const QString & id) {
 	mId = id;
 }
 
+/// <summary>
+/// Returns the Region's unique identifier.
+/// </summary>
+/// <returns></returns>
 QString Region::id() const {
 	return mId;
 }
 
-void Region::setPoly(const Polygon & polygon) {
+/// <summary>
+/// Set the polygon which enclosed the Region.
+/// The polygon's coordinates are w.r.t the image coordinates.
+/// </summary>
+/// <param name="polygon">A polygon that represents the Region.</param>
+void Region::setPolygon(const Polygon & polygon) {
 	mPoly = polygon;
 }
 
+/// <summary>
+/// The Region's polygon.
+/// </summary>
+/// <returns></returns>
 Polygon Region::polygon() const {
 	return mPoly;
 }
 
+/// <summary>
+/// Draws the Region to the Painter.
+/// </summary>
+/// <param name="p">The painter.</param>
+/// <param name="config">The configuration containing colors etc.</param>
 void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 
 	p.setPen(config.pen());
@@ -100,10 +147,18 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 
 }
 
+/// <summary>
+/// Adds a child to the current Region.
+/// </summary>
+/// <param name="child">The child region.</param>
 void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
 }
 
+/// <summary>
+/// Removes the child specified.
+/// </summary>
+/// <param name="child">The child region.</param>
 void Region::removeChild(QSharedPointer<Region> child) {
 	
 	int idx = mChildren.indexOf(child);
@@ -114,6 +169,10 @@ void Region::removeChild(QSharedPointer<Region> child) {
 		qWarning() << "cannot remove" << child;
 }
 
+/// <summary>
+/// Sets the child regions.
+/// </summary>
+/// <param name="children">The child regions.</param>
 void Region::setChildren(const QVector<QSharedPointer<Region>>& children) {
 	mChildren = children;
 }
@@ -127,7 +186,7 @@ QVector<QSharedPointer<Region> > Region::children() const {
 }
 
 /// <summary>
-/// Returns a string discribing the current Region.
+/// Returns a string discribing the Region.
 /// </summary>
 /// <returns></returns>
 QString Region::toString(bool withChildren) const {
@@ -144,6 +203,10 @@ QString Region::toString(bool withChildren) const {
 	return msg;
 }
 
+/// <summary>
+/// Returns a string with all attributes of the Region's children.
+/// </summary>
+/// <returns></returns>
 QString Region::childrenToString() const {
 	
 	QString msg;
@@ -179,6 +242,12 @@ bool Region::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+/// <summary>
+/// Writes the Region to the XML stream.
+/// </summary>
+/// <param name="writer">The XML stream at the position where the region should be written.</param>
+/// <param name="withChildren">if set to <c>true</c> the Region's children are written too.</param>
+/// <param name="close">if set to <c>true</c> the element's close tag is appended.</param>
 void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -198,6 +267,10 @@ void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) cons
 		writer.writeEndElement();	// <Type>
 }
 
+/// <summary>
+/// Writes the Region's children to the XML stream.
+/// </summary>
+/// <param name="writer">The XML stream.</param>
 void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 	for (const QSharedPointer<Region> child : mChildren)
@@ -205,26 +278,53 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 }
 
 // TextLine --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="TextLine"/> class.
+/// This class represents Text lines (Region::type_text_line).
+/// </summary>
 TextLine::TextLine() : Region() {
 	mType = Region::type_text_line;
 }
 
+/// <summary>
+/// Set the BaseLine.
+/// </summary>
+/// <param name="baseLine">The Textline's base line.</param>
 void TextLine::setBaseLine(const BaseLine & baseLine) {
 	mBaseLine = baseLine;
 }
 
+/// <summary>
+/// Returns the Textline's Baseline.
+/// </summary>
+/// <returns></returns>
 BaseLine TextLine::baseLine() const {
 	return mBaseLine;
 }
 
+/// <summary>
+/// Set the GT/HTR text of the TextLine.
+/// </summary>
+/// <param name="text">The text corresponding to the textline.</param>
 void TextLine::setText(const QString & text) {
 	mText = text;
 }
 
+/// <summary>
+/// GT/HTR Text of the Textline.
+/// </summary>
+/// <returns></returns>
 QString TextLine::text() const {
 	return mText;
 }
 
+/// <summary>
+/// Reads a Textline from the XML stream.
+/// The stream must be at the position of the 
+/// Textline's tag and is forwarded until its end
+/// </summary>
+/// <param name="reader">The XML stream.</param>
+/// <returns>true on success</returns>
 bool TextLine::read(QXmlStreamReader & reader) {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -261,6 +361,12 @@ bool TextLine::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+/// <summary>
+/// Writes the TextLine instance to the XML stream.
+/// </summary>
+/// <param name="writer">The XML stream.</param>
+/// <param name="withChildren">if set to <c>true</c> the TextLine's children are written to the XML.</param>
+/// <param name="close">if set to <c>true</c> the TextLine's end element is written.</param>
 void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -286,6 +392,11 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 }
 
 
+/// <summary>
+/// Returns a string with all important properties of the TextLine.
+/// </summary>
+/// <param name="withChildren">if set to <c>true</c> children properties are written too.</param>
+/// <returns></returns>
 QString TextLine::toString(bool withChildren) const {
 	
 	QString msg = Region::toString(false);
@@ -302,6 +413,11 @@ QString TextLine::toString(bool withChildren) const {
 	return msg;
 }
 
+/// <summary>
+/// Draws the TextLine to the Painter.
+/// </summary>
+/// <param name="p">The painter.</param>
+/// <param name="config">The configuration (e.g. color of the Region).</param>
 void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	Region::draw(p, config);
@@ -330,6 +446,13 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 }
 
 // PageElement --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="PageElement"/> class.
+/// This class corresponds to a PAGE XML file. It hold's the XML file's path.
+/// After parsing the PAGE XML, the rootRegion() should contain all relevant
+/// regions.
+/// </summary>
+/// <param name="xmlPath">The XML path.</param>
 PageElement::PageElement(const QString& xmlPath) {
 	
 	mXmlPath = xmlPath;
@@ -338,18 +461,34 @@ PageElement::PageElement(const QString& xmlPath) {
 	mDateModified = QDateTime::currentDateTime();
 }
 
+/// <summary>
+/// Prints the page element to the debug stream.
+/// </summary>
+/// <param name="d">The debug stream.</param>
+/// <param name="p">The page element.</param>
+/// <returns></returns>
 QDebug operator<<(QDebug d, const PageElement& p) {
 
 	d << qPrintable(p.toString());
 	return d;
 }
 
+/// <summary>
+/// Appends the page element to the data stream s.
+/// </summary>
+/// <param name="s">The data stream.</param>
+/// <param name="p">The page element.</param>
+/// <returns></returns>
 QDataStream& operator<<(QDataStream& s, const PageElement& p) {
 
 	s << p.toString();	// for now show children too
 	return s;
 }
 
+/// <summary>
+/// Creates a string with all relevant attributes of the current instance.
+/// </summary>
+/// <returns></returns>
 QString PageElement::toString() const {
 
 	QString msg = xmlPath();
@@ -366,58 +505,114 @@ QString PageElement::toString() const {
 	return msg;
 }
 
+/// <summary>
+/// Set the XML path.
+/// </summary>
+/// <param name="xmlPath">The XML path.</param>
 void PageElement::setXmlPath(const QString & xmlPath) {
 	mXmlPath = xmlPath;
 }
 
+/// <summary>
+/// The PAGE XML path.
+/// </summary>
+/// <returns></returns>
 QString PageElement::xmlPath() const {
 	return mXmlPath;
 }
 
+/// <summary>
+/// Set the filename of the corresponding image.
+/// </summary>
+/// <param name="name">The image's filename.</param>
 void PageElement::setImageFileName(const QString & name) {
 	mImageFileName = name;
 }
 
+/// <summary>
+/// Returns the filename of the corresponding image.
+/// </summary>
+/// <returns></returns>
 QString PageElement::imageFileName() const {
 	return mImageFileName;
 }
 
+/// <summary>
+/// Set the size of the image.
+/// </summary>
+/// <param name="size">The image size.</param>
 void PageElement::setImageSize(const QSize & size) {
 	mImageSize = size;
 }
 
+/// <summary>
+/// The image size.
+/// </summary>
+/// <returns></returns>
 QSize PageElement::imageSize() const {
 	return mImageSize;
 }
 
+/// <summary>
+/// Set the root region. This is needed for writing to a PAGE XML file.
+/// </summary>
+/// <param name="region">The root region.</param>
 void PageElement::setRootRegion(QSharedPointer<Region> region) {
 	mRoot = region;
 }
 
+/// <summary>
+/// Returns the root region. This is needed if the XML is read.
+/// </summary>
+/// <returns></returns>
 QSharedPointer<Region> PageElement::rootRegion() const {
 	return mRoot;
 }
 
+/// <summary>
+/// Set the creator of the PAGE XML.
+/// </summary>
+/// <param name="creator">The PAGE creator (CVL if we write).</param>
 void PageElement::setCreator(const QString & creator) {
 	mCreator = creator;
 }
 
+/// <summary>
+/// The PAGE XML creator.
+/// </summary>
+/// <returns></returns>
 QString PageElement::creator() const {
 	return mCreator;
 }
 
+/// <summary>
+/// Set the date created of the PAGE XML.
+/// </summary>
+/// <param name="date">The date created.</param>
 void PageElement::setDateCreated(const QDateTime & date) {
 	mDateCreated = date;
 }
 
+/// <summary>
+/// Returns the date created of the PAGE XML.
+/// </summary>
+/// <returns></returns>
 QDateTime PageElement::dateCreated() const {
 	return mDateCreated;
 }
 
+/// <summary>
+/// Set the date modified of the PAGE XML.
+/// </summary>
+/// <param name="date">The last modified date of the PAGE XML.</param>
 void PageElement::setDateModified(const QDateTime & date) {
 	mDateModified = date;
 }
 
+/// <summary>
+/// The modified date of the PAGE XML.
+/// </summary>
+/// <returns></returns>
 QDateTime PageElement::dateModified() const {
 	return mDateModified;
 }
