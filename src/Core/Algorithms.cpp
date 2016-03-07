@@ -56,6 +56,14 @@ Algorithms& Algorithms::instance() {
 	return *inst;
 }
 
+/// <summary>
+/// Dilates the image bwImg with a given structuring element.
+/// </summary>
+/// <param name="bwImg">The bwImg: a grayscale image CV_8U (or CV_32F [0 1] but slower).</param>
+/// <param name="seSize">The structuring element's size.</param>
+/// <param name="shape">The shape (either Square or Disk).</param>
+/// <param name="borderValue">The border value.</param>
+/// <returns>An dilated image (CV_8U or CV_32F).</returns>
 cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
 
 	// nothing to do in here
@@ -80,6 +88,14 @@ cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape sha
 	return dImg;
 }
 
+/// <summary>
+/// Erodes the image bwimg with a given structuring element.
+/// </summary>
+/// <param name="bwImg">The bwimg: a grayscale image CV_8U (or CV_32F [0 1] but slower).</param>
+/// <param name="seSize">The structuring element's size.</param>
+/// <param name="shape">The shape (either Square or Disk).</param>
+/// <param name="borderValue">The border value.</param>
+/// <returns>An eroded image (CV_8U or CV_32F).</returns>
 cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
 
 	// nothing to do in here
@@ -109,6 +125,12 @@ cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shap
 	return eImg;
 }
 
+/// <summary>
+/// Creates the structuring element for morphological operations.
+/// </summary>
+/// <param name="seSize">Size of the structuring element.</param>
+/// <param name="shape">The shape (either Square or Disk).</param>
+/// <returns>A cvMat containing the structuring element (CV_8UC1).</returns>
 cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 
 	cv::Mat se = cv::Mat(seSize, seSize, CV_8U);
@@ -146,6 +168,11 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 
 }
 
+/// <summary>
+/// Threshold an image using Otsu as threshold.
+/// </summary>
+/// <param name="srcImg">The source img CV_8UC1 or CV_8UC3.</param>
+/// <returns>A binary image CV_8UC1</returns>
 cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) const {
 
 	if (srcImg.depth() !=  CV_8U) {
@@ -164,7 +191,16 @@ cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) const {
 
 }
 
-
+/// <summary>
+/// Convolves a histogram symmetrically.
+/// Symmetric convolution means that the convolution
+/// is flipped around at the histograms borders. This is
+/// specifically useful for orientation histograms (since
+/// 0° corresponds to 360°
+/// </summary>
+/// <param name="hist">The histogram CV_32FC1.</param>
+/// <param name="kernel">The convolution kernel CV_32FC1.</param>
+/// <returns>The convolved Histogram CV_32FC1.</returns>
 cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) const {
 
 	if (hist.channels() > 1) {
@@ -213,6 +249,12 @@ cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel
 
 }
 
+/// <summary>
+/// Computes a 1D Gaussian filter kernel.
+/// The kernel's size is adjusted to the standard deviation.
+/// </summary>
+/// <param name="sigma">The standard deviation of the Gaussian.</param>
+/// <returns>The Gaussian kernel CV_32FC1</returns>
 cv::Mat Algorithms::get1DGauss(double sigma) const {
 
 	// correct -> checked with matlab reference
@@ -238,6 +280,16 @@ cv::Mat Algorithms::get1DGauss(double sigma) const {
 	return gKernel;
 }
 
+/// <summary>
+/// Convolves an integral image by means of box filters.
+/// This functions applies box filtering. It is specifically useful for the computation
+/// of image sums, mean filtering and standard deviation with big kernel sizes.
+/// </summary>
+/// <param name="src">The integral image CV_64FC1.</param>
+/// <param name="kernelSizeX">The box filter's size.</param>
+/// <param name="kernelSizeY">The box filter's size.</param>
+/// <param name="norm">If BORDER_ZERO an image sum is computed, if BORDER_FLIP a mean filtering is applied.</param>
+/// <returns>The convolved image CV_32FC1.</returns>
 cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY, MorphBorder norm) const {
 
 	if (src.channels() > 1) {
@@ -346,6 +398,11 @@ cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSi
 	return dst;
 }
 
+/// <summary>
+/// Sets the border to a constant value (1 pixel width).
+/// </summary>
+/// <param name="src">The source image CV_32F or CV_8U.</param>
+/// <param name="val">The border value.</param>
 void Algorithms::setBorderConst(cv::Mat &src, float val) const {
 
 	// do nothing if the mask is empty
@@ -361,6 +418,16 @@ void Algorithms::setBorderConst(cv::Mat &src, float val) const {
 
 }
 
+/// <summary>
+/// Computes robust statistical moments of an image.
+/// The quantiles of an image (or median) are computed.
+/// </summary>
+/// <param name="src">The source image CV_32FC1.</param>
+/// <param name="mask">The mask CV_32FC1 or CV_8UC1.</param>
+/// <param name="momentValue">The moment (e.g. 0.5 for median, 0.25 or 0.75 for quartiles).</param>
+/// <param name="maxSamples">The maximum number of samples (speed up).</param>
+/// <param name="area">The mask's area (speed up).</param>
+/// <returns>The statistical moment.</returns>
 float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentValue, int maxSamples, int area) const {
 
 	// check input
@@ -439,6 +506,11 @@ float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentVal
 	return (float)rdf::statMoment(samples, momentValue);
 }
 
+/// <summary>
+/// Inverts the img.
+/// </summary>
+/// <param name="srcImg">The source img CV_32FC1 [0 1] or CV_8UC1.</param>
+/// <param name="mask">The mask.</param>
 void Algorithms::invertImg(cv::Mat& srcImg, cv::Mat mask) {
 	
 	if (srcImg.depth() == CV_32F) {
@@ -465,6 +537,11 @@ void Algorithms::invertImg(cv::Mat& srcImg, cv::Mat mask) {
 	}
 }
 
+/// <summary>
+/// Applies a mask to the image.
+/// </summary>
+/// <param name="src">The source img CV_8U or CV_32F.</param>
+/// <param name="mask">The optional mask CV_8U or CV_32F.</param>
 void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 	// do nothing if the mask is empty
 	if (!mask.empty()) {
@@ -485,6 +562,14 @@ void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 	}
 }
 
+/// <summary>
+/// Prefilters an binary image according to the blob size.
+/// Should be done to remove small blobs and to reduce the runtime of cvFindContours.
+/// </summary>
+/// <param name="img">The source img CV_8UC1.</param>
+/// <param name="minArea">The blob size threshold in pixel.</param>
+/// <param name="maxArea">The maximum area.</param>
+/// <returns>A CV_8UC1 binary image with all blobs smaller than minArea removed.</returns>
 cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) const {
 
 	cv::Mat bwImgTmp = img.clone();
@@ -583,6 +668,12 @@ cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) 
 
 }
 
+/// <summary>
+/// Computes the histogram of an image.
+/// </summary>
+/// <param name="img">The source img CV_32FC1.</param>
+/// <param name="mask">The mask CV_8UC1 or CV_32FC1.</param>
+/// <returns>The histogram of the img as cv::mat CV_32FC1.</returns>
 cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
 	if (img.channels() > 1) {
 		qDebug() << "the image needs to have 1 channel";
@@ -648,6 +739,12 @@ cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
 	return hist;
 }
 
+/// <summary>
+/// Gets the Otsu threshold based on a certain histogram.
+/// </summary>
+/// <param name="hist">The histogram CV_32FC1.</param>
+/// <param name="otsuThresh">The otsu threshold - deprecated.</param>
+/// <returns>The computed threshold.</returns>
 double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) const {
 	if (hist.channels() > 1) {
 		qDebug() << "the histogram needs to have 1 channel";
@@ -717,7 +814,13 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) c
 																//return max_val;
 }
 
-
+/// <summary>
+/// Computes the normalized angle within startIvl and endIvl.
+/// </summary>
+/// <param name="angle">The angle in rad.</param>
+/// <param name="startIvl">The intervals lower bound.</param>
+/// <param name="endIvl">The intervals upper bound.</param>
+/// <returns>The angle within [startIvl endIvl].</returns>
 float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const {
 	// this could be a bottleneck
 	if (abs(angle) > 1000)
@@ -731,13 +834,23 @@ float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const 
 	return angle;
 }
 
+/// <summary>
+/// Returns euclidean distance between two vectors
+/// </summary>
+/// <param name="p1">Vector p1.</param>
+/// <param name="p2">Vector p2.</param>
+/// <returns>The Euclidean distance.</returns>
 float Algorithms::euclideanDistance(const QPoint& p1, const QPoint& p2) const {
 
 	return (float)sqrt((p1.x() - p2.x())*(p1.x() - p2.x()) + (p1.y() - p2.y())*(p1.y() - p2.y()));
 
 }
 
-
+/// <summary>
+/// Estimates the mask.
+/// </summary>
+/// <param name="src">The source image.</param>
+/// <returns>The estimated mask.</returns>
 cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 
 	cv::Mat srcGray = src.clone();

@@ -44,6 +44,10 @@
 namespace rdf {
 
 // SimpleBinarization --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="SimpleBinarization"/> class.
+/// </summary>
+/// <param name="img">The source img CV_8U.</param>
 SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
 	
@@ -61,6 +65,10 @@ bool SimpleBinarization::checkInput() const {
 	return true;
 }
 
+/// <summary>
+/// Determines whether this instance is empty.
+/// </summary>
+/// <returns>True if the instance is empty.</returns>
 bool SimpleBinarization::isEmpty() const {
 	return mSrcImg.empty();
 }
@@ -75,6 +83,10 @@ void SimpleBinarization::save(QSettings& settings) const {
 	settings.setValue("thresh", mThresh);
 }
 
+/// <summary>
+/// Returns the binary image.
+/// </summary>
+/// <returns>The binary image CV_8UC1.</returns>
 cv::Mat SimpleBinarization::binaryImage() const {
 	return mBwImg;
 }
@@ -87,6 +99,10 @@ cv::Mat SimpleBinarization::binaryImage() const {
 //	return mThresh;
 //}
 
+/// <summary>
+/// Computes the binary image.
+/// </summary>
+/// <returns>True if the image could be computed.</returns>
 bool SimpleBinarization::compute() {
 
 	if (!checkInput())
@@ -103,6 +119,10 @@ bool SimpleBinarization::compute() {
 	return true;
 }
 
+/// <summary>
+/// Summary of the class.
+/// </summary>
+/// <returns>A summary string</returns>
 QString SimpleBinarization::toString() const {
 	
 	QString msg = debugName();
@@ -112,6 +132,11 @@ QString SimpleBinarization::toString() const {
 }
 
 // BaseBinarizationSu --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="BaseBinarizationSu"/> class.
+/// </summary>
+/// <param name="img">The source img CV_8U.</param>
+/// <param name="mask">The optional mask image CV_8UC1.</param>
 BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) {
 	mSrcImg = img;
 	mMask = mask;
@@ -139,6 +164,10 @@ bool BaseBinarizationSu::checkInput() const {
 	return true;
 }
 
+/// <summary>
+/// Determines whether this instance is empty.
+/// </summary>
+/// <returns>True if the source image is not set.</returns>
 bool BaseBinarizationSu::isEmpty() const {
 	return mSrcImg.empty() && mMask.empty();
 }
@@ -153,10 +182,18 @@ void BaseBinarizationSu::save(QSettings& settings) const {
 	settings.setValue("erodeMaskSize", mErodeMaskSize);
 }
 
+/// <summary>
+/// Returns the binary image.
+/// </summary>
+/// <returns>The binary image CV_8UC1.</returns>
 cv::Mat BaseBinarizationSu::binaryImage() const {
 	return mBwImg;
 }
 
+/// <summary>
+/// Computes the thresholded image.
+/// </summary>
+/// <returns>True if the binary image could be computed.</returns>
 bool BaseBinarizationSu::compute() {
 
 	if (!checkInput())
@@ -215,6 +252,15 @@ bool BaseBinarizationSu::compute() {
 	return true;
 }
 
+/// <summary>
+/// Sets the preFiltering. All blobs smaller than preFilterSize are removed if preFilter is true.
+/// </summary>
+/// <param name="preFilter">if set to <c>true</c> [prefilter] is applied and all blobs smaller then preFilterSize are removed.</param>
+/// <param name="preFilterSize">Size of the prefilter.</param>
+void BaseBinarizationSu::setPreFiltering(bool preFilter, int preFilterSize) {
+	mPreFilter = preFilter; 
+	mPreFilterSize = preFilterSize;
+}
 
 cv::Mat BaseBinarizationSu::compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const {
 	
@@ -505,7 +551,10 @@ inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
 	//return *mean/1.05;
 }
 
-
+/// <summary>
+/// Summary of the method.
+/// </summary>
+/// <returns>The summary string.</returns>
 QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
@@ -515,7 +564,19 @@ QString BaseBinarizationSu::toString() const {
 	return msg;
 }
 
+/// <summary>
+/// Initializes a new instance of the <see cref="BinarizationSuAdapted"/> class.
+/// </summary>
+/// <param name="img">The source img CV_8U.</param>
+/// <param name="mask">The optional mask CV_8UC1.</param>
+BinarizationSuAdapted::BinarizationSuAdapted(const cv::Mat & img, const cv::Mat & mask) {
+	mModuleName = "BaseBinarizationAdapted";
+}
 
+/// <summary>
+/// Computes the binary image using the adapted method of Su.
+/// </summary>
+/// <returns>True if the thresholded image could be computed.</returns>
 bool BinarizationSuAdapted::compute() {
 
 	
@@ -596,10 +657,22 @@ void BinarizationSuAdapted::calcFilterParams(int &filterS, int &Nm) {
 	Nm = cvFloor(mStrokeW * 10);
 }
 
+/// <summary>
+/// If set, a median filter of size 3 is applied at the end.
+/// </summary>
+/// <param name="medianFilter">if set to <c>true</c> [median filter] with size 3 is applied.</param>
+void BinarizationSuAdapted::setFiltering(bool medianFilter) {
+	mMedianFilter = medianFilter;
+}
+
 float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
 	return mStrokeW = strokeW;
 }
 
+/// <summary>
+/// Summary of parameters as String.
+/// </summary>
+/// <returns>Summary of parameters.</returns>
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
@@ -611,7 +684,19 @@ QString BinarizationSuAdapted::toString() const {
 }
 
 
+/// <summary>
+/// Initializes a new instance of the <see cref="BinarizationSuFgdWeight"/> class.
+/// </summary>
+/// <param name="img">The img.</param>
+/// <param name="mask">The mask.</param>
+BinarizationSuFgdWeight::BinarizationSuFgdWeight(const cv::Mat & img, const cv::Mat & mask) : BinarizationSuAdapted(img, mask) {
+	mModuleName = "BinarizationSuFgdWeight";
+}
 
+/// <summary>
+/// Computes the foreground weighted image.
+/// </summary>
+/// <returns>True if the image could be computed.</returns>
 bool BinarizationSuFgdWeight::compute() {
 
 	bool stat = BinarizationSuAdapted::compute();
