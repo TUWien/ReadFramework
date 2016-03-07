@@ -55,8 +55,11 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES COMPILE_FLAGS "-DDLL_MOD
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_DLL_MODULE_NAME}d)
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_MODULE_NAME})
 
+# make RelWithDebInfo link against release instead of debug opencv dlls
+set_target_properties(${OpenCV_LIBS} PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE)
+
 # copy required dlls to the directories
-set(OpenCV_MODULE_NAMES core imgproc stitching features2d calib3d flann imgcodecs xfeatures2d ml)
+set(OpenCV_MODULE_NAMES ${RDF_REQUIRED_OPENCV_PACKAGES})
 foreach(opencvlib ${OpenCV_MODULE_NAMES})
 	file(GLOB dllpath ${OpenCV_DIR}/bin/Release/opencv_${opencvlib}*.dll)
 	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Release)

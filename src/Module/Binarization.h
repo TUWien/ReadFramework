@@ -63,37 +63,14 @@ namespace rdf {
 	class DllModuleExport SimpleBinarization : public Module {
 
 public:
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SimpleBinarization"/> class.
-	/// </summary>
-	/// <param name="img">The source img CV_8U.</param>
 	SimpleBinarization(const cv::Mat& img);
 	
-	/// <summary>
-	/// Determines whether this instance is empty.
-	/// </summary>
-	/// <returns>True if the instance is empty.</returns>
+	
 	bool isEmpty() const override;
-
-	/// <summary>
-	/// Computes the binary image.
-	/// </summary>
-	/// <returns>True if the image could be computed.</returns>
 	bool compute() override;
-
-	/// <summary>
-	/// Returns the binary image.
-	/// </summary>
-	/// <returns>The binary image CV_8UC1.</returns>
 	cv::Mat binaryImage() const;
-
 	//void setThresh(int thresh);
 	//int thresh() const;
-
-	/// <summary>
-	/// Summary of the class.
-	/// </summary>
-	/// <returns>A summary string</returns>
 	QString toString() const override;
 
 private:
@@ -117,43 +94,13 @@ private:
 	class DllModuleExport BaseBinarizationSu : public Module {
 
 public:
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseBinarizationSu"/> class.
-	/// </summary>
-	/// <param name="img">The source img CV_8U.</param>
-	/// <param name="mask">The optional mask image CV_8UC1.</param>
 	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-	/// <summary>
-	/// Determines whether this instance is empty.
-	/// </summary>
-	/// <returns>True if the source image is not set.</returns>
 	bool isEmpty() const override;
-
-	/// <summary>
-	/// Computes the thresholded image.
-	/// </summary>
-	/// <returns>True if the binary image could be computed.</returns>
 	virtual bool compute() override;
-
-	/// <summary>
-	/// Returns the binary image.
-	/// </summary>
-	/// <returns>The binary image CV_8UC1.</returns>
 	cv::Mat binaryImage() const;
-
-	/// <summary>
-	/// Summary of the method.
-	/// </summary>
-	/// <returns>The summary string.</returns>
 	virtual QString toString() const override;
-
-	/// <summary>
-	/// Sets the preFiltering. All blobs smaller than preFilterSize are removed if preFilter is true.
-	/// </summary>
-	/// <param name="preFilter">if set to <c>true</c> [prefilter] is applied and all blobs smaller then preFilterSize are removed.</param>
-	/// <param name="preFilterSize">Size of the prefilter.</param>
-	void setPreFiltering(bool preFilter = true, int preFilterSize = 10) { mPreFilter = preFilter; mPreFilterSize = preFilterSize; };
+	void setPreFiltering(bool preFilter = true, int preFilterSize = 10);
 
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
@@ -197,30 +144,11 @@ private:
 	class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
 
 public:
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BinarizationSuAdapted"/> class.
-	/// </summary>
-	/// <param name="img">The source img CV_8U.</param>
-	/// <param name="mask">The optional mask CV_8UC1.</param>
-	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BaseBinarizationSu(img, mask) { mModuleName = "BaseBinarizationAdapted"; };
+	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-	/// <summary>
-	/// Computes the binary image using the adapted method of Su.
-	/// </summary>
-	/// <returns>True if the thresholded image could be computed.</returns>
 	virtual bool compute() override;
-
-	/// <summary>
-	/// Summary of parameters as String.
-	/// </summary>
-	/// <returns>Summary of parameters.</returns>
 	virtual QString toString() const override;
-
-	/// <summary>
-	/// If set, a median filter of size 3 is applied at the end.
-	/// </summary>
-	/// <param name="medianFilter">if set to <c>true</c> [median filter] with size 3 is applied.</param>
-	void setFiltering(bool medianFilter) { mMedianFilter = medianFilter; };
+	void setFiltering(bool medianFilter);
 
 protected:
 	float setStrokeWidth(float strokeW);
@@ -245,17 +173,8 @@ private:
 	class DllModuleExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
 
 public:
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BinarizationSuFgdWeight"/> class.
-	/// </summary>
-	/// <param name="img">The img.</param>
-	/// <param name="mask">The mask.</param>
-	BinarizationSuFgdWeight(const cv::Mat& img, const cv::Mat& mask = cv::Mat()) : BinarizationSuAdapted(img, mask) { mModuleName = "BinarizationSuFgdWeight"; };
+	BinarizationSuFgdWeight(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-	/// <summary>
-	/// Computes the foreground weighted image.
-	/// </summary>
-	/// <returns>True if the image could be computed.</returns>
 	virtual bool compute() override;
 
 protected:

@@ -118,28 +118,54 @@ QPoint BaseLine::endPoint() const {
 
 // Line ------------------------------------------------------------------------------------------------------
 
+/// <summary>
+/// Initializes a new instance of the <see cref="Line"/> class.
+/// </summary>
+/// <param name="line">The line.</param>
+/// <param name="thickness">The stroke width.</param>
 Line::Line(const QLine& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
 }
 
+/// <summary>
+/// Determines whether this instance is empty.
+/// </summary>
+/// <returns>True if no line is set</returns>
 bool Line::isEmpty() const {
 	return (mLine.isNull());
 }
 
+/// <summary>
+/// Sets the line.
+/// </summary>
+/// <param name="line">The line.</param>
+/// <param name="thickness">The stroke width.</param>
 void Line::setLine(const QLine& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
 }
 
+/// <summary>
+/// Returns the line information.
+/// </summary>
+/// <returns>The line.</returns>
 QLine Line::line() const {
 	return mLine;
 }
 
+/// <summary>
+/// Returns the stroke width of the line.
+/// </summary>
+/// <returns>The stroke width.</returns>
 float Line::thickness() const {
 	return mThickness;
 }
 
+/// <summary>
+/// Returns the line length.
+/// </summary>
+/// <returns>The line length.</returns>
 float Line::length() const {
 	QPoint diff = mLine.p2() - mLine.p1();
 
@@ -147,6 +173,10 @@ float Line::length() const {
 
 }
 
+/// <summary>
+/// Returns the line angle.
+/// </summary>
+/// <returns>The line angle [-pi,+pi] in radians.</returns>
 double Line::angle() const {
 
 	QPoint diff = mLine.p2() - mLine.p1();
@@ -155,15 +185,27 @@ double Line::angle() const {
 
 }
 
+/// <summary>
+/// Returns the start point.
+/// </summary>
+/// <returns>The start point.</returns>
 QPoint Line::startPoint() const {
 	return mLine.p1();
 }
 
+/// <summary>
+/// Returns the end point.
+/// </summary>
+/// <returns>The end point.</returns>
 QPoint Line::endPoint() const {
 	return mLine.p2();
 }
 
-
+/// <summary>
+/// Returns the minimum distance of the line endings of line l to the line endings of the current line instance.
+/// </summary>
+/// <param name="l">The line l to which the minimum distance is computed.</param>
+/// <returns>The minimum distance.</returns>
 float Line::minDistance(const Line& l) const {
 
 	float dist1 = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
@@ -177,11 +219,11 @@ float Line::minDistance(const Line& l) const {
 	return dist1;
 }
 
-/**
-* Calculates the normal distance to the point given.
-* @param p a point.
-* @return the normal distance to the point p.
-**/
+/// <summary>
+/// Returns the minimal distance of point p to the current line instance.
+/// </summary>
+/// <param name="p">The p.</param>
+/// <returns>The distance of point p.</returns>
 float Line::distance(const QPoint p) const {
 
 	QPoint normalVec = mLine.p2() - mLine.p1();
@@ -195,11 +237,11 @@ float Line::distance(const QPoint p) const {
 	return (float)abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (FLT_EPSILON + sqrt(normalVec.x()*normalVec.x() + normalVec.y()*normalVec.y())));
 }
 
-/**
-* Decides whether a point is inside the two normals at the end of the line (at any distance)
-* @param p a point whose position with the two normals should be computer
-* @return true if the point lies within the two normals at the endpoints of the line (or the point is on the line), false if not
-*/
+/// <summary>
+/// Calculated if point p is within the current line instance.
+/// </summary>
+/// <param name="p">The point p to be checked.</param>
+/// <returns>True if p is within the current line instance.</returns>
 bool Line::within(const QPoint& p) const {
 
 	QPoint tmp = mLine.p2() - mLine.p1();
@@ -210,6 +252,11 @@ bool Line::within(const QPoint& p) const {
 
 }
 
+/// <summary>
+/// Merges the specified line l with the current line instance.
+/// </summary>
+/// <param name="l">The line to merge.</param>
+/// <returns>The merged line.</returns>
 Line Line::merge(const Line& l) const {
 
 	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
@@ -237,6 +284,11 @@ Line Line::merge(const Line& l) const {
 	return mergedLine;
 }
 
+/// <summary>
+/// Calculates the gap line between line l and the current line instance.
+/// </summary>
+/// <param name="l">The line l to which a gap line is calculated.</param>
+/// <returns>The gap line.</returns>
 Line Line::gapLine(const Line& l) const {
 
 	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
@@ -264,6 +316,11 @@ Line Line::gapLine(const Line& l) const {
 	return gapLine;
 }
 
+/// <summary>
+/// The angle difference of line l and the current line instance.
+/// </summary>
+/// <param name="l">The line l.</param>
+/// <returns>The angle difference in rad.</returns>
 float Line::diffAngle(const Line& l) const {
 
 	float angleLine, angleL;

@@ -45,6 +45,10 @@ namespace rdf {
 Image::Image() {
 }
 
+/// <summary>
+/// Returns the current instance, otherwise created.
+/// </summary>
+/// <returns>Reference to current Image class.</returns>
 Image& Image::instance() { 
 
 	static QSharedPointer<Image> inst;
@@ -53,11 +57,11 @@ Image& Image::instance() {
 	return *inst; 
 }
 
-/**
-* Converts a QImage to a Mat
-* @param img formats supported: ARGB32 | RGB32 | RGB888 | Indexed8
-* @return cv::Mat the corresponding Mat
-**/ 
+/// <summary>
+/// Converts a QImage to a cv::Mat.
+/// </summary>
+/// <param name="img">The Qimage.</param>
+/// <returns>The cv__Mat image.</returns>
 cv::Mat Image::qImage2Mat(const QImage& img) {
 
 	cv::Mat mat2;
@@ -95,11 +99,11 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 	return mat2; 
 }
 
-/**
-* Converts a cv::Mat to a QImage.
-* @param img supported formats CV8UC1 | CV_8UC3 | CV_8UC4
-* @return QImage the corresponding QImage
-**/ 
+/// <summary>
+/// Converts a cv::Mat to QImage.
+/// </summary>
+/// <param name="img">The cv::Mat img.</param>
+/// <returns>The converted QImage.</returns>
 QImage Image::mat2QImage(const cv::Mat& img) {
 
 	QImage qImg;
@@ -125,6 +129,13 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	return qImg;
 }
 
+/// <summary>
+/// Saves the specified QImage img.
+/// </summary>
+/// <param name="img">The img to be saved.</param>
+/// <param name="savePath">The save path.</param>
+/// <param name="compression">The compression.</param>
+/// <returns>True if the image was saved.</returns>
 bool Image::save(const QImage& img, const QString& savePath, int compression) const {
 
 	bool saved = false;
@@ -164,7 +175,13 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 	return saved;
 }
 
-
+/// <summary>
+/// Saves the specified cv::Mat img.
+/// </summary>
+/// <param name="img">The imgto be saved.</param>
+/// <param name="savePath">The save path.</param>
+/// <param name="compression">The compression.</param>
+/// <returns>True if the image was saved.</returns>
 bool Image::save(const cv::Mat& img, const QString& savePath, int compression) const {
 
 	bool saved = false;
@@ -176,7 +193,11 @@ bool Image::save(const cv::Mat& img, const QString& savePath, int compression) c
 }
 
 
-
+/// <summary>
+/// Checks if the alpha channel is used.
+/// </summary>
+/// <param name="img">The QImage img.</param>
+/// <returns>True if the alpha channel is used.</returns>
 bool Image::alphaChannelUsed(const QImage& img) const {
 
 	if (img.format() != QImage::Format_ARGB32 && img.format() != QImage::Format_ARGB32_Premultiplied)
@@ -201,6 +222,11 @@ bool Image::alphaChannelUsed(const QImage& img) const {
 	return false;
 }
 
+/// <summary>
+/// Prints the basic image information.
+/// </summary>
+/// <param name="img">The source img.</param>
+/// <param name="name">The name that should be displayed in the command line.</param>
 void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const {
 
 	qDebug().noquote() << "image info: " << name;
@@ -245,6 +271,12 @@ void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const 
 
 }
 
+/// <summary>
+/// Prints the image as a string formatted according Matlab.
+/// </summary>
+/// <param name="img">The src img.</param>
+/// <param name="name">The variable name in Matlab.</param>
+/// <returns>A string containing the values of the image</returns>
 QString Image::printImage(const cv::Mat& img, const QString name) const {
 	QString imgInfo;
 	if (img.depth() == CV_32FC1)
