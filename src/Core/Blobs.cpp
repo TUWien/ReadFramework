@@ -44,29 +44,63 @@
 
 namespace rdf {
 
+
+/// <summary>
+/// Initializes a new instance of the <see cref="Blob"/> class.
+/// </summary>
+Blob::Blob() {
+
+}
+
+/// <summary>
+/// Initializes a new instance of the <see cref="Blob"/> class.
+/// </summary>
+/// <param name="outerC">The outer contour of the blob.</param>
+/// <param name="innerC">The inner contours of the blob (can be more than one).</param>
 Blob::Blob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
 	mOuterContour = outerC;
 	mInnerContours = innerC;
 }
 
+/// <summary>
+/// Determines whether this instance is empty.
+/// </summary>
+/// <returns>True if emtpy.</returns>
 bool Blob::isEmpty() const {
 
 	return (mOuterContour.size() == 0);
 }
 
+/// <summary>
+/// Sets the blob.
+/// </summary>
+/// <param name="outerC">The outer contour.</param>
+/// <param name="innerC">The inner contours.</param>
 void Blob::setBlob(const QVector<cv::Point>& outerC, const QVector<QVector<cv::Point> >& innerC) {
 	mOuterContour = outerC;
 	mInnerContours = innerC;
 }
 
+/// <summary>
+/// Returns the outer contour.
+/// </summary>
+/// <returns>The outer contour.</returns>
 QVector<cv::Point> Blob::outerContour() const {
 	return mOuterContour;
 }
 
+/// <summary>
+/// Returns the inner contours.
+/// </summary>
+/// <returns>The inner contours.</returns>
 QVector<QVector<cv::Point> > Blob::innerContours() const {
 	return mInnerContours;
 }
 
+/// <summary>
+/// Calculates the hierarchy for the blob such that it can be used with openCV functions.
+/// </summary>
+/// <returns>The OpenCV hierarchy.</returns>
 QVector<cv::Vec4i> Blob::hierarchy() const {
 	QVector<cv::Vec4i> tmp;
 
@@ -90,6 +124,10 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 	return tmp;
 }
 
+/// <summary>
+/// The blobs orientation based on moments.
+/// </summary>
+/// <returns>The orientation of the blob in rad.</returns>
 float Blob::blobOrientation() const {
 
 	double u00, u11, u01, u10, u20, u02, num, den;
@@ -140,6 +178,12 @@ float Blob::blobOrientation() const {
 	return o;
 }
 
+/// <summary>
+/// Draws the Blob.
+/// </summary>
+/// <param name="imgSrc">The img source where the blob is drawn.</param>
+/// <param name="color">The color of the blob.</param>
+/// <returns>True if the blob is drawn.</returns>
 bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color, int maxLevel) const {
 
 	if (isEmpty()) return false;
@@ -171,11 +215,17 @@ bool Blob::drawBlob(cv::Mat& imgSrc, cv::Scalar color, int maxLevel) const {
 }
 
 // ----------------------------- BlobManager ----------------------------------------------------------------------------
-
+/// <summary>
+/// Initializes a new instance of the <see cref="Blobs"/> class.
+/// </summary>
 Blobs::Blobs() {
 
 }
 
+/// <summary>
+/// Determines whether this instance is empty (no blobs).
+/// </summary>
+/// <returns>True if the instance is empty.</returns>
 bool Blobs::isEmpty() const {
 
 	return mBlobs.isEmpty();
@@ -188,6 +238,11 @@ bool Blobs::checkInput() const {
 	return true;
 }
 
+/// <summary>
+/// Sets the image.
+/// </summary>
+/// <param name="bWImg">The binary img CV_8UC1.</param>
+/// <returns>True if the image could be set.</returns>
 bool Blobs::setImage(const cv::Mat& bWImg) {
 
 	mBwImg = bWImg.clone(); //clone is needed, because findContours changes the image
@@ -196,6 +251,10 @@ bool Blobs::setImage(const cv::Mat& bWImg) {
 
 }
 
+/// <summary>
+/// Computes all blobs of the binary image.
+/// </summary>
+/// <returns>True if the blobs could be computed.</returns>
 bool Blobs::compute() {
 	if (!checkInput()) return false;
 
@@ -231,9 +290,36 @@ bool Blobs::compute() {
 	return true;
 }
 
+/// <summary>
+/// Deletes the blobs.
+/// </summary>
 void Blobs::deleteBlobs() {
 
 	mBlobs.clear();
+}
+
+/// <summary>
+/// Return all blobs.
+/// </summary>
+/// <returns>The blobs.</returns>
+QVector<Blob> Blobs::blobs() const {
+	return mBlobs;
+}
+
+/// <summary>
+/// Sets the blobs.
+/// </summary>
+/// <param name="blobs">The blobs.</param>
+void Blobs::setBlobs(const QVector<Blob>& blobs) {
+	mBlobs.clear(); mBlobs = blobs;
+}
+
+/// <summary>
+/// Returns the size of the image.
+/// </summary>
+/// <returns>The size of the image.</returns>
+cv::Size Blobs::size() const {
+	return mSize;
 }
 
 // ---------- BlobManager ----------------------------------------------------------------------------------------------
@@ -243,6 +329,10 @@ BlobManager::BlobManager() {
 
 }
 
+/// <summary>
+/// Creates an instance or return the instance.
+/// </summary>
+/// <returns>The instance of BlobManager.</returns>
 BlobManager& BlobManager::instance() {
 
 	static QSharedPointer<BlobManager> inst;
@@ -252,6 +342,13 @@ BlobManager& BlobManager::instance() {
 
 }
 
+/// <summary>
+/// Filters blobs according to a minimal area.
+/// Removes all blobs with an area smaller than area.
+/// </summary>
+/// <param name="area">The area threshold.</param>
+/// <param name="blobs">The blobs.</param>
+/// <returns>The filtered blob vector</returns>
 QVector<Blob> BlobManager::filterArea(int threshArea, const Blobs& blobs) const {
 
 	//QVector<Blob> tmp = blobs.blobs();
@@ -269,6 +366,13 @@ QVector<Blob> BlobManager::filterArea(int threshArea, const Blobs& blobs) const 
 	return filtered;
 }
 
+/// <summary>
+/// Filters blobs according to the size and the aspect ratio.
+/// </summary>
+/// <param name="maxAspectRatio">The maximum aspect ratio.</param>
+/// <param name="minWidth">The minimum width.</param>
+/// <param name="blobs">The blobs.</param>
+/// <returns>The filtered blob vector.</returns>
 QVector<Blob> BlobManager::filterMar(float maxAspectRatio, int minWidth, const Blobs& blobs) const {
 
 	QVector<Blob> filtered;
@@ -296,6 +400,14 @@ QVector<Blob> BlobManager::filterMar(float maxAspectRatio, int minWidth, const B
 	return filtered;
 }
 
+
+/// <summary>
+/// Filters blobs according to their orientation.
+/// </summary>
+/// <param name="angle">The specified orientation angle in rad.</param>
+/// <param name="maxAngleDiff">The maximum angle difference in degree.</param>
+/// <param name="blobs">The blobs.</param>
+/// <returns>The filtered blob vector</returns>
 QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const {
 
 	QVector<Blob> filtered;
@@ -324,6 +436,12 @@ QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Bl
 	return filtered;
 }
 
+/// <summary>
+/// Draws the blobs and returns a CV_8UC1 image.
+/// </summary>
+/// <param name="blobs">The blobs.</param>
+/// <param name="color">The color of the blobs.</param>
+/// <returns>A CV_8UC1 image containing all blobs.</returns>
 cv::Mat BlobManager::drawBlobs(const Blobs& blobs, cv::Scalar color) const {
 
 	cv::Mat newBWImg(blobs.size(), CV_8UC1);
@@ -338,6 +456,11 @@ cv::Mat BlobManager::drawBlobs(const Blobs& blobs, cv::Scalar color) const {
 	return newBWImg;
 }
 
+/// <summary>
+/// Assumes all blobs as lines and fit a Line based on the minimum area rectangle.
+/// </summary>
+/// <param name="blobs">The blobs.</param>
+/// <returns>The line vector.</returns>
 QVector<Line> BlobManager::lines(const Blobs& blobs) const {
 
 	QVector<Line> blobLines;
@@ -373,6 +496,11 @@ QVector<Line> BlobManager::lines(const Blobs& blobs) const {
 	return blobLines;
 }
 
+/// <summary>
+/// Gets the biggest BLOB.
+/// </summary>
+/// <param name="blobs">The blobs.</param>
+/// <returns>The biggest blob.</returns>
 Blob BlobManager::getBiggestBlob(const Blobs& blobs) const {
 
 	QVector<Blob> filtered;

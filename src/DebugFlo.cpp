@@ -88,6 +88,17 @@ namespace rdf {
 
 		//Image::instance().imageInfo(inputImg, "input");
 
+		//int nSamples = 20;
+		//cv::RNG rng;
+		//cv::Mat lBound(1, 1, CV_64FC1);
+		//lBound.setTo(0);
+		//cv::Mat uBound(1, 1, CV_64FC1);
+		//uBound.setTo(nSamples - 1);
+
+		//cv::Mat randRows(nSamples, 1, CV_32FC1);
+		//rng.fill(randRows, cv::RNG::UNIFORM, lBound, uBound);
+		//qDebug() << Image::instance().printImage(randRows, "test");
+
 		//cv::Mat tmp = inputImg.clone();
 		//cv::bilateralFilter(inputImg, tmp, 5, 90, 90);
 		//inputImg = tmp;

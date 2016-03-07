@@ -63,93 +63,25 @@ namespace rdf {
 	class DllModuleExport LineTrace : public Module {
 
 public:
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LineTrace"/> class.
-	/// </summary>
-	/// <param name="img">The binary input image.</param>
-	/// <param name="mask">The mask image.</param>
 	LineTrace(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-	/// <summary>
-	/// Determines whether this instance is empty.
-	/// </summary>
-	/// <returns>True if src image and mask is empty.</returns>
 	bool isEmpty() const override;
-
-	/// <summary>
-	/// Computes the binary line image as will as the line vectors.
-	/// </summary>
-	/// <returns>True if the lines are computed successfully.</returns>
 	virtual bool compute() override;
-
-	/// <summary>
-	/// Filters all lines accordinge a specified angle and the allowed angle difference angleDiff.
-	/// </summary>
-	/// <param name="lines">The line vector.</param>
-	/// <param name="angle">The angle in rad.</param>
-	/// <param name="angleDiff">The maximal allowed angle difference in degree.</param>
-	/// <returns>The filtered line vector.</returns>
 	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const;
-
-	/// <summary>
-	/// Gets the horizontal lines.
-	/// </summary>
-	/// <returns>A line vector containing all horizontal lines.</returns>
 	QVector<rdf::Line> getHLines() const;
-
-	/// <summary>
-	/// Gets the vertical lines.
-	/// </summary>
-	/// <returns>A line vector containing all vertical lines</returns>
 	QVector<rdf::Line> getVLines() const;
-
-	/// <summary>
-	/// Sets the angle to filter the lines horizontally and vertically.
-	/// </summary>
-	/// <param name="angle">The angle to define a horizontal line.</param>
-	void setAngle(double angle = std::numeric_limits<double>::infinity()) { mAngle = angle; };
-
-	/// <summary>
-	/// Resets the angle which defines horizontal.
-	/// </summary>
-	void resetAngle() { mAngle = std::numeric_limits<double>::infinity(); };
+	void setAngle(double angle = std::numeric_limits<double>::infinity());
+	void resetAngle();
 
 	/**
 	* Returns a vector with all calculated and merged lines.
 	* @return The calculated and merged lines.
 	**/
 	//QVector<DkLineExt> getLines();
-
-	/// <summary>
-	/// Returns the line image.
-	/// </summary>
-	/// <returns>A binary CV_8UC1 image containing the lines.</returns>
 	cv::Mat lineImage() const;
-
-	/// <summary>
-	/// Generates the line image based on the synthetic line vector.
-	/// </summary>
-	/// <returns>A binary CV_8UC1 image where all line vectors are drawn.</returns>
 	cv::Mat generatedLineImage() const;
-
-	/// <summary>
-	/// Sets the minimum length for the final line filtering.
-	// Default value = 60;
-	/// </summary>
-	/// <param name="len">The minimum length threshold in pixel.</param>
-	void setMinLenSecondRun(int len) { mMinLenSecondRun = len; };
-
-	/// <summary>
-	/// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
-	// Default value = 0.3.
-	/// </summary>
-	/// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
-	void setMaxAspectRatio(float ratio) { mMaxAspectRatio = ratio; };
-
-	/// <summary>
-	/// Summary of the class.
-	/// </summary>
-	/// <returns>A String containing all parameter values.</returns>
+	void setMinLenSecondRun(int len);
+	void setMaxAspectRatio(float ratio);
 	virtual QString toString() const override;
 
 protected:

@@ -49,7 +49,11 @@ namespace rdf {
 
 
 	// LineTrace--------------------------------------------------------------------
-
+	/// <summary>
+	/// Initializes a new instance of the <see cref="LineTrace"/> class.
+	/// </summary>
+	/// <param name="img">The binary input image.</param>
+	/// <param name="mask">The mask image.</param>
 	LineTrace::LineTrace(const cv::Mat& img, const cv::Mat& mask) {
 		mSrcImg = img;
 		mMask = mask;
@@ -82,18 +86,50 @@ namespace rdf {
 		return true;
 	}
 
+	/// <summary>
+	/// Determines whether this instance is empty.
+	/// </summary>
+	/// <returns>True if src image and mask is empty.</returns>
 	bool LineTrace::isEmpty() const {
 		return mSrcImg.empty() && mMask.empty();
 	}
 
+
+	/// <summary>
+	/// Gets the horizontal lines.
+	/// </summary>
+	/// <returns>A line vector containing all horizontal lines</returns>
 	QVector<rdf::Line> LineTrace::getHLines() const {
 		return hLines;
 	}
 
+	/// <summary>
+	/// Sets the angle to filter the lines horizontally and vertically.
+	/// </summary>
+	/// <param name="angle">The angle to define a horizontal line.</param>
+	void LineTrace::setAngle(double angle) {
+		mAngle = angle;
+	}
+
+	/// <summary>
+	/// Resets the angle which defines horizontal.
+	/// </summary>
+	void LineTrace::resetAngle() {
+		mAngle = std::numeric_limits<double>::infinity();
+	}
+
+	/// <summary>
+	/// Gets the vertical lines.
+	/// </summary>
+	/// <returns>A line vector containing all vertical lines</returns>
 	QVector<rdf::Line> LineTrace::getVLines() const {
 		return vLines;
 	}
 
+	/// <summary>
+	/// Computes the binary line image as will as the line vectors.
+	/// </summary>
+	/// <returns>True if the lines are computed successfully.</returns>
 	bool LineTrace::compute() {
 
 		if (!checkInput())
@@ -146,6 +182,29 @@ namespace rdf {
 		return true;
 	}
 
+
+	/// <summary>
+	/// Sets the minimum length for the final line filtering.
+	// Default value = 60;
+	/// </summary>
+	/// <param name="len">The minimum length threshold in pixel.</param>
+	void LineTrace::setMinLenSecondRun(int len) {
+		mMinLenSecondRun = len;
+	}
+
+	/// <summary>
+	/// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
+	// Default value = 0.3.
+	/// </summary>
+	/// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
+	void LineTrace::setMaxAspectRatio(float ratio) {
+		mMaxAspectRatio = ratio;
+	}
+
+	/// <summary>
+	/// Generates the line image based on the synthetic line vector.
+	/// </summary>
+	/// <returns>A binary CV_8UC1 image where all line vectors are drawn.</returns>
 	cv::Mat LineTrace::generatedLineImage() const {
 
 		if (mSrcImg.empty()) return cv::Mat();
@@ -314,6 +373,13 @@ namespace rdf {
 
 	}
 
+	/// <summary>
+	/// Filters all lines accordinge a specified angle and the allowed angle difference angleDiff.
+	/// </summary>
+	/// <param name="lines">The line vector.</param>
+	/// <param name="angle">The angle in rad.</param>
+	/// <param name="angleDiff">The maximal allowed angle difference in degree.</param>
+	/// <returns>The filtered line vector.</returns>
 	QVector<rdf::Line> LineTrace::filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const {
 
 		QVector<rdf::Line> resultLines;
@@ -565,6 +631,10 @@ namespace rdf {
 
 	}
 
+	/// <summary>
+	/// Summary of the class.
+	/// </summary>
+	/// <returns>A String containing all parameter values.</returns>
 	QString LineTrace::toString() const {
 
 		QString msg = debugName();
@@ -584,6 +654,10 @@ namespace rdf {
 	//	//settings.setValue("erodeMaskSize", mErodeMaskSize);
 	//}
 
+	/// <summary>
+	/// Returns the line image.
+	/// </summary>
+	/// <returns>A binary CV_8UC1 image containing the lines.</returns>
 	cv::Mat LineTrace::lineImage() const {
 		return mLineImg;
 	}
