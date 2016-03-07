@@ -569,7 +569,7 @@ QString BaseBinarizationSu::toString() const {
 /// </summary>
 /// <param name="img">The source img CV_8U.</param>
 /// <param name="mask">The optional mask CV_8UC1.</param>
-BinarizationSuAdapted::BinarizationSuAdapted(const cv::Mat & img, const cv::Mat & mask) {
+BinarizationSuAdapted::BinarizationSuAdapted(const cv::Mat & img, const cv::Mat & mask) : BaseBinarizationSu(img, mask) {
 	mModuleName = "BaseBinarizationAdapted";
 }
 
