@@ -4,6 +4,8 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 
 [![Build Status](https://travis-ci.org/TUWien/ReadFramework.svg?branch=master)](https://travis-ci.org/TUWien/ReadFramework)
 
+Documentation can be found here: http://tuwien.github.io/ReadFramework/html/
+
 ## Build on Windows
 ### Compile dependencies
 - `Qt` SDK or the compiled sources (>= 5.4.0)
