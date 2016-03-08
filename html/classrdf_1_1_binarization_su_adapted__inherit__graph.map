@@ -1,0 +1,5 @@
+<map id="rdf::BinarizationSuAdapted" name="rdf::BinarizationSuAdapted">
+<area shape="rect" id="node4" href="$classrdf_1_1_binarization_su_fgd_weight.html" title="The class binarize a rgb color image. To make the algorithm robust against noise, the foreground is e..." alt="" coords="5,229,197,256"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_binarization_su.html" title="The class binarize a grayvalue image. The segmentation algorithm is based on &quot;Binarization of Histori..." alt="" coords="22,80,180,107"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module..." alt="" coords="58,5,144,32"/>
+</map>

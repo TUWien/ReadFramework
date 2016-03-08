@@ -1,0 +1,38 @@
+var classrdf_1_1_region =
+[
+    [ "Type", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f", [
+      [ "type_unknown", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa11527eaba1b660694f8c11e00991f538", null ],
+      [ "type_root", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa0af2dcf0c6e30b730f1b5e96f466005a", null ],
+      [ "type_text_region", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fae58556c3626e51de9c0b6abe2995e1f0", null ],
+      [ "type_text_line", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa93de6b76765d54abc0715e0715f76fc4", null ],
+      [ "type_word", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa592189c1a249986d1bc9b0677f34c812", null ],
+      [ "type_separator", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa6da605a26ee499f9927b554504f06f70", null ],
+      [ "type_image", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa8552559107da30024c0d03905860b852", null ],
+      [ "type_graphic", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa5aa47fd9d76f4919efcd26dfbe88bc61", null ],
+      [ "type_noise", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa66dfad8a2b599a95c2743c76e9e98621", null ],
+      [ "type_end", "classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa83fff59e3f737b9afe884002a9d34c2f", null ]
+    ] ],
+    [ "Region", "classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0", null ],
+    [ "addChild", "classrdf_1_1_region.html#a77b35f891e22ffd53338bd573b88e682", null ],
+    [ "children", "classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1", null ],
+    [ "childrenToString", "classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e", null ],
+    [ "draw", "classrdf_1_1_region.html#a9d3df78447907bdb26e18abe36c5a9e1", null ],
+    [ "id", "classrdf_1_1_region.html#a98259b56817f5bfebb276a3e6edef795", null ],
+    [ "polygon", "classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c", null ],
+    [ "read", "classrdf_1_1_region.html#a9be7a3a131e767f3e24ef01e4c8418fd", null ],
+    [ "removeChild", "classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361", null ],
+    [ "setChildren", "classrdf_1_1_region.html#a674fd43577cea523e4ff3fca899c2a88", null ],
+    [ "setId", "classrdf_1_1_region.html#a4b1875530c09da1f6c1c361b080006d3", null ],
+    [ "setPolygon", "classrdf_1_1_region.html#a9e64582aa1aa804388689fc6b348f399", null ],
+    [ "setType", "classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876", null ],
+    [ "toString", "classrdf_1_1_region.html#ab2c9f57c3627e0904bc5e9e5b374786e", null ],
+    [ "type", "classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9", null ],
+    [ "write", "classrdf_1_1_region.html#acfbde63ca27c6cc13d5eedf241097890", null ],
+    [ "writeChildren", "classrdf_1_1_region.html#a33b1b20e571b300ae1788b807fbfad28", null ],
+    [ "operator<<", "classrdf_1_1_region.html#af07d2e6aa6ce5d2e9034c9b1e578dbad", null ],
+    [ "operator<<", "classrdf_1_1_region.html#afd2ad7008e91d0a0a50f789a0b34e403", null ],
+    [ "mChildren", "classrdf_1_1_region.html#a943b4d012593bafba5234604cb871cd7", null ],
+    [ "mId", "classrdf_1_1_region.html#a6c25683d298a9553c20d7cdb4a49b246", null ],
+    [ "mPoly", "classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1", null ],
+    [ "mType", "classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b", null ]
+];
