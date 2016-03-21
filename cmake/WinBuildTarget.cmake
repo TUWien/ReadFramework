@@ -12,7 +12,7 @@ set(RDF_LIB_MODULE_NAME optimized ${RDF_DLL_MODULE_NAME}.lib debug ${RDF_DLL_MOD
 set(RDF_LIB_NAME optimized ${DLL_GUI_NAME}.lib debug ${DLL_GUI_NAME}d.lib)
 
 #binary
-link_directories(${OpenCV_LIBRARY_DIRS} ${LIBRARY_DIR})
+link_directories(${OpenCV_LIBRARY_DIRS} ${LIBRARY_DIR} ${CMAKE_BINARY_DIR})
 set(CHANGLOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/changelog.txt)
 add_executable(${RDF_BINARY_NAME} WIN32  MACOSX_BUNDLE ${MAIN_SOURCES} ${MAIN_HEADERS} ${RDF_TRANSLATIONS} ${RDF_RC} ${CHANGLOG_FILE}) #changelog is added here, so that i appears in visual studio
 set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) # define that changelog should not be compiled
