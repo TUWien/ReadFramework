@@ -7,6 +7,13 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.1)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
+if(CMAKE_CL_64)
+	SET(RDF_ARCHITECTURE "x64")
+else()
+	SET(RDF_ARCHITECTURE "x86")
+endif()
+
+
 if(DEFINED GLOBAL_READ_BUILD)
 	# set output path when building for READ
 	if(MSVC)
@@ -94,6 +101,8 @@ else()
 	message(STATUS "build system unkown ... fallback to unix")
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 endif()
+
+RDF_ADD_INSTALL()
 
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)

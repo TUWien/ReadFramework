@@ -89,10 +89,10 @@ private:
 };
 
 
-	/// <summary>
-	/// Blobs class - holds a vector of Blobs and the corresponding image.
-	/// </summary>
-	class DllCoreExport Blobs {
+/// <summary>
+/// Blobs class - holds a vector of Blobs and the corresponding image.
+/// </summary>
+class DllCoreExport Blobs {
 
 public:
 

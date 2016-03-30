@@ -74,3 +74,36 @@ macro(RDF_CHECK_COMPILER)
 		set(CMAKE_EXE_LINKER_FLAGS_REALLYRELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE") # /subsystem:windows does not work due to a bug in cmake (see http://public.kitware.com/Bug/view.php?id=12566)
 	endif()
 endmacro(RDF_CHECK_COMPILER)
+
+macro(RDF_ADD_INSTALL)
+
+	if (MSVC)
+		RDF_GENERATE_PACKAGE_XML()
+	
+		SET(RDF_INSTALL_DIRECTORY ${CMAKE_SOURCE_DIR}/install CACHE PATH "Path to the nomacs install directory for deploying")
+	
+		message(STATUS "${PROJECT_NAME} \t will be installed to: ${RDF_INSTALL_DIRECTORY}")
+		
+		set(PACKAGE_DIR ${RDF_INSTALL_DIRECTORY}/packages/plugins.${RDF_ARCHITECTURE}.${PROJECT_NAME})
+		set(PACKAGE_DATA_DIR ${PACKAGE_DIR}/data/nomacs-${RDF_ARCHITECTURE}/plugins/)
+		install(TARGETS ${PROJECT_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} RUNTIME DESTINATION ${PACKAGE_DATA_DIR} CONFIGURATIONS Release)
+		install(FILES ${CMAKE_CURRENT_BINARY_DIR}/package.xml DESTINATION ${PACKAGE_DIR}/meta CONFIGURATIONS Release)
+	endif()
+endmacro(RDF_ADD_INSTALL)
+
+macro(RDF_GENERATE_PACKAGE_XML)
+
+	string(TIMESTAMP CURRENT_DATE "%Y-%m-%d")	
+	
+	set(XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+	set(XML_CONTENT "${XML_CONTENT}<Package>\n")
+	set(XML_CONTENT "${XML_CONTENT}\t<DisplayName>${PROJECT_NAME} [${RDF_ARCHITECTURE}]</DisplayName>\n")
+	set(XML_CONTENT "${XML_CONTENT}\t<Description>READ Framework for ${RDF_ARCHITECTURE} systems (v${RDF_FRAMEWORK_VERSION}).</Description>\n")
+	set(XML_CONTENT "${XML_CONTENT}\t<Version>${RDF_FRAMEWORK_VERSION}</Version>\n")
+	set(XML_CONTENT "${XML_CONTENT}\t<ReleaseDate>${CURRENT_DATE}</ReleaseDate>\n")
+	set(XML_CONTENT "${XML_CONTENT}\t<Default>true</Default>\n")
+	set(XML_CONTENT "${XML_CONTENT}</Package>\n")
+	
+	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/package.xml ${XML_CONTENT})
+	
+endmacro(RDF_GENERATE_PACKAGE_XML)
