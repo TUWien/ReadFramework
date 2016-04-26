@@ -30,5 +30,6 @@ var namespacerdf =
     [ "BinarizationSuAdapted", "classrdf_1_1_binarization_su_adapted.html", "classrdf_1_1_binarization_su_adapted" ],
     [ "BinarizationSuFgdWeight", "classrdf_1_1_binarization_su_fgd_weight.html", "classrdf_1_1_binarization_su_fgd_weight" ],
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
+    [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]
 ];

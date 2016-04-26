@@ -13,6 +13,10 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "LineTrace.h", "_line_trace_8h.html", [
       [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ]
     ] ],
+    [ "SkewEstimation.cpp", "_skew_estimation_8cpp.html", null ],
+    [ "SkewEstimation.h", "_skew_estimation_8h.html", [
+      [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ]
+    ] ],
     [ "SuperPixel.cpp", "_super_pixel_8cpp.html", null ],
     [ "SuperPixel.h", "_super_pixel_8h.html", [
       [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]

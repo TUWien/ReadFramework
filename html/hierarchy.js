@@ -20,6 +20,7 @@ var hierarchy =
           [ "rdf::BinarizationSuFgdWeight", "classrdf_1_1_binarization_su_fgd_weight.html", null ]
         ] ]
       ] ],
+      [ "rdf::BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", null ],
       [ "rdf::LineTrace", "classrdf_1_1_line_trace.html", null ],
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ]
