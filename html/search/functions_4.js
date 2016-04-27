@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['edgemap',['edgeMap',['../classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d',1,'rdf::BaseSkewEstimation']]],
   ['elapsed',['elapsed',['../classrdf_1_1_timer.html#a1c4e719921172ca9fa4ce0fe15a38751',1,'rdf::Timer']]],
   ['endpoint',['endPoint',['../classrdf_1_1_base_line.html#a7c658f7796568f2496b1c00516473373',1,'rdf::BaseLine::endPoint()'],['../classrdf_1_1_line.html#abd8ce6d16188f8a1b3a60157ff866e6a',1,'rdf::Line::endPoint()']]],
   ['erodeimage',['erodeImage',['../classrdf_1_1_algorithms.html#a916b6b1df1b469031465011cd4fa5d3b',1,'rdf::Algorithms']]],

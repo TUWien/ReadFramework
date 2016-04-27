@@ -5,7 +5,7 @@ var searchData=
   ['region',['Region',['../classrdf_1_1_region.html',1,'rdf']]],
   ['region',['Region',['../classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0',1,'rdf::Region']]],
   ['regionmanager',['RegionManager',['../classrdf_1_1_region_manager.html',1,'rdf']]],
-  ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()'],['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()']]],
+  ['regiontypeconfig',['regionTypeConfig',['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()'],['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()']]],
   ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html',1,'rdf']]],
   ['regionxmlhelper',['RegionXmlHelper',['../classrdf_1_1_region_xml_helper.html',1,'rdf']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],

@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['edgedirection',['EdgeDirection',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997',1,'rdf::BaseSkewEstimation']]],
+  ['edgemap',['edgeMap',['../classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d',1,'rdf::BaseSkewEstimation']]],
   ['elapsed',['elapsed',['../classrdf_1_1_timer.html#a1c4e719921172ca9fa4ce0fe15a38751',1,'rdf::Timer']]],
   ['elements_2ecpp',['Elements.cpp',['../_elements_8cpp.html',1,'']]],
   ['elements_2eh',['Elements.h',['../_elements_8h.html',1,'']]],

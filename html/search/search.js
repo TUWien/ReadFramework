@@ -13,8 +13,8 @@ var indexSectionsWithContent =
   3: "abdeilmprsu",
   4: "abcdefghilmnopqrstwx",
   5: "hmsvwx",
-  6: "mrtx",
-  7: "abdst",
+  6: "emrtx",
+  7: "abdhstv",
   8: "o",
   9: "_dim"
 };

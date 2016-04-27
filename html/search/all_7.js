@@ -5,12 +5,13 @@ var searchData=
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html#aa7ec4eed4f45c9286d94187fc91ccca0',1,'rdf::GenericSettings']]],
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html',1,'rdf']]],
   ['get1dgauss',['get1DGauss',['../classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f',1,'rdf::Algorithms']]],
+  ['getangle',['getAngle',['../classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb',1,'rdf::BaseSkewEstimation']]],
   ['getbiggestblob',['getBiggestBlob',['../classrdf_1_1_blob_manager.html#a75fa4e3373dd8c9bdc674f012901f52f',1,'rdf::BlobManager']]],
   ['gethlines',['getHLines',['../classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637',1,'rdf::LineTrace']]],
   ['getthreshotsu',['getThreshOtsu',['../classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597',1,'rdf::Algorithms']]],
   ['gettotal',['getTotal',['../classrdf_1_1_timer.html#a19c55bb89adf7b93b1247db0078cf345',1,'rdf::Timer']]],
   ['getvlines',['getVLines',['../classrdf_1_1_line_trace.html#a939ed5b4fbd84586f3da9909d7158f3c',1,'rdf::LineTrace']]],
   ['global',['global',['../classrdf_1_1_config.html#acb7616ba1af8370903c20132c0eeba66',1,'rdf::Config']]],
-  ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html#a55236d5b15cd44f8f56f8263956a35af',1,'rdf::GlobalSettings']]],
-  ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html',1,'rdf']]]
+  ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html',1,'rdf']]],
+  ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html#a55236d5b15cd44f8f56f8263956a35af',1,'rdf::GlobalSettings']]]
 ];
