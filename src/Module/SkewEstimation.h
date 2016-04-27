@@ -34,9 +34,12 @@
 
 #include "BaseModule.h"
 
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QObject>
+#include <QVector>
+#include <QVector4D>
 
 #include "opencv2/core/core.hpp"
 #pragma warning(pop)
@@ -55,12 +58,6 @@
 
 namespace rdf {
 
-// read defines
-/// <summary>
-/// The class binarize a grayvalue image. The segmentation algorithm is based on
-/// "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
-/// </summary>
-/// <seealso cref="Module" />
 
 /// <summary>
 /// The class estimates the skew of a document page. The methodology is based on
@@ -70,10 +67,18 @@ namespace rdf {
 	class DllModuleExport BaseSkewEstimation : public Module {
 
 	public:
+		enum EdgeDirection { HORIZONTAL = 0, VERTICAL };
+
 		BaseSkewEstimation(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+		void setImages(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+
+		bool compute();
+		double getAngle();
+		cv::Mat separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask=cv::Mat()) const;
+		cv::Mat edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction = HORIZONTAL, const cv::Mat& mask=cv::Mat()) const;
+		QVector<QVector3D> computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction = HORIZONTAL);
 
 		bool isEmpty() const override;
-		virtual bool compute() override;
 		virtual QString toString() const override;
 
 	protected:
@@ -84,6 +89,20 @@ namespace rdf {
 															//cv::Mat mThrImg;
 
 	private:
+
+		double mSkewAngle = 0.0;
+		double mThr = 0.1;
+		double mWeightEps = 0.5;
+		int mMinLineLength = 10;
+		int mKMax = 7;
+		int mNIter = 200;
+		int mRotationFactor = 1;
+
+		cv::Mat mIntegralImg;
+		cv::Mat mIntegralSqdImg;
+		
+		QVector<QVector4D> mSelectedLines;
+		QVector<int> mSelectedLineTypes;
 
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;
