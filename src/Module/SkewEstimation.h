@@ -96,7 +96,7 @@ namespace rdf {
 		int mMinLineLength = 10;
 		int mKMax = 7;
 		int mNIter = 200;
-		int mRotationFactor = 1;
+		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
 
 		cv::Mat mIntegralImg;
 		cv::Mat mIntegralSqdImg;

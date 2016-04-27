@@ -204,7 +204,11 @@ namespace rdf {
 		QVector4D maxLine = QVector4D();
 		int minLineProjLength = mMinLineLength / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
-		HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		if (direction == HORIZONTAL) {
+			HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		} else {
+			HoughLinesP(edgeMap.t(), lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		}
 
 		QVector<QVector3D> computedWeights = QVector<QVector3D>();
 
@@ -213,7 +217,7 @@ namespace rdf {
 			cv::Vec4i l = lines[i];
 			QVector3D currMax = QVector3D(0.0, 0.0, 0.0);
 
-			if (direction == HORIZONTAL) {
+			//if (direction == HORIZONTAL) {
 
 				int K = 0;
 
@@ -227,6 +231,7 @@ namespace rdf {
 
 				double lineAngle = atan2((l[3] - l[1]), (l[2] - l[0]));
 				double slope = qTan(lineAngle);
+				//double slope = (l[3] - l[1]) / (l[2] - l[0]); test
 
 				while (qAbs(x1 - x2) > minLineProjLength && K < mNIter) {
 
@@ -247,10 +252,7 @@ namespace rdf {
 
 					if (yrPoss1.size() > 0 && yrPoss2.size() > 0) {
 						for (int y1i = 0; y1i < yrPoss1.size(); y1i++) {
-
-							//int ys1 = yrPoss1.at(y1i);
 							for (int y2i = 0; y2i < yrPoss2.size(); y2i++) {
-								//int ys2 = yrPoss2.at(y2i);
 
 								double sumVal = 0;
 								for (int xi = x1; xi <= x2; xi++)
@@ -274,76 +276,88 @@ namespace rdf {
 					x1++;
 					x2--;
 				}
-			}
-			else {
+			//}
+			//else {
 
-				int K = 0;
-				if (l[3] < l[1]) l = cv::Vec4i(l[2], l[3], l[0], l[1]);
+			//	int K = 0;
+			//	if (l[3] < l[1]) l = cv::Vec4i(l[2], l[3], l[0], l[1]);
 
-				int x1 = l[1];
-				int x2 = l[3];
+			//	int x1 = l[1];
+			//	int x2 = l[3];
 
-				while (x2 > edgeMap.rows) x2--;
-				while (x1 < 0) x1--;
+			//	while (x2 > edgeMap.rows) x2--;
+			//	while (x1 < 0) x1--;
 
-				double lineAngle = atan2((l[2] - l[0]), (l[3] - l[1]));
-				double slope = qTan(lineAngle);
+			//	double lineAngle = atan2((l[2] - l[0]), (l[3] - l[1]));
+			//	double slope = qTan(lineAngle);
 
 
-				while (qAbs(x1 - x2) > minLineProjLength && K < mNIter) {
+			//	while (qAbs(x1 - x2) > minLineProjLength && K < mNIter) {
 
-					int y1 = qRound(l[0] + (x1 - l[1]) * slope);
-					int y2 = qRound(l[0] + (x2 - l[1]) * slope);
+			//		int y1 = qRound(l[0] + (x1 - l[1]) * slope);
+			//		int y2 = qRound(l[0] + (x2 - l[1]) * slope);
 
-					QVector<int> yrPoss1 = QVector<int>();
-					for (int di = -delta; di <= delta && y1 + di < edgeMap.cols; di++) {
-						if (y1 + di >= 0)
-							if (edgeMap.at<uchar>(x1, y1 + di) == 1) yrPoss1.append(y1 + di);
+			//		QVector<int> yrPoss1 = QVector<int>();
+			//		for (int di = -delta; di <= delta && y1 + di < edgeMap.cols; di++) {
+			//			if (y1 + di >= 0)
+			//				if (edgeMap.at<uchar>(x1, y1 + di) == 1) yrPoss1.append(y1 + di);
+			//		}
+
+			//		QVector<int> yrPoss2 = QVector<int>();
+			//		for (int di = -delta; di <= delta && y2 + di < edgeMap.cols; di++) {
+			//			if (y2 + di >= 0)
+			//				if (edgeMap.at<uchar>(x2, y2 + di) == 1) yrPoss2.append(y2 + di);
+			//		}
+
+			//		if (yrPoss1.size() > 0 && yrPoss2.size() > 0) {
+			//			for (int y1i = 0; y1i < yrPoss1.size(); y1i++) {
+
+			//				//int ys1 = yrPoss1.at(y1i);
+			//				for (int y2i = 0; y2i < yrPoss2.size(); y2i++) {
+			//					//int ys2 = yrPoss2.at(y2i);
+
+			//					double sumVal = 0;
+			//					for (int xi = x1; xi <= x2; xi++)
+			//						for (int yi = -epsilon; yi <= epsilon; yi++) {
+			//							int yc = qRound(l[0] + (xi - l[1]) * slope) + yi;
+			//							if (yc < edgeMap.cols && xi < edgeMap.rows && yc > 0 && xi > 0) sumVal += edgeMap.at<uchar>(xi, yc);
+			//						}
+
+			//					if (sumVal > currMax.x()) {
+
+			//						QPointF centerPoint = QPointF(0.5*(x1 + x2), 0.5*(y1 + y2));
+			//						currMax = QVector3D((float)sumVal, (float)(mRotationFactor * lineAngle), (float)qSqrt((edgeMap.rows *0.5 - centerPoint.x()) * (edgeMap.rows*0.5 - centerPoint.x()) + (edgeMap.cols*0.5 - centerPoint.y()) * (edgeMap.cols*0.5 - centerPoint.y())));
+			//						maxLine = QVector4D((float)y1, (float)x1, (float)y2, (float)x2);
+			//					}
+
+			//					K++;
+			//				}
+			//			}
+			//		}
+
+			//		x1++;
+			//		x2--;
+			//	}
+			//}
+
+
+				if (direction == HORIZONTAL) {
+					if (currMax.x() > 0) {
+						computedWeights.append(currMax);
+						//if (mRotationFactor == -1) maxLine = QVector4D(maxLine.y(), maxLine.x(), maxLine.w(), maxLine.z());
+						mSelectedLines.append(maxLine);
+						mSelectedLineTypes.append(0);
 					}
-
-					QVector<int> yrPoss2 = QVector<int>();
-					for (int di = -delta; di <= delta && y2 + di < edgeMap.cols; di++) {
-						if (y2 + di >= 0)
-							if (edgeMap.at<uchar>(x2, y2 + di) == 1) yrPoss2.append(y2 + di);
+				} else {
+					if (currMax.x() > 0) {
+						currMax = QVector3D(currMax[0], -currMax[1], currMax[2]);
+						computedWeights.append(currMax);
+						maxLine = QVector4D(maxLine.y(), maxLine.x(), maxLine.w(), maxLine.z());
+						//if (mRotationFactor == -1) maxLine = QVector4D(maxLine.y(), maxLine.x(), maxLine.w(), maxLine.z());
+						mSelectedLines.append(maxLine);
+						mSelectedLineTypes.append(0);
 					}
-
-					if (yrPoss1.size() > 0 && yrPoss2.size() > 0) {
-						for (int y1i = 0; y1i < yrPoss1.size(); y1i++) {
-
-							//int ys1 = yrPoss1.at(y1i);
-							for (int y2i = 0; y2i < yrPoss2.size(); y2i++) {
-								//int ys2 = yrPoss2.at(y2i);
-
-								double sumVal = 0;
-								for (int xi = x1; xi <= x2; xi++)
-									for (int yi = -epsilon; yi <= epsilon; yi++) {
-										int yc = qRound(l[0] + (xi - l[1]) * slope) + yi;
-										if (yc < edgeMap.cols && xi < edgeMap.rows && yc > 0 && xi > 0) sumVal += edgeMap.at<uchar>(xi, yc);
-									}
-
-								if (sumVal > currMax.x()) {
-
-									QPointF centerPoint = QPointF(0.5*(x1 + x2), 0.5*(y1 + y2));
-									currMax = QVector3D((float)sumVal, (float)(mRotationFactor * lineAngle), (float)qSqrt((edgeMap.rows *0.5 - centerPoint.x()) * (edgeMap.rows*0.5 - centerPoint.x()) + (edgeMap.cols*0.5 - centerPoint.y()) * (edgeMap.cols*0.5 - centerPoint.y())));
-									maxLine = QVector4D((float)y1, (float)x1, (float)y2, (float)x2);
-								}
-
-								K++;
-							}
-						}
-					}
-
-					x1++;
-					x2--;
 				}
-			}
-
-			if (currMax.x() > 0) {
-				computedWeights.append(currMax);
-				if (mRotationFactor == -1) maxLine = QVector4D(maxLine.y(), maxLine.x(), maxLine.w(), maxLine.z());
-				mSelectedLines.append(maxLine);
-				mSelectedLineTypes.append(0);
-			}
 		}
 		return computedWeights;
 	}
