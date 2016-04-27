@@ -68,15 +68,24 @@ namespace rdf {
 		}
 
 		int w, h;
+		int delta, epsilon;
 		w = 10;
 		h = 5;
+		epsilon = 2;
+		delta = 10;
 		
 
 		cv::Mat horSep = separability(mSrcImg, w, h, mMask);
 		cv::Mat verSep = separability(mSrcImg, h, w, mMask);
 		
-		cv::Mat edgeHor = edgeMap(horSep, mThr, HORIZONTAL, mMask);
-		cv::Mat edgeVer = edgeMap(verSep, mThr, VERTICAL, mMask);
+		double min, max;
+		cv::minMaxLoc(horSep, &min, &max);
+		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
+		cv::minMaxLoc(verSep, &min, &max);
+		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
+
+		QVector<QVector3D> weightsHor = computeWeights(edgeHor, delta, epsilon, HORIZONTAL);
+		QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
 
 
 		return true;
