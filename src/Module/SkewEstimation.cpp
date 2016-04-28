@@ -44,6 +44,11 @@
 
 namespace rdf {
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BaseSkewEstimation"/> class.
+	/// </summary>
+	/// <param name="img">The source img.</param>
+	/// <param name="mask">The optional mask.</param>
 	BaseSkewEstimation::BaseSkewEstimation(const cv::Mat& img, const cv::Mat& mask) {
 		mSrcImg = img;
 		mMask = mask;
@@ -52,6 +57,11 @@ namespace rdf {
 		mIntegralSqdImg = cv::Mat();
 	}
 
+	/// <summary>
+	/// Sets the images.
+	/// </summary>
+	/// <param name="img">The source img.</param>
+	/// <param name="mask">The optional mask.</param>
 	void BaseSkewEstimation::setImages(const cv::Mat & img, const cv::Mat & mask)
 	{
 		mSrcImg = img;
@@ -61,6 +71,11 @@ namespace rdf {
 		mIntegralSqdImg = cv::Mat();
 	}
 
+	/// <summary>
+	/// Computes the skew angle based on "Skew Estimation of natural images based on a
+	/// salient line detector", Hyung Il Koo and Nam Ik Choo.
+	/// </summary>
+	/// <returns>true if the angle could be computed</returns>
 	bool BaseSkewEstimation::compute()
 	{
 		if (isEmpty()) {
@@ -107,6 +122,10 @@ namespace rdf {
 		return ok;
 	}
 
+	/// <summary>
+	/// Gets the skew angle.
+	/// </summary>
+	/// <returns>The skew angle</returns>
 	double BaseSkewEstimation::getAngle()
 	{
 		if (mSrcImg.empty()) {
@@ -116,6 +135,14 @@ namespace rdf {
 		return mSkewAngle;
 	}
 
+	/// <summary>
+	/// Computes the separability of two neighbouring regions based on mean and variance.
+	/// </summary>
+	/// <param name="srcImg">The source img.</param>
+	/// <param name="w">The width of the region.</param>
+	/// <param name="h">The height of the region.</param>
+	/// <param name="mask">The optional mask.</param>
+	/// <returns>The separability map</returns>
 	cv::Mat BaseSkewEstimation::separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask) const
 	{
 
@@ -177,6 +204,14 @@ namespace rdf {
 		return separability;
 	}
 
+	/// <summary>
+	/// Computes the edge map based on the separability
+	/// </summary>
+	/// <param name="separability">The separability map.</param>
+	/// <param name="thr">A threshold value for edges (=0.1).</param>
+	/// <param name="direction">The direction (horizontal or vertical).</param>
+	/// <param name="mask">The optional mask.</param>
+	/// <returns>The edge map.</returns>
 	cv::Mat BaseSkewEstimation::edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction, const cv::Mat& mask) const
 	{
 		cv::Mat edgeM = cv::Mat::zeros(separability.size(), CV_8UC1);
@@ -224,6 +259,14 @@ namespace rdf {
 		return edgeM;
 	}
 
+	/// <summary>
+	/// Computes the PPHT, detects straight lines and refines it
+	/// </summary>
+	/// <param name="edgeMap">The edge map.</param>
+	/// <param name="delta">Delta parameter: max coordinate deviation for refined lines.</param>
+	/// <param name="epsilon">Epsilon parameter: max allowed deviation from line coordinates for the weight calculation (=2).</param>
+	/// <param name="direction">The direction (horizontal or vertical).</param>
+	/// <returns>The line weights</returns>
 	QVector<QVector3D> BaseSkewEstimation::computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction) {
 		std::vector<cv::Vec4i> lines;
 		QVector4D maxLine = QVector4D();
@@ -323,7 +366,15 @@ namespace rdf {
 		return computedWeights;
 	}
 
-	double BaseSkewEstimation::skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta)	{
+	/// <summary>
+	/// Computes the skew based oon the detected lines
+	/// </summary>
+	/// <param name="weights">The weights.</param>
+	/// <param name="imgDiagonal">The img diagonal.</param>
+	/// <param name="ok">Ok - is set to false if only one line is detected.</param>
+	/// <param name="eta">Eta -  parameter to reject small lines.</param>
+	/// <returns></returns>
+	double BaseSkewEstimation::skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta) {
 
 		if (weights.size() < 1) {
 			ok = false;
@@ -383,6 +434,10 @@ namespace rdf {
 		return salSkewAngle;
 	}
 
+	/// <summary>
+	/// Determines whether this instance is empty.
+	/// </summary>
+	/// <returns>true if no src image is set.</returns>
 	bool BaseSkewEstimation::isEmpty() const {
 
 		return mSrcImg.empty();
@@ -390,6 +445,10 @@ namespace rdf {
 	}
 
 
+	/// <summary>
+	/// Summarize the method as string. Not yet implemented.
+	/// </summary>
+	/// <returns>Summary string.</returns>
 	QString BaseSkewEstimation::toString() const
 	{
 		return QString();
