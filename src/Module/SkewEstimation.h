@@ -90,14 +90,19 @@ namespace rdf {
 	private:
 
 		double mSkewAngle = 0.0;
-		double mThr = 0.1;
-		double mWeightEps = 0.5;
+		double mThr = 0.1; //according to the paper
+		//double mWeightEps = 0.5;
 		int mMinLineLength = 10;
 		int minLineProjLength = 10 / 4;
-		int mKMax = 7;
-		int mNIter = 200;
+		int mKMax = 7; //according to the paper
+		int mNIter = 200; //according to the paper
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
-		double mSigma = 0.3;
+		double mSigma = 0.3; //according to the paper
+
+		int mW = 49; //according to the paper
+		int mH = 12; //according to the paper
+		int mDelta = 20; //according to the paper
+		int mEpsilon = 2; //according to the paper
 
 		cv::Mat mIntegralImg;
 		cv::Mat mIntegralSqdImg;

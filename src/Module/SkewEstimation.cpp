@@ -84,15 +84,15 @@ namespace rdf {
 
 		int w, h;
 		int delta, epsilon;
-		w = 10;
-		w = qRound(mSrcImg.cols / 1430.0*49.0); //check
-		h = 5;
-		h = qRound(mSrcImg.rows / 700.0*12.0); //check
+		w = mW;
+		w = qRound(mSrcImg.cols / 1430.0*49.0); //check  (nomacs plugin version)
+		h = mH;
+		h = qRound(mSrcImg.rows / 700.0*12.0); //check (nomacs plugin version)
 		w = w <= 1 ? 10 : w;
 		h = h <= 1 ? 5 : h;
-		epsilon = 2;
-		delta = 10;
-		delta = qRound(mSrcImg.cols / 1430.0*20.0); //check parameter
+		epsilon = mEpsilon;
+		delta = mDelta;
+		delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
 		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
 
@@ -100,7 +100,7 @@ namespace rdf {
 		cv::Mat verSep = separability(mSrcImg, h, w, mMask);
 		
 		double min, max;
-		cv::minMaxLoc(horSep, &min, &max);
+		cv::minMaxLoc(horSep, &min, &max); //* max -> check
 		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
 		cv::minMaxLoc(verSep, &min, &max);
 		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
