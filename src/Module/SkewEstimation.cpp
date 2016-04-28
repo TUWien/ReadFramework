@@ -63,16 +63,22 @@ namespace rdf {
 
 	bool BaseSkewEstimation::compute()
 	{
-		if (mSrcImg.empty()) {
+		if (isEmpty()) {
 			return false;
 		}
 
 		int w, h;
 		int delta, epsilon;
 		w = 10;
+		w = qRound(mSrcImg.cols / 1430.0*49.0); //check
 		h = 5;
+		h = qRound(mSrcImg.rows / 700.0*12.0); //check
+		w = w <= 1 ? 10 : w;
+		h = h <= 1 ? 5 : h;
 		epsilon = 2;
 		delta = 10;
+		delta = qRound(mSrcImg.cols / 1430.0*20.0); //check parameter
+		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
 
 		cv::Mat horSep = separability(mSrcImg, w, h, mMask);
@@ -221,7 +227,7 @@ namespace rdf {
 	QVector<QVector3D> BaseSkewEstimation::computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction) {
 		std::vector<cv::Vec4i> lines;
 		QVector4D maxLine = QVector4D();
-		int minLineProjLength = mMinLineLength / 4;
+		minLineProjLength = mMinLineLength / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
 		if (direction == HORIZONTAL) {
 			HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);

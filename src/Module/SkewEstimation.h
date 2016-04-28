@@ -93,6 +93,7 @@ namespace rdf {
 		double mThr = 0.1;
 		double mWeightEps = 0.5;
 		int mMinLineLength = 10;
+		int minLineProjLength = 10 / 4;
 		int mKMax = 7;
 		int mNIter = 200;
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
