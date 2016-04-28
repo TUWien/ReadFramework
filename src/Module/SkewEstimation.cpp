@@ -399,7 +399,7 @@ namespace rdf {
 
 		QVector<QPointF> saliencyVec = QVector<QPointF>();
 
-		for (double skewAngle = -30; skewAngle <= 30.001; skewAngle += 0.1) {
+		for (double skewAngle = -30; skewAngle <= 30.001; skewAngle += 0.01) {
 
 			double saliency = 0;
 
