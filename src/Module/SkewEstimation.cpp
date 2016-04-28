@@ -301,6 +301,7 @@ namespace rdf {
 				double slope = qTan(lineAngle);
 				//double slope = (l[3] - l[1]) / (l[2] - l[0]); test
 
+				//TODO: instead of x1++ and x2-- check if alternating increment/decrement improves result
 				while (qAbs(x1 - x2) > minLineProjLength && K < mNIter) {
 
 					int y1 = qRound(l[1] + (x1 - l[0]) * slope);
