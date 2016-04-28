@@ -69,6 +69,7 @@ namespace rdf {
 	public:
 		enum EdgeDirection { HORIZONTAL = 0, VERTICAL };
 
+		BaseSkewEstimation();
 		BaseSkewEstimation(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 		void setImages(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
@@ -86,6 +87,7 @@ namespace rdf {
 		cv::Mat edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction = HORIZONTAL, const cv::Mat& mask = cv::Mat()) const;
 		QVector<QVector3D> computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction = HORIZONTAL);
 		double skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta=0.35);
+		bool checkInput() const override;
 
 	private:
 

@@ -35,6 +35,8 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
 #include <QDebug>
+#include <QVector2D>
+#include <QMatrix4x4>
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -980,5 +982,85 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 
 	return mask;
 }
+
+/// <summary>
+/// Rotates an image according to the angle obtained.
+/// The new image bounds are minimized with respect to
+/// the angle obtained.
+/// positive angle values mean counterclockwise rotation
+/// </summary>
+/// <param name="src">The source image.</param>
+/// <param name="angleRad">The angle in RAD.</param>
+/// <param name="interpolation">The interpolation.</param>
+/// <param name="borderValue">The border value.</param>
+/// <returns>The rotated image.</returns>
+cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interpolation, cv::Scalar borderValue)
+{
+
+	// check inputs
+	if (src.empty()) {
+		qWarning() << "I cannot rotate an empty image";
+		return cv::Mat();
+	}
+
+	if (angleRad == 0.0f)
+		return src.clone();
+	//if (angleRad == CV_PI*0.5f)
+	//	return src.clone().t();
+
+	QPointF srcSize((float)src.cols, (float)src.rows);
+	QPointF nSl = calcRotationSize(angleRad, srcSize);
+
+	QPointF rotCenter = nSl * 0.5;
+
+	cv::Mat rotMat = cv::getRotationMatrix2D(cv::Point((int)rotCenter.x(), (int)rotCenter.y()), angleRad *  180.0/CV_PI, 1.0);
+
+	QPointF cDiff = rotCenter - srcSize*0.5;
+	QMatrix4x4 m;
+	m.setToIdentity();
+	m.rotate((float)(angleRad*180.0 / CV_PI),0,0);
+	cDiff = m.map(cDiff);
+
+	double *transl = rotMat.ptr<double>();
+	transl[2] += (double)cDiff.x();
+	transl[5] += (double)cDiff.y();
+
+	//img in wrapAffine must not be overwritten
+	cv::Mat rImg = cv::Mat(cv::Size((int)nSl.x(),(int)nSl.y()), src.type());
+	warpAffine(src, rImg, rotMat, rImg.size(), interpolation, cv::BORDER_CONSTANT, borderValue);
+
+	return rImg;
+}
+
+/// <summary>
+/// Calculates the image size of the rotated image.
+/// </summary>
+/// <param name="angleRad">The angle in RAD.</param>
+/// <param name="srcSize">Size of the source image.</param>
+/// <returns>The Size of the rotated image.</returns>
+QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize)
+{
+	QPointF nSl = srcSize;
+	QPointF nSr(srcSize.y(), srcSize.x());
+
+	QMatrix4x4 m;
+	m.setToIdentity();
+	m.rotate((float)(angleRad*180.0 / CV_PI), 0, 0);
+	nSl = m.map(nSl);
+	//absolute value
+	nSl.setX(qAbs(nSl.x()));
+	nSl.setY(qAbs(nSl.y()));
+
+	nSr = m.map(nSr);
+	//absolute value
+	nSr.setX(qAbs(nSr.x()));
+	nSr.setY(qAbs(nSr.y()));
+
+	QPointF resultSize(qMax(nSl.x(),nSr.y()), qMax(nSl.y(),nSr.x()));
+
+	return resultSize;
+}
+
+
 
 }

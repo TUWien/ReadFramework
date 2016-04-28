@@ -43,6 +43,15 @@
 #pragma warning(pop)
 
 namespace rdf {
+	
+	
+
+	/// <summary>
+	/// Initializes a new (empty) instance of the <see cref="BaseSkewEstimation"/> class.
+	/// </summary>
+	BaseSkewEstimation::BaseSkewEstimation()
+	{
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseSkewEstimation"/> class.
@@ -149,7 +158,7 @@ namespace rdf {
 		cv::Mat grayImg = srcImg;
 
 		if (mSrcImg.channels() > 1) {
-			cv::cvtColor(mSrcImg, grayImg, CV_BGR2GRAY);
+			cv::cvtColor(mSrcImg, grayImg, CV_RGB2GRAY);
 		}
 
 		//check if already computed
@@ -433,6 +442,15 @@ namespace rdf {
 
 		ok = true;
 		return salSkewAngle;
+	}
+
+	/// <summary>
+	/// Checks the input - not yet implemented.
+	/// </summary>
+	/// <returns></returns>
+	bool BaseSkewEstimation::checkInput() const
+	{
+		return false;
 	}
 
 	/// <summary>
