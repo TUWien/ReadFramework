@@ -74,9 +74,6 @@ namespace rdf {
 
 		bool compute();
 		double getAngle();
-		cv::Mat separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask=cv::Mat()) const;
-		cv::Mat edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction = HORIZONTAL, const cv::Mat& mask=cv::Mat()) const;
-		QVector<QVector3D> computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction = HORIZONTAL);
 
 		bool isEmpty() const override;
 		virtual QString toString() const override;
@@ -84,9 +81,11 @@ namespace rdf {
 	protected:
 		cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
 		cv::Mat mMask;										//the mask image [0 255]
-															//cv::Mat mContrastImg;
-															//cv::Mat mBinContrastImg;
-															//cv::Mat mThrImg;
+
+		cv::Mat separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask = cv::Mat()) const;
+		cv::Mat edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction = HORIZONTAL, const cv::Mat& mask = cv::Mat()) const;
+		QVector<QVector3D> computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction = HORIZONTAL);
+		double skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta=0.35);
 
 	private:
 
@@ -97,6 +96,7 @@ namespace rdf {
 		int mKMax = 7;
 		int mNIter = 200;
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
+		double mSigma = 0.3;
 
 		cv::Mat mIntegralImg;
 		cv::Mat mIntegralSqdImg;

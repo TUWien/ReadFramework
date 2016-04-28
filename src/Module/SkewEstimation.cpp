@@ -87,6 +87,8 @@ namespace rdf {
 		QVector<QVector3D> weightsHor = computeWeights(edgeHor, delta, epsilon, HORIZONTAL);
 		QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
 
+		QVector<QVector3D> weightsAll = weightsHor + weightsVer;
+
 
 		return true;
 	}
@@ -305,6 +307,66 @@ namespace rdf {
 				}
 		}
 		return computedWeights;
+	}
+
+	double BaseSkewEstimation::skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta)	{
+
+		if (weights.size() < 1) {
+			ok = false;
+			return 0.0;
+		}
+
+		double maxWeight = 0;
+		for (int i = 0; i < weights.size(); i++) {
+			if (weights[i].x() > maxWeight) {
+				maxWeight = weights.at(i).x();
+			}
+		}
+
+		QVector<QVector3D> thrWeights = QVector<QVector3D>();
+		for (int i = 0; i < weights.size(); i++) {
+			if (weights[i].x() / maxWeight > eta) {
+				thrWeights.append(QVector3D((float)qSqrt((weights[i].x() / maxWeight - eta) / (1.0 - eta)), (float)(weights[i].y() / M_PI * 180.0), (float)(weights[i].z() / imgDiagonal)));
+				//thrWeights.append(QVector3D((weights.at(i).x()/maxWeight - eta) * (weights.at(i).x()/maxWeight - eta), weights.at(i).y() / M_PI * 180, weights.at(i).z() / imgDiagonal));
+			}
+		}
+
+
+		QVector<QPointF> saliencyVec = QVector<QPointF>();
+
+		for (double skewAngle = -30; skewAngle <= 30.001; skewAngle += 0.1) {
+
+			double saliency = 0;
+
+			for (int i = 0; i < thrWeights.size(); i++) {
+				saliency += thrWeights[i].x() * qExp(-thrWeights[i].z()) * qExp(-0.5 * ((skewAngle - thrWeights[i].y()) * (skewAngle - thrWeights[i].y())) / (mSigma * mSigma));
+			}
+
+			saliencyVec.append(QPointF(skewAngle, saliency));
+		}
+
+		double maxSaliency = 0;
+		double salSkewAngle = 0;
+
+		for (int i = 0; i < saliencyVec.size(); i++) {
+			if (maxSaliency < saliencyVec[i].y()) {
+				maxSaliency = saliencyVec[i].y();
+				salSkewAngle = saliencyVec[i].x();
+			}
+		}
+
+		for (int i = 0; i < weights.size(); i++) {
+			if (weights[i].x() > eta && qAbs(weights[i].y() / M_PI * 180.0 - salSkewAngle) < 0.15)
+				mSelectedLineTypes.replace(i, 1);
+		}
+
+		if (maxSaliency == 0) { 
+			ok = false;
+			return 0; 
+		}
+
+		ok = true;
+		return salSkewAngle;
 	}
 
 	bool BaseSkewEstimation::isEmpty() const {
