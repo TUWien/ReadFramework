@@ -84,13 +84,21 @@ namespace rdf {
 		cv::minMaxLoc(verSep, &min, &max);
 		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
 
+		mSelectedLines.clear();
+		mSelectedLineTypes.clear();
+
 		QVector<QVector3D> weightsHor = computeWeights(edgeHor, delta, epsilon, HORIZONTAL);
 		QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
 
 		QVector<QVector3D> weightsAll = weightsHor + weightsVer;
 
+		double diagonal = qSqrt(mSrcImg.rows*mSrcImg.rows + mSrcImg.cols*mSrcImg.cols);
+		bool ok = true;
 
-		return true;
+		mSkewAngle = skewEst(weightsAll, diagonal, ok);
+
+
+		return ok;
 	}
 
 	double BaseSkewEstimation::getAngle()
