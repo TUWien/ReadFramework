@@ -257,13 +257,15 @@ $(document).ready(function(){initNavTree('_algorithms_8h_source.html','');});
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordtype">float</span> normAngleRad(<span class="keywordtype">float</span> angle, <span class="keywordtype">float</span> startIvl, <span class="keywordtype">float</span> endIvl) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">float</span> euclideanDistance(<span class="keyword">const</span> QPoint&amp; p1, <span class="keyword">const</span> QPoint&amp; p2) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    cv::Mat estimateMask(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keywordtype">bool</span> preFilter=<span class="keyword">true</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>();</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>&amp;);</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;};</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    cv::Mat rotateImage(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keywordtype">double</span> angleRad, <span class="keywordtype">int</span> interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    QPointF calcRotationSize(<span class="keywordtype">double</span> angleRad, QPointF srcSize);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>();</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_algorithms.html">Algorithms</a>&amp;);</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;};</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_algorithms_html_ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc"><div class="ttname"><a href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc">rdf::Algorithms::SQUARE</a></div><div class="ttdef"><b>Definition:</b> Algorithms.h:142</div></div>
 <div class="ttc" id="_blobs_8h_html"><div class="ttname"><a href="_blobs_8h.html">Blobs.h</a></div></div>
 <div class="ttc" id="_image_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_image_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> Image.h:49</div></div>

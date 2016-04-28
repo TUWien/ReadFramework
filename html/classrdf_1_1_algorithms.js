@@ -8,6 +8,7 @@ var classrdf_1_1_algorithms =
       [ "SQUARE", "classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc", null ],
       [ "DISK", "classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a474d155e77a9eb896f3e990e3fe6a351", null ]
     ] ],
+    [ "calcRotationSize", "classrdf_1_1_algorithms.html#aa34ac689fbc59c3a6b695510011911cb", null ],
     [ "computeHist", "classrdf_1_1_algorithms.html#a151df7095898865c591deab878403c78", null ],
     [ "convolveIntegralImage", "classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76", null ],
     [ "convolveSymmetric", "classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092", null ],
@@ -22,6 +23,7 @@ var classrdf_1_1_algorithms =
     [ "mulMask", "classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0", null ],
     [ "normAngleRad", "classrdf_1_1_algorithms.html#af9f83de0133580a1fec39a550d17bcd7", null ],
     [ "preFilterArea", "classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf", null ],
+    [ "rotateImage", "classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade", null ],
     [ "setBorderConst", "classrdf_1_1_algorithms.html#a6f15da4a25f448c8172f93262e2e795d", null ],
     [ "statMomentMat", "classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716", null ],
     [ "threshOtsu", "classrdf_1_1_algorithms.html#a9d4c29693ab0fcadff876ec369ddf696", null ]

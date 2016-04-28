@@ -13,5 +13,6 @@ var searchData=
   ['resetangle',['resetAngle',['../classrdf_1_1_line_trace.html#a7b84e3a12def8a99a2f1aef8b9c25f70',1,'rdf::LineTrace']]],
   ['resource_2eh',['resource.h',['../resource_8h.html',1,'']]],
   ['rootregion',['rootRegion',['../classrdf_1_1_page_element.html#a5df1b5290bc6170b7c425c5b96639c56',1,'rdf::PageElement']]],
-  ['roottags',['RootTags',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fd',1,'rdf::PageXmlParser']]]
+  ['roottags',['RootTags',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fd',1,'rdf::PageXmlParser']]],
+  ['rotateimage',['rotateImage',['../classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade',1,'rdf::Algorithms']]]
 ];

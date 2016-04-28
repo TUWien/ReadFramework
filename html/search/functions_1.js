@@ -2,7 +2,7 @@ var searchData=
 [
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html#aab215a591d0aa492646d0e488b896b09',1,'rdf::BaseBinarizationSu']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()'],['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()']]],
-  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa',1,'rdf::BaseSkewEstimation']]],
+  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#aa66b2b8706116c5b84e2aff0eae9ccb1',1,'rdf::BaseSkewEstimation::BaseSkewEstimation()'],['../classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa',1,'rdf::BaseSkewEstimation::BaseSkewEstimation(const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())']]],
   ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa',1,'rdf::BinarizationSuAdapted']]],
   ['binarizationsufgdweight',['BinarizationSuFgdWeight',['../classrdf_1_1_binarization_su_fgd_weight.html#ab3af93b360e3aae9ec3875fb20dc0fca',1,'rdf::BinarizationSuFgdWeight']]],
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html#a8f1ad72deae51b99cf8d4cb8e6c7770f',1,'rdf::BinarizationTest']]],

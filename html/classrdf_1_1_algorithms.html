@@ -182,6 +182,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500">estimateMask</a> (const cv::Mat &amp;src, bool preFilter=true) const </td></tr>
 <tr class="memdesc:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the mask.  <a href="#a07c2d9ff5b5105399332dcb0ba3f3500">More...</a><br/></td></tr>
 <tr class="separator:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
+<tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
+<tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa34ac689fbc59c3a6b695510011911cb"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa34ac689fbc59c3a6b695510011911cb">calcRotationSize</a> (double angleRad, QPointF srcSize)</td></tr>
+<tr class="memdesc:aa34ac689fbc59c3a6b695510011911cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#aa34ac689fbc59c3a6b695510011911cb">More...</a><br/></td></tr>
+<tr class="separator:aa34ac689fbc59c3a6b695510011911cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -228,6 +234,42 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aa34ac689fbc59c3a6b695510011911cb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPointF rdf::Algorithms::calcRotationSize </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angleRad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname"><em>srcSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the image size of the rotated image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angleRad</td><td>The angle in RAD.</td></tr>
+    <tr><td class="paramname">srcSize</td><td>Size of the source image.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Size of the rotated image.</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a151df7095898865c591deab878403c78"></a>
 <div class="memitem">
 <div class="memproto">
@@ -794,6 +836,56 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A CV_8UC1 binary image with all blobs smaller than minArea removed.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a66a9a52098cad58ba3bd4db9bd89fade"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::Algorithms::rotateImage </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angleRad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>interpolation</em> = <code>cv::INTER_CUBIC</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cv::Scalar&#160;</td>
+          <td class="paramname"><em>borderValue</em> = <code>cv::Scalar(0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The source image.</td></tr>
+    <tr><td class="paramname">angleRad</td><td>The angle in RAD.</td></tr>
+    <tr><td class="paramname">interpolation</td><td>The interpolation.</td></tr>
+    <tr><td class="paramname">borderValue</td><td>The border value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The rotated image.</dd></dl>
 
 </div>
 </div>

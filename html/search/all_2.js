@@ -6,7 +6,7 @@ var searchData=
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()'],['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()']]],
   ['basemodule_2ecpp',['BaseModule.cpp',['../_base_module_8cpp.html',1,'']]],
   ['basemodule_2eh',['BaseModule.h',['../_base_module_8h.html',1,'']]],
-  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa',1,'rdf::BaseSkewEstimation']]],
+  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#aa66b2b8706116c5b84e2aff0eae9ccb1',1,'rdf::BaseSkewEstimation::BaseSkewEstimation()'],['../classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa',1,'rdf::BaseSkewEstimation::BaseSkewEstimation(const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())']]],
   ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html',1,'rdf']]],
   ['binarization_2ecpp',['Binarization.cpp',['../_binarization_8cpp.html',1,'']]],
   ['binarization_2eh',['Binarization.h',['../_binarization_8h.html',1,'']]],

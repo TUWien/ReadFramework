@@ -1,7 +1,8 @@
 var searchData=
 [
   ['calcfilterparams',['calcFilterParams',['../classrdf_1_1_base_binarization_su.html#af605529a2e0b817d5046eff073b923cb',1,'rdf::BaseBinarizationSu::calcFilterParams()'],['../classrdf_1_1_binarization_su_adapted.html#a03997e818de410d2722b22900baa1ac8',1,'rdf::BinarizationSuAdapted::calcFilterParams()']]],
-  ['checkinput',['checkInput',['../classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60',1,'rdf::Module::checkInput()'],['../classrdf_1_1_base_binarization_su.html#a8ad67960638f4da6deab761972a69399',1,'rdf::BaseBinarizationSu::checkInput()'],['../classrdf_1_1_line_trace.html#a51d03163246b743f741d00f2fdfbce94',1,'rdf::LineTrace::checkInput()']]],
+  ['calcrotationsize',['calcRotationSize',['../classrdf_1_1_algorithms.html#aa34ac689fbc59c3a6b695510011911cb',1,'rdf::Algorithms']]],
+  ['checkinput',['checkInput',['../classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60',1,'rdf::Module::checkInput()'],['../classrdf_1_1_base_binarization_su.html#a8ad67960638f4da6deab761972a69399',1,'rdf::BaseBinarizationSu::checkInput()'],['../classrdf_1_1_line_trace.html#a51d03163246b743f741d00f2fdfbce94',1,'rdf::LineTrace::checkInput()'],['../classrdf_1_1_base_skew_estimation.html#a6d8392a4f2a91cc567872e0ae9bc1ee0',1,'rdf::BaseSkewEstimation::checkInput()']]],
   ['children',['children',['../classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1',1,'rdf::Region']]],
   ['childrentostring',['childrenToString',['../classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e',1,'rdf::Region']]],
   ['closedpolygon',['closedPolygon',['../classrdf_1_1_polygon.html#a9c6a5f511afe3876c5b5ecaa8e51ab3c',1,'rdf::Polygon']]],

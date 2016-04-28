@@ -142,6 +142,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aa66b2b8706116c5b84e2aff0eae9ccb1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aa66b2b8706116c5b84e2aff0eae9ccb1">BaseSkewEstimation</a> ()</td></tr>
+<tr class="memdesc:aa66b2b8706116c5b84e2aff0eae9ccb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new (empty) instance of the <a class="el" href="classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...">BaseSkewEstimation</a> class.  <a href="#aa66b2b8706116c5b84e2aff0eae9ccb1">More...</a><br/></td></tr>
+<tr class="separator:aa66b2b8706116c5b84e2aff0eae9ccb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa">BaseSkewEstimation</a> (const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())</td></tr>
 <tr class="memdesc:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...">BaseSkewEstimation</a> class.  <a href="#ac9abbaf63924fe18ddf60b93b4d64dfa">More...</a><br/></td></tr>
 <tr class="separator:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,9 +192,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ab52b919e2a7faab4527dfa35145ad77b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b">skewEst</a> (const QVector&lt; QVector3D &gt; &amp;weights, double imgDiagonal, bool &amp;ok, double eta=0.35)</td></tr>
 <tr class="memdesc:ab52b919e2a7faab4527dfa35145ad77b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the skew based oon the detected lines  <a href="#ab52b919e2a7faab4527dfa35145ad77b">More...</a><br/></td></tr>
 <tr class="separator:ab52b919e2a7faab4527dfa35145ad77b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8392a4f2a91cc567872e0ae9bc1ee0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a6d8392a4f2a91cc567872e0ae9bc1ee0">checkInput</a> () const override</td></tr>
+<tr class="memdesc:a6d8392a4f2a91cc567872e0ae9bc1ee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the input - not yet implemented.  <a href="#a6d8392a4f2a91cc567872e0ae9bc1ee0">More...</a><br/></td></tr>
+<tr class="separator:a6d8392a4f2a91cc567872e0ae9bc1ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
-<tr class="memitem:a910f489d5bc14f60343f72b82af4ea60 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60">checkInput</a> () const =0</td></tr>
-<tr class="separator:a910f489d5bc14f60343f72b82af4ea60 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf38fe5390d4386fb94f1392b27e4162 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#abf38fe5390d4386fb94f1392b27e4162">load</a> (const QSettings &amp;settings)</td></tr>
 <tr class="separator:abf38fe5390d4386fb94f1392b27e4162 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9ccd1c087300a74cd0dd0c878f46f52 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#ab9ccd1c087300a74cd0dd0c878f46f52">save</a> (QSettings &amp;settings) const </td></tr>
@@ -232,6 +236,23 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aa66b2b8706116c5b84e2aff0eae9ccb1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rdf::BaseSkewEstimation::BaseSkewEstimation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes a new (empty) instance of the <a class="el" href="classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...">BaseSkewEstimation</a> class. </p>
+
+</div>
+</div>
 <a class="anchor" id="ac9abbaf63924fe18ddf60b93b4d64dfa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -268,6 +289,34 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a6d8392a4f2a91cc567872e0ae9bc1ee0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::BaseSkewEstimation::checkInput </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks the input - not yet implemented. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p>Implements <a class="el" href="classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60">rdf::Module</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aaa02b423ad1136f9ea5e4ce6afd6b671"></a>
 <div class="memitem">
 <div class="memproto">
