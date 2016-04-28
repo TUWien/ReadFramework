@@ -12,6 +12,7 @@ var classrdf_1_1_base_skew_estimation =
     [ "isEmpty", "classrdf_1_1_base_skew_estimation.html#a9b6a528290c36418a2cbda12dd007d0a", null ],
     [ "separability", "classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0", null ],
     [ "setImages", "classrdf_1_1_base_skew_estimation.html#a9e268dd57006d111a03f49654f712cd0", null ],
+    [ "skewEst", "classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b", null ],
     [ "toString", "classrdf_1_1_base_skew_estimation.html#a2f2550c38a90aa4266d12e32eb0d461d", null ],
     [ "mMask", "classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1", null ],
     [ "mSrcImg", "classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8", null ]

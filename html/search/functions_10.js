@@ -40,6 +40,7 @@ var searchData=
   ['setxmlpath',['setXmlPath',['../classrdf_1_1_page_element.html#a9356592758038a0d3f732a8bfe82bb27',1,'rdf::PageElement::setXmlPath()'],['../classrdf_1_1_debug_config.html#ac5c018e810791fc517eeb4d5b688745c',1,'rdf::DebugConfig::setXmlPath()']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['size',['size',['../classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3',1,'rdf::Blobs::size()'],['../classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b',1,'rdf::Polygon::size()']]],
+  ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
   ['start',['start',['../classrdf_1_1_timer.html#abf3b0a4fe7ce68cfbe982e60b7a81195',1,'rdf::Timer']]],
   ['startpoint',['startPoint',['../classrdf_1_1_base_line.html#a3cf2f1cd2ea83bd9b0e93ee0f3e2cfa1',1,'rdf::BaseLine::startPoint()'],['../classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc',1,'rdf::Line::startPoint()']]],
   ['statmomentmat',['statMomentMat',['../classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716',1,'rdf::Algorithms']]],

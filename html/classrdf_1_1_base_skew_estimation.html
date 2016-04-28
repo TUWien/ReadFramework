@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_base_skew_estimation.html
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrdf_1_1_base_skew_estimation-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -142,25 +143,23 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa">BaseSkewEstimation</a> (const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())</td></tr>
+<tr class="memdesc:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...">BaseSkewEstimation</a> class.  <a href="#ac9abbaf63924fe18ddf60b93b4d64dfa">More...</a><br/></td></tr>
 <tr class="separator:ac9abbaf63924fe18ddf60b93b4d64dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e268dd57006d111a03f49654f712cd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a9e268dd57006d111a03f49654f712cd0">setImages</a> (const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())</td></tr>
+<tr class="memdesc:a9e268dd57006d111a03f49654f712cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the images.  <a href="#a9e268dd57006d111a03f49654f712cd0">More...</a><br/></td></tr>
 <tr class="separator:a9e268dd57006d111a03f49654f712cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa02b423ad1136f9ea5e4ce6afd6b671"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aaa02b423ad1136f9ea5e4ce6afd6b671">compute</a> ()</td></tr>
-<tr class="memdesc:aaa02b423ad1136f9ea5e4ce6afd6b671"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#aaa02b423ad1136f9ea5e4ce6afd6b671">More...</a><br/></td></tr>
+<tr class="memdesc:aaa02b423ad1136f9ea5e4ce6afd6b671"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the skew angle based on "Skew Estimation of natural images based on a
+salient line detector", Hyung Il Koo and Nam Ik Choo.  <a href="#aaa02b423ad1136f9ea5e4ce6afd6b671">More...</a><br/></td></tr>
 <tr class="separator:aaa02b423ad1136f9ea5e4ce6afd6b671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab24f61909aff210dc07edf9d935cddcb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb">getAngle</a> ()</td></tr>
+<tr class="memdesc:ab24f61909aff210dc07edf9d935cddcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the skew angle.  <a href="#ab24f61909aff210dc07edf9d935cddcb">More...</a><br/></td></tr>
 <tr class="separator:ab24f61909aff210dc07edf9d935cddcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d8ee6a044b64307592f018b82a281c0"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0">separability</a> (const cv::Mat &amp;srcImg, int w, int h, const cv::Mat &amp;mask=cv::Mat()) const </td></tr>
-<tr class="separator:a5d8ee6a044b64307592f018b82a281c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1b4206579fae1d4a605b48556f1768d"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d">edgeMap</a> (const cv::Mat &amp;<a class="el" href="classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0">separability</a>, double thr, <a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction=<a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997ab53c7e2bfcb1f4a67ef1f2f2aecbafc6">HORIZONTAL</a>, const cv::Mat &amp;mask=cv::Mat()) const </td></tr>
-<tr class="separator:ac1b4206579fae1d4a605b48556f1768d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaed441206cfd6b49dc15c365ed74cb6"><td class="memItemLeft" align="right" valign="top">QVector&lt; QVector3D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aeaed441206cfd6b49dc15c365ed74cb6">computeWeights</a> (cv::Mat <a class="el" href="classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d">edgeMap</a>, int delta, int epsilon, <a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction=<a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997ab53c7e2bfcb1f4a67ef1f2f2aecbafc6">HORIZONTAL</a>)</td></tr>
-<tr class="separator:aeaed441206cfd6b49dc15c365ed74cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b6a528290c36418a2cbda12dd007d0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a9b6a528290c36418a2cbda12dd007d0a">isEmpty</a> () const override</td></tr>
-<tr class="memdesc:a9b6a528290c36418a2cbda12dd007d0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed.  <a href="#a9b6a528290c36418a2cbda12dd007d0a">More...</a><br/></td></tr>
+<tr class="memdesc:a9b6a528290c36418a2cbda12dd007d0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this instance is empty.  <a href="#a9b6a528290c36418a2cbda12dd007d0a">More...</a><br/></td></tr>
 <tr class="separator:a9b6a528290c36418a2cbda12dd007d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f2550c38a90aa4266d12e32eb0d461d"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a2f2550c38a90aa4266d12e32eb0d461d">toString</a> () const override</td></tr>
-<tr class="memdesc:a2f2550c38a90aa4266d12e32eb0d461d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#a2f2550c38a90aa4266d12e32eb0d461d">More...</a><br/></td></tr>
+<tr class="memdesc:a2f2550c38a90aa4266d12e32eb0d461d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summarize the method as string. Not yet implemented.  <a href="#a2f2550c38a90aa4266d12e32eb0d461d">More...</a><br/></td></tr>
 <tr class="separator:a2f2550c38a90aa4266d12e32eb0d461d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a2c7864d8a5bfbbcd7a62d311cde6cf99 inherit pub_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99">Module</a> ()</td></tr>
@@ -176,18 +175,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad4e56741793284e34c7636c5b08c35f2 inherit pub_methods_classrdf_1_1_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the settings.  <a href="#ad4e56741793284e34c7636c5b08c35f2">More...</a><br/></td></tr>
 <tr class="separator:ad4e56741793284e34c7636c5b08c35f2 inherit pub_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:aa33bf8af8af875c2df3467a61dbdd2b8"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">mSrcImg</a></td></tr>
-<tr class="separator:aa33bf8af8af875c2df3467a61dbdd2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32f29afe12350a8c33c4084f17c2c6c1"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">mMask</a></td></tr>
-<tr class="separator:a32f29afe12350a8c33c4084f17c2c6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
-<tr class="memitem:abbb655cdf94ad87a271f9ea2b365886f inherit pro_attribs_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#abbb655cdf94ad87a271f9ea2b365886f">mModuleName</a></td></tr>
-<tr class="separator:abbb655cdf94ad87a271f9ea2b365886f inherit pro_attribs_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5d8ee6a044b64307592f018b82a281c0"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0">separability</a> (const cv::Mat &amp;srcImg, int w, int h, const cv::Mat &amp;mask=cv::Mat()) const </td></tr>
+<tr class="memdesc:a5d8ee6a044b64307592f018b82a281c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the separability of two neighbouring regions based on mean and variance.  <a href="#a5d8ee6a044b64307592f018b82a281c0">More...</a><br/></td></tr>
+<tr class="separator:a5d8ee6a044b64307592f018b82a281c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1b4206579fae1d4a605b48556f1768d"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d">edgeMap</a> (const cv::Mat &amp;<a class="el" href="classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0">separability</a>, double thr, <a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction=<a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997ab53c7e2bfcb1f4a67ef1f2f2aecbafc6">HORIZONTAL</a>, const cv::Mat &amp;mask=cv::Mat()) const </td></tr>
+<tr class="memdesc:ac1b4206579fae1d4a605b48556f1768d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the edge map based on the separability  <a href="#ac1b4206579fae1d4a605b48556f1768d">More...</a><br/></td></tr>
+<tr class="separator:ac1b4206579fae1d4a605b48556f1768d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaed441206cfd6b49dc15c365ed74cb6"><td class="memItemLeft" align="right" valign="top">QVector&lt; QVector3D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aeaed441206cfd6b49dc15c365ed74cb6">computeWeights</a> (cv::Mat <a class="el" href="classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d">edgeMap</a>, int delta, int epsilon, <a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction=<a class="el" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997ab53c7e2bfcb1f4a67ef1f2f2aecbafc6">HORIZONTAL</a>)</td></tr>
+<tr class="memdesc:aeaed441206cfd6b49dc15c365ed74cb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the PPHT, detects straight lines and refines it  <a href="#aeaed441206cfd6b49dc15c365ed74cb6">More...</a><br/></td></tr>
+<tr class="separator:aeaed441206cfd6b49dc15c365ed74cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab52b919e2a7faab4527dfa35145ad77b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b">skewEst</a> (const QVector&lt; QVector3D &gt; &amp;weights, double imgDiagonal, bool &amp;ok, double eta=0.35)</td></tr>
+<tr class="memdesc:ab52b919e2a7faab4527dfa35145ad77b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the skew based oon the detected lines  <a href="#ab52b919e2a7faab4527dfa35145ad77b">More...</a><br/></td></tr>
+<tr class="separator:ab52b919e2a7faab4527dfa35145ad77b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a910f489d5bc14f60343f72b82af4ea60 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60">checkInput</a> () const =0</td></tr>
 <tr class="separator:a910f489d5bc14f60343f72b82af4ea60 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +198,16 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ab9ccd1c087300a74cd0dd0c878f46f52 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a47fcd4dd3706329cfec2a9b1e712de73">debugName</a> () const </td></tr>
 <tr class="separator:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:aa33bf8af8af875c2df3467a61dbdd2b8"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">mSrcImg</a></td></tr>
+<tr class="separator:aa33bf8af8af875c2df3467a61dbdd2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32f29afe12350a8c33c4084f17c2c6c1"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">mMask</a></td></tr>
+<tr class="separator:a32f29afe12350a8c33c4084f17c2c6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
+<tr class="memitem:abbb655cdf94ad87a271f9ea2b365886f inherit pro_attribs_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#abbb655cdf94ad87a271f9ea2b365886f">mModuleName</a></td></tr>
+<tr class="separator:abbb655cdf94ad87a271f9ea2b365886f inherit pro_attribs_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The class estimates the skew of a document page. The methodology is based on "Skew estimation of natural images based on a salient line detector", Hyung Il Koo and Nam Ik Cho </p>
@@ -245,6 +256,15 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initializes a new instance of the <a class="el" href="classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...">BaseSkewEstimation</a> class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">img</td><td>The source img.</td></tr>
+    <tr><td class="paramname">mask</td><td>The optional mask.</td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -269,8 +289,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Runs the algorithm implemented by the module. </p>
-<dl class="section return"><dt>Returns</dt><dd>True on success.</dd></dl>
+<p>Computes the skew angle based on "Skew Estimation of natural images based on a
+salient line detector", Hyung Il Koo and Nam Ik Choo. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the angle could be computed</dd></dl>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c">rdf::Module</a>.</p>
 
@@ -279,6 +300,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="anchor" id="aeaed441206cfd6b49dc15c365ed74cb6"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QVector&lt; QVector3D &gt; rdf::BaseSkewEstimation::computeWeights </td>
@@ -310,13 +334,33 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>Computes the PPHT, detects straight lines and refines it </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">edgeMap</td><td>The edge map.</td></tr>
+    <tr><td class="paramname">delta</td><td>Delta parameter: max coordinate deviation for refined lines.</td></tr>
+    <tr><td class="paramname">epsilon</td><td>Epsilon parameter: max allowed deviation from line coordinates for the weight calculation (=2).</td></tr>
+    <tr><td class="paramname">direction</td><td>The direction (horizontal or vertical).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The line weights</dd></dl>
 
 </div>
 </div>
 <a class="anchor" id="ac1b4206579fae1d4a605b48556f1768d"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::BaseSkewEstimation::edgeMap </td>
@@ -348,7 +392,24 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>Computes the edge map based on the separability </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">separability</td><td>The separability map.</td></tr>
+    <tr><td class="paramname">thr</td><td>A threshold value for edges (=0.1).</td></tr>
+    <tr><td class="paramname">direction</td><td>The direction (horizontal or vertical).</td></tr>
+    <tr><td class="paramname">mask</td><td>The optional mask.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The edge map.</dd></dl>
 
 </div>
 </div>
@@ -364,6 +425,9 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Gets the skew angle. </p>
+<dl class="section return"><dt>Returns</dt><dd>The skew angle</dd></dl>
 
 </div>
 </div>
@@ -388,8 +452,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns true if the module was initialized.</dd></dl>
+<p>Determines whether this instance is empty. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if no src image is set.</dd></dl>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#a85ba7a0e15f79287047b6fe58399078f">rdf::Module</a>.</p>
 
@@ -398,6 +462,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="anchor" id="a5d8ee6a044b64307592f018b82a281c0"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::BaseSkewEstimation::separability </td>
@@ -429,7 +496,24 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>Computes the separability of two neighbouring regions based on mean and variance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">srcImg</td><td>The source img.</td></tr>
+    <tr><td class="paramname">w</td><td>The width of the region.</td></tr>
+    <tr><td class="paramname">h</td><td>The height of the region.</td></tr>
+    <tr><td class="paramname">mask</td><td>The optional mask.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The separability map</dd></dl>
 
 </div>
 </div>
@@ -457,6 +541,73 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sets the images. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">img</td><td>The source img.</td></tr>
+    <tr><td class="paramname">mask</td><td>The optional mask.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab52b919e2a7faab4527dfa35145ad77b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::BaseSkewEstimation::skewEst </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; QVector3D &gt; &amp;&#160;</td>
+          <td class="paramname"><em>weights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>imgDiagonal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>ok</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eta</em> = <code>0.35</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the skew based oon the detected lines </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">weights</td><td>The weights.</td></tr>
+    <tr><td class="paramname">imgDiagonal</td><td>The img diagonal.</td></tr>
+    <tr><td class="paramname">ok</td><td>Ok - is set to false if only one line is detected.</td></tr>
+    <tr><td class="paramname">eta</td><td>Eta - parameter to reject small lines.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a2f2550c38a90aa4266d12e32eb0d461d"></a>
@@ -480,8 +631,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Converts the module's parameters and results to a string. </p>
-<dl class="section return"><dt>Returns</dt><dd>The string containing all parameters and results of the module.</dd></dl>
+<p>Summarize the method as string. Not yet implemented. </p>
+<dl class="section return"><dt>Returns</dt><dd>Summary string.</dd></dl>
 
 <p>Reimplemented from <a class="el" href="classrdf_1_1_module.html#aaeab7549bfdf04197c45ebaef60181f8">rdf::Module</a>.</p>
 
