@@ -104,15 +104,26 @@ namespace rdf {
 		delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
 		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
+		//Image::instance().imageInfo(mSrcImg, "horSep");
 
 		cv::Mat horSep = separability(mSrcImg, w, h, mMask);
-		cv::Mat verSep = separability(mSrcImg, h, w, mMask);
+		//cv::Mat verSep = separability(mSrcImg, h, w, mMask);
+		cv::Mat verSep = separability(mSrcImg.t(), w, h, mMask);
+		verSep = verSep.t();
+
+		Image::instance().imageInfo(horSep, "horSep");
+		Image::instance().imageInfo(verSep, "verSep");
 		
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
 		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
 		cv::minMaxLoc(verSep, &min, &max);
 		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
+
+		Image::instance().imageInfo(edgeHor, "edgeHor");
+		Image::instance().imageInfo(edgeVer, "edgeVer");
+		Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
+		Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
 
 		mSelectedLines.clear();
 		mSelectedLineTypes.clear();
@@ -152,28 +163,37 @@ namespace rdf {
 	/// <param name="h">The height of the region.</param>
 	/// <param name="mask">The optional mask.</param>
 	/// <returns>The separability map</returns>
-	cv::Mat BaseSkewEstimation::separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask) const
+	cv::Mat BaseSkewEstimation::separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask)
 	{
 
-		cv::Mat grayImg = srcImg;
+		cv::Mat grayImg;
 
-		if (mSrcImg.channels() > 1) {
-			cv::cvtColor(mSrcImg, grayImg, CV_RGB2GRAY);
+		if (srcImg.channels() > 1) {
+			cv::cvtColor(srcImg, grayImg, CV_RGB2GRAY);
 		}
+		else {
+			grayImg = srcImg;
+		}
+		//Image::instance().imageInfo(grayImg, "grayImg");
 
 		//check if already computed
-		if (mIntegralImg.empty() || mIntegralSqdImg.empty()) {
-			cv::integral(grayImg, mIntegralImg, mIntegralSqdImg, CV_64F);
-		}
+		//if (mIntegralImg.empty() || mIntegralSqdImg.empty()) {
+			cv::integral(grayImg, mIntegralImg, mIntegralSqdImg, CV_64F, CV_64F);
+		//}
 
 		cv::Mat meanImg, stdImg;
 
 		meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP);
-		meanImg /= (float)(w*h);
-		stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, w, Algorithms::BORDER_FLIP);
-		stdImg /= (float)(w*h);
+		//meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_ZERO);
+		//meanImg /= (float)(w*h);  //not needed since BORDER_FLIP (=mean filtering)
+		stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP);
+		//stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_ZERO);
+		//stdImg /= (float)(w*h);	//not needed since BORDER_FLIP (=mean filtering)
 		stdImg = stdImg - meanImg.mul(meanImg);
 		//cv::sqrt(stdImg, stdImg);  //we need sigma^2
+
+		//Image::instance().imageInfo(meanImg, "meanImg");
+		//Image::instance().imageInfo(stdImg, "stdImg");
 
 		cv::Mat separability = cv::Mat::zeros(meanImg.size(), CV_64FC1);
 		int halfKRows = cvCeil(h * 0.5);
@@ -319,13 +339,13 @@ namespace rdf {
 					QVector<int> yrPoss1 = QVector<int>();
 					for (int di = -delta; di <= delta && y1 + di < edgeMap.rows; di++) {
 						if (y1 + di >= 0)
-							if (edgeMap.at<uchar>(y1 + di, x1) == 1) yrPoss1.append(y1 + di);
+							if (edgeMap.at<uchar>(y1 + di, x1) > 0) yrPoss1.append(y1 + di);
 					}
 
 					QVector<int> yrPoss2 = QVector<int>();
 					for (int di = -delta; di <= delta && y2 + di < edgeMap.rows; di++) {
 						if (y2 + di >= 0)
-							if (edgeMap.at<uchar>(y2 + di, x2) == 1) yrPoss2.append(y2 + di);
+							if (edgeMap.at<uchar>(y2 + di, x2) > 0) yrPoss2.append(y2 + di);
 					}
 
 					if (yrPoss1.size() > 0 && yrPoss2.size() > 0) {
@@ -336,7 +356,7 @@ namespace rdf {
 								for (int xi = x1; xi <= x2; xi++)
 									for (int yi = -epsilon; yi <= epsilon; yi++) {
 										int yc = qRound(l[1] + (xi - l[0]) * slope) + yi;
-										if (yc < edgeMap.rows && xi < edgeMap.cols && yc > 0 && xi > 0) sumVal += edgeMap.at<uchar>(yc, xi);
+										if (yc < edgeMap.rows && xi < edgeMap.cols && yc > 0 && xi > 0) sumVal += (edgeMap.at<uchar>(yc, xi)/255);
 									}
 
 								if (sumVal > currMax.x()) {

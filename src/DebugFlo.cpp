@@ -101,9 +101,6 @@ namespace rdf {
 
 		cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
 
-		
-
-
 		//int nSamples = 20;
 		//cv::RNG rng;
 		//cv::Mat lBound(1, 1, CV_64FC1);
