@@ -105,33 +105,42 @@ namespace rdf {
 		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
 		//Image::instance().imageInfo(mSrcImg, "horSep");
+		int halfW = w / 2;
+		int halfH = h / 2;
 
-		cv::Mat horSep = separability(mSrcImg, w, h, mMask);
+		cv::Mat horSep = separability(mSrcImg, halfW, halfH, mMask);
 		//cv::Mat verSep = separability(mSrcImg, h, w, mMask);
-		cv::Mat verSep = separability(mSrcImg.t(), w, h, mMask);
+		cv::Mat verSep = separability(mSrcImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
 
 		Image::instance().imageInfo(horSep, "horSep");
 		Image::instance().imageInfo(verSep, "verSep");
+
+		//cv::Mat sepHV;
+		//cv::normalize(horSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+		//Image::instance().save(sepHV, "D:\\tmp\\horSep.png");
+		//cv::normalize(verSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+		//Image::instance().save(sepHV, "D:\\tmp\\verSep.png");
 		
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
 		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
-		cv::minMaxLoc(verSep, &min, &max);
-		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
+		//cv::minMaxLoc(verSep, &min, &max);
+		//cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
 
 		Image::instance().imageInfo(edgeHor, "edgeHor");
-		Image::instance().imageInfo(edgeVer, "edgeVer");
+		//Image::instance().imageInfo(edgeVer, "edgeVer");
+		
 		Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
-		Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
+		//Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
 
 		mSelectedLines.clear();
 		mSelectedLineTypes.clear();
 
 		QVector<QVector3D> weightsHor = computeWeights(edgeHor, delta, epsilon, HORIZONTAL);
-		QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
+		//QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
 
-		QVector<QVector3D> weightsAll = weightsHor + weightsVer;
+		QVector<QVector3D> weightsAll = weightsHor;// +weightsVer;
 
 		double diagonal = qSqrt(mSrcImg.rows*mSrcImg.rows + mSrcImg.cols*mSrcImg.cols);
 		bool ok = true;
@@ -259,10 +268,13 @@ namespace rdf {
 				if (ptrSep[col] > thr) {
 					bool edgeT = true;
 					for (int k = -mKMax; k <= mKMax; k++) {
+						if (k == 0) {
+							continue;
+						}
 						const double* sepKPtr = 0;
 						if (direction == HORIZONTAL) {
 							if (row + k >= 0 && row + k < separability.rows) {
-								sepKPtr = separability.ptr<double>(row + k);
+								sepKPtr = separability.ptr<double>(row + k) + col;
 							}
 						}
 						else if (direction == VERTICAL) {
@@ -271,7 +283,7 @@ namespace rdf {
 							}
 						}
 
-						if (sepKPtr && ptrSep[col] <= *sepKPtr) {
+						if (sepKPtr && (ptrSep[col] < *sepKPtr)) {
 							edgeT = false;
 						}
 					}
@@ -286,6 +298,76 @@ namespace rdf {
 		}
 
 		return edgeM;
+	}
+
+	cv::Mat BaseSkewEstimation::computeEdgeMap(cv::Mat separability, double thr, EdgeDirection direction) const {
+
+		int tmpStatus;
+
+		cv::Mat edgeMap = cv::Mat::zeros(separability.rows, separability.cols, CV_8UC1);
+
+		if (direction == HORIZONTAL) {
+			//int progressStep = separability.rows - 2 * H2 - 2 * kMax;
+			//int lastValue = progress->value();
+
+			double* p;
+			for (int r = mKMax; r < separability.rows-mKMax; r++) {
+				
+				
+
+				p = separability.ptr<double>(r);
+				for (int c = 0; c < separability.cols; c++) {
+
+					if (p[c] > thr) {
+						tmpStatus = 1;
+						for (int k = -mKMax; k <= mKMax; k++) {
+							if (k == 0) k++;
+							double* pK;
+							pK = separability.ptr<double>(r + k);
+							if (pK[c] > p[c]) {
+								tmpStatus = 0;
+								break;
+							}
+						}
+
+						if (tmpStatus) {
+							uchar* pEM;
+							pEM = edgeMap.ptr<uchar>(r);
+							pEM[c] = 1;
+						}
+					}
+				}
+			}
+		}
+		else {
+
+			float* p;
+			for (int r = 0; r < separability.rows; r++) {
+
+				p = separability.ptr<float>(r);
+				for (int c = 0; c < separability.cols; c++) {
+
+					if (p[c] > thr) {
+						tmpStatus = 1;
+						for (int k = -mKMax; k <= mKMax; k++) {
+							if (k == 0) k++;
+							if (p[c + k] > p[c]) {
+								tmpStatus = 0;
+								break;
+							}
+						}
+
+						if (tmpStatus) {
+							uchar* pEM;
+							pEM = edgeMap.ptr<uchar>(r);
+							pEM[c] = 1;
+						}
+					}
+				}
+			}
+		}
+
+		return edgeMap;
 	}
 
 	/// <summary>
