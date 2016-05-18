@@ -75,6 +75,7 @@ namespace rdf {
 
 		bool compute();
 		double getAngle();
+		QVector<QVector4D> getSelectedLines() const;
 
 		bool isEmpty() const override;
 		virtual QString toString() const override;

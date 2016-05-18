@@ -98,6 +98,15 @@ namespace rdf {
 		}
 
 		double skewAngle = skewTest.getAngle();
+		skewAngle = -skewAngle / 180.0 * CV_PI;
+
+		QVector<QVector4D> selLines = skewTest.getSelectedLines();
+		for (int iL = 0; iL < selLines.size(); iL++) {
+			QVector4D line = selLines[iL];
+
+			cv::line(inputImg, cv::Point(line.x(),line.y()), cv::Point(line.z(),line.w()), cv::Scalar(255, 255, 255), 3);
+
+		}
 
 		cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
 

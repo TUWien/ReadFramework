@@ -158,6 +158,11 @@ namespace rdf {
 		return mSkewAngle;
 	}
 
+	QVector<QVector4D> BaseSkewEstimation::getSelectedLines() const
+	{
+		return mSelectedLines;
+	}
+
 	/// <summary>
 	/// Computes the separability of two neighbouring regions based on mean and variance.
 	/// </summary>
