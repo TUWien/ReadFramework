@@ -113,9 +113,8 @@ namespace rdf {
 		cv::Mat verSep = separability(mSrcImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
 
-		Image::instance().imageInfo(horSep, "horSep");
-		Image::instance().imageInfo(verSep, "verSep");
-
+		//Image::instance().imageInfo(horSep, "horSep");
+		//Image::instance().imageInfo(verSep, "verSep");
 		//cv::Mat sepHV;
 		//cv::normalize(horSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
 		//Image::instance().save(sepHV, "D:\\tmp\\horSep.png");
@@ -125,22 +124,22 @@ namespace rdf {
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
 		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
-		//cv::minMaxLoc(verSep, &min, &max);
-		//cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
+		cv::minMaxLoc(verSep, &min, &max);
+		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
 
-		Image::instance().imageInfo(edgeHor, "edgeHor");
+		//Image::instance().imageInfo(edgeHor, "edgeHor");
 		//Image::instance().imageInfo(edgeVer, "edgeVer");
-		
-		Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
+		//
+		//Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
 		//Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
 
 		mSelectedLines.clear();
 		mSelectedLineTypes.clear();
 
 		QVector<QVector3D> weightsHor = computeWeights(edgeHor, delta, epsilon, HORIZONTAL);
-		//QVector<QVector3D> weightsVer = computeWeights(edgeVer, delta, epsilon, VERTICAL);
+		QVector<QVector3D> weightsVer = computeWeights(edgeVer.t(), delta, epsilon, VERTICAL);
 
-		QVector<QVector3D> weightsAll = weightsHor;// +weightsVer;
+		QVector<QVector3D> weightsAll = weightsHor + weightsVer;
 
 		double diagonal = qSqrt(mSrcImg.rows*mSrcImg.rows + mSrcImg.cols*mSrcImg.cols);
 		bool ok = true;
@@ -383,11 +382,11 @@ namespace rdf {
 		QVector4D maxLine = QVector4D();
 		minLineProjLength = mMinLineLength / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
-		if (direction == HORIZONTAL) {
+		//if (direction == HORIZONTAL) {
 			HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
-		} else {
-			HoughLinesP(edgeMap.t(), lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
-		}
+		//} else {
+		//	HoughLinesP(edgeMap.t(), lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		//}
 
 		QVector<QVector3D> computedWeights = QVector<QVector3D>();
 
