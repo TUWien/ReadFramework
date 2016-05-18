@@ -177,55 +177,56 @@ $(document).ready(function(){initNavTree('_skew_estimation_8h_source.html','');}
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">bool</span> compute();</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordtype">double</span> getAngle();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">virtual</span> QString toString() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">   83</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">mSrcImg</a>;                                    <span class="comment">//the input image  either 3 channel or 1 channel [0 255]</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">   84</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">mMask</a>;                                      <span class="comment">//the mask image [0 255]</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        cv::Mat separability(<span class="keyword">const</span> cv::Mat&amp; srcImg, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat());</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        cv::Mat edgeMap(<span class="keyword">const</span> cv::Mat&amp; separability, <span class="keywordtype">double</span> thr, <a class="code" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction = HORIZONTAL, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        QVector&lt;QVector3D&gt; computeWeights(cv::Mat edgeMap, <span class="keywordtype">int</span> delta, <span class="keywordtype">int</span> epsilon, <a class="code" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction = HORIZONTAL);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordtype">double</span> skewEst(<span class="keyword">const</span> QVector&lt;QVector3D&gt;&amp; weights, <span class="keywordtype">double</span> imgDiagonal, <span class="keywordtype">bool</span>&amp; ok, <span class="keywordtype">double</span> eta=0.35);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">double</span> mSkewAngle = 0.0;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">double</span> mThr = 0.1; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="comment">//double mWeightEps = 0.5;</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">int</span> mMinLineLength = 10;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">int</span> minLineProjLength = 10 / 4;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">int</span> mKMax = 7; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">int</span> mNIter = 200; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">int</span> mRotationFactor = 1; <span class="comment">//needed if we want to transpose the image in the beginning...</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">double</span> mSigma = 0.3; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">int</span> mW = 49; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">int</span> mH = 12; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">int</span> mDelta = 20; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">int</span> mEpsilon = 2; <span class="comment">//according to the paper</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        cv::Mat mIntegralImg;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        cv::Mat mIntegralSqdImg;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        QVector&lt;QVector4D&gt; mSelectedLines;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        QVector&lt;int&gt; mSelectedLineTypes;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="comment">//void load(const QSettings&amp; settings) override;</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="comment">//void save(QSettings&amp; settings) const override;</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    };</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        QVector&lt;QVector4D&gt; getSelectedLines() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">virtual</span> QString toString() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">   84</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">mSrcImg</a>;                                    <span class="comment">//the input image  either 3 channel or 1 channel [0 255]</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">   85</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">mMask</a>;                                      <span class="comment">//the mask image [0 255]</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        cv::Mat separability(<span class="keyword">const</span> cv::Mat&amp; srcImg, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat());</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        cv::Mat edgeMap(<span class="keyword">const</span> cv::Mat&amp; separability, <span class="keywordtype">double</span> thr, <a class="code" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction = HORIZONTAL, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        QVector&lt;QVector3D&gt; computeWeights(cv::Mat edgeMap, <span class="keywordtype">int</span> delta, <span class="keywordtype">int</span> epsilon, <a class="code" href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">EdgeDirection</a> direction = HORIZONTAL);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">double</span> skewEst(<span class="keyword">const</span> QVector&lt;QVector3D&gt;&amp; weights, <span class="keywordtype">double</span> imgDiagonal, <span class="keywordtype">bool</span>&amp; ok, <span class="keywordtype">double</span> eta=0.35);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">double</span> mSkewAngle = 0.0;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">double</span> mThr = 0.1; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="comment">//double mWeightEps = 0.5;</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">int</span> mMinLineLength = 10;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">int</span> minLineProjLength = 10 / 4;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">int</span> mKMax = 7; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">int</span> mNIter = 200; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">int</span> mRotationFactor = 1; <span class="comment">//needed if we want to transpose the image in the beginning...</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">double</span> mSigma = 0.3; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">int</span> mW = 49; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">int</span> mH = 12; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">int</span> mDelta = 20; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">int</span> mEpsilon = 2; <span class="comment">//according to the paper</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        cv::Mat mIntegralImg;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        cv::Mat mIntegralSqdImg;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        QVector&lt;QVector4D&gt; mSelectedLines;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        QVector&lt;int&gt; mSelectedLineTypes;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="comment">//void load(const QSettings&amp; settings) override;</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="comment">//void save(QSettings&amp; settings) const override;</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    };</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:47</div></div>
 <div class="ttc" id="classrdf_1_1_base_skew_estimation_html"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html">rdf::BaseSkewEstimation</a></div><div class="ttdoc">The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu...</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:67</div></div>
 <div class="ttc" id="classrdf_1_1_base_skew_estimation_html_a35363114968830bbf92a089760e06997"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997">rdf::BaseSkewEstimation::EdgeDirection</a></div><div class="ttdeci">EdgeDirection</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:70</div></div>
-<div class="ttc" id="classrdf_1_1_base_skew_estimation_html_aa33bf8af8af875c2df3467a61dbdd2b8"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">rdf::BaseSkewEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:83</div></div>
+<div class="ttc" id="classrdf_1_1_base_skew_estimation_html_aa33bf8af8af875c2df3467a61dbdd2b8"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8">rdf::BaseSkewEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:84</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:65</div></div>
-<div class="ttc" id="classrdf_1_1_base_skew_estimation_html_a32f29afe12350a8c33c4084f17c2c6c1"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">rdf::BaseSkewEstimation::mMask</a></div><div class="ttdeci">cv::Mat mMask</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:84</div></div>
+<div class="ttc" id="classrdf_1_1_base_skew_estimation_html_a32f29afe12350a8c33c4084f17c2c6c1"><div class="ttname"><a href="classrdf_1_1_base_skew_estimation.html#a32f29afe12350a8c33c4084f17c2c6c1">rdf::BaseSkewEstimation::mMask</a></div><div class="ttdeci">cv::Mat mMask</div><div class="ttdef"><b>Definition:</b> SkewEstimation.h:85</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

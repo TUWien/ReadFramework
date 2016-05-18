@@ -11,6 +11,7 @@ var classrdf_1_1_base_skew_estimation =
     [ "computeWeights", "classrdf_1_1_base_skew_estimation.html#aeaed441206cfd6b49dc15c365ed74cb6", null ],
     [ "edgeMap", "classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d", null ],
     [ "getAngle", "classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb", null ],
+    [ "getSelectedLines", "classrdf_1_1_base_skew_estimation.html#aa2e8fc89e88fa6bec2a4c846aead0511", null ],
     [ "isEmpty", "classrdf_1_1_base_skew_estimation.html#a9b6a528290c36418a2cbda12dd007d0a", null ],
     [ "separability", "classrdf_1_1_base_skew_estimation.html#ae2be109c5e949340fe99b532c1bfdf2a", null ],
     [ "setImages", "classrdf_1_1_base_skew_estimation.html#a9e268dd57006d111a03f49654f712cd0", null ],
