@@ -105,16 +105,14 @@ namespace rdf {
 		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
 		//Image::instance().imageInfo(mSrcImg, "horSep");
+		//half again to be consistent with original implementation
 		int halfW = w / 2;
 		int halfH = h / 2;
 
 		cv::Mat horSep = separability(mSrcImg, halfW, halfH, mMask);
-		//cv::Mat verSep = separability(mSrcImg, h, w, mMask);
 		cv::Mat verSep = separability(mSrcImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
 
-		//Image::instance().imageInfo(horSep, "horSep");
-		//Image::instance().imageInfo(verSep, "verSep");
 		//cv::Mat sepHV;
 		//cv::normalize(horSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
 		//Image::instance().save(sepHV, "D:\\tmp\\horSep.png");
@@ -127,9 +125,6 @@ namespace rdf {
 		cv::minMaxLoc(verSep, &min, &max);
 		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
 
-		//Image::instance().imageInfo(edgeHor, "edgeHor");
-		//Image::instance().imageInfo(edgeVer, "edgeVer");
-		//
 		//Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
 		//Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
 
@@ -182,26 +177,19 @@ namespace rdf {
 		else {
 			grayImg = srcImg;
 		}
-		//Image::instance().imageInfo(grayImg, "grayImg");
 
-		//check if already computed
+		//must be computed, because separability is also called with transposed image
 		//if (mIntegralImg.empty() || mIntegralSqdImg.empty()) {
 			cv::integral(grayImg, mIntegralImg, mIntegralSqdImg, CV_64F, CV_64F);
 		//}
 
 		cv::Mat meanImg, stdImg;
 
-		meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP);
-		//meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_ZERO);
+		meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
 		//meanImg /= (float)(w*h);  //not needed since BORDER_FLIP (=mean filtering)
-		stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP);
-		//stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_ZERO);
+		stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
 		//stdImg /= (float)(w*h);	//not needed since BORDER_FLIP (=mean filtering)
-		stdImg = stdImg - meanImg.mul(meanImg);
-		//cv::sqrt(stdImg, stdImg);  //we need sigma^2
-
-		//Image::instance().imageInfo(meanImg, "meanImg");
-		//Image::instance().imageInfo(stdImg, "stdImg");
+		stdImg = stdImg - meanImg.mul(meanImg); // = sigma^2
 
 		cv::Mat separability = cv::Mat::zeros(meanImg.size(), CV_64FC1);
 		int halfKRows = cvCeil(h * 0.5);
@@ -299,76 +287,6 @@ namespace rdf {
 		return edgeM;
 	}
 
-	cv::Mat BaseSkewEstimation::computeEdgeMap(cv::Mat separability, double thr, EdgeDirection direction) const {
-
-		int tmpStatus;
-
-		cv::Mat edgeMap = cv::Mat::zeros(separability.rows, separability.cols, CV_8UC1);
-
-		if (direction == HORIZONTAL) {
-			//int progressStep = separability.rows - 2 * H2 - 2 * kMax;
-			//int lastValue = progress->value();
-
-			double* p;
-			for (int r = mKMax; r < separability.rows-mKMax; r++) {
-				
-				
-
-				p = separability.ptr<double>(r);
-				for (int c = 0; c < separability.cols; c++) {
-
-					if (p[c] > thr) {
-						tmpStatus = 1;
-						for (int k = -mKMax; k <= mKMax; k++) {
-							if (k == 0) k++;
-							double* pK;
-							pK = separability.ptr<double>(r + k);
-							if (pK[c] > p[c]) {
-								tmpStatus = 0;
-								break;
-							}
-						}
-
-						if (tmpStatus) {
-							uchar* pEM;
-							pEM = edgeMap.ptr<uchar>(r);
-							pEM[c] = 1;
-						}
-					}
-				}
-			}
-		}
-		else {
-
-			float* p;
-			for (int r = 0; r < separability.rows; r++) {
-
-				p = separability.ptr<float>(r);
-				for (int c = 0; c < separability.cols; c++) {
-
-					if (p[c] > thr) {
-						tmpStatus = 1;
-						for (int k = -mKMax; k <= mKMax; k++) {
-							if (k == 0) k++;
-							if (p[c + k] > p[c]) {
-								tmpStatus = 0;
-								break;
-							}
-						}
-
-						if (tmpStatus) {
-							uchar* pEM;
-							pEM = edgeMap.ptr<uchar>(r);
-							pEM[c] = 1;
-						}
-					}
-				}
-			}
-		}
-
-		return edgeMap;
-	}
-
 	/// <summary>
 	/// Computes the PPHT, detects straight lines and refines it
 	/// </summary>
@@ -382,11 +300,7 @@ namespace rdf {
 		QVector4D maxLine = QVector4D();
 		minLineProjLength = mMinLineLength / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
-		//if (direction == HORIZONTAL) {
-			HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
-		//} else {
-		//	HoughLinesP(edgeMap.t(), lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
-		//}
+		HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
 
 		QVector<QVector3D> computedWeights = QVector<QVector3D>();
 

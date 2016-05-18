@@ -85,7 +85,6 @@ namespace rdf {
 
 		cv::Mat separability(const cv::Mat& srcImg, int w, int h, const cv::Mat& mask = cv::Mat());
 		cv::Mat edgeMap(const cv::Mat& separability, double thr, EdgeDirection direction = HORIZONTAL, const cv::Mat& mask = cv::Mat()) const;
-		cv::Mat computeEdgeMap(cv::Mat separability, double thr, EdgeDirection direction) const;
 		QVector<QVector3D> computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction = HORIZONTAL);
 		double skewEst(const QVector<QVector3D>& weights, double imgDiagonal, bool& ok, double eta=0.35);
 		bool checkInput() const override;
