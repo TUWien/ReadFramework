@@ -2,7 +2,7 @@ var searchData=
 [
   ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a40d8ab4f3e863f1a7046075859bc95c3',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_image.html#a5452f24d5e18187f593af893a5cd1d81',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module.html#ab9ccd1c087300a74cd0dd0c878f46f52',1,'rdf::Module::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module.html#ad4e56741793284e34c7636c5b08c35f2',1,'rdf::Module']]],
-  ['separability',['separability',['../classrdf_1_1_base_skew_estimation.html#a5d8ee6a044b64307592f018b82a281c0',1,'rdf::BaseSkewEstimation']]],
+  ['separability',['separability',['../classrdf_1_1_base_skew_estimation.html#ae2be109c5e949340fe99b532c1bfdf2a',1,'rdf::BaseSkewEstimation']]],
   ['setangle',['setAngle',['../classrdf_1_1_line_trace.html#a70aadcbd34761189576bd4e966f1a235',1,'rdf::LineTrace']]],
   ['setbaseline',['setBaseLine',['../classrdf_1_1_text_line.html#a59e743491942833c65a3b25436885d00',1,'rdf::TextLine']]],
   ['setblob',['setBlob',['../classrdf_1_1_blob.html#af5c30e14af8db8d23c2d2a145e98f23f',1,'rdf::Blob']]],
