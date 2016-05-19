@@ -40,6 +40,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <QVector3D>
 #include <QtCore/qmath.h>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -109,9 +110,14 @@ namespace rdf {
 		int halfW = w / 2;
 		int halfH = h / 2;
 
+		//Image::instance().imageInfo(mSrcImg, "srcImg");
+
 		cv::Mat horSep = separability(mSrcImg, halfW, halfH, mMask);
 		cv::Mat verSep = separability(mSrcImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
+
+		//Image::instance().imageInfo(horSep, "horSep");
+		//Image::instance().imageInfo(verSep, "verSep");
 
 		//cv::Mat sepHV;
 		//cv::normalize(horSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
@@ -305,7 +311,7 @@ namespace rdf {
 		QVector4D maxLine = QVector4D();
 		minLineProjLength = mMinLineLength / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
-		HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		cv::HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
 
 		QVector<QVector3D> computedWeights = QVector<QVector3D>();
 
@@ -325,6 +331,11 @@ namespace rdf {
 
 				while (x2 > edgeMap.cols) x2--;
 				while (x1 < 0) x1--;
+
+				if (std::abs(l[2] - l[0]) <= 1) {
+					qWarning() << "detected line almost vertical - skipping line";
+					continue;
+				}
 
 				double lineAngle = atan2((l[3] - l[1]), (l[2] - l[0]));
 				double slope = qTan(lineAngle);
@@ -348,21 +359,32 @@ namespace rdf {
 							if (edgeMap.at<uchar>(y2 + di, x2) > 0) yrPoss2.append(y2 + di);
 					}
 
+					//yrPoss1 and YrPoss2 can at most contain one value
 					if (yrPoss1.size() > 0 && yrPoss2.size() > 0) {
+						
+						double lineAngleNew = lineAngle;
 						for (int y1i = 0; y1i < yrPoss1.size(); y1i++) {
+							int ys1 = yrPoss1.at(y1i);
+
 							for (int y2i = 0; y2i < yrPoss2.size(); y2i++) {
+								int ys2 = yrPoss2.at(y2i);
 
 								double sumVal = 0;
-								for (int xi = x1; xi <= x2; xi++)
+								lineAngleNew = std::atan2((ys2 - ys1), (x2 - x1));
+								double slopeNew = qTan(lineAngleNew);
+
+								//always entire line length, but define new line based on ys1 and ys2
+								for (int xi = l[0]; xi <= l[2]; xi++) {
 									for (int yi = -epsilon; yi <= epsilon; yi++) {
-										int yc = qRound(l[1] + (xi - l[0]) * slope) + yi;
-										if (yc < edgeMap.rows && xi < edgeMap.cols && yc > 0 && xi > 0) sumVal += (edgeMap.at<uchar>(yc, xi)/255);
+										int yc = qRound(ys1 + (xi - x1) * slopeNew) + yi;
+										if (yc < edgeMap.rows && xi < edgeMap.cols && yc > 0 && xi > 0) sumVal += (edgeMap.at<uchar>(yc, xi) / 255);
 									}
+								}
 
 								if (sumVal > currMax.x()) {
 
 									QPointF centerPoint = QPointF(0.5*(x1 + x2), 0.5*(y1 + y2));
-									currMax = QVector3D((float)sumVal, (float)(-mRotationFactor * lineAngle), (float)qSqrt((edgeMap.cols*0.5 - centerPoint.x()) * (edgeMap.cols*0.5 - centerPoint.x()) + (edgeMap.rows*0.5 - centerPoint.y()) * (edgeMap.rows*0.5 - centerPoint.y())));
+									currMax = QVector3D((float)sumVal, (float)(-mRotationFactor * lineAngleNew), (float)qSqrt((edgeMap.cols*0.5 - centerPoint.x()) * (edgeMap.cols*0.5 - centerPoint.x()) + (edgeMap.rows*0.5 - centerPoint.y()) * (edgeMap.rows*0.5 - centerPoint.y())));
 									maxLine = QVector4D((float)x1, (float)y1, (float)x2, (float)y2);
 								}
 
