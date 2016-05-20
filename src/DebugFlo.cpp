@@ -72,6 +72,9 @@ namespace rdf {
 		
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
+		//flip image
+		inputImg = inputImg.t();
+		flip(inputImg, inputImg, 0);
 		
 		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
 		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
@@ -104,7 +107,7 @@ namespace rdf {
 		for (int iL = 0; iL < selLines.size(); iL++) {
 			QVector4D line = selLines[iL];
 
-			cv::line(inputImg, cv::Point(line.x(),line.y()), cv::Point(line.z(),line.w()), cv::Scalar(255, 255, 255), 3);
+			cv::line(inputImg, cv::Point((int)line.x(),(int)line.y()), cv::Point((int)line.z(),(int)line.w()), cv::Scalar(255, 255, 255), 3);
 
 		}
 
