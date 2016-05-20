@@ -433,6 +433,7 @@ namespace rdf {
 			return 0.0;
 		}
 
+		//determine fi_opt
 		double maxWeight = 0;
 		for (int i = 0; i < weights.size(); i++) {
 			if (weights[i].x() > maxWeight) {
@@ -440,11 +441,13 @@ namespace rdf {
 			}
 		}
 
+		//according to paper eta should be 0.5
 		QVector<QVector3D> thrWeights = QVector<QVector3D>();
 		for (int i = 0; i < weights.size(); i++) {
 			if (weights[i].x() / maxWeight > eta) {
-				thrWeights.append(QVector3D((float)qSqrt((weights[i].x() / maxWeight - eta) / (1.0 - eta)), (float)(weights[i].y() / M_PI * 180.0), (float)(weights[i].z() / imgDiagonal)));
-				//thrWeights.append(QVector3D((weights.at(i).x()/maxWeight - eta) * (weights.at(i).x()/maxWeight - eta), weights.at(i).y() / M_PI * 180, weights.at(i).z() / imgDiagonal));
+				//plugin version
+				//thrWeights.append(QVector3D(qSqrt((weights.at(i).x() / maxWeight - eta) / (1 - eta)), weights.at(i).y() / M_PI * 180, weights.at(i).z() / imgDiagonal));
+				thrWeights.append(QVector3D((float)qPow(weights[i].x() - maxWeight*eta,2), (float)(weights[i].y() / M_PI * 180.0), (float)(weights[i].z() / imgDiagonal)));
 			}
 		}
 
@@ -456,7 +459,9 @@ namespace rdf {
 			double saliency = 0;
 
 			for (int i = 0; i < thrWeights.size(); i++) {
-				saliency += thrWeights[i].x() * qExp(-thrWeights[i].z()) * qExp(-0.5 * ((skewAngle - thrWeights[i].y()) * (skewAngle - thrWeights[i].y())) / (mSigma * mSigma));
+				//plugin version
+				//saliency += thrWeights.at(i).x() * qExp(-thrWeights.at(i).z()) * qExp(-0.5 * ((skewAngle - thrWeights.at(i).y()) * (skewAngle - thrWeights.at(i).y())) / (mSigma * mSigma));
+				saliency += thrWeights[i].x() * qExp(-thrWeights[i].z()) * (1/qSqrt(2.0*CV_PI*mSigma*mSigma)) * qExp(-0.5 * ((skewAngle - thrWeights[i].y()) * (skewAngle - thrWeights[i].y())) / (mSigma * mSigma));
 			}
 
 			saliencyVec.append(QPointF(skewAngle, saliency));
@@ -473,7 +478,7 @@ namespace rdf {
 		}
 
 		for (int i = 0; i < weights.size(); i++) {
-			if (weights[i].x() > eta && qAbs(weights[i].y() / M_PI * 180.0 - salSkewAngle) < 0.15)
+			if (weights[i].x()/maxWeight > eta && qAbs(weights[i].y() / M_PI * 180.0 - salSkewAngle) < 0.15)
 				mSelectedLineTypes.replace(i, 1);
 		}
 
