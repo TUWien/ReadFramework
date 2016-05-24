@@ -108,8 +108,8 @@ namespace rdf {
 		h = h <= 1 ? 5 : h;
 		epsilon = mEpsilon;
 		delta = mDelta;
-		delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
-		mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
+		//delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
+		//mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
 		//Image::instance().imageInfo(mSrcImg, "horSep");
 		//half again to be consistent with original implementation
@@ -514,7 +514,7 @@ namespace rdf {
 		mDelta = settings.value("delta", mDelta).toInt();
 		mEpsilon = settings.value("eps", mEpsilon).toInt();
 		mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
-		mMinLineLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
+		minLineProjLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
 		mSigma = settings.value("sigma", mSigma).toDouble();
 
 	}

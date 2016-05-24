@@ -99,8 +99,8 @@ namespace rdf {
 		double mSkewAngle = 0.0;
 		double mThr = 0.1; //according to the paper
 		//double mWeightEps = 0.5;
-		int mMinLineLength = 10;
-		int minLineProjLength = 10 / 4;
+		int mMinLineLength = 50;
+		int minLineProjLength = 50 / 4;
 		int mKMax = 7; //according to the paper
 		int mNIter = 200; //according to the paper
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
