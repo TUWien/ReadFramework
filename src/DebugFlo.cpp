@@ -73,8 +73,8 @@ namespace rdf {
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
 		//flip image
-		inputImg = inputImg.t();
-		flip(inputImg, inputImg, 0);
+		//inputImg = inputImg.t();
+		//flip(inputImg, inputImg, 0);
 		
 		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
 		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);

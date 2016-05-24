@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QVector2D>
 #include <QMatrix4x4>
+#include <QtMath>
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -1016,17 +1017,16 @@ cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interp
 	cv::Mat rotMat = cv::getRotationMatrix2D(cv::Point((int)rotCenter.x(), (int)rotCenter.y()), angleRad *  180.0/CV_PI, 1.0);
 
 	QPointF cDiff = rotCenter - srcSize*0.5;
-	QMatrix4x4 m;
-	m.setToIdentity();
-	m.rotate((float)(angleRad*180.0 / CV_PI),0,0);
-	cDiff = m.map(cDiff);
+	QTransform tf;
+	tf.rotateRadians(-angleRad);
+	cDiff = tf.map(cDiff);
 
 	double *transl = rotMat.ptr<double>();
 	transl[2] += (double)cDiff.x();
 	transl[5] += (double)cDiff.y();
 
 	//img in wrapAffine must not be overwritten
-	cv::Mat rImg = cv::Mat(cv::Size((int)nSl.x(),(int)nSl.y()), src.type());
+	cv::Mat rImg = cv::Mat(cv::Size(qCeil(nSl.x()),qCeil(nSl.y())), src.type());
 	warpAffine(src, rImg, rotMat, rImg.size(), interpolation, cv::BORDER_CONSTANT, borderValue);
 
 	return rImg;
@@ -1043,15 +1043,15 @@ QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize)
 	QPointF nSl = srcSize;
 	QPointF nSr(srcSize.y(), srcSize.x());
 
-	QMatrix4x4 m;
-	m.setToIdentity();
-	m.rotate((float)(angleRad*180.0 / CV_PI), 0, 0);
-	nSl = m.map(nSl);
+	QTransform tf;
+
+	tf.rotateRadians(-angleRad);
+	nSl = tf.map(nSl);
 	//absolute value
 	nSl.setX(qAbs(nSl.x()));
 	nSl.setY(qAbs(nSl.y()));
 
-	nSr = m.map(nSr);
+	nSr = tf.map(nSr);
 	//absolute value
 	nSr.setX(qAbs(nSr.x()));
 	nSr.setY(qAbs(nSr.y()));
