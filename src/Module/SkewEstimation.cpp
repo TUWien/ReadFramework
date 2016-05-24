@@ -52,6 +52,8 @@ namespace rdf {
 	/// </summary>
 	BaseSkewEstimation::BaseSkewEstimation()
 	{
+		mModuleName = "BaseSkewEstimation";
+		loadSettings();
 	}
 
 	/// <summary>
@@ -65,6 +67,10 @@ namespace rdf {
 
 		mIntegralImg = cv::Mat();
 		mIntegralSqdImg = cv::Mat();
+
+		mModuleName = "BaseSkewEstimation";
+		loadSettings();
+
 	}
 
 	/// <summary>
@@ -147,6 +153,7 @@ namespace rdf {
 
 		mSkewAngle = skewEst(weightsAll, diagonal, ok);
 
+		saveSettings();
 
 		return ok;
 	}
@@ -333,7 +340,7 @@ namespace rdf {
 				while (x1 < 0) x1--;
 
 				if (std::abs(l[2] - l[0]) <= 1) {
-					qWarning() << "detected line almost vertical - skipping line";
+					//qWarning() << "detected line almost vertical - skipping line";
 					continue;
 				}
 
@@ -498,6 +505,29 @@ namespace rdf {
 	bool BaseSkewEstimation::checkInput() const
 	{
 		return false;
+	}
+
+	void BaseSkewEstimation::load(const QSettings & settings)
+	{
+		mW = settings.value("sepW", mW).toInt();	
+		mH = settings.value("sepH", mH).toInt();
+		mDelta = settings.value("delta", mDelta).toInt();
+		mEpsilon = settings.value("eps", mEpsilon).toInt();
+		mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
+		mMinLineLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
+		mSigma = settings.value("sigma", mSigma).toDouble();
+
+	}
+
+	void BaseSkewEstimation::save(QSettings & settings) const
+	{
+		settings.setValue("sepW", mW);
+		settings.setValue("sepH", mH);
+		settings.setValue("delta", mDelta);
+		settings.setValue("eps", mEpsilon);
+		settings.setValue("minLineLength", mMinLineLength);
+		settings.setValue("minLineLengthProj", minLineProjLength);
+		settings.setValue("sigma", mSigma);
 	}
 
 	/// <summary>

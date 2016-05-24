@@ -93,6 +93,9 @@ namespace rdf {
 
 	private:
 
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
 		double mSkewAngle = 0.0;
 		double mThr = 0.1; //according to the paper
 		//double mWeightEps = 0.5;
