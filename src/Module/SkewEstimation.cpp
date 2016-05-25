@@ -101,9 +101,9 @@ namespace rdf {
 		int w, h;
 		int delta, epsilon;
 		w = mW;
-		w = qRound(mSrcImg.cols / 1430.0*49.0); //check  (nomacs plugin version)
+		//w = qRound(mSrcImg.cols / 1430.0*49.0); //check  (nomacs plugin version)
 		h = mH;
-		h = qRound(mSrcImg.rows / 700.0*12.0); //check (nomacs plugin version)
+		//h = qRound(mSrcImg.rows / 700.0*12.0); //check (nomacs plugin version)
 		w = w <= 1 ? 10 : w;
 		h = h <= 1 ? 5 : h;
 		epsilon = mEpsilon;
@@ -133,9 +133,11 @@ namespace rdf {
 		
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
-		cv::Mat edgeHor = edgeMap(horSep, mThr*max, HORIZONTAL, mMask);
+		double thr = mFixedThr ? mThr : mThr * max;
+		cv::Mat edgeHor = edgeMap(horSep, thr, HORIZONTAL, mMask);
 		cv::minMaxLoc(verSep, &min, &max);
-		cv::Mat edgeVer = edgeMap(verSep, mThr*max, VERTICAL, mMask);
+		thr = mFixedThr ? mThr : mThr * max;
+		cv::Mat edgeVer = edgeMap(verSep, thr, VERTICAL, mMask);
 
 		//Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
 		//Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
@@ -147,6 +149,19 @@ namespace rdf {
 		QVector<QVector3D> weightsVer = computeWeights(edgeVer.t(), delta, epsilon, VERTICAL);
 
 		QVector<QVector3D> weightsAll = weightsHor + weightsVer;
+
+		////debug: print lines 
+		//QVector<QVector4D> selLines = mSelectedLines;
+		//cv::Mat inputImg = mSrcImg.clone();
+		//for (int iL = 0; iL < selLines.size(); iL++) {
+		//	QVector4D line = selLines[iL];
+
+		//	cv::line(inputImg, cv::Point((int)line.x(), (int)line.y()), cv::Point((int)line.z(), (int)line.w()), cv::Scalar(255, 255, 255), 3);
+
+		//}
+		//Image::instance().save(inputImg, "D:\\tmp\\lines.png");
+		////debug: print lines
+
 
 		double diagonal = qSqrt(mSrcImg.rows*mSrcImg.rows + mSrcImg.cols*mSrcImg.cols);
 		bool ok = true;
@@ -511,6 +526,7 @@ namespace rdf {
 	{
 		mW = settings.value("sepW", mW).toInt();	
 		mH = settings.value("sepH", mH).toInt();
+		mThr = settings.value("thr", mThr).toDouble();
 		mDelta = settings.value("delta", mDelta).toInt();
 		mEpsilon = settings.value("eps", mEpsilon).toInt();
 		mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
@@ -523,6 +539,7 @@ namespace rdf {
 	{
 		settings.setValue("sepW", mW);
 		settings.setValue("sepH", mH);
+		settings.setValue("thr", mThr);
 		settings.setValue("delta", mDelta);
 		settings.setValue("eps", mEpsilon);
 		settings.setValue("minLineLength", mMinLineLength);
@@ -548,6 +565,41 @@ namespace rdf {
 	QString BaseSkewEstimation::toString() const
 	{
 		return QString();
+	}
+
+	void BaseSkewEstimation::setThr(double thr)
+	{
+		mThr = thr;
+	}
+
+	void BaseSkewEstimation::setmMinLineLength(int ll)
+	{
+		mMinLineLength = ll;
+	}
+
+	void BaseSkewEstimation::setDelta(int d)
+	{
+		mDelta = d;
+	}
+
+	void BaseSkewEstimation::setEpsilon(int e)
+	{
+		mEpsilon = e;
+	}
+
+	void BaseSkewEstimation::setW(int w)
+	{
+		mW = w;
+	}
+
+	void BaseSkewEstimation::setH(int h)
+	{
+		mH = h;
+	}
+
+	void BaseSkewEstimation::setFixedThr(bool f)
+	{
+		mFixedThr = f;
 	}
 
 }

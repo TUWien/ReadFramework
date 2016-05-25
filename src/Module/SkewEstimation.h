@@ -80,6 +80,14 @@ namespace rdf {
 		bool isEmpty() const override;
 		virtual QString toString() const override;
 
+		void setThr(double thr);
+		void setmMinLineLength(int ll);
+		void setDelta(int d);
+		void setEpsilon(int e);
+		void setW(int w);
+		void setH(int h);
+		void setFixedThr(bool f);
+
 	protected:
 		cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
 		cv::Mat mMask;										//the mask image [0 255]
@@ -97,7 +105,8 @@ namespace rdf {
 		void save(QSettings& settings) const override;
 
 		double mSkewAngle = 0.0;
-		double mThr = 0.1; //according to the paper
+		//double mThr = 0.1; //according to the paper
+		double mThr = 4.0; //according to the paper
 		//double mWeightEps = 0.5;
 		int mMinLineLength = 50;
 		int minLineProjLength = 50 / 4;
@@ -106,10 +115,12 @@ namespace rdf {
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
 		double mSigma = 0.3; //according to the paper
 
-		int mW = 49; //according to the paper
-		int mH = 12; //according to the paper
+		int mW = 168; //49 according to the paper
+		int mH = 56; //12 according to the paper
 		int mDelta = 20; //according to the paper
 		int mEpsilon = 2; //according to the paper
+
+		bool mFixedThr = true;
 
 		cv::Mat mIntegralImg;
 		cv::Mat mIntegralSqdImg;
