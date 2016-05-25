@@ -13,7 +13,7 @@ var searchData=
   ['parseregion',['parseRegion',['../classrdf_1_1_page_xml_parser.html#ac144a210afba700fa0ec189f80029929',1,'rdf::PageXmlParser']]],
   ['parsexml',['parseXml',['../classrdf_1_1_xml_test.html#acab3c1c208f51ac0ab9a3abfd7d818e7',1,'rdf::XmlTest']]],
   ['pen',['pen',['../classrdf_1_1_region_type_config.html#a012ea4e2e416ca4829b1d7851d513959',1,'rdf::RegionTypeConfig']]],
-  ['polygon',['Polygon',['../classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9',1,'rdf::Polygon::Polygon()'],['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972',1,'rdf::Polygon::polygon()'],['../classrdf_1_1_base_line.html#a42f4fecd40a10f4d933a870bae030a80',1,'rdf::BaseLine::polygon()']]],
+  ['polygon',['polygon',['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972',1,'rdf::Polygon::polygon()'],['../classrdf_1_1_base_line.html#a42f4fecd40a10f4d933a870bae030a80',1,'rdf::BaseLine::polygon()'],['../classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9',1,'rdf::Polygon::Polygon()']]],
   ['polygon',['Polygon',['../classrdf_1_1_polygon.html',1,'rdf']]],
   ['polytostring',['polyToString',['../classrdf_1_1_converter.html#acab5ac0a7d0c58db70a8f2d2b15c5cd4',1,'rdf::Converter']]],
   ['prefilterarea',['preFilterArea',['../classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf',1,'rdf::Algorithms']]],
