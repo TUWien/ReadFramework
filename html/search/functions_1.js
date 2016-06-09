@@ -11,6 +11,6 @@ var searchData=
   ['blob',['Blob',['../classrdf_1_1_blob.html#a524cc4f4349f4e41faceb1df4dcaed5f',1,'rdf::Blob::Blob()'],['../classrdf_1_1_blob.html#af1e9cf46848b6a6b0118dba3e7c8c32e',1,'rdf::Blob::Blob(const QVector&lt; cv::Point &gt; &amp;outerC, const QVector&lt; QVector&lt; cv::Point &gt; &gt; &amp;innerC)']]],
   ['bloborientation',['blobOrientation',['../classrdf_1_1_blob.html#a98b9ac417405ae6b3604e731e3bde347',1,'rdf::Blob']]],
   ['blobs',['Blobs',['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()'],['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const ']]],
-  ['brennerfm',['BrennerFM',['../classrdf_1_1_brenner_f_m.html#a3083ee26667783fbbf6a18fb93847666',1,'rdf::BrennerFM::BrennerFM()'],['../classrdf_1_1_brenner_f_m.html#ab41aacc30262df565af9a07c770fb349',1,'rdf::BrennerFM::BrennerFM(const cv::Mat &amp;img)']]],
+  ['brennerfm',['BrennerFM',['../classrdf_1_1_brenner_f_m.html#ab41aacc30262df565af9a07c770fb349',1,'rdf::BrennerFM']]],
   ['brush',['brush',['../classrdf_1_1_region_type_config.html#a12fedcf767a2ece1e35fd138c13e9b66',1,'rdf::RegionTypeConfig']]]
 ];
