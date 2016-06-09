@@ -28,6 +28,7 @@ var searchData=
   ['setimagepath',['setImagePath',['../classrdf_1_1_debug_config.html#a93a3e3749070c21f6580d5b471fef8b4',1,'rdf::DebugConfig']]],
   ['setimages',['setImages',['../classrdf_1_1_base_skew_estimation.html#a9e268dd57006d111a03f49654f712cd0',1,'rdf::BaseSkewEstimation']]],
   ['setimagesize',['setImageSize',['../classrdf_1_1_page_element.html#a00fb2d65ada087832261b6728f81719b',1,'rdf::PageElement']]],
+  ['setimg',['setImg',['../classrdf_1_1_brenner_f_m.html#a498b8e6c06533d71b60a29ea922abcbb',1,'rdf::BrennerFM']]],
   ['setline',['setLine',['../classrdf_1_1_line.html#a75aa64366e7c5a5d206f186424cd6ab9',1,'rdf::Line']]],
   ['setmaxaspectratio',['setMaxAspectRatio',['../classrdf_1_1_line_trace.html#a172752621ba635db249592cf015444c1',1,'rdf::LineTrace']]],
   ['setminlensecondrun',['setMinLenSecondRun',['../classrdf_1_1_line_trace.html#a755d6cc1acc2fdeefd8dbf90e4fc2e47',1,'rdf::LineTrace']]],
