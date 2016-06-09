@@ -6,6 +6,7 @@ var hierarchy =
     [ "rdf::Blob", "classrdf_1_1_blob.html", null ],
     [ "rdf::BlobManager", "classrdf_1_1_blob_manager.html", null ],
     [ "rdf::Blobs", "classrdf_1_1_blobs.html", null ],
+    [ "rdf::BrennerFM", "classrdf_1_1_brenner_f_m.html", null ],
     [ "rdf::Config", "classrdf_1_1_config.html", null ],
     [ "rdf::Converter", "classrdf_1_1_converter.html", null ],
     [ "rdf::DebugConfig", "classrdf_1_1_debug_config.html", null ],

@@ -9,6 +9,10 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "BinarizationSuAdapted", "classrdf_1_1_binarization_su_adapted.html", "classrdf_1_1_binarization_su_adapted" ],
       [ "BinarizationSuFgdWeight", "classrdf_1_1_binarization_su_fgd_weight.html", "classrdf_1_1_binarization_su_fgd_weight" ]
     ] ],
+    [ "FocusMeasure.cpp", "_focus_measure_8cpp.html", null ],
+    [ "FocusMeasure.h", "_focus_measure_8h.html", [
+      [ "BrennerFM", "classrdf_1_1_brenner_f_m.html", "classrdf_1_1_brenner_f_m" ]
+    ] ],
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [
       [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ]

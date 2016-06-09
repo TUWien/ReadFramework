@@ -8,5 +8,6 @@ var searchData=
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html',1,'rdf']]],
   ['blob',['Blob',['../classrdf_1_1_blob.html',1,'rdf']]],
   ['blobmanager',['BlobManager',['../classrdf_1_1_blob_manager.html',1,'rdf']]],
-  ['blobs',['Blobs',['../classrdf_1_1_blobs.html',1,'rdf']]]
+  ['blobs',['Blobs',['../classrdf_1_1_blobs.html',1,'rdf']]],
+  ['brennerfm',['BrennerFM',['../classrdf_1_1_brenner_f_m.html',1,'rdf']]]
 ];

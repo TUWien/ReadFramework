@@ -47,6 +47,7 @@ var searchData=
   ['settingsfilename',['settingsFileName',['../classrdf_1_1_global_settings.html#afda273400126b7158db3ea5e7795a7e3',1,'rdf::GlobalSettings']]],
   ['settype',['setType',['../classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876',1,'rdf::Region']]],
   ['setw',['setW',['../classrdf_1_1_base_skew_estimation.html#ade43fa61d10cd93c17e5cc9d9962d7cb',1,'rdf::BaseSkewEstimation']]],
+  ['setwindowsize',['setWindowSize',['../classrdf_1_1_brenner_f_m.html#aafc1a73804bd807bec54f0e6015a5879',1,'rdf::BrennerFM']]],
   ['setxmlpath',['setXmlPath',['../classrdf_1_1_page_element.html#a9356592758038a0d3f732a8bfe82bb27',1,'rdf::PageElement::setXmlPath()'],['../classrdf_1_1_debug_config.html#ac5c018e810791fc517eeb4d5b688745c',1,'rdf::DebugConfig::setXmlPath()']]],
   ['shapes_2ecpp',['Shapes.cpp',['../_shapes_8cpp.html',1,'']]],
   ['shapes_2eh',['Shapes.h',['../_shapes_8h.html',1,'']]],

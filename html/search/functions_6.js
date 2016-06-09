@@ -11,6 +11,7 @@ var searchData=
   ['getthreshotsu',['getThreshOtsu',['../classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597',1,'rdf::Algorithms']]],
   ['gettotal',['getTotal',['../classrdf_1_1_timer.html#a19c55bb89adf7b93b1247db0078cf345',1,'rdf::Timer']]],
   ['getvlines',['getVLines',['../classrdf_1_1_line_trace.html#a939ed5b4fbd84586f3da9909d7158f3c',1,'rdf::LineTrace']]],
+  ['getwindowsize',['getWindowSize',['../classrdf_1_1_brenner_f_m.html#a75b40457cd88d6a9762770908b8d7bad',1,'rdf::BrennerFM']]],
   ['global',['global',['../classrdf_1_1_config.html#acb7616ba1af8370903c20132c0eeba66',1,'rdf::Config']]],
   ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html#a55236d5b15cd44f8f56f8263956a35af',1,'rdf::GlobalSettings']]]
 ];
