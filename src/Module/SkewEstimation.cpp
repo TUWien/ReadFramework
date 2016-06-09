@@ -50,7 +50,7 @@ namespace rdf {
 	/// <summary>
 	/// Initializes a new (empty) instance of the <see cref="BaseSkewEstimation"/> class.
 	/// </summary>
-	BaseSkewEstimation::BaseSkewEstimation()
+	BaseSkewEstimation::BaseSkewEstimation() : Module()
 	{
 		mModuleName = "BaseSkewEstimation";
 		loadSettings();
@@ -168,7 +168,8 @@ namespace rdf {
 
 		mSkewAngle = skewEst(weightsAll, diagonal, ok);
 
-		saveSettings();
+		//do not save here because it is not thread safe
+		//saveSettings();
 
 		return ok;
 	}

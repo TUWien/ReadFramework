@@ -80,6 +80,8 @@ void Module::loadSettings() {
 
 void Module::saveSettings() {
 
+	// TODO: this method should be made thread-safe - it would be convenient
+
 	QSettings& settings = Config::instance().settings();
 	settings.beginGroup(mModuleName);
 	save(settings);

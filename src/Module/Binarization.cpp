@@ -626,7 +626,8 @@ bool BinarizationSuAdapted::compute() {
 	//	cv::medianBlur(mBwImg, mBwImg, 3);
 
 	// I guess here is a good point to save the settings
-	saveSettings();
+	//or not because it is not thread saFe!
+	//saveSettings();
 	mDebug << " computed...";
 
 	return true;
