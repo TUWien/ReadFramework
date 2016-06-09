@@ -37,14 +37,25 @@
 #pragma warning(pop)
 
 namespace rdf {
+	BrennerFM::BrennerFM()
+	{
+	}
+
 	BrennerFM::BrennerFM(const cv::Mat & img)
 	{
 		mSrcImg = img;
 	}
+
+	void BrennerFM::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
 	int BrennerFM::getWindowSize() const
 	{
 		return mWindowSize;
 	}
+
 	void BrennerFM::setWindowSize(int ws)
 	{
 		mWindowSize = ws;

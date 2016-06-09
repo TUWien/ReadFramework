@@ -54,8 +54,10 @@ namespace rdf {
 	class DllModuleExport BrennerFM {
 
 	public:
+		BrennerFM();
 		BrennerFM(const cv::Mat& img);
 
+		void setImg(const cv::Mat& img);
 		int getWindowSize() const;
 		void setWindowSize(int ws);
 
