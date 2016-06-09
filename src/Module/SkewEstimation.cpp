@@ -98,6 +98,11 @@ namespace rdf {
 			return false;
 		}
 
+		cv::Mat skewImg = mSrcImg;
+		if (mSrcImg.channels() != 1) {
+			cv::cvtColor(mSrcImg, skewImg, CV_RGB2GRAY);
+		}
+
 		int w, h;
 		int delta, epsilon;
 		w = mW;
@@ -118,8 +123,8 @@ namespace rdf {
 
 		//Image::instance().imageInfo(mSrcImg, "srcImg");
 
-		cv::Mat horSep = separability(mSrcImg, halfW, halfH, mMask);
-		cv::Mat verSep = separability(mSrcImg.t(), halfW, halfH, mMask);
+		cv::Mat horSep = separability(skewImg, halfW, halfH, mMask);
+		cv::Mat verSep = separability(skewImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
 
 		//Image::instance().imageInfo(horSep, "horSep");
