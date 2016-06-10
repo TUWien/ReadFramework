@@ -189,6 +189,33 @@ namespace rdf {
 		return mVal;
 	}
 
+	double BasicFM::computeLAPE()
+	{
+		cv::Mat laImg;
+		cv::Laplacian(mSrcImg, laImg, CV_64F);
+		laImg = laImg.mul(laImg);
+
+		cv::Scalar m, v;
+		cv::meanStdDev(laImg, m, v);
+
+		mVal = m[0];
+
+		return mVal;
+	}
+
+	double BasicFM::computeLAPV()
+	{
+		cv::Mat laImg;
+		cv::Laplacian(mSrcImg, laImg, CV_64F);
+
+		cv::Scalar m, v;
+		cv::meanStdDev(laImg, m, v);
+		
+		mVal = v[0] * v[0];
+
+		return mVal;
+	}
+
 	void BasicFM::setImg(const cv::Mat & img)
 	{
 		mSrcImg = img;
@@ -239,22 +266,27 @@ namespace rdf {
 		mWindowSize = wSize;
 	}
 
-	bool FocusEstimation::compute(FocusMeasure fm)
+	bool FocusEstimation::compute(FocusMeasure fm, cv::Mat fmImg)
 	{
 
-		if (mSrcImg.empty())
+		cv::Mat fImg = fmImg;
+		if (fImg.empty())
+			fImg = mSrcImg;
+
+		if (fImg.empty())
 			return false;
 
 		BasicFM fmClass;
 		double f;
+		mFmPatches.clear();
 
-		for (int row = 0; row < mSrcImg.rows; row += (mWindowSize+mSplitSize)) {
-			for (int col = 0; col < mSrcImg.cols; col += (mWindowSize+mSplitSize)) {
+		for (int row = 0; row < fImg.rows; row += (mWindowSize+mSplitSize)) {
+			for (int col = 0; col < fImg.cols; col += (mWindowSize+mSplitSize)) {
 
-				cv::Range rR(row, cv::min(row + mWindowSize, mSrcImg.rows));
-				cv::Range cR(col, cv::min(col + mWindowSize, mSrcImg.cols));
+				cv::Range rR(row, cv::min(row + mWindowSize, fImg.rows));
+				cv::Range cR(col, cv::min(col + mWindowSize, fImg.cols));
 
-				cv::Mat tile = mSrcImg(rR, cR);
+				cv::Mat tile = fImg(rR, cR);
 
 				fmClass.setImg(tile);
 
@@ -278,6 +310,12 @@ namespace rdf {
 				case rdf::FocusEstimation::GRAS:
 					f = fmClass.computeGRAS();
 					break;
+				case rdf::FocusEstimation::LAPE:
+					f = fmClass.computeLAPE();
+					break;
+				case rdf::FocusEstimation::LAPV:
+					f = fmClass.computeLAPV();
+					break;
 				default:
 					f = -1;
 					break;
@@ -289,6 +327,19 @@ namespace rdf {
 		}
 
 		return true;
+	}
+
+	bool FocusEstimation::computeRefPatches(FocusMeasure fm)
+	{
+		if (mSrcImg.empty())
+			return false;
+
+		cv::Mat binImg;
+		mSrcImg.convertTo(binImg, CV_8U, 255);
+		cv::threshold(binImg, binImg, 0, 1, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+		binImg.convertTo(binImg, CV_64F);
+
+		return compute(fm, binImg);
 	}
 
 	std::vector<Patch> FocusEstimation::fmPatches() const
@@ -334,6 +385,15 @@ namespace rdf {
 		mFm = f;
 	}
 
+	Patch::Patch(cv::Point p, int w, int h, double f, double fRef)
+	{
+		mUpperLeft = p;
+		mWidth = w;
+		mHeight = h;
+		mFm = f;
+		mFmReference = fRef;
+	}
+
 	void Patch::setPosition(cv::Point p, int w, int h)
 	{
 		mUpperLeft = p;
@@ -353,6 +413,11 @@ namespace rdf {
 		return center;
 	}
 
+	void Patch::setFmRef(double f)
+	{
+		mFmReference = f;
+	}
+
 	int Patch::width() const
 	{
 		return mWidth;
@@ -366,6 +431,11 @@ namespace rdf {
 	double Patch::fm() const
 	{
 		return mFm;
+	}
+
+	double Patch::fmRef() const
+	{
+		return mFmReference;
 	}
 
 }

@@ -64,6 +64,8 @@ namespace rdf {
 		double computeGLLV();
 		double computeGRAT();
 		double computeGRAS();
+		double computeLAPE();
+		double computeLAPV();
 
 
 		void setImg(const cv::Mat& img);
@@ -84,14 +86,17 @@ namespace rdf {
 	public:
 		Patch();
 		Patch(cv::Point p, int w, int h, double f);
+		Patch(cv::Point p, int w, int h, double f, double fRef);
 
 		void setPosition(cv::Point p, int w, int h);
 		cv::Point upperLeft() const;
 		cv::Point center() const;
+		void setFmRef(double f);
 		int width() const;
 		int height() const;
 
 		double fm() const;
+		double fmRef() const;
 
 
 	protected:
@@ -101,18 +106,20 @@ namespace rdf {
 		int mHeight = 0;
 
 		double mFm = -1;
+		double mFmReference = -1;
 	};
 
 	class DllModuleExport FocusEstimation {
 
 	public:
-		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS};
+		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV};
 
 		FocusEstimation();
 		FocusEstimation(const cv::Mat& img);
 		FocusEstimation(const cv::Mat& img, int wSize);
 
-		bool compute(FocusMeasure fm = BREN);
+		bool compute(FocusMeasure fm = BREN, cv::Mat fmImg = cv::Mat());
+		bool computeRefPatches(FocusMeasure fm = BREN);
 		std::vector<Patch> fmPatches() const;
 
 		void setImg(const cv::Mat& img);
@@ -128,7 +135,6 @@ namespace rdf {
 		// parameters
 		int mWindowSize = 100;
 		int mSplitSize = 0;
-
 	};
 
 
