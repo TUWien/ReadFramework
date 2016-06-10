@@ -80,30 +80,57 @@ namespace rdf {
 
 	};
 
+	class DllModuleExport Patch {
+	public:
+		Patch();
+		Patch(cv::Point p, int w, int h, double f);
 
+		void setPosition(cv::Point p, int w, int h);
+		cv::Point upperLeft() const;
+		int width() const;
+		int height() const;
+
+		double fm() const;
+
+
+	protected:
+
+		cv::Point mUpperLeft;
+		int mWidth = 0;
+		int mHeight = 0;
+
+		double mFm = -1;
+	};
 
 	class DllModuleExport FocusEstimation {
 
 	public:
-		enum EdgeDirection { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS};
+		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS};
 
 		FocusEstimation();
 		FocusEstimation(const cv::Mat& img);
+		FocusEstimation(const cv::Mat& img, int wSize);
 
-		double compute();
+		bool compute(FocusMeasure fm = BREN);
+		std::vector<Patch> fmPatches() const;
 
 		void setImg(const cv::Mat& img);
-
 		void setWindowSize(int s);
+		void setSplitSize(int s);
 		int windowSize() const;
 
 	protected:
 		cv::Mat mSrcImg;
 
+		std::vector<Patch> mFmPatches;
+
 		// parameters
 		int mWindowSize = 100;
+		int mSplitSize = 0;
 
 	};
+
+
 
 
 };

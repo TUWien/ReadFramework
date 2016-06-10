@@ -171,6 +171,15 @@ namespace rdf {
 	double BasicFM::computeGRAS()
 	{
 
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
 		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
 		dH = dH.mul(dH);
 
@@ -208,16 +217,94 @@ namespace rdf {
 	FocusEstimation::FocusEstimation(const cv::Mat & img)
 	{
 		mSrcImg = img;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
 	}
 
-	double FocusEstimation::compute()
+	FocusEstimation::FocusEstimation(const cv::Mat & img, int wSize)
 	{
-		return 0.0;
+
+		mSrcImg = img;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		mWindowSize = wSize;
+	}
+
+	bool FocusEstimation::compute(FocusMeasure fm)
+	{
+
+		if (mSrcImg.empty())
+			return false;
+
+		BasicFM fmClass;
+		double f;
+
+		for (int row = 0; row < mSrcImg.rows; row += (mWindowSize+mSplitSize)) {
+			for (int col = 0; col < mSrcImg.cols; col += (mWindowSize+mSplitSize)) {
+
+				cv::Range rR(row, cv::min(row + mWindowSize, mSrcImg.rows));
+				cv::Range cR(col, cv::min(col + mWindowSize, mSrcImg.cols));
+
+				cv::Mat tile = mSrcImg(rR, cR);
+
+				fmClass.setImg(tile);
+
+				switch (fm)
+				{
+				case rdf::FocusEstimation::BREN:
+					f = fmClass.computeBREN();
+					break;
+				case rdf::FocusEstimation::GLVA:
+					f = fmClass.computeGLVA();
+					break;
+				case rdf::FocusEstimation::GLVN:
+					f = fmClass.computeGLVN();
+					break;
+				case rdf::FocusEstimation::GLLV:
+					f = fmClass.computeGLLV();
+					break;
+				case rdf::FocusEstimation::GRAT:
+					f = fmClass.computeGRAT();
+					break;
+				case rdf::FocusEstimation::GRAS:
+					f = fmClass.computeGRAS();
+					break;
+				default:
+					f = -1;
+					break;
+				}
+				
+				Patch r(cv::Point(col, row), mWindowSize, mWindowSize, f);
+				mFmPatches.push_back(r);
+			}
+		}
+
+		return true;
+	}
+
+	std::vector<Patch> FocusEstimation::fmPatches() const
+	{
+		return mFmPatches;
 	}
 
 	void FocusEstimation::setImg(const cv::Mat & img)
 	{
 		mSrcImg = img;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
 	}
 
 	void FocusEstimation::setWindowSize(int s)
@@ -225,9 +312,53 @@ namespace rdf {
 		mWindowSize = s;
 	}
 
+	void FocusEstimation::setSplitSize(int s)
+	{
+		mSplitSize = s;
+	}
+
 	int FocusEstimation::windowSize() const
 	{
 		return mWindowSize;
+	}
+
+	Patch::Patch()
+	{
+	}
+
+	Patch::Patch(cv::Point p, int w, int h, double f)
+	{
+		mUpperLeft = p;
+		mWidth = w;
+		mHeight = h;
+		mFm = f;
+	}
+
+	void Patch::setPosition(cv::Point p, int w, int h)
+	{
+		mUpperLeft = p;
+		mWidth = w;
+		mHeight = h;
+	}
+
+	cv::Point Patch::upperLeft() const
+	{
+		return mUpperLeft;
+	}
+
+	int Patch::width() const
+	{
+		return mWidth;
+	}
+
+	int Patch::height() const
+	{
+		return mHeight;
+	}
+
+	double Patch::fm() const
+	{
+		return mFm;
 	}
 
 }
