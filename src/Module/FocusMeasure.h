@@ -58,7 +58,13 @@ namespace rdf {
 		BasicFM();
 		BasicFM(const cv::Mat& img);
 
-		virtual double compute() = 0;
+		double computeBREN();
+		double computeGLVA();
+		double computeGLVN();
+		double computeGLLV();
+		double computeGRAT();
+		double computeGRAS();
+
 
 		void setImg(const cv::Mat& img);
 		double val() const;
@@ -72,62 +78,6 @@ namespace rdf {
 		double mVal = -1.0;
 		int mWindowSize = 15;
 
-	};
-
-	class DllModuleExport BrennerFM : public BasicFM {
-
-	public:
-		BrennerFM();
-		BrennerFM(const cv::Mat& img);
-
-		double compute() override;
-
-	};
-
-	class DllModuleExport GlVaFM : public BasicFM {
-
-	public:
-		GlVaFM();
-		GlVaFM(const cv::Mat& img);
-
-		double compute() override;
-	};
-
-	class DllModuleExport GlLvFM : public BasicFM {
-
-	public:
-		GlLvFM();
-		GlLvFM(const cv::Mat& img);
-
-		double compute() override;
-	};
-
-
-	class DllModuleExport GlVnFM : public BasicFM {
-
-	public:
-		GlVnFM();
-		GlVnFM(const cv::Mat& img);
-
-		double compute() override;
-	};
-
-	class DllModuleExport GraTFM : public BasicFM {
-
-	public:
-		GraTFM();
-		GraTFM(const cv::Mat& img);
-
-		double compute() override;
-	};
-
-	class DllModuleExport GraSFM : public BasicFM {
-
-	public:
-		GraSFM();
-		GraSFM(const cv::Mat& img);
-
-		double compute() override;
 	};
 
 

@@ -48,47 +48,18 @@ namespace rdf {
 		mSrcImg = img;
 	}
 
-	void BasicFM::setImg(const cv::Mat & img)
-	{
-		mSrcImg = img;
-	}
-
-	double BasicFM::val() const
-	{
-		return mVal;
-	}
-
-	void BasicFM::setWindowSize(int s)
-	{
-		mWindowSize = s;
-	}
-
-	int BasicFM::windowSize() const
-	{
-		return mWindowSize;
-	}
-
-
-	BrennerFM::BrennerFM() : BasicFM()
-	{
-	}
-
-	BrennerFM::BrennerFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double BrennerFM::compute()
+	double BasicFM::computeBREN()
 	{
 		if (mSrcImg.empty())
 			return mVal;
 
 		if (mSrcImg.depth() != CV_64F)
 			mSrcImg.convertTo(mSrcImg, CV_64F);
-		
+
 		if (mSrcImg.channels() != 1)
 			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
 
-		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols-2));
+		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
 		cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
 		dH = cv::abs(dH);
 		dV = cv::abs(dV);
@@ -102,16 +73,7 @@ namespace rdf {
 		return mVal;
 	}
 
-
-	GlVaFM::GlVaFM() : BasicFM()
-	{
-	}
-
-	GlVaFM::GlVaFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double GlVaFM::compute()
+	double BasicFM::computeGLVA()
 	{
 		if (mSrcImg.empty())
 			return mVal;
@@ -122,7 +84,7 @@ namespace rdf {
 		if (mSrcImg.channels() != 1)
 			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
 
-		
+
 		cv::Scalar m, v;
 		cv::meanStdDev(mSrcImg, m, v);
 		mVal = v[0];
@@ -131,16 +93,25 @@ namespace rdf {
 		return mVal;
 	}
 
-
-	GlLvFM::GlLvFM() : BasicFM()
+	double BasicFM::computeGLVN()
 	{
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		cv::Scalar m, v;
+		cv::meanStdDev(mSrcImg, m, v);
+		mVal = v[0] * v[0] / (m[0] * m[0] + std::numeric_limits<double>::epsilon());
+
+		return mVal;
 	}
 
-	GlLvFM::GlLvFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double GlLvFM::compute()
+	double BasicFM::computeGLLV()
 	{
 		if (mSrcImg.empty())
 			return mVal;
@@ -161,51 +132,14 @@ namespace rdf {
 
 		cv::Scalar m, v;
 		cv::meanStdDev(localStdImg, m, v);
-		mVal = v[0]*v[0];
+		mVal = v[0] * v[0];
 
 
 		return mVal;
 	}
 
-
-	GlVnFM::GlVnFM() : BasicFM()
+	double BasicFM::computeGRAT()
 	{
-	}
-
-	GlVnFM::GlVnFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double GlVnFM::compute()
-	{
-
-		if (mSrcImg.empty())
-			return mVal;
-
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
-
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
-
-		cv::Scalar m, v;
-		cv::meanStdDev(mSrcImg, m, v);
-		mVal = v[0] * v[0] / (m[0]*m[0] + std::numeric_limits<double>::epsilon());
-
-		return mVal;
-	}
-
-	GraTFM::GraTFM() : BasicFM()
-	{
-	}
-
-	GraTFM::GraTFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double GraTFM::compute()
-	{
-
 		if (mSrcImg.empty())
 			return mVal;
 
@@ -228,21 +162,13 @@ namespace rdf {
 		FM = FM.mul(mask);
 
 		cv::Scalar fm = cv::sum(FM) / cv::sum(mask);
-		
+
 		mVal = fm[0];
 
 		return mVal;
 	}
 
-	GraSFM::GraSFM() : BasicFM()
-	{
-	}
-
-	GraSFM::GraSFM(const cv::Mat & img) : BasicFM(img)
-	{
-	}
-
-	double GraSFM::compute()
+	double BasicFM::computeGRAS()
 	{
 
 		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
@@ -253,6 +179,27 @@ namespace rdf {
 
 		return mVal;
 	}
+
+	void BasicFM::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	double BasicFM::val() const
+	{
+		return mVal;
+	}
+
+	void BasicFM::setWindowSize(int s)
+	{
+		mWindowSize = s;
+	}
+
+	int BasicFM::windowSize() const
+	{
+		return mWindowSize;
+	}
+
 
 	FocusEstimation::FocusEstimation()
 	{
