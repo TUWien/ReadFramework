@@ -2,14 +2,15 @@ var hierarchy =
 [
     [ "rdf::Algorithms", "classrdf_1_1_algorithms.html", null ],
     [ "rdf::BaseLine", "classrdf_1_1_base_line.html", null ],
+    [ "rdf::BasicFM", "classrdf_1_1_basic_f_m.html", null ],
     [ "rdf::BinarizationTest", "classrdf_1_1_binarization_test.html", null ],
     [ "rdf::Blob", "classrdf_1_1_blob.html", null ],
     [ "rdf::BlobManager", "classrdf_1_1_blob_manager.html", null ],
     [ "rdf::Blobs", "classrdf_1_1_blobs.html", null ],
-    [ "rdf::BrennerFM", "classrdf_1_1_brenner_f_m.html", null ],
     [ "rdf::Config", "classrdf_1_1_config.html", null ],
     [ "rdf::Converter", "classrdf_1_1_converter.html", null ],
     [ "rdf::DebugConfig", "classrdf_1_1_debug_config.html", null ],
+    [ "rdf::FocusEstimation", "classrdf_1_1_focus_estimation.html", null ],
     [ "rdf::GenericSettings", "classrdf_1_1_generic_settings.html", [
       [ "rdf::GlobalSettings", "classrdf_1_1_global_settings.html", null ]
     ] ],
@@ -28,6 +29,7 @@ var hierarchy =
     ] ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],
     [ "rdf::PageXmlParser", "classrdf_1_1_page_xml_parser.html", null ],
+    [ "rdf::Patch", "classrdf_1_1_patch.html", null ],
     [ "rdf::Polygon", "classrdf_1_1_polygon.html", null ],
     [ "rdf::Region", "classrdf_1_1_region.html", [
       [ "rdf::TextLine", "classrdf_1_1_text_line.html", null ]

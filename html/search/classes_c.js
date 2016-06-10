@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['utils',['Utils',['../classrdf_1_1_utils.html',1,'rdf']]]
+  ['textline',['TextLine',['../classrdf_1_1_text_line.html',1,'rdf']]],
+  ['timer',['Timer',['../classrdf_1_1_timer.html',1,'rdf']]]
 ];

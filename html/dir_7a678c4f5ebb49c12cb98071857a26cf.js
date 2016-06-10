@@ -11,7 +11,9 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     ] ],
     [ "FocusMeasure.cpp", "_focus_measure_8cpp.html", null ],
     [ "FocusMeasure.h", "_focus_measure_8h.html", [
-      [ "BrennerFM", "classrdf_1_1_brenner_f_m.html", "classrdf_1_1_brenner_f_m" ]
+      [ "BasicFM", "classrdf_1_1_basic_f_m.html", "classrdf_1_1_basic_f_m" ],
+      [ "Patch", "classrdf_1_1_patch.html", "classrdf_1_1_patch" ],
+      [ "FocusEstimation", "classrdf_1_1_focus_estimation.html", "classrdf_1_1_focus_estimation" ]
     ] ],
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [

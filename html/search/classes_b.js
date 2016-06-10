@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['textline',['TextLine',['../classrdf_1_1_text_line.html',1,'rdf']]],
-  ['timer',['Timer',['../classrdf_1_1_timer.html',1,'rdf']]]
+  ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html',1,'rdf']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]]
 ];
