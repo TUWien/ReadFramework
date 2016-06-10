@@ -87,6 +87,7 @@ namespace rdf {
 
 		void setPosition(cv::Point p, int w, int h);
 		cv::Point upperLeft() const;
+		cv::Point center() const;
 		int width() const;
 		int height() const;
 

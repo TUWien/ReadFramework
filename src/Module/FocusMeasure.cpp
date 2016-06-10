@@ -346,6 +346,13 @@ namespace rdf {
 		return mUpperLeft;
 	}
 
+	cv::Point Patch::center() const
+	{
+		cv::Point center(mUpperLeft.x+mWidth/2, mUpperLeft.y+mHeight/2);
+
+		return center;
+	}
+
 	int Patch::width() const
 	{
 		return mWidth;
