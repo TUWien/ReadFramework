@@ -51,22 +51,83 @@
 namespace rdf {
 
 // read defines
-	class DllModuleExport BrennerFM {
+
+	class DllModuleExport BasicFM {
+
+	public:
+		BasicFM();
+		BasicFM(const cv::Mat& img);
+
+		virtual double compute() = 0;
+
+		void setImg(const cv::Mat& img);
+		double val() const;
+		void setWindowSize(int s);
+		int windowSize() const;
+
+	protected:
+		cv::Mat mSrcImg;
+
+		// parameters
+		double mVal = -1.0;
+		int mWindowSize = 15;
+
+	};
+
+	class DllModuleExport BrennerFM : public BasicFM {
 
 	public:
 		BrennerFM();
 		BrennerFM(const cv::Mat& img);
 
-		void setImg(const cv::Mat& img);
-		int getWindowSize() const;
-		void setWindowSize(int ws);
+		double compute() override;
 
-	private:
-		cv::Mat mSrcImg;
+	};
 
-		// parameters
-		int mWindowSize = 100;
+	class DllModuleExport GlVaFM : public BasicFM {
 
+	public:
+		GlVaFM();
+		GlVaFM(const cv::Mat& img);
+
+		double compute() override;
+	};
+
+	class DllModuleExport GlLvFM : public BasicFM {
+
+	public:
+		GlLvFM();
+		GlLvFM(const cv::Mat& img);
+
+		double compute() override;
+	};
+
+
+	class DllModuleExport GlVnFM : public BasicFM {
+
+	public:
+		GlVnFM();
+		GlVnFM(const cv::Mat& img);
+
+		double compute() override;
+	};
+
+	class DllModuleExport GraTFM : public BasicFM {
+
+	public:
+		GraTFM();
+		GraTFM(const cv::Mat& img);
+
+		double compute() override;
+	};
+
+	class DllModuleExport GraSFM : public BasicFM {
+
+	public:
+		GraSFM();
+		GraSFM(const cv::Mat& img);
+
+		double compute() override;
 	};
 
 

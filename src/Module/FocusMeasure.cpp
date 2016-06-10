@@ -33,31 +33,225 @@
 #include "FocusMeasure.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-
+#include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
 namespace rdf {
-	BrennerFM::BrennerFM()
+
+
+	BasicFM::BasicFM()
 	{
 	}
 
-	BrennerFM::BrennerFM(const cv::Mat & img)
-	{
-		mSrcImg = img;
-	}
-
-	void BrennerFM::setImg(const cv::Mat & img)
+	BasicFM::BasicFM(const cv::Mat & img)
 	{
 		mSrcImg = img;
 	}
 
-	int BrennerFM::getWindowSize() const
+	void BasicFM::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	double BasicFM::val() const
+	{
+		return mVal;
+	}
+
+	void BasicFM::setWindowSize(int s)
+	{
+		mWindowSize = s;
+	}
+
+	int BasicFM::windowSize() const
 	{
 		return mWindowSize;
 	}
 
-	void BrennerFM::setWindowSize(int ws)
+
+	BrennerFM::BrennerFM() : BasicFM()
 	{
-		mWindowSize = ws;
 	}
+
+	BrennerFM::BrennerFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double BrennerFM::compute()
+	{
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+		
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols-2));
+		cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
+		dH = cv::abs(dH);
+		dV = cv::abs(dV);
+
+		cv::Mat FM = cv::max(dH, dV);
+		FM = FM.mul(FM);
+
+		cv::Scalar fm = cv::mean(FM);
+		mVal = fm[0];
+
+		return mVal;
+	}
+
+
+	GlVaFM::GlVaFM() : BasicFM()
+	{
+	}
+
+	GlVaFM::GlVaFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double GlVaFM::compute()
+	{
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		
+		cv::Scalar m, v;
+		cv::meanStdDev(mSrcImg, m, v);
+		mVal = v[0];
+
+
+		return mVal;
+	}
+
+
+	GlLvFM::GlLvFM() : BasicFM()
+	{
+	}
+
+	GlLvFM::GlLvFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double GlLvFM::compute()
+	{
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		cv::Mat sqdImg = mSrcImg.mul(mSrcImg);
+		cv::Mat meanImg, meanSqdImg;
+		cv::boxFilter(mSrcImg, meanImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
+		cv::boxFilter(sqdImg, meanSqdImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
+
+		cv::Mat localStdImg = meanSqdImg - meanImg.mul(meanImg);
+		localStdImg = localStdImg.mul(localStdImg);
+
+		cv::Scalar m, v;
+		cv::meanStdDev(localStdImg, m, v);
+		mVal = v[0]*v[0];
+
+
+		return mVal;
+	}
+
+
+	GlVnFM::GlVnFM() : BasicFM()
+	{
+	}
+
+	GlVnFM::GlVnFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double GlVnFM::compute()
+	{
+
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		cv::Scalar m, v;
+		cv::meanStdDev(mSrcImg, m, v);
+		mVal = v[0] * v[0] / (m[0]*m[0] + std::numeric_limits<double>::epsilon());
+
+		return mVal;
+	}
+
+	GraTFM::GraTFM() : BasicFM()
+	{
+	}
+
+	GraTFM::GraTFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double GraTFM::compute()
+	{
+
+		if (mSrcImg.empty())
+			return mVal;
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
+		cv::Mat dV = mSrcImg(cv::Range(1, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 1), cv::Range::all());
+		dH = cv::abs(dH);
+		dV = cv::abs(dV);
+
+		cv::Mat FM = cv::max(dH, dV);
+		double thr = 0;
+		cv::Mat mask = FM >= thr;
+		mask.convertTo(mask, CV_64FC1, 1 / 255.0);
+
+		FM = FM.mul(mask);
+
+		cv::Scalar fm = cv::sum(FM) / cv::sum(mask);
+		
+		mVal = fm[0];
+
+		return mVal;
+	}
+
+	GraSFM::GraSFM() : BasicFM()
+	{
+	}
+
+	GraSFM::GraSFM(const cv::Mat & img) : BasicFM(img)
+	{
+	}
+
+	double GraSFM::compute()
+	{
+
+		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
+		dH = dH.mul(dH);
+
+		cv::Scalar fm = cv::mean(dH);
+		mVal = fm[0];
+
+		return mVal;
+	}
+
 }
