@@ -131,4 +131,29 @@ namespace rdf {
 	};
 
 
+
+	class DllModuleExport FocusEstimation {
+
+	public:
+		enum EdgeDirection { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS};
+
+		FocusEstimation();
+		FocusEstimation(const cv::Mat& img);
+
+		double compute();
+
+		void setImg(const cv::Mat& img);
+
+		void setWindowSize(int s);
+		int windowSize() const;
+
+	protected:
+		cv::Mat mSrcImg;
+
+		// parameters
+		int mWindowSize = 100;
+
+	};
+
+
 };

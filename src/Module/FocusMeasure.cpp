@@ -254,4 +254,33 @@ namespace rdf {
 		return mVal;
 	}
 
+	FocusEstimation::FocusEstimation()
+	{
+	}
+
+	FocusEstimation::FocusEstimation(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	double FocusEstimation::compute()
+	{
+		return 0.0;
+	}
+
+	void FocusEstimation::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	void FocusEstimation::setWindowSize(int s)
+	{
+		mWindowSize = s;
+	}
+
+	int FocusEstimation::windowSize() const
+	{
+		return mWindowSize;
+	}
+
 }
