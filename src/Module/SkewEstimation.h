@@ -86,6 +86,7 @@ namespace rdf {
 		void setEpsilon(int e);
 		void setW(int w);
 		void setH(int h);
+		void setSigma(double s);
 		void setFixedThr(bool f);
 
 	protected:
@@ -113,10 +114,10 @@ namespace rdf {
 		int mKMax = 7; //according to the paper
 		int mNIter = 200; //according to the paper
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
-		double mSigma = 0.3; //according to the paper
+		double mSigma = 0.3; //according to the paper, best for document: 0.5
 
-		int mW = 168; //49 according to the paper
-		int mH = 56; //12 according to the paper
+		int mW = 168; //49 according to the paper, best for document: 60
+		int mH = 56; //12 according to the paper, best for document: 28
 		int mDelta = 20; //according to the paper
 		int mEpsilon = 2; //according to the paper
 

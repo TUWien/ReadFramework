@@ -603,6 +603,11 @@ namespace rdf {
 		mH = h;
 	}
 
+	void BaseSkewEstimation::setSigma(double s)
+	{
+		mSigma = s;
+	}
+
 	void BaseSkewEstimation::setFixedThr(bool f)
 	{
 		mFixedThr = f;
