@@ -41,6 +41,7 @@ var searchData=
   ['setprefiltering',['setPreFiltering',['../classrdf_1_1_base_binarization_su.html#a2e95895b91f9b616ac8ab8155ad14f0a',1,'rdf::BaseBinarizationSu']]],
   ['setrootregion',['setRootRegion',['../classrdf_1_1_page_element.html#a5b32448e4f030c6feb881fcda9729977',1,'rdf::PageElement']]],
   ['setsettingsfile',['setSettingsFile',['../classrdf_1_1_config.html#a948463c19d84ab70d16d6e93f577edcb',1,'rdf::Config']]],
+  ['setsigma',['setSigma',['../classrdf_1_1_base_skew_estimation.html#a3fc29d9cadeb358154f1bd0dce6d57f1',1,'rdf::BaseSkewEstimation']]],
   ['setsplitsize',['setSplitSize',['../classrdf_1_1_focus_estimation.html#a8289bb5d339cc36dd49314ff7abad58b',1,'rdf::FocusEstimation']]],
   ['setstrokewidth',['setStrokeWidth',['../classrdf_1_1_binarization_su_adapted.html#a0ce9554e1f6ba0bf9a5ec83be07ecee2',1,'rdf::BinarizationSuAdapted']]],
   ['settext',['setText',['../classrdf_1_1_text_line.html#a759566ff1b31c5ed201274e8e4311a98',1,'rdf::TextLine']]],

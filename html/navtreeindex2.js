@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classrdf_1_1_region_type_config.html#a95bc7b402a689b582bd44cc45425c389":[1,0,0,7,20],
 "classrdf_1_1_region_type_config.html#aa5142eccf04249d4d786497b3d2b0187":[1,0,0,7,1],
 "classrdf_1_1_region_type_config.html#aab1d26f0b1e03a543f2bd0fea3e9f75b":[1,0,0,7,17],
 "classrdf_1_1_region_type_config.html#ab0cda1a705de2c13f23a4a4543d9399b":[1,0,0,7,19],
@@ -66,8 +67,8 @@ var NAVTREEINDEX2 =
 "dir_7a678c4f5ebb49c12cb98071857a26cf.html":[2,0,0,2],
 "dir_a2f0e5642e47e7ed59fe0f0829eafb5f.html":[2,0,0,0],
 "files.html":[2,0],
-"functions.html":[1,3,0],
 "functions.html":[1,3,0,0],
+"functions.html":[1,3,0],
 "functions_b.html":[1,3,0,1],
 "functions_c.html":[1,3,0,2],
 "functions_d.html":[1,3,0,3],

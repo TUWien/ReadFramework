@@ -41,6 +41,7 @@ var searchData=
   ['setprefiltering',['setPreFiltering',['../classrdf_1_1_base_binarization_su.html#a2e95895b91f9b616ac8ab8155ad14f0a',1,'rdf::BaseBinarizationSu']]],
   ['setrootregion',['setRootRegion',['../classrdf_1_1_page_element.html#a5b32448e4f030c6feb881fcda9729977',1,'rdf::PageElement']]],
   ['setsettingsfile',['setSettingsFile',['../classrdf_1_1_config.html#a948463c19d84ab70d16d6e93f577edcb',1,'rdf::Config']]],
+  ['setsigma',['setSigma',['../classrdf_1_1_base_skew_estimation.html#a3fc29d9cadeb358154f1bd0dce6d57f1',1,'rdf::BaseSkewEstimation']]],
   ['setsplitsize',['setSplitSize',['../classrdf_1_1_focus_estimation.html#a8289bb5d339cc36dd49314ff7abad58b',1,'rdf::FocusEstimation']]],
   ['setstrokewidth',['setStrokeWidth',['../classrdf_1_1_binarization_su_adapted.html#a0ce9554e1f6ba0bf9a5ec83be07ecee2',1,'rdf::BinarizationSuAdapted']]],
   ['settext',['setText',['../classrdf_1_1_text_line.html#a759566ff1b31c5ed201274e8e4311a98',1,'rdf::TextLine']]],
@@ -55,8 +56,8 @@ var searchData=
   ['setxmlpath',['setXmlPath',['../classrdf_1_1_page_element.html#a9356592758038a0d3f732a8bfe82bb27',1,'rdf::PageElement::setXmlPath()'],['../classrdf_1_1_debug_config.html#ac5c018e810791fc517eeb4d5b688745c',1,'rdf::DebugConfig::setXmlPath()']]],
   ['shapes_2ecpp',['Shapes.cpp',['../_shapes_8cpp.html',1,'']]],
   ['shapes_2eh',['Shapes.h',['../_shapes_8h.html',1,'']]],
-  ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html',1,'rdf']]],
+  ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['size',['size',['../classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3',1,'rdf::Blobs::size()'],['../classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b',1,'rdf::Polygon::size()']]],
   ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
   ['skewestimation_2ecpp',['SkewEstimation.cpp',['../_skew_estimation_8cpp.html',1,'']]],
@@ -68,8 +69,8 @@ var searchData=
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];
