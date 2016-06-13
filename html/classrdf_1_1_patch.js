@@ -6,6 +6,7 @@ var classrdf_1_1_patch =
     [ "center", "classrdf_1_1_patch.html#ad09ce2489744becf473eab0e20c4945e", null ],
     [ "fm", "classrdf_1_1_patch.html#a1a42077556b90e83973621bc5672dbb6", null ],
     [ "fmRef", "classrdf_1_1_patch.html#aadf396f2ee1cbbdeb12bbbeb550502d8", null ],
+    [ "fmS", "classrdf_1_1_patch.html#a038d5e236019f362407450456fccffe5", null ],
     [ "height", "classrdf_1_1_patch.html#afb47b316d86a0d19ea40d73ccbaabbe8", null ],
     [ "setFmRef", "classrdf_1_1_patch.html#ae2e24d44251214c3c2a7ac52248e10c2", null ],
     [ "setPosition", "classrdf_1_1_patch.html#a7a2d45f4ffe51ef66ce5a0f958acedc9", null ],

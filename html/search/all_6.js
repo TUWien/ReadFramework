@@ -7,8 +7,9 @@ var searchData=
   ['fm',['fm',['../classrdf_1_1_patch.html#a1a42077556b90e83973621bc5672dbb6',1,'rdf::Patch']]],
   ['fmpatches',['fmPatches',['../classrdf_1_1_focus_estimation.html#a88cc03e7c4f015e51e508e4b809238ac',1,'rdf::FocusEstimation']]],
   ['fmref',['fmRef',['../classrdf_1_1_patch.html#aadf396f2ee1cbbdeb12bbbeb550502d8',1,'rdf::Patch']]],
-  ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873',1,'rdf::FocusEstimation::FocusEstimation()'],['../classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img, int wSize)']]],
+  ['fms',['fmS',['../classrdf_1_1_patch.html#a038d5e236019f362407450456fccffe5',1,'rdf::Patch']]],
   ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html',1,'rdf']]],
+  ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873',1,'rdf::FocusEstimation::FocusEstimation()'],['../classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['focusmeasure',['FocusMeasure',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe',1,'rdf::FocusEstimation']]],
   ['focusmeasure_2ecpp',['FocusMeasure.cpp',['../_focus_measure_8cpp.html',1,'']]],
   ['focusmeasure_2eh',['FocusMeasure.h',['../_focus_measure_8h.html',1,'']]]
