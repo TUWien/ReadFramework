@@ -276,6 +276,9 @@ namespace rdf {
 		if (fImg.empty())
 			return false;
 
+		if (fmImg.channels() != 1 || fImg.depth() != CV_64F)
+			return false;
+
 		BasicFM fmClass;
 		double f;
 		mFmPatches.clear();
@@ -431,6 +434,11 @@ namespace rdf {
 	double Patch::fm() const
 	{
 		return mFm;
+	}
+
+	std::string Patch::fmS() const
+	{
+		return std::string();
 	}
 
 	double Patch::fmRef() const

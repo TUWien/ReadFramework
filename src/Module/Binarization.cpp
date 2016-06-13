@@ -244,7 +244,7 @@ bool BaseBinarizationSu::compute() {
 
 
 	// I guess here is a good point to save the settings
-	saveSettings();
+	//saveSettings();
 	mDebug << " computed...";
 	//mWarning << "a warning...";
 	//mInfo << "an info...";

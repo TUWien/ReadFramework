@@ -96,6 +96,7 @@ namespace rdf {
 		int height() const;
 
 		double fm() const;
+		std::string fmS() const;
 		double fmRef() const;
 
 
