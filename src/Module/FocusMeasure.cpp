@@ -59,16 +59,22 @@ namespace rdf {
 		if (mSrcImg.depth() != CV_64F)
 			mSrcImg.convertTo(mSrcImg, CV_64F);
 
-		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
-		cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
-		dH = cv::abs(dH);
-		dV = cv::abs(dV);
+		if (mSrcImg.cols < 4 || mSrcImg.rows < 4) {
+			mVal = -1;
+		}
+		else {
 
-		cv::Mat FM = cv::max(dH(cv::Range(0,dH.rows-2),cv::Range::all()), dV(cv::Range::all(), cv::Range(0,dV.cols-2)));
-		FM = FM.mul(FM);
+			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
+			cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
+			dH = cv::abs(dH);
+			dV = cv::abs(dV);
 
-		cv::Scalar fm = cv::mean(FM);
-		mVal = fm[0];
+			cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 2), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 2)));
+			FM = FM.mul(FM);
+
+			cv::Scalar fm = cv::mean(FM);
+			mVal = fm[0];
+		}
 
 		return mVal;
 	}
