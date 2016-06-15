@@ -1,17 +1,18 @@
 <map id="src/Core/Shapes.h" name="src/Core/Shapes.h">
-<area shape="rect" id="node2" href="$_blobs_8h.html" title="src/Core/Blobs.h" alt="" coords="876,80,996,107"/>
+<area shape="rect" id="node2" href="$_blobs_8h.html" title="src/Core/Blobs.h" alt="" coords="1103,80,1223,107"/>
 <area shape="rect" id="node6" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="5,229,149,256"/>
-<area shape="rect" id="node7" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="1159,229,1284,256"/>
-<area shape="rect" id="node11" href="$_elements_8h.html" title="src/Core/Elements.h" alt="" coords="1541,80,1683,107"/>
-<area shape="rect" id="node16" href="$_line_trace_8h.html" title="src/Module/LineTrace.h" alt="" coords="1025,155,1183,181"/>
-<area shape="rect" id="node3" href="$_algorithms_8h.html" title="src/Core/Algorithms.h" alt="" coords="660,155,808,181"/>
+<area shape="rect" id="node7" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="1385,229,1511,256"/>
+<area shape="rect" id="node12" href="$_elements_8h.html" title="src/Core/Elements.h" alt="" coords="1755,80,1897,107"/>
+<area shape="rect" id="node17" href="$_line_trace_8h.html" title="src/Module/LineTrace.h" alt="" coords="1251,155,1409,181"/>
+<area shape="rect" id="node3" href="$_algorithms_8h.html" title="src/Core/Algorithms.h" alt="" coords="753,155,901,181"/>
 <area shape="rect" id="node5" href="$_blobs_8cpp.html" title="src/Core/Blobs.cpp" alt="" coords="174,229,308,256"/>
-<area shape="rect" id="node9" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="962,229,1133,256"/>
-<area shape="rect" id="node4" href="$_algorithms_8cpp.html" title="src/Core/Algorithms.cpp" alt="" coords="775,229,937,256"/>
-<area shape="rect" id="node8" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="333,229,515,256"/>
-<area shape="rect" id="node10" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="540,229,749,256"/>
-<area shape="rect" id="node12" href="$_elements_8cpp.html" title="src/Core/Elements.cpp" alt="" coords="1721,229,1876,256"/>
-<area shape="rect" id="node13" href="$_elements_helper_8h.html" title="src/Core/ElementsHelper.h" alt="" coords="1522,155,1701,181"/>
-<area shape="rect" id="node14" href="$_elements_helper_8cpp.html" title="src/Core/ElementsHelper.cpp" alt="" coords="1308,229,1503,256"/>
-<area shape="rect" id="node15" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="1527,229,1696,256"/>
+<area shape="rect" id="node10" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1189,229,1360,256"/>
+<area shape="rect" id="node4" href="$_algorithms_8cpp.html" title="src/Core/Algorithms.cpp" alt="" coords="333,229,496,256"/>
+<area shape="rect" id="node8" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="521,229,703,256"/>
+<area shape="rect" id="node9" href="$_focus_measure_8cpp.html" title="src/Module/FocusMeasure.cpp" alt="" coords="727,229,928,256"/>
+<area shape="rect" id="node11" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="953,229,1163,256"/>
+<area shape="rect" id="node13" href="$_elements_8cpp.html" title="src/Core/Elements.cpp" alt="" coords="1949,229,2104,256"/>
+<area shape="rect" id="node14" href="$_elements_helper_8h.html" title="src/Core/ElementsHelper.h" alt="" coords="1737,155,1916,181"/>
+<area shape="rect" id="node15" href="$_elements_helper_8cpp.html" title="src/Core/ElementsHelper.cpp" alt="" coords="1729,229,1924,256"/>
+<area shape="rect" id="node16" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="1535,229,1704,256"/>
 </map>

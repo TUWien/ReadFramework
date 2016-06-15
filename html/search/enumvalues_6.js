@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['square',['SQUARE',['../classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc',1,'rdf::Algorithms']]]
+  ['rogr',['ROGR',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf',1,'rdf::FocusEstimation']]]
 ];

@@ -12,6 +12,7 @@ var searchData=
   ['removechild',['removeChild',['../classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361',1,'rdf::Region']]],
   ['resetangle',['resetAngle',['../classrdf_1_1_line_trace.html#a7b84e3a12def8a99a2f1aef8b9c25f70',1,'rdf::LineTrace']]],
   ['resource_2eh',['resource.h',['../resource_8h.html',1,'']]],
+  ['rogr',['ROGR',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf',1,'rdf::FocusEstimation']]],
   ['rootregion',['rootRegion',['../classrdf_1_1_page_element.html#a5df1b5290bc6170b7c425c5b96639c56',1,'rdf::PageElement']]],
   ['roottags',['RootTags',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fd',1,'rdf::PageXmlParser']]],
   ['rotateimage',['rotateImage',['../classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade',1,'rdf::Algorithms']]]

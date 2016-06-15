@@ -8,7 +8,8 @@ var classrdf_1_1_focus_estimation =
       [ "GRAT", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feaa8e90c7e5ad6a3ab2092a68083129aee", null ],
       [ "GRAS", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feae6deb3c899437835482a85cca3b755e9", null ],
       [ "LAPE", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fea2a5da035e08a516a6423b3345b9f171d", null ],
-      [ "LAPV", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fea7ba4f9b46762fb645019dcab8a72bbc8", null ]
+      [ "LAPV", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fea7ba4f9b46762fb645019dcab8a72bbc8", null ],
+      [ "ROGR", "classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf", null ]
     ] ],
     [ "FocusEstimation", "classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873", null ],
     [ "FocusEstimation", "classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e", null ],
