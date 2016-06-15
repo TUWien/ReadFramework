@@ -31,6 +31,7 @@
  *******************************************************************************************************/
 
 #include "FocusMeasure.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include "opencv2/imgproc/imgproc.hpp"
@@ -50,19 +51,8 @@ namespace rdf {
 
 	double BasicFM::computeBREN()
 	{
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
-
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
-
-		if (mSrcImg.cols < 4 || mSrcImg.rows < 4) {
-			mVal = -1;
-		}
-		else {
+		if (checkInput()) {
 
 			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
 			cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
@@ -75,25 +65,23 @@ namespace rdf {
 			cv::Scalar fm = cv::mean(FM);
 			mVal = fm[0];
 		}
+		else {
+			mVal = -1;
+		}
 
 		return mVal;
 	}
 
 	double BasicFM::computeGLVA()
 	{
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		if (checkInput()) {
 
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			cv::Scalar m, v;
+			cv::meanStdDev(mSrcImg, m, v);
+			mVal = v[0];
 
-
-		cv::Scalar m, v;
-		cv::meanStdDev(mSrcImg, m, v);
-		mVal = v[0];
+		}
 
 
 		return mVal;
@@ -101,44 +89,33 @@ namespace rdf {
 
 	double BasicFM::computeGLVN()
 	{
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
-
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
-
-		cv::Scalar m, v;
-		cv::meanStdDev(mSrcImg, m, v);
-		mVal = v[0] * v[0] / (m[0] * m[0] + std::numeric_limits<double>::epsilon());
+		if (checkInput()) {
+			cv::Scalar m, v;
+			cv::meanStdDev(mSrcImg, m, v);
+			mVal = v[0] * v[0] / (m[0] * m[0] + std::numeric_limits<double>::epsilon());
+		}
 
 		return mVal;
 	}
 
 	double BasicFM::computeGLLV()
 	{
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		if (checkInput()) {
 
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			cv::Mat sqdImg = mSrcImg.mul(mSrcImg);
+			cv::Mat meanImg, meanSqdImg;
+			cv::boxFilter(mSrcImg, meanImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
+			cv::boxFilter(sqdImg, meanSqdImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
 
-		cv::Mat sqdImg = mSrcImg.mul(mSrcImg);
-		cv::Mat meanImg, meanSqdImg;
-		cv::boxFilter(mSrcImg, meanImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
-		cv::boxFilter(sqdImg, meanSqdImg, CV_64FC1, cv::Size(mWindowSize, mWindowSize));
+			cv::Mat localStdImg = meanSqdImg - meanImg.mul(meanImg);
+			localStdImg = localStdImg.mul(localStdImg);
 
-		cv::Mat localStdImg = meanSqdImg - meanImg.mul(meanImg);
-		localStdImg = localStdImg.mul(localStdImg);
-
-		cv::Scalar m, v;
-		cv::meanStdDev(localStdImg, m, v);
-		mVal = v[0] * v[0];
+			cv::Scalar m, v;
+			cv::meanStdDev(localStdImg, m, v);
+			mVal = v[0] * v[0];
+		}
 
 
 		return mVal;
@@ -146,32 +123,27 @@ namespace rdf {
 
 	double BasicFM::computeGRAT()
 	{
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		if (checkInput()) {
 
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
+			cv::Mat dV = mSrcImg(cv::Range(1, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 1), cv::Range::all());
+			//dH = cv::abs(dH);
+			//dV = cv::abs(dV);
 
-		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
-		cv::Mat dV = mSrcImg(cv::Range(1, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 1), cv::Range::all());
-		dH = cv::abs(dH);
-		dV = cv::abs(dV);
+			//cv::Mat FM = cv::max(dH, dV);
+			cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 1), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 1)));
 
-		//cv::Mat FM = cv::max(dH, dV);
-		cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 1), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 1)));
+			double thr = 0;
+			cv::Mat mask = FM >= thr;
+			mask.convertTo(mask, CV_64FC1, 1 / 255.0);
 
-		double thr = 0;
-		cv::Mat mask = FM >= thr;
-		mask.convertTo(mask, CV_64FC1, 1 / 255.0);
+			FM = FM.mul(mask);
 
-		FM = FM.mul(mask);
+			cv::Scalar fm = cv::sum(FM) / cv::sum(mask);
 
-		cv::Scalar fm = cv::sum(FM) / cv::sum(mask);
-
-		mVal = fm[0];
+			mVal = fm[0];
+		}
 
 		return mVal;
 	}
@@ -179,20 +151,15 @@ namespace rdf {
 	double BasicFM::computeGRAS()
 	{
 
-		if (mSrcImg.empty())
-			return mVal;
 
-		if (mSrcImg.channels() != 1)
-			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		if (checkInput()) {
 
-		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
+			dH = dH.mul(dH);
 
-		cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
-		dH = dH.mul(dH);
-
-		cv::Scalar fm = cv::mean(dH);
-		mVal = fm[0];
+			cv::Scalar fm = cv::mean(dH);
+			mVal = fm[0];
+		}
 
 		return mVal;
 	}
@@ -224,6 +191,30 @@ namespace rdf {
 		return mVal;
 	}
 
+	double BasicFM::computeROGR()
+	{
+		if (checkInput()) {
+
+			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(1, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 1));
+			cv::Mat dV = mSrcImg(cv::Range(1, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 1), cv::Range::all());
+			dH = cv::abs(dH);
+			dV = cv::abs(dV);
+
+			cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 1), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 1)));
+			FM = FM.mul(FM);
+
+			cv::Scalar m = cv::mean(FM);
+			cv::Mat tmp;
+			FM.convertTo(tmp, CV_32F);
+			double r = (double)rdf::Algorithms::instance().statMomentMat(tmp, cv::Mat(), 0.98f);
+
+			//mVal = r > 0 ? m[0] / r : m[0];
+			mVal = m[0] / r;
+		}
+
+		return mVal;
+	}
+
 	void BasicFM::setImg(const cv::Mat & img)
 	{
 		mSrcImg = img;
@@ -242,6 +233,23 @@ namespace rdf {
 	int BasicFM::windowSize() const
 	{
 		return mWindowSize;
+	}
+
+	bool BasicFM::checkInput()
+	{
+		if (mSrcImg.empty())
+			return false;
+
+		if (mSrcImg.cols < 4 || mSrcImg.rows < 4)
+			return false;
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		return true;
 	}
 
 
@@ -316,6 +324,9 @@ namespace rdf {
 					break;
 				case rdf::FocusEstimation::LAPV:
 					f = fmClass.computeLAPV();
+					break;
+				case rdf::FocusEstimation::ROGR:
+					f = fmClass.computeROGR();
 					break;
 				default:
 					f = -1;

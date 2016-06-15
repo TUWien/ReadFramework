@@ -66,6 +66,7 @@ namespace rdf {
 		double computeGRAS();
 		double computeLAPE();
 		double computeLAPV();
+		double computeROGR();
 
 
 		void setImg(const cv::Mat& img);
@@ -74,6 +75,8 @@ namespace rdf {
 		int windowSize() const;
 
 	protected:
+		bool checkInput();
+
 		cv::Mat mSrcImg;
 
 		// parameters
@@ -113,7 +116,7 @@ namespace rdf {
 	class DllModuleExport FocusEstimation {
 
 	public:
-		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV};
+		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV, ROGR};
 
 		FocusEstimation();
 		FocusEstimation(const cv::Mat& img);
