@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['marea',['mArea',['../classrdf_1_1_patch.html#a66219dedf0419b86e3616d1ddc029e68',1,'rdf::Patch']]],
   ['mbaseline',['mBaseLine',['../classrdf_1_1_text_line.html#a223b596aa2ee21b35194efcb54af928c',1,'rdf::TextLine::mBaseLine()'],['../classrdf_1_1_base_line.html#a1c770a632f92b5e8045d33f0841daba9',1,'rdf::BaseLine::mBaseLine()']]],
   ['mbincontrastimg',['mBinContrastImg',['../classrdf_1_1_binarization_su_adapted.html#af6f531b013aa721681519b4d5e9c877c',1,'rdf::BinarizationSuAdapted']]],
   ['mbrush',['mBrush',['../classrdf_1_1_region_type_config.html#aab1d26f0b1e03a543f2bd0fea3e9f75b',1,'rdf::RegionTypeConfig']]],
@@ -53,6 +54,7 @@ var searchData=
   ['mtype',['mType',['../classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b',1,'rdf::Region::mType()'],['../classrdf_1_1_region_type_config.html#a02fc7d0cf69c969e8397a7bed4f7df70',1,'rdf::RegionTypeConfig::mType()']]],
   ['mupperleft',['mUpperLeft',['../classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f',1,'rdf::Patch']]],
   ['mval',['mVal',['../classrdf_1_1_basic_f_m.html#a5b47dfee8f4206914569b534b9b5acad',1,'rdf::BasicFM']]],
+  ['mweight',['mWeight',['../classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2',1,'rdf::Patch']]],
   ['mwidth',['mWidth',['../classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6',1,'rdf::Patch']]],
   ['mwindowsize',['mWindowSize',['../classrdf_1_1_basic_f_m.html#adbf6fd39e76ad4b19a2e20d44df9bd35',1,'rdf::BasicFM::mWindowSize()'],['../classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f',1,'rdf::FocusEstimation::mWindowSize()']]],
   ['mxmlpath',['mXmlPath',['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()'],['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()']]]

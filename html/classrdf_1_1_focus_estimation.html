@@ -141,10 +141,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2b5c5942954b17ed5157ce6869afc23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0b77177fec3105f917d72fe0276b918"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918">FocusEstimation</a> (const cv::Mat &amp;img, int wSize)</td></tr>
 <tr class="separator:ad0b77177fec3105f917d72fe0276b918"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2204c963c31578bb376196ab37aafa3b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#a2204c963c31578bb376196ab37aafa3b">compute</a> (<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> fm=<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a>, cv::Mat fmImg=cv::Mat())</td></tr>
-<tr class="separator:a2204c963c31578bb376196ab37aafa3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e26eaa206c68f8afd39fe5d053465e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#a1e26eaa206c68f8afd39fe5d053465e1">computeRefPatches</a> (<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> fm=<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a>)</td></tr>
-<tr class="separator:a1e26eaa206c68f8afd39fe5d053465e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d43278a2f8fc41245b501f32203f5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#a96d43278a2f8fc41245b501f32203f5d">compute</a> (<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> fm=<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a>, cv::Mat fmImg=cv::Mat(), bool binary=false)</td></tr>
+<tr class="separator:a96d43278a2f8fc41245b501f32203f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afafb78d1743693d48d275f09440980a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#afafb78d1743693d48d275f09440980a1">computeRefPatches</a> (<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> fm=<a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a>, bool binary=false)</td></tr>
+<tr class="separator:afafb78d1743693d48d275f09440980a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88cc03e7c4f015e51e508e4b809238ac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classrdf_1_1_patch.html">Patch</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#a88cc03e7c4f015e51e508e4b809238ac">fmPatches</a> () const </td></tr>
 <tr class="separator:a88cc03e7c4f015e51e508e4b809238ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3a7c53dbbcb194ea5354d7140d4923d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_focus_estimation.html#ab3a7c53dbbcb194ea5354d7140d4923d">setImg</a> (const cv::Mat &amp;img)</td></tr>
@@ -259,7 +259,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a2204c963c31578bb376196ab37aafa3b"></a>
+<a class="anchor" id="a96d43278a2f8fc41245b501f32203f5d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -273,7 +273,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">cv::Mat&#160;</td>
-          <td class="paramname"><em>fmImg</em> = <code>cv::Mat()</code>&#160;</td>
+          <td class="paramname"><em>fmImg</em> = <code>cv::Mat()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>binary</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -285,7 +291,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1e26eaa206c68f8afd39fe5d053465e1"></a>
+<a class="anchor" id="afafb78d1743693d48d275f09440980a1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -293,8 +299,18 @@ Protected Attributes</h2></td></tr>
           <td class="memname">bool rdf::FocusEstimation::computeRefPatches </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a>&#160;</td>
-          <td class="paramname"><em>fm</em> = <code><a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a></code></td><td>)</td>
+          <td class="paramname"><em>fm</em> = <code><a class="el" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feab31ba75da427ec5f094d4993f3d14c6f">BREN</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>binary</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['weight',['weight',['../classrdf_1_1_patch.html#ac701ad90d59ae97dfb5a4fb3b8683624',1,'rdf::Patch']]],
   ['weightfunction',['weightFunction',['../classrdf_1_1_binarization_su_fgd_weight.html#af3ecb2042125d16aff9dc39e7e502d02',1,'rdf::BinarizationSuFgdWeight']]],
   ['width',['width',['../classrdf_1_1_patch.html#a8dfb072cc7a82df177e55b7c5c73d1be',1,'rdf::Patch']]],
   ['windowsize',['windowSize',['../classrdf_1_1_basic_f_m.html#a9673ab79a0a5a90f0adfd56b85bb6d0b',1,'rdf::BasicFM::windowSize()'],['../classrdf_1_1_focus_estimation.html#a7582c8514175c93937722e8d0c9f69a8',1,'rdf::FocusEstimation::windowSize()']]],
