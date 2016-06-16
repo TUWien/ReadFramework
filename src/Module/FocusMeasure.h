@@ -95,10 +95,14 @@ namespace rdf {
 		cv::Point upperLeft() const;
 		cv::Point center() const;
 		void setFmRef(double f);
+		void setWeight(double w);
+		void setArea(double a);
 		int width() const;
 		int height() const;
 
 		double fm() const;
+		double weight() const;
+		double area() const;
 		std::string fmS() const;
 		double fmRef() const;
 
@@ -111,6 +115,8 @@ namespace rdf {
 
 		double mFm = -1;
 		double mFmReference = -1;
+		double mWeight = -1;
+		double mArea = -1;
 	};
 
 	class DllModuleExport FocusEstimation {
@@ -122,8 +128,8 @@ namespace rdf {
 		FocusEstimation(const cv::Mat& img);
 		FocusEstimation(const cv::Mat& img, int wSize);
 
-		bool compute(FocusMeasure fm = BREN, cv::Mat fmImg = cv::Mat());
-		bool computeRefPatches(FocusMeasure fm = BREN);
+		bool compute(FocusMeasure fm = BREN, cv::Mat fmImg = cv::Mat(), bool binary = false);
+		bool computeRefPatches(FocusMeasure fm = BREN, bool binary = false);
 		std::vector<Patch> fmPatches() const;
 
 		void setImg(const cv::Mat& img);

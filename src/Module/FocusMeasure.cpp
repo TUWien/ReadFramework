@@ -168,7 +168,7 @@ namespace rdf {
 	{
 		cv::Mat laImg;
 		cv::Laplacian(mSrcImg, laImg, CV_64F);
-		laImg = laImg.mul(laImg);
+		laImg = laImg.mul(laImg); 
 
 		cv::Scalar m, v;
 		cv::meanStdDev(laImg, m, v);
@@ -187,6 +187,7 @@ namespace rdf {
 		cv::meanStdDev(laImg, m, v);
 		
 		mVal = v[0] * v[0];
+		//mVal = v[0];
 
 		return mVal;
 	}
@@ -272,7 +273,7 @@ namespace rdf {
 		mWindowSize = wSize;
 	}
 
-	bool FocusEstimation::compute(FocusMeasure fm, cv::Mat fmImg)
+	bool FocusEstimation::compute(FocusMeasure fm, cv::Mat fmImg, bool binary)
 	{
 
 		cv::Mat fImg = fmImg;
@@ -332,8 +333,27 @@ namespace rdf {
 					f = -1;
 					break;
 				}
-				
+
 				Patch r(cv::Point(col, row), mWindowSize, mWindowSize, f);
+
+				if (binary) {
+					cv::Scalar relArea = cv::sum(tile);
+					relArea[0] = relArea[0] / (double)(mWindowSize * mWindowSize);
+					r.setArea(relArea[0]);
+					//area completely written with text ~ 0.1
+					//normalize to 1
+					relArea[0] *= 10.0;
+
+					//weight with sigmoid function
+					//-6: shift sigmoid to the right
+					//*10: scale normalized Area
+					double a = 10.0;
+					double b = -6.0;
+					double weight = 1.0 / (1 + std::exp(-(relArea[0] * a + b)));
+					r.setWeight(weight);
+				}
+				
+
 				mFmPatches.push_back(r);
 			}
 		}
@@ -341,7 +361,7 @@ namespace rdf {
 		return true;
 	}
 
-	bool FocusEstimation::computeRefPatches(FocusMeasure fm)
+	bool FocusEstimation::computeRefPatches(FocusMeasure fm, bool binary)
 	{
 		if (mSrcImg.empty())
 			return false;
@@ -351,7 +371,7 @@ namespace rdf {
 		cv::threshold(binImg, binImg, 0, 1, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 		binImg.convertTo(binImg, CV_64F);
 
-		return compute(fm, binImg);
+		return compute(fm, binImg, binary);
 	}
 
 	std::vector<Patch> FocusEstimation::fmPatches() const
@@ -434,6 +454,16 @@ namespace rdf {
 		mFmReference = f;
 	}
 
+	void Patch::setWeight(double w)
+	{
+		mWeight = w;
+	}
+
+	void Patch::setArea(double a)
+	{
+		mArea = a;
+	}
+
 	int Patch::width() const
 	{
 		return mWidth;
@@ -447,6 +477,16 @@ namespace rdf {
 	double Patch::fm() const
 	{
 		return mFm;
+	}
+
+	double Patch::weight() const
+	{
+		return mWeight;
+	}
+
+	double Patch::area() const
+	{
+		return mArea;
 	}
 
 	std::string Patch::fmS() const
