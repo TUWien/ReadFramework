@@ -97,6 +97,7 @@ namespace rdf {
 		double computeRMS();
 
 		void setImg(const cv::Mat& img);
+		void setLum(bool l);
 		double val() const;
 		void setWindowSize(int s);
 		int windowSize() const;
@@ -109,7 +110,7 @@ namespace rdf {
 		// parameters
 		double mVal = -1.0;
 		int mWindowSize = 15;
-
+		bool mLuminance = false;
 	};
 
 

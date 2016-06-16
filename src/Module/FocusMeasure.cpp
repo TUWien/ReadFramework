@@ -528,6 +528,10 @@ namespace rdf {
 	{
 		if (checkInput()) {
 
+			double min, max;
+			cv::minMaxLoc(mSrcImg, &min, &max);
+
+			mVal = max / (min + +std::numeric_limits<double>::epsilon()) - 1;
 		}
 		else {
 			mVal = -1.0;
@@ -560,6 +564,11 @@ namespace rdf {
 		mSrcImg = img;
 	}
 
+	void BasicContrast::setLum(bool l)
+	{
+		mLuminance = l;
+	}
+
 	double BasicContrast::val() const
 	{
 		return mVal;
@@ -583,8 +592,14 @@ namespace rdf {
 		if (mSrcImg.cols < 4 || mSrcImg.rows < 4)
 			return false;
 
-		if (mSrcImg.channels() != 1)
+		if (mSrcImg.channels() != 1 && mLuminance == false) {
 			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		} else if (mSrcImg.channels() != 1 && mLuminance == true) {
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2Luv);
+			std::vector<cv::Mat> channels;
+			cv::split(mSrcImg, channels);
+			mSrcImg = channels[0];
+		}
 
 		if (mSrcImg.depth() != CV_64F)
 			mSrcImg.convertTo(mSrcImg, CV_64F);
