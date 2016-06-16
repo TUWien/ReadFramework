@@ -85,6 +85,35 @@ namespace rdf {
 
 	};
 
+
+	class DllModuleExport BasicContrast {
+
+	public:
+		BasicContrast();
+		BasicContrast(const cv::Mat& img);
+
+		double computeWeber();
+		double computeMichelson();
+		double computeRMS();
+
+		void setImg(const cv::Mat& img);
+		double val() const;
+		void setWindowSize(int s);
+		int windowSize() const;
+
+	protected:
+		bool checkInput();
+
+		cv::Mat mSrcImg;
+
+		// parameters
+		double mVal = -1.0;
+		int mWindowSize = 15;
+
+	};
+
+
+
 	class DllModuleExport Patch {
 	public:
 		Patch();

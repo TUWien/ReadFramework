@@ -499,4 +499,97 @@ namespace rdf {
 		return mFmReference;
 	}
 
+	BasicContrast::BasicContrast()
+	{
+	}
+
+	BasicContrast::BasicContrast(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	double BasicContrast::computeWeber()
+	{
+		if (checkInput()) {
+			double min, max;
+			cv::minMaxLoc(mSrcImg, &min, &max);
+
+			mVal = (max-min) / (max+min+std::numeric_limits<double>::epsilon());
+
+		}
+		else {
+			mVal = -1.0;
+		}
+
+		return mVal;
+	}
+
+	double BasicContrast::computeMichelson()
+	{
+		if (checkInput()) {
+
+		}
+		else {
+			mVal = -1.0;
+		}
+
+		return mVal;
+	}
+
+	double BasicContrast::computeRMS()
+	{
+		if (checkInput()) {
+
+			cv::Scalar m;
+			m = cv::mean(mSrcImg);
+
+			cv::Mat tmp = mSrcImg - m;
+			tmp = tmp.mul(tmp);
+			cv::Scalar s = cv::sum(tmp);
+			mVal = s[0] / (double)(mSrcImg.rows*mSrcImg.cols);
+		}
+		else {
+			mVal = -1.0;
+		}
+	
+		return mVal;
+	}
+
+	void BasicContrast::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	double BasicContrast::val() const
+	{
+		return mVal;
+	}
+
+	void BasicContrast::setWindowSize(int s)
+	{
+		mWindowSize = s;
+	}
+
+	int BasicContrast::windowSize() const
+	{
+		return mWindowSize;
+	}
+
+	bool BasicContrast::checkInput()
+	{
+		if (mSrcImg.empty())
+			return false;
+
+		if (mSrcImg.cols < 4 || mSrcImg.rows < 4)
+			return false;
+
+		if (mSrcImg.channels() != 1)
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+		if (mSrcImg.depth() != CV_64F)
+			mSrcImg.convertTo(mSrcImg, CV_64F);
+
+		return true;
+	}
+
 }
