@@ -510,39 +510,31 @@ namespace rdf {
 
 	double BasicContrast::computeWeber()
 	{
-		if (checkInput()) {
+
 			double min, max;
 			cv::minMaxLoc(mSrcImg, &min, &max);
 
 			mVal = (max-min) / (max+min+std::numeric_limits<double>::epsilon());
 
-		}
-		else {
-			mVal = -1.0;
-		}
 
 		return mVal;
 	}
 
 	double BasicContrast::computeMichelson()
 	{
-		if (checkInput()) {
+
 
 			double min, max;
 			cv::minMaxLoc(mSrcImg, &min, &max);
 
 			mVal = max / (min + +std::numeric_limits<double>::epsilon()) - 1;
-		}
-		else {
-			mVal = -1.0;
-		}
 
 		return mVal;
 	}
 
 	double BasicContrast::computeRMS()
 	{
-		if (checkInput()) {
+
 
 			cv::Scalar m;
 			m = cv::mean(mSrcImg);
@@ -551,10 +543,6 @@ namespace rdf {
 			tmp = tmp.mul(tmp);
 			cv::Scalar s = cv::sum(tmp);
 			mVal = s[0] / (double)(mSrcImg.rows*mSrcImg.cols);
-		}
-		else {
-			mVal = -1.0;
-		}
 	
 		return mVal;
 	}
@@ -584,7 +572,93 @@ namespace rdf {
 		return mWindowSize;
 	}
 
-	bool BasicContrast::checkInput()
+
+	ContrastEstimation::ContrastEstimation()
+	{
+	}
+
+	ContrastEstimation::ContrastEstimation(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	ContrastEstimation::ContrastEstimation(const cv::Mat & img, int wSize)
+	{
+		mSrcImg = img;
+		mWindowSize = wSize;
+	}
+
+	bool ContrastEstimation::compute(ContrastMeasure fm)
+	{
+
+		BasicContrast contClass;
+		double c;
+		mContPatches.clear();
+
+		if (checkInput()) {
+
+			for (int row = 0; row < mSrcImg.rows; row += (mWindowSize + mSplitSize)) {
+				for (int col = 0; col < mSrcImg.cols; col += (mWindowSize + mSplitSize)) {
+
+					cv::Range rR(row, cv::min(row + mWindowSize, mSrcImg.rows));
+					cv::Range cR(col, cv::min(col + mWindowSize, mSrcImg.cols));
+
+					cv::Mat tile = mSrcImg(rR, cR);
+
+					contClass.setImg(tile);
+
+					switch (fm)
+					{
+					case rdf::ContrastEstimation::WEBER:
+						c = contClass.computeWeber();
+						break;
+					case rdf::ContrastEstimation::MICHELSON:
+						c = contClass.computeMichelson();
+						break;
+					case rdf::ContrastEstimation::RMS:
+						c = contClass.computeRMS();
+						break;
+					default:
+						c = -1;
+						break;
+					}
+
+					Patch r(cv::Point(col, row), mWindowSize, mWindowSize, c);
+
+					mContPatches.push_back(r);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	std::vector<Patch> ContrastEstimation::cPatches() const
+	{
+		return mContPatches;
+	}
+
+	void ContrastEstimation::setImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+
+	void ContrastEstimation::setWindowSize(int s)
+	{
+		mWindowSize = s;
+	}
+
+	void ContrastEstimation::setSplitSize(int s)
+	{
+		mSplitSize = s;
+	}
+
+	int ContrastEstimation::windowSize() const
+	{
+		return mWindowSize;
+	}
+
+	bool ContrastEstimation::checkInput()
 	{
 		if (mSrcImg.empty())
 			return false;
@@ -594,7 +668,8 @@ namespace rdf {
 
 		if (mSrcImg.channels() != 1 && mLuminance == false) {
 			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
-		} else if (mSrcImg.channels() != 1 && mLuminance == true) {
+		}
+		else if (mSrcImg.channels() != 1 && mLuminance == true) {
 			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2Luv);
 			std::vector<cv::Mat> channels;
 			cv::split(mSrcImg, channels);
@@ -602,9 +677,14 @@ namespace rdf {
 		}
 
 		if (mSrcImg.depth() != CV_64F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			mSrcImg.convertTo(mSrcImg, CV_64F, 1.0/255.0);
 
 		return true;
+	}
+
+	void ContrastEstimation::setLum(bool b)
+	{
+		mLuminance = b;
 	}
 
 }
