@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['focusmeasure',['FocusMeasure',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe',1,'rdf::FocusEstimation']]]
+  ['edgedirection',['EdgeDirection',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997',1,'rdf::BaseSkewEstimation']]]
 ];

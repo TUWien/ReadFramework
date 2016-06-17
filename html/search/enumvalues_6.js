@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rogr',['ROGR',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf',1,'rdf::FocusEstimation']]]
+  ['michelson',['MICHELSON',['../classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119a3b94332e12b6379f5786205fe230e42a',1,'rdf::ContrastEstimation']]]
 ];

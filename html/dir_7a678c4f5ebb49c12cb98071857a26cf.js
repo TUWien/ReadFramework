@@ -12,8 +12,10 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "FocusMeasure.cpp", "_focus_measure_8cpp.html", null ],
     [ "FocusMeasure.h", "_focus_measure_8h.html", [
       [ "BasicFM", "classrdf_1_1_basic_f_m.html", "classrdf_1_1_basic_f_m" ],
+      [ "BasicContrast", "classrdf_1_1_basic_contrast.html", "classrdf_1_1_basic_contrast" ],
       [ "Patch", "classrdf_1_1_patch.html", "classrdf_1_1_patch" ],
-      [ "FocusEstimation", "classrdf_1_1_focus_estimation.html", "classrdf_1_1_focus_estimation" ]
+      [ "FocusEstimation", "classrdf_1_1_focus_estimation.html", "classrdf_1_1_focus_estimation" ],
+      [ "ContrastEstimation", "classrdf_1_1_contrast_estimation.html", "classrdf_1_1_contrast_estimation" ]
     ] ],
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [

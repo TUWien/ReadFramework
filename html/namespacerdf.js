@@ -30,8 +30,10 @@ var namespacerdf =
     [ "BinarizationSuAdapted", "classrdf_1_1_binarization_su_adapted.html", "classrdf_1_1_binarization_su_adapted" ],
     [ "BinarizationSuFgdWeight", "classrdf_1_1_binarization_su_fgd_weight.html", "classrdf_1_1_binarization_su_fgd_weight" ],
     [ "BasicFM", "classrdf_1_1_basic_f_m.html", "classrdf_1_1_basic_f_m" ],
+    [ "BasicContrast", "classrdf_1_1_basic_contrast.html", "classrdf_1_1_basic_contrast" ],
     [ "Patch", "classrdf_1_1_patch.html", "classrdf_1_1_patch" ],
     [ "FocusEstimation", "classrdf_1_1_focus_estimation.html", "classrdf_1_1_focus_estimation" ],
+    [ "ContrastEstimation", "classrdf_1_1_contrast_estimation.html", "classrdf_1_1_contrast_estimation" ],
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
     [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]
