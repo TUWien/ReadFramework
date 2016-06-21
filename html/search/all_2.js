@@ -21,7 +21,7 @@ var searchData=
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html',1,'rdf']]],
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html#a8f1ad72deae51b99cf8d4cb8e6c7770f',1,'rdf::BinarizationTest']]],
   ['binarizetest',['binarizeTest',['../classrdf_1_1_binarization_test.html#a02ac2487eb6b32676e84fe92b445a5b4',1,'rdf::BinarizationTest']]],
-  ['binaryimage',['binaryImage',['../classrdf_1_1_simple_binarization.html#a56428027b0b8bb27626da40210c81aed',1,'rdf::SimpleBinarization::binaryImage()'],['../classrdf_1_1_base_binarization_su.html#a3aced4a4a6f52f04c6092387d0042081',1,'rdf::BaseBinarizationSu::binaryImage()'],['../classrdf_1_1_super_pixel.html#a9cb16fb65d06c2dd57b5c4bf4e6bc973',1,'rdf::SuperPixel::binaryImage()']]],
+  ['binaryimage',['binaryImage',['../classrdf_1_1_simple_binarization.html#a56428027b0b8bb27626da40210c81aed',1,'rdf::SimpleBinarization::binaryImage()'],['../classrdf_1_1_base_binarization_su.html#a3aced4a4a6f52f04c6092387d0042081',1,'rdf::BaseBinarizationSu::binaryImage()'],['../classrdf_1_1_form_features.html#a4d99a1d303aefa0c07ead1ec68a4c6e2',1,'rdf::FormFeatures::binaryImage()'],['../classrdf_1_1_super_pixel.html#a9cb16fb65d06c2dd57b5c4bf4e6bc973',1,'rdf::SuperPixel::binaryImage()']]],
   ['blob',['Blob',['../classrdf_1_1_blob.html',1,'rdf']]],
   ['blob',['Blob',['../classrdf_1_1_blob.html#a524cc4f4349f4e41faceb1df4dcaed5f',1,'rdf::Blob::Blob()'],['../classrdf_1_1_blob.html#af1e9cf46848b6a6b0118dba3e7c8c32e',1,'rdf::Blob::Blob(const QVector&lt; cv::Point &gt; &amp;outerC, const QVector&lt; QVector&lt; cv::Point &gt; &gt; &amp;innerC)']]],
   ['blobmanager',['BlobManager',['../classrdf_1_1_blob_manager.html',1,'rdf']]],

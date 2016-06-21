@@ -34,6 +34,7 @@ var namespacerdf =
     [ "Patch", "classrdf_1_1_patch.html", "classrdf_1_1_patch" ],
     [ "FocusEstimation", "classrdf_1_1_focus_estimation.html", "classrdf_1_1_focus_estimation" ],
     [ "ContrastEstimation", "classrdf_1_1_contrast_estimation.html", "classrdf_1_1_contrast_estimation" ],
+    [ "FormFeatures", "classrdf_1_1_form_features.html", "classrdf_1_1_form_features" ],
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
     [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]

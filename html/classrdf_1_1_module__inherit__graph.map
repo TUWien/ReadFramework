@@ -1,9 +1,10 @@
 <map id="rdf::Module" name="rdf::Module">
 <area shape="rect" id="node2" href="$classrdf_1_1_base_binarization_su.html" title="The class binarize a grayvalue image. The segmentation algorithm is based on &quot;Binarization of Histori..." alt="" coords="147,5,306,32"/>
 <area shape="rect" id="node5" href="$classrdf_1_1_base_skew_estimation.html" title="The class estimates the skew of a document page. The methodology is based on &quot;Skew estimation of natu..." alt="" coords="141,56,312,83"/>
-<area shape="rect" id="node6" href="$classrdf_1_1_line_trace.html" title="Detects Lines in a binary image. The result is a binary image containing all line elements (pixel acc..." alt="" coords="175,107,278,133"/>
-<area shape="rect" id="node7" href="$classrdf_1_1_simple_binarization.html" title="A simple binarization module using a defined threshold. " alt="" coords="150,157,303,184"/>
-<area shape="rect" id="node8" href="$classrdf_1_1_super_pixel.html" title="rdf::SuperPixel" alt="" coords="173,208,281,235"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_form_features.html" title="rdf::FormFeatures" alt="" coords="163,107,290,133"/>
+<area shape="rect" id="node7" href="$classrdf_1_1_line_trace.html" title="Detects Lines in a binary image. The result is a binary image containing all line elements (pixel acc..." alt="" coords="175,157,278,184"/>
+<area shape="rect" id="node8" href="$classrdf_1_1_simple_binarization.html" title="A simple binarization module using a defined threshold. " alt="" coords="150,208,303,235"/>
+<area shape="rect" id="node9" href="$classrdf_1_1_super_pixel.html" title="rdf::SuperPixel" alt="" coords="173,259,281,285"/>
 <area shape="rect" id="node3" href="$classrdf_1_1_binarization_su_adapted.html" title="The class binarize a grayvalue image. The segmentation algorithm is based on &quot;Binarization of Histori..." alt="" coords="361,5,538,32"/>
 <area shape="rect" id="node4" href="$classrdf_1_1_binarization_su_fgd_weight.html" title="The class binarize a rgb color image. To make the algorithm robust against noise, the foreground is e..." alt="" coords="587,5,779,32"/>
 </map>

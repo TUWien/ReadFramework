@@ -20,6 +20,7 @@ var searchData=
   ['setdrawpoly',['setDrawPoly',['../classrdf_1_1_region_type_config.html#abdbed4b1c0e9800342201eb560f887fe',1,'rdf::RegionTypeConfig']]],
   ['setdrawtext',['setDrawText',['../classrdf_1_1_region_type_config.html#af406b39581b4c8ebe62f5c2be486664e',1,'rdf::RegionTypeConfig']]],
   ['setepsilon',['setEpsilon',['../classrdf_1_1_base_skew_estimation.html#a8a148044350dc476f9fbf8bbacf693e9',1,'rdf::BaseSkewEstimation']]],
+  ['setestimateskew',['setEstimateSkew',['../classrdf_1_1_form_features.html#a43d73dd6416c66f229f9c43dd5218180',1,'rdf::FormFeatures']]],
   ['setfiltering',['setFiltering',['../classrdf_1_1_binarization_su_adapted.html#a7d4597ed54bbaa58534bccc44f0b068f',1,'rdf::BinarizationSuAdapted']]],
   ['setfixedthr',['setFixedThr',['../classrdf_1_1_base_skew_estimation.html#a6f67e711a03d80899d4e8b8728aacfe1',1,'rdf::BaseSkewEstimation']]],
   ['setfmref',['setFmRef',['../classrdf_1_1_patch.html#ae2e24d44251214c3c2a7ac52248e10c2',1,'rdf::Patch']]],
@@ -31,8 +32,10 @@ var searchData=
   ['setimages',['setImages',['../classrdf_1_1_base_skew_estimation.html#a9e268dd57006d111a03f49654f712cd0',1,'rdf::BaseSkewEstimation']]],
   ['setimagesize',['setImageSize',['../classrdf_1_1_page_element.html#a00fb2d65ada087832261b6728f81719b',1,'rdf::PageElement']]],
   ['setimg',['setImg',['../classrdf_1_1_basic_f_m.html#a5fea695f3753d0dbe14e7bdef827ebac',1,'rdf::BasicFM::setImg()'],['../classrdf_1_1_basic_contrast.html#ad68a956d116b503ba791a6670104429f',1,'rdf::BasicContrast::setImg()'],['../classrdf_1_1_focus_estimation.html#ab3a7c53dbbcb194ea5354d7140d4923d',1,'rdf::FocusEstimation::setImg()'],['../classrdf_1_1_contrast_estimation.html#a3295286678307a2e2ab631da5143492e',1,'rdf::ContrastEstimation::setImg()']]],
+  ['setinputimg',['setInputImg',['../classrdf_1_1_form_features.html#aeb24e5ce439a6769ce4ec13d8ebe90ce',1,'rdf::FormFeatures']]],
   ['setline',['setLine',['../classrdf_1_1_line.html#a75aa64366e7c5a5d206f186424cd6ab9',1,'rdf::Line']]],
   ['setlum',['setLum',['../classrdf_1_1_basic_contrast.html#af77d84ec66869c55289c3581d941c963',1,'rdf::BasicContrast::setLum()'],['../classrdf_1_1_contrast_estimation.html#a4569f1d40ff6cf750c68b0f786654242',1,'rdf::ContrastEstimation::setLum()']]],
+  ['setmask',['setMask',['../classrdf_1_1_form_features.html#a4ec39d7b6f425cfb62e206b141e5edef',1,'rdf::FormFeatures']]],
   ['setmaxaspectratio',['setMaxAspectRatio',['../classrdf_1_1_line_trace.html#a172752621ba635db249592cf015444c1',1,'rdf::LineTrace']]],
   ['setminlensecondrun',['setMinLenSecondRun',['../classrdf_1_1_line_trace.html#a755d6cc1acc2fdeefd8dbf90e4fc2e47',1,'rdf::LineTrace']]],
   ['setmminlinelength',['setmMinLineLength',['../classrdf_1_1_base_skew_estimation.html#a39d4a254aac691e2db2c140585e561c5',1,'rdf::BaseSkewEstimation']]],
@@ -72,8 +75,8 @@ var searchData=
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];

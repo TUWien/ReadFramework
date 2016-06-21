@@ -36,7 +36,7 @@ var NAVTREEINDEX =
 [
 "_algorithms_8cpp.html",
 "classrdf_1_1_blob_manager.html#a75fa4e3373dd8c9bdc674f012901f52f",
-"classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1"
+"classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

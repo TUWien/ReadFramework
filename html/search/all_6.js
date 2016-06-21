@@ -14,5 +14,7 @@ var searchData=
   ['focusmeasure_2ecpp',['FocusMeasure.cpp',['../_focus_measure_8cpp.html',1,'']]],
   ['focusmeasure_2eh',['FocusMeasure.h',['../_focus_measure_8h.html',1,'']]],
   ['formanalysis_2ecpp',['FormAnalysis.cpp',['../_form_analysis_8cpp.html',1,'']]],
-  ['formanalysis_2eh',['FormAnalysis.h',['../_form_analysis_8h.html',1,'']]]
+  ['formanalysis_2eh',['FormAnalysis.h',['../_form_analysis_8h.html',1,'']]],
+  ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html#ab848f428a204c0ece54602bf93ae39d8',1,'rdf::FormFeatures::FormFeatures()'],['../classrdf_1_1_form_features.html#af587ef40ac6392f4585768584222ee4d',1,'rdf::FormFeatures::FormFeatures(const cv::Mat &amp;img, const cv::Mat &amp;mask)']]],
+  ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html',1,'rdf']]]
 ];
