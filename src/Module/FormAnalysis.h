@@ -32,8 +32,13 @@
 
 #pragma once
 
+#include "BaseModule.h"
+#include "LineTrace.h"
+
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QObject>
+
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
 // TODO: add DllExport magic
@@ -42,6 +47,40 @@
 
 namespace rdf {
 
-// read defines
+	class DllModuleExport FormFeatures : public Module {
+
+	public:
+		FormFeatures();
+		FormFeatures(const cv::Mat& img, const cv::Mat& mask);
+
+		void setInputImg(const cv::Mat& img);
+		void setMask(const cv::Mat& mask);
+		bool isEmpty() const override;
+		bool compute() override;
+		bool computeBinaryInput();
+
+		cv::Mat binaryImage() const;
+		void setEstimateSkew(bool s);
+		//void setThresh(int thresh);
+		//int thresh() const;
+		QString toString() const override;
+
+	private:
+		cv::Mat mSrcImg;
+		cv::Mat mMask;
+		cv::Mat mBwImg;
+		bool mEstimateSkew = false;
+		double mPageAngle = 0.0;
+
+		QVector<rdf::Line> mHorLines;
+		QVector<rdf::Line> mVerLines;
+
+		// parameters
+
+		bool checkInput() const override;
+
+		//void load(const QSettings& settings) override;
+		//void save(QSettings& settings) const override;
+	};
 
 };

@@ -31,11 +31,118 @@
  *******************************************************************************************************/
 
 #include "FormAnalysis.h"
+#include "Binarization.h"
+#include "SkewEstimation.h"
+
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QDebug>
+
+#include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
 namespace rdf {
+	FormFeatures::FormFeatures()
+	{
+	}
+	FormFeatures::FormFeatures(const cv::Mat & img, const cv::Mat & mask)
+	{
+		mSrcImg = img;
+		mMask = mask;
+	}
+	void FormFeatures::setInputImg(const cv::Mat & img)
+	{
+		mSrcImg = img;
+	}
+	void FormFeatures::setMask(const cv::Mat & mask)
+	{
+		mMask = mask;
+	}
+	bool FormFeatures::isEmpty() const
+	{
+		return mSrcImg.empty();
+	}
+	bool FormFeatures::compute()
+	{
+		if (!checkInput())
+			return false;
 
+		if (mBwImg.empty()) {
+			if (!computeBinaryInput())
+				return false;
+
+			mWarning << "binary image was not set - was calculated";
+		}
+
+		if (mEstimateSkew) {
+			BaseSkewEstimation skewE(mSrcImg, mMask);
+			skewE.compute();
+			mPageAngle = skewE.getAngle();
+		}
+
+		//compute Lines
+		LineTrace lt(mBwImg, mMask);
+		if (mEstimateSkew) {
+			lt.setAngle(mPageAngle);
+		}
+		lt.compute();
+
+		mHorLines = lt.getHLines();
+		mVerLines = lt.getVLines();
+
+		return true;
+	}
+
+	bool FormFeatures::computeBinaryInput()
+	{
+		if (mSrcImg.empty() || mSrcImg.depth() != CV_8U) {
+			mWarning << "image is empty or illegal image depth: " << mSrcImg.depth();
+			return false;
+		}
+
+		if (!mMask.empty() && mMask.depth() != CV_8U && mMask.channels() != 1) {
+			mWarning << "illegal image depth or channel for mask: " << mMask.depth();
+			return false;
+		}
+
+		BinarizationSuAdapted binarizeImg(mSrcImg, mMask);
+		binarizeImg.compute();
+		mBwImg = binarizeImg.binaryImage();
+
+		return true;
+	}
+
+	cv::Mat FormFeatures::binaryImage() const
+	{
+		return mBwImg;
+	}
+
+	void FormFeatures::setEstimateSkew(bool s)
+	{
+		mEstimateSkew = s;
+	}
+
+	QString FormFeatures::toString() const
+	{
+		return QString("Form Features class calculates line and layout features for form classification");
+	}
+
+	bool FormFeatures::checkInput() const
+	{
+		if (mSrcImg.empty())
+			return false;
+
+		if (mSrcImg.depth() != CV_8U) {
+			mSrcImg.convertTo(mSrcImg, CV_8U, 255);
+			mWarning << "Input image was not CV_8U - has been converted";
+		}
+
+		if (mSrcImg.channels() != 1) {
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+
+			mWarning << "Input image was a color image - has been converted tpo grayscale";
+		}
+
+		return true;
+	}
 }
