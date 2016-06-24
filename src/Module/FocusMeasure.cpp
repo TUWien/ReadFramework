@@ -179,6 +179,7 @@ namespace rdf {
 		cv::Scalar m, v;
 		cv::meanStdDev(laImg, m, v);
 
+		//mVal = m[0];
 		mVal = m[0] / 1040400.0;
 
 		return mVal;
@@ -197,7 +198,7 @@ namespace rdf {
 							   //1020 = 4 *255 if filter [0 1 0; 1 -4 1; 0 1 0]
 							   //see cv::Laplacian
 							   //normalize
-		mVal = mVal / 1040400.0;
+		//mVal = mVal / 1040400.0;
 
 		return mVal;
 	}
@@ -377,8 +378,8 @@ namespace rdf {
 			return false;
 
 		cv::Mat binImg;
-		mSrcImg.convertTo(binImg, CV_8U, 255);
-		cv::threshold(binImg, binImg, 0, 1, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+		mSrcImg.convertTo(binImg, CV_8U);
+		cv::threshold(binImg, binImg, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 		binImg.convertTo(binImg, CV_64F);
 
 		return compute(fm, binImg, binary);
