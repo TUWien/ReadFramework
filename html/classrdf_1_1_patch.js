@@ -10,6 +10,7 @@ var classrdf_1_1_patch =
     [ "fmS", "classrdf_1_1_patch.html#a038d5e236019f362407450456fccffe5", null ],
     [ "height", "classrdf_1_1_patch.html#afb47b316d86a0d19ea40d73ccbaabbe8", null ],
     [ "setArea", "classrdf_1_1_patch.html#accee4efad23797b820a77b7ad92ce025", null ],
+    [ "setFm", "classrdf_1_1_patch.html#a9cd9bf1fd2ada4b9166de2c327f8a144", null ],
     [ "setFmRef", "classrdf_1_1_patch.html#ae2e24d44251214c3c2a7ac52248e10c2", null ],
     [ "setPosition", "classrdf_1_1_patch.html#a7a2d45f4ffe51ef66ce5a0f958acedc9", null ],
     [ "setWeight", "classrdf_1_1_patch.html#aae8121f198a68ddadc234dc6db8bb1f0", null ],

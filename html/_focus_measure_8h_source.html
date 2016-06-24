@@ -231,109 +231,110 @@ $(document).ready(function(){initNavTree('_focus_measure_8h_source.html','');});
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        cv::Point upperLeft() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        cv::Point center() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordtype">void</span> setFmRef(<span class="keywordtype">double</span> f);</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> setWeight(<span class="keywordtype">double</span> w);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">void</span> setArea(<span class="keywordtype">double</span> a);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">int</span> width() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordtype">int</span> height() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordtype">double</span> fm() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">double</span> weight() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">double</span> area() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        std::string fmS() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">double</span> fmRef() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> setFm(<span class="keywordtype">double</span> f);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">void</span> setWeight(<span class="keywordtype">double</span> w);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">void</span> setArea(<span class="keywordtype">double</span> a);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordtype">int</span> width() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">int</span> height() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">double</span> fm() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">double</span> weight() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordtype">double</span> area() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        std::string fmS() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordtype">double</span> fmRef() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">  141</a></span>&#160;        cv::Point <a class="code" href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">mUpperLeft</a>;</div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6">  142</a></span>&#160;        <span class="keywordtype">int</span> mWidth = 0;</div>
-<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a5ea19fa9b487d4eadd542d5246c7e179">  143</a></span>&#160;        <span class="keywordtype">int</span> mHeight = 0;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#ae3f372e46d351fa9f032958d67cedbd0">  145</a></span>&#160;        <span class="keywordtype">double</span> mFm = -1;</div>
-<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#aa71ea97910ebbe3d9505872309f8bf9b">  146</a></span>&#160;        <span class="keywordtype">double</span> mFmReference = -1;</div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2">  147</a></span>&#160;        <span class="keywordtype">double</span> mWeight = -1;</div>
-<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a66219dedf0419b86e3616d1ddc029e68">  148</a></span>&#160;        <span class="keywordtype">double</span> mArea = -1;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    };</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html">  151</a></span>&#160;    <span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a> {</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf">  154</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV, ROGR };</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>();</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> wSize);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">bool</span> compute(FocusMeasure fm = BREN, cv::Mat fmImg = cv::Mat(), <span class="keywordtype">bool</span> binary = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">bool</span> computeRefPatches(FocusMeasure fm = BREN, <span class="keywordtype">bool</span> binary = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::vector&lt;Patch&gt; fmPatches() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">void</span> setImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">void</span> setWindowSize(<span class="keywordtype">int</span> s);</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordtype">void</span> setSplitSize(<span class="keywordtype">int</span> s);</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">int</span> windowSize() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">  170</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">mSrcImg</a>;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">  172</a></span>&#160;        std::vector&lt;Patch&gt; <a class="code" href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">mFmPatches</a>;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="comment">// parameters</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f">  175</a></span>&#160;        <span class="keywordtype">int</span> mWindowSize = 40;</div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a52bdcb0501c36db44ee18b244650c192">  176</a></span>&#160;        <span class="keywordtype">int</span> mSplitSize = 0;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    };</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">  142</a></span>&#160;        cv::Point <a class="code" href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">mUpperLeft</a>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6">  143</a></span>&#160;        <span class="keywordtype">int</span> mWidth = 0;</div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a5ea19fa9b487d4eadd542d5246c7e179">  144</a></span>&#160;        <span class="keywordtype">int</span> mHeight = 0;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#ae3f372e46d351fa9f032958d67cedbd0">  146</a></span>&#160;        <span class="keywordtype">double</span> mFm = -1;</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#aa71ea97910ebbe3d9505872309f8bf9b">  147</a></span>&#160;        <span class="keywordtype">double</span> mFmReference = -1;</div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2">  148</a></span>&#160;        <span class="keywordtype">double</span> mWeight = -1;</div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classrdf_1_1_patch.html#a66219dedf0419b86e3616d1ddc029e68">  149</a></span>&#160;        <span class="keywordtype">double</span> mArea = -1;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    };</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html">  152</a></span>&#160;    <span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a> {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf">  155</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">FocusMeasure</a> { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV, ROGR };</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="code" href="classrdf_1_1_focus_estimation.html">FocusEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> wSize);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">bool</span> compute(FocusMeasure fm = BREN, cv::Mat fmImg = cv::Mat(), <span class="keywordtype">bool</span> binary = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">bool</span> computeRefPatches(FocusMeasure fm = BREN, <span class="keywordtype">bool</span> binary = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        std::vector&lt;Patch&gt; fmPatches() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">void</span> setImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordtype">void</span> setWindowSize(<span class="keywordtype">int</span> s);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">void</span> setSplitSize(<span class="keywordtype">int</span> s);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordtype">int</span> windowSize() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">  171</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">mSrcImg</a>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">  173</a></span>&#160;        std::vector&lt;Patch&gt; <a class="code" href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">mFmPatches</a>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="comment">// parameters</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f">  176</a></span>&#160;        <span class="keywordtype">int</span> mWindowSize = 40;</div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="classrdf_1_1_focus_estimation.html#a52bdcb0501c36db44ee18b244650c192">  177</a></span>&#160;        <span class="keywordtype">int</span> mSplitSize = 0;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    };</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
-<div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html">  180</a></span>&#160;    <span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a> {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119ab5490c2edb8787424cf1285ce6071622">  183</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119">ContrastMeasure</a> { WEBER = 0, MICHELSON, RMS };</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>();</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> wSize);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordtype">bool</span> compute(ContrastMeasure fm = WEBER);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        std::vector&lt;Patch&gt; cPatches() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordtype">void</span> setImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">void</span> setWindowSize(<span class="keywordtype">int</span> s);</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordtype">void</span> setSplitSize(<span class="keywordtype">int</span> s);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordtype">int</span> windowSize() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">bool</span> checkInput();</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">void</span> setLum(<span class="keywordtype">bool</span> b);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">  200</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">mSrcImg</a>;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
-<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">  202</a></span>&#160;        std::vector&lt;Patch&gt; <a class="code" href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">mContPatches</a>;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="comment">// parameters</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a77276488650bd0b7fb06e8c57454eb19">  205</a></span>&#160;        <span class="keywordtype">int</span> mWindowSize = 100;</div>
-<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#af1fa16f1ad360245d4ca52825183549e">  206</a></span>&#160;        <span class="keywordtype">int</span> mSplitSize = 0;</div>
-<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a142158e1a63a086620a6a913ab51b84e">  207</a></span>&#160;        <span class="keywordtype">bool</span> mLuminance = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    };</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
+<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html">  181</a></span>&#160;    <span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a> {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119ab5490c2edb8787424cf1285ce6071622">  184</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119">ContrastMeasure</a> { WEBER = 0, MICHELSON, RMS };</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>();</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <a class="code" href="classrdf_1_1_contrast_estimation.html">ContrastEstimation</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> wSize);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">bool</span> compute(ContrastMeasure fm = WEBER);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        std::vector&lt;Patch&gt; cPatches() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">void</span> setImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordtype">void</span> setWindowSize(<span class="keywordtype">int</span> s);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordtype">void</span> setSplitSize(<span class="keywordtype">int</span> s);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">int</span> windowSize() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">bool</span> checkInput();</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">void</span> setLum(<span class="keywordtype">bool</span> b);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00201"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">  201</a></span>&#160;        cv::Mat <a class="code" href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">mSrcImg</a>;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">  203</a></span>&#160;        std::vector&lt;Patch&gt; <a class="code" href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">mContPatches</a>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="comment">// parameters</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a77276488650bd0b7fb06e8c57454eb19">  206</a></span>&#160;        <span class="keywordtype">int</span> mWindowSize = 100;</div>
+<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#af1fa16f1ad360245d4ca52825183549e">  207</a></span>&#160;        <span class="keywordtype">int</span> mSplitSize = 0;</div>
+<div class="line"><a name="l00208"></a><span class="lineno"><a class="line" href="classrdf_1_1_contrast_estimation.html#a142158e1a63a086620a6a913ab51b84e">  208</a></span>&#160;        <span class="keywordtype">bool</span> mLuminance = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    };</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;};</div>
-<div class="ttc" id="classrdf_1_1_patch_html_ae2cbe64438023f22ce99a0448c9af49f"><div class="ttname"><a href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">rdf::Patch::mUpperLeft</a></div><div class="ttdeci">cv::Point mUpperLeft</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:141</div></div>
-<div class="ttc" id="classrdf_1_1_focus_estimation_html_a5c8397b2eee289b1b9c702db01ff57e4"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">rdf::FocusEstimation::mFmPatches</a></div><div class="ttdeci">std::vector&lt; Patch &gt; mFmPatches</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:172</div></div>
-<div class="ttc" id="classrdf_1_1_contrast_estimation_html"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html">rdf::ContrastEstimation</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:180</div></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;};</div>
+<div class="ttc" id="classrdf_1_1_patch_html_ae2cbe64438023f22ce99a0448c9af49f"><div class="ttname"><a href="classrdf_1_1_patch.html#ae2cbe64438023f22ce99a0448c9af49f">rdf::Patch::mUpperLeft</a></div><div class="ttdeci">cv::Point mUpperLeft</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:142</div></div>
+<div class="ttc" id="classrdf_1_1_focus_estimation_html_a5c8397b2eee289b1b9c702db01ff57e4"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#a5c8397b2eee289b1b9c702db01ff57e4">rdf::FocusEstimation::mFmPatches</a></div><div class="ttdeci">std::vector&lt; Patch &gt; mFmPatches</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:173</div></div>
+<div class="ttc" id="classrdf_1_1_contrast_estimation_html"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html">rdf::ContrastEstimation</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:181</div></div>
 <div class="ttc" id="classrdf_1_1_basic_contrast_html_aea24159b0ba41af1861e6a3a32cb4038"><div class="ttname"><a href="classrdf_1_1_basic_contrast.html#aea24159b0ba41af1861e6a3a32cb4038">rdf::BasicContrast::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:107</div></div>
-<div class="ttc" id="classrdf_1_1_contrast_estimation_html_a04551ee81fdcf46962f31ffff765fd47"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">rdf::ContrastEstimation::mContPatches</a></div><div class="ttdeci">std::vector&lt; Patch &gt; mContPatches</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:202</div></div>
+<div class="ttc" id="classrdf_1_1_contrast_estimation_html_a04551ee81fdcf46962f31ffff765fd47"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47">rdf::ContrastEstimation::mContPatches</a></div><div class="ttdeci">std::vector&lt; Patch &gt; mContPatches</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:203</div></div>
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_basic_contrast_html"><div class="ttname"><a href="classrdf_1_1_basic_contrast.html">rdf::BasicContrast</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:89</div></div>
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:47</div></div>
-<div class="ttc" id="classrdf_1_1_focus_estimation_html_a2f8c60e44084f15ba54e421260409953"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">rdf::FocusEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:170</div></div>
+<div class="ttc" id="classrdf_1_1_focus_estimation_html_a2f8c60e44084f15ba54e421260409953"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953">rdf::FocusEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:171</div></div>
 <div class="ttc" id="classrdf_1_1_patch_html"><div class="ttname"><a href="classrdf_1_1_patch.html">rdf::Patch</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:117</div></div>
 <div class="ttc" id="classrdf_1_1_basic_f_m_html"><div class="ttname"><a href="classrdf_1_1_basic_f_m.html">rdf::BasicFM</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:55</div></div>
 <div class="ttc" id="classrdf_1_1_basic_f_m_html_a2ab2ddb204a36de92737540cd5d55d6e"><div class="ttname"><a href="classrdf_1_1_basic_f_m.html#a2ab2ddb204a36de92737540cd5d55d6e">rdf::BasicFM::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:80</div></div>
-<div class="ttc" id="classrdf_1_1_focus_estimation_html_ac5dfff39bdedcd9fd91480cb8e4313fe"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">rdf::FocusEstimation::FocusMeasure</a></div><div class="ttdeci">FocusMeasure</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:154</div></div>
-<div class="ttc" id="classrdf_1_1_focus_estimation_html"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html">rdf::FocusEstimation</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:151</div></div>
-<div class="ttc" id="classrdf_1_1_contrast_estimation_html_af0313c280267c0b1b8641f53c7c61fc7"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">rdf::ContrastEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:200</div></div>
-<div class="ttc" id="classrdf_1_1_contrast_estimation_html_acf7f3d86b9c0682dceab39a40dfea119"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119">rdf::ContrastEstimation::ContrastMeasure</a></div><div class="ttdeci">ContrastMeasure</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:183</div></div>
+<div class="ttc" id="classrdf_1_1_focus_estimation_html_ac5dfff39bdedcd9fd91480cb8e4313fe"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe">rdf::FocusEstimation::FocusMeasure</a></div><div class="ttdeci">FocusMeasure</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:155</div></div>
+<div class="ttc" id="classrdf_1_1_focus_estimation_html"><div class="ttname"><a href="classrdf_1_1_focus_estimation.html">rdf::FocusEstimation</a></div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:152</div></div>
+<div class="ttc" id="classrdf_1_1_contrast_estimation_html_af0313c280267c0b1b8641f53c7c61fc7"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7">rdf::ContrastEstimation::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:201</div></div>
+<div class="ttc" id="classrdf_1_1_contrast_estimation_html_acf7f3d86b9c0682dceab39a40dfea119"><div class="ttname"><a href="classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119">rdf::ContrastEstimation::ContrastMeasure</a></div><div class="ttdeci">ContrastMeasure</div><div class="ttdef"><b>Definition:</b> FocusMeasure.h:184</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

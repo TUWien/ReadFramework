@@ -23,6 +23,7 @@ var searchData=
   ['setestimateskew',['setEstimateSkew',['../classrdf_1_1_form_features.html#a43d73dd6416c66f229f9c43dd5218180',1,'rdf::FormFeatures']]],
   ['setfiltering',['setFiltering',['../classrdf_1_1_binarization_su_adapted.html#a7d4597ed54bbaa58534bccc44f0b068f',1,'rdf::BinarizationSuAdapted']]],
   ['setfixedthr',['setFixedThr',['../classrdf_1_1_base_skew_estimation.html#a6f67e711a03d80899d4e8b8728aacfe1',1,'rdf::BaseSkewEstimation']]],
+  ['setfm',['setFm',['../classrdf_1_1_patch.html#a9cd9bf1fd2ada4b9166de2c327f8a144',1,'rdf::Patch']]],
   ['setfmref',['setFmRef',['../classrdf_1_1_patch.html#ae2e24d44251214c3c2a7ac52248e10c2',1,'rdf::Patch']]],
   ['seth',['setH',['../classrdf_1_1_base_skew_estimation.html#ae6fb4ac15e9bc5af5e6a198633ee75a9',1,'rdf::BaseSkewEstimation']]],
   ['setid',['setId',['../classrdf_1_1_region.html#a4b1875530c09da1f6c1c361b080006d3',1,'rdf::Region']]],
