@@ -403,7 +403,10 @@ namespace rdf {
 			//mSrcImg.convertTo(mSrcImg, CV_64F, 1.0/255.0);
 
 		if (mSrcImg.depth() == CV_32F)
-			mSrcImg.convertTo(mSrcImg, CV_64F);
+			mSrcImg.convertTo(mSrcImg, CV_64F, 255.0);
+
+		if (mSrcImg.depth() == CV_64F)
+			mSrcImg = mSrcImg * 255.0;
 	}
 
 	void FocusEstimation::setWindowSize(int s)
