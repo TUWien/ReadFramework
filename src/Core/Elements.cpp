@@ -232,9 +232,9 @@ bool Region::read(QXmlStreamReader & reader) {
 	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 		mPoly.read(reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString());
 	}
-	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
+	//else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 
-	}
+	//}
 	// report unknown tags
 	else if (reader.tokenType() == QXmlStreamReader::StartElement)
 		return false;
@@ -618,5 +618,28 @@ QDateTime PageElement::dateModified() const {
 }
 
 
+
+SeparatorRegion::SeparatorRegion() : Region() {
+	mType = type_separator;
+}
+
+void SeparatorRegion::setLine(const Line & line) {
+
+	QPolygon qlp;
+	qlp << line.startPoint() << line.endPoint();
+	Polygon p(qlp);
+
+	setPolygon(p);
+	mLine = line;
+
+}
+
+Line SeparatorRegion::line() const {
+	
+	if (mLine.isEmpty())
+		return Line(mPoly);
+	
+	return mLine;
+}
 
 }

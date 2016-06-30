@@ -160,6 +160,8 @@ public:
 	float normAngleRad(float angle, float startIvl, float endIvl) const;
 	float euclideanDistance(const QPoint& p1, const QPoint& p2) const;
 	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
+	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
+	QPointF calcRotationSize(double angleRad, QPointF srcSize);
 
 private:
 	Algorithms();

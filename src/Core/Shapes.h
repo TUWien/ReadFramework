@@ -99,6 +99,7 @@ class DllCoreExport Line {
 
 public:
 	Line(const QLine& line = QLine(), float thickness = 0);
+	Line(const Polygon& poly);
 
 	bool isEmpty() const;
 	void setLine(const QLine& line, float thickness = 0);

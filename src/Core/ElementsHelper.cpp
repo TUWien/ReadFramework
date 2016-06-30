@@ -257,12 +257,15 @@ bool RegionManager::isValidTypeName(const QString & typeName) const {
 QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) const {
 
 	switch (type) {
+	case Region::type_separator:
+		return QSharedPointer<SeparatorRegion>(new SeparatorRegion());
 	case Region::type_text_region:
 	case Region::type_text_line:
 	case Region::type_word:
 		return QSharedPointer<TextLine>(new TextLine());
-		break;
 		// Add new types here...
+	default:
+		qWarning() << "unknown region type" << type;
 	}
 
 	return QSharedPointer<Region>(new Region());

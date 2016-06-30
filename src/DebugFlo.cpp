@@ -34,6 +34,7 @@
 #include "Image.h"
 #include "Utils.h"
 #include "Binarization.h"
+#include "SkewEstimation.h"
 #include "Algorithms.h"
 #include "Blobs.h"
 #include "Shapes.h"
@@ -71,6 +72,9 @@ namespace rdf {
 		
 		//test Otsu
 		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
+		//flip image
+		//inputImg = inputImg.t();
+		//flip(inputImg, inputImg, 0);
 		
 		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
 		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
@@ -87,6 +91,27 @@ namespace rdf {
 		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
 
 		//Image::instance().imageInfo(inputImg, "input");
+
+		rdf::BaseSkewEstimation skewTest;
+
+		skewTest.setImages(inputImg/*, mask*/);
+		bool skewComp = skewTest.compute();
+		if (!skewComp) {
+			qDebug() << "could not compute skew";
+		}
+
+		double skewAngle = skewTest.getAngle();
+		skewAngle = -skewAngle / 180.0 * CV_PI;
+
+		QVector<QVector4D> selLines = skewTest.getSelectedLines();
+		for (int iL = 0; iL < selLines.size(); iL++) {
+			QVector4D line = selLines[iL];
+
+			cv::line(inputImg, cv::Point((int)line.x(),(int)line.y()), cv::Point((int)line.z(),(int)line.w()), cv::Scalar(255, 255, 255), 3);
+
+		}
+
+		cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
 
 		//int nSamples = 20;
 		//cv::RNG rng;
@@ -106,26 +131,28 @@ namespace rdf {
 		//cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7));
 		//cv::erode(inputImg, tmp, kernel);
 		//cv::dilate(tmp, tmp, kernel);
-		Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
+		//Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
 
-		rdf::BinarizationSuAdapted testBin(inputImg);
-		testBin.compute();
-		cv::Mat binImg = testBin.binaryImage();
+		//rdf::BinarizationSuAdapted testBin(inputImg);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
 
-		Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
+		//Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
 
-		//binImg = Algorithms::instance().preFilterArea(binImg, 10);
+		////binImg = Algorithms::instance().preFilterArea(binImg, 10);
 
-		rdf::LineTrace linetest(binImg);
-		linetest.setMinLenSecondRun(40);
-		//linetest.setMaxAspectRatio(0.2f);
-		//linetest.setAngle(0.0f);
-		linetest.compute();
+		//rdf::LineTrace linetest(binImg);
+		//linetest.setMinLenSecondRun(40);
+		////linetest.setMaxAspectRatio(0.2f);
+		////linetest.setAngle(0.0f);
+		//linetest.compute();
 
-		cv::Mat lImg = linetest.lineImage();
+		//cv::Mat lImg = linetest.lineImage();
 
-		cv::Mat synLine = linetest.generatedLineImage();
-		Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+		//cv::Mat synLine = linetest.generatedLineImage();
+		//Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+
+
 
 		//rdf::Blobs binBlobs;
 		//binBlobs.setImage(binImg);
@@ -151,14 +178,14 @@ namespace rdf {
 		//rdf::Image::instance().imageInfo(binImg, "binImg");
 		//qDebug() << testBin << " in " << dt;
 		
-		QImage binImgQt = rdf::Image::instance().mat2QImage(lImg);
+		QImage resultImg = rdf::Image::instance().mat2QImage(rotatedImage);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();
 
 			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
 			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().save(binImgQt, mConfig.outputPath());
+			rdf::Image::instance().save(resultImg, mConfig.outputPath());
 			
 		} else {
 			qDebug() << "no save path";

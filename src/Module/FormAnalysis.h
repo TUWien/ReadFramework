@@ -30,70 +30,57 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
+#pragma once
+
 #include "BaseModule.h"
-#include "Settings.h"
+#include "LineTrace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QSettings>
-#include <QDebug>
+#include <QObject>
+
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
+
+// TODO: add DllExport magic
+
+// Qt defines
 
 namespace rdf {
 
-// Module --------------------------------------------------------------------
-Module::Module() {
-	mModuleName = "Generic Module";
-}
+	class DllModuleExport FormFeatures : public Module {
 
-QString Module::name() const {
-	return mModuleName;
-}
+	public:
+		FormFeatures();
+		FormFeatures(const cv::Mat& img, const cv::Mat& mask);
 
-QString Module::debugName() const {
-	return "[" + mModuleName + "]";
-}
+		void setInputImg(const cv::Mat& img);
+		void setMask(const cv::Mat& mask);
+		bool isEmpty() const override;
+		bool compute() override;
+		bool computeBinaryInput();
 
-QString Module::toString() const {
-	return debugName();
-}
+		cv::Mat binaryImage() const;
+		void setEstimateSkew(bool s);
+		//void setThresh(int thresh);
+		//int thresh() const;
+		QString toString() const override;
 
-QDataStream& operator<<(QDataStream& s, const Module& m) {
+	private:
+		cv::Mat mSrcImg;
+		cv::Mat mMask;
+		cv::Mat mBwImg;
+		bool mEstimateSkew = false;
+		double mPageAngle = 0.0;
 
-	// this makes the operator<< virtual (stroustrup)
-	s << m.toString();
-	return s;
-}
+		QVector<rdf::Line> mHorLines;
+		QVector<rdf::Line> mVerLines;
 
-QDebug operator<<(QDebug d, const Module& m) {
+		// parameters
 
-	d << qPrintable(m.toString());
-	return d;
-}
+		bool checkInput() const override;
 
-void Module::loadSettings() {
+		//void load(const QSettings& settings) override;
+		//void save(QSettings& settings) const override;
+	};
 
-	QSettings& settings = Config::instance().settings();
-	settings.beginGroup(mModuleName);
-	load(settings);
-	settings.endGroup();
-}
-
-void Module::saveSettings() {
-
-	// TODO: this method should be made thread-safe - it would be convenient
-
-	QSettings& settings = Config::instance().settings();
-	settings.beginGroup(mModuleName);
-	save(settings);
-	settings.endGroup();
-}
-
-void Module::load(const QSettings&) {
-	// dummy
-}
-
-void Module::save(QSettings&) const {
-	// dummy
-}
-
-}
+};

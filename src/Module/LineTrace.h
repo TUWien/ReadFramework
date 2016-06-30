@@ -70,6 +70,7 @@ public:
 	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const;
 	QVector<rdf::Line> getHLines() const;
 	QVector<rdf::Line> getVLines() const;
+	QVector<rdf::Line> getLines() const;
 	void setAngle(double angle = std::numeric_limits<double>::infinity());
 	void resetAngle();
 
