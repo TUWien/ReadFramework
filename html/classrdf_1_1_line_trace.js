@@ -6,6 +6,7 @@ var classrdf_1_1_line_trace =
     [ "filterLineAngle", "classrdf_1_1_line_trace.html#aa0db4498043e6f4e5013f1db0842ffdf", null ],
     [ "generatedLineImage", "classrdf_1_1_line_trace.html#aa084e224a475dc42c71e989a6094ebaa", null ],
     [ "getHLines", "classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637", null ],
+    [ "getLines", "classrdf_1_1_line_trace.html#aaa2586bb273c9ee9c03689e5d3b91cbb", null ],
     [ "getVLines", "classrdf_1_1_line_trace.html#a939ed5b4fbd84586f3da9909d7158f3c", null ],
     [ "isEmpty", "classrdf_1_1_line_trace.html#a6e107d3c1293b73e781aac548f39e3ea", null ],
     [ "lineImage", "classrdf_1_1_line_trace.html#aa6ac1f992165c9062d82e4af2af0d3bd", null ],

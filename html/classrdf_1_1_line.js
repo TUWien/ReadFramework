@@ -1,6 +1,7 @@
 var classrdf_1_1_line =
 [
     [ "Line", "classrdf_1_1_line.html#a9ac669b914c5bb46ca94f5101dd6a7fa", null ],
+    [ "Line", "classrdf_1_1_line.html#a5c0148c387b7474954d9ab3f1b381371", null ],
     [ "angle", "classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c", null ],
     [ "diffAngle", "classrdf_1_1_line.html#a5a36e1fcef55baa244bde01e15332287", null ],
     [ "distance", "classrdf_1_1_line.html#a5073b2f4fa450185c245e3108067adab", null ],

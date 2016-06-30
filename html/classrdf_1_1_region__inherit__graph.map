@@ -1,3 +1,4 @@
 <map id="rdf::Region" name="rdf::Region">
-<area shape="rect" id="node2" href="$classrdf_1_1_text_line.html" title="rdf::TextLine" alt="" coords="5,80,99,107"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_separator_region.html" title="rdf::SeparatorRegion" alt="" coords="5,80,147,107"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_text_line.html" title="rdf::TextLine" alt="" coords="171,80,265,107"/>
 </map>

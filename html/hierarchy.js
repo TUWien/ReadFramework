@@ -35,6 +35,7 @@ var hierarchy =
     [ "rdf::Patch", "classrdf_1_1_patch.html", null ],
     [ "rdf::Polygon", "classrdf_1_1_polygon.html", null ],
     [ "rdf::Region", "classrdf_1_1_region.html", [
+      [ "rdf::SeparatorRegion", "classrdf_1_1_separator_region.html", null ],
       [ "rdf::TextLine", "classrdf_1_1_text_line.html", null ]
     ] ],
     [ "rdf::RegionManager", "classrdf_1_1_region_manager.html", null ],

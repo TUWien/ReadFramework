@@ -1,0 +1,5 @@
+<map id="rdf::SeparatorRegion" name="rdf::SeparatorRegion">
+<area shape="rect" id="node2" href="$classrdf_1_1_region.html" title="rdf::Region" alt="" coords="7,96,93,123"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_polygon.html" title="rdf::Polygon" alt="" coords="5,5,96,32"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_line.html" title="A basic line class including stroke width (thickness). " alt="" coords="119,96,188,123"/>
+</map>

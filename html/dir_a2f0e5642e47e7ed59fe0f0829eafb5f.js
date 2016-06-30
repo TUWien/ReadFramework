@@ -12,6 +12,7 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "Elements.h", "_elements_8h.html", [
       [ "Region", "classrdf_1_1_region.html", "classrdf_1_1_region" ],
       [ "TextLine", "classrdf_1_1_text_line.html", "classrdf_1_1_text_line" ],
+      [ "SeparatorRegion", "classrdf_1_1_separator_region.html", "classrdf_1_1_separator_region" ],
       [ "PageElement", "classrdf_1_1_page_element.html", "classrdf_1_1_page_element" ]
     ] ],
     [ "ElementsHelper.cpp", "_elements_helper_8cpp.html", null ],

@@ -6,6 +6,7 @@ var namespacerdf =
     [ "BlobManager", "classrdf_1_1_blob_manager.html", "classrdf_1_1_blob_manager" ],
     [ "Region", "classrdf_1_1_region.html", "classrdf_1_1_region" ],
     [ "TextLine", "classrdf_1_1_text_line.html", "classrdf_1_1_text_line" ],
+    [ "SeparatorRegion", "classrdf_1_1_separator_region.html", "classrdf_1_1_separator_region" ],
     [ "PageElement", "classrdf_1_1_page_element.html", "classrdf_1_1_page_element" ],
     [ "RegionTypeConfig", "classrdf_1_1_region_type_config.html", "classrdf_1_1_region_type_config" ],
     [ "RegionXmlHelper", "classrdf_1_1_region_xml_helper.html", "classrdf_1_1_region_xml_helper" ],
