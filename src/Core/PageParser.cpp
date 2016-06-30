@@ -225,7 +225,7 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 		if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) 
 			parseRegion(reader, region);
 		else
-			readNextLine = region->read(reader);	// present current line to the region
+			readNextLine = region->read(reader);	// present current (xml) line to the region
 	}
 
 }

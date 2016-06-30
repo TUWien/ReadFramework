@@ -126,6 +126,11 @@ namespace rdf {
 		return vLines;
 	}
 
+	QVector<rdf::Line> LineTrace::getLines() const
+	{
+		return hLines+vLines;
+	}
+
 	/// <summary>
 	/// Computes the binary line image as will as the line vectors.
 	/// </summary>

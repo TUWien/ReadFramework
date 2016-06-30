@@ -36,6 +36,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -126,6 +127,15 @@ QPoint BaseLine::endPoint() const {
 Line::Line(const QLine& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
+}
+
+Line::Line(const Polygon & poly) {
+
+	if (poly.size() != 2)
+		qWarning() << "line initialized with illegal polygon, size: " << poly.size();
+	else
+		mLine = QLine(poly.polygon()[0], poly.polygon()[1]);
+
 }
 
 /// <summary>

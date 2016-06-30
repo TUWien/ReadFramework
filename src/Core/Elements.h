@@ -136,6 +136,26 @@ protected:
 	QString mText;
 };
 
+
+class DllCoreExport SeparatorRegion : public Region {
+
+public:
+	SeparatorRegion();
+
+	void setLine(const Line& line);
+	Line line() const;
+
+	//virtual bool read(QXmlStreamReader& reader) override;
+	//virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
+
+	//virtual QString toString(bool withChildren = false) const override;
+
+	//virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
+
+protected:
+	Line mLine;
+};
+
 class DllCoreExport PageElement {
 
 public:
