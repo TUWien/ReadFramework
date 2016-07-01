@@ -159,13 +159,13 @@ void Region::addUniqueChild(QSharedPointer<Region> child)
 {
 	bool containsChild = false;
 	for (auto i : mChildren) {
-		if ((*child) == (*i))
+		//be careful -> i must be on the left side to call the correct overloaded operator...
+		if ((*i) == (*child))
 			containsChild = true;
 	}
 
 	if (!containsChild)
 		mChildren.append(child);
-
 }
 
 /// <summary>
@@ -669,9 +669,12 @@ Line SeparatorRegion::line() const {
 	return mLine;
 }
 
-bool SeparatorRegion::operator==(const SeparatorRegion & sr1)
+bool SeparatorRegion::operator==(const Region & sr1)
 {
-	Line l1 = sr1.line();
+	Polygon p1 = sr1.polygon();
+	Line l1(p1);
+
+	//Line l1 = sr1.line();
 	mLine = this->line();
 	
 

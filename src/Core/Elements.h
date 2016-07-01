@@ -154,7 +154,8 @@ public:
 	//virtual QString toString(bool withChildren = false) const override;
 
 	//virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
-	virtual bool operator==(const SeparatorRegion& sr1);
+	//virtual bool operator==(const SeparatorRegion& sr1);
+	virtual bool operator==(const Region& sr1);
 
 protected:
 	Line mLine;
