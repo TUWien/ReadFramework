@@ -159,7 +159,7 @@ void Region::addUniqueChild(QSharedPointer<Region> child)
 {
 	bool containsChild = false;
 	for (auto i : mChildren) {
-		if (i == child)
+		if ((*child) == (*i))
 			containsChild = true;
 	}
 
