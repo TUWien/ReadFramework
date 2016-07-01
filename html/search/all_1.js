@@ -1,6 +1,7 @@
 var searchData=
 [
   ['addchild',['addChild',['../classrdf_1_1_region.html#a77b35f891e22ffd53338bd573b88e682',1,'rdf::Region']]],
+  ['adduniquechild',['addUniqueChild',['../classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396',1,'rdf::Region']]],
   ['algorithms',['Algorithms',['../classrdf_1_1_algorithms.html',1,'rdf']]],
   ['algorithms_2ecpp',['Algorithms.cpp',['../_algorithms_8cpp.html',1,'']]],
   ['algorithms_2eh',['Algorithms.h',['../_algorithms_8h.html',1,'']]],
