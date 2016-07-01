@@ -155,6 +155,19 @@ void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
 }
 
+void Region::addUniqueChild(QSharedPointer<Region> child)
+{
+	bool containsChild = false;
+	for (auto i : mChildren) {
+		if (i == child)
+			containsChild = true;
+	}
+
+	if (!containsChild)
+		mChildren.append(child);
+
+}
+
 /// <summary>
 /// Removes the child specified.
 /// </summary>
@@ -275,6 +288,20 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 	for (const QSharedPointer<Region> child : mChildren)
 		child->write(writer, true);
+}
+
+bool Region::operator==(const Region & r1)
+{
+	QPolygon p1 = r1.polygon().polygon();
+	QPolygon p2 = mPoly.polygon();
+
+	if (p1.isEmpty() || p2.isEmpty())
+		return false;
+
+	if (p1 == p2)
+		return true;
+	else
+		return false;
 }
 
 // TextLine --------------------------------------------------------------------
@@ -640,6 +667,21 @@ Line SeparatorRegion::line() const {
 		return Line(mPoly);
 	
 	return mLine;
+}
+
+bool SeparatorRegion::operator==(const SeparatorRegion & sr1)
+{
+	Line l1 = sr1.line();
+	
+
+	if (l1.isEmpty() || mLine.isEmpty())
+		return false;
+
+	if (l1.startPoint() == mLine.startPoint() && l1.endPoint() == mLine.endPoint())
+		return true;
+	else
+		return false;
+
 }
 
 }

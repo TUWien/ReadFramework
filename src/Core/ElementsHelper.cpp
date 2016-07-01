@@ -227,7 +227,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_text_region:	return "TextRegion";
 	case Region::type_text_line:	return "TextLine";
 	case Region::type_word:			return "Word";
-	case Region::type_separator:	return "Separator";
+	case Region::type_separator:	return "SeparatorRegion";
 	case Region::type_image:		return "ImageRegion";
 	case Region::type_graphic:		return "GraphicRegion";
 	case Region::type_noise:		return "NoiseRegion";

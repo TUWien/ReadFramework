@@ -93,6 +93,7 @@ public:
 	Polygon polygon() const;
 
 	void addChild(QSharedPointer<Region> child);
+	void addUniqueChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
@@ -105,6 +106,8 @@ public:
 	virtual bool read(QXmlStreamReader& reader);
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
 	virtual void writeChildren(QXmlStreamWriter& writer) const;
+
+	virtual bool operator==(const Region& r1);
 
 protected:
 	Type mType;
@@ -151,6 +154,7 @@ public:
 	//virtual QString toString(bool withChildren = false) const override;
 
 	//virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
+	virtual bool operator==(const SeparatorRegion& sr1);
 
 protected:
 	Line mLine;
