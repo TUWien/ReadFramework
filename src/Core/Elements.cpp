@@ -672,6 +672,7 @@ Line SeparatorRegion::line() const {
 bool SeparatorRegion::operator==(const SeparatorRegion & sr1)
 {
 	Line l1 = sr1.line();
+	mLine = this->line();
 	
 
 	if (l1.isEmpty() || mLine.isEmpty())
