@@ -188,6 +188,8 @@ QString Converter::polyToString(const QPolygon& polygon) {
 	}
 
 	// NOTE: we have one space at the end
+	//FK040716: remove last space - otherwise we get a warning when reading
+	polyStr.remove(polyStr.length() - 1, 1);
 
 	return polyStr;
 }
