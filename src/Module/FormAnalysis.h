@@ -58,9 +58,13 @@ namespace rdf {
 		bool isEmpty() const override;
 		bool compute() override;
 		bool computeBinaryInput();
+		bool compareWithTemplate(const FormFeatures& fTempl);
+		QVector<rdf::Line> horLines() const;
+		QVector<rdf::Line> verLines() const;
 
 		cv::Mat binaryImage() const;
 		void setEstimateSkew(bool s);
+		void setThreshLineLenRatio(float l);
 		//void setThresh(int thresh);
 		//int thresh() const;
 		QString toString() const override;
@@ -71,6 +75,8 @@ namespace rdf {
 		cv::Mat mBwImg;
 		bool mEstimateSkew = false;
 		double mPageAngle = 0.0;
+
+		float mThreshLineLenRatio = 0.6f;
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;

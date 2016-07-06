@@ -112,6 +112,68 @@ namespace rdf {
 		return true;
 	}
 
+	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)
+	{
+		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::leqY1);
+		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::leqX1);
+
+		QVector<rdf::Line> horLinesTemp = fTempl.horLines();
+		QVector<rdf::Line> verLinesTemp = fTempl.verLines();
+
+		std::sort(horLinesTemp.begin(), horLinesTemp.end(), rdf::Line::leqY1);
+		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::leqX1);
+
+		float hLen = 0, hLenTemp = 0;
+		float vLen = 0, vLenTemp = 0;
+		
+		//calculate entire horizontal and vertical line lengths of the detected lines
+		//of the current document
+		for (auto i : mHorLines) {
+			hLen += i.length();
+		}
+		for (auto i : mVerLines) {
+			vLen += i.length();
+		}
+		//calculate entire horizontal and vertical line lengths of the template
+		for (auto i : horLinesTemp) {
+			hLenTemp += i.length();
+		}
+		for (auto i : verLinesTemp) {
+			vLenTemp += i.length();
+		}
+
+		float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
+		float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
+
+		//at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
+		if (ratioHor < mThreshLineLenRatio || ratioVer < mThreshLineLenRatio)
+			return false;
+
+		//float refY = horLinesTemp[0].startPoint().y();
+		//float distance = 0.0f;
+		//for (int i = 0; i < mHorLines.size(); i++) {
+		//	
+		//	float mapDiffY = mHorLines[i].startPoint().y() - refY;
+		//	for (int j = 0; j < verLinesTemp.size(); j++) {
+
+		//	}
+
+		//}
+
+
+		return false;
+	}
+
+	QVector<rdf::Line> FormFeatures::horLines() const
+	{
+		return mHorLines;
+	}
+
+	QVector<rdf::Line> FormFeatures::verLines() const
+	{
+		return mVerLines;
+	}
+
 	cv::Mat FormFeatures::binaryImage() const
 	{
 		return mBwImg;
@@ -120,6 +182,11 @@ namespace rdf {
 	void FormFeatures::setEstimateSkew(bool s)
 	{
 		mEstimateSkew = s;
+	}
+
+	void FormFeatures::setThreshLineLenRatio(float l)
+	{
+		mThreshLineLenRatio = l;
 	}
 
 	QString FormFeatures::toString() const
