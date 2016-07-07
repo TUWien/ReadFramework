@@ -180,6 +180,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 
 	case attr_points:		return "points";
 	case attr_id:			return "id";
+	case attr_custom:		return "custom";
 	}
 
 	qWarning() << "unknown tag: " << tagId;

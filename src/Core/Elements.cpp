@@ -109,6 +109,16 @@ QString Region::id() const {
 	return mId;
 }
 
+void Region::setCustom(const QString & c)
+{
+	mCustom = c;
+}
+
+QString Region::custom() const
+{
+	return mCustom;
+}
+
 /// <summary>
 /// Set the polygon which enclosed the Region.
 /// The polygon's coordinates are w.r.t the image coordinates.
@@ -267,7 +277,9 @@ void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) cons
 
 	writer.writeStartElement(RegionManager::instance().typeName(mType));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
-	
+	if (!mCustom.isEmpty())
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
+
 	// write polygon
 	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
@@ -370,6 +382,7 @@ bool TextLine::read(QXmlStreamReader & reader) {
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
 				reader.readNext();
 				mText = reader.text().toUtf8().trimmed();	// add text
+				mTextEquiv = true;
 			}
 			// read ASCII
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
@@ -405,7 +418,7 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 		writer.writeEndElement(); // </Baseline>
 	}
 
-	if (!mText.isEmpty()) {
+	if (!mText.isEmpty() || mTextEquiv) {
 		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
 		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
 		writer.writeEndElement(); // </TextEquiv>

@@ -89,6 +89,9 @@ public:
 	void setId(const QString& id);
 	QString id() const;
 
+	void setCustom(const QString& c);
+	QString custom() const;
+
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
@@ -112,6 +115,7 @@ public:
 protected:
 	Type mType;
 	QString mId;
+	QString mCustom;
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
 };
@@ -137,6 +141,7 @@ public:
 protected:
 	BaseLine mBaseLine;
 	QString mText;
+	bool mTextEquiv = false;
 };
 
 

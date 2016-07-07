@@ -202,6 +202,7 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 	// add region attributes
 	region->setType(rType);
 	region->setId(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_id)).toString());
+	region->setCustom(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_custom)).toString());
 	parent->addChild(region);
 
 	// TODO add type to text regions
