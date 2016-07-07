@@ -95,6 +95,9 @@ public:
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
+	void setTextEqiv(const QString& text);
+	QString textEquiv() const;
+
 	void addChild(QSharedPointer<Region> child);
 	void addUniqueChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
@@ -117,6 +120,8 @@ protected:
 	QString mId;
 	QString mCustom;
 	Polygon mPoly;
+	QString mTextEquiv;
+	bool mTextEquivPresent = false;
 	QVector<QSharedPointer<Region> > mChildren;
 };
 
@@ -141,7 +146,7 @@ public:
 protected:
 	BaseLine mBaseLine;
 	QString mText;
-	bool mTextEquiv = false;
+	bool mTextPresent = false;
 };
 
 
