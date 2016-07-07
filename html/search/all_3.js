@@ -7,6 +7,7 @@ var searchData=
   ['children',['children',['../classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1',1,'rdf::Region']]],
   ['childrentostring',['childrenToString',['../classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e',1,'rdf::Region']]],
   ['closedpolygon',['closedPolygon',['../classrdf_1_1_polygon.html#a9c6a5f511afe3876c5b5ecaa8e51ab3c',1,'rdf::Polygon']]],
+  ['comparewithtemplate',['compareWithTemplate',['../classrdf_1_1_form_features.html#a6d41be1593a456a13d91fb79eda97092',1,'rdf::FormFeatures']]],
   ['compbincontrastimg',['compBinContrastImg',['../classrdf_1_1_base_binarization_su.html#a44ac1abbb14c53aaff5525a7cd1324cd',1,'rdf::BaseBinarizationSu']]],
   ['compcontrastimg',['compContrastImg',['../classrdf_1_1_base_binarization_su.html#aa5f29d1f4d3678883ca3c6cb4b79b0cd',1,'rdf::BaseBinarizationSu']]],
   ['compute',['compute',['../classrdf_1_1_blobs.html#adc27d58060ad874e42b226494c804a7a',1,'rdf::Blobs::compute()'],['../classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c',1,'rdf::Module::compute()'],['../classrdf_1_1_simple_binarization.html#a61bbcc56936c2bd9e001d828068964f8',1,'rdf::SimpleBinarization::compute()'],['../classrdf_1_1_base_binarization_su.html#a6bf0d05ccb33e3f4303980aa03e75d53',1,'rdf::BaseBinarizationSu::compute()'],['../classrdf_1_1_binarization_su_adapted.html#a136b5542e5aa27a3c845f7d0460bd0f9',1,'rdf::BinarizationSuAdapted::compute()'],['../classrdf_1_1_binarization_su_fgd_weight.html#a3cafb50f3fac345945ffe7905ae26f3a',1,'rdf::BinarizationSuFgdWeight::compute()'],['../classrdf_1_1_focus_estimation.html#a96d43278a2f8fc41245b501f32203f5d',1,'rdf::FocusEstimation::compute()'],['../classrdf_1_1_contrast_estimation.html#ac1d737456ce2d5be66ae64c06d3de66e',1,'rdf::ContrastEstimation::compute()'],['../classrdf_1_1_form_features.html#adaab507434aae30fdfc8f00c5c91eb77',1,'rdf::FormFeatures::compute()'],['../classrdf_1_1_line_trace.html#a8d80dd15e02bfe3e62283573cc93411f',1,'rdf::LineTrace::compute()'],['../classrdf_1_1_base_skew_estimation.html#aaa02b423ad1136f9ea5e4ce6afd6b671',1,'rdf::BaseSkewEstimation::compute()'],['../classrdf_1_1_super_pixel.html#abde4e8ba437892e2940dcc7814581af2',1,'rdf::SuperPixel::compute()']]],
@@ -32,8 +33,8 @@ var searchData=
   ['computeweber',['computeWeber',['../classrdf_1_1_basic_contrast.html#a7e3aebecdcb9ae97f340718bf51a5051',1,'rdf::BasicContrast']]],
   ['computeweights',['computeWeights',['../classrdf_1_1_base_skew_estimation.html#aeaed441206cfd6b49dc15c365ed74cb6',1,'rdf::BaseSkewEstimation']]],
   ['config',['Config',['../classrdf_1_1_config.html',1,'rdf']]],
-  ['contrastestimation',['ContrastEstimation',['../classrdf_1_1_contrast_estimation.html#a470441409ce5796f1fc1852c5231bca8',1,'rdf::ContrastEstimation::ContrastEstimation()'],['../classrdf_1_1_contrast_estimation.html#a340fc982853fc4599250fe78fac16e01',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_contrast_estimation.html#a4a4167d540b5edb1f651d4b3f16f126d',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['contrastestimation',['ContrastEstimation',['../classrdf_1_1_contrast_estimation.html',1,'rdf']]],
+  ['contrastestimation',['ContrastEstimation',['../classrdf_1_1_contrast_estimation.html#a470441409ce5796f1fc1852c5231bca8',1,'rdf::ContrastEstimation::ContrastEstimation()'],['../classrdf_1_1_contrast_estimation.html#a340fc982853fc4599250fe78fac16e01',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_contrast_estimation.html#a4a4167d540b5edb1f651d4b3f16f126d',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['contrastmeasure',['ContrastMeasure',['../classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119',1,'rdf::ContrastEstimation']]],
   ['contrastval',['contrastVal',['../classrdf_1_1_base_binarization_su.html#adec4e6a29c32487f2afe082c866b21b7',1,'rdf::BaseBinarizationSu::contrastVal()'],['../classrdf_1_1_binarization_su_adapted.html#af7e5b70815484b5871e9cb7c3f4a52c9',1,'rdf::BinarizationSuAdapted::contrastVal()']]],
   ['converter',['Converter',['../classrdf_1_1_converter.html',1,'rdf']]],
@@ -42,5 +43,6 @@ var searchData=
   ['cpatches',['cPatches',['../classrdf_1_1_contrast_estimation.html#a998c5fa5ac2eb2d897d62e8e7c2652ae',1,'rdf::ContrastEstimation']]],
   ['createregion',['createRegion',['../classrdf_1_1_region_manager.html#a51ebbd67f805a5f84724bf389e407467',1,'rdf::RegionManager']]],
   ['createstructuringelement',['createStructuringElement',['../classrdf_1_1_algorithms.html#ac56f5aefdd774d13b2797dfaf9c966da',1,'rdf::Algorithms']]],
-  ['creator',['creator',['../classrdf_1_1_page_element.html#a564996abd587685a6d899deef7f91942',1,'rdf::PageElement']]]
+  ['creator',['creator',['../classrdf_1_1_page_element.html#a564996abd587685a6d899deef7f91942',1,'rdf::PageElement']]],
+  ['custom',['custom',['../classrdf_1_1_region.html#af4b0811283f97ffd938a8561bde3f40d',1,'rdf::Region']]]
 ];

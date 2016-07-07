@@ -9,6 +9,7 @@ var searchData=
   ['angle',['angle',['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line']]],
   ['area',['area',['../classrdf_1_1_patch.html#a221e27175020312fc49ae77cb1d27cf1',1,'rdf::Patch']]],
   ['assigndefaultcolor',['assignDefaultColor',['../classrdf_1_1_region_type_config.html#aa5142eccf04249d4d786497b3d2b0187',1,'rdf::RegionTypeConfig']]],
+  ['attr_5fcustom',['attr_custom',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63a3b3aeac3a465fe95b580dc8771029bd9',1,'rdf::RegionXmlHelper']]],
   ['attr_5fid',['attr_id',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63a451cca229b0dbfa0c26ba45935f1657f',1,'rdf::RegionXmlHelper']]],
   ['attr_5fimagefilename',['attr_imageFilename',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda45bb09556199061ddd28f315a5fc9221',1,'rdf::PageXmlParser']]],
   ['attr_5fimageheight',['attr_imageHeight',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda8096b89f7bbf0438a0562e5ebbaf54f1',1,'rdf::PageXmlParser']]],

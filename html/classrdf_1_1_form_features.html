@@ -145,10 +145,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adaab507434aae30fdfc8f00c5c91eb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa895a6fe46070ff711ba46e78207bc3d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#aa895a6fe46070ff711ba46e78207bc3d">computeBinaryInput</a> ()</td></tr>
 <tr class="separator:aa895a6fe46070ff711ba46e78207bc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d41be1593a456a13d91fb79eda97092"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a6d41be1593a456a13d91fb79eda97092">compareWithTemplate</a> (const <a class="el" href="classrdf_1_1_form_features.html">FormFeatures</a> &amp;fTempl)</td></tr>
+<tr class="separator:a6d41be1593a456a13d91fb79eda97092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae820300dd6b513cba25aa3a480eaaaf7"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#ae820300dd6b513cba25aa3a480eaaaf7">horLines</a> () const </td></tr>
+<tr class="separator:ae820300dd6b513cba25aa3a480eaaaf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f9cceb13b2afd30bef5306e9a161e42"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a7f9cceb13b2afd30bef5306e9a161e42">verLines</a> () const </td></tr>
+<tr class="separator:a7f9cceb13b2afd30bef5306e9a161e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d99a1d303aefa0c07ead1ec68a4c6e2"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a4d99a1d303aefa0c07ead1ec68a4c6e2">binaryImage</a> () const </td></tr>
 <tr class="separator:a4d99a1d303aefa0c07ead1ec68a4c6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43d73dd6416c66f229f9c43dd5218180"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a43d73dd6416c66f229f9c43dd5218180">setEstimateSkew</a> (bool s)</td></tr>
 <tr class="separator:a43d73dd6416c66f229f9c43dd5218180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc73fd8d8b5e153428f78aa244a460d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#abc73fd8d8b5e153428f78aa244a460d7">setThreshLineLenRatio</a> (float l)</td></tr>
+<tr class="separator:abc73fd8d8b5e153428f78aa244a460d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cf83f2c37f6093fa30de5056136527b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a0cf83f2c37f6093fa30de5056136527b">toString</a> () const override</td></tr>
 <tr class="memdesc:a0cf83f2c37f6093fa30de5056136527b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#a0cf83f2c37f6093fa30de5056136527b">More...</a><br/></td></tr>
 <tr class="separator:a0cf83f2c37f6093fa30de5056136527b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +245,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6d41be1593a456a13d91fb79eda97092"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::FormFeatures::compareWithTemplate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_form_features.html">FormFeatures</a> &amp;&#160;</td>
+          <td class="paramname"><em>fTempl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="adaab507434aae30fdfc8f00c5c91eb77"></a>
 <div class="memitem">
 <div class="memproto">
@@ -274,6 +298,21 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae820300dd6b513cba25aa3a480eaaaf7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt; rdf::FormFeatures::horLines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -356,6 +395,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abc73fd8d8b5e153428f78aa244a460d7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FormFeatures::setThreshLineLenRatio </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0cf83f2c37f6093fa30de5056136527b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -381,6 +436,21 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The string containing all parameters and results of the module.</dd></dl>
 
 <p>Reimplemented from <a class="el" href="classrdf_1_1_module.html#aaeab7549bfdf04197c45ebaef60181f8">rdf::Module</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7f9cceb13b2afd30bef5306e9a161e42"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt; rdf::FormFeatures::verLines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

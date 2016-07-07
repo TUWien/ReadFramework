@@ -14,6 +14,7 @@ var searchData=
   ['mcontpatches',['mContPatches',['../classrdf_1_1_contrast_estimation.html#a04551ee81fdcf46962f31ffff765fd47',1,'rdf::ContrastEstimation']]],
   ['mcontrastimg',['mContrastImg',['../classrdf_1_1_binarization_su_adapted.html#a6ad950523dbd82d5ba0b09f508d603e9',1,'rdf::BinarizationSuAdapted']]],
   ['mcreator',['mCreator',['../classrdf_1_1_page_element.html#a19ef33d2426a0c37f30794dc42f4ae46',1,'rdf::PageElement']]],
+  ['mcustom',['mCustom',['../classrdf_1_1_region.html#a0c938579d9f274f2e0095a82aad62ca4',1,'rdf::Region']]],
   ['mdatecreated',['mDateCreated',['../classrdf_1_1_page_element.html#a4d050d193b60016f1400955eb159bd56',1,'rdf::PageElement']]],
   ['mdatemodified',['mDateModified',['../classrdf_1_1_page_element.html#a7f7679b68ea20bb8aeb4553f8fd006d9',1,'rdf::PageElement']]],
   ['mdebug',['mDebug',['../_base_module_8h.html#a51fdb2725294de6c71f132431201daf6',1,'BaseModule.h']]],
@@ -62,6 +63,9 @@ var searchData=
   ['mstdcontrast',['mStdContrast',['../classrdf_1_1_binarization_su_fgd_weight.html#a2eb7ed298a5d449cf08fd388f3b23e3e',1,'rdf::BinarizationSuFgdWeight']]],
   ['mstrokew',['mStrokeW',['../classrdf_1_1_base_binarization_su.html#aeb84de6bcea5fd6df11db67c365e887b',1,'rdf::BaseBinarizationSu']]],
   ['mtext',['mText',['../classrdf_1_1_text_line.html#a343482a87fd5c4dd4cd458757ba9b520',1,'rdf::TextLine']]],
+  ['mtextequiv',['mTextEquiv',['../classrdf_1_1_region.html#a951bb090dee4480199b0a12b26a04233',1,'rdf::Region']]],
+  ['mtextequivpresent',['mTextEquivPresent',['../classrdf_1_1_region.html#a1e2185c60df0aa614ee67da0ab45d6ad',1,'rdf::Region']]],
+  ['mtextpresent',['mTextPresent',['../classrdf_1_1_text_line.html#a4827ba352744de1c6999d5df827ef094',1,'rdf::TextLine']]],
   ['mthickness',['mThickness',['../classrdf_1_1_line.html#aae7f4b4d407e665b9a241567e90fd2ec',1,'rdf::Line']]],
   ['mthrimg',['mThrImg',['../classrdf_1_1_binarization_su_adapted.html#af46984727f8386919e1ae894e29e79ca',1,'rdf::BinarizationSuAdapted']]],
   ['mtimer',['mTimer',['../classrdf_1_1_timer.html#a27429cf89e2155685eceb05db841a2c4',1,'rdf::Timer']]],
@@ -73,5 +77,5 @@ var searchData=
   ['mweight',['mWeight',['../classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2',1,'rdf::Patch']]],
   ['mwidth',['mWidth',['../classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6',1,'rdf::Patch']]],
   ['mwindowsize',['mWindowSize',['../classrdf_1_1_basic_f_m.html#adbf6fd39e76ad4b19a2e20d44df9bd35',1,'rdf::BasicFM::mWindowSize()'],['../classrdf_1_1_basic_contrast.html#a0caae3aa3d2625a0cd72314e9ffb26f3',1,'rdf::BasicContrast::mWindowSize()'],['../classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f',1,'rdf::FocusEstimation::mWindowSize()'],['../classrdf_1_1_contrast_estimation.html#a77276488650bd0b7fb06e8c57454eb19',1,'rdf::ContrastEstimation::mWindowSize()']]],
-  ['mxmlpath',['mXMLPath',['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()'],['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()']]]
+  ['mxmlpath',['mXmlPath',['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()'],['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()']]]
 ];

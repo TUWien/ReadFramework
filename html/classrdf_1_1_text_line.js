@@ -10,5 +10,6 @@ var classrdf_1_1_text_line =
     [ "toString", "classrdf_1_1_text_line.html#aedd2dd985d790c1c3bec672a2cb763ba", null ],
     [ "write", "classrdf_1_1_text_line.html#aa856ebdbb0d4240aef32321a352fd37d", null ],
     [ "mBaseLine", "classrdf_1_1_text_line.html#a223b596aa2ee21b35194efcb54af928c", null ],
-    [ "mText", "classrdf_1_1_text_line.html#a343482a87fd5c4dd4cd458757ba9b520", null ]
+    [ "mText", "classrdf_1_1_text_line.html#a343482a87fd5c4dd4cd458757ba9b520", null ],
+    [ "mTextPresent", "classrdf_1_1_text_line.html#a4827ba352744de1c6999d5df827ef094", null ]
 ];
