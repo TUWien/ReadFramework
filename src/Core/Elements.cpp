@@ -109,13 +109,11 @@ QString Region::id() const {
 	return mId;
 }
 
-void Region::setCustom(const QString & c)
-{
+void Region::setCustom(const QString & c) {
 	mCustom = c;
 }
 
-QString Region::custom() const
-{
+QString Region::custom() const {
 	return mCustom;
 }
 
