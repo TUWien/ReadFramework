@@ -174,13 +174,19 @@ void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
 }
 
-void Region::addUniqueChild(QSharedPointer<Region> child)
-{
+void Region::addUniqueChild(QSharedPointer<Region> child) {
+
+	if (!child) {
+		qWarning() << "addUniqueChild: child is NULL where it should not be";
+		return;
+	}
+
 	bool containsChild = false;
-	for (auto i : mChildren) {
-		//be careful -> i must be on the left side to call the correct overloaded operator...
-		if ((*i) == (*child))
+	for (const QSharedPointer<Region> i  : mChildren) {
+		if (i && *i == *child) {
 			containsChild = true;
+			break;
+		}
 	}
 
 	if (!containsChild)
@@ -341,8 +347,8 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 		child->write(writer, true);
 }
 
-bool Region::operator==(const Region & r1)
-{
+bool Region::operator==(const Region & r1) {
+
 	QPolygon p1 = r1.polygon().polygon();
 	QPolygon p2 = mPoly.polygon();
 
@@ -722,14 +728,16 @@ Line SeparatorRegion::line() const {
 	return mLine;
 }
 
-bool SeparatorRegion::operator==(const Region & sr1)
-{
+bool SeparatorRegion::operator==(const Region & sr1) {
+
+	if (mPoly.size() != sr1.polygon().size())
+		return false;
+
 	Polygon p1 = sr1.polygon();
 	Line l1(p1);
 
 	//Line l1 = sr1.line();
-	mLine = this->line();
-	
+	mLine = line();
 
 	if (l1.isEmpty() || mLine.isEmpty())
 		return false;
