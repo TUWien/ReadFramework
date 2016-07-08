@@ -113,6 +113,8 @@ public:
 	Line gapLine(const Line& l) const;
 	float diffAngle(const Line& l) const;
 	bool within(const QPoint& p) const;
+	static bool leqX1(const Line& l1, const Line& l2);
+	static bool leqY1(const Line& l1, const Line& l2);
 	QPoint startPoint() const;
 	QPoint endPoint() const;
 

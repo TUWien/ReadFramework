@@ -112,6 +112,7 @@ public:
 
 		attr_points,
 		attr_id,
+		attr_custom,
 
 		tag_end
 	};

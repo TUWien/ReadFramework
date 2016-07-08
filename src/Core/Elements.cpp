@@ -109,6 +109,16 @@ QString Region::id() const {
 	return mId;
 }
 
+void Region::setCustom(const QString & c)
+{
+	mCustom = c;
+}
+
+QString Region::custom() const
+{
+	return mCustom;
+}
+
 /// <summary>
 /// Set the polygon which enclosed the Region.
 /// The polygon's coordinates are w.r.t the image coordinates.
@@ -124,6 +134,15 @@ void Region::setPolygon(const Polygon & polygon) {
 /// <returns></returns>
 Polygon Region::polygon() const {
 	return mPoly;
+}
+
+void Region::setTextEqiv(const QString & text)
+{
+	mTextEquiv = text;
+}
+
+QString Region::textEquiv() const {
+	return mTextEquiv;
 }
 
 /// <summary>
@@ -153,6 +172,19 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 /// <param name="child">The child region.</param>
 void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
+}
+
+void Region::addUniqueChild(QSharedPointer<Region> child)
+{
+	bool containsChild = false;
+	for (auto i : mChildren) {
+		//be careful -> i must be on the left side to call the correct overloaded operator...
+		if ((*i) == (*child))
+			containsChild = true;
+	}
+
+	if (!containsChild)
+		mChildren.append(child);
 }
 
 /// <summary>
@@ -236,6 +268,30 @@ bool Region::read(QXmlStreamReader & reader) {
 
 	//}
 	// report unknown tags
+	// read <TextEquiv>
+	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
+
+		while (!reader.atEnd()) {
+			reader.readNext();
+
+			// are we done with reading the text?
+			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv))
+				break;
+
+			// read unicode
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
+				reader.readNext();
+				mTextEquiv = reader.text().toUtf8().trimmed();	// add text
+				mTextEquivPresent = true;
+			}
+			// read ASCII
+			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
+				reader.readNext();
+				mTextEquiv = reader.text().toString().trimmed();	// add text
+				mTextEquivPresent = true;
+			}
+		}
+	}
 	else if (reader.tokenType() == QXmlStreamReader::StartElement)
 		return false;
 
@@ -254,11 +310,19 @@ void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) cons
 
 	writer.writeStartElement(RegionManager::instance().typeName(mType));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
-	
+	if (!mCustom.isEmpty())
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
+
 	// write polygon
 	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
 	writer.writeEndElement();	// <Coords>
+
+	if (!mTextEquiv.isEmpty() || mTextEquivPresent) {
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
+		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mTextEquiv);
+		writer.writeEndElement(); // </TextEquiv>
+	}
 
 	if (withChildren)
 		writeChildren(writer);
@@ -275,6 +339,20 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 	for (const QSharedPointer<Region> child : mChildren)
 		child->write(writer, true);
+}
+
+bool Region::operator==(const Region & r1)
+{
+	QPolygon p1 = r1.polygon().polygon();
+	QPolygon p2 = mPoly.polygon();
+
+	if (p1.isEmpty() || p2.isEmpty())
+		return false;
+
+	if (p1 == p2)
+		return true;
+	else
+		return false;
 }
 
 // TextLine --------------------------------------------------------------------
@@ -343,11 +421,13 @@ bool TextLine::read(QXmlStreamReader & reader) {
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
 				reader.readNext();
 				mText = reader.text().toUtf8().trimmed();	// add text
+				mTextPresent = true;
 			}
 			// read ASCII
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
 				reader.readNext();
 				mText = reader.text().toString().trimmed();	// add text
+				mTextPresent = true;
 			}
 		}
 	}
@@ -378,7 +458,7 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 		writer.writeEndElement(); // </Baseline>
 	}
 
-	if (!mText.isEmpty()) {
+	if (!mText.isEmpty() || mTextPresent) {
 		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
 		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
 		writer.writeEndElement(); // </TextEquiv>
@@ -640,6 +720,25 @@ Line SeparatorRegion::line() const {
 		return Line(mPoly);
 	
 	return mLine;
+}
+
+bool SeparatorRegion::operator==(const Region & sr1)
+{
+	Polygon p1 = sr1.polygon();
+	Line l1(p1);
+
+	//Line l1 = sr1.line();
+	mLine = this->line();
+	
+
+	if (l1.isEmpty() || mLine.isEmpty())
+		return false;
+
+	if (l1.startPoint() == mLine.startPoint() && l1.endPoint() == mLine.endPoint())
+		return true;
+	else
+		return false;
+
 }
 
 }
