@@ -1,9 +1,13 @@
 <map id="src/DebugMarkus.cpp" name="src/DebugMarkus.cpp">
-<area shape="rect" id="node2" href="$_debug_markus_8h.html" title="DebugMarkus.h" alt="" coords="21,80,136,107"/>
-<area shape="rect" id="node5" href="$_page_parser_8h.html" title="PageParser.h" alt="" coords="185,80,287,107"/>
-<area shape="rect" id="node7" href="$_utils_8h.html" title="Utils.h" alt="" coords="363,80,423,107"/>
-<area shape="rect" id="node10" href="$_image_8h.html" title="Image.h" alt="" coords="485,80,555,107"/>
-<area shape="rect" id="node13" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="629,80,725,107"/>
+<area shape="rect" id="node2" href="$_debug_markus_8h.html" title="DebugMarkus.h" alt="" coords="64,80,179,107"/>
+<area shape="rect" id="node5" href="$_page_parser_8h.html" title="PageParser.h" alt="" coords="269,80,371,107"/>
+<area shape="rect" id="node7" href="$_utils_8h.html" title="Utils.h" alt="" coords="395,80,455,107"/>
+<area shape="rect" id="node10" href="$_image_8h.html" title="Image.h" alt="" coords="527,80,596,107"/>
+<area shape="rect" id="node13" href="$_binarization_8h.html" title="Binarization.h" alt="" coords="671,80,772,107"/>
+<area shape="rect" id="node16" href="$_line_trace_8h.html" title="LineTrace.h" alt="" coords="916,80,1007,107"/>
+<area shape="rect" id="node21" href="$_elements_8h.html" title="Elements.h" alt="" coords="1031,80,1119,107"/>
+<area shape="rect" id="node23" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="796,80,892,107"/>
 <area shape="rect" id="node3" href="$_debug_utils_8h.html" title="DebugUtils.h" alt="" coords="5,155,104,181"/>
-<area shape="rect" id="node14" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="701,155,805,181"/>
+<area shape="rect" id="node14" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="803,155,908,181"/>
+<area shape="rect" id="node17" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="1028,155,1104,181"/>
 </map>

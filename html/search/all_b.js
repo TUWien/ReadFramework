@@ -63,8 +63,6 @@ var searchData=
   ['mstdcontrast',['mStdContrast',['../classrdf_1_1_binarization_su_fgd_weight.html#a2eb7ed298a5d449cf08fd388f3b23e3e',1,'rdf::BinarizationSuFgdWeight']]],
   ['mstrokew',['mStrokeW',['../classrdf_1_1_base_binarization_su.html#aeb84de6bcea5fd6df11db67c365e887b',1,'rdf::BaseBinarizationSu']]],
   ['mtext',['mText',['../classrdf_1_1_text_line.html#a343482a87fd5c4dd4cd458757ba9b520',1,'rdf::TextLine']]],
-  ['mtextequiv',['mTextEquiv',['../classrdf_1_1_region.html#a951bb090dee4480199b0a12b26a04233',1,'rdf::Region']]],
-  ['mtextequivpresent',['mTextEquivPresent',['../classrdf_1_1_region.html#a1e2185c60df0aa614ee67da0ab45d6ad',1,'rdf::Region']]],
   ['mtextpresent',['mTextPresent',['../classrdf_1_1_text_line.html#a4827ba352744de1c6999d5df827ef094',1,'rdf::TextLine']]],
   ['mthickness',['mThickness',['../classrdf_1_1_line.html#aae7f4b4d407e665b9a241567e90fd2ec',1,'rdf::Line']]],
   ['mthrimg',['mThrImg',['../classrdf_1_1_binarization_su_adapted.html#af46984727f8386919e1ae894e29e79ca',1,'rdf::BinarizationSuAdapted']]],

@@ -41,7 +41,5 @@ var classrdf_1_1_region =
     [ "mCustom", "classrdf_1_1_region.html#a0c938579d9f274f2e0095a82aad62ca4", null ],
     [ "mId", "classrdf_1_1_region.html#a6c25683d298a9553c20d7cdb4a49b246", null ],
     [ "mPoly", "classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1", null ],
-    [ "mTextEquiv", "classrdf_1_1_region.html#a951bb090dee4480199b0a12b26a04233", null ],
-    [ "mTextEquivPresent", "classrdf_1_1_region.html#a1e2185c60df0aa614ee67da0ab45d6ad", null ],
     [ "mType", "classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b", null ]
 ];

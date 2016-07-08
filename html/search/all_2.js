@@ -27,7 +27,7 @@ var searchData=
   ['blobmanager',['BlobManager',['../classrdf_1_1_blob_manager.html',1,'rdf']]],
   ['bloborientation',['blobOrientation',['../classrdf_1_1_blob.html#a98b9ac417405ae6b3604e731e3bde347',1,'rdf::Blob']]],
   ['blobs',['Blobs',['../classrdf_1_1_blobs.html',1,'rdf']]],
-  ['blobs',['blobs',['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const '],['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()']]],
+  ['blobs',['Blobs',['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()'],['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const ']]],
   ['blobs_2ecpp',['Blobs.cpp',['../_blobs_8cpp.html',1,'']]],
   ['blobs_2eh',['Blobs.h',['../_blobs_8h.html',1,'']]],
   ['border_5fflip',['BORDER_FLIP',['../classrdf_1_1_algorithms.html#a62ea27720ef3bf555f5598b85aa41a85a5768eac63d50e5c307df8a349a14e4c4',1,'rdf::Algorithms']]],
