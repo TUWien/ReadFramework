@@ -136,15 +136,6 @@ Polygon Region::polygon() const {
 	return mPoly;
 }
 
-void Region::setTextEqiv(const QString & text)
-{
-	mTextEquiv = text;
-}
-
-QString Region::textEquiv() const {
-	return mTextEquiv;
-}
-
 /// <summary>
 /// Draws the Region to the Painter.
 /// </summary>
@@ -273,31 +264,6 @@ bool Region::read(QXmlStreamReader & reader) {
 	//else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 
 	//}
-	// report unknown tags
-	// read <TextEquiv>
-	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
-
-		while (!reader.atEnd()) {
-			reader.readNext();
-
-			// are we done with reading the text?
-			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv))
-				break;
-
-			// read unicode
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
-				reader.readNext();
-				mTextEquiv = reader.text().toUtf8().trimmed();	// add text
-				mTextEquivPresent = true;
-			}
-			// read ASCII
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
-				reader.readNext();
-				mTextEquiv = reader.text().toString().trimmed();	// add text
-				mTextEquivPresent = true;
-			}
-		}
-	}
 	else if (reader.tokenType() == QXmlStreamReader::StartElement)
 		return false;
 
@@ -323,12 +289,6 @@ void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) cons
 	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
 	writer.writeEndElement();	// <Coords>
-
-	if (!mTextEquiv.isEmpty() || mTextEquivPresent) {
-		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
-		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mTextEquiv);
-		writer.writeEndElement(); // </TextEquiv>
-	}
 
 	if (withChildren)
 		writeChildren(writer);

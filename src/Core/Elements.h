@@ -120,8 +120,6 @@ protected:
 	QString mId;
 	QString mCustom;
 	Polygon mPoly;
-	QString mTextEquiv;
-	bool mTextEquivPresent = false;
 	QVector<QSharedPointer<Region> > mChildren;
 };
 
