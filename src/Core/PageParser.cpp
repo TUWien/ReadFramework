@@ -54,6 +54,11 @@ void PageXmlParser::read(const QString & xmlPath) {
 
 	mPage = parse(xmlPath);
 
+	// create an empty page if we could not read the XML
+	if (!mPage) {
+		mPage = mPage.create();
+	}
+
 }
 
 void PageXmlParser::write(const QString & xmlPath, const QSharedPointer<PageElement> pageElement) {
@@ -117,6 +122,10 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	}
 	
 	return "";
+}
+
+void PageXmlParser::setPage(QSharedPointer<PageElement> page) {
+	mPage = page;
 }
 
 QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {

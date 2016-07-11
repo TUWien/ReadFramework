@@ -503,6 +503,8 @@ PageElement::PageElement(const QString& xmlPath) {
 	mCreator = "CVL";
 	mDateCreated = QDateTime::currentDateTime();
 	mDateModified = QDateTime::currentDateTime();
+
+	mRoot = mRoot.create();
 }
 
 /// <summary>

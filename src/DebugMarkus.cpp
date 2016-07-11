@@ -62,20 +62,12 @@ void XmlTest::parseXml() {
 
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+
 	//SuperPixel sp(imgCv);
 	//sp.compute();
 	//
 	//if (!mConfig.outputPath().isEmpty())
 	//	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
-
-	//// loop for sampling time...
-	//for ( ; idx < 1; idx++) {
-
-	//	PageXmlParser parser;
-	//	parser.read(mConfig.xmlPath());
-	//	
-	//	parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
-	//}
 
 	// test lines XML
 	rdf::BinarizationSuAdapted binarizeImg(imgCv);
@@ -87,30 +79,60 @@ void XmlTest::parseXml() {
 
 	lt.compute();
 
-	//cv::Mat lImg = lt.lineImage();
-	//cv::Mat synLine = lt.generatedLineImage();
-	//QVector<rdf::Line> hlines = lt.getHLines();
-	//QVector<rdf::Line> vlines = lt.getVLines();
 	QVector<rdf::Line> alllines = lt.getLines();
 
-	//save lines to xml
-	//TODO - check if it is working...
-	rdf::PageXmlParser parser;
+	// init parser
+	PageXmlParser parser;
 	parser.read(mConfig.xmlPath());
-	auto pe = parser.page();
-	auto root = pe->rootRegion();
-	//pe->setCreator(QString("CVL"));
 
+	auto root = parser.page()->rootRegion();
+
+	// test writing lines
 	for (int i = 0; i < alllines.size(); i++) {
 
 		QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
 		pSepR->setLine(alllines[i].line());
 
-		if (root)
-			root->addUniqueChild(pSepR);
+		root->addUniqueChild(pSepR);
 	}
 
-	parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), pe);
+	// loop for sampling time...
+	parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
+
+	//// test lines XML
+	//rdf::BinarizationSuAdapted binarizeImg(imgCv);
+	//binarizeImg.compute();
+	//cv::Mat bwImg = binarizeImg.binaryImage();
+
+	//rdf::LineTrace lt(bwImg);
+	//lt.setAngle(0.0);
+
+	//lt.compute();
+
+	////cv::Mat lImg = lt.lineImage();
+	////cv::Mat synLine = lt.generatedLineImage();
+	////QVector<rdf::Line> hlines = lt.getHLines();
+	////QVector<rdf::Line> vlines = lt.getVLines();
+	//QVector<rdf::Line> alllines = lt.getLines();
+
+	////save lines to xml
+	////TODO - check if it is working...
+	//rdf::PageXmlParser parser;
+	//parser.read(mConfig.xmlPath());
+	//auto pe = parser.page();
+	//auto root = pe->rootRegion();
+	////pe->setCreator(QString("CVL"));
+
+	//for (int i = 0; i < alllines.size(); i++) {
+
+	//	QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
+	//	pSepR->setLine(alllines[i].line());
+
+	//	if (root)
+	//		root->addUniqueChild(pSepR);
+	//}
+
+	//parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), pe);
 
 
 	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed());

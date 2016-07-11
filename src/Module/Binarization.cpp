@@ -52,7 +52,7 @@ SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
 	
 	mModuleName = "SimpleBinarization";
-	loadSettings();
+	//loadSettings();
 }
 
 bool SimpleBinarization::checkInput() const {
@@ -146,7 +146,7 @@ BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) 
 	}
 
 	mModuleName = "BaseBinarizationSu";
-	loadSettings();
+	//loadSettings();
 }
 
 bool BaseBinarizationSu::checkInput() const {

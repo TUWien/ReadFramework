@@ -86,6 +86,7 @@ public:
 
 	QString tagName(const RootTags& tag) const;
 
+	void setPage(QSharedPointer<PageElement> page);
 	QSharedPointer<PageElement> page() const;
 
 	static QString imagePathToXmlPath(const QString& path);
