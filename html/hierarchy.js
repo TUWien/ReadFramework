@@ -30,6 +30,10 @@ var hierarchy =
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ]
     ] ],
+    [ "rdf::ModuleConfig", "classrdf_1_1_module_config.html", [
+      [ "rdf::BaseBinarizationSuConfig", "classrdf_1_1_base_binarization_su_config.html", null ],
+      [ "rdf::SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", null ]
+    ] ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],
     [ "rdf::PageXmlParser", "classrdf_1_1_page_xml_parser.html", null ],
     [ "rdf::Patch", "classrdf_1_1_patch.html", null ],

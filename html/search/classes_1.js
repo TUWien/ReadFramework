@@ -1,6 +1,7 @@
 var searchData=
 [
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html',1,'rdf']]],
+  ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html',1,'rdf']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html',1,'rdf']]],
   ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html',1,'rdf']]],
   ['basiccontrast',['BasicContrast',['../classrdf_1_1_basic_contrast.html',1,'rdf']]],

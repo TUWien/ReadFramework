@@ -22,6 +22,7 @@ var classrdf_1_1_page_xml_parser =
     [ "parseMetadata", "classrdf_1_1_page_xml_parser.html#a5d6a869e9cbcf8bfc51b46a02d2f2b66", null ],
     [ "parseRegion", "classrdf_1_1_page_xml_parser.html#ac144a210afba700fa0ec189f80029929", null ],
     [ "read", "classrdf_1_1_page_xml_parser.html#aee0cbb62b5f041bb470a7939a8dc3e77", null ],
+    [ "setPage", "classrdf_1_1_page_xml_parser.html#a37885ad33bcb55ec98d621415797cc4f", null ],
     [ "tagName", "classrdf_1_1_page_xml_parser.html#ad045baf5b9df93a55a179bde558945b4", null ],
     [ "write", "classrdf_1_1_page_xml_parser.html#aace3f3ec7292c42fb1f7178c000dd920", null ],
     [ "writeMetaData", "classrdf_1_1_page_xml_parser.html#a06ec6de2b9c6b9838a555a5a413a5ba1", null ],

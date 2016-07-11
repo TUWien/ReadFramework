@@ -4,7 +4,9 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "BaseModule.h", "_base_module_8h.html", "_base_module_8h" ],
     [ "Binarization.cpp", "_binarization_8cpp.html", null ],
     [ "Binarization.h", "_binarization_8h.html", [
+      [ "SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", "classrdf_1_1_simple_binarization_config" ],
       [ "SimpleBinarization", "classrdf_1_1_simple_binarization.html", "classrdf_1_1_simple_binarization" ],
+      [ "BaseBinarizationSuConfig", "classrdf_1_1_base_binarization_su_config.html", "classrdf_1_1_base_binarization_su_config" ],
       [ "BaseBinarizationSu", "classrdf_1_1_base_binarization_su.html", "classrdf_1_1_base_binarization_su" ],
       [ "BinarizationSuAdapted", "classrdf_1_1_binarization_su_adapted.html", "classrdf_1_1_binarization_su_adapted" ],
       [ "BinarizationSuFgdWeight", "classrdf_1_1_binarization_su_fgd_weight.html", "classrdf_1_1_binarization_su_fgd_weight" ]

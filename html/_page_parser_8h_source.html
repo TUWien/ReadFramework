@@ -193,23 +193,24 @@ $(document).ready(function(){initNavTree('_page_parser_8h_source.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    QString tagName(<span class="keyword">const</span> RootTags&amp; tag) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    QSharedPointer&lt;PageElement&gt; page() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">static</span> QString imagePathToXmlPath(<span class="keyword">const</span> QString&amp; path);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">   95</a></span>&#160;    QSharedPointer&lt;PageElement&gt; <a class="code" href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">mPage</a>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    QSharedPointer&lt;PageElement&gt; parse(<span class="keyword">const</span> QString&amp; xmlPath) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> parseRegion(QXmlStreamReader&amp; reader, QSharedPointer&lt;Region&gt; parent) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> parseMetadata(QXmlStreamReader&amp; reader, QSharedPointer&lt;PageElement&gt; page) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    QByteArray writePageElement() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> writeMetaData(QXmlStreamWriter&amp; writer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> setPage(QSharedPointer&lt;PageElement&gt; page);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    QSharedPointer&lt;PageElement&gt; page() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> QString imagePathToXmlPath(<span class="keyword">const</span> QString&amp; path);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">   96</a></span>&#160;    QSharedPointer&lt;PageElement&gt; <a class="code" href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">mPage</a>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    QSharedPointer&lt;PageElement&gt; parse(<span class="keyword">const</span> QString&amp; xmlPath) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> parseRegion(QXmlStreamReader&amp; reader, QSharedPointer&lt;Region&gt; parent) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> parseMetadata(QXmlStreamReader&amp; reader, QSharedPointer&lt;PageElement&gt; page) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    QByteArray writePageElement() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> writeMetaData(QXmlStreamWriter&amp; writer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fda2694b774267fa6b3f9d72497e1e0cc7a"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda2694b774267fa6b3f9d72497e1e0cc7a">rdf::PageXmlParser::tag_meta_changed</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:71</div></div>
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fda16784f4fd4f83c37540c106383ef2f66"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda16784f4fd4f83c37540c106383ef2f66">rdf::PageXmlParser::attr_xsi</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:78</div></div>
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fdaff5d3da2d407f14a885b45f51665bedb"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fdaff5d3da2d407f14a885b45f51665bedb">rdf::PageXmlParser::attr_schemaLocation</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:79</div></div>
@@ -225,7 +226,7 @@ $(document).ready(function(){initNavTree('_page_parser_8h_source.html','');});
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fda31070e52ad715e92d1af7f51e429a7ea"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda31070e52ad715e92d1af7f51e429a7ea">rdf::PageXmlParser::tag_meta_creator</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:69</div></div>
 <div class="ttc" id="_page_parser_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_page_parser_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> PageParser.h:46</div></div>
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fda49ec9b091c2bd5c1e244e319be6c858d"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda49ec9b091c2bd5c1e244e319be6c858d">rdf::PageXmlParser::attr_text_type</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:76</div></div>
-<div class="ttc" id="classrdf_1_1_page_xml_parser_html_ae2e9b87217afe50f29217e58252d57a3"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">rdf::PageXmlParser::mPage</a></div><div class="ttdeci">QSharedPointer&lt; PageElement &gt; mPage</div><div class="ttdef"><b>Definition:</b> PageParser.h:95</div></div>
+<div class="ttc" id="classrdf_1_1_page_xml_parser_html_ae2e9b87217afe50f29217e58252d57a3"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ae2e9b87217afe50f29217e58252d57a3">rdf::PageXmlParser::mPage</a></div><div class="ttdeci">QSharedPointer&lt; PageElement &gt; mPage</div><div class="ttdef"><b>Definition:</b> PageParser.h:96</div></div>
 <div class="ttc" id="classrdf_1_1_page_xml_parser_html_ab50cae4158fbf6422bc22653108066fda0b24763d839bd1a0aff7ced8f54d627e"><div class="ttname"><a href="classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda0b24763d839bd1a0aff7ced8f54d627e">rdf::PageXmlParser::attr_imageWidth</a></div><div class="ttdef"><b>Definition:</b> PageParser.h:74</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

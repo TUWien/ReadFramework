@@ -4,8 +4,7 @@ var classrdf_1_1_base_skew_estimation =
       [ "HORIZONTAL", "classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997ab53c7e2bfcb1f4a67ef1f2f2aecbafc6", null ],
       [ "VERTICAL", "classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997af847d1ca53fcb96592612a071cc15e02", null ]
     ] ],
-    [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html#aa66b2b8706116c5b84e2aff0eae9ccb1", null ],
-    [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html#ac9abbaf63924fe18ddf60b93b4d64dfa", null ],
+    [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html#ad9894e5f9a0114b1c9dd274d336bdcc2", null ],
     [ "checkInput", "classrdf_1_1_base_skew_estimation.html#a6d8392a4f2a91cc567872e0ae9bc1ee0", null ],
     [ "compute", "classrdf_1_1_base_skew_estimation.html#aaa02b423ad1136f9ea5e4ce6afd6b671", null ],
     [ "computeWeights", "classrdf_1_1_base_skew_estimation.html#aeaed441206cfd6b49dc15c365ed74cb6", null ],
