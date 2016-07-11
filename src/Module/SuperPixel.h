@@ -68,8 +68,6 @@ private:
 
 	bool checkInput() const override;
 
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
 };
 
 };

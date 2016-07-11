@@ -55,35 +55,62 @@
 
 namespace rdf {
 
+class DllModuleExport SimpleBinarizationConfig : public ModuleConfig {
+
+public:
+	SimpleBinarizationConfig();
+
+	int thresh();
+	
+	virtual QString toString() const override;
+
+protected:
+	// parameters
+	int mThresh = 100;
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
 // read defines
 /// <summary>
 /// A simple binarization module using a defined threshold.
 /// </summary>
 /// <seealso cref="Module" />
-	class DllModuleExport SimpleBinarization : public Module {
+class DllModuleExport SimpleBinarization : public Module {
 
 public:
 	SimpleBinarization(const cv::Mat& img);
 	
-	
 	bool isEmpty() const override;
 	bool compute() override;
 	cv::Mat binaryImage() const;
-	//void setThresh(int thresh);
-	//int thresh() const;
 	QString toString() const override;
+	
+	QSharedPointer<SimpleBinarizationConfig> config() const;
 
 private:
 	cv::Mat mSrcImg;
 	cv::Mat mBwImg;
-
-	// parameters
-	int mThresh = 100;
-
+	
 	bool checkInput() const override;
 
+};
+
+class DllModuleExport BaseBinarizationSuConfig : public ModuleConfig {
+
+public:
+	BaseBinarizationSuConfig();
+
+	int erodedMaskSize() const;
+
+	QString toString() const override;
+
+private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
+
+	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
 };
 
 /// <summary>
@@ -91,7 +118,7 @@ private:
 /// "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
 /// </summary>
 /// <seealso cref="Module" />
-	class DllModuleExport BaseBinarizationSu : public Module {
+class DllModuleExport BaseBinarizationSu : public Module {
 
 public:
 	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
@@ -101,6 +128,8 @@ public:
 	cv::Mat binaryImage() const;
 	virtual QString toString() const override;
 	void setPreFiltering(bool preFilter = true, int preFilterSize = 10);
+
+	QSharedPointer<BaseBinarizationSuConfig> config() const;
 
 protected:
 	cv::Mat compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const;
@@ -122,17 +151,10 @@ protected:
 														//cv::Mat mBinContrastImg;
 														//cv::Mat mThrImg;
 
-														//parameters
-	int mErodeMaskSize = 3 * 6;							//size for the boundary erosion
-	float mStrokeW = 4;									//estimated strokeWidth
-
 	bool mPreFilter = true;
 	int mPreFilterSize = 10;
+	float mStrokeW = 4;									//estimated strokeWidth
 
-private:
-	
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
 };
 
 /// <summary>
@@ -141,7 +163,7 @@ private:
 /// In contrast to DkSegmentationSu the ContrastImg is adapted and the strokeWidth is constant.
 /// </summary>
 /// <seealso cref="BaseBinarizationSu" />
-	class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
+class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
 
 public:
 	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat());

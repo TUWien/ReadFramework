@@ -48,15 +48,6 @@ namespace rdf {
 	
 
 	/// <summary>
-	/// Initializes a new (empty) instance of the <see cref="BaseSkewEstimation"/> class.
-	/// </summary>
-	BaseSkewEstimation::BaseSkewEstimation() : Module()
-	{
-		mModuleName = "BaseSkewEstimation";
-		loadSettings();
-	}
-
-	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseSkewEstimation"/> class.
 	/// </summary>
 	/// <param name="img">The source img.</param>
@@ -67,10 +58,6 @@ namespace rdf {
 
 		mIntegralImg = cv::Mat();
 		mIntegralSqdImg = cv::Mat();
-
-		mModuleName = "BaseSkewEstimation";
-		loadSettings();
-
 	}
 
 	/// <summary>
@@ -528,30 +515,31 @@ namespace rdf {
 		return false;
 	}
 
-	void BaseSkewEstimation::load(const QSettings & settings)
-	{
-		mW = settings.value("sepW", mW).toInt();	
-		mH = settings.value("sepH", mH).toInt();
-		mThr = settings.value("thr", mThr).toDouble();
-		mDelta = settings.value("delta", mDelta).toInt();
-		mEpsilon = settings.value("eps", mEpsilon).toInt();
-		mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
-		minLineProjLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
-		mSigma = settings.value("sigma", mSigma).toDouble();
+	// TODO
+	//void BaseSkewEstimation::load(const QSettings & settings)
+	//{
+	//	mW = settings.value("sepW", mW).toInt();	
+	//	mH = settings.value("sepH", mH).toInt();
+	//	mThr = settings.value("thr", mThr).toDouble();
+	//	mDelta = settings.value("delta", mDelta).toInt();
+	//	mEpsilon = settings.value("eps", mEpsilon).toInt();
+	//	mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
+	//	minLineProjLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
+	//	mSigma = settings.value("sigma", mSigma).toDouble();
 
-	}
+	//}
 
-	void BaseSkewEstimation::save(QSettings & settings) const
-	{
-		settings.setValue("sepW", mW);
-		settings.setValue("sepH", mH);
-		settings.setValue("thr", mThr);
-		settings.setValue("delta", mDelta);
-		settings.setValue("eps", mEpsilon);
-		settings.setValue("minLineLength", mMinLineLength);
-		settings.setValue("minLineLengthProj", minLineProjLength);
-		settings.setValue("sigma", mSigma);
-	}
+	//void BaseSkewEstimation::save(QSettings & settings) const
+	//{
+	//	settings.setValue("sepW", mW);
+	//	settings.setValue("sepH", mH);
+	//	settings.setValue("thr", mThr);
+	//	settings.setValue("delta", mDelta);
+	//	settings.setValue("eps", mEpsilon);
+	//	settings.setValue("minLineLength", mMinLineLength);
+	//	settings.setValue("minLineLengthProj", minLineProjLength);
+	//	settings.setValue("sigma", mSigma);
+	//}
 
 	/// <summary>
 	/// Determines whether this instance is empty.

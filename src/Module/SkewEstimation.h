@@ -69,8 +69,7 @@ namespace rdf {
 	public:
 		enum EdgeDirection { HORIZONTAL = 0, VERTICAL };
 
-		BaseSkewEstimation();
-		BaseSkewEstimation(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+		BaseSkewEstimation(const cv::Mat& img = cv::Mat(), const cv::Mat& mask = cv::Mat());
 		void setImages(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
 		bool compute();
@@ -102,8 +101,9 @@ namespace rdf {
 
 	private:
 
-		void load(const QSettings& settings) override;
-		void save(QSettings& settings) const override;
+		// TODO
+		//void load(const QSettings& settings) override;
+		//void save(QSettings& settings) const override;
 
 		double mSkewAngle = 0.0;
 		//double mThr = 0.1; //according to the paper

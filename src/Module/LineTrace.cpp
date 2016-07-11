@@ -62,8 +62,7 @@ namespace rdf {
 			mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
 		}
 
-		mModuleName = "LineTrace";
-		loadSettings();
+		//mModuleName = "LineTrace";
 	}
 
 	bool LineTrace::checkInput() const {
