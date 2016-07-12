@@ -58,6 +58,8 @@ namespace rdf {
 
 		mIntegralImg = cv::Mat();
 		mIntegralSqdImg = cv::Mat();
+
+		mConfig = QSharedPointer<BaseSkewEstimationConfig>::create();
 	}
 
 	/// <summary>
@@ -92,14 +94,14 @@ namespace rdf {
 
 		int w, h;
 		int delta, epsilon;
-		w = mW;
+		w = config()->width();
 		//w = qRound(mSrcImg.cols / 1430.0*49.0); //check  (nomacs plugin version)
-		h = mH;
+		h = config()->height();
 		//h = qRound(mSrcImg.rows / 700.0*12.0); //check (nomacs plugin version)
 		w = w <= 1 ? 10 : w;
 		h = h <= 1 ? 5 : h;
-		epsilon = mEpsilon;
-		delta = mDelta;
+		epsilon = config()->epsilon();
+		delta = config()->delta();
 		//delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
 		//mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
@@ -125,10 +127,10 @@ namespace rdf {
 		
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
-		double thr = mFixedThr ? mThr : mThr * max;
+		double thr = mFixedThr ? config()->thr() : config()->thr() * max;
 		cv::Mat edgeHor = edgeMap(horSep, thr, HORIZONTAL, mMask);
 		cv::minMaxLoc(verSep, &min, &max);
-		thr = mFixedThr ? mThr : mThr * max;
+		thr = mFixedThr ? config()->thr() : config()->thr() * max;
 		cv::Mat edgeVer = edgeMap(verSep, thr, VERTICAL, mMask);
 
 		//Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
@@ -280,7 +282,7 @@ namespace rdf {
 
 				if (ptrSep[col] > thr) {
 					bool edgeT = true;
-					for (int k = -mKMax; k <= mKMax; k++) {
+					for (int k = -config()->kMax(); k <= config()->kMax(); k++) {
 						if (k == 0) {
 							continue;
 						}
@@ -324,9 +326,9 @@ namespace rdf {
 	QVector<QVector3D> BaseSkewEstimation::computeWeights(cv::Mat edgeMap, int delta, int epsilon, EdgeDirection direction) {
 		std::vector<cv::Vec4i> lines;
 		QVector4D maxLine = QVector4D();
-		minLineProjLength = mMinLineLength / 4;
+		int minLineProjLength = config()->minLineLength() / 4;
 		//params: rho resolution, theta resolution, threshold, min Line length, max line gap
-		cv::HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, mMinLineLength, 20);
+		cv::HoughLinesP(edgeMap, lines, 1, CV_PI / 180, 50, config()->minLineLength(), 20);
 
 		QVector<QVector3D> computedWeights = QVector<QVector3D>();
 
@@ -357,7 +359,7 @@ namespace rdf {
 				//double slope = (l[3] - l[1]) / (l[2] - l[0]); test
 
 				//TODO: instead of x1++ and x2-- check if alternating increment/decrement improves result
-				while (qAbs(x1 - x2) > minLineProjLength && K < mNIter) {
+				while (qAbs(x1 - x2) > minLineProjLength && K < config()->nIter()) {
 
 					int y1 = qRound(l[1] + (x1 - l[0]) * slope);
 					int y2 = qRound(l[1] + (x2 - l[0]) * slope);
@@ -476,7 +478,7 @@ namespace rdf {
 			for (int i = 0; i < thrWeights.size(); i++) {
 				//plugin version
 				//saliency += thrWeights.at(i).x() * qExp(-thrWeights.at(i).z()) * qExp(-0.5 * ((skewAngle - thrWeights.at(i).y()) * (skewAngle - thrWeights.at(i).y())) / (mSigma * mSigma));
-				saliency += thrWeights[i].x() * qExp(-thrWeights[i].z()) * (1/qSqrt(2.0*CV_PI*mSigma*mSigma)) * qExp(-0.5 * ((skewAngle - thrWeights[i].y()) * (skewAngle - thrWeights[i].y())) / (mSigma * mSigma));
+				saliency += thrWeights[i].x() * qExp(-thrWeights[i].z()) * (1/qSqrt(2.0*CV_PI*config()->sigma()*config()->sigma())) * qExp(-0.5 * ((skewAngle - thrWeights[i].y()) * (skewAngle - thrWeights[i].y())) / (config()->sigma() * config()->sigma()));
 			}
 
 			saliencyVec.append(QPointF(skewAngle, saliency));
@@ -515,32 +517,6 @@ namespace rdf {
 		return false;
 	}
 
-	// TODO
-	//void BaseSkewEstimation::load(const QSettings & settings)
-	//{
-	//	mW = settings.value("sepW", mW).toInt();	
-	//	mH = settings.value("sepH", mH).toInt();
-	//	mThr = settings.value("thr", mThr).toDouble();
-	//	mDelta = settings.value("delta", mDelta).toInt();
-	//	mEpsilon = settings.value("eps", mEpsilon).toInt();
-	//	mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
-	//	minLineProjLength = settings.value("minLineLengthProj", minLineProjLength).toInt();
-	//	mSigma = settings.value("sigma", mSigma).toDouble();
-
-	//}
-
-	//void BaseSkewEstimation::save(QSettings & settings) const
-	//{
-	//	settings.setValue("sepW", mW);
-	//	settings.setValue("sepH", mH);
-	//	settings.setValue("thr", mThr);
-	//	settings.setValue("delta", mDelta);
-	//	settings.setValue("eps", mEpsilon);
-	//	settings.setValue("minLineLength", mMinLineLength);
-	//	settings.setValue("minLineLengthProj", minLineProjLength);
-	//	settings.setValue("sigma", mSigma);
-	//}
-
 	/// <summary>
 	/// Determines whether this instance is empty.
 	/// </summary>
@@ -558,47 +534,185 @@ namespace rdf {
 	/// <returns>Summary string.</returns>
 	QString BaseSkewEstimation::toString() const
 	{
-		return QString();
+		QString msg = debugName();
+		msg += "estimated skew: " + QString::number(mSkewAngle);
+		msg += config()->toString();
+
+		return msg;
 	}
 
-	void BaseSkewEstimation::setThr(double thr)
-	{
-		mThr = thr;
-	}
+	//void BaseSkewEstimation::setThr(double thr)
+	//{
+	//	mThr = thr;
+	//}
 
-	void BaseSkewEstimation::setmMinLineLength(int ll)
-	{
-		mMinLineLength = ll;
-	}
+	//void BaseSkewEstimation::setmMinLineLength(int ll)
+	//{
+	//	mMinLineLength = ll;
+	//}
 
-	void BaseSkewEstimation::setDelta(int d)
-	{
-		mDelta = d;
-	}
+	//void BaseSkewEstimation::setDelta(int d)
+	//{
+	//	mDelta = d;
+	//}
 
-	void BaseSkewEstimation::setEpsilon(int e)
-	{
-		mEpsilon = e;
-	}
+	//void BaseSkewEstimation::setEpsilon(int e)
+	//{
+	//	mEpsilon = e;
+	//}
 
-	void BaseSkewEstimation::setW(int w)
-	{
-		mW = w;
-	}
+	//void BaseSkewEstimation::setW(int w)
+	//{
+	//	mW = w;
+	//}
 
-	void BaseSkewEstimation::setH(int h)
-	{
-		mH = h;
-	}
+	//void BaseSkewEstimation::setH(int h)
+	//{
+	//	mH = h;
+	//}
 
-	void BaseSkewEstimation::setSigma(double s)
-	{
-		mSigma = s;
-	}
+	//void BaseSkewEstimation::setSigma(double s)
+	//{
+	//	mSigma = s;
+	//}
 
 	void BaseSkewEstimation::setFixedThr(bool f)
 	{
 		mFixedThr = f;
+	}
+
+	QSharedPointer<BaseSkewEstimationConfig> BaseSkewEstimation::config() const
+	{
+		return qSharedPointerDynamicCast<BaseSkewEstimationConfig>(mConfig);
+	}
+
+	BaseSkewEstimationConfig::BaseSkewEstimationConfig()	{
+		mModuleName = "BaseSkewEstimation";
+	}
+
+	int BaseSkewEstimationConfig::width() const {
+		return mW;
+	}
+
+	void BaseSkewEstimationConfig::setWidth(int w) 	{
+		mW = w;
+	}
+
+	int BaseSkewEstimationConfig::height() const {
+		return mH;
+	}
+
+	void BaseSkewEstimationConfig::setHeight(int h)	{
+		mH = h;
+	}
+
+	int BaseSkewEstimationConfig::delta() const
+	{
+		return mDelta;
+	}
+
+	void BaseSkewEstimationConfig::setDelta(int d) 	{
+		mDelta = d;
+	}
+
+	int BaseSkewEstimationConfig::epsilon() const {
+		return mEpsilon;
+	}
+
+	void BaseSkewEstimationConfig::setEpsilon(int e) {
+		mEpsilon = e;
+	}
+
+	int BaseSkewEstimationConfig::minLineLength() const {
+		return mMinLineLength;
+	}
+
+	void BaseSkewEstimationConfig::setMinLineLength(int l)	{
+		mMinLineLength = l;
+	}
+
+	//int BaseSkewEstimationConfig::minLineProjLength() const	{
+	//	return mMinLineProjLength;
+	//}
+
+	//void BaseSkewEstimationConfig::setMinLineProjLength(int l)	{
+	//	mMinLineProjLength = l;
+	//}
+
+	double BaseSkewEstimationConfig::sigma() const	{
+		return mSigma;
+	}
+
+	void BaseSkewEstimationConfig::setSigma(double s)	{
+		mSigma = s;
+	}
+
+	double BaseSkewEstimationConfig::thr() const {
+		return mThr;
+	}
+
+	void BaseSkewEstimationConfig::setThr(double t)	{
+		mThr = t;
+	}
+
+	int BaseSkewEstimationConfig::kMax() const	{
+		return mKMax;
+	}
+
+	void BaseSkewEstimationConfig::setKMax(int k)	{
+		mKMax = k;
+	}
+
+	int BaseSkewEstimationConfig::nIter() const	{
+		return mNIter;
+	}
+
+	void BaseSkewEstimationConfig::setNIter(int n)	{
+		mNIter = n;
+	}
+
+	QString BaseSkewEstimationConfig::toString() const
+	{
+		QString msg;
+		msg += "  W: " + QString::number(mW);
+		msg += "  H: " + QString::number(mH);
+		msg += "  delta: " + QString::number(mDelta);
+		msg += "  epsilon: " + QString::number(mEpsilon);
+		msg += "  minLineLength: " + QString::number(mMinLineLength);
+		//msg += "  minLineLengthProj: " + QString::number(mMinLineProjLength);
+		msg += "  sigma: " + QString::number(mSigma);
+		msg += "  thr: " + QString::number(mThr);
+		msg += "  kmax: " + QString::number(mKMax);
+		msg += "  niter: " + QString::number(mNIter);
+
+		return msg;
+	}
+
+	void BaseSkewEstimationConfig::load(const QSettings & settings)	{
+			mW = settings.value("sepW", mW).toInt();	
+			mH = settings.value("sepH", mH).toInt();
+			mThr = settings.value("thr", mThr).toDouble();
+			mDelta = settings.value("delta", mDelta).toInt();
+			mEpsilon = settings.value("eps", mEpsilon).toInt();
+			mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
+			//mMinLineProjLength = settings.value("minLineLengthProj", mMinLineProjLength).toInt();
+			mSigma = settings.value("sigma", mSigma).toDouble();
+			mKMax = settings.value("kmax", mKMax).toInt();
+			mNIter = settings.value("niter", mNIter).toInt();
+	}
+
+	void BaseSkewEstimationConfig::save(QSettings & settings) const	{
+
+			settings.setValue("sepW", mW);
+			settings.setValue("sepH", mH);
+			settings.setValue("thr", mThr);
+			settings.setValue("delta", mDelta);
+			settings.setValue("eps", mEpsilon);
+			settings.setValue("minLineLength", mMinLineLength);
+			//settings.setValue("minLineLengthProj", mMinLineProjLength);
+			settings.setValue("sigma", mSigma);
+			settings.setValue("kmax", mKMax);
+			settings.setValue("niter", mNIter);
 	}
 
 }

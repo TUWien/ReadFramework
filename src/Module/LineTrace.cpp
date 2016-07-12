@@ -677,7 +677,7 @@ namespace rdf {
 
 
 	LineTraceConfig::LineTraceConfig() 	{
-		mModuleName = "LineTraceConfig";
+		mModuleName = "LineTrace";
 	}
 
 	float LineTraceConfig::maxSlopeRotat() const {
