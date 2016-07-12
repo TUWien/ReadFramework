@@ -142,18 +142,18 @@ namespace rdf {
 			vLenTemp += i.length();
 		}
 
-		float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
-		float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
+		//float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
+		//float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
 
-		//at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
-		if (ratioHor < mThreshLineLenRatio || ratioVer < mThreshLineLenRatio)
-			return false;
+		////at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
+		//if (ratioHor < mThreshLineLenRatio || ratioVer < mThreshLineLenRatio)
+		//	return false;
 
-		//float refY = horLinesTemp[0].startPoint().y();
+		//int refY = horLinesTemp[0].startPoint().y();
 		//float distance = 0.0f;
 		//for (int i = 0; i < mHorLines.size(); i++) {
 		//	
-		//	float mapDiffY = mHorLines[i].startPoint().y() - refY;
+		//	int mapDiffY = mHorLines[i].startPoint().y() - refY;
 		//	for (int j = 0; j < verLinesTemp.size(); j++) {
 
 		//	}

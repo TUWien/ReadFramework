@@ -55,6 +55,79 @@
 namespace rdf {
 
 
+
+class DllModuleExport LineTraceConfig : public ModuleConfig {
+
+public:
+	LineTraceConfig();
+
+	float maxSlopeRotat() const;
+	void setMaxSlopeRotat(float s);
+
+	float maxLenDiff() const;
+	void setMaxLenDiff(float l);
+
+	float maxAspectRatio() const;
+	void setMaxAspectRatio(float a);
+
+	int minWidth() const;
+	void setMinWidth(int w);
+
+	int maxLen() const;
+	void setMaxLen(int l);
+
+	int minArea() const;
+	void setMinArea(int a);
+
+	int rippleLen() const;
+	void setRippleLen(int r);
+
+	float rippleArea() const;
+	void setRippleArea(float a);
+
+	float maxGap() const;
+	void setMaxGap(float g);
+
+	float maxSlopeDiff() const;
+	void setMaxSlopeDiff(float s);
+
+	float maxAngleDiff() const;
+	void setMaxAngleDiff(float a);
+
+	int minLenSecondRun() const;
+	void setMinLenSecondRun(int r);
+
+	float maxDistExtern() const;
+	void setMaxDistExtern(float d);
+
+	float maxAngleDiffExtern() const;
+	void setMaxAngleDiffExtern(float a);
+
+
+	QString toString() const override;
+
+private:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	float mMaxSlopeRotat = 10.0f;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 5 deg)
+	float mMaxLenDiff = 1.5f;		//filter parameter: maximal difference in length between two successive runlengths (default: 1.5)
+	float mMaxAspectRatio = 0.3f;	//filter parameter: maximal aspect ratio of a line (default: 0.3f)
+	int mMinWidth = 20;			//filter parameter: minimal width a line in pixel (default: 30)
+	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
+	int mMinArea = 20;				//filter parameter: minimum area in pixel (default: 40)
+	int mRippleLen = 200;			//filter parameter: ripple len of a line in pixel (default: 200)
+	float mRippleArea = 0.2f;		//filter parameter: ripple area of a line (default: 0.2f)
+	float mMaxGap = 100;			//filter parameter: maximal gap between two lines in pixel (default: 250)
+	float mMaxSlopeDiff = 2.0f;		//filter parameter: maximal slope difference between two lines in degree (default: 3)
+	float mMaxAngleDiff = 2.0f;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 20)
+	int mMinLenSecondRun = 60;    //min len to filter after merge lines; was 60
+
+								  //filter Lines parameter (compared to given line vector, see std::vector<DkLineExt> filterLines(std::vector<DkLineExt> &externLines))
+	float mMaxDistExtern = 10.0f;		//maximal Distance of the external line end points compared to a given line (default: 5 pixel)
+	float mMaxAngleDiffExtern = 20.0f / 180.0f * (float)CV_PI;;	//maximal Angle Difference of the external line compared to a given line (default: 20 deg)
+};
+
 /// <summary>
 /// Detects Lines in a binary image. The result is a binary image containing all line elements (pixel accurate) as well as all lines as vectors.
 ///	It is also possible to filter lines according a specified angle.
@@ -74,6 +147,8 @@ public:
 	void setAngle(double angle = std::numeric_limits<double>::infinity());
 	void resetAngle();
 
+	QSharedPointer<LineTraceConfig> config() const;
+
 	/**
 	* Returns a vector with all calculated and merged lines.
 	* @return The calculated and merged lines.
@@ -81,8 +156,8 @@ public:
 	//QVector<DkLineExt> getLines();
 	cv::Mat lineImage() const;
 	cv::Mat generatedLineImage() const;
-	void setMinLenSecondRun(int len);
-	void setMaxAspectRatio(float ratio);
+	//void setMinLenSecondRun(int len);
+	//void setMaxAspectRatio(float ratio);
 	virtual QString toString() const override;
 
 protected:
@@ -98,26 +173,10 @@ protected:
 
 private:
 
-	float mMaxSlopeRotat = 10.0f;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 5 deg)
-	float mMaxLenDiff = 1.5f;		//filter parameter: maximal difference in length between two successive runlengths (default: 1.5)
-	float mMaxAspectRatio = 0.3f;	//filter parameter: maximal aspect ratio of a line (default: 0.3f)
-	int mMinWidth = 20;			//filter parameter: minimal width a line in pixel (default: 30)
-	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
-	int mMinArea = 20;				//filter parameter: minimum area in pixel (default: 40)
-	int mRippleLen = 200;			//filter parameter: ripple len of a line in pixel (default: 200)
-	float mRippleArea = 0.2f;		//filter parameter: ripple area of a line (default: 0.2f)
-	float mMaxGap = 100;			//filter parameter: maximal gap between two lines in pixel (default: 250)
-	float mMaxSlopeDiff = 2.0f;		//filter parameter: maximal slope difference between two lines in degree (default: 3)
-	float mMaxAngleDiff = 2.0f;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 20)
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
-	int mMinLenSecondRun = 60;    //min len to filter after merge lines; was 60
 
 	float mLineProb;
 	float mLineDistProb;
-
-	//filter Lines parameter (compared to given line vector, see std::vector<DkLineExt> filterLines(std::vector<DkLineExt> &externLines))
-	float mMaxDistExtern = 10.0f;		//maximal Distance of the external line end points compared to a given line (default: 5 pixel)
-	float mMaxAngleDiffExtern = 20.0f / 180.0f * (float)CV_PI;;	//maximal Angle Difference of the external line compared to a given line (default: 20 deg)
 
 	//void load(const qsettings& settings) override;
 	//void save(qsettings& settings) const override;

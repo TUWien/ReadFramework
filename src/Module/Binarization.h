@@ -103,6 +103,7 @@ public:
 	BaseBinarizationSuConfig();
 
 	int erodedMaskSize() const;
+	void setErodedMaskSize(int s);
 
 	QString toString() const override;
 

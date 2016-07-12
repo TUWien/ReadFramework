@@ -658,7 +658,6 @@ float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
-	msg += " computed... ";
 	msg += " strokeW: " + QString::number(mStrokeW);
 	msg += config()->toString();
 
@@ -827,11 +826,15 @@ void SimpleBinarizationConfig::save(QSettings& settings) const {
 
 // BaseBinarizationSuConfig --------------------------------------------------------------------
 BaseBinarizationSuConfig::BaseBinarizationSuConfig() {
-	mModuleName = "BaseBinarizationSuConfig";
+	mModuleName = "BaseBinarizationSu";
 }
 
 int BaseBinarizationSuConfig::erodedMaskSize() const {
 	return mErodeMaskSize;
+}
+
+void BaseBinarizationSuConfig::setErodedMaskSize(int s) {
+	mErodeMaskSize = s;
 }
 
 QString BaseBinarizationSuConfig::toString() const {
