@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['operator_3c_3c',['operator&lt;&lt;',['../namespacerdf.html#afe016bb57a4f09aeb9cba098b36700ff',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Region &amp;r)'],['../namespacerdf.html#ad68ecf6f2ea89be63cc6bc25b61ad194',1,'rdf::operator&lt;&lt;(QDebug d, const Region &amp;r)'],['../namespacerdf.html#a20f72b284e1399b78bb81ddd74c72d2c',1,'rdf::operator&lt;&lt;(QDebug d, const PageElement &amp;p)'],['../namespacerdf.html#a7c969483b4759cab315ba9c437db87b1',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const PageElement &amp;p)'],['../namespacerdf.html#a0129bc2d353e91ca9b9c517e3169ed2a',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Timer &amp;t)'],['../namespacerdf.html#a1af014cb031f96b9a6fa9b0af834063f',1,'rdf::operator&lt;&lt;(QDebug d, const Timer &amp;t)'],['../namespacerdf.html#a34d038e3f8df64553aa89167c454d050',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Module &amp;m)'],['../namespacerdf.html#a6238f7bd691752c19bc7ee9a92fa876e',1,'rdf::operator&lt;&lt;(QDebug d, const Module &amp;m)']]],
-  ['operator_3d_3d',['operator==',['../classrdf_1_1_region.html#a60075777747ebd1a61b5775309f90e5d',1,'rdf::Region::operator==()'],['../classrdf_1_1_separator_region.html#ab4c79e782bb3b9cc5934782ed6a0b600',1,'rdf::SeparatorRegion::operator==()']]],
-  ['outercontour',['outerContour',['../classrdf_1_1_blob.html#a52ebad281c02be8b2bbe144df914cce0',1,'rdf::Blob']]],
-  ['outputpath',['outputPath',['../classrdf_1_1_debug_config.html#a369fa6737b90b24b68f2f4ce199a1ddb',1,'rdf::DebugConfig']]]
+  ['name',['name',['../classrdf_1_1_module_config.html#a3c3aefe966e688ef3081585a7de5cd8a',1,'rdf::ModuleConfig::name()'],['../classrdf_1_1_module.html#a801c9555459fa28b3ad087c17d168fe9',1,'rdf::Module::name()']]],
+  ['niter',['nIter',['../classrdf_1_1_base_skew_estimation_config.html#a3d384c20cbc24aa215fbd8e2e7947287',1,'rdf::BaseSkewEstimationConfig']]],
+  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#af9f83de0133580a1fec39a550d17bcd7',1,'rdf::Algorithms']]]
 ];

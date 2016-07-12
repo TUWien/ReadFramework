@@ -8,13 +8,15 @@ var searchData=
   ['fmpatches',['fmPatches',['../classrdf_1_1_focus_estimation.html#a88cc03e7c4f015e51e508e4b809238ac',1,'rdf::FocusEstimation']]],
   ['fmref',['fmRef',['../classrdf_1_1_patch.html#aadf396f2ee1cbbdeb12bbbeb550502d8',1,'rdf::Patch']]],
   ['fms',['fmS',['../classrdf_1_1_patch.html#a038d5e236019f362407450456fccffe5',1,'rdf::Patch']]],
-  ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873',1,'rdf::FocusEstimation::FocusEstimation()'],['../classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html',1,'rdf']]],
+  ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873',1,'rdf::FocusEstimation::FocusEstimation()'],['../classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['focusmeasure',['FocusMeasure',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fe',1,'rdf::FocusEstimation']]],
   ['focusmeasure_2ecpp',['FocusMeasure.cpp',['../_focus_measure_8cpp.html',1,'']]],
   ['focusmeasure_2eh',['FocusMeasure.h',['../_focus_measure_8h.html',1,'']]],
   ['formanalysis_2ecpp',['FormAnalysis.cpp',['../_form_analysis_8cpp.html',1,'']]],
   ['formanalysis_2eh',['FormAnalysis.h',['../_form_analysis_8h.html',1,'']]],
   ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html#ab848f428a204c0ece54602bf93ae39d8',1,'rdf::FormFeatures::FormFeatures()'],['../classrdf_1_1_form_features.html#af587ef40ac6392f4585768584222ee4d',1,'rdf::FormFeatures::FormFeatures(const cv::Mat &amp;img, const cv::Mat &amp;mask)']]],
-  ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html',1,'rdf']]]
+  ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html',1,'rdf']]],
+  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html',1,'rdf']]],
+  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html#a78debda4ca3ea5281a3eaee298da67fb',1,'rdf::FormFeaturesConfig']]]
 ];

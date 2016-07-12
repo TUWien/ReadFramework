@@ -32,6 +32,9 @@ var hierarchy =
     ] ],
     [ "rdf::ModuleConfig", "classrdf_1_1_module_config.html", [
       [ "rdf::BaseBinarizationSuConfig", "classrdf_1_1_base_binarization_su_config.html", null ],
+      [ "rdf::BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", null ],
+      [ "rdf::FormFeaturesConfig", "classrdf_1_1_form_features_config.html", null ],
+      [ "rdf::LineTraceConfig", "classrdf_1_1_line_trace_config.html", null ],
       [ "rdf::SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", null ]
     ] ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],

@@ -160,18 +160,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7b84e3a12def8a99a2f1aef8b9c25f70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#a7b84e3a12def8a99a2f1aef8b9c25f70">resetAngle</a> ()</td></tr>
 <tr class="memdesc:a7b84e3a12def8a99a2f1aef8b9c25f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the angle which defines horizontal.  <a href="#a7b84e3a12def8a99a2f1aef8b9c25f70">More...</a><br/></td></tr>
 <tr class="separator:a7b84e3a12def8a99a2f1aef8b9c25f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41c71dac962be530023a30080dac9210"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_line_trace_config.html">LineTraceConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#a41c71dac962be530023a30080dac9210">config</a> () const </td></tr>
+<tr class="separator:a41c71dac962be530023a30080dac9210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6ac1f992165c9062d82e4af2af0d3bd"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#aa6ac1f992165c9062d82e4af2af0d3bd">lineImage</a> () const </td></tr>
 <tr class="memdesc:aa6ac1f992165c9062d82e4af2af0d3bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line image.  <a href="#aa6ac1f992165c9062d82e4af2af0d3bd">More...</a><br/></td></tr>
 <tr class="separator:aa6ac1f992165c9062d82e4af2af0d3bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa084e224a475dc42c71e989a6094ebaa"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#aa084e224a475dc42c71e989a6094ebaa">generatedLineImage</a> () const </td></tr>
 <tr class="memdesc:aa084e224a475dc42c71e989a6094ebaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates the line image based on the synthetic line vector.  <a href="#aa084e224a475dc42c71e989a6094ebaa">More...</a><br/></td></tr>
 <tr class="separator:aa084e224a475dc42c71e989a6094ebaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a755d6cc1acc2fdeefd8dbf90e4fc2e47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#a755d6cc1acc2fdeefd8dbf90e4fc2e47">setMinLenSecondRun</a> (int len)</td></tr>
-<tr class="memdesc:a755d6cc1acc2fdeefd8dbf90e4fc2e47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the minimum length for the final line filtering.  <a href="#a755d6cc1acc2fdeefd8dbf90e4fc2e47">More...</a><br/></td></tr>
-<tr class="separator:a755d6cc1acc2fdeefd8dbf90e4fc2e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a172752621ba635db249592cf015444c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#a172752621ba635db249592cf015444c1">setMaxAspectRatio</a> (float ratio)</td></tr>
-<tr class="memdesc:a172752621ba635db249592cf015444c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.  <a href="#a172752621ba635db249592cf015444c1">More...</a><br/></td></tr>
-<tr class="separator:a172752621ba635db249592cf015444c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86e71e10389d739a1f7c746d107b3aec"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line_trace.html#a86e71e10389d739a1f7c746d107b3aec">toString</a> () const override</td></tr>
 <tr class="memdesc:a86e71e10389d739a1f7c746d107b3aec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summary of the class.  <a href="#a86e71e10389d739a1f7c746d107b3aec">More...</a><br/></td></tr>
 <tr class="separator:a86e71e10389d739a1f7c746d107b3aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +298,21 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>True if the lines are computed successfully.</dd></dl>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c">rdf::Module</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a41c71dac962be530023a30080dac9210"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_line_trace_config.html">LineTraceConfig</a> &gt; rdf::LineTrace::config </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -501,54 +512,6 @@ Protected Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">angle</td><td>The angle to define a horizontal line.</td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a172752621ba635db249592cf015444c1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rdf::LineTrace::setMaxAspectRatio </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ratio</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the maximum aspect ratio allowed for the minimum area rectangle of a line. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ratio</td><td>The max aspect ratio of a MAR of a line.</td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a755d6cc1acc2fdeefd8dbf90e4fc2e47"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rdf::LineTrace::setMinLenSecondRun </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>len</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the minimum length for the final line filtering. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">len</td><td>The minimum length threshold in pixel.</td></tr>
   </table>
   </dd>
 </dl>

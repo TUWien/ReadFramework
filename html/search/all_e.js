@@ -1,24 +1,7 @@
 var searchData=
 [
-  ['page',['page',['../classrdf_1_1_page_xml_parser.html#ab819f5bcf6a7e5c6959af23325d4ab96',1,'rdf::PageXmlParser']]],
-  ['pageelement',['PageElement',['../classrdf_1_1_page_element.html#ad8f0d4fa7e5cc0614b6abd1869e56a5f',1,'rdf::PageElement']]],
-  ['pageelement',['PageElement',['../classrdf_1_1_page_element.html',1,'rdf']]],
-  ['pageparser_2ecpp',['PageParser.cpp',['../_page_parser_8cpp.html',1,'']]],
-  ['pageparser_2eh',['PageParser.h',['../_page_parser_8h.html',1,'']]],
-  ['pagexmlparser',['PageXmlParser',['../classrdf_1_1_page_xml_parser.html#a2752073547167adcf9f3d37c43cf5baa',1,'rdf::PageXmlParser']]],
-  ['pagexmlparser',['PageXmlParser',['../classrdf_1_1_page_xml_parser.html',1,'rdf']]],
-  ['paint',['paint',['../classrdf_1_1_config.html#a4b6b04d6c181e49e7606a8396934880e',1,'rdf::Config']]],
-  ['parse',['parse',['../classrdf_1_1_page_xml_parser.html#a625617138f7bb7235cf6ddb1d6dc472b',1,'rdf::PageXmlParser']]],
-  ['parsemetadata',['parseMetadata',['../classrdf_1_1_page_xml_parser.html#a5d6a869e9cbcf8bfc51b46a02d2f2b66',1,'rdf::PageXmlParser']]],
-  ['parseregion',['parseRegion',['../classrdf_1_1_page_xml_parser.html#ac144a210afba700fa0ec189f80029929',1,'rdf::PageXmlParser']]],
-  ['parsexml',['parseXml',['../classrdf_1_1_xml_test.html#acab3c1c208f51ac0ab9a3abfd7d818e7',1,'rdf::XmlTest']]],
-  ['patch',['Patch',['../classrdf_1_1_patch.html#afbc316209738fb9afc87c948383cd57f',1,'rdf::Patch::Patch()'],['../classrdf_1_1_patch.html#a8a239cccc7cb1dc008d2712d76bace5e',1,'rdf::Patch::Patch(cv::Point p, int w, int h, double f)'],['../classrdf_1_1_patch.html#ade9675c4cbd82ec94bab78eaf7dc055e',1,'rdf::Patch::Patch(cv::Point p, int w, int h, double f, double fRef)']]],
-  ['patch',['Patch',['../classrdf_1_1_patch.html',1,'rdf']]],
-  ['pen',['pen',['../classrdf_1_1_region_type_config.html#a012ea4e2e416ca4829b1d7851d513959',1,'rdf::RegionTypeConfig']]],
-  ['polygon',['Polygon',['../classrdf_1_1_polygon.html',1,'rdf']]],
-  ['polygon',['Polygon',['../classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9',1,'rdf::Polygon::Polygon()'],['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972',1,'rdf::Polygon::polygon()'],['../classrdf_1_1_base_line.html#a42f4fecd40a10f4d933a870bae030a80',1,'rdf::BaseLine::polygon()']]],
-  ['polytostring',['polyToString',['../classrdf_1_1_converter.html#acab5ac0a7d0c58db70a8f2d2b15c5cd4',1,'rdf::Converter']]],
-  ['prefilterarea',['preFilterArea',['../classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf',1,'rdf::Algorithms']]],
-  ['printimage',['printImage',['../classrdf_1_1_image.html#a1511ff1ef43c13e0ceac7f2afa29d976',1,'rdf::Image']]],
-  ['put',['put',['../classrdf_1_1_timer.html#a10b24dda5986736f1bee69ea0290685c',1,'rdf::Timer']]]
+  ['operator_3c_3c',['operator&lt;&lt;',['../classrdf_1_1_region.html#af07d2e6aa6ce5d2e9034c9b1e578dbad',1,'rdf::Region::operator&lt;&lt;()'],['../classrdf_1_1_region.html#afd2ad7008e91d0a0a50f789a0b34e403',1,'rdf::Region::operator&lt;&lt;()'],['../classrdf_1_1_page_element.html#acc2ee4a66abdeebef3ace53daffc452c',1,'rdf::PageElement::operator&lt;&lt;()'],['../classrdf_1_1_page_element.html#af56b17b3141b32276c4d5c68f1aeaa79',1,'rdf::PageElement::operator&lt;&lt;()'],['../classrdf_1_1_timer.html#ad7758d31caef979e155c74e7a463836a',1,'rdf::Timer::operator&lt;&lt;()'],['../classrdf_1_1_timer.html#aced36f1ccaec8cb986eb940f5d8f8c05',1,'rdf::Timer::operator&lt;&lt;()'],['../classrdf_1_1_module_config.html#a204fc985a737dc70458b5bc73338f418',1,'rdf::ModuleConfig::operator&lt;&lt;()'],['../classrdf_1_1_module_config.html#a05e1865f2a91f6aea1d7c27bfc471c08',1,'rdf::ModuleConfig::operator&lt;&lt;()'],['../classrdf_1_1_module.html#a9f8488c917db557e8539482ef2dd2fc7',1,'rdf::Module::operator&lt;&lt;()'],['../classrdf_1_1_module.html#a3c731f9bf43a48f273678fe45a199574',1,'rdf::Module::operator&lt;&lt;()'],['../namespacerdf.html#afe016bb57a4f09aeb9cba098b36700ff',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Region &amp;r)'],['../namespacerdf.html#ad68ecf6f2ea89be63cc6bc25b61ad194',1,'rdf::operator&lt;&lt;(QDebug d, const Region &amp;r)'],['../namespacerdf.html#a20f72b284e1399b78bb81ddd74c72d2c',1,'rdf::operator&lt;&lt;(QDebug d, const PageElement &amp;p)'],['../namespacerdf.html#a7c969483b4759cab315ba9c437db87b1',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const PageElement &amp;p)'],['../namespacerdf.html#a0129bc2d353e91ca9b9c517e3169ed2a',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Timer &amp;t)'],['../namespacerdf.html#a1af014cb031f96b9a6fa9b0af834063f',1,'rdf::operator&lt;&lt;(QDebug d, const Timer &amp;t)'],['../namespacerdf.html#a34d038e3f8df64553aa89167c454d050',1,'rdf::operator&lt;&lt;(QDataStream &amp;s, const Module &amp;m)'],['../namespacerdf.html#a6238f7bd691752c19bc7ee9a92fa876e',1,'rdf::operator&lt;&lt;(QDebug d, const Module &amp;m)']]],
+  ['operator_3d_3d',['operator==',['../classrdf_1_1_region.html#a60075777747ebd1a61b5775309f90e5d',1,'rdf::Region::operator==()'],['../classrdf_1_1_separator_region.html#ab4c79e782bb3b9cc5934782ed6a0b600',1,'rdf::SeparatorRegion::operator==()']]],
+  ['outercontour',['outerContour',['../classrdf_1_1_blob.html#a52ebad281c02be8b2bbe144df914cce0',1,'rdf::Blob']]],
+  ['outputpath',['outputPath',['../classrdf_1_1_debug_config.html#a369fa6737b90b24b68f2f4ce199a1ddb',1,'rdf::DebugConfig']]]
 ];

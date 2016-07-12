@@ -1,10 +1,13 @@
 var searchData=
 [
-  ['main',['main',['../main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main.cpp']]],
-  ['mat2qimage',['mat2QImage',['../classrdf_1_1_image.html#a1766746d75d3b91bc084de2a83a385d2',1,'rdf::Image']]],
-  ['merge',['merge',['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line']]],
-  ['mindistance',['minDistance',['../classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff',1,'rdf::Line']]],
-  ['module',['Module',['../classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99',1,'rdf::Module']]],
-  ['moduleconfig',['ModuleConfig',['../classrdf_1_1_module_config.html#ac6e87309925bd69be555a4c13c5ba276',1,'rdf::ModuleConfig']]],
-  ['mulmask',['mulMask',['../classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0',1,'rdf::Algorithms']]]
+  ['length',['length',['../classrdf_1_1_line.html#a7710613efa9fdea501ca222fda43c421',1,'rdf::Line']]],
+  ['leqx1',['leqX1',['../classrdf_1_1_line.html#a24b918853fa1c71661a49466745c12e4',1,'rdf::Line']]],
+  ['leqy1',['leqY1',['../classrdf_1_1_line.html#a494792e7da9e1030fdc8f4b165a3c76d',1,'rdf::Line']]],
+  ['line',['Line',['../classrdf_1_1_line.html#a9ac669b914c5bb46ca94f5101dd6a7fa',1,'rdf::Line::Line(const QLine &amp;line=QLine(), float thickness=0)'],['../classrdf_1_1_line.html#a5c0148c387b7474954d9ab3f1b381371',1,'rdf::Line::Line(const Polygon &amp;poly)'],['../classrdf_1_1_separator_region.html#a2b4ddd152283845d34ccc0dbcd359dc2',1,'rdf::SeparatorRegion::line()'],['../classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0',1,'rdf::Line::line()']]],
+  ['lineimage',['lineImage',['../classrdf_1_1_line_trace.html#aa6ac1f992165c9062d82e4af2af0d3bd',1,'rdf::LineTrace']]],
+  ['lines',['lines',['../classrdf_1_1_blob_manager.html#aaaa772b3771dcc80912dd1c5aa84f43a',1,'rdf::BlobManager']]],
+  ['linetrace',['LineTrace',['../classrdf_1_1_line_trace.html#a1925b4129809448da81aab43a80c5c0b',1,'rdf::LineTrace']]],
+  ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html#a644d9e948e1080d50a103494ecf6fdba',1,'rdf::LineTraceConfig']]],
+  ['load',['load',['../classrdf_1_1_region_type_config.html#a3d16be5bebe30c78f83df9fedd4eaea6',1,'rdf::RegionTypeConfig::load()'],['../classrdf_1_1_generic_settings.html#a988daf67befbee022897c9b6f48dc746',1,'rdf::GenericSettings::load()'],['../classrdf_1_1_global_settings.html#aaeeb34e5876b8c5fab307e4ed89020fb',1,'rdf::GlobalSettings::load()'],['../classrdf_1_1_config.html#a0bd579fa01f31f98787caefc7ad50c4d',1,'rdf::Config::load()'],['../classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409',1,'rdf::ModuleConfig::load()'],['../classrdf_1_1_simple_binarization_config.html#a45955c54fb2c51c254abde12a8e77946',1,'rdf::SimpleBinarizationConfig::load()']]],
+  ['loadsettings',['loadSettings',['../classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947',1,'rdf::ModuleConfig']]]
 ];

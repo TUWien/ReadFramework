@@ -4,6 +4,7 @@ var searchData=
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html#a033a57638775862b6965aa735ce2ad9a',1,'rdf::BaseBinarizationSuConfig']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()'],['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()']]],
   ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#ad9894e5f9a0114b1c9dd274d336bdcc2',1,'rdf::BaseSkewEstimation']]],
+  ['baseskewestimationconfig',['BaseSkewEstimationConfig',['../classrdf_1_1_base_skew_estimation_config.html#ab43f1c78f082f07b31cc525bb451c584',1,'rdf::BaseSkewEstimationConfig']]],
   ['basiccontrast',['BasicContrast',['../classrdf_1_1_basic_contrast.html#a324ddce418943eaa2f5aa030fc58ea5e',1,'rdf::BasicContrast::BasicContrast()'],['../classrdf_1_1_basic_contrast.html#ae77a82f95ca411ee01203a9efe286a86',1,'rdf::BasicContrast::BasicContrast(const cv::Mat &amp;img)']]],
   ['basicfm',['BasicFM',['../classrdf_1_1_basic_f_m.html#accaef98e5c81edbc4bd3cdef0f6453a9',1,'rdf::BasicFM::BasicFM()'],['../classrdf_1_1_basic_f_m.html#a7b9839bd4aaa518e3ae8c812d787cec6',1,'rdf::BasicFM::BasicFM(const cv::Mat &amp;img)']]],
   ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa',1,'rdf::BinarizationSuAdapted']]],

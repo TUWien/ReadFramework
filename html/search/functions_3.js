@@ -6,6 +6,7 @@ var searchData=
   ['debugname',['debugName',['../classrdf_1_1_module.html#a47fcd4dd3706329cfec2a9b1e712de73',1,'rdf::Module']]],
   ['defaultsettings',['defaultSettings',['../classrdf_1_1_generic_settings.html#aeb44aa779f908a71246bbd4092e0c95e',1,'rdf::GenericSettings::defaultSettings()'],['../classrdf_1_1_global_settings.html#a884f62f5f58c5cbe04cbd4d728568952',1,'rdf::GlobalSettings::defaultSettings()']]],
   ['deleteblobs',['deleteBlobs',['../classrdf_1_1_blobs.html#a0a0df08d5f2186ddd03d9658ff41f110',1,'rdf::Blobs']]],
+  ['delta',['delta',['../classrdf_1_1_base_skew_estimation_config.html#aaaaa4282445ab191085ab1fa366e166b',1,'rdf::BaseSkewEstimationConfig']]],
   ['diffangle',['diffAngle',['../classrdf_1_1_line.html#a5a36e1fcef55baa244bde01e15332287',1,'rdf::Line']]],
   ['dilateimage',['dilateImage',['../classrdf_1_1_algorithms.html#a0f4649e97afcce6ee3713a410c0634f1',1,'rdf::Algorithms']]],
   ['distance',['distance',['../classrdf_1_1_line.html#a5073b2f4fa450185c245e3108067adab',1,'rdf::Line']]],

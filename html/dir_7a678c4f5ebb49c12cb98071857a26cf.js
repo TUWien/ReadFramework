@@ -21,14 +21,17 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     ] ],
     [ "FormAnalysis.cpp", "_form_analysis_8cpp.html", null ],
     [ "FormAnalysis.h", "_form_analysis_8h.html", [
+      [ "FormFeaturesConfig", "classrdf_1_1_form_features_config.html", "classrdf_1_1_form_features_config" ],
       [ "FormFeatures", "classrdf_1_1_form_features.html", "classrdf_1_1_form_features" ]
     ] ],
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [
+      [ "LineTraceConfig", "classrdf_1_1_line_trace_config.html", "classrdf_1_1_line_trace_config" ],
       [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ]
     ] ],
     [ "SkewEstimation.cpp", "_skew_estimation_8cpp.html", null ],
     [ "SkewEstimation.h", "_skew_estimation_8h.html", [
+      [ "BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", "classrdf_1_1_base_skew_estimation_config" ],
       [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ]
     ] ],
     [ "SuperPixel.cpp", "_super_pixel_8cpp.html", null ],

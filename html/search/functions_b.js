@@ -1,5 +1,23 @@
 var searchData=
 [
-  ['name',['name',['../classrdf_1_1_module_config.html#a3c3aefe966e688ef3081585a7de5cd8a',1,'rdf::ModuleConfig::name()'],['../classrdf_1_1_module.html#a801c9555459fa28b3ad087c17d168fe9',1,'rdf::Module::name()']]],
-  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#af9f83de0133580a1fec39a550d17bcd7',1,'rdf::Algorithms']]]
+  ['main',['main',['../main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main.cpp']]],
+  ['mat2qimage',['mat2QImage',['../classrdf_1_1_image.html#a1766746d75d3b91bc084de2a83a385d2',1,'rdf::Image']]],
+  ['maxanglediff',['maxAngleDiff',['../classrdf_1_1_line_trace_config.html#a945777437892f704dc71bcef96aaa506',1,'rdf::LineTraceConfig']]],
+  ['maxanglediffextern',['maxAngleDiffExtern',['../classrdf_1_1_line_trace_config.html#a30a2475ad8bbf994534097cf243a1b08',1,'rdf::LineTraceConfig']]],
+  ['maxaspectratio',['maxAspectRatio',['../classrdf_1_1_line_trace_config.html#a470eadee6c1487dfc747f136e532cfc6',1,'rdf::LineTraceConfig']]],
+  ['maxdistextern',['maxDistExtern',['../classrdf_1_1_line_trace_config.html#a003a3d8c643488e15f5ddc3c59374d2d',1,'rdf::LineTraceConfig']]],
+  ['maxgap',['maxGap',['../classrdf_1_1_line_trace_config.html#a5dc51590f1060c7f5f8b842749982e04',1,'rdf::LineTraceConfig']]],
+  ['maxlen',['maxLen',['../classrdf_1_1_line_trace_config.html#a0b2db54bf8015a92a4c5e90748b74648',1,'rdf::LineTraceConfig']]],
+  ['maxlendiff',['maxLenDiff',['../classrdf_1_1_line_trace_config.html#a788f34f70fe3b8fefe7604229138eec0',1,'rdf::LineTraceConfig']]],
+  ['maxslopediff',['maxSlopeDiff',['../classrdf_1_1_line_trace_config.html#a33c87207edfded18cecae06dc15e0f0e',1,'rdf::LineTraceConfig']]],
+  ['maxsloperotat',['maxSlopeRotat',['../classrdf_1_1_line_trace_config.html#ac7fdc5b085519a46ccefdf6749274100',1,'rdf::LineTraceConfig']]],
+  ['merge',['merge',['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line']]],
+  ['minarea',['minArea',['../classrdf_1_1_line_trace_config.html#a6404667bfba7e6408ea3a9bdaceaa973',1,'rdf::LineTraceConfig']]],
+  ['mindistance',['minDistance',['../classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff',1,'rdf::Line']]],
+  ['minlensecondrun',['minLenSecondRun',['../classrdf_1_1_line_trace_config.html#a69eade51562167900657f6d9f70a45bb',1,'rdf::LineTraceConfig']]],
+  ['minlinelength',['minLineLength',['../classrdf_1_1_base_skew_estimation_config.html#a618e5c158b07d21335a3e32005a37762',1,'rdf::BaseSkewEstimationConfig']]],
+  ['minwidth',['minWidth',['../classrdf_1_1_line_trace_config.html#a2c0389ba860da02abef6ac52947fff97',1,'rdf::LineTraceConfig']]],
+  ['module',['Module',['../classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99',1,'rdf::Module']]],
+  ['moduleconfig',['ModuleConfig',['../classrdf_1_1_module_config.html#ac6e87309925bd69be555a4c13c5ba276',1,'rdf::ModuleConfig']]],
+  ['mulmask',['mulMask',['../classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0',1,'rdf::Algorithms']]]
 ];
