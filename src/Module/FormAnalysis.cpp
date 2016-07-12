@@ -37,18 +37,21 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+#include <QSettings>
 
 #include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
 namespace rdf {
-	FormFeatures::FormFeatures()
-	{
+	FormFeatures::FormFeatures(){
+		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
 	FormFeatures::FormFeatures(const cv::Mat & img, const cv::Mat & mask)
 	{
 		mSrcImg = img;
 		mMask = mask;
+
+		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
 	void FormFeatures::setInputImg(const cv::Mat & img)
 	{
@@ -142,12 +145,12 @@ namespace rdf {
 			vLenTemp += i.length();
 		}
 
-		//float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
-		//float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
+		float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
+		float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
 
-		////at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
-		//if (ratioHor < mThreshLineLenRatio || ratioVer < mThreshLineLenRatio)
-		//	return false;
+		//at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
+		if (ratioHor < config()->threshLineLenRation() || ratioVer < config()->threshLineLenRation())
+			return false;
 
 		//int refY = horLinesTemp[0].startPoint().y();
 		//float distance = 0.0f;
@@ -174,6 +177,10 @@ namespace rdf {
 		return mVerLines;
 	}
 
+	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{
+		return qSharedPointerDynamicCast<FormFeaturesConfig>(mConfig);
+	}
+
 	cv::Mat FormFeatures::binaryImage() const
 	{
 		return mBwImg;
@@ -184,10 +191,10 @@ namespace rdf {
 		mEstimateSkew = s;
 	}
 
-	void FormFeatures::setThreshLineLenRatio(float l)
-	{
-		mThreshLineLenRatio = l;
-	}
+	//void FormFeatures::setThreshLineLenRatio(float l)
+	//{
+	//	mThreshLineLenRatio = l;
+	//}
 
 	QString FormFeatures::toString() const
 	{
@@ -211,5 +218,26 @@ namespace rdf {
 		}
 
 		return true;
+	}
+	FormFeaturesConfig::FormFeaturesConfig() {
+		mModuleName = "FormFeatures";
+	}
+	float FormFeaturesConfig::threshLineLenRation() const	{
+		return mThreshLineLenRatio;
+	}
+	void FormFeaturesConfig::setThreshLineLenRation(float s)	{
+		mThreshLineLenRatio = s;
+	}
+	QString FormFeaturesConfig::toString() const	{
+		QString msg;
+		msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
+
+		return msg;
+	}
+	void FormFeaturesConfig::load(const QSettings & settings)	{
+		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toFloat();
+	}
+	void FormFeaturesConfig::save(QSettings & settings) const	{
+		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 	}
 }

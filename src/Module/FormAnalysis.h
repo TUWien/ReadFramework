@@ -47,6 +47,26 @@
 
 namespace rdf {
 
+	class DllModuleExport FormFeaturesConfig : public ModuleConfig {
+
+	public:
+		FormFeaturesConfig();
+
+		float threshLineLenRation() const;
+		void setThreshLineLenRation(float s);
+
+
+		QString toString() const override;
+
+	private:
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+		float mThreshLineLenRatio = 0.6f;
+
+	};
+
+
 	class DllModuleExport FormFeatures : public Module {
 
 	public:
@@ -62,9 +82,11 @@ namespace rdf {
 		QVector<rdf::Line> horLines() const;
 		QVector<rdf::Line> verLines() const;
 
+		QSharedPointer<FormFeaturesConfig> config() const;
+
 		cv::Mat binaryImage() const;
 		void setEstimateSkew(bool s);
-		void setThreshLineLenRatio(float l);
+		//void setThreshLineLenRatio(float l);
 		//void setThresh(int thresh);
 		//int thresh() const;
 		QString toString() const override;
@@ -75,8 +97,6 @@ namespace rdf {
 		cv::Mat mBwImg;
 		bool mEstimateSkew = false;
 		double mPageAngle = 0.0;
-
-		float mThreshLineLenRatio = 0.6f;
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
