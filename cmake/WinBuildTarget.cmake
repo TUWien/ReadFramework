@@ -61,6 +61,7 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RD
 
 # make RelWithDebInfo link against release instead of debug opencv dlls
 set_target_properties(${OpenCV_LIBS} PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE)
+set_target_properties(${OpenCV_LIBS} PROPERTIES MAP_IMPORTED_CONFIG_MINSIZEREL RELEASE)
 
 # create settings file for portable version while working
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo)
