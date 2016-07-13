@@ -62,31 +62,6 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RD
 # make RelWithDebInfo link against release instead of debug opencv dlls
 set_target_properties(${OpenCV_LIBS} PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE)
 
-# copy required dlls to the directories
-set(OpenCV_MODULE_NAMES ${RDF_REQUIRED_OPENCV_PACKAGES})
-foreach(opencvlib ${OpenCV_MODULE_NAMES})
-	file(GLOB dllpath ${OpenCV_DIR}/bin/Release/opencv_${opencvlib}*.dll)
-	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Release)
-	
-	set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES} ${dllpath})
-	
-	file(GLOB dllpath ${OpenCV_DIR}/bin/Debug/opencv_${opencvlib}*d.dll)
-	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/Debug)
-	file(COPY ${dllpath} DESTINATION ${CMAKE_BINARY_DIR}/RelWithDebInfo)
-	
-	set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES} ${dllpath})
-	
-	message(STATUS "copying ${dllpath} to ${CMAKE_BINARY_DIR}/Debug")
-endforeach(opencvlib)
-
-set(QTLIBLIST Qt5Core Qt5Gui Qt5Network Qt5Widgets Qt5PrintSupport Qt5Concurrent Qt5Svg)
-foreach(qtlib ${QTLIBLIST})
-	get_filename_component(QT_DLL_PATH_tmp ${QT_QMAKE_EXECUTABLE} PATH)
-	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}.dll DESTINATION ${CMAKE_BINARY_DIR}/Release)
-	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}.dll DESTINATION ${CMAKE_BINARY_DIR}/RelWithDebInfo)
-	file(COPY ${QT_DLL_PATH_tmp}/${qtlib}d.dll DESTINATION ${CMAKE_BINARY_DIR}/Debug)
-endforeach(qtlib)
-
 # create settings file for portable version while working
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo)
 	file(WRITE ${CMAKE_BINARY_DIR}/Release/rdf-settings.nfo "")
@@ -134,3 +109,23 @@ set(RDF_INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE
 set(RDF_BUILD_DIRECTORY ${CMAKE_BINARY_DIR})
 set(RDF_BINARIES ${CMAKE_BINARY_DIR}/Debug/${MODULE_DEBUG_NAME}.dll ${CMAKE_BINARY_DIR}/Release/${MODULE_RELEASE_NAME}.dll ${CMAKE_BINARY_DIR}/Debug/${CORE_DEBUG_NAME}.dll ${CMAKE_BINARY_DIR}/Release/${CORE_RELEASE_NAME}.dll )
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
+
+
+### DependencyCollector
+set(DC_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/cmake/DependencyCollector.py)
+set(DC_CONFIG ${CMAKE_BINARY_DIR}/DependencyCollector.ini)
+
+GET_FILENAME_COMPONENT(VS_PATH ${CMAKE_LINKER} PATH)
+if(CMAKE_CL_64)
+	SET(VS_PATH "${VS_PATH}/../../../Common7/IDE/Remote Debugger/x64")
+else()
+	SET(VS_PATH "${VS_PATH}/../../Common7/IDE/Remote Debugger/x86")
+endif()
+SET(DC_PATHS_RELEASE C:/Windows/System32 ${OpenCV_DIR}/bin/Release ${QT_QMAKE_PATH} ${VS_PATH})
+SET(DC_PATHS_DEBUG C:/Windows/System32 ${OpenCV_DIR}/bin/Debug ${QT_QMAKE_PATH} ${VS_PATH})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/DependencyCollector.config.cmake.in ${DC_CONFIG})
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${DC_SCRIPT} --infile $<TARGET_FILE:${PROJECT_NAME}> --configfile ${DC_CONFIG} --configuration $<CONFIGURATION>)
+
+
