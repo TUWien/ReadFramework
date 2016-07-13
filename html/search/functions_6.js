@@ -2,6 +2,7 @@ var searchData=
 [
   ['gapline',['gapLine',['../classrdf_1_1_line.html#ae3f79882106a3b7c605a684ed15a3058',1,'rdf::Line']]],
   ['generatedlineimage',['generatedLineImage',['../classrdf_1_1_line_trace.html#aa084e224a475dc42c71e989a6094ebaa',1,'rdf::LineTrace']]],
+  ['generatelineimage',['generateLineImage',['../classrdf_1_1_line_trace.html#a10ef4c177f61b242b8d544d2f4860fc7',1,'rdf::LineTrace']]],
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html#aa7ec4eed4f45c9286d94187fc91ccca0',1,'rdf::GenericSettings']]],
   ['get1dgauss',['get1DGauss',['../classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f',1,'rdf::Algorithms']]],
   ['getangle',['getAngle',['../classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb',1,'rdf::BaseSkewEstimation']]],

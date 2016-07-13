@@ -86,6 +86,7 @@ var searchData=
   ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
   ['start',['start',['../classrdf_1_1_timer.html#abf3b0a4fe7ce68cfbe982e60b7a81195',1,'rdf::Timer']]],
   ['startpoint',['startPoint',['../classrdf_1_1_base_line.html#a3cf2f1cd2ea83bd9b0e93ee0f3e2cfa1',1,'rdf::BaseLine::startPoint()'],['../classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc',1,'rdf::Line::startPoint()']]],
+  ['startpointcv',['startPointCV',['../classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29',1,'rdf::Line']]],
   ['statmomentmat',['statMomentMat',['../classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716',1,'rdf::Algorithms']]],
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],

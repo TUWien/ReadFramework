@@ -7,6 +7,7 @@ var classrdf_1_1_form_features =
     [ "compute", "classrdf_1_1_form_features.html#adaab507434aae30fdfc8f00c5c91eb77", null ],
     [ "computeBinaryInput", "classrdf_1_1_form_features.html#aa895a6fe46070ff711ba46e78207bc3d", null ],
     [ "config", "classrdf_1_1_form_features.html#aecdfae3baff50e424a27e7198e36e2ca", null ],
+    [ "errLine", "classrdf_1_1_form_features.html#adbb84609954349ff9e033dd486aea652", null ],
     [ "horLines", "classrdf_1_1_form_features.html#ae820300dd6b513cba25aa3a480eaaaf7", null ],
     [ "isEmpty", "classrdf_1_1_form_features.html#ae5c1ed90f5f5a3a315a994e6bf5fa575", null ],
     [ "setEstimateSkew", "classrdf_1_1_form_features.html#a43d73dd6416c66f229f9c43dd5218180", null ],

@@ -97,12 +97,13 @@ var searchData=
   ['square',['SQUARE',['../classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc',1,'rdf::Algorithms']]],
   ['start',['start',['../classrdf_1_1_timer.html#abf3b0a4fe7ce68cfbe982e60b7a81195',1,'rdf::Timer']]],
   ['startpoint',['startPoint',['../classrdf_1_1_base_line.html#a3cf2f1cd2ea83bd9b0e93ee0f3e2cfa1',1,'rdf::BaseLine::startPoint()'],['../classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc',1,'rdf::Line::startPoint()']]],
+  ['startpointcv',['startPointCV',['../classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29',1,'rdf::Line']]],
   ['statmomentmat',['statMomentMat',['../classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716',1,'rdf::Algorithms']]],
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];
