@@ -131,7 +131,7 @@ BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) 
 	mSrcImg = img;
 	mMask = mask;
 
-	mConfig = QSharedPointer<BaseBinarizationSuConfig>();
+	mConfig = QSharedPointer<BaseBinarizationSuConfig>::create();
 
 	if (mMask.empty()) {
 		mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));

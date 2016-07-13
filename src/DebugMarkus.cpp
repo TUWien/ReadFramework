@@ -63,6 +63,9 @@ void XmlTest::parseXml() {
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::instance().qImage2Mat(img);
 
+	rdf::BinarizationSuAdapted binarizeImg(imgCv, cv::Mat());
+	binarizeImg.compute();
+
 	//SuperPixel sp(imgCv);
 	//sp.compute();
 	//
@@ -70,8 +73,6 @@ void XmlTest::parseXml() {
 	//	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
 
 	// test lines XML
-	rdf::BinarizationSuAdapted binarizeImg(imgCv);
-	binarizeImg.compute();
 	cv::Mat bwImg = binarizeImg.binaryImage();
 
 	rdf::LineTrace lt(bwImg);

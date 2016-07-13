@@ -264,26 +264,31 @@ bool Blobs::compute() {
 		std::vector<cv::Vec4i> hierarchy;
 		cv::findContours(mBwImg, contours, hierarchy, CV_RETR_CCOMP, mApproxMethod);
 
+		if (!hierarchy.empty()) {
 
-		for (int outerIdx = 0; outerIdx >= 0; outerIdx = hierarchy[outerIdx][0]) {
+			for (int outerIdx = 0; outerIdx >= 0; outerIdx = hierarchy[outerIdx][0]) {
 
-			QVector<cv::Point> outerContour;
-			QVector<QVector<cv::Point> > innerContours;
+				QVector<cv::Point> outerContour;
+				QVector<QVector<cv::Point> > innerContours;
 
-			//outerContour = outerContour.fromStdVector(contours[outerIdx]);
-			outerContour = QVector<cv::Point>::fromStdVector(contours[outerIdx]);
+				//outerContour = outerContour.fromStdVector(contours[outerIdx]);
+				outerContour = QVector<cv::Point>::fromStdVector(contours[outerIdx]);
 
-			int firstChild = hierarchy[outerIdx][2];
-		
-			if (firstChild != -1) {
+				int firstChild = hierarchy[outerIdx][2];
 
-				for (int innerIdx = firstChild; innerIdx >= 0; innerIdx = hierarchy[innerIdx][0]) {
-					innerContours.append(QVector<cv::Point>::fromStdVector(contours[innerIdx]));
+				if (firstChild != -1) {
+
+					for (int innerIdx = firstChild; innerIdx >= 0; innerIdx = hierarchy[innerIdx][0]) {
+						innerContours.append(QVector<cv::Point>::fromStdVector(contours[innerIdx]));
+					}
 				}
-			}
 
-			Blob newBlob(outerContour, innerContours);
-			mBlobs.append(newBlob);
+				Blob newBlob(outerContour, innerContours);
+				mBlobs.append(newBlob);
+			}
+		}
+		else {
+			qInfo() << "no blobs found";
 		}
 	}
 
