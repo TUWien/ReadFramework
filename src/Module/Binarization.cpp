@@ -50,9 +50,7 @@ namespace rdf {
 /// <param name="img">The source img CV_8U.</param>
 SimpleBinarization::SimpleBinarization(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
-	
-	mModuleName = "SimpleBinarization";
-	loadSettings();
+	mConfig = QSharedPointer<SimpleBinarizationConfig>::create();
 }
 
 bool SimpleBinarization::checkInput() const {
@@ -71,16 +69,6 @@ bool SimpleBinarization::checkInput() const {
 /// <returns>True if the instance is empty.</returns>
 bool SimpleBinarization::isEmpty() const {
 	return mSrcImg.empty();
-}
-
-void SimpleBinarization::load(const QSettings& settings) {
-	
-	mThresh = settings.value("thresh", mThresh).toInt();
-}
-
-void SimpleBinarization::save(QSettings& settings) const {
-
-	settings.setValue("thresh", mThresh);
 }
 
 /// <summary>
@@ -108,10 +96,8 @@ bool SimpleBinarization::compute() {
 	if (!checkInput())
 		return false;
 
-	mBwImg = mSrcImg > mThresh;
+	mBwImg = mSrcImg > config()->thresh();
 
-	// I guess here is a good point to save the settings
-	saveSettings();
 	mDebug << " computed...";
 	mWarning << "a warning...";
 	mInfo << "an info...";
@@ -126,9 +112,13 @@ bool SimpleBinarization::compute() {
 QString SimpleBinarization::toString() const {
 	
 	QString msg = debugName();
-	msg += " thresh: " + QString::number(mThresh);
+	msg += config()->toString();
 
 	return msg;
+}
+
+QSharedPointer<SimpleBinarizationConfig> SimpleBinarization::config() const {
+	return qSharedPointerDynamicCast<SimpleBinarizationConfig>(mConfig);
 }
 
 // BaseBinarizationSu --------------------------------------------------------------------
@@ -141,12 +131,11 @@ BaseBinarizationSu::BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask) 
 	mSrcImg = img;
 	mMask = mask;
 
+	mConfig = QSharedPointer<BaseBinarizationSuConfig>();
+
 	if (mMask.empty()) {
 		mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
 	}
-
-	mModuleName = "BaseBinarizationSu";
-	loadSettings();
 }
 
 bool BaseBinarizationSu::checkInput() const {
@@ -172,16 +161,6 @@ bool BaseBinarizationSu::isEmpty() const {
 	return mSrcImg.empty() && mMask.empty();
 }
 
-void BaseBinarizationSu::load(const QSettings& settings) {
-
-	mErodeMaskSize = settings.value("erodeMaskSize", mErodeMaskSize).toInt();
-}
-
-void BaseBinarizationSu::save(QSettings& settings) const {
-
-	settings.setValue("erodeMaskSize", mErodeMaskSize);
-}
-
 /// <summary>
 /// Returns the binary image.
 /// </summary>
@@ -199,7 +178,7 @@ bool BaseBinarizationSu::compute() {
 	if (!checkInput())
 		return false;
 
-	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE, 0);
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(config()->erodedMaskSize()), Algorithms::SQUARE, 0);
 
 	//Image::instance().imageInfo(erodedMask, "erodedMAsk");
 	//qDebug() << "mErodedMaskSize " << cvRound(mErodeMaskSize);
@@ -260,6 +239,10 @@ bool BaseBinarizationSu::compute() {
 void BaseBinarizationSu::setPreFiltering(bool preFilter, int preFilterSize) {
 	mPreFilter = preFilter; 
 	mPreFilterSize = preFilterSize;
+}
+
+QSharedPointer<BaseBinarizationSuConfig> BaseBinarizationSu::config() const {
+	return qSharedPointerDynamicCast<BaseBinarizationSuConfig>(mConfig);
 }
 
 cv::Mat BaseBinarizationSu::compContrastImg(const cv::Mat& srcImg, const cv::Mat& mask) const {
@@ -558,8 +541,7 @@ inline float BaseBinarizationSu::thresholdVal(float *mean, float *std) const {
 QString BaseBinarizationSu::toString() const {
 
 	QString msg = debugName();
-	//msg += "strokeW: " + QString::number(mStrokeW);
-	msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
+	msg += config()->toString();
 
 	return msg;
 }
@@ -570,7 +552,6 @@ QString BaseBinarizationSu::toString() const {
 /// <param name="img">The source img CV_8U.</param>
 /// <param name="mask">The optional mask CV_8UC1.</param>
 BinarizationSuAdapted::BinarizationSuAdapted(const cv::Mat & img, const cv::Mat & mask) : BaseBinarizationSu(img, mask) {
-	mModuleName = "BaseBinarizationAdapted";
 }
 
 /// <summary>
@@ -583,7 +564,7 @@ bool BinarizationSuAdapted::compute() {
 	if (!checkInput())
 		return false;
 
-	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(config()->erodedMaskSize()), Algorithms::SQUARE);
 
 	mContrastImg = compContrastImg(mSrcImg, erodedMask);
 	//Image::instance().save(mContrastImg, "D:\\tmp\\contrastImgAdapted.tif");
@@ -677,9 +658,8 @@ float BinarizationSuAdapted::setStrokeWidth(float strokeW) {
 QString BinarizationSuAdapted::toString() const {
 
 	QString msg = debugName();
-	msg += " computed... ";
 	msg += " strokeW: " + QString::number(mStrokeW);
-	msg += " erodedMasksize: " + QString::number(mErodeMaskSize);
+	msg += config()->toString();
 
 	return msg;
 }
@@ -691,7 +671,6 @@ QString BinarizationSuAdapted::toString() const {
 /// <param name="img">The img.</param>
 /// <param name="mask">The mask.</param>
 BinarizationSuFgdWeight::BinarizationSuFgdWeight(const cv::Mat & img, const cv::Mat & mask) : BinarizationSuAdapted(img, mask) {
-	mModuleName = "BinarizationSuFgdWeight";
 }
 
 /// <summary>
@@ -713,7 +692,7 @@ bool BinarizationSuFgdWeight::compute() {
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f / 255.0f);
 
 	//Image::instance().save(mThrImg, "D:\\tmp\\thrFgdInput.tif");
-	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(mErodeMaskSize), Algorithms::SQUARE);
+	cv::Mat erodedMask = Algorithms::instance().erodeImage(mMask, cvRound(config()->erodedMaskSize()), Algorithms::SQUARE);
 	weightFunction(srcGray, mThrImg, erodedMask);
 
 	cv::bitwise_and(mBwImg, srcGray <= (mThrImg), mBwImg);		//combine with Nmin condition
@@ -817,5 +796,63 @@ cv::Mat BinarizationSuFgdWeight::computeFgd() const {
 
 }
 
+
+// SimpleBinarizationConfig --------------------------------------------------------------------
+SimpleBinarizationConfig::SimpleBinarizationConfig() {
+	mModuleName = "Simple Binarization";
+}
+
+int SimpleBinarizationConfig::thresh() {
+	return mThresh;
+}
+
+QString SimpleBinarizationConfig::toString() const {
+
+	QString msg;
+	msg += " thresh: " + QString::number(mThresh);
+	
+	return msg;
+}
+
+void SimpleBinarizationConfig::load(const QSettings& settings) {
+
+	mThresh = settings.value("thresh", mThresh).toInt();
+}
+
+void SimpleBinarizationConfig::save(QSettings& settings) const {
+
+	settings.setValue("thresh", mThresh);
+}
+
+// BaseBinarizationSuConfig --------------------------------------------------------------------
+BaseBinarizationSuConfig::BaseBinarizationSuConfig() {
+	mModuleName = "BaseBinarizationSu";
+}
+
+int BaseBinarizationSuConfig::erodedMaskSize() const {
+	return mErodeMaskSize;
+}
+
+void BaseBinarizationSuConfig::setErodedMaskSize(int s) {
+	mErodeMaskSize = s;
+}
+
+QString BaseBinarizationSuConfig::toString() const {
+	
+	QString msg;
+	msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
+
+	return msg;
+}
+
+void BaseBinarizationSuConfig::load(const QSettings& settings) {
+
+	mErodeMaskSize = settings.value("erodeMaskSize", mErodeMaskSize).toInt();
+}
+
+void BaseBinarizationSuConfig::save(QSettings& settings) const {
+
+	settings.setValue("erodeMaskSize", mErodeMaskSize);
+}
 
 }

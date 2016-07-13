@@ -34,6 +34,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
+#include <QSharedPointer>
 #pragma warning(pop)
 
 #include "opencv2/core/core.hpp"
@@ -57,12 +58,40 @@ namespace rdf {
 #define mWarning	qWarning().noquote() << debugName()
 #define mInfo		qInfo().noquote() << debugName()
 
+class DllModuleExport ModuleConfig {
+
+public:
+	ModuleConfig();
+
+	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const ModuleConfig& m);
+	friend DllModuleExport QDebug operator<< (QDebug d, const ModuleConfig &m);
+
+	/// <summary>
+	/// Loads the settings.
+	/// </summary>
+	void loadSettings();
+
+	/// <summary>
+	/// Saves the settings.
+	/// </summary>
+	void saveSettings();
+
+	QString name() const;
+	virtual QString toString() const;
+
+protected:
+	virtual void load(const QSettings& settings);
+	virtual void save(QSettings& settings) const;
+
+	QString mModuleName;						/**< the module's name.**/
+};
+
 
 /// <summary>
 /// This is the base class for all modules.
 /// It provides all functions which are implemented by the modules.
 /// </summary>
-	class DllModuleExport Module {
+class DllModuleExport Module {
 	
 public:
 
@@ -101,23 +130,13 @@ public:
 	 /// <returns>True on success.</returns>
 	virtual bool compute() = 0;
 
-	/// <summary>
-	/// Loads the settings.
-	/// </summary>
-	void loadSettings();
-
-	/// <summary>
-	/// Saves the settings.
-	/// </summary>
-	void saveSettings();
+	virtual void setConfig(QSharedPointer<ModuleConfig> config);
+	QSharedPointer<ModuleConfig> config() const;
 
 protected:
-	QString mModuleName;						/**< the module's name.**/
+	QSharedPointer<ModuleConfig> mConfig;		/**< the module config **/
 
 	virtual bool checkInput() const = 0;		/**< checks if all input images are in the specified format.**/
-
-	virtual void load(const QSettings& settings);
-	virtual void save(QSettings& settings) const;
 	QString debugName() const;
 
 };

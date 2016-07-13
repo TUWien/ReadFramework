@@ -180,6 +180,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 
 	case attr_points:		return "points";
 	case attr_id:			return "id";
+	case attr_custom:		return "custom";
 	}
 
 	qWarning() << "unknown tag: " << tagId;
@@ -227,7 +228,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_text_region:	return "TextRegion";
 	case Region::type_text_line:	return "TextLine";
 	case Region::type_word:			return "Word";
-	case Region::type_separator:	return "Separator";
+	case Region::type_separator:	return "SeparatorRegion";
 	case Region::type_image:		return "ImageRegion";
 	case Region::type_graphic:		return "GraphicRegion";
 	case Region::type_noise:		return "NoiseRegion";
@@ -257,12 +258,15 @@ bool RegionManager::isValidTypeName(const QString & typeName) const {
 QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) const {
 
 	switch (type) {
+	case Region::type_separator:
+		return QSharedPointer<SeparatorRegion>(new SeparatorRegion());
 	case Region::type_text_region:
 	case Region::type_text_line:
 	case Region::type_word:
 		return QSharedPointer<TextLine>(new TextLine());
-		break;
 		// Add new types here...
+	default:
+		qWarning() << "unknown region type" << type;
 	}
 
 	return QSharedPointer<Region>(new Region());

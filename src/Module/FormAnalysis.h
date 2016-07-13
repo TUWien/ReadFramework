@@ -32,75 +32,81 @@
 
 #pragma once
 
+#include "BaseModule.h"
+#include "LineTrace.h"
+
 #pragma warning(push, 0)	// no warnings from includes
-#include <QString>
-#include <QSharedPointer>
+#include <QObject>
+
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
-#pragma warning(disable: 4251)	// dll interface warning
-
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
-#else
-#define DllCoreExport Q_DECL_IMPORT
-#endif
-#endif
+// TODO: add DllExport magic
 
 // Qt defines
-class QXmlStreamReader;
-class QXmlStreamWriter;
 
 namespace rdf {
 
-class PageElement;
-class Region;
+	class DllModuleExport FormFeaturesConfig : public ModuleConfig {
 
-// read defines
-class DllCoreExport PageXmlParser {
+	public:
+		FormFeaturesConfig();
 
-public:
-	PageXmlParser();
+		float threshLineLenRation() const;
+		void setThreshLineLenRation(float s);
 
-	enum RootTags {
-		tag_root,
-		tag_page,
-		tag_meta,
-		tag_meta_creator,
-		tag_meta_created,
-		tag_meta_changed,
 
-		attr_imageFilename,
-		attr_imageWidth,
-		attr_imageHeight,
-		attr_text_type,
-		attr_xmlns,
-		attr_xsi,
-		attr_schemaLocation,
+		QString toString() const override;
 
-		tag_end
+	private:
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+		float mThreshLineLenRatio = 0.6f;
+
 	};
 
-	void read(const QString& xmlPath);
-	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
 
-	QString tagName(const RootTags& tag) const;
+	class DllModuleExport FormFeatures : public Module {
 
-	void setPage(QSharedPointer<PageElement> page);
-	QSharedPointer<PageElement> page() const;
+	public:
+		FormFeatures();
+		FormFeatures(const cv::Mat& img, const cv::Mat& mask);
 
-	static QString imagePathToXmlPath(const QString& path);
+		void setInputImg(const cv::Mat& img);
+		void setMask(const cv::Mat& mask);
+		bool isEmpty() const override;
+		bool compute() override;
+		bool computeBinaryInput();
+		bool compareWithTemplate(const FormFeatures& fTempl);
+		QVector<rdf::Line> horLines() const;
+		QVector<rdf::Line> verLines() const;
 
-protected:
+		QSharedPointer<FormFeaturesConfig> config() const;
 
-	QSharedPointer<PageElement> mPage;
+		cv::Mat binaryImage() const;
+		void setEstimateSkew(bool s);
+		//void setThreshLineLenRatio(float l);
+		//void setThresh(int thresh);
+		//int thresh() const;
+		QString toString() const override;
 
-	QSharedPointer<PageElement> parse(const QString& xmlPath) const;
-	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
-	void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
+	private:
+		cv::Mat mSrcImg;
+		cv::Mat mMask;
+		cv::Mat mBwImg;
+		bool mEstimateSkew = false;
+		double mPageAngle = 0.0;
 
-	QByteArray writePageElement() const;
-	void writeMetaData(QXmlStreamWriter& writer) const;
-};
+		QVector<rdf::Line> mHorLines;
+		QVector<rdf::Line> mVerLines;
+
+		// parameters
+
+		bool checkInput() const override;
+
+		//void load(const QSettings& settings) override;
+		//void save(QSettings& settings) const override;
+	};
 
 };

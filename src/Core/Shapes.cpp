@@ -36,6 +36,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -126,6 +127,15 @@ QPoint BaseLine::endPoint() const {
 Line::Line(const QLine& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
+}
+
+Line::Line(const Polygon & poly) {
+
+	if (poly.size() != 2)
+		qWarning() << "line initialized with illegal polygon, size: " << poly.size();
+	else
+		mLine = QLine(poly.polygon()[0], poly.polygon()[1]);
+
 }
 
 /// <summary>
@@ -250,6 +260,22 @@ bool Line::within(const QPoint& p) const {
 	
 	return (tmp.x()*tmp2.x() + tmp.y()*tmp2.y()) * (tmp.x()*tmp3.x() + tmp.y()*tmp3.y()) < 0;
 
+}
+
+bool Line::leqX1(const Line & l1, const Line & l2)
+{
+	if (l1.startPoint().x() <= l2.startPoint().x())
+		return true;
+	else
+		return false;
+}
+
+bool Line::leqY1(const Line & l1, const Line & l2)
+{
+	if (l1.startPoint().y() <= l2.startPoint().y())
+		return true;
+	else
+		return false;
 }
 
 /// <summary>

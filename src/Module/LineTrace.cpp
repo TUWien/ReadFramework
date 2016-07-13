@@ -62,8 +62,9 @@ namespace rdf {
 			mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
 		}
 
-		mModuleName = "LineTrace";
-		loadSettings();
+		mConfig = QSharedPointer<LineTraceConfig>::create();
+
+		//mModuleName = "LineTrace";
 	}
 
 	bool LineTrace::checkInput() const {
@@ -118,12 +119,22 @@ namespace rdf {
 		mAngle = std::numeric_limits<double>::infinity();
 	}
 
+	QSharedPointer<LineTraceConfig> LineTrace::config() const {
+
+		return qSharedPointerDynamicCast<LineTraceConfig>(mConfig);		
+	}
+
 	/// <summary>
 	/// Gets the vertical lines.
 	/// </summary>
 	/// <returns>A line vector containing all vertical lines</returns>
 	QVector<rdf::Line> LineTrace::getVLines() const {
 		return vLines;
+	}
+
+	QVector<rdf::Line> LineTrace::getLines() const
+	{
+		return hLines+vLines;
 	}
 
 	/// <summary>
@@ -158,8 +169,8 @@ namespace rdf {
 			tmp.append(hLines);
 			tmp.append(vLines);
 
-			hLines = filterLineAngle(tmp, (float)mAngle, mMaxSlopeRotat);
-			vLines = filterLineAngle(tmp, (float)(mAngle+CV_PI*0.5f), mMaxSlopeRotat);
+			hLines = filterLineAngle(tmp, (float)mAngle, config()->maxSlopeRotat());
+			vLines = filterLineAngle(tmp, (float)(mAngle+CV_PI*0.5f), config()->maxSlopeRotat());
 		}
 
 		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
@@ -176,30 +187,30 @@ namespace rdf {
 		finalBlobs.setImage(mLineImg);
 		finalBlobs.compute();
 
-		finalBlobs.setBlobs(rdf::BlobManager::instance().filterMar(1.0f, mMinLenSecondRun, finalBlobs));
+		finalBlobs.setBlobs(rdf::BlobManager::instance().filterMar(1.0f, config()->minLenSecondRun(), finalBlobs));
 		mLineImg = rdf::BlobManager::instance().drawBlobs(finalBlobs);
 
 		return true;
 	}
 
 
-	/// <summary>
-	/// Sets the minimum length for the final line filtering.
-	// Default value = 60;
-	/// </summary>
-	/// <param name="len">The minimum length threshold in pixel.</param>
-	void LineTrace::setMinLenSecondRun(int len) {
-		mMinLenSecondRun = len;
-	}
+	///// <summary>
+	///// Sets the minimum length for the final line filtering.
+	//// Default value = 60;
+	///// </summary>
+	///// <param name="len">The minimum length threshold in pixel.</param>
+	//void LineTrace::setMinLenSecondRun(int len) {
+	//	mMinLenSecondRun = len;
+	//}
 
-	/// <summary>
-	/// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
-	// Default value = 0.3.
-	/// </summary>
-	/// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
-	void LineTrace::setMaxAspectRatio(float ratio) {
-		mMaxAspectRatio = ratio;
-	}
+	///// <summary>
+	///// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
+	//// Default value = 0.3.
+	///// </summary>
+	///// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
+	//void LineTrace::setMaxAspectRatio(float ratio) {
+	//	mMaxAspectRatio = ratio;
+	//}
 
 	/// <summary>
 	/// Generates the line image based on the synthetic line vector.
@@ -248,10 +259,10 @@ namespace rdf {
 				rdf::Line cmpLine = *lineIterCmp;
 				float dist = cLine.minDistance(cmpLine);
 
-				if (dist > mMaxGap) continue;
+				if (dist > config()->maxGap()) continue;
 
 				float diffAngle = cLine.diffAngle(cmpLine);
-				if (diffAngle > qDegreesToRadians(mMaxSlopeDiff)) continue;
+				if (diffAngle > qDegreesToRadians(config()->maxSlopeDiff())) continue;
 				
 				//orientation of new line differ in orientation with connecting lines by maxSlopeDiff degree
 				//difference in orientation between gapline and cline/cmpline. the larger deviation is taken
@@ -262,15 +273,15 @@ namespace rdf {
 				float angle2 = (float)newLine.diffAngle(cmpLine);
 				float angle = angle1 > angle2 ? angle1 : angle2;
 
-				float weight = 1.0f - (dist / mMaxGap);
-				if (angle > (weight * qDegreesToRadians(mMaxAngleDiff))) continue;
+				float weight = 1.0f - (dist / config()->maxGap());
+				if (angle > (weight * qDegreesToRadians(config()->maxAngleDiff()))) continue;
 
 				gapLine = cLine.gapLine(cmpLine);
 				angle1 = gapLine.diffAngle(cLine);
 				angle2 = gapLine.diffAngle(cmpLine);
 				angle = angle1 > angle2 ? angle1 : angle2;
 
-				weight = 1.0f - (dist / mMaxGap)*(dist / mMaxGap);
+				weight = 1.0f - (dist / config()->maxGap())*(dist / config()->maxGap());
 				if (dist > 5 && angle > weight * qDegreesToRadians(20.0f)) continue;
 
 				gapLines.append(gapLine);
@@ -359,14 +370,14 @@ namespace rdf {
 		QVector<rdf::Line> tmp;
 
 		for (auto l : hLines) {
-			if (l.length() > (float)mMinLenSecondRun)
+			if (l.length() > (float)config()->minLenSecondRun())
 				tmp.append(l);
 		}
 		hLines = tmp;
 
 		tmp.clear();
 		for (auto l : vLines) {
-			if (l.length() > (float)mMinLenSecondRun)
+			if (l.length() > (float)config()->minLenSecondRun())
 				tmp.append(l);
 		}
 		vLines = tmp;
@@ -547,8 +558,8 @@ namespace rdf {
 							int uppr = equivalenceLbl[0];
 							//int len = currentLen[uppr-1];
 							//if runlength is longer than maxlenDiff * upprNeighbour delete runlenghts (cross points!)
-							if ((((float)runlen > mMaxLenDiff*(float)(currentLen[uppr - 1])) ||
-								(mMaxLenDiff*(float)runlen <= (float)(currentLen[uppr - 1]))) && (runlen > 5)) {
+							if ((((float)runlen > config()->maxLenDiff()*(float)(currentLen[uppr - 1])) ||
+								(config()->maxLenDiff()*(float)runlen <= (float)(currentLen[uppr - 1]))) && (runlen > 5)) {
 
 								invalidLabels[(int)(*ptrBw) - 1] = col;
 								invalidLabels[uppr - 1] = col;
@@ -561,7 +572,7 @@ namespace rdf {
 							}
 						}
 						//runlength greater maximal alloewd
-						if (runlen > mMaxLen) {
+						if (runlen > config()->maxLen()) {
 							invalidLabels[(int)(*ptrBw) - 1] = col;
 						}
 
@@ -610,9 +621,9 @@ namespace rdf {
 		binBlobsH.setImage(hDSCCImg);
 		binBlobsH.compute();
 
-		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsH));
+		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsH));
 		if (!isinf(mAngle)) 
-			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mMaxSlopeRotat, binBlobsH));
+			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsH));
 
 		hLines = rdf::BlobManager::instance().lines(binBlobsH);
 		hDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsH);
@@ -622,9 +633,9 @@ namespace rdf {
 		binBlobsV.setImage(vDSCCImg);
 		binBlobsV.compute();
 
-		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(mMaxAspectRatio, mMinWidth, binBlobsV));
+		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsV));
 		if (!isinf(mAngle))
-			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mMaxSlopeRotat, binBlobsV));
+			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsV));
 
 		vLines = rdf::BlobManager::instance().lines(binBlobsV);
 		vDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsV);
@@ -638,8 +649,9 @@ namespace rdf {
 	QString LineTrace::toString() const {
 
 		QString msg = debugName();
-		msg += "angle defining horizontal: " + QString::number(mAngle);
-		//msg += "  erodedMasksize: " + QString::number(mErodeMaskSize);
+		msg += "number of detected horizontal lines: " + QString::number(hLines.size());
+		msg += "number of detected vertical lines: " + QString::number(vLines.size());
+		msg += config()->toString();
 
 		return msg;
 	}
@@ -663,5 +675,173 @@ namespace rdf {
 	}
 
 
+
+	LineTraceConfig::LineTraceConfig() 	{
+		mModuleName = "LineTrace";
+	}
+
+	float LineTraceConfig::maxSlopeRotat() const {
+		return mMaxSlopeRotat;
+	}
+
+	void LineTraceConfig::setMaxSlopeRotat(float s) {
+		mMaxSlopeRotat = s;
+	}
+
+	float LineTraceConfig::maxLenDiff() const {
+		return mMaxLenDiff;
+	}
+
+	void LineTraceConfig::setMaxLenDiff(float l) {
+		mMaxLenDiff = l;
+	}
+
+	float LineTraceConfig::maxAspectRatio() const {
+		return mMaxAspectRatio;
+	}
+
+	void LineTraceConfig::setMaxAspectRatio(float a) {
+		mMaxAspectRatio = a;
+	}
+
+	int LineTraceConfig::minWidth() const	{
+		return mMinWidth;
+	}
+
+	void LineTraceConfig::setMinWidth(int w) {
+		mMinWidth = w;
+	}
+
+	int LineTraceConfig::maxLen() const {
+		return mMaxLen;
+	}
+
+	void LineTraceConfig::setMaxLen(int l)	{
+		mMaxLen = l;
+	}
+
+	int LineTraceConfig::minArea() const {
+		return mMinArea;
+	}
+
+	void LineTraceConfig::setMinArea(int a) {
+		mMinArea = a;
+	}
+
+	int LineTraceConfig::rippleLen() const 	{
+		return mRippleLen;
+	}
+
+	void LineTraceConfig::setRippleLen(int r) {
+		mRippleLen = r;
+	}
+
+	float LineTraceConfig::rippleArea() const {
+		return mRippleArea;
+	}
+
+	void LineTraceConfig::setRippleArea(float a) {
+		mRippleArea = a;
+	}
+
+	float LineTraceConfig::maxGap() const {
+		return mMaxGap;
+	}
+
+	void LineTraceConfig::setMaxGap(float g) {
+		mMaxGap = g;
+	}
+
+	float LineTraceConfig::maxSlopeDiff() const {
+		return mMaxSlopeDiff;
+	}
+
+	void LineTraceConfig::setMaxSlopeDiff(float s)	{
+		mMaxSlopeDiff = s;
+	}
+
+	float LineTraceConfig::maxAngleDiff() const {
+		return mMaxAngleDiff;
+	}
+
+	void LineTraceConfig::setMaxAngleDiff(float a)	{
+		mMaxAngleDiff = a;
+	}
+
+	int LineTraceConfig::minLenSecondRun() const {
+		return mMinLenSecondRun;
+	}
+
+	void LineTraceConfig::setMinLenSecondRun(int r)
+	{
+		mMinLenSecondRun = r;
+	}
+
+	float LineTraceConfig::maxDistExtern() const {
+		return mMaxDistExtern;
+	}
+
+	void LineTraceConfig::setMaxDistExtern(float d)	{
+		mMaxDistExtern = d;
+	}
+
+	float LineTraceConfig::maxAngleDiffExtern() const {
+		return mMaxAngleDiffExtern;
+	}
+
+	void LineTraceConfig::setMaxAngleDiffExtern(float a) {
+		mMaxAngleDiffExtern = a;
+	}
+
+	QString LineTraceConfig::toString() const {
+		QString msg;
+		msg += "  mMaxSlopeRotat: " + QString::number(mMaxSlopeRotat);
+		msg += "  mMaxAspectRatio: " + QString::number(mMaxAspectRatio);
+		msg += "  mMinWidth: " + QString::number(mMinWidth);
+		msg += "  mMaxLen: " + QString::number(mMaxLen);
+		msg += "  mMaxGap: " + QString::number(mMaxGap);
+		msg += "  mMaxSlopeDiff: " + QString::number(mMaxSlopeDiff);
+		msg += "  mMinLenSecondRun: " + QString::number(mMinLenSecondRun);
+
+		return msg;
+	}
+
+	void LineTraceConfig::load(const QSettings & settings) 	{
+		
+		mMaxSlopeRotat = settings.value("maxSlopeRotat", mMaxSlopeRotat).toFloat();
+		mMaxLenDiff = settings.value("maxLenDiff", mMaxLenDiff).toFloat();
+		mMaxAspectRatio = settings.value("maxAspectRatio", mMaxAspectRatio).toFloat();
+		mMinWidth = settings.value("minWidth", mMinWidth).toInt();
+		mMaxLen = settings.value("maxLen", mMaxLen).toInt();
+		mMinArea = settings.value("minArea", mMinArea).toInt();
+		mRippleLen = settings.value("rippleLen", mRippleLen).toInt();
+		mRippleArea = settings.value("rippleArea", mRippleArea).toFloat();
+		mMaxGap = settings.value("maxGap", mMaxGap).toFloat();
+		mMaxSlopeDiff = settings.value("maxSlopeDiff", mMaxSlopeDiff).toFloat();
+		mMaxAngleDiff = settings.value("maxAngleDiff", mMaxAngleDiff).toFloat();
+		mMinLenSecondRun = settings.value("minLenSecondRun", mMinLenSecondRun).toInt();
+
+		mMaxDistExtern = settings.value("maxDistExtern", mMaxDistExtern).toFloat();
+		mMaxAngleDiffExtern = settings.value("maxAngleDiffExtern", mMaxAngleDiffExtern).toFloat();
+	}
+
+	void LineTraceConfig::save(QSettings & settings) const	{
+		
+		settings.setValue("maxSlopeRotat", mMaxSlopeRotat);
+		settings.setValue("maxLenDiff", mMaxLenDiff);
+		settings.setValue("maxAspectRatio", mMaxAspectRatio);
+		settings.setValue("minWidth", mMinWidth);
+		settings.setValue("maxLen", mMaxLen);
+		settings.setValue("minArea", mMinArea);
+		settings.setValue("rippleLen", mRippleLen);
+		settings.setValue("rippleArea", mRippleArea);
+		settings.setValue("maxGap", mMaxGap);
+		settings.setValue("maxSlopeDiff", mMaxSlopeDiff);
+		settings.setValue("maxAngleDiff", mMaxAngleDiff);
+		settings.setValue("minLenSecondRun", mMinLenSecondRun);
+
+		settings.setValue("maxDistExtern", mMaxDistExtern);
+		settings.setValue("maxAngleDiffExtern", mMaxAngleDiffExtern);
+	}
 
 }

@@ -89,10 +89,17 @@ public:
 	void setId(const QString& id);
 	QString id() const;
 
+	void setCustom(const QString& c);
+	QString custom() const;
+
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
+	void setTextEqiv(const QString& text);
+	QString textEquiv() const;
+
 	void addChild(QSharedPointer<Region> child);
+	void addUniqueChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
@@ -106,9 +113,12 @@ public:
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
 	virtual void writeChildren(QXmlStreamWriter& writer) const;
 
+	virtual bool operator==(const Region& r1);
+
 protected:
 	Type mType;
 	QString mId;
+	QString mCustom;
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
 };
@@ -134,6 +144,29 @@ public:
 protected:
 	BaseLine mBaseLine;
 	QString mText;
+	bool mTextPresent = false;
+};
+
+
+class DllCoreExport SeparatorRegion : public Region {
+
+public:
+	SeparatorRegion();
+
+	void setLine(const Line& line);
+	Line line() const;
+
+	//virtual bool read(QXmlStreamReader& reader) override;
+	//virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
+
+	//virtual QString toString(bool withChildren = false) const override;
+
+	//virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
+	//virtual bool operator==(const SeparatorRegion& sr1);
+	virtual bool operator==(const Region& sr1);
+
+protected:
+	Line mLine;
 };
 
 class DllCoreExport PageElement {

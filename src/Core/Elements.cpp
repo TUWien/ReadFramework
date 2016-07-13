@@ -109,6 +109,14 @@ QString Region::id() const {
 	return mId;
 }
 
+void Region::setCustom(const QString & c) {
+	mCustom = c;
+}
+
+QString Region::custom() const {
+	return mCustom;
+}
+
 /// <summary>
 /// Set the polygon which enclosed the Region.
 /// The polygon's coordinates are w.r.t the image coordinates.
@@ -153,6 +161,25 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 /// <param name="child">The child region.</param>
 void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
+}
+
+void Region::addUniqueChild(QSharedPointer<Region> child) {
+
+	if (!child) {
+		qWarning() << "addUniqueChild: child is NULL where it should not be";
+		return;
+	}
+
+	bool containsChild = false;
+	for (const QSharedPointer<Region> i  : mChildren) {
+		if (i && *i == *child) {
+			containsChild = true;
+			break;
+		}
+	}
+
+	if (!containsChild)
+		mChildren.append(child);
 }
 
 /// <summary>
@@ -232,10 +259,9 @@ bool Region::read(QXmlStreamReader & reader) {
 	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 		mPoly.read(reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString());
 	}
-	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
+	//else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 
-	}
-	// report unknown tags
+	//}
 	else if (reader.tokenType() == QXmlStreamReader::StartElement)
 		return false;
 
@@ -254,7 +280,9 @@ void Region::write(QXmlStreamWriter& writer, bool withChildren, bool close) cons
 
 	writer.writeStartElement(RegionManager::instance().typeName(mType));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
-	
+	if (!mCustom.isEmpty())
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
+
 	// write polygon
 	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
 	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
@@ -275,6 +303,20 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 	for (const QSharedPointer<Region> child : mChildren)
 		child->write(writer, true);
+}
+
+bool Region::operator==(const Region & r1) {
+
+	QPolygon p1 = r1.polygon().polygon();
+	QPolygon p2 = mPoly.polygon();
+
+	if (p1.isEmpty() || p2.isEmpty())
+		return false;
+
+	if (p1 == p2)
+		return true;
+	else
+		return false;
 }
 
 // TextLine --------------------------------------------------------------------
@@ -343,11 +385,13 @@ bool TextLine::read(QXmlStreamReader & reader) {
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
 				reader.readNext();
 				mText = reader.text().toUtf8().trimmed();	// add text
+				mTextPresent = true;
 			}
 			// read ASCII
 			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
 				reader.readNext();
 				mText = reader.text().toString().trimmed();	// add text
+				mTextPresent = true;
 			}
 		}
 	}
@@ -378,7 +422,7 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 		writer.writeEndElement(); // </Baseline>
 	}
 
-	if (!mText.isEmpty()) {
+	if (!mText.isEmpty() || mTextPresent) {
 		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
 		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
 		writer.writeEndElement(); // </TextEquiv>
@@ -459,6 +503,8 @@ PageElement::PageElement(const QString& xmlPath) {
 	mCreator = "CVL";
 	mDateCreated = QDateTime::currentDateTime();
 	mDateModified = QDateTime::currentDateTime();
+
+	mRoot = mRoot.create();
 }
 
 /// <summary>
@@ -618,5 +664,49 @@ QDateTime PageElement::dateModified() const {
 }
 
 
+
+SeparatorRegion::SeparatorRegion() : Region() {
+	mType = type_separator;
+}
+
+void SeparatorRegion::setLine(const Line & line) {
+
+	QPolygon qlp;
+	qlp << line.startPoint() << line.endPoint();
+	Polygon p(qlp);
+
+	setPolygon(p);
+	mLine = line;
+
+}
+
+Line SeparatorRegion::line() const {
+	
+	if (mLine.isEmpty())
+		return Line(mPoly);
+	
+	return mLine;
+}
+
+bool SeparatorRegion::operator==(const Region & sr1) {
+
+	if (mPoly.size() != sr1.polygon().size())
+		return false;
+
+	Polygon p1 = sr1.polygon();
+	Line l1(p1);
+
+	//Line l1 = sr1.line();
+	mLine = line();
+
+	if (l1.isEmpty() || mLine.isEmpty())
+		return false;
+
+	if (l1.startPoint() == mLine.startPoint() && l1.endPoint() == mLine.endPoint())
+		return true;
+	else
+		return false;
+
+}
 
 }

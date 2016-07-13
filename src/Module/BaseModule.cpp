@@ -40,17 +40,63 @@
 
 namespace rdf {
 
-// Module --------------------------------------------------------------------
-Module::Module() {
+// ModuleConfig --------------------------------------------------------------------
+ModuleConfig::ModuleConfig() {
 	mModuleName = "Generic Module";
 }
 
-QString Module::name() const {
+void ModuleConfig::loadSettings() {
+
+	QSettings& settings = Config::instance().settings();
+	settings.beginGroup(mModuleName);
+	load(settings);
+	settings.endGroup();
+}
+
+void ModuleConfig::saveSettings() {
+
+	QSettings& settings = Config::instance().settings();
+	settings.beginGroup(mModuleName);
+	save(settings);
+	settings.endGroup();
+}
+
+QString ModuleConfig::name() const {
 	return mModuleName;
 }
 
+QString ModuleConfig::toString() const {
+	return name();
+}
+
+void ModuleConfig::load(const QSettings&) {
+	// dummy
+}
+
+void ModuleConfig::save(QSettings&) const {
+	// dummy
+}
+
+
+// Module --------------------------------------------------------------------
+Module::Module() {
+	mConfig = QSharedPointer<ModuleConfig>::create();
+}
+
+QString Module::name() const {
+	return mConfig->name();
+}
+
+void Module::setConfig(QSharedPointer<ModuleConfig> config) {
+	mConfig = config;
+}
+
+QSharedPointer<ModuleConfig> Module::config() const {
+	return mConfig;
+}
+
 QString Module::debugName() const {
-	return "[" + mModuleName + "]";
+	return "[" + mConfig->name() + "]";
 }
 
 QString Module::toString() const {
@@ -68,32 +114,6 @@ QDebug operator<<(QDebug d, const Module& m) {
 
 	d << qPrintable(m.toString());
 	return d;
-}
-
-void Module::loadSettings() {
-
-	QSettings& settings = Config::instance().settings();
-	settings.beginGroup(mModuleName);
-	load(settings);
-	settings.endGroup();
-}
-
-void Module::saveSettings() {
-
-	// TODO: this method should be made thread-safe - it would be convenient
-
-	QSettings& settings = Config::instance().settings();
-	settings.beginGroup(mModuleName);
-	save(settings);
-	settings.endGroup();
-}
-
-void Module::load(const QSettings&) {
-	// dummy
-}
-
-void Module::save(QSettings&) const {
-	// dummy
 }
 
 }

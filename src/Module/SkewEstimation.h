@@ -59,6 +59,63 @@
 namespace rdf {
 
 
+	class DllModuleExport BaseSkewEstimationConfig : public ModuleConfig {
+
+	public:
+		BaseSkewEstimationConfig();
+
+		int width() const;
+		void setWidth(int w);
+
+		int height() const;
+		void setHeight(int h);
+
+		int delta() const;
+		void setDelta(int d);
+
+		int epsilon() const;
+		void setEpsilon(int e);
+
+		int minLineLength() const;
+		void setMinLineLength(int l);
+
+		//int minLineProjLength() const;
+		//void setMinLineProjLength(int l);
+
+		double sigma() const;
+		void setSigma(double s);
+
+		double thr() const;
+		void setThr(double t);
+
+		int kMax() const;
+		void setKMax(int k);
+
+		int nIter() const;
+		void setNIter(int n);
+
+		QString toString() const override;
+
+	private:
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+		int mW = 168; //49 according to the paper, best for document: 60
+		int mH = 56; //12 according to the paper, best for document: 28
+		int mDelta = 20; //according to the paper
+		int mEpsilon = 2; //according to the paper
+
+		int mMinLineLength = 50;
+		//int mMinLineProjLength = 50 / 4;
+		double mSigma = 0.3; //according to the paper, best for document: 0.5
+		//double mThr = 0.1; //according to the paper
+		double mThr = 4.0; //according to the paper
+
+		int mKMax = 7; //according to the paper
+		int mNIter = 200; //according to the paper
+	};
+
+
 /// <summary>
 /// The class estimates the skew of a document page. The methodology is based on
 /// "Skew estimation of natural images based on a salient line detector", Hyung Il Koo and Nam Ik Cho
@@ -69,8 +126,7 @@ namespace rdf {
 	public:
 		enum EdgeDirection { HORIZONTAL = 0, VERTICAL };
 
-		BaseSkewEstimation();
-		BaseSkewEstimation(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+		BaseSkewEstimation(const cv::Mat& img = cv::Mat(), const cv::Mat& mask = cv::Mat());
 		void setImages(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
 		bool compute();
@@ -80,14 +136,16 @@ namespace rdf {
 		bool isEmpty() const override;
 		virtual QString toString() const override;
 
-		void setThr(double thr);
-		void setmMinLineLength(int ll);
-		void setDelta(int d);
-		void setEpsilon(int e);
-		void setW(int w);
-		void setH(int h);
-		void setSigma(double s);
+		//void setThr(double thr);
+		//void setmMinLineLength(int ll);
+		//void setDelta(int d);
+		//void setEpsilon(int e);
+		//void setW(int w);
+		//void setH(int h);
+		//void setSigma(double s);
 		void setFixedThr(bool f);
+
+		QSharedPointer<BaseSkewEstimationConfig> config() const;
 
 	protected:
 		cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
@@ -102,25 +160,9 @@ namespace rdf {
 
 	private:
 
-		void load(const QSettings& settings) override;
-		void save(QSettings& settings) const override;
-
 		double mSkewAngle = 0.0;
-		//double mThr = 0.1; //according to the paper
-		double mThr = 4.0; //according to the paper
 		//double mWeightEps = 0.5;
-		int mMinLineLength = 50;
-		int minLineProjLength = 50 / 4;
-		int mKMax = 7; //according to the paper
-		int mNIter = 200; //according to the paper
 		int mRotationFactor = 1; //needed if we want to transpose the image in the beginning...
-		double mSigma = 0.3; //according to the paper, best for document: 0.5
-
-		int mW = 168; //49 according to the paper, best for document: 60
-		int mH = 56; //12 according to the paper, best for document: 28
-		int mDelta = 20; //according to the paper
-		int mEpsilon = 2; //according to the paper
-
 		bool mFixedThr = true;
 
 		cv::Mat mIntegralImg;
@@ -129,8 +171,6 @@ namespace rdf {
 		QVector<QVector4D> mSelectedLines;
 		QVector<int> mSelectedLineTypes;
 
-		//void load(const QSettings& settings) override;
-		//void save(QSettings& settings) const override;
 	};
 
 };

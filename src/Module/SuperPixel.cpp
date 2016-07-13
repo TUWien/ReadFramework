@@ -45,9 +45,6 @@ namespace rdf {
 // SuperPixel --------------------------------------------------------------------
 SuperPixel::SuperPixel(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
-
-	mModuleName = "SuperPixel";
-	loadSettings();
 }
 
 bool SuperPixel::checkInput() const {
@@ -62,17 +59,6 @@ bool SuperPixel::checkInput() const {
 
 bool SuperPixel::isEmpty() const {
 	return mSrcImg.empty();
-}
-
-void SuperPixel::load(const QSettings& settings) {
-
-	//mThresh = settings.value("thresh", mThresh).toInt();
-}
-
-void SuperPixel::save(QSettings& settings) const {
-
-	// TODO
-	//settings.setValue("thresh", mThresh);
 }
 
 bool SuperPixel::compute() {
@@ -97,9 +83,6 @@ bool SuperPixel::compute() {
 	seamFinder.find(mats, corners, mMask);
 
 	qDebug() << "mMask size: " << mMask.size();
-
-	// I guess here is a good point to save the settings
-	saveSettings();
 	mDebug << " computed...";
 
 	return true;
