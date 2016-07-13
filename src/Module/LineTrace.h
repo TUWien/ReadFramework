@@ -156,6 +156,7 @@ public:
 	//QVector<DkLineExt> getLines();
 	cv::Mat lineImage() const;
 	cv::Mat generatedLineImage() const;
+	static void generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat& img);
 	//void setMinLenSecondRun(int len);
 	//void setMaxAspectRatio(float ratio);
 	virtual QString toString() const override;

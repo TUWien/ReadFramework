@@ -51,6 +51,8 @@ namespace rdf {
 		mSrcImg = img;
 		mMask = mask;
 
+		mSizeSrc = mSrcImg.size();
+
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
 	void FormFeatures::setInputImg(const cv::Mat & img)
@@ -126,6 +128,10 @@ namespace rdf {
 		std::sort(horLinesTemp.begin(), horLinesTemp.end(), rdf::Line::leqY1);
 		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::leqX1);
 
+		cv::Mat lineTempl(mSizeSrc, CV_32FC1);
+		LineTrace::generateLineImage(horLinesTemp, verLinesTemp, lineTempl);
+		cv::distanceTransform(lineTempl, lineTempl, CV_DIST_L1, CV_DIST_MASK_3); //cityblock
+
 		float hLen = 0, hLenTemp = 0;
 		float vLen = 0, vLenTemp = 0;
 		
@@ -149,8 +155,30 @@ namespace rdf {
 		float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
 
 		//at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
-		if (ratioHor < config()->threshLineLenRation() || ratioVer < config()->threshLineLenRation())
+		if (ratioHor < config()->threshLineLenRation() || ratioVer < config()->threshLineLenRation()) {
+			qDebug() << "form rejected: less lines as specified in the threshold (threshLineLenRatio)";
 			return false;
+		}
+
+		int offsetX, offsetY;
+
+		//initialize with current offset;
+		offsetX = 0;
+		offsetY = 0;
+		float horizontalError = 0;
+		float verticalError = 0;
+		for (int i = 0; i < mHorLines.size(); i++) {
+			float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetX, offsetY));
+			horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+		}
+		for (int i = 0; i < mVerLines.size(); i++) {
+			float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetX, offsetY));
+			verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+		}
+
+		float error = horizontalError + verticalError;
+		qDebug() << "current Error: " << error;
+
 
 		//int refY = horLinesTemp[0].startPoint().y();
 		//float distance = 0.0f;
@@ -199,6 +227,37 @@ namespace rdf {
 	QString FormFeatures::toString() const
 	{
 		return QString("Form Features class calculates line and layout features for form classification");
+	}
+
+	float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
+	{
+
+		cv::LineIterator it(mSrcImg, l.startPointCV(), l.endPointCV());
+		float distance = 0;
+		float outsidePixel = 0;
+		float max = 0;
+
+		for (int i = 0; i < it.count; i++, ++it) {
+
+			cv::Point pos = it.pos();
+			pos = pos + offset;
+
+			if (pos.x < 0 || pos.y < 0 || pos.x >= distImg.cols || pos.y >= distImg.rows) {
+				//we are outside the image
+				outsidePixel++;
+			}
+			else {
+				float dist = distImg.at<float>(pos.y, pos.x);
+				distance += dist;
+				max = dist > max ? dist : max;
+			}
+		}
+
+		distance += (max*outsidePixel);
+		if (distance == 0)
+			distance = std::numeric_limits<float>::max();
+
+		return distance;
 	}
 
 	bool FormFeatures::checkInput() const

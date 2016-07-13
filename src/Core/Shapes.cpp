@@ -138,6 +138,16 @@ Line::Line(const Polygon & poly) {
 
 }
 
+cv::Point Line::startPointCV() const
+{
+	return cv::Point(mLine.p1().x(), mLine.p1().y());
+}
+
+cv::Point Line::endPointCV() const
+{
+	return cv::Point(mLine.p2().x(), mLine.p2().y());
+}
+
 /// <summary>
 /// Determines whether this instance is empty.
 /// </summary>
@@ -245,6 +255,20 @@ float Line::distance(const QPoint p) const {
 	QPoint tmp = p - mLine.p2();
 
 	return (float)abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (FLT_EPSILON + sqrt(normalVec.x()*normalVec.x() + normalVec.y()*normalVec.y())));
+}
+
+int Line::horizontalOverlap(const Line & l) const
+{
+	int ol = std::max(mLine.x1(), l.startPoint().x()) - std::min(mLine.x2(), l.endPoint().x());
+
+	return ol;
+}
+
+int Line::verticalOverlap(const Line & l) const
+{
+	int ol = std::max(mLine.y1(), l.startPoint().y()) - std::min(mLine.y2(), l.endPoint().y());
+
+	return ol;
 }
 
 /// <summary>

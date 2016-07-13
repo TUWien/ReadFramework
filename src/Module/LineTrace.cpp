@@ -242,6 +242,30 @@ namespace rdf {
 		return synLinImg;
 	}
 
+	void LineTrace::generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat & img)
+	{
+		if (hline.empty() && vline.empty())
+			return;
+
+		//img.setTo(0);
+
+		for (auto l : hline) {
+
+			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
+			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+
+			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+		}
+
+		for (auto l : vline) {
+
+			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
+			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+
+			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+		}
+	}
+
 	QVector<rdf::Line> LineTrace::mergeLines(QVector<rdf::Line>& lines) {
 
 		QVector<rdf::Line>::iterator lineIter, lineIterCmp;

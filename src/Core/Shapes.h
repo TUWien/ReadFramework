@@ -35,6 +35,8 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QPolygon>
 #include <QLine>
+
+#include "opencv2/core/core.hpp"
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -101,6 +103,9 @@ public:
 	Line(const QLine& line = QLine(), float thickness = 0);
 	Line(const Polygon& poly);
 
+
+	cv::Point startPointCV() const;
+	cv::Point endPointCV() const;
 	bool isEmpty() const;
 	void setLine(const QLine& line, float thickness = 0);
 	QLine line() const;
@@ -109,6 +114,8 @@ public:
 	double angle() const;
 	float minDistance(const Line& l) const;
 	float distance(const QPoint p) const;
+	int horizontalOverlap(const Line& l) const;
+	int verticalOverlap(const Line& l) const;
 	Line merge(const Line& l) const;
 	Line gapLine(const Line& l) const;
 	float diffAngle(const Line& l) const;
