@@ -91,6 +91,11 @@ namespace rdf {
 		//int thresh() const;
 		QString toString() const override;
 
+
+	protected:
+
+		float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
+
 	private:
 		cv::Mat mSrcImg;
 		cv::Mat mMask;
@@ -100,6 +105,8 @@ namespace rdf {
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
+
+		cv::Size mSizeSrc;
 
 		// parameters
 
