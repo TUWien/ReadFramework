@@ -91,6 +91,7 @@ var searchData=
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d',1,'rdf::SimpleBinarizationConfig']]],
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
   ['size',['size',['../classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3',1,'rdf::Blobs::size()'],['../classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b',1,'rdf::Polygon::size()']]],
+  ['sizeimg',['sizeImg',['../classrdf_1_1_form_features.html#acfc3eaa4cbe7287ba6ca1a78cc9aef39',1,'rdf::FormFeatures']]],
   ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
   ['skewestimation_2ecpp',['SkewEstimation.cpp',['../_skew_estimation_8cpp.html',1,'']]],
   ['skewestimation_2eh',['SkewEstimation.h',['../_skew_estimation_8h.html',1,'']]],
@@ -102,8 +103,8 @@ var searchData=
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];

@@ -148,6 +148,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa895a6fe46070ff711ba46e78207bc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d41be1593a456a13d91fb79eda97092"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a6d41be1593a456a13d91fb79eda97092">compareWithTemplate</a> (const <a class="el" href="classrdf_1_1_form_features.html">FormFeatures</a> &amp;fTempl)</td></tr>
 <tr class="separator:a6d41be1593a456a13d91fb79eda97092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfc3eaa4cbe7287ba6ca1a78cc9aef39"><td class="memItemLeft" align="right" valign="top">cv::Size&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#acfc3eaa4cbe7287ba6ca1a78cc9aef39">sizeImg</a> () const </td></tr>
+<tr class="separator:acfc3eaa4cbe7287ba6ca1a78cc9aef39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae820300dd6b513cba25aa3a480eaaaf7"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#ae820300dd6b513cba25aa3a480eaaaf7">horLines</a> () const </td></tr>
 <tr class="separator:ae820300dd6b513cba25aa3a480eaaaf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f9cceb13b2afd30bef5306e9a161e42"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a7f9cceb13b2afd30bef5306e9a161e42">verLines</a> () const </td></tr>
@@ -178,6 +180,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:adbb84609954349ff9e033dd486aea652"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#adbb84609954349ff9e033dd486aea652">errLine</a> (const cv::Mat &amp;distImg, const <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> l, cv::Point offset=cv::Point(0, 0))</td></tr>
 <tr class="separator:adbb84609954349ff9e033dd486aea652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a061e2f313fdeca7641139dbd092435c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a061e2f313fdeca7641139dbd092435c5">findOffsets</a> (const QVector&lt; <a class="el" href="classrdf_1_1_line.html">Line</a> &gt; &amp;hT, const QVector&lt; <a class="el" href="classrdf_1_1_line.html">Line</a> &gt; &amp;vT, QVector&lt; int &gt; &amp;offX, QVector&lt; int &gt; &amp;offY) const </td></tr>
+<tr class="separator:a061e2f313fdeca7641139dbd092435c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a47fcd4dd3706329cfec2a9b1e712de73">debugName</a> () const </td></tr>
 <tr class="separator:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -360,6 +364,52 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a061e2f313fdeca7641139dbd092435c5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FormFeatures::findOffsets </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; <a class="el" href="classrdf_1_1_line.html">Line</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>hT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVector&lt; <a class="el" href="classrdf_1_1_line.html">Line</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>offX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>offY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae820300dd6b513cba25aa3a480eaaaf7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -445,6 +495,21 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramtype">const cv::Mat &amp;&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acfc3eaa4cbe7287ba6ca1a78cc9aef39"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Size rdf::FormFeatures::sizeImg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -83,6 +83,7 @@ var searchData=
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d',1,'rdf::SimpleBinarizationConfig']]],
   ['size',['size',['../classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3',1,'rdf::Blobs::size()'],['../classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b',1,'rdf::Polygon::size()']]],
+  ['sizeimg',['sizeImg',['../classrdf_1_1_form_features.html#acfc3eaa4cbe7287ba6ca1a78cc9aef39',1,'rdf::FormFeatures']]],
   ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
   ['start',['start',['../classrdf_1_1_timer.html#abf3b0a4fe7ce68cfbe982e60b7a81195',1,'rdf::Timer']]],
   ['startpoint',['startPoint',['../classrdf_1_1_base_line.html#a3cf2f1cd2ea83bd9b0e93ee0f3e2cfa1',1,'rdf::BaseLine::startPoint()'],['../classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc',1,'rdf::Line::startPoint()']]],

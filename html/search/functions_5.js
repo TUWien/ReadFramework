@@ -4,6 +4,7 @@ var searchData=
   ['filterarea',['filterArea',['../classrdf_1_1_blob_manager.html#a79b51e41d19ad5e9498c2ba86972cf5a',1,'rdf::BlobManager']]],
   ['filterlineangle',['filterLineAngle',['../classrdf_1_1_line_trace.html#aa0db4498043e6f4e5013f1db0842ffdf',1,'rdf::LineTrace']]],
   ['filtermar',['filterMar',['../classrdf_1_1_blob_manager.html#a4986f0811c732e9045753b5ee788102a',1,'rdf::BlobManager']]],
+  ['findoffsets',['findOffsets',['../classrdf_1_1_form_features.html#a061e2f313fdeca7641139dbd092435c5',1,'rdf::FormFeatures']]],
   ['fm',['fm',['../classrdf_1_1_patch.html#a1a42077556b90e83973621bc5672dbb6',1,'rdf::Patch']]],
   ['fmpatches',['fmPatches',['../classrdf_1_1_focus_estimation.html#a88cc03e7c4f015e51e508e4b809238ac',1,'rdf::FocusEstimation']]],
   ['fmref',['fmRef',['../classrdf_1_1_patch.html#aadf396f2ee1cbbdeb12bbbeb550502d8',1,'rdf::Patch']]],
