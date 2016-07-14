@@ -164,7 +164,7 @@ namespace rdf {
 		//Image::instance().save(mLineImg, "D:\\tmp\\mLineImg.tif");
 
 		//if (mDAngle != 361.0f) {
-		if (!isinf(mAngle)) {
+		if (!std::isinf(mAngle)) {
 			QVector<rdf::Line> tmp;
 			tmp.append(hLines);
 			tmp.append(vLines);
@@ -646,7 +646,7 @@ namespace rdf {
 		binBlobsH.compute();
 
 		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsH));
-		if (!isinf(mAngle)) 
+		if (!std::isinf(mAngle)) 
 			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsH));
 
 		hLines = rdf::BlobManager::instance().lines(binBlobsH);
@@ -658,7 +658,7 @@ namespace rdf {
 		binBlobsV.compute();
 
 		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsV));
-		if (!isinf(mAngle))
+		if (!std::isinf(mAngle))
 			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsV));
 
 		vLines = rdf::BlobManager::instance().lines(binBlobsV);
