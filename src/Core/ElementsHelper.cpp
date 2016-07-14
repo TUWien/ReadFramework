@@ -283,7 +283,13 @@ void RegionManager::drawRegion(QPainter & p, QSharedPointer<rdf::Region> region,
 
 	QVector<QSharedPointer<RegionTypeConfig> > c = config.empty() ? mTypeConfig : config;
 
+
 	// do not draw this kind of region
+	if (region->type() < 0 || region->type() > c.size()) {
+		qDebug() << "illegal region type" << region->type();
+		return;
+	}
+		
 	if (!c[region->type()]->draw())
 		return;
 

@@ -507,6 +507,10 @@ PageElement::PageElement(const QString& xmlPath) {
 	mRoot = mRoot.create();
 }
 
+bool PageElement::isEmpty() {
+	return !mRoot || mXmlPath.isEmpty();
+}
+
 /// <summary>
 /// Prints the page element to the debug stream.
 /// </summary>
