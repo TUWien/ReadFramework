@@ -79,6 +79,7 @@ namespace rdf {
 		bool compute() override;
 		bool computeBinaryInput();
 		bool compareWithTemplate(const FormFeatures& fTempl);
+		cv::Size sizeImg() const;
 		QVector<rdf::Line> horLines() const;
 		QVector<rdf::Line> verLines() const;
 
@@ -95,6 +96,8 @@ namespace rdf {
 	protected:
 
 		float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
+		void findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const;
+		
 
 	private:
 		cv::Mat mSrcImg;

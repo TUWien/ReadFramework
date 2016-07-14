@@ -160,39 +160,52 @@ namespace rdf {
 			return false;
 		}
 
-		int offsetX, offsetY;
+		QVector<int> offsetsX;
+		QVector<int> offsetsY;
+		//mSrcImg.rows
+		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height);
+		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width);
 
-		//initialize with current offset;
-		offsetX = 0;
-		offsetY = 0;
+		findOffsets(horLinesTemp, verLinesTemp, offsetsX, offsetsY);
+
 		float horizontalError = 0;
 		float verticalError = 0;
-		for (int i = 0; i < mHorLines.size(); i++) {
-			float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetX, offsetY));
-			horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+		cv::Point offSet(0, 0);
+		float minError = std::numeric_limits<float>::max();
+
+		for (int iX = 0; iX <= offsetsX.size(); iX++) {
+			for (int iY = 0; iY <= offsetsY.size(); iY++) {
+				//for for maximal translation
+				if (offsetsX[iX] <= sizeDiffX && offsetsY[iY] <= sizeDiffY) {
+
+					for (int i = 0; i < mHorLines.size(); i++) {
+						float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+					}
+					for (int i = 0; i < mVerLines.size(); i++) {
+						float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+					}
+					float error = horizontalError + verticalError;
+					if (error <= minError) {
+						minError = error;
+						offSet.x = offsetsX[iX];
+						offSet.y = offsetsY[iY];
+					}
+				}
+
+			}
 		}
-		for (int i = 0; i < mVerLines.size(); i++) {
-			float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetX, offsetY));
-			verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
-		}
 
-		float error = horizontalError + verticalError;
-		qDebug() << "current Error: " << error;
+		qDebug() << "current Error: " << minError;
+		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
+		return true;
+	}
 
-		//int refY = horLinesTemp[0].startPoint().y();
-		//float distance = 0.0f;
-		//for (int i = 0; i < mHorLines.size(); i++) {
-		//	
-		//	int mapDiffY = mHorLines[i].startPoint().y() - refY;
-		//	for (int j = 0; j < verLinesTemp.size(); j++) {
-
-		//	}
-
-		//}
-
-
-		return false;
+	cv::Size FormFeatures::sizeImg() const
+	{
+		return mSizeSrc;
 	}
 
 	QVector<rdf::Line> FormFeatures::horLines() const
@@ -260,8 +273,62 @@ namespace rdf {
 		return distance;
 	}
 
-	bool FormFeatures::checkInput() const
-	{
+	void FormFeatures::findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const	{
+
+		offY.clear();
+		offY.push_back(0);
+		offX.clear();
+		offX.push_back(0);
+
+		//find vertical offsets
+		if (!hT.empty() && !mHorLines.empty()) {
+			//use Y difference of horizontal lines if template and current Image contains horizontal lines
+			for (int i = 0; i < hT.size(); i++) {
+				int yLineTemp = hT[i].startPointCV().y;
+				for (int j = 0; j < mHorLines.size(); j++) {
+					int diffYLine = yLineTemp - mHorLines[j].startPointCV().y;
+					offY.push_back(diffYLine);
+				}
+			}
+		}
+		else {
+			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
+			for (int i = 0; i < vT.size(); i++) {
+				int yLineTemp = vT[i].startPointCV().y;
+				for (int j = 0; j < mVerLines.size(); j++) {
+					int diffYLine = yLineTemp - mVerLines[j].startPointCV().y;
+					offY.push_back(diffYLine);
+				}
+			}
+		}
+		
+
+
+		//find horizontal offsets
+		if (!vT.empty() && !mVerLines.empty()) {
+			//use Y difference of horizontal lines if template and current Image contains horizontal lines
+			for (int i = 0; i < vT.size(); i++) {
+				int xLineTemp = vT[i].startPointCV().x;
+				for (int j = 0; j < mVerLines.size(); j++) {
+					int diffXLine = xLineTemp - mVerLines[j].startPointCV().x;
+					offY.push_back(diffXLine);
+				}
+			}
+		}
+		else {
+			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
+			for (int i = 0; i < hT.size(); i++) {
+				int xLineTemp = hT[i].startPointCV().x;
+				for (int j = 0; j < mHorLines.size(); j++) {
+					int diffXLine = xLineTemp - mHorLines[j].startPointCV().x;
+					offX.push_back(diffXLine);
+				}
+			}
+		}
+
+	}
+
+	bool FormFeatures::checkInput() const	{
 		if (mSrcImg.empty())
 			return false;
 
