@@ -170,7 +170,13 @@ namespace rdf {
 
 		float horizontalError = 0;
 		float verticalError = 0;
+		float finalErrorH = 0;
+		float finalErrorV = 0;
 		cv::Point offSet(0, 0);
+		float acceptedHor = 0;
+		float acceptedVer = 0;
+		float finalAcceptedHor = 0;
+		float finalAcceptedVer = 0;
 		float minError = std::numeric_limits<float>::max();
 
 		for (int iX = 0; iX <= offsetsX.size(); iX++) {
@@ -180,27 +186,52 @@ namespace rdf {
 
 					for (int i = 0; i < mHorLines.size(); i++) {
 						float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
-						horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+						//accept line or not depending on the distance, otherwise assumed as noise
+						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
+							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+							acceptedHor += mHorLines[i].length();
+						}
 					}
 					for (int i = 0; i < mVerLines.size(); i++) {
 						float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
-						verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+						//accept line or not depending on the distance, otherwise assumed as noise
+						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
+							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+							acceptedVer += mHorLines[i].length();
+						}
 					}
 					float error = horizontalError + verticalError;
 					if (error <= minError) {
 						minError = error;
+						finalAcceptedHor = acceptedHor;
+						finalAcceptedVer = acceptedVer;
+						finalErrorH = horizontalError;
+						finalErrorV = verticalError;
 						offSet.x = offsetsX[iX];
 						offSet.y = offsetsY[iY];
 					}
+					horizontalError = 0;
+					verticalError = 0;
+					acceptedHor = 0;
+					acceptedVer = 0;
 				}
 
 			}
 		}
 
+		
+		if (finalAcceptedHor / hLenTemp > config()->threshLineLenRation() && finalAcceptedVer / vLenTemp > config()->threshLineLenRation()) {
+
+			//more than threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
+			//if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr())
+				return true;
+		}
+
+
 		qDebug() << "current Error: " << minError;
 		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
-		return true;
+		return false;
 	}
 
 	cv::Size FormFeatures::sizeImg() const
@@ -354,16 +385,39 @@ namespace rdf {
 	void FormFeaturesConfig::setThreshLineLenRation(float s)	{
 		mThreshLineLenRatio = s;
 	}
+
+	float FormFeaturesConfig::distThreshold() const	{
+		return mDistThreshold;
+	}
+
+	void FormFeaturesConfig::setDistThreshold(float d)	{
+		mDistThreshold = d;
+	}
+
+	float FormFeaturesConfig::errorThr() const	{
+		return mErrorThr;
+	}
+
+	void FormFeaturesConfig::setErrorThr(float e)	{
+		mErrorThr = e;
+	}
+
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
 		msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
+		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
+		msg += "  mErrorThr: " + QString::number(mErrorThr);
 
 		return msg;
 	}
 	void FormFeaturesConfig::load(const QSettings & settings)	{
 		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toFloat();
+		mDistThreshold = settings.value("distThreshold", mDistThreshold).toFloat();
+		mErrorThr = settings.value("errorThr", mErrorThr).toFloat();
 	}
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
+		settings.setValue("distThreshold", mDistThreshold);
+		settings.setValue("errorThr", mErrorThr);
 	}
 }
