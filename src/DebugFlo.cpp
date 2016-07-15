@@ -39,6 +39,7 @@
 #include "Blobs.h"
 #include "Shapes.h"
 #include "LineTrace.h"
+#include "FormAnalysis.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -92,93 +93,121 @@ namespace rdf {
 
 		//Image::instance().imageInfo(inputImg, "input");
 
-		rdf::BaseSkewEstimation skewTest;
 
-		skewTest.setImages(inputImg/*, mask*/);
-		bool skewComp = skewTest.compute();
-		if (!skewComp) {
-			qDebug() << "could not compute skew";
+	
+		QImage imgTemplate;
+		//TODO: change path to template
+		imgTemplate.load(mConfig.imagePath());
+		cv::Mat imgTempl = rdf::Image::instance().qImage2Mat(imgTemplate);
+		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTempl, CV_RGB2GRAY);
+		cv::Mat maskTempl = Algorithms::instance().estimateMask(imgTempl);
+		FormFeatures formTempl(imgTempl);
+		formTempl.compute();
+
+		FormFeatures cmpImg(inputImg);
+		cmpImg.compute();
+		if (cmpImg.compareWithTemplate(formTempl)) {
+			qDebug() << "Match is true";
+		} else {
+			qDebug() << "Match is false";
 		}
 
-		double skewAngle = skewTest.getAngle();
-		skewAngle = -skewAngle / 180.0 * CV_PI;
-
-		QVector<QVector4D> selLines = skewTest.getSelectedLines();
-		for (int iL = 0; iL < selLines.size(); iL++) {
-			QVector4D line = selLines[iL];
-
-			cv::line(inputImg, cv::Point((int)line.x(),(int)line.y()), cv::Point((int)line.z(),(int)line.w()), cv::Scalar(255, 255, 255), 3);
-
-		}
-
-		cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
-
-		//int nSamples = 20;
-		//cv::RNG rng;
-		//cv::Mat lBound(1, 1, CV_64FC1);
-		//lBound.setTo(0);
-		//cv::Mat uBound(1, 1, CV_64FC1);
-		//uBound.setTo(nSamples - 1);
-
-		//cv::Mat randRows(nSamples, 1, CV_32FC1);
-		//rng.fill(randRows, cv::RNG::UNIFORM, lBound, uBound);
-		//qDebug() << Image::instance().printImage(randRows, "test");
-
-		//cv::Mat tmp = inputImg.clone();
-		//cv::bilateralFilter(inputImg, tmp, 5, 90, 90);
-		//inputImg = tmp;
-		//cv::medianBlur(inputImg, tmp, 41);
-		//cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7));
-		//cv::erode(inputImg, tmp, kernel);
-		//cv::dilate(tmp, tmp, kernel);
-		//Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
-
-		//rdf::BinarizationSuAdapted testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-
-		//Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
-
-		////binImg = Algorithms::instance().preFilterArea(binImg, 10);
-
-		//rdf::LineTrace linetest(binImg);
-		//linetest.setMinLenSecondRun(40);
-		////linetest.setMaxAspectRatio(0.2f);
-		////linetest.setAngle(0.0f);
-		//linetest.compute();
-
-		//cv::Mat lImg = linetest.lineImage();
-
-		//cv::Mat synLine = linetest.generatedLineImage();
-		//Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
-
-
-
-		//rdf::Blobs binBlobs;
-		//binBlobs.setImage(binImg);
-		//binBlobs.compute();
-
-		//QVector<rdf::Blob> blobs = binBlobs.blobs();
-
-		//binBlobs.setBlobs(rdf::BlobManager::instance().filterArea(20, binBlobs));
-		//binBlobs.setBlobs(rdf::BlobManager::instance().filterMar(0.3f,200, binBlobs));
-		//binBlobs.setBlobs(rdf::BlobManager::instance().filterAngle(0,));
-
-		//qDebug() << "blobs #: " << binBlobs.blobs().size();
-
-		//cv::Mat testImg;
-		//testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
-
-
-
-		//rdf::BinarizationSuFgdWeight testBin(inputImg);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-
-		//rdf::Image::instance().imageInfo(binImg, "binImg");
-		//qDebug() << testBin << " in " << dt;
+		cv::Mat detLineImg = inputImg.clone();
+		rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), detLineImg);
 		
-		QImage resultImg = rdf::Image::instance().mat2QImage(rotatedImage);
+		
+		////cv::Mat lImg = linetest.lineImage();
+		////cv::Mat synLine = linetest.generatedLineImage();
+		////Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+
+
+		//rdf::BaseSkewEstimation skewTest;
+
+		//skewTest.setImages(inputImg/*, mask*/);
+		//bool skewComp = skewTest.compute();
+		//if (!skewComp) {
+		//	qDebug() << "could not compute skew";
+		//}
+
+		//double skewAngle = skewTest.getAngle();
+		//skewAngle = -skewAngle / 180.0 * CV_PI;
+
+		//QVector<QVector4D> selLines = skewTest.getSelectedLines();
+		//for (int iL = 0; iL < selLines.size(); iL++) {
+		//	QVector4D line = selLines[iL];
+
+		//	cv::line(inputImg, cv::Point((int)line.x(),(int)line.y()), cv::Point((int)line.z(),(int)line.w()), cv::Scalar(255, 255, 255), 3);
+
+		//}
+
+		//cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
+
+		////int nSamples = 20;
+		////cv::RNG rng;
+		////cv::Mat lBound(1, 1, CV_64FC1);
+		////lBound.setTo(0);
+		////cv::Mat uBound(1, 1, CV_64FC1);
+		////uBound.setTo(nSamples - 1);
+
+		////cv::Mat randRows(nSamples, 1, CV_32FC1);
+		////rng.fill(randRows, cv::RNG::UNIFORM, lBound, uBound);
+		////qDebug() << Image::instance().printImage(randRows, "test");
+
+		////cv::Mat tmp = inputImg.clone();
+		////cv::bilateralFilter(inputImg, tmp, 5, 90, 90);
+		////inputImg = tmp;
+		////cv::medianBlur(inputImg, tmp, 41);
+		////cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7));
+		////cv::erode(inputImg, tmp, kernel);
+		////cv::dilate(tmp, tmp, kernel);
+		////Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
+
+		////rdf::BinarizationSuAdapted testBin(inputImg);
+		////testBin.compute();
+		////cv::Mat binImg = testBin.binaryImage();
+
+		////Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
+
+		//////binImg = Algorithms::instance().preFilterArea(binImg, 10);
+
+		////rdf::LineTrace linetest(binImg);
+		////linetest.setMinLenSecondRun(40);
+		//////linetest.setMaxAspectRatio(0.2f);
+		//////linetest.setAngle(0.0f);
+		////linetest.compute();
+
+		////cv::Mat lImg = linetest.lineImage();
+
+		////cv::Mat synLine = linetest.generatedLineImage();
+		////Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+
+
+
+		////rdf::Blobs binBlobs;
+		////binBlobs.setImage(binImg);
+		////binBlobs.compute();
+
+		////QVector<rdf::Blob> blobs = binBlobs.blobs();
+
+		////binBlobs.setBlobs(rdf::BlobManager::instance().filterArea(20, binBlobs));
+		////binBlobs.setBlobs(rdf::BlobManager::instance().filterMar(0.3f,200, binBlobs));
+		////binBlobs.setBlobs(rdf::BlobManager::instance().filterAngle(0,));
+
+		////qDebug() << "blobs #: " << binBlobs.blobs().size();
+
+		////cv::Mat testImg;
+		////testImg = rdf::BlobManager::instance().drawBlobs(binBlobs);
+
+
+
+		////rdf::BinarizationSuFgdWeight testBin(inputImg);
+		////testBin.compute();
+		////cv::Mat binImg = testBin.binaryImage();
+
+		////rdf::Image::instance().imageInfo(binImg, "binImg");
+		////qDebug() << testBin << " in " << dt;
+		
+		QImage resultImg = rdf::Image::instance().mat2QImage(detLineImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();

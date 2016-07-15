@@ -32,6 +32,7 @@
 
 #include "FormAnalysis.h"
 #include "Binarization.h"
+#include "Algorithms.h"
 #include "SkewEstimation.h"
 
 
@@ -73,10 +74,12 @@ namespace rdf {
 			return false;
 
 		if (mBwImg.empty()) {
-			if (!computeBinaryInput())
+			if (!computeBinaryInput()) {
+				mWarning << "binary image was not set and could not be calculated";
 				return false;
+			}
 
-			mWarning << "binary image was not set - was calculated";
+			qDebug() << "binary image was not set - was calculated";
 		}
 
 		if (mEstimateSkew) {
@@ -89,6 +92,8 @@ namespace rdf {
 		LineTrace lt(mBwImg, mMask);
 		if (mEstimateSkew) {
 			lt.setAngle(mPageAngle);
+		} else {
+			lt.setAngle(0);
 		}
 		lt.compute();
 
@@ -113,6 +118,8 @@ namespace rdf {
 		BinarizationSuAdapted binarizeImg(mSrcImg, mMask);
 		binarizeImg.compute();
 		mBwImg = binarizeImg.binaryImage();
+		if (mPreFilter)
+			mBwImg = Algorithms::instance().preFilterArea(mBwImg, preFilterArea);
 
 		return true;
 	}
@@ -219,17 +226,17 @@ namespace rdf {
 			}
 		}
 
-		
+		qDebug() << "current Error: " << minError;
+		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
+
 		if (finalAcceptedHor / hLenTemp > config()->threshLineLenRation() && finalAcceptedVer / vLenTemp > config()->threshLineLenRation()) {
 
 			//more than threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
-			//if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr())
+			//if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
+				
 				return true;
+			//}
 		}
-
-
-		qDebug() << "current Error: " << minError;
-		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
 		return false;
 	}
