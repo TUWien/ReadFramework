@@ -105,9 +105,10 @@ void RegionTypeConfig::load(QSettings & settings) {
 	mPen = settings.value("pen", mPen).value<QPen>();
 	mBrush = settings.value("brush", mBrush).value<QColor>();
 	
+	mDraw = settings.value("draw", mDraw).toBool();
 	mDrawPoly = settings.value("drawPoly", mDrawPoly).toBool();
 	mDrawBaseline = settings.value("drawBaseline", mDrawBaseline).toBool();
-	mDrawBaseline = settings.value("drawText", mDrawText).toBool();
+	mDrawText = settings.value("drawText", mDrawText).toBool();
 	settings.endGroup();
 }
 
@@ -120,6 +121,7 @@ void RegionTypeConfig::save(QSettings & settings) const {
 	//settings.setValue("penBrush", mPen.brush().color());
 	//settings.setValue("penWidth", mPen.width());
 	
+	settings.setValue("draw", mDraw);
 	settings.setValue("drawPoly", mDrawPoly);
 	settings.setValue("drawBaseline", mDrawBaseline);
 	settings.setValue("drawText", mDrawText);

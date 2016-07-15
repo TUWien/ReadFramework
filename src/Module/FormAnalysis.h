@@ -55,6 +55,12 @@ namespace rdf {
 		float threshLineLenRation() const;
 		void setThreshLineLenRation(float s);
 
+		float distThreshold() const;
+		void setDistThreshold(float d);
+
+		float errorThr() const;
+		void setErrorThr(float e);
+
 
 		QString toString() const override;
 
@@ -63,6 +69,8 @@ namespace rdf {
 		void save(QSettings& settings) const override;
 
 		float mThreshLineLenRatio = 0.6f;
+		float mDistThreshold = 30.0;
+		float mErrorThr = 15.0;
 
 	};
 
