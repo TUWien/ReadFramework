@@ -10,6 +10,7 @@ var searchData=
   ['diffangle',['diffAngle',['../classrdf_1_1_line.html#a5a36e1fcef55baa244bde01e15332287',1,'rdf::Line']]],
   ['dilateimage',['dilateImage',['../classrdf_1_1_algorithms.html#a0f4649e97afcce6ee3713a410c0634f1',1,'rdf::Algorithms']]],
   ['distance',['distance',['../classrdf_1_1_line.html#a5073b2f4fa450185c245e3108067adab',1,'rdf::Line']]],
+  ['distthreshold',['distThreshold',['../classrdf_1_1_form_features_config.html#ac8273dccaaa0d9f4d43eaf971e75ed65',1,'rdf::FormFeaturesConfig']]],
   ['draw',['draw',['../classrdf_1_1_region.html#a9d3df78447907bdb26e18abe36c5a9e1',1,'rdf::Region::draw()'],['../classrdf_1_1_text_line.html#ae16b2a92ef18bd5d8028e15e29c5e5e9',1,'rdf::TextLine::draw()'],['../classrdf_1_1_region_type_config.html#a7e42caeb8c636154d846329fc175a81f',1,'rdf::RegionTypeConfig::draw()']]],
   ['drawbaseline',['drawBaseline',['../classrdf_1_1_region_type_config.html#ada6651b4963923c907d26cac733683ea',1,'rdf::RegionTypeConfig']]],
   ['drawblob',['drawBlob',['../classrdf_1_1_blob.html#a0f08620ea7add568779506f967286738',1,'rdf::Blob']]],

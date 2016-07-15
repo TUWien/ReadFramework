@@ -20,6 +20,7 @@ var searchData=
   ['dilateimage',['dilateImage',['../classrdf_1_1_algorithms.html#a0f4649e97afcce6ee3713a410c0634f1',1,'rdf::Algorithms']]],
   ['disk',['DISK',['../classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a474d155e77a9eb896f3e990e3fe6a351',1,'rdf::Algorithms']]],
   ['distance',['distance',['../classrdf_1_1_line.html#a5073b2f4fa450185c245e3108067adab',1,'rdf::Line']]],
+  ['distthreshold',['distThreshold',['../classrdf_1_1_form_features_config.html#ac8273dccaaa0d9f4d43eaf971e75ed65',1,'rdf::FormFeaturesConfig']]],
   ['dkdummy_2ecpp',['DkDummy.cpp',['../_dk_dummy_8cpp.html',1,'']]],
   ['dkdummy_2eh',['DkDummy.h',['../_dk_dummy_8h.html',1,'']]],
   ['dllcoreexport',['DllCoreExport',['../_image_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3',1,'DllCoreExport():&#160;Image.h'],['../_page_parser_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3',1,'DllCoreExport():&#160;PageParser.h'],['../_settings_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3',1,'DllCoreExport():&#160;Settings.h'],['../_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3',1,'DllCoreExport():&#160;Shapes.h'],['../_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3',1,'DllCoreExport():&#160;Utils.h']]],
