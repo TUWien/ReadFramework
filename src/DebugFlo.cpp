@@ -97,7 +97,7 @@ namespace rdf {
 	
 		QImage imgTemplate;
 		//TODO: change path to template
-		imgTemplate.load(mConfig.imagePath());
+		imgTemplate.load("D:\\projects\\READ\\formTest\\5117-087-0010.jpg");
 		cv::Mat imgTempl = rdf::Image::instance().qImage2Mat(imgTemplate);
 		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTempl, CV_RGB2GRAY);
 		cv::Mat maskTempl = Algorithms::instance().estimateMask(imgTempl);
