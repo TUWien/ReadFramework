@@ -136,9 +136,9 @@ namespace rdf {
 		std::sort(horLinesTemp.begin(), horLinesTemp.end(), rdf::Line::lessY1);
 		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::lessX1);
 
-		cv::Mat lineTempl(mSizeSrc, CV_32FC1);
+		cv::Mat lineTempl(mSizeSrc, CV_8UC1);
 		LineTrace::generateLineImage(horLinesTemp, verLinesTemp, lineTempl);
-		cv::distanceTransform(lineTempl, lineTempl, CV_DIST_L1, CV_DIST_MASK_3); //cityblock
+		cv::distanceTransform(lineTempl, lineTempl, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
 
 		float hLen = 0, hLenTemp = 0;
 		float vLen = 0, vLenTemp = 0;
