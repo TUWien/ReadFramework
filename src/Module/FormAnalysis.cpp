@@ -34,6 +34,7 @@
 #include "Binarization.h"
 #include "Algorithms.h"
 #include "SkewEstimation.h"
+#include "Image.h"
 
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -124,8 +125,8 @@ namespace rdf {
 		return true;
 	}
 
-	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)
-	{
+	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)	{
+
 		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);
 		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::lessX1);
 		
@@ -137,8 +138,17 @@ namespace rdf {
 		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::lessX1);
 
 		cv::Mat lineTempl(mSizeSrc, CV_8UC1);
+		lineTempl = 0;
 		LineTrace::generateLineImage(horLinesTemp, verLinesTemp, lineTempl);
-		cv::distanceTransform(lineTempl, lineTempl, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
+		lineTempl = 255 - lineTempl;
+		cv::Mat distImg;
+		cv::distanceTransform(lineTempl, distImg, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
+		//cv::distanceTransform(lineTempl, distImg, CV_DIST_L2, 3); //euclidean
+
+		//rdf::Image::instance().imageInfo(distImg, "distImg");
+		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\linetmpl.png");
+		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
+		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
 
 		float hLen = 0, hLenTemp = 0;
 		float vLen = 0, vLenTemp = 0;
@@ -193,7 +203,7 @@ namespace rdf {
 				if (std::abs(offsetsX[iX]) <= sizeDiffX && std::abs(offsetsY[iY]) <= sizeDiffY) {
 
 					for (int i = 0; i < mHorLines.size(); i++) {
-						float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						float tmp = errLine(distImg, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
 							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
@@ -201,7 +211,7 @@ namespace rdf {
 						}
 					}
 					for (int i = 0; i < mVerLines.size(); i++) {
-						float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						float tmp = errLine(distImg, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
 							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
