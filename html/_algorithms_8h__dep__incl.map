@@ -5,6 +5,7 @@
 <area shape="rect" id="node5" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="521,80,647,107"/>
 <area shape="rect" id="node6" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="671,80,853,107"/>
 <area shape="rect" id="node7" href="$_focus_measure_8cpp.html" title="src/Module/FocusMeasure.cpp" alt="" coords="878,80,1079,107"/>
-<area shape="rect" id="node8" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1103,80,1275,107"/>
-<area shape="rect" id="node9" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="1300,80,1509,107"/>
+<area shape="rect" id="node8" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="1104,80,1299,107"/>
+<area shape="rect" id="node9" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1323,80,1495,107"/>
+<area shape="rect" id="node10" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="1520,80,1729,107"/>
 </map>

@@ -1,11 +1,12 @@
 <map id="src/Core/Blobs.h" name="src/Core/Blobs.h">
-<area shape="rect" id="node2" href="$_algorithms_8h.html" title="src/Core/Algorithms.h" alt="" coords="555,80,703,107"/>
+<area shape="rect" id="node2" href="$_algorithms_8h.html" title="src/Core/Algorithms.h" alt="" coords="676,80,824,107"/>
 <area shape="rect" id="node4" href="$_blobs_8cpp.html" title="src/Core/Blobs.cpp" alt="" coords="5,155,139,181"/>
 <area shape="rect" id="node6" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="164,155,289,181"/>
-<area shape="rect" id="node9" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1337,155,1508,181"/>
-<area shape="rect" id="node3" href="$_algorithms_8cpp.html" title="src/Core/Algorithms.cpp" alt="" coords="548,155,711,181"/>
-<area shape="rect" id="node5" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="735,155,880,181"/>
-<area shape="rect" id="node7" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="905,155,1087,181"/>
-<area shape="rect" id="node8" href="$_focus_measure_8cpp.html" title="src/Module/FocusMeasure.cpp" alt="" coords="1111,155,1312,181"/>
-<area shape="rect" id="node10" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="313,155,523,181"/>
+<area shape="rect" id="node10" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1557,155,1728,181"/>
+<area shape="rect" id="node3" href="$_algorithms_8cpp.html" title="src/Core/Algorithms.cpp" alt="" coords="993,155,1156,181"/>
+<area shape="rect" id="node5" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="1181,155,1325,181"/>
+<area shape="rect" id="node7" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="1350,155,1532,181"/>
+<area shape="rect" id="node8" href="$_focus_measure_8cpp.html" title="src/Module/FocusMeasure.cpp" alt="" coords="314,155,515,181"/>
+<area shape="rect" id="node9" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="540,155,735,181"/>
+<area shape="rect" id="node11" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="759,155,968,181"/>
 </map>

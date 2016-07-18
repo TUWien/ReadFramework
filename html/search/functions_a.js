@@ -1,8 +1,8 @@
 var searchData=
 [
   ['length',['length',['../classrdf_1_1_line.html#a7710613efa9fdea501ca222fda43c421',1,'rdf::Line']]],
-  ['leqx1',['leqX1',['../classrdf_1_1_line.html#a24b918853fa1c71661a49466745c12e4',1,'rdf::Line']]],
-  ['leqy1',['leqY1',['../classrdf_1_1_line.html#a494792e7da9e1030fdc8f4b165a3c76d',1,'rdf::Line']]],
+  ['lessx1',['lessX1',['../classrdf_1_1_line.html#a7cdbcccc29f98540bbd8322d6bfb8554',1,'rdf::Line']]],
+  ['lessy1',['lessY1',['../classrdf_1_1_line.html#a57ef87eb206de21aecefabb78567b718',1,'rdf::Line']]],
   ['line',['Line',['../classrdf_1_1_line.html#a9ac669b914c5bb46ca94f5101dd6a7fa',1,'rdf::Line::Line(const QLine &amp;line=QLine(), float thickness=0)'],['../classrdf_1_1_line.html#a5c0148c387b7474954d9ab3f1b381371',1,'rdf::Line::Line(const Polygon &amp;poly)'],['../classrdf_1_1_separator_region.html#a2b4ddd152283845d34ccc0dbcd359dc2',1,'rdf::SeparatorRegion::line()'],['../classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0',1,'rdf::Line::line()']]],
   ['lineimage',['lineImage',['../classrdf_1_1_line_trace.html#aa6ac1f992165c9062d82e4af2af0d3bd',1,'rdf::LineTrace']]],
   ['lines',['lines',['../classrdf_1_1_blob_manager.html#aaaa772b3771dcc80912dd1c5aa84f43a',1,'rdf::BlobManager']]],

@@ -186,7 +186,7 @@ $(document).ready(function(){initNavTree('_form_analysis_8h_source.html','');});
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="code" href="classrdf_1_1_form_features.html">FormFeatures</a>();</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="code" href="classrdf_1_1_form_features.html">FormFeatures</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keyword">const</span> cv::Mat&amp; mask);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="code" href="classrdf_1_1_form_features.html">FormFeatures</a>(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat());</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">void</span> setInputImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">void</span> setMask(<span class="keyword">const</span> cv::Mat&amp; mask);</div>
@@ -219,22 +219,24 @@ $(document).ready(function(){initNavTree('_form_analysis_8h_source.html','');});
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        cv::Mat mMask;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        cv::Mat mBwImg;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordtype">bool</span> mEstimateSkew = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordtype">double</span> mPageAngle = 0.0;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        QVector&lt;rdf::Line&gt; mHorLines;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        QVector&lt;rdf::Line&gt; mVerLines;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        cv::Size mSizeSrc;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordtype">bool</span> mPreFilter = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordtype">int</span> preFilterArea = 10;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">double</span> mPageAngle = 0.0;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        QVector&lt;rdf::Line&gt; mHorLines;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        QVector&lt;rdf::Line&gt; mVerLines;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="comment">// parameters</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        cv::Size mSizeSrc;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="comment">// parameters</span></div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="comment">//void load(const QSettings&amp; settings) override;</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="comment">//void save(QSettings&amp; settings) const override;</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    };</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;};</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="comment">//void load(const QSettings&amp; settings) override;</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="comment">//void save(QSettings&amp; settings) const override;</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    };</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_module_config_html"><div class="ttname"><a href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></div><div class="ttdef"><b>Definition:</b> BaseModule.h:61</div></div>
 <div class="ttc" id="_line_trace_8h_html"><div class="ttname"><a href="_line_trace_8h.html">LineTrace.h</a></div></div>
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>

@@ -1,7 +1,7 @@
 var classrdf_1_1_form_features =
 [
     [ "FormFeatures", "classrdf_1_1_form_features.html#ab848f428a204c0ece54602bf93ae39d8", null ],
-    [ "FormFeatures", "classrdf_1_1_form_features.html#af587ef40ac6392f4585768584222ee4d", null ],
+    [ "FormFeatures", "classrdf_1_1_form_features.html#a79eb61c36661a8aefbd6fd598cbe6c17", null ],
     [ "binaryImage", "classrdf_1_1_form_features.html#a4d99a1d303aefa0c07ead1ec68a4c6e2", null ],
     [ "compareWithTemplate", "classrdf_1_1_form_features.html#a6d41be1593a456a13d91fb79eda97092", null ],
     [ "compute", "classrdf_1_1_form_features.html#adaab507434aae30fdfc8f00c5c91eb77", null ],
