@@ -61,5 +61,5 @@ var searchData=
   ['mweight',['mWeight',['../classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2',1,'rdf::Patch']]],
   ['mwidth',['mWidth',['../classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6',1,'rdf::Patch']]],
   ['mwindowsize',['mWindowSize',['../classrdf_1_1_basic_f_m.html#adbf6fd39e76ad4b19a2e20d44df9bd35',1,'rdf::BasicFM::mWindowSize()'],['../classrdf_1_1_basic_contrast.html#a0caae3aa3d2625a0cd72314e9ffb26f3',1,'rdf::BasicContrast::mWindowSize()'],['../classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f',1,'rdf::FocusEstimation::mWindowSize()'],['../classrdf_1_1_contrast_estimation.html#a77276488650bd0b7fb06e8c57454eb19',1,'rdf::ContrastEstimation::mWindowSize()']]],
-  ['mxmlpath',['mXmlPath',['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()'],['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()']]]
+  ['mxmlpath',['mXMLPath',['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()'],['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()']]]
 ];
