@@ -286,17 +286,17 @@ bool Line::within(const QPoint& p) const {
 
 }
 
-bool Line::leqX1(const Line & l1, const Line & l2)
-{
-	if (l1.startPoint().x() <= l2.startPoint().x())
+bool Line::lessX1(const Line& l1, const Line& l2) {
+
+	if (l1.startPoint().x() < l2.startPoint().x())
 		return true;
 	else
 		return false;
 }
 
-bool Line::leqY1(const Line & l1, const Line & l2)
-{
-	if (l1.startPoint().y() <= l2.startPoint().y())
+bool Line::lessY1(const Line& l1, const Line& l2) {
+
+	if (l1.startPoint().y() <l2.startPoint().y())
 		return true;
 	else
 		return false;

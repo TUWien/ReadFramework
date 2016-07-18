@@ -79,7 +79,7 @@ namespace rdf {
 
 	public:
 		FormFeatures();
-		FormFeatures(const cv::Mat& img, const cv::Mat& mask);
+		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
 		void setInputImg(const cv::Mat& img);
 		void setMask(const cv::Mat& mask);
@@ -89,7 +89,9 @@ namespace rdf {
 		bool compareWithTemplate(const FormFeatures& fTempl);
 		cv::Size sizeImg() const;
 		QVector<rdf::Line> horLines() const;
+		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
+		QVector<rdf::Line> verLinesMatched() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
 
@@ -112,11 +114,15 @@ namespace rdf {
 		cv::Mat mMask;
 		cv::Mat mBwImg;
 		bool mEstimateSkew = false;
+		bool mPreFilter = true;
+		int preFilterArea = 10;
 		double mPageAngle = 0.0;
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
 
+		QVector<rdf::Line> mHorLinesMatched;
+		QVector<rdf::Line> mVerLinesMatched;
 		cv::Size mSizeSrc;
 
 		// parameters
