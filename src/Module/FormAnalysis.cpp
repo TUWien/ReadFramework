@@ -187,8 +187,8 @@ namespace rdf {
 		float finalAcceptedVer = 0;
 		float minError = std::numeric_limits<float>::max();
 
-		for (int iX = 0; iX <= offsetsX.size(); iX++) {
-			for (int iY = 0; iY <= offsetsY.size(); iY++) {
+		for (int iX = 0; iX < offsetsX.size(); iX++) {
+			for (int iY = 0; iY < offsetsY.size(); iY++) {
 				//for for maximal translation
 				if (offsetsX[iX] <= sizeDiffX && offsetsY[iY] <= sizeDiffY) {
 
