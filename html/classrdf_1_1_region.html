@@ -106,6 +106,8 @@ $(document).ready(function(){initNavTree('classrdf_1_1_region.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classrdf_1_1_region-members.html">List of all members</a>  </div>
@@ -154,6 +156,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa8d2f6b90f534d1c7dfaa524ceac52b0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0">Region</a> ()</td></tr>
 <tr class="memdesc:aa8d2f6b90f534d1c7dfaa524ceac52b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="classrdf_1_1_region.html">Region</a> class. The <a class="el" href="classrdf_1_1_region.html">Region</a> is the base class for all <a class="el" href="classrdf_1_1_region.html">Region</a> elements that are contained in the extended PAGE XML.  <a href="#aa8d2f6b90f534d1c7dfaa524ceac52b0">More...</a><br/></td></tr>
 <tr class="separator:aa8d2f6b90f534d1c7dfaa524ceac52b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36604cc4fb3496fde8becd5f2ec70777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a36604cc4fb3496fde8becd5f2ec70777">setSelected</a> (bool select)</td></tr>
+<tr class="separator:a36604cc4fb3496fde8becd5f2ec70777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bee504e0c76fab8b58af3c1826afcc4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a6bee504e0c76fab8b58af3c1826afcc4">selected</a> () const </td></tr>
+<tr class="separator:a6bee504e0c76fab8b58af3c1826afcc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af796d5e4f3272d76c065665f415d3876"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876">setType</a> (const <a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Region::Type</a> &amp;<a class="el" href="classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9">type</a>)</td></tr>
 <tr class="memdesc:af796d5e4f3272d76c065665f415d3876"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="classrdf_1_1_region.html">Region</a> type.  <a href="#af796d5e4f3272d76c065665f415d3876">More...</a><br/></td></tr>
 <tr class="separator:af796d5e4f3272d76c065665f415d3876"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,10 +217,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a60075777747ebd1a61b5775309f90e5d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a60075777747ebd1a61b5775309f90e5d">operator==</a> (const <a class="el" href="classrdf_1_1_region.html">Region</a> &amp;r1)</td></tr>
 <tr class="separator:a60075777747ebd1a61b5775309f90e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:afda47aa74c831d3f63b97b541a1ea9d9"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9">allRegions</a> (QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; root)</td></tr>
+<tr class="separator:afda47aa74c831d3f63b97b541a1ea9d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a37671bac653920715fbee407b9bfad42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a37671bac653920715fbee407b9bfad42">collectRegions</a> (QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &gt; &amp;<a class="el" href="classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9">allRegions</a>) const </td></tr>
+<tr class="separator:a37671bac653920715fbee407b9bfad42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0964c4ab62831139f5bff2855971302b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b">mType</a> = Type::type_unknown</td></tr>
 <tr class="separator:a0964c4ab62831139f5bff2855971302b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95924e9f75e2fad0cb44cbee87bc190d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a95924e9f75e2fad0cb44cbee87bc190d">mSelected</a> = false</td></tr>
+<tr class="separator:a95924e9f75e2fad0cb44cbee87bc190d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c25683d298a9553c20d7cdb4a49b246"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a6c25683d298a9553c20d7cdb4a49b246">mId</a></td></tr>
 <tr class="separator:a6c25683d298a9553c20d7cdb4a49b246"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c938579d9f274f2e0095a82aad62ca4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a0c938579d9f274f2e0095a82aad62ca4">mCustom</a></td></tr>
@@ -327,6 +346,30 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afda47aa74c831d3f63b97b541a1ea9d9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &gt; rdf::Region::allRegions </td>
+          <td>(</td>
+          <td class="paramtype">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;&#160;</td>
+          <td class="paramname"><em>root</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae03077756dc88e3b8fd498a9934663e1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -368,6 +411,30 @@ Friends</h2></td></tr>
 
 <p>Returns a string with all attributes of the <a class="el" href="classrdf_1_1_region.html">Region</a>'s children. </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a37671bac653920715fbee407b9bfad42"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Region::collectRegions </td>
+          <td>(</td>
+          <td class="paramtype">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>allRegions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -552,6 +619,21 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6bee504e0c76fab8b58af3c1826afcc4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::Region::selected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a674fd43577cea523e4ff3fca899c2a88"></a>
 <div class="memitem">
 <div class="memproto">
@@ -637,6 +719,22 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a36604cc4fb3496fde8becd5f2ec70777"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Region::setSelected </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>select</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -954,6 +1052,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a> rdf::Region::mPoly</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95924e9f75e2fad0cb44cbee87bc190d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::Region::mSelected = false</td>
         </tr>
       </table>
   </td>

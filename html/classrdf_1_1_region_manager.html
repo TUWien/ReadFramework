@@ -126,11 +126,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aeae5aed693e12b27946a61fa2f6de015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51ebbd67f805a5f84724bf389e407467"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#a51ebbd67f805a5f84724bf389e407467">createRegion</a> (const <a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Region::Type</a> &amp;<a class="el" href="classrdf_1_1_region_manager.html#ae7cc63decd01f65a2fa69e9aaaa136ed">type</a>) const </td></tr>
 <tr class="separator:a51ebbd67f805a5f84724bf389e407467"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18e2052ed10858c0e87a05410f455ef0"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0">getConfig</a> (const QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &amp;r, const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt; &amp;config=QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt;()) const </td></tr>
+<tr class="separator:a18e2052ed10858c0e87a05410f455ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3507218cc3345c5b656071d31eb6f033"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#a3507218cc3345c5b656071d31eb6f033">drawRegion</a> (QPainter &amp;p, QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">rdf::Region</a> &gt; region, const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt; &amp;config=QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt;(), bool recursive=true) const </td></tr>
 <tr class="separator:a3507218cc3345c5b656071d31eb6f033"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb08d7cee5f305538f2109c41970eabc"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_region.html">rdf::Region</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#adb08d7cee5f305538f2109c41970eabc">regionsAt</a> (QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">rdf::Region</a> &gt; root, const QPoint &amp;p, const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt; &amp;config=QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt;()) const </td></tr>
+<tr class="separator:adb08d7cee5f305538f2109c41970eabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabb27f3443b1951c158a93edfdf4c8c5"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
 &lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5">regionTypeConfig</a> () const </td></tr>
 <tr class="separator:aabb27f3443b1951c158a93edfdf4c8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb4f1030496bb4c10247302a13b75f0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region_manager.html#aeb4f1030496bb4c10247302a13b75f0d">selectRegions</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;&gt; &amp;selRegions, QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; rootRegion=QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;()) const </td></tr>
+<tr class="memdesc:aeb4f1030496bb4c10247302a13b75f0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the regions.  <a href="#aeb4f1030496bb4c10247302a13b75f0d">More...</a><br/></td></tr>
+<tr class="separator:aeb4f1030496bb4c10247302a13b75f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -192,6 +200,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a18e2052ed10858c0e87a05410f455ef0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; rdf::RegionManager::getConfig </td>
+          <td>(</td>
+          <td class="paramtype">const QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>config</em> = <code>QVector&lt;QSharedPointer&lt;<a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a>&gt;&#160;&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae3513ee06e511b3586fab7cb680625f7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -231,6 +265,38 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="adb08d7cee5f305538f2109c41970eabc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">rdf::Region</a> &gt; &gt; rdf::RegionManager::regionsAt </td>
+          <td>(</td>
+          <td class="paramtype">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">rdf::Region</a> &gt;&#160;</td>
+          <td class="paramname"><em>root</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QPoint &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>config</em> = <code>QVector&lt;QSharedPointer&lt;<a class="el" href="classrdf_1_1_region_type_config.html">RegionTypeConfig</a>&gt;&#160;&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aabb27f3443b1951c158a93edfdf4c8c5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -243,6 +309,41 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeb4f1030496bb4c10247302a13b75f0d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::RegionManager::selectRegions </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>selRegions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt;&#160;</td>
+          <td class="paramname"><em>rootRegion</em> = <code>QSharedPointer&lt;<a class="el" href="classrdf_1_1_region.html">Region</a>&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Selects the regions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">selRegions</td><td>a vector with all regions to select.</td></tr>
+    <tr><td class="paramname">rootRegion</td><td>The root region. If it is not empty, all regions are unselected first.</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

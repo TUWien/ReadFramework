@@ -44,6 +44,7 @@ var searchData=
   ['mprefilter',['mPreFilter',['../classrdf_1_1_base_binarization_su.html#a5e95d0d57105084c9bc13d2c5cd611e7',1,'rdf::BaseBinarizationSu']]],
   ['mprefiltersize',['mPreFilterSize',['../classrdf_1_1_base_binarization_su.html#a78742ee20ba8555cca898d7cb337e563',1,'rdf::BaseBinarizationSu']]],
   ['mroot',['mRoot',['../classrdf_1_1_page_element.html#a71cf554b955bb7e983100fb6921ce9e2',1,'rdf::PageElement']]],
+  ['mselected',['mSelected',['../classrdf_1_1_region.html#a95924e9f75e2fad0cb44cbee87bc190d',1,'rdf::Region']]],
   ['msigmslope',['mSigmSlope',['../classrdf_1_1_binarization_su_fgd_weight.html#ab00f2debdf3f1591cf51f6d196b00d01',1,'rdf::BinarizationSuFgdWeight']]],
   ['msplitsize',['mSplitSize',['../classrdf_1_1_focus_estimation.html#a52bdcb0501c36db44ee18b244650c192',1,'rdf::FocusEstimation::mSplitSize()'],['../classrdf_1_1_contrast_estimation.html#af1fa16f1ad360245d4ca52825183549e',1,'rdf::ContrastEstimation::mSplitSize()']]],
   ['msrcimg',['mSrcImg',['../classrdf_1_1_base_binarization_su.html#a11ec0b5eedec3b0687ad12dc6c40c138',1,'rdf::BaseBinarizationSu::mSrcImg()'],['../classrdf_1_1_basic_f_m.html#a2ab2ddb204a36de92737540cd5d55d6e',1,'rdf::BasicFM::mSrcImg()'],['../classrdf_1_1_basic_contrast.html#aea24159b0ba41af1861e6a3a32cb4038',1,'rdf::BasicContrast::mSrcImg()'],['../classrdf_1_1_focus_estimation.html#a2f8c60e44084f15ba54e421260409953',1,'rdf::FocusEstimation::mSrcImg()'],['../classrdf_1_1_contrast_estimation.html#af0313c280267c0b1b8641f53c7c61fc7',1,'rdf::ContrastEstimation::mSrcImg()'],['../classrdf_1_1_line_trace.html#ab5c396aa8a62f6f96c38cd91c7f6741f',1,'rdf::LineTrace::mSrcImg()'],['../classrdf_1_1_base_skew_estimation.html#aa33bf8af8af875c2df3467a61dbdd2b8',1,'rdf::BaseSkewEstimation::mSrcImg()']]],
@@ -61,5 +62,5 @@ var searchData=
   ['mweight',['mWeight',['../classrdf_1_1_patch.html#a40d8b6056f89577b98b2e4d4ed5ceef2',1,'rdf::Patch']]],
   ['mwidth',['mWidth',['../classrdf_1_1_patch.html#a197f746c1537025cf7ffb76027e847a6',1,'rdf::Patch']]],
   ['mwindowsize',['mWindowSize',['../classrdf_1_1_basic_f_m.html#adbf6fd39e76ad4b19a2e20d44df9bd35',1,'rdf::BasicFM::mWindowSize()'],['../classrdf_1_1_basic_contrast.html#a0caae3aa3d2625a0cd72314e9ffb26f3',1,'rdf::BasicContrast::mWindowSize()'],['../classrdf_1_1_focus_estimation.html#abcb6d3441a2c7e97f9546940d053cc0f',1,'rdf::FocusEstimation::mWindowSize()'],['../classrdf_1_1_contrast_estimation.html#a77276488650bd0b7fb06e8c57454eb19',1,'rdf::ContrastEstimation::mWindowSize()']]],
-  ['mxmlpath',['mXMLPath',['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()'],['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()']]]
+  ['mxmlpath',['mXmlPath',['../classrdf_1_1_page_element.html#a1a88e14bc9c41b08805befd166e0a6d8',1,'rdf::PageElement::mXmlPath()'],['../classrdf_1_1_debug_config.html#afc4bdf363fb954b589d271397c2a68e4',1,'rdf::DebugConfig::mXMLPath()']]]
 ];

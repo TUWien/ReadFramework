@@ -7,6 +7,7 @@ var searchData=
   ['get1dgauss',['get1DGauss',['../classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f',1,'rdf::Algorithms']]],
   ['getangle',['getAngle',['../classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb',1,'rdf::BaseSkewEstimation']]],
   ['getbiggestblob',['getBiggestBlob',['../classrdf_1_1_blob_manager.html#a75fa4e3373dd8c9bdc674f012901f52f',1,'rdf::BlobManager']]],
+  ['getconfig',['getConfig',['../classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0',1,'rdf::RegionManager']]],
   ['gethlines',['getHLines',['../classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637',1,'rdf::LineTrace']]],
   ['getlines',['getLines',['../classrdf_1_1_line_trace.html#aaa2586bb273c9ee9c03689e5d3b91cbb',1,'rdf::LineTrace']]],
   ['getselectedlines',['getSelectedLines',['../classrdf_1_1_base_skew_estimation.html#aa2e8fc89e88fa6bec2a4c846aead0511',1,'rdf::BaseSkewEstimation']]],

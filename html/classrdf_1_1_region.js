@@ -17,6 +17,7 @@ var classrdf_1_1_region =
     [ "addUniqueChild", "classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396", null ],
     [ "children", "classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1", null ],
     [ "childrenToString", "classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e", null ],
+    [ "collectRegions", "classrdf_1_1_region.html#a37671bac653920715fbee407b9bfad42", null ],
     [ "custom", "classrdf_1_1_region.html#af4b0811283f97ffd938a8561bde3f40d", null ],
     [ "draw", "classrdf_1_1_region.html#a9d3df78447907bdb26e18abe36c5a9e1", null ],
     [ "id", "classrdf_1_1_region.html#a98259b56817f5bfebb276a3e6edef795", null ],
@@ -24,10 +25,12 @@ var classrdf_1_1_region =
     [ "polygon", "classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c", null ],
     [ "read", "classrdf_1_1_region.html#a9be7a3a131e767f3e24ef01e4c8418fd", null ],
     [ "removeChild", "classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361", null ],
+    [ "selected", "classrdf_1_1_region.html#a6bee504e0c76fab8b58af3c1826afcc4", null ],
     [ "setChildren", "classrdf_1_1_region.html#a674fd43577cea523e4ff3fca899c2a88", null ],
     [ "setCustom", "classrdf_1_1_region.html#a7a7ed6b3283e01bc1e4ef4b02477320d", null ],
     [ "setId", "classrdf_1_1_region.html#a4b1875530c09da1f6c1c361b080006d3", null ],
     [ "setPolygon", "classrdf_1_1_region.html#a9e64582aa1aa804388689fc6b348f399", null ],
+    [ "setSelected", "classrdf_1_1_region.html#a36604cc4fb3496fde8becd5f2ec70777", null ],
     [ "setType", "classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876", null ],
     [ "toString", "classrdf_1_1_region.html#ab2c9f57c3627e0904bc5e9e5b374786e", null ],
     [ "type", "classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9", null ],
@@ -39,5 +42,6 @@ var classrdf_1_1_region =
     [ "mCustom", "classrdf_1_1_region.html#a0c938579d9f274f2e0095a82aad62ca4", null ],
     [ "mId", "classrdf_1_1_region.html#a6c25683d298a9553c20d7cdb4a49b246", null ],
     [ "mPoly", "classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1", null ],
+    [ "mSelected", "classrdf_1_1_region.html#a95924e9f75e2fad0cb44cbee87bc190d", null ],
     [ "mType", "classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b", null ]
 ];

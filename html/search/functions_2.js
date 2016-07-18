@@ -7,6 +7,7 @@ var searchData=
   ['children',['children',['../classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1',1,'rdf::Region']]],
   ['childrentostring',['childrenToString',['../classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e',1,'rdf::Region']]],
   ['closedpolygon',['closedPolygon',['../classrdf_1_1_polygon.html#a9c6a5f511afe3876c5b5ecaa8e51ab3c',1,'rdf::Polygon']]],
+  ['collectregions',['collectRegions',['../classrdf_1_1_region.html#a37671bac653920715fbee407b9bfad42',1,'rdf::Region']]],
   ['comparewithtemplate',['compareWithTemplate',['../classrdf_1_1_form_features.html#a6d41be1593a456a13d91fb79eda97092',1,'rdf::FormFeatures']]],
   ['compbincontrastimg',['compBinContrastImg',['../classrdf_1_1_base_binarization_su.html#a44ac1abbb14c53aaff5525a7cd1324cd',1,'rdf::BaseBinarizationSu']]],
   ['compcontrastimg',['compContrastImg',['../classrdf_1_1_base_binarization_su.html#aa5f29d1f4d3678883ca3c6cb4b79b0cd',1,'rdf::BaseBinarizationSu']]],

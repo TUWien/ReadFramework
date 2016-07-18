@@ -2,6 +2,8 @@ var searchData=
 [
   ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a40d8ab4f3e863f1a7046075859bc95c3',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_image.html#a5452f24d5e18187f593af893a5cd1d81',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module_config.html#acdf8ca83534fc9b93543fea400ac0ebf',1,'rdf::ModuleConfig']]],
+  ['selected',['selected',['../classrdf_1_1_region.html#a6bee504e0c76fab8b58af3c1826afcc4',1,'rdf::Region']]],
+  ['selectregions',['selectRegions',['../classrdf_1_1_region_manager.html#aeb4f1030496bb4c10247302a13b75f0d',1,'rdf::RegionManager']]],
   ['separability',['separability',['../classrdf_1_1_base_skew_estimation.html#ae2be109c5e949340fe99b532c1bfdf2a',1,'rdf::BaseSkewEstimation']]],
   ['separatorregion',['SeparatorRegion',['../classrdf_1_1_separator_region.html#adf00f80d2b67a55afe66097cef906fcb',1,'rdf::SeparatorRegion']]],
   ['separatorregion',['SeparatorRegion',['../classrdf_1_1_separator_region.html',1,'rdf']]],
@@ -68,6 +70,7 @@ var searchData=
   ['setripplearea',['setRippleArea',['../classrdf_1_1_line_trace_config.html#a93faa20d7007ce98c19b3e7dbddc247a',1,'rdf::LineTraceConfig']]],
   ['setripplelen',['setRippleLen',['../classrdf_1_1_line_trace_config.html#ac6b30ecd1796bb518ec07562f3c6bba9',1,'rdf::LineTraceConfig']]],
   ['setrootregion',['setRootRegion',['../classrdf_1_1_page_element.html#a5b32448e4f030c6feb881fcda9729977',1,'rdf::PageElement']]],
+  ['setselected',['setSelected',['../classrdf_1_1_region.html#a36604cc4fb3496fde8becd5f2ec70777',1,'rdf::Region']]],
   ['setsettingsfile',['setSettingsFile',['../classrdf_1_1_config.html#a948463c19d84ab70d16d6e93f577edcb',1,'rdf::Config']]],
   ['setsigma',['setSigma',['../classrdf_1_1_base_skew_estimation_config.html#a67f6539c26206ce58968a2870d29147c',1,'rdf::BaseSkewEstimationConfig']]],
   ['setsplitsize',['setSplitSize',['../classrdf_1_1_focus_estimation.html#a8289bb5d339cc36dd49314ff7abad58b',1,'rdf::FocusEstimation::setSplitSize()'],['../classrdf_1_1_contrast_estimation.html#aced237fcde4d77d5b5d8129ace8f8942',1,'rdf::ContrastEstimation::setSplitSize()']]],
@@ -104,8 +107,8 @@ var searchData=
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];

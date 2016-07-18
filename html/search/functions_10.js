@@ -2,6 +2,7 @@ var searchData=
 [
   ['read',['read',['../classrdf_1_1_region.html#a9be7a3a131e767f3e24ef01e4c8418fd',1,'rdf::Region::read()'],['../classrdf_1_1_text_line.html#af1b776b6782d79aa3da96191d2ea1582',1,'rdf::TextLine::read()'],['../classrdf_1_1_page_xml_parser.html#aee0cbb62b5f041bb470a7939a8dc3e77',1,'rdf::PageXmlParser::read()'],['../classrdf_1_1_polygon.html#a4335652867aca759c8d8a2d68a9e2b7d',1,'rdf::Polygon::read()'],['../classrdf_1_1_base_line.html#a5c2b4d416e0848f99a426ff936a7a81f',1,'rdf::BaseLine::read()']]],
   ['region',['Region',['../classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0',1,'rdf::Region']]],
+  ['regionsat',['regionsAt',['../classrdf_1_1_region_manager.html#adb08d7cee5f305538f2109c41970eabc',1,'rdf::RegionManager']]],
   ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()'],['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],
   ['removechild',['removeChild',['../classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361',1,'rdf::Region']]],
