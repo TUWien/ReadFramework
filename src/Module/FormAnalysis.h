@@ -89,7 +89,9 @@ namespace rdf {
 		bool compareWithTemplate(const FormFeatures& fTempl);
 		cv::Size sizeImg() const;
 		QVector<rdf::Line> horLines() const;
+		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
+		QVector<rdf::Line> verLinesMatched() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
 
@@ -119,6 +121,8 @@ namespace rdf {
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
 
+		QVector<rdf::Line> mHorLinesMatched;
+		QVector<rdf::Line> mVerLinesMatched;
 		cv::Size mSizeSrc;
 
 		// parameters

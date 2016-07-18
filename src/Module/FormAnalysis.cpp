@@ -215,6 +215,7 @@ namespace rdf {
 						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
 							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedHor += mHorLines[i].length();
+							mHorLinesMatched.push_back(mHorLines[i]);
 						}
 					}
 					for (int i = 0; i < mVerLines.size(); i++) {
@@ -223,6 +224,7 @@ namespace rdf {
 						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
 							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedVer += mVerLines[i].length();
+							mVerLinesMatched.push_back(mVerLines[i]);
 						}
 					}
 					float error = horizontalError + verticalError;
@@ -236,7 +238,13 @@ namespace rdf {
 							finalErrorV = verticalError;
 							offSet.x = offsetsX[iX];
 							offSet.y = offsetsY[iY];
+						} else {
+							mHorLinesMatched.clear();
+							mVerLinesMatched.clear();
 						}
+					} else {
+						mHorLinesMatched.clear();
+						mVerLinesMatched.clear();
 					}
 					horizontalError = 0;
 					verticalError = 0;
@@ -250,13 +258,12 @@ namespace rdf {
 		qDebug() << "current Error: " << minError;
 		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
-		if (finalAcceptedHor / hLenTemp > config()->threshLineLenRation() && finalAcceptedVer / vLenTemp > config()->threshLineLenRation()) {
-
-			//more than threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
-			//if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
+		if (minError < std::numeric_limits<float>::max()) {
+			//check if the average distance of the matched lines is smaller then the errorThr (default: 15px)
+			if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
 				
 				return true;
-			//}
+			}
 		}
 
 		return false;
@@ -272,9 +279,19 @@ namespace rdf {
 		return mHorLines;
 	}
 
+	QVector<rdf::Line> FormFeatures::horLinesMatched() const
+	{
+		return mHorLinesMatched;
+	}
+
 	QVector<rdf::Line> FormFeatures::verLines() const
 	{
 		return mVerLines;
+	}
+
+	QVector<rdf::Line> FormFeatures::verLinesMatched() const
+	{
+		return mVerLinesMatched;
 	}
 
 	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{
