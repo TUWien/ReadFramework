@@ -83,6 +83,9 @@ public:
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
 
+	void setSelected(bool select);
+	bool selected() const;
+
 	void setType(const Region::Type& type);
 	Region::Type type() const;
 
@@ -100,6 +103,7 @@ public:
 	void removeChild(QSharedPointer<Region> child);
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
+	static QVector<QSharedPointer<Region> > allRegions(QSharedPointer<Region> root);
 
 	virtual void draw(QPainter& p, const RegionTypeConfig& config) const;
 
@@ -114,10 +118,13 @@ public:
 
 protected:
 	Type mType = Type::type_unknown;
+	bool mSelected = false;
 	QString mId;
 	QString mCustom;
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
+
+	void collectRegions(QVector<QSharedPointer<Region> >& allRegions) const;
 };
 
 class DllCoreExport TextLine : public Region {

@@ -194,6 +194,26 @@ QVector<QSharedPointer<RegionTypeConfig> > RegionManager::regionTypeConfig() con
 	return mTypeConfig;
 }
 
+/// <summary>
+/// Selects the regions.
+/// </summary>
+/// <param name="selRegions">a vector with all regions to select.</param>
+/// <param name="rootRegion">The root region. If it is not empty, all regions are unselected first.</param>
+void RegionManager::selectRegions(const QVector<QSharedPointer<Region>>& selRegions, QSharedPointer<Region> rootRegion) const {
+
+	if (rootRegion) {
+		QVector<QSharedPointer<Region> > regions = Region::allRegions(rootRegion);
+
+		// deselect all
+		for (auto r : regions)
+			r->setSelected(false);
+	}
+
+	for (auto r : selRegions)
+		r->setSelected(true);
+
+}
+
 // RegionManager --------------------------------------------------------------------
 RegionManager::RegionManager() {
 
@@ -274,7 +294,25 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	return QSharedPointer<Region>(new Region());
 }
 
-void RegionManager::drawRegion(QPainter & p, QSharedPointer<rdf::Region> region, const QVector<QSharedPointer<RegionTypeConfig> >& config, bool recursive) const {
+QSharedPointer<RegionTypeConfig> RegionManager::getConfig(
+	const QSharedPointer<Region>& r, 
+	const QVector<QSharedPointer<RegionTypeConfig>>& config) const {
+
+	const QVector<QSharedPointer<RegionTypeConfig> >& c = (config.isEmpty()) ? regionTypeConfig() : config;
+	
+	Region::Type t = r ? r->type() : Region::Type::type_unknown;
+
+	if (t >= 0 && t < c.size())
+		return c[t];
+
+	return QSharedPointer<RegionTypeConfig>();
+}
+
+void RegionManager::drawRegion(
+	QPainter & p, 
+	QSharedPointer<rdf::Region> region, 
+	const QVector<QSharedPointer<RegionTypeConfig> >& config, 
+	bool recursive) const {
 
 	if (!region) {
 		qWarning() << "I cannot draw a NULL region";
@@ -301,6 +339,39 @@ void RegionManager::drawRegion(QPainter & p, QSharedPointer<rdf::Region> region,
 			drawRegion(p, r, c, recursive);
 	}
 
+}
+
+QVector<QSharedPointer<rdf::Region> > RegionManager::regionsAt(
+	QSharedPointer<rdf::Region> root, 
+	const QPoint & p,
+	const QVector<QSharedPointer<RegionTypeConfig> >& config) const {
+	
+	QVector<QSharedPointer<rdf::Region> > sRegions;
+
+	if (!root)
+		return sRegions;
+
+	QVector<QSharedPointer<Region> > regions = rdf::Region::allRegions(root);
+
+	for (auto r : regions) {
+
+		if (!r) {
+			qWarning() << "NULL region detected";
+			continue;
+		}
+
+		QSharedPointer<RegionTypeConfig> cr = getConfig(r, config);
+			
+		// is the region visible to the user?
+		if (!cr->drawPoly() || !cr->draw())
+			continue;
+
+		// append region if it contains the point
+		if (r->polygon().closedPolygon().containsPoint(p, Qt::WindingFill))
+			sRegions << r;
+	}
+	
+	return sRegions;
 }
 
 Region::Type RegionManager::type(const QString& typeName) const {
