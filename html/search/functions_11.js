@@ -72,7 +72,6 @@ var searchData=
   ['setsplitsize',['setSplitSize',['../classrdf_1_1_focus_estimation.html#a8289bb5d339cc36dd49314ff7abad58b',1,'rdf::FocusEstimation::setSplitSize()'],['../classrdf_1_1_contrast_estimation.html#aced237fcde4d77d5b5d8129ace8f8942',1,'rdf::ContrastEstimation::setSplitSize()']]],
   ['setstrokewidth',['setStrokeWidth',['../classrdf_1_1_binarization_su_adapted.html#a0ce9554e1f6ba0bf9a5ec83be07ecee2',1,'rdf::BinarizationSuAdapted']]],
   ['settext',['setText',['../classrdf_1_1_text_line.html#a759566ff1b31c5ed201274e8e4311a98',1,'rdf::TextLine']]],
-  ['settexteqiv',['setTextEqiv',['../classrdf_1_1_region.html#a07738a87a142110cc29ec5154e734926',1,'rdf::Region']]],
   ['setthr',['setThr',['../classrdf_1_1_base_skew_estimation_config.html#a3960e547847c34459d6cd90b37b5cdc4',1,'rdf::BaseSkewEstimationConfig']]],
   ['setthreshlinelenration',['setThreshLineLenRation',['../classrdf_1_1_form_features_config.html#a271e847dc862e656725c287d80cb9c96',1,'rdf::FormFeaturesConfig']]],
   ['settings',['settings',['../classrdf_1_1_config.html#aed7f10409b7fbf93f575f6a4188bdcc6',1,'rdf::Config']]],

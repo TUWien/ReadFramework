@@ -3,7 +3,6 @@ var searchData=
   ['tag',['tag',['../classrdf_1_1_region_xml_helper.html#aab3702188f893510256efa26f9cf605e',1,'rdf::RegionXmlHelper']]],
   ['tagname',['tagName',['../classrdf_1_1_page_xml_parser.html#ad045baf5b9df93a55a179bde558945b4',1,'rdf::PageXmlParser']]],
   ['text',['text',['../classrdf_1_1_text_line.html#a995495340b4b89e84f89d78fd9ec6e70',1,'rdf::TextLine']]],
-  ['textequiv',['textEquiv',['../classrdf_1_1_region.html#a951bc8e10167b3d47f373eefbb808cba',1,'rdf::Region']]],
   ['textline',['TextLine',['../classrdf_1_1_text_line.html#ac74ea657fc1ee717f65194a17d73436a',1,'rdf::TextLine']]],
   ['thickness',['thickness',['../classrdf_1_1_line.html#aafb351d4d9d078a4b535338ab827287e',1,'rdf::Line']]],
   ['thr',['thr',['../classrdf_1_1_base_skew_estimation_config.html#af5f98a5ffae8faa5b9b645a982a76ef3',1,'rdf::BaseSkewEstimationConfig']]],

@@ -176,10 +176,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ebf22d644b2e800a06639e807be484c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c">polygon</a> () const </td></tr>
 <tr class="memdesc:a1ebf22d644b2e800a06639e807be484c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classrdf_1_1_region.html">Region</a>'s polygon.  <a href="#a1ebf22d644b2e800a06639e807be484c">More...</a><br/></td></tr>
 <tr class="separator:a1ebf22d644b2e800a06639e807be484c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07738a87a142110cc29ec5154e734926"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a07738a87a142110cc29ec5154e734926">setTextEqiv</a> (const QString &amp;text)</td></tr>
-<tr class="separator:a07738a87a142110cc29ec5154e734926"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a951bc8e10167b3d47f373eefbb808cba"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a951bc8e10167b3d47f373eefbb808cba">textEquiv</a> () const </td></tr>
-<tr class="separator:a951bc8e10167b3d47f373eefbb808cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77b35f891e22ffd53338bd573b88e682"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a77b35f891e22ffd53338bd573b88e682">addChild</a> (QSharedPointer&lt; <a class="el" href="classrdf_1_1_region.html">Region</a> &gt; child)</td></tr>
 <tr class="memdesc:a77b35f891e22ffd53338bd573b88e682"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a child to the current <a class="el" href="classrdf_1_1_region.html">Region</a>.  <a href="#a77b35f891e22ffd53338bd573b88e682">More...</a><br/></td></tr>
 <tr class="separator:a77b35f891e22ffd53338bd573b88e682"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,7 +213,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a0964c4ab62831139f5bff2855971302b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b">mType</a></td></tr>
+<tr class="memitem:a0964c4ab62831139f5bff2855971302b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a0964c4ab62831139f5bff2855971302b">mType</a> = Type::type_unknown</td></tr>
 <tr class="separator:a0964c4ab62831139f5bff2855971302b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c25683d298a9553c20d7cdb4a49b246"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_region.html#a6c25683d298a9553c20d7cdb4a49b246">mId</a></td></tr>
 <tr class="separator:a6c25683d298a9553c20d7cdb4a49b246"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -644,22 +640,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a07738a87a142110cc29ec5154e734926"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rdf::Region::setTextEqiv </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>text</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="af796d5e4f3272d76c065665f415d3876"></a>
 <div class="memitem">
 <div class="memproto">
@@ -681,21 +661,6 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a951bc8e10167b3d47f373eefbb808cba"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">QString rdf::Region::textEquiv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1008,7 +973,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Type</a> rdf::Region::mType</td>
+          <td class="memname"><a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">Type</a> rdf::Region::mType = Type::type_unknown</td>
         </tr>
       </table>
   </td>

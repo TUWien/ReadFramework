@@ -6,6 +6,7 @@ var classrdf_1_1_page_element =
     [ "dateModified", "classrdf_1_1_page_element.html#a27fd72b52d0b60c4a1251d6b748f81ff", null ],
     [ "imageFileName", "classrdf_1_1_page_element.html#ab6f7aec5a3c4eba651b483a79b987b67", null ],
     [ "imageSize", "classrdf_1_1_page_element.html#aff18f08a42d6f63b822ccb6ddaa00ac6", null ],
+    [ "isEmpty", "classrdf_1_1_page_element.html#a17a054e69ce39b91e41520fae9b16408", null ],
     [ "rootRegion", "classrdf_1_1_page_element.html#a5df1b5290bc6170b7c425c5b96639c56", null ],
     [ "setCreator", "classrdf_1_1_page_element.html#a54ce511737203543471d1c5f6622f330", null ],
     [ "setDateCreated", "classrdf_1_1_page_element.html#afc34012a603986df7f600236c634bda8", null ],
