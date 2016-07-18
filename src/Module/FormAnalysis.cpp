@@ -330,7 +330,7 @@ namespace rdf {
 				}
 			}
 		}
-		else {
+		else if (!vT.empty() && !mVerLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < vT.size(); i++) {
 				int yLineTemp = vT[i].startPointCV().y;
@@ -345,16 +345,16 @@ namespace rdf {
 
 		//find horizontal offsets
 		if (!vT.empty() && !mVerLines.empty()) {
-			//use Y difference of horizontal lines if template and current Image contains horizontal lines
+			//use X difference of vertical lines if template and current Image contains vertical lines
 			for (int i = 0; i < vT.size(); i++) {
 				int xLineTemp = vT[i].startPointCV().x;
 				for (int j = 0; j < mVerLines.size(); j++) {
 					int diffXLine = xLineTemp - mVerLines[j].startPointCV().x;
-					offY.push_back(diffXLine);
+					offX.push_back(diffXLine);
 				}
 			}
 		}
-		else {
+		else if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
 				int xLineTemp = hT[i].startPointCV().x;
