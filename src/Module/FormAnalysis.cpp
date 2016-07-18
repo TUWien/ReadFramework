@@ -126,14 +126,15 @@ namespace rdf {
 
 	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)
 	{
-		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::leqY1);
-		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::leqX1);
+		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);
+		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::lessX1);
+		
 
 		QVector<rdf::Line> horLinesTemp = fTempl.horLines();
 		QVector<rdf::Line> verLinesTemp = fTempl.verLines();
 
-		std::sort(horLinesTemp.begin(), horLinesTemp.end(), rdf::Line::leqY1);
-		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::leqX1);
+		std::sort(horLinesTemp.begin(), horLinesTemp.end(), rdf::Line::lessY1);
+		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::lessX1);
 
 		cv::Mat lineTempl(mSizeSrc, CV_32FC1);
 		LineTrace::generateLineImage(horLinesTemp, verLinesTemp, lineTempl);
