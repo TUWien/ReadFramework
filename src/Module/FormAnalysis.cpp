@@ -147,6 +147,9 @@ namespace rdf {
 
 		//rdf::Image::instance().imageInfo(distImg, "distImg");
 		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\linetmpl.png");
+		//lineTempl = 0;
+		//LineTrace::generateLineImage(mHorLines, mVerLines, lineTempl);
+		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\lineImg.png");
 		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
 		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
 
@@ -181,8 +184,8 @@ namespace rdf {
 		QVector<int> offsetsX;
 		QVector<int> offsetsY;
 		//mSrcImg.rows
-		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height);
-		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width);
+		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height); //TODO: add offset
+		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width);	//TODO: add offset
 
 		findOffsets(horLinesTemp, verLinesTemp, offsetsX, offsetsY);
 
@@ -201,6 +204,10 @@ namespace rdf {
 			for (int iY = 0; iY < offsetsY.size(); iY++) {
 				//for for maximal translation
 				if (std::abs(offsetsX[iX]) <= sizeDiffX && std::abs(offsetsY[iY]) <= sizeDiffY) {
+					
+					//int ox = offsetsX[iX];
+					//int oy = offsetsY[iY];
+					//qDebug() << ox << " " << oy;
 
 					for (int i = 0; i < mHorLines.size(); i++) {
 						float tmp = errLine(distImg, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
@@ -220,13 +227,16 @@ namespace rdf {
 					}
 					float error = horizontalError + verticalError;
 					if (error <= minError) {
-						minError = error;
-						finalAcceptedHor = acceptedHor;
-						finalAcceptedVer = acceptedVer;
-						finalErrorH = horizontalError;
-						finalErrorV = verticalError;
-						offSet.x = offsetsX[iX];
-						offSet.y = offsetsY[iY];
+						//check also if at least threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
+						if (acceptedHor / hLenTemp > config()->threshLineLenRation() && acceptedVer / vLenTemp > config()->threshLineLenRation()) {
+							minError = error;
+							finalAcceptedHor = acceptedHor;
+							finalAcceptedVer = acceptedVer;
+							finalErrorH = horizontalError;
+							finalErrorV = verticalError;
+							offSet.x = offsetsX[iX];
+							offSet.y = offsetsY[iY];
+						}
 					}
 					horizontalError = 0;
 					verticalError = 0;
