@@ -203,9 +203,9 @@ namespace rdf {
 					for (int i = 0; i < mVerLines.size(); i++) {
 						float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
-						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
+						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
 							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
-							acceptedVer += mHorLines[i].length();
+							acceptedVer += mVerLines[i].length();
 						}
 					}
 					float error = horizontalError + verticalError;
