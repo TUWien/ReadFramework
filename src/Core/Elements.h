@@ -95,9 +95,6 @@ public:
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
-	void setTextEqiv(const QString& text);
-	QString textEquiv() const;
-
 	void addChild(QSharedPointer<Region> child);
 	void addUniqueChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
@@ -116,7 +113,7 @@ public:
 	virtual bool operator==(const Region& r1);
 
 protected:
-	Type mType;
+	Type mType = Type::type_unknown;
 	QString mId;
 	QString mCustom;
 	Polygon mPoly;
@@ -173,6 +170,8 @@ class DllCoreExport PageElement {
 
 public:
 	PageElement(const QString& xmlPath = QString());
+
+	bool isEmpty();
 
 	void setXmlPath(const QString& xmlPath);
 	QString xmlPath() const;
