@@ -190,7 +190,7 @@ namespace rdf {
 		for (int iX = 0; iX < offsetsX.size(); iX++) {
 			for (int iY = 0; iY < offsetsY.size(); iY++) {
 				//for for maximal translation
-				if (offsetsX[iX] <= sizeDiffX && offsetsY[iY] <= sizeDiffY) {
+				if (std::abs(offsetsX[iX]) <= sizeDiffX && std::abs(offsetsY[iY]) <= sizeDiffY) {
 
 					for (int i = 0; i < mHorLines.size(); i++) {
 						float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
