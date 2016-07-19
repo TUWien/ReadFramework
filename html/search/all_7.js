@@ -2,7 +2,7 @@ var searchData=
 [
   ['gapline',['gapLine',['../classrdf_1_1_line.html#ae3f79882106a3b7c605a684ed15a3058',1,'rdf::Line']]],
   ['generatedlineimage',['generatedLineImage',['../classrdf_1_1_line_trace.html#aa084e224a475dc42c71e989a6094ebaa',1,'rdf::LineTrace']]],
-  ['generatelineimage',['generateLineImage',['../classrdf_1_1_line_trace.html#a10ef4c177f61b242b8d544d2f4860fc7',1,'rdf::LineTrace']]],
+  ['generatelineimage',['generateLineImage',['../classrdf_1_1_line_trace.html#a3f268903521dfa831fe84c5ba0d78b17',1,'rdf::LineTrace']]],
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html',1,'rdf']]],
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html#aa7ec4eed4f45c9286d94187fc91ccca0',1,'rdf::GenericSettings']]],
   ['get1dgauss',['get1DGauss',['../classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f',1,'rdf::Algorithms']]],
@@ -11,6 +11,7 @@ var searchData=
   ['getconfig',['getConfig',['../classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0',1,'rdf::RegionManager']]],
   ['gethlines',['getHLines',['../classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637',1,'rdf::LineTrace']]],
   ['getlines',['getLines',['../classrdf_1_1_line_trace.html#aaa2586bb273c9ee9c03689e5d3b91cbb',1,'rdf::LineTrace']]],
+  ['getmatchedlineimg',['getMatchedLineImg',['../classrdf_1_1_form_features.html#a46c60cc8c2f11f496923bf8f8453edfd',1,'rdf::FormFeatures']]],
   ['getselectedlines',['getSelectedLines',['../classrdf_1_1_base_skew_estimation.html#aa2e8fc89e88fa6bec2a4c846aead0511',1,'rdf::BaseSkewEstimation']]],
   ['getthreshotsu',['getThreshOtsu',['../classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597',1,'rdf::Algorithms']]],
   ['gettotal',['getTotal',['../classrdf_1_1_timer.html#a19c55bb89adf7b93b1247db0078cf345',1,'rdf::Timer']]],

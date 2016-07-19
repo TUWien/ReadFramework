@@ -1,7 +1,8 @@
 var classrdf_1_1_line =
 [
-    [ "Line", "classrdf_1_1_line.html#a9ac669b914c5bb46ca94f5101dd6a7fa", null ],
+    [ "Line", "classrdf_1_1_line.html#a5cdb24d4588e0ee96de0fd4c854dfd2e", null ],
     [ "Line", "classrdf_1_1_line.html#a5c0148c387b7474954d9ab3f1b381371", null ],
+    [ "Line", "classrdf_1_1_line.html#aa90c3a573d451ea982cf8a7029e2d8a5", null ],
     [ "angle", "classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c", null ],
     [ "diffAngle", "classrdf_1_1_line.html#a5a36e1fcef55baa244bde01e15332287", null ],
     [ "distance", "classrdf_1_1_line.html#a5073b2f4fa450185c245e3108067adab", null ],
@@ -14,7 +15,7 @@ var classrdf_1_1_line =
     [ "line", "classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0", null ],
     [ "merge", "classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a", null ],
     [ "minDistance", "classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff", null ],
-    [ "setLine", "classrdf_1_1_line.html#a75aa64366e7c5a5d206f186424cd6ab9", null ],
+    [ "setLine", "classrdf_1_1_line.html#a65df7726ac29280f450ea8c03848247c", null ],
     [ "startPoint", "classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc", null ],
     [ "startPointCV", "classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29", null ],
     [ "thickness", "classrdf_1_1_line.html#aafb351d4d9d078a4b535338ab827287e", null ],
