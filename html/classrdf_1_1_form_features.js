@@ -12,6 +12,7 @@ var classrdf_1_1_form_features =
     [ "horLines", "classrdf_1_1_form_features.html#ae820300dd6b513cba25aa3a480eaaaf7", null ],
     [ "horLinesMatched", "classrdf_1_1_form_features.html#aa4907cfce88a75b57c5b7bdc8a5a524e", null ],
     [ "isEmpty", "classrdf_1_1_form_features.html#ae5c1ed90f5f5a3a315a994e6bf5fa575", null ],
+    [ "offset", "classrdf_1_1_form_features.html#a36874d7afa5fc4131e95faeb62cec68f", null ],
     [ "setEstimateSkew", "classrdf_1_1_form_features.html#a43d73dd6416c66f229f9c43dd5218180", null ],
     [ "setInputImg", "classrdf_1_1_form_features.html#aeb24e5ce439a6769ce4ec13d8ebe90ce", null ],
     [ "setMask", "classrdf_1_1_form_features.html#a4ec39d7b6f425cfb62e206b141e5edef", null ],

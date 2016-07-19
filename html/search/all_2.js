@@ -4,7 +4,7 @@ var searchData=
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html#aab215a591d0aa492646d0e488b896b09',1,'rdf::BaseBinarizationSu']]],
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html',1,'rdf']]],
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html#a033a57638775862b6965aa735ce2ad9a',1,'rdf::BaseBinarizationSuConfig']]],
-  ['baseline',['BaseLine',['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()'],['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()']]],
+  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html',1,'rdf']]],
   ['basemodule_2ecpp',['BaseModule.cpp',['../_base_module_8cpp.html',1,'']]],
   ['basemodule_2eh',['BaseModule.h',['../_base_module_8h.html',1,'']]],

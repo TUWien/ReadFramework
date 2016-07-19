@@ -2,6 +2,8 @@ var searchData=
 [
   ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a40d8ab4f3e863f1a7046075859bc95c3',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_image.html#a5452f24d5e18187f593af893a5cd1d81',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=90) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module_config.html#acdf8ca83534fc9b93543fea400ac0ebf',1,'rdf::ModuleConfig']]],
+  ['searchxoffset',['searchXOffset',['../classrdf_1_1_form_features_config.html#ae7b6767aedd982ccb9817709b7b75de1',1,'rdf::FormFeaturesConfig']]],
+  ['searchyoffset',['searchYOffset',['../classrdf_1_1_form_features_config.html#ae1b8bc7e70fec2338c95e053b1258202',1,'rdf::FormFeaturesConfig']]],
   ['selected',['selected',['../classrdf_1_1_region.html#a6bee504e0c76fab8b58af3c1826afcc4',1,'rdf::Region']]],
   ['selectregions',['selectRegions',['../classrdf_1_1_region_manager.html#aeb4f1030496bb4c10247302a13b75f0d',1,'rdf::RegionManager']]],
   ['separability',['separability',['../classrdf_1_1_base_skew_estimation.html#ae2be109c5e949340fe99b532c1bfdf2a',1,'rdf::BaseSkewEstimation']]],
@@ -92,8 +94,8 @@ var searchData=
   ['sigma',['sigma',['../classrdf_1_1_base_skew_estimation_config.html#a7b5303caff3218f114e66d393999a4a8',1,'rdf::BaseSkewEstimationConfig']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html',1,'rdf']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
-  ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d',1,'rdf::SimpleBinarizationConfig']]],
+  ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
   ['size',['size',['../classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3',1,'rdf::Blobs::size()'],['../classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b',1,'rdf::Polygon::size()']]],
   ['sizeimg',['sizeImg',['../classrdf_1_1_form_features.html#acfc3eaa4cbe7287ba6ca1a78cc9aef39',1,'rdf::FormFeatures']]],
   ['skewest',['skewEst',['../classrdf_1_1_base_skew_estimation.html#ab52b919e2a7faab4527dfa35145ad77b',1,'rdf::BaseSkewEstimation']]],
@@ -107,8 +109,8 @@ var searchData=
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4',1,'rdf::SuperPixel']]],
+  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]]
 ];
