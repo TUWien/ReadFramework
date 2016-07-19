@@ -100,14 +100,14 @@ protected:
 class DllCoreExport Line {
 
 public:
-	Line(const QLine& line = QLine(), float thickness = 0);
+	Line(const QLine& line = QLine(), float thickness = 1);
 	Line(const Polygon& poly);
 
 
 	cv::Point startPointCV() const;
 	cv::Point endPointCV() const;
 	bool isEmpty() const;
-	void setLine(const QLine& line, float thickness = 0);
+	void setLine(const QLine& line, float thickness = 1);
 	QLine line() const;
 	float thickness() const;
 	float length() const;
@@ -127,7 +127,7 @@ public:
 
 protected:
 	QLine mLine;
-	float mThickness;
+	float mThickness = 1;
 };
 
 };

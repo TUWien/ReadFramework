@@ -76,8 +76,8 @@ namespace rdf {
 		//flip image
 		//inputImg = inputImg.t();
 		//flip(inputImg, inputImg, 0);
-		
-		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputImg, CV_RGB2GRAY);
+		cv::Mat inputG;
+		if (inputImg.channels() != 1) cv::cvtColor(inputImg, inputG, CV_RGB2GRAY);
 		//if (inputImg.depth() != CV_8U) inputImg.convertTo(inputImg, CV_8U, 255);
 		//findContours test
 		//std::vector<std::vector<cv::Point> > contours;
@@ -88,7 +88,7 @@ namespace rdf {
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
 
-		cv::Mat mask = Algorithms::instance().estimateMask(inputImg);
+		cv::Mat mask = Algorithms::instance().estimateMask(inputG);
 		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
 
 		//Image::instance().imageInfo(inputImg, "input");
@@ -106,7 +106,7 @@ namespace rdf {
 		FormFeatures formTempl(imgTempl);
 		formTempl.compute();
 
-		FormFeatures cmpImg(inputImg);
+		FormFeatures cmpImg(inputG);
 		cmpImg.compute();
 		if (cmpImg.compareWithTemplate(formTempl)) {
 			qDebug() << "Match is true";
@@ -115,7 +115,8 @@ namespace rdf {
 		}
 
 		cv::Mat detLineImg = inputImg.clone();
-		rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), detLineImg);
+		rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
+		cmpImg.getMatchedLineImg(detLineImg);
 		
 		
 		////cv::Mat lImg = linetest.lineImage();

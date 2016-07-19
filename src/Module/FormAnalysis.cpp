@@ -57,6 +57,13 @@ namespace rdf {
 
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
+	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg) const	{
+
+		cv::Mat finalImg = srcImg.clone();
+		rdf::LineTrace::generateLineImage(mHorLinesMatched, mVerLinesMatched, finalImg, cv::Scalar(0,255,0), cv::Scalar(0,0,255));
+
+		return finalImg;
+	}
 	void FormFeatures::setInputImg(const cv::Mat & img)
 	{
 		mSrcImg = img;
@@ -276,9 +283,17 @@ namespace rdf {
 		return mSizeSrc;
 	}
 
+	void FormFeatures::setSize(cv::Size s)	{
+		mSizeSrc = s;
+	}
+
 	QVector<rdf::Line> FormFeatures::horLines() const
 	{
 		return mHorLines;
+	}
+
+	void FormFeatures::setHorLines(const QVector<rdf::Line>& h)	{
+		mHorLines = h;
 	}
 
 	QVector<rdf::Line> FormFeatures::horLinesMatched() const
@@ -291,13 +306,15 @@ namespace rdf {
 		return mVerLines;
 	}
 
-	QVector<rdf::Line> FormFeatures::verLinesMatched() const
-	{
+	void FormFeatures::setVerLines(const QVector<rdf::Line>& v)	{
+		mVerLines = v;
+	}
+
+	QVector<rdf::Line> FormFeatures::verLinesMatched() const	{
 		return mVerLinesMatched;
 	}
 
-	cv::Point FormFeatures::offset() const
-	{
+	cv::Point FormFeatures::offset() const	{
 		return mOffset;
 	}
 
@@ -305,13 +322,11 @@ namespace rdf {
 		return qSharedPointerDynamicCast<FormFeaturesConfig>(mConfig);
 	}
 
-	cv::Mat FormFeatures::binaryImage() const
-	{
+	cv::Mat FormFeatures::binaryImage() const	{
 		return mBwImg;
 	}
 
-	void FormFeatures::setEstimateSkew(bool s)
-	{
+	void FormFeatures::setEstimateSkew(bool s)	{
 		mEstimateSkew = s;
 	}
 

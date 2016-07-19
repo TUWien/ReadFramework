@@ -242,7 +242,7 @@ namespace rdf {
 		return synLinImg;
 	}
 
-	void LineTrace::generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat & img)
+	void LineTrace::generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat & img, cv::Scalar hCol, cv::Scalar vCol)
 	{
 		if (hline.empty() && vline.empty())
 			return;
@@ -254,7 +254,7 @@ namespace rdf {
 			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
 			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
 
-			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+			cv::line(img, pStart, pEnd, hCol, (int)l.thickness(), 8, 0);
 		}
 
 		for (auto l : vline) {
@@ -262,7 +262,7 @@ namespace rdf {
 			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
 			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
 
-			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
+			cv::line(img, pStart, pEnd, vCol, (int)l.thickness(), 8, 0);
 		}
 	}
 

@@ -87,6 +87,8 @@ namespace rdf {
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
+		cv::Mat getMatchedLineImg(const cv::Mat srcImg) const;
+
 		void setInputImg(const cv::Mat& img);
 		void setMask(const cv::Mat& mask);
 		bool isEmpty() const override;
@@ -94,9 +96,12 @@ namespace rdf {
 		bool computeBinaryInput();
 		bool compareWithTemplate(const FormFeatures& fTempl);
 		cv::Size sizeImg() const;
+		void setSize(cv::Size s);
 		QVector<rdf::Line> horLines() const;
+		void setHorLines(const QVector<rdf::Line>& h);
 		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
+		void setVerLines(const QVector<rdf::Line>& v);
 		QVector<rdf::Line> verLinesMatched() const;
 		cv::Point offset() const;
 
