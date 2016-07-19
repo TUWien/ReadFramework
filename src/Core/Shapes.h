@@ -102,6 +102,7 @@ class DllCoreExport Line {
 public:
 	Line(const QLine& line = QLine(), float thickness = 1);
 	Line(const Polygon& poly);
+	Line(const cv::Point p1, const cv::Point p2, float thickness = 1);
 
 
 	cv::Point startPointCV() const;

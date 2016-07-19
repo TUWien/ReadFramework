@@ -101,9 +101,10 @@ namespace rdf {
 		imgTemplate.load(templPath);
 		qDebug() << templPath << "loaded template";
 		cv::Mat imgTempl = rdf::Image::instance().qImage2Mat(imgTemplate);
-		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTempl, CV_RGB2GRAY);
-		cv::Mat maskTempl = Algorithms::instance().estimateMask(imgTempl);
-		FormFeatures formTempl(imgTempl);
+		cv::Mat imgTemplG;
+		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTemplG, CV_RGB2GRAY);
+		cv::Mat maskTempl = Algorithms::instance().estimateMask(imgTemplG);
+		FormFeatures formTempl(imgTemplG);
 		formTempl.compute();
 
 		FormFeatures cmpImg(inputG);
@@ -115,8 +116,10 @@ namespace rdf {
 		}
 
 		cv::Mat detLineImg = inputImg.clone();
-		rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
-		cmpImg.getMatchedLineImg(detLineImg);
+		//rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
+		//detLineImg = cmpImg.getMatchedLineImg(detLineImg);
+		detLineImg = cmpImg.getMatchedLineImg(imgTempl, cmpImg.offset());
+		
 		
 		
 		////cv::Mat lImg = linetest.lineImage();

@@ -87,7 +87,7 @@ namespace rdf {
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-		cv::Mat getMatchedLineImg(const cv::Mat srcImg) const;
+		cv::Mat getMatchedLineImg(const cv::Mat srcImg, cv::Point offset = cv::Point(0,0)) const;
 
 		void setInputImg(const cv::Mat& img);
 		void setMask(const cv::Mat& mask);

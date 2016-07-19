@@ -57,10 +57,20 @@ namespace rdf {
 
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
-	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg) const	{
+	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg, cv::Point offset) const	{
 
 		cv::Mat finalImg = srcImg.clone();
-		rdf::LineTrace::generateLineImage(mHorLinesMatched, mVerLinesMatched, finalImg, cv::Scalar(0,255,0), cv::Scalar(0,0,255));
+
+		QVector<rdf::Line> hl, vl;
+
+		for (auto h : mHorLinesMatched) {
+			hl.push_back(rdf::Line(h.startPointCV() + offset, h.endPointCV() + offset, h.thickness()));
+		}
+		for (auto v : mVerLinesMatched) {
+			vl.push_back(rdf::Line(v.startPointCV() + offset, v.endPointCV() + offset, v.thickness()));
+		}
+
+		rdf::LineTrace::generateLineImage(hl, vl, finalImg, cv::Scalar(0,255,0), cv::Scalar(0,0,255));
 
 		return finalImg;
 	}
@@ -206,6 +216,7 @@ namespace rdf {
 		float finalAcceptedHor = 0;
 		float finalAcceptedVer = 0;
 		float minError = std::numeric_limits<float>::max();
+		QVector<rdf::Line> horLinesMatched, verLinesMatched;
 
 		for (int iX = 0; iX < offsetsX.size(); iX++) {
 			for (int iY = 0; iY < offsetsY.size(); iY++) {
@@ -222,7 +233,7 @@ namespace rdf {
 						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
 							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedHor += mHorLines[i].length();
-							mHorLinesMatched.push_back(mHorLines[i]);
+							horLinesMatched.push_back(mHorLines[i]);
 						}
 					}
 					for (int i = 0; i < mVerLines.size(); i++) {
@@ -231,7 +242,7 @@ namespace rdf {
 						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
 							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedVer += mVerLines[i].length();
-							mVerLinesMatched.push_back(mVerLines[i]);
+							verLinesMatched.push_back(mVerLines[i]);
 						}
 					}
 					float error = horizontalError + verticalError;
@@ -245,18 +256,17 @@ namespace rdf {
 							finalErrorV = verticalError;
 							offSet.x = offsetsX[iX];
 							offSet.y = offsetsY[iY];
-						} else {
-							mHorLinesMatched.clear();
-							mVerLinesMatched.clear();
+							mHorLinesMatched = horLinesMatched;
+							mVerLinesMatched = verLinesMatched;
 						}
-					} else {
-						mHorLinesMatched.clear();
-						mVerLinesMatched.clear();
 					}
+
 					horizontalError = 0;
 					verticalError = 0;
 					acceptedHor = 0;
 					acceptedVer = 0;
+					horLinesMatched.clear();
+					verLinesMatched.clear();
 				}
 
 			}

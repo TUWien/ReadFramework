@@ -138,6 +138,11 @@ Line::Line(const Polygon & poly) {
 
 }
 
+Line::Line(const cv::Point p1, const cv::Point p2, float thickness) {
+	mLine = QLine(QPoint(p1.x, p1.y), QPoint(p2.x, p2.y));
+	mThickness = thickness;
+}
+
 cv::Point Line::startPointCV() const
 {
 	return cv::Point(mLine.p1().x(), mLine.p1().y());
