@@ -137,14 +137,29 @@ public:
 	QStringList typeNames() const;
 	bool isValidTypeName(const QString& typeName) const;
 
-	QSharedPointer<Region> createRegion(const Region::Type& type) const;
 
-	void drawRegion(QPainter& p, 
+	QSharedPointer<Region> createRegion(
+		const Region::Type& type) const;
+	QSharedPointer<RegionTypeConfig> getConfig(
+		const QSharedPointer<Region>& r,
+		const QVector<QSharedPointer<RegionTypeConfig> >& config = QVector<QSharedPointer<RegionTypeConfig> >()) const;
+
+	void drawRegion(
+		QPainter& p, 
 		QSharedPointer<rdf::Region> region, 
 		const QVector<QSharedPointer<RegionTypeConfig> >& config = QVector<QSharedPointer<RegionTypeConfig> >(), 
 		bool recursive = true) const;
 
+	QVector<QSharedPointer<rdf::Region> > regionsAt(
+		QSharedPointer<rdf::Region> root, 
+		const QPoint& p, 
+		const QVector<QSharedPointer<RegionTypeConfig> >& config = QVector<QSharedPointer<RegionTypeConfig> >()) const;
+
 	QVector<QSharedPointer<RegionTypeConfig> > regionTypeConfig() const;
+
+	void selectRegions(
+		const QVector<QSharedPointer<Region>>& selRegions, 
+		QSharedPointer<Region> rootRegion = QSharedPointer<Region>()) const;
 
 private:
 	RegionManager();
