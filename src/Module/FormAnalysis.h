@@ -61,6 +61,9 @@ namespace rdf {
 		float errorThr() const;
 		void setErrorThr(float e);
 
+		int searchXOffset() const;
+		int searchYOffset() const;
+
 
 		QString toString() const override;
 
@@ -71,6 +74,9 @@ namespace rdf {
 		float mThreshLineLenRatio = 0.6f;
 		float mDistThreshold = 30.0;
 		float mErrorThr = 15.0;
+
+		int mSearchXOffset = 200;
+		int mSearchYOffset = 200;
 
 	};
 
@@ -89,7 +95,10 @@ namespace rdf {
 		bool compareWithTemplate(const FormFeatures& fTempl);
 		cv::Size sizeImg() const;
 		QVector<rdf::Line> horLines() const;
+		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
+		QVector<rdf::Line> verLinesMatched() const;
+		cv::Point offset() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
 
@@ -119,6 +128,9 @@ namespace rdf {
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
 
+		QVector<rdf::Line> mHorLinesMatched;
+		QVector<rdf::Line> mVerLinesMatched;
+		cv::Point mOffset;
 		cv::Size mSizeSrc;
 
 		// parameters

@@ -34,6 +34,7 @@
 #include "Binarization.h"
 #include "Algorithms.h"
 #include "SkewEstimation.h"
+#include "Image.h"
 
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -124,8 +125,8 @@ namespace rdf {
 		return true;
 	}
 
-	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)
-	{
+	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)	{
+
 		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);
 		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::lessX1);
 		
@@ -137,8 +138,20 @@ namespace rdf {
 		std::sort(verLinesTemp.begin(), verLinesTemp.end(), rdf::Line::lessX1);
 
 		cv::Mat lineTempl(mSizeSrc, CV_8UC1);
+		lineTempl = 0;
 		LineTrace::generateLineImage(horLinesTemp, verLinesTemp, lineTempl);
-		cv::distanceTransform(lineTempl, lineTempl, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
+		lineTempl = 255 - lineTempl;
+		cv::Mat distImg;
+		cv::distanceTransform(lineTempl, distImg, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
+		//cv::distanceTransform(lineTempl, distImg, CV_DIST_L2, 3); //euclidean
+
+		//rdf::Image::instance().imageInfo(distImg, "distImg");
+		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\linetmpl.png");
+		//lineTempl = 0;
+		//LineTrace::generateLineImage(mHorLines, mVerLines, lineTempl);
+		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\lineImg.png");
+		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
+		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
 
 		float hLen = 0, hLenTemp = 0;
 		float vLen = 0, vLenTemp = 0;
@@ -171,8 +184,8 @@ namespace rdf {
 		QVector<int> offsetsX;
 		QVector<int> offsetsY;
 		//mSrcImg.rows
-		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height);
-		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width);
+		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height) + config()->searchYOffset();
+		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width) + config()->searchXOffset();
 
 		findOffsets(horLinesTemp, verLinesTemp, offsetsX, offsetsY);
 
@@ -190,33 +203,48 @@ namespace rdf {
 		for (int iX = 0; iX < offsetsX.size(); iX++) {
 			for (int iY = 0; iY < offsetsY.size(); iY++) {
 				//for for maximal translation
-				if (offsetsX[iX] <= sizeDiffX && offsetsY[iY] <= sizeDiffY) {
+				if (std::abs(offsetsX[iX]) <= sizeDiffX && std::abs(offsetsY[iY]) <= sizeDiffY) {
+					
+					//int ox = offsetsX[iX];
+					//int oy = offsetsY[iY];
+					//qDebug() << ox << " " << oy;
 
 					for (int i = 0; i < mHorLines.size(); i++) {
-						float tmp = errLine(lineTempl, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						float tmp = errLine(distImg, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
 							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedHor += mHorLines[i].length();
+							mHorLinesMatched.push_back(mHorLines[i]);
 						}
 					}
 					for (int i = 0; i < mVerLines.size(); i++) {
-						float tmp = errLine(lineTempl, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
+						float tmp = errLine(distImg, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
 							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
 							acceptedVer += mVerLines[i].length();
+							mVerLinesMatched.push_back(mVerLines[i]);
 						}
 					}
 					float error = horizontalError + verticalError;
 					if (error <= minError) {
-						minError = error;
-						finalAcceptedHor = acceptedHor;
-						finalAcceptedVer = acceptedVer;
-						finalErrorH = horizontalError;
-						finalErrorV = verticalError;
-						offSet.x = offsetsX[iX];
-						offSet.y = offsetsY[iY];
+						//check also if at least threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
+						if (acceptedHor / hLenTemp > config()->threshLineLenRation() && acceptedVer / vLenTemp > config()->threshLineLenRation()) {
+							minError = error;
+							finalAcceptedHor = acceptedHor;
+							finalAcceptedVer = acceptedVer;
+							finalErrorH = horizontalError;
+							finalErrorV = verticalError;
+							offSet.x = offsetsX[iX];
+							offSet.y = offsetsY[iY];
+						} else {
+							mHorLinesMatched.clear();
+							mVerLinesMatched.clear();
+						}
+					} else {
+						mHorLinesMatched.clear();
+						mVerLinesMatched.clear();
 					}
 					horizontalError = 0;
 					verticalError = 0;
@@ -230,13 +258,14 @@ namespace rdf {
 		qDebug() << "current Error: " << minError;
 		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
-		if (finalAcceptedHor / hLenTemp > config()->threshLineLenRation() && finalAcceptedVer / vLenTemp > config()->threshLineLenRation()) {
+		if (minError < std::numeric_limits<float>::max()) {
+			//at least threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
 
-			//more than threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
-			//if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
-				
+			//check if the average distance of the matched lines is smaller then the errorThr (default: 15px)
+			if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
+				mOffset = offSet;
 				return true;
-			//}
+			}
 		}
 
 		return false;
@@ -252,9 +281,24 @@ namespace rdf {
 		return mHorLines;
 	}
 
+	QVector<rdf::Line> FormFeatures::horLinesMatched() const
+	{
+		return mHorLinesMatched;
+	}
+
 	QVector<rdf::Line> FormFeatures::verLines() const
 	{
 		return mVerLines;
+	}
+
+	QVector<rdf::Line> FormFeatures::verLinesMatched() const
+	{
+		return mVerLinesMatched;
+	}
+
+	cv::Point FormFeatures::offset() const
+	{
+		return mOffset;
 	}
 
 	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{
@@ -330,7 +374,7 @@ namespace rdf {
 				}
 			}
 		}
-		else {
+		else if (!vT.empty() && !mVerLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < vT.size(); i++) {
 				int yLineTemp = vT[i].startPointCV().y;
@@ -345,16 +389,16 @@ namespace rdf {
 
 		//find horizontal offsets
 		if (!vT.empty() && !mVerLines.empty()) {
-			//use Y difference of horizontal lines if template and current Image contains horizontal lines
+			//use X difference of vertical lines if template and current Image contains vertical lines
 			for (int i = 0; i < vT.size(); i++) {
 				int xLineTemp = vT[i].startPointCV().x;
 				for (int j = 0; j < mVerLines.size(); j++) {
 					int diffXLine = xLineTemp - mVerLines[j].startPointCV().x;
-					offY.push_back(diffXLine);
+					offX.push_back(diffXLine);
 				}
 			}
 		}
-		else {
+		else if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
 				int xLineTemp = hT[i].startPointCV().x;
@@ -408,6 +452,14 @@ namespace rdf {
 
 	void FormFeaturesConfig::setErrorThr(float e)	{
 		mErrorThr = e;
+	}
+
+	int FormFeaturesConfig::searchXOffset() const	{
+		return mSearchXOffset;
+	}
+
+	int FormFeaturesConfig::searchYOffset() const	{
+		return mSearchYOffset;
 	}
 
 	QString FormFeaturesConfig::toString() const	{

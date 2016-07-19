@@ -77,6 +77,14 @@ QDebug operator<<(QDebug d, const Region& r) {
 	return d;
 }
 
+void Region::setSelected(bool select) {
+	mSelected = select;
+}
+
+bool Region::selected() const {
+	return mSelected;
+}
+
 /// <summary>
 /// Sets the Region type.
 /// </summary>
@@ -141,7 +149,14 @@ Polygon Region::polygon() const {
 /// <param name="config">The configuration containing colors etc.</param>
 void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 
-	p.setPen(config.pen());
+	QPen cp = config.pen();
+	
+	if (selected()) {
+		cp.setStyle(Qt::DashLine);
+		qDebug() << "should be dashed...";
+	}
+
+	p.setPen(cp);
 
 	// draw polygon
 	if (config.drawPoly() && !polygon().isEmpty()) {
@@ -210,6 +225,25 @@ void Region::setChildren(const QVector<QSharedPointer<Region>>& children) {
 /// <returns></returns>
 QVector<QSharedPointer<Region> > Region::children() const {
 	return mChildren;
+}
+
+QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) {
+
+	QVector<QSharedPointer<Region> > regions;
+
+	if (root)
+		root->collectRegions(regions);
+
+	return regions;
+}
+
+void Region::collectRegions(QVector<QSharedPointer<Region> >& allRegions) const {
+
+	for (auto c : children())
+		allRegions << c;
+
+	for (auto c : children())
+		c->collectRegions(allRegions);
 }
 
 /// <summary>
@@ -483,8 +517,8 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 			sp = mPoly.polygon().first();
 			p.drawText(sp, text());
 		}
-		else
-			qDebug() << "could not draw text: region has no polygon";
+		//else
+		//	qDebug() << "could not draw text: region has no polygon";
 	}
 
 }
