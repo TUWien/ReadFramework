@@ -184,8 +184,8 @@ namespace rdf {
 		QVector<int> offsetsX;
 		QVector<int> offsetsY;
 		//mSrcImg.rows
-		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height); //TODO: add offset
-		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width);	//TODO: add offset
+		int sizeDiffY = std::abs(mSizeSrc.height - fTempl.sizeImg().height) + config()->searchYOffset();
+		int sizeDiffX = std::abs(mSizeSrc.width - fTempl.sizeImg().width) + config()->searchXOffset();
 
 		findOffsets(horLinesTemp, verLinesTemp, offsetsX, offsetsY);
 
@@ -259,9 +259,11 @@ namespace rdf {
 		qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
 
 		if (minError < std::numeric_limits<float>::max()) {
+			//at least threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
+
 			//check if the average distance of the matched lines is smaller then the errorThr (default: 15px)
 			if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
-				
+				mOffset = offSet;
 				return true;
 			}
 		}
@@ -292,6 +294,11 @@ namespace rdf {
 	QVector<rdf::Line> FormFeatures::verLinesMatched() const
 	{
 		return mVerLinesMatched;
+	}
+
+	cv::Point FormFeatures::offset() const
+	{
+		return mOffset;
 	}
 
 	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{
@@ -445,6 +452,14 @@ namespace rdf {
 
 	void FormFeaturesConfig::setErrorThr(float e)	{
 		mErrorThr = e;
+	}
+
+	int FormFeaturesConfig::searchXOffset() const	{
+		return mSearchXOffset;
+	}
+
+	int FormFeaturesConfig::searchYOffset() const	{
+		return mSearchYOffset;
 	}
 
 	QString FormFeaturesConfig::toString() const	{
