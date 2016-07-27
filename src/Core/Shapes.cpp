@@ -226,6 +226,49 @@ QPoint Line::endPoint() const {
 	return mLine.p2();
 }
 
+bool Line::isHorizontal(float mAngleTresh) const
+{
+	double lineAngle = angle();
+
+	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
+	angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+
+	float diffangle = fabs(0.0f - angleNewLine);
+
+	angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+
+	diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+
+	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+		return true;
+	else
+		return false;
+
+}
+
+bool Line::isVertical(float mAngleTresh) const
+{
+	double lineAngle = angle();
+	//lineAngle = o = blob.blobOrientation
+	//lineAngle = angle
+
+
+	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
+	angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+
+	float diffangle = fabs((float)CV_PI*0.5f - (float)angleNewLine);
+
+	angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+
+	diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+
+	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+		return true;
+	else
+		return false;
+
+}
+
 /// <summary>
 /// Returns the minimum distance of the line endings of line l to the line endings of the current line instance.
 /// </summary>

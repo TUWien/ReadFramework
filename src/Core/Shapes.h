@@ -125,6 +125,8 @@ public:
 	static bool lessY1(const Line& l1, const Line& l2);
 	QPoint startPoint() const;
 	QPoint endPoint() const;
+	bool isHorizontal(float mAngleTresh = 0.5) const;
+	bool isVertical(float mAngleTresh = 0.5) const;
 
 protected:
 	QLine mLine;
