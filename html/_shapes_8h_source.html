@@ -229,20 +229,22 @@ $(document).ready(function(){initNavTree('_shapes_8h_source.html','');});
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> lessY1(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_line.html">Line</a>&amp; l1, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_line.html">Line</a>&amp; l2);</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    QPoint startPoint() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    QPoint endPoint() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">  130</a></span>&#160;    QLine <a class="code" href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">mLine</a>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="classrdf_1_1_line.html#aae7f4b4d407e665b9a241567e90fd2ec">  131</a></span>&#160;    <span class="keywordtype">float</span> mThickness = 1;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;};</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">bool</span> isHorizontal(<span class="keywordtype">float</span> mAngleTresh = 0.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">bool</span> isVertical(<span class="keywordtype">float</span> mAngleTresh = 0.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">  132</a></span>&#160;    QLine <a class="code" href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">mLine</a>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="classrdf_1_1_line.html#aae7f4b4d407e665b9a241567e90fd2ec">  133</a></span>&#160;    <span class="keywordtype">float</span> mThickness = 1;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;};</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_polygon_html_a506abf1492416243393a341ca356b382"><div class="ttname"><a href="classrdf_1_1_polygon.html#a506abf1492416243393a341ca356b382">rdf::Polygon::mPoly</a></div><div class="ttdeci">QPolygon mPoly</div><div class="ttdef"><b>Definition:</b> Shapes.h:72</div></div>
 <div class="ttc" id="classrdf_1_1_base_line_html"><div class="ttname"><a href="classrdf_1_1_base_line.html">rdf::BaseLine</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:76</div></div>
 <div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:100</div></div>
 <div class="ttc" id="classrdf_1_1_polygon_html"><div class="ttname"><a href="classrdf_1_1_polygon.html">rdf::Polygon</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:55</div></div>
 <div class="ttc" id="classrdf_1_1_base_line_html_a1c770a632f92b5e8045d33f0841daba9"><div class="ttname"><a href="classrdf_1_1_base_line.html#a1c770a632f92b5e8045d33f0841daba9">rdf::BaseLine::mBaseLine</a></div><div class="ttdeci">QPolygon mBaseLine</div><div class="ttdef"><b>Definition:</b> Shapes.h:93</div></div>
 <div class="ttc" id="_shapes_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> Shapes.h:46</div></div>
-<div class="ttc" id="classrdf_1_1_line_html_a225e6dc566a1d95563f1786813e92d45"><div class="ttname"><a href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">rdf::Line::mLine</a></div><div class="ttdeci">QLine mLine</div><div class="ttdef"><b>Definition:</b> Shapes.h:130</div></div>
+<div class="ttc" id="classrdf_1_1_line_html_a225e6dc566a1d95563f1786813e92d45"><div class="ttname"><a href="classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45">rdf::Line::mLine</a></div><div class="ttdeci">QLine mLine</div><div class="ttdef"><b>Definition:</b> Shapes.h:132</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

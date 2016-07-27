@@ -11,6 +11,8 @@ var classrdf_1_1_line =
     [ "gapLine", "classrdf_1_1_line.html#ae3f79882106a3b7c605a684ed15a3058", null ],
     [ "horizontalOverlap", "classrdf_1_1_line.html#a4b2a8461800cadc3283d83337ac97af5", null ],
     [ "isEmpty", "classrdf_1_1_line.html#a96b55e886aa3c832bf1c8ee5cb993773", null ],
+    [ "isHorizontal", "classrdf_1_1_line.html#a7862d5c1d0bd7136fbc65ad128eee0a7", null ],
+    [ "isVertical", "classrdf_1_1_line.html#ac26947a698686df16ee376fe792b42d5", null ],
     [ "length", "classrdf_1_1_line.html#a7710613efa9fdea501ca222fda43c421", null ],
     [ "line", "classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0", null ],
     [ "merge", "classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a", null ],
