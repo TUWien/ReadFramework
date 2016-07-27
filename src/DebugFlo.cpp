@@ -69,6 +69,10 @@ namespace rdf {
 		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
 
 		qDebug() << "image converted...";
+		if (inputImg.empty()) {
+			qDebug() << "image is empty...";
+			return;
+		}
 
 		
 		//test Otsu
@@ -103,7 +107,7 @@ namespace rdf {
 		cv::Mat imgTempl = rdf::Image::instance().qImage2Mat(imgTemplate);
 		cv::Mat imgTemplG;
 		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTemplG, CV_RGB2GRAY);
-		cv::Mat maskTempl = Algorithms::instance().estimateMask(imgTemplG);
+		cv::Mat maskTempl = rdf::Algorithms::instance().estimateMask(imgTemplG);
 		FormFeatures formTempl(imgTemplG);
 		formTempl.compute();
 
