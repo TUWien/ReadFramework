@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classrdf_1_1_module.html#ab95cf35f9dff6adbc42e37284d6a2e6c":[1,0,0,26,11],
 "classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c":[1,0,0,26,2],
 "classrdf_1_1_module_config.html":[1,0,0,25],
 "classrdf_1_1_module_config.html#a05e1865f2a91f6aea1d7c27bfc471c08":[1,0,0,25,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9":[1,0,0,19,1],
 "classrdf_1_1_xml_test.html":[1,0,0,23],
 "classrdf_1_1_xml_test.html#a7f70aebc70cb7c8f79eea001650df1e0":[1,0,0,23,0],
-"classrdf_1_1_xml_test.html#a936631441a6dbc0e7f11180e1ce67af5":[1,0,0,23,2],
-"classrdf_1_1_xml_test.html#acab3c1c208f51ac0ab9a3abfd7d818e7":[1,0,0,23,1]
+"classrdf_1_1_xml_test.html#a936631441a6dbc0e7f11180e1ce67af5":[1,0,0,23,2]
 };

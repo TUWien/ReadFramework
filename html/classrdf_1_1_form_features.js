@@ -24,6 +24,7 @@ var classrdf_1_1_form_features =
     [ "setSize", "classrdf_1_1_form_features.html#ae32b056efc017fc885716f003bfcce51", null ],
     [ "setVerLines", "classrdf_1_1_form_features.html#ad17b4d0ff5e94ea0a9a73f305e2d65dd", null ],
     [ "sizeImg", "classrdf_1_1_form_features.html#acfc3eaa4cbe7287ba6ca1a78cc9aef39", null ],
+    [ "templates", "classrdf_1_1_form_features.html#ae83487078c44ce0e1e77515fab55d20f", null ],
     [ "toString", "classrdf_1_1_form_features.html#a0cf83f2c37f6093fa30de5056136527b", null ],
     [ "verLines", "classrdf_1_1_form_features.html#a7f9cceb13b2afd30bef5306e9a161e42", null ],
     [ "verLinesMatched", "classrdf_1_1_form_features.html#a26674d806205a62abaec7333c38f120a", null ]
