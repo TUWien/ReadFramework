@@ -130,6 +130,11 @@ void PageXmlParser::setPage(QSharedPointer<PageElement> page) {
 
 QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
+	if (!QFileInfo(xmlPath).exists()) {
+		qCritical() << "cannot read XML from non-existing file:" << xmlPath;
+		return QSharedPointer<PageElement>();
+	}
+
 	QFile f(xmlPath);
 	QSharedPointer<PageElement> pageElement;
 

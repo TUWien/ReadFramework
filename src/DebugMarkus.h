@@ -49,6 +49,7 @@ public:
 	XmlTest(const DebugConfig& config = DebugConfig());
 
 	void parseXml();
+	void linesToXml();
 
 protected:
 	DebugConfig mConfig;

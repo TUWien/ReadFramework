@@ -52,6 +52,7 @@
 #pragma comment (linker, "/SUBSYSTEM:WINDOWS")
 #endif
 
+void applyDebugSettings(rdf::DebugConfig& dc);
 
 int main(int argc, char** argv) {
 
@@ -86,7 +87,7 @@ int main(int argc, char** argv) {
 	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filename."), "filename");
 	parser.addOption(settingOpt);
 
-	parser.process(app);
+	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
 
 	// load settings
@@ -99,20 +100,24 @@ int main(int argc, char** argv) {
 	}
 	config.load();
 
-	if (!parser.positionalArguments().empty()) {
+	// create debug config
+	rdf::DebugConfig dc;
 
-		QString imgPath = parser.positionalArguments()[0].trimmed();
-		
-		rdf::DebugConfig dc;
-		dc.setImagePath(imgPath);
+	if (parser.positionalArguments().size() > 0)
+		dc.setImagePath(parser.positionalArguments()[0].trimmed());
 
-		// add output path	
-		if (parser.isSet(outputOpt))
-			dc.setOutputPath(parser.value(outputOpt));
+	// add output path	
+	if (parser.isSet(outputOpt))
+		dc.setOutputPath(parser.value(outputOpt));
 
-		// add xml path	
-		if (parser.isSet(xmlOpt))
-			dc.setXmlPath(parser.value(xmlOpt));
+	// add xml path	
+	if (parser.isSet(xmlOpt))
+		dc.setXmlPath(parser.value(xmlOpt));
+
+	// apply debug settings - convenience if you don't want to always change the cmd args
+	applyDebugSettings(dc);
+
+	if (!dc.imagePath().isEmpty()) {
 
 		// flos section
 		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
@@ -130,7 +135,8 @@ int main(int argc, char** argv) {
 		else {
 			qDebug() << "Servus Markus...";
 			rdf::XmlTest test(dc);
-			test.parseXml();
+			//test.parseXml();
+			test.linesToXml();
 		}
 
 	}
@@ -142,4 +148,19 @@ int main(int argc, char** argv) {
 	// save settings
 	config.save();
 	return 0;	// thanks
+}
+
+void applyDebugSettings(rdf::DebugConfig& dc) {
+
+	if (dc.outputPath().isEmpty()) {
+		dc.setOutputPath("D:/read/test/line.xml");
+		qInfo() << dc.outputPath() << "added as output path";
+	}
+
+	if (dc.imagePath().isEmpty()) {
+		dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
+		qInfo() << dc.imagePath() << "added as image path";
+	}
+
+	// add your debug overwrites here...
 }

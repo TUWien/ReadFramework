@@ -56,31 +56,45 @@ XmlTest::XmlTest(const DebugConfig& config) {
 void XmlTest::parseXml() {
 
 	rdf::Timer dt;
-	int idx = 0;
 
-	qDebug() << "image path: " << mConfig.imagePath();
-
+	// test image loading
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::instance().qImage2Mat(img);
 
+	if (!imgCv.empty())
+		qInfo() << mConfig.imagePath() << "loaded...";
+	else
+		qInfo() << mConfig.imagePath() << "NOT loaded...";
+
+	// parse xml
+	PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+
+	qDebug() << mConfig.xmlPath() << "parsed in " << dt;
+}
+
+void XmlTest::linesToXml() {
+
+	rdf::Timer dt;
+
+	qDebug() << "image path: " << mConfig.imagePath();
+
+	// load image
+	QImage img(mConfig.imagePath());
+	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+
+	// binarize
 	rdf::BinarizationSuAdapted binarizeImg(imgCv, cv::Mat());
 	binarizeImg.compute();
-
-	//SuperPixel sp(imgCv);
-	//sp.compute();
-	//
-	//if (!mConfig.outputPath().isEmpty())
-	//	cv::imwrite(mConfig.outputPath().toStdString(), sp.binaryImage());
-
-	// test lines XML
 	cv::Mat bwImg = binarizeImg.binaryImage();
+	qInfo() << "binarised in" << dt;
 
+	// find lines
 	rdf::LineTrace lt(bwImg);
 	lt.setAngle(0.0);
-
 	lt.compute();
-
-	QVector<rdf::Line> alllines = lt.getLines();
+	QVector<rdf::Line> allLines = lt.getLines();
+	qInfo() << allLines.size() << "lines detected in" << dt;
 
 	// init parser
 	PageXmlParser parser;
@@ -89,55 +103,16 @@ void XmlTest::parseXml() {
 	auto root = parser.page()->rootRegion();
 
 	// test writing lines
-	for (int i = 0; i < alllines.size(); i++) {
+	for (const rdf::Line& cL : allLines) {
 
 		QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
-		pSepR->setLine(alllines[i].line());
-
+		pSepR->setLine(cL.line());
 		root->addUniqueChild(pSepR);
 	}
 
-	// loop for sampling time...
 	parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), parser.page());
-
-	//// test lines XML
-	//rdf::BinarizationSuAdapted binarizeImg(imgCv);
-	//binarizeImg.compute();
-	//cv::Mat bwImg = binarizeImg.binaryImage();
-
-	//rdf::LineTrace lt(bwImg);
-	//lt.setAngle(0.0);
-
-	//lt.compute();
-
-	////cv::Mat lImg = lt.lineImage();
-	////cv::Mat synLine = lt.generatedLineImage();
-	////QVector<rdf::Line> hlines = lt.getHLines();
-	////QVector<rdf::Line> vlines = lt.getVLines();
-	//QVector<rdf::Line> alllines = lt.getLines();
-
-	////save lines to xml
-	////TODO - check if it is working...
-	//rdf::PageXmlParser parser;
-	//parser.read(mConfig.xmlPath());
-	//auto pe = parser.page();
-	//auto root = pe->rootRegion();
-	////pe->setCreator(QString("CVL"));
-
-	//for (int i = 0; i < alllines.size(); i++) {
-
-	//	QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
-	//	pSepR->setLine(alllines[i].line());
-
-	//	if (root)
-	//		root->addUniqueChild(pSepR);
-	//}
-
-	//parser.write(PageXmlParser::imagePathToXmlPath(mConfig.outputPath()), pe);
-
-
-	qDebug() << mConfig.xmlPath() << "parsed" << idx << "x in " << dt << "mean" << dt.stringifyTime(dt.elapsed());
-
+	
+	qInfo() << mConfig.imagePath() << "lines computed and written in" << dt;
 }
 
 }

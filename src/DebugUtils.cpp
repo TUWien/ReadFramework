@@ -32,8 +32,10 @@
 
 #include "DebugUtils.h"
 
+#include "PageParser.h"
+
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -46,19 +48,29 @@ DebugConfig::DebugConfig() {
 void DebugConfig::setImagePath(const QString & path) {
 	mImagePath = path;
 }
+
 QString DebugConfig::imagePath() const {
 	return mImagePath;
 }
+
 void DebugConfig::setXmlPath(const QString & path) {
 	mXMLPath = path;
 }
+
 QString DebugConfig::xmlPath() const {
+
+	if (mXMLPath.isEmpty())
+		return PageXmlParser::imagePathToXmlPath(imagePath());
+
 	return mXMLPath;
 }
+
 void DebugConfig::setOutputPath(const QString & path) {
 	mOutputPath = path;
 }
+
 QString DebugConfig::outputPath() const {
 	return mOutputPath;
 }
+
 }
