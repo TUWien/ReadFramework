@@ -355,6 +355,7 @@ namespace rdf {
 			//check if the average distance of the matched lines is smaller then the errorThr (default: 15px)
 			if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
 				mOffset = offSet;
+				mMinError = (double)minError;
 				return true;
 			}
 		}
@@ -400,6 +401,10 @@ namespace rdf {
 
 	cv::Point FormFeatures::offset() const	{
 		return mOffset;
+	}
+
+	double FormFeatures::error() const	{
+		return mMinError;
 	}
 
 	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{

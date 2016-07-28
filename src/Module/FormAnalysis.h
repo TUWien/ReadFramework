@@ -111,6 +111,7 @@ namespace rdf {
 		void setVerLines(const QVector<rdf::Line>& v);
 		QVector<rdf::Line> verLinesMatched() const;
 		cv::Point offset() const;
+		double error() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
 
@@ -138,6 +139,7 @@ namespace rdf {
 		bool mPreFilter = true;
 		int preFilterArea = 10;
 		double mPageAngle = 0.0;
+		double mMinError = std::numeric_limits<double>::max();
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
