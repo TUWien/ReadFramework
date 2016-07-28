@@ -8,6 +8,7 @@ var classrdf_1_1_form_features =
     [ "computeBinaryInput", "classrdf_1_1_form_features.html#aa895a6fe46070ff711ba46e78207bc3d", null ],
     [ "config", "classrdf_1_1_form_features.html#aecdfae3baff50e424a27e7198e36e2ca", null ],
     [ "errLine", "classrdf_1_1_form_features.html#adbb84609954349ff9e033dd486aea652", null ],
+    [ "error", "classrdf_1_1_form_features.html#abd369e6c5472a26a1d2fb406c185bc9a", null ],
     [ "findOffsets", "classrdf_1_1_form_features.html#a061e2f313fdeca7641139dbd092435c5", null ],
     [ "formName", "classrdf_1_1_form_features.html#a92c77578dff631a981cf042fcf5c7316", null ],
     [ "getMatchedLineImg", "classrdf_1_1_form_features.html#a46c60cc8c2f11f496923bf8f8453edfd", null ],

@@ -8,6 +8,7 @@ var searchData=
   ['erodedmasksize',['erodedMaskSize',['../classrdf_1_1_base_binarization_su_config.html#a67d3badd37e8481d0ce1c8a03fcc77c9',1,'rdf::BaseBinarizationSuConfig']]],
   ['erodeimage',['erodeImage',['../classrdf_1_1_algorithms.html#a916b6b1df1b469031465011cd4fa5d3b',1,'rdf::Algorithms']]],
   ['errline',['errLine',['../classrdf_1_1_form_features.html#adbb84609954349ff9e033dd486aea652',1,'rdf::FormFeatures']]],
+  ['error',['error',['../classrdf_1_1_form_features.html#abd369e6c5472a26a1d2fb406c185bc9a',1,'rdf::FormFeatures']]],
   ['errorthr',['errorThr',['../classrdf_1_1_form_features_config.html#ad90db61d4bed3d1acd7e9c0fd62c9bfe',1,'rdf::FormFeaturesConfig']]],
   ['estimatemask',['estimateMask',['../classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500',1,'rdf::Algorithms']]],
   ['euclideandistance',['euclideanDistance',['../classrdf_1_1_algorithms.html#a1ee47d9e9be1b11d5172e17069e226a1',1,'rdf::Algorithms']]]
