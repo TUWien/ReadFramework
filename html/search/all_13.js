@@ -14,7 +14,7 @@ var searchData=
   ['tag_5ftext_5fequiv',['tag_text_equiv',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63a016f308e4e66c662f788d2f3becf7bc4',1,'rdf::RegionXmlHelper']]],
   ['tag_5funicode',['tag_unicode',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63afcc895154b9d3920fb4efbe628e4c1eb',1,'rdf::RegionXmlHelper']]],
   ['tagname',['tagName',['../classrdf_1_1_page_xml_parser.html#ad045baf5b9df93a55a179bde558945b4',1,'rdf::PageXmlParser']]],
-  ['templates',['templates',['../classrdf_1_1_form_features.html#ae83487078c44ce0e1e77515fab55d20f',1,'rdf::FormFeatures']]],
+  ['templatesdb',['templatesDb',['../classrdf_1_1_form_features.html#a952479e18fca3744fed443e482fce7df',1,'rdf::FormFeatures']]],
   ['templdatabase',['templDatabase',['../classrdf_1_1_form_features_config.html#a16e5c488a8e3ea56a68328a1ba407c8b',1,'rdf::FormFeaturesConfig']]],
   ['text',['text',['../classrdf_1_1_text_line.html#a995495340b4b89e84f89d78fd9ec6e70',1,'rdf::TextLine']]],
   ['textline',['TextLine',['../classrdf_1_1_text_line.html#ac74ea657fc1ee717f65194a17d73436a',1,'rdf::TextLine']]],

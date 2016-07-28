@@ -2,7 +2,7 @@ var searchData=
 [
   ['tag',['tag',['../classrdf_1_1_region_xml_helper.html#aab3702188f893510256efa26f9cf605e',1,'rdf::RegionXmlHelper']]],
   ['tagname',['tagName',['../classrdf_1_1_page_xml_parser.html#ad045baf5b9df93a55a179bde558945b4',1,'rdf::PageXmlParser']]],
-  ['templates',['templates',['../classrdf_1_1_form_features.html#ae83487078c44ce0e1e77515fab55d20f',1,'rdf::FormFeatures']]],
+  ['templatesdb',['templatesDb',['../classrdf_1_1_form_features.html#a952479e18fca3744fed443e482fce7df',1,'rdf::FormFeatures']]],
   ['templdatabase',['templDatabase',['../classrdf_1_1_form_features_config.html#a16e5c488a8e3ea56a68328a1ba407c8b',1,'rdf::FormFeaturesConfig']]],
   ['text',['text',['../classrdf_1_1_text_line.html#a995495340b4b89e84f89d78fd9ec6e70',1,'rdf::TextLine']]],
   ['textline',['TextLine',['../classrdf_1_1_text_line.html#ac74ea657fc1ee717f65194a17d73436a',1,'rdf::TextLine']]],
