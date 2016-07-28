@@ -127,6 +127,10 @@ namespace rdf {
 		return true;
 	}
 
+	QVector<rdf::FormFeatures> FormFeatures::templates() const {
+		return mTemplates;
+	}
+
 	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg, cv::Point offset) const	{
 
 		cv::Mat finalImg = srcImg.clone();
