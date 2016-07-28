@@ -16,5 +16,6 @@ var searchData=
   ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html#a644d9e948e1080d50a103494ecf6fdba',1,'rdf::LineTraceConfig']]],
   ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html',1,'rdf']]],
   ['load',['load',['../classrdf_1_1_region_type_config.html#a3d16be5bebe30c78f83df9fedd4eaea6',1,'rdf::RegionTypeConfig::load()'],['../classrdf_1_1_generic_settings.html#a988daf67befbee022897c9b6f48dc746',1,'rdf::GenericSettings::load()'],['../classrdf_1_1_global_settings.html#aaeeb34e5876b8c5fab307e4ed89020fb',1,'rdf::GlobalSettings::load()'],['../classrdf_1_1_config.html#a0bd579fa01f31f98787caefc7ad50c4d',1,'rdf::Config::load()'],['../classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409',1,'rdf::ModuleConfig::load()'],['../classrdf_1_1_simple_binarization_config.html#a45955c54fb2c51c254abde12a8e77946',1,'rdf::SimpleBinarizationConfig::load()']]],
-  ['loadsettings',['loadSettings',['../classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947',1,'rdf::ModuleConfig']]]
+  ['loadsettings',['loadSettings',['../classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947',1,'rdf::ModuleConfig']]],
+  ['loadtemplatedatabase',['loadTemplateDatabase',['../classrdf_1_1_form_features.html#ab6f6a9a3c69e87326692b284c5cfbde0',1,'rdf::FormFeatures']]]
 ];

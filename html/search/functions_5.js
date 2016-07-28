@@ -11,5 +11,6 @@ var searchData=
   ['fms',['fmS',['../classrdf_1_1_patch.html#a038d5e236019f362407450456fccffe5',1,'rdf::Patch']]],
   ['focusestimation',['FocusEstimation',['../classrdf_1_1_focus_estimation.html#ae4b3bb44264fe2ec76ad27d61a632873',1,'rdf::FocusEstimation::FocusEstimation()'],['../classrdf_1_1_focus_estimation.html#a2b5c5942954b17ed5157ce6869afc23e',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_focus_estimation.html#ad0b77177fec3105f917d72fe0276b918',1,'rdf::FocusEstimation::FocusEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html#ab848f428a204c0ece54602bf93ae39d8',1,'rdf::FormFeatures::FormFeatures()'],['../classrdf_1_1_form_features.html#a79eb61c36661a8aefbd6fd598cbe6c17',1,'rdf::FormFeatures::FormFeatures(const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())']]],
-  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html#a78debda4ca3ea5281a3eaee298da67fb',1,'rdf::FormFeaturesConfig']]]
+  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html#a78debda4ca3ea5281a3eaee298da67fb',1,'rdf::FormFeaturesConfig']]],
+  ['formname',['formName',['../classrdf_1_1_form_features.html#a92c77578dff631a981cf042fcf5c7316',1,'rdf::FormFeatures']]]
 ];

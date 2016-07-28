@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab848f428a204c0ece54602bf93ae39d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79eb61c36661a8aefbd6fd598cbe6c17"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a79eb61c36661a8aefbd6fd598cbe6c17">FormFeatures</a> (const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())</td></tr>
 <tr class="separator:a79eb61c36661a8aefbd6fd598cbe6c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6f6a9a3c69e87326692b284c5cfbde0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#ab6f6a9a3c69e87326692b284c5cfbde0">loadTemplateDatabase</a> (QString db)</td></tr>
+<tr class="separator:ab6f6a9a3c69e87326692b284c5cfbde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46c60cc8c2f11f496923bf8f8453edfd"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a46c60cc8c2f11f496923bf8f8453edfd">getMatchedLineImg</a> (const cv::Mat srcImg, cv::Point <a class="el" href="classrdf_1_1_form_features.html#a36874d7afa5fc4131e95faeb62cec68f">offset</a>=cv::Point(0, 0)) const </td></tr>
 <tr class="separator:a46c60cc8c2f11f496923bf8f8453edfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb24e5ce439a6769ce4ec13d8ebe90ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#aeb24e5ce439a6769ce4ec13d8ebe90ce">setInputImg</a> (const cv::Mat &amp;img)</td></tr>
@@ -178,6 +180,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0cf83f2c37f6093fa30de5056136527b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a0cf83f2c37f6093fa30de5056136527b">toString</a> () const override</td></tr>
 <tr class="memdesc:a0cf83f2c37f6093fa30de5056136527b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#a0cf83f2c37f6093fa30de5056136527b">More...</a><br/></td></tr>
 <tr class="separator:a0cf83f2c37f6093fa30de5056136527b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f6450e2e4ff78194432b54032cf7292"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a9f6450e2e4ff78194432b54032cf7292">setFormName</a> (QString s)</td></tr>
+<tr class="separator:a9f6450e2e4ff78194432b54032cf7292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c77578dff631a981cf042fcf5c7316"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_form_features.html#a92c77578dff631a981cf042fcf5c7316">formName</a> () const </td></tr>
+<tr class="separator:a92c77578dff631a981cf042fcf5c7316"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a2c7864d8a5bfbbcd7a62d311cde6cf99 inherit pub_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99">Module</a> ()</td></tr>
 <tr class="memdesc:a2c7864d8a5bfbbcd7a62d311cde6cf99 inherit pub_methods_classrdf_1_1_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor Initializes a new instance of the <a class="el" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module...">Module</a> class.  <a href="#a2c7864d8a5bfbbcd7a62d311cde6cf99">More...</a><br/></td></tr>
@@ -424,6 +430,21 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a92c77578dff631a981cf042fcf5c7316"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString rdf::FormFeatures::formName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a46c60cc8c2f11f496923bf8f8453edfd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -508,6 +529,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab6f6a9a3c69e87326692b284c5cfbde0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::FormFeatures::loadTemplateDatabase </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>db</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a36874d7afa5fc4131e95faeb62cec68f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -531,6 +568,22 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void rdf::FormFeatures::setEstimateSkew </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9f6450e2e4ff78194432b54032cf7292"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FormFeatures::setFormName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
           <td></td>
         </tr>
