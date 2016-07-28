@@ -127,7 +127,7 @@ namespace rdf {
 		return true;
 	}
 
-	QVector<rdf::FormFeatures> FormFeatures::templates() const {
+	QVector<rdf::FormFeatures> FormFeatures::templatesDb() const {
 		return mTemplates;
 	}
 

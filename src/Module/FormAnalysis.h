@@ -92,7 +92,7 @@ namespace rdf {
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
 		bool loadTemplateDatabase(QString db);
-		QVector<rdf::FormFeatures> templates() const;
+		QVector<rdf::FormFeatures> templatesDb() const;
 
 		cv::Mat getMatchedLineImg(const cv::Mat srcImg, cv::Point offset = cv::Point(0,0)) const;
 
