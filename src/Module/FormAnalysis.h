@@ -64,12 +64,17 @@ namespace rdf {
 		int searchXOffset() const;
 		int searchYOffset() const;
 
+		QString templDatabase() const;
+		void setTemplDatabase(QString s);
+
 
 		QString toString() const override;
 
 	private:
 		void load(const QSettings& settings) override;
 		void save(QSettings& settings) const override;
+
+		QString mTemplDatabase;
 
 		float mThreshLineLenRatio = 0.6f;
 		float mDistThreshold = 30.0;
@@ -80,13 +85,13 @@ namespace rdf {
 
 	};
 
-
 	class DllModuleExport FormFeatures : public Module {
 
 	public:
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
+		bool loadTemplateDatabase(QString db);
 		cv::Mat getMatchedLineImg(const cv::Mat srcImg, cv::Point offset = cv::Point(0,0)) const;
 
 		void setInputImg(const cv::Mat& img);
@@ -114,6 +119,8 @@ namespace rdf {
 		//int thresh() const;
 		QString toString() const override;
 
+		void setFormName(QString s);
+		QString formName() const;
 
 	protected:
 
@@ -133,6 +140,8 @@ namespace rdf {
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
 
+		QVector<rdf::FormFeatures> mTemplates;
+
 		QVector<rdf::Line> mHorLinesMatched;
 		QVector<rdf::Line> mVerLinesMatched;
 		cv::Point mOffset;
@@ -141,6 +150,7 @@ namespace rdf {
 		// parameters
 
 		bool checkInput() const override;
+		QString mFormName;
 
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;
