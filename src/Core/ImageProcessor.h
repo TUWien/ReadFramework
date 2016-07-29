@@ -33,14 +33,9 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QSharedPointer>
-#include <QImage>
-#include <QString>
-
-#include "opencv2/core/core.hpp"
+#include <QObject>
+#include <opencv2\core\core.hpp>
 #pragma warning(pop)
-
-#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
 #ifndef DllCoreExport
 #ifdef DLL_CORE_EXPORT
@@ -55,59 +50,11 @@
 namespace rdf {
 
 // read defines
-/// <summary>
-/// Basic image class
-/// </summary>
-class DllCoreExport Image {
+class DllCoreExport IP {	// basically a namespace for now
 
 public:
-	static Image& instance();
-
-	cv::Mat qImage2Mat(const QImage& img);
-	QImage mat2QImage(const cv::Mat& img);
-	bool save(const QImage& img, const QString& savePath, int compression = -1) const;
-	bool save(const cv::Mat& img, const QString& savePath, int compression = -1) const;
-	bool alphaChannelUsed(const QImage& img) const;
-	void imageInfo(const cv::Mat& img, const QString name) const;
-	QString printImage(const cv::Mat& img, const QString name) const;
-
-	/// <summary>
-	/// Prints the values of a cv::Mat to copy it to Matlab.
-	/// </summary>
-	/// <param name="src">The Mat to be printed.</param>
-	/// <param name="varName">Name of the variable for matlab.</param>
-	/// <returns>The String with all values formatted for matlab.</returns>
-	template <typename numFmt>
-	static QString printMat(const cv::Mat& src, const QString varName) {
-
-		QString msg = varName;
-		msg.append(" = [");	// matlab...
-
-		int cnt = 0;
-
-		for (int rIdx = 0; rIdx < src.rows; rIdx++) {
-
-			const numFmt* srcPtr = src.ptr<numFmt>(rIdx);
-
-			for (int cIdx = 0; cIdx < src.cols; cIdx++, cnt++) {
-
-
-				msg.append(QString::number(srcPtr[cIdx]));
-				msg.append( (cIdx < src.cols - 1) ? " " : "; " ); // next row matlab?
-
-				if (cnt % 7 == 0)
-					msg.append("...\n");
-			}
-
-		}
-		msg.append("];");
-
-		return msg;
-	}
-
-private:
-	Image();
-	Image(const Image&);
+	static cv::Mat invert(const cv::Mat& src);
+	static cv::Mat grayscale(const cv::Mat& src);
 };
 
 };

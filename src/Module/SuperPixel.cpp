@@ -33,7 +33,9 @@
 #include "SuperPixel.h"
 
 #include "Image.h"
+#include "ImageProcessor.h"
 #include "Drawer.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -70,19 +72,42 @@ bool SuperPixel::compute() {
 	if (!checkInput())
 		return false;
 
+	cv::Mat img = mSrcImg.clone();
+	img = IP::grayscale(img);
+	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
+	//img = IP::invert(img);
+
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
 
-	std::vector<std::vector<cv::Point> > centers;
+	std::vector<std::vector<cv::Point> > elements;
 	std::vector<cv::Rect> bboxes;
-	mser->detectRegions(mSrcImg, centers, bboxes);
+	mser->detectRegions(img, elements, bboxes);
 
-	mDstImg = mSrcImg.clone();
+	mDstImg = img.clone();
+	//mDstImg.setTo(cv::Scalar(255));
+
+	//// TODO: put into a drawer class...
+	//for (auto set : elements) {
+	//	QColor col;// = Drawer::instance().getRandomColor();
+	//	col.setAlpha(30);
+	//	Drawer::instance().setColor(col);
+	//	mDstImg = Drawer::instance().drawPoints(mDstImg, set);
+	//}
+
+	std::vector<cv::Point> cc;
+	for (cv::Rect r : bboxes) {
+		QRectF qr = Converter::cvRectToQt(r);
+		cc.push_back(Converter::qPointToCv(qr.center()));
+	}
 
 	// TODO: put into a drawer class...
-	for (auto set : centers) {
-		Drawer::instance().setColor(Drawer::instance().getRandomColor());
-		mDstImg = Drawer::instance().drawPoints(mDstImg, set);
-	}
+	QColor col = Drawer::instance().getRandomColor();
+	col.setAlpha(100);
+	Drawer::instance().setColor(col);
+	Drawer::instance().setStrokeWidth(3);
+	mDstImg = Drawer::instance().drawPoints(mDstImg, cc);
+
+
 
 	//Drawer::instance().setColor(Drawer::instance().getRandomColor());
 	//mDstImg = Drawer::instance().drawRects(mDstImg, bboxes);

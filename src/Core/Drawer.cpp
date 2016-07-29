@@ -129,14 +129,15 @@ void Drawer::setPen(const QPen& pen) {
 QColor Drawer::getRandomColor(int idx) const {
 
 	QVector<QColor> cols = colors();
-	int maxCols = cols.size() * 2;
+	int maxCols = cols.size();
 	if (idx == -1)
-		idx = qRound(Utils::rand()*maxCols);
+		idx = qRound(Utils::rand()*maxCols*3);
 
 	assert(idx >= 0 && cols.size() > 0);
 
 	QColor col = cols[idx % cols.size()];
 
+	// currently not hit
 	if (idx > 2 * cols.size())
 		col = col.darker();
 	else if (idx > cols.size())
