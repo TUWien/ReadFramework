@@ -50,6 +50,21 @@
 namespace rdf {
 
 // read defines
+
+class DllModuleExport SuperPixelConfig : public ModuleConfig {
+
+public:
+	SuperPixelConfig();
+
+	virtual QString toString() const override;
+
+protected:
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+
 class DllModuleExport SuperPixel : public Module {
 
 public:
@@ -64,7 +79,7 @@ public:
 
 private:
 	cv::Mat mSrcImg;
-	std::vector<cv::UMat> mMask;
+	cv::Mat mDstImg;
 
 	bool checkInput() const override;
 

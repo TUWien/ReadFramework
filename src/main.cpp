@@ -134,9 +134,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			rdf::XmlTest test(dc);
-			//test.parseXml();
-			test.linesToXml();
+			//rdf::XmlTest test(dc);
+			////test.parseXml();
+			//test.linesToXml();
+
+			rdf::LayoutTest lt(dc);
+			lt.testComponents();
 		}
 
 	}
@@ -153,11 +156,12 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath("D:/read/test/line.xml");
+		dc.setOutputPath("D:/read/test/superPixel.png");
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 
 	if (dc.imagePath().isEmpty()) {
+		dc.setImagePath("D:/read/test/two-lines.jpg");
 		dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
 		qInfo() << dc.imagePath() << "added as image path";
 	}

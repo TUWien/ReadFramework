@@ -36,6 +36,11 @@
 #include <QApplication>
 #include <QDebug>
 #include <QPolygon>
+#include <QFileInfo>
+#include <QDir>
+#include <QTime>
+
+#include <opencv2\core\core.hpp>
 #pragma warning(pop)
 
 // needed for registering the file version
@@ -50,6 +55,9 @@ namespace rdf {
 
 // Utils --------------------------------------------------------------------
 Utils::Utils() {
+
+	// initialize random
+	qsrand(QTime::currentTime().msec());
 }
 
 Utils& Utils::instance() { 
@@ -126,6 +134,41 @@ void Utils::registerVersion() const {
 
 }
 
+/// <summary>
+/// Returns a random number within [0 1].
+/// </summary>
+/// <returns></returns>
+double Utils::rand() {
+
+	return (double)qrand() / RAND_MAX;
+}
+
+/// <summary>
+/// Creates a new file path from filePath.
+/// Hence, C:\temp\josef.png can be turned into C:\temp\josef-something.xml
+/// </summary>
+/// <param name="filePath">The old file path.</param>
+/// <param name="attribute">An attribute string which is appended to the filename.</param>
+/// <param name="newSuffix">A new suffix, the old suffix is used if empty.</param>
+/// <returns>The new file path.</returns>
+QString Utils::createFilePath(const QString & filePath, const QString & attribute, const QString & newSuffix) const {
+	
+	QFileInfo info(filePath);
+	QString suffix = (newSuffix.isEmpty()) ? info.suffix() : newSuffix;
+	QString newFileName = info.baseName() + attribute + "." + suffix;
+	info.setFile(info.absoluteDir(), newFileName);
+
+	return info.absoluteFilePath();
+}
+
+
+QRectF Converter::cvRectToQt(const cv::Rect & r) {
+	return QRectF(r.x, r.y, r.width, r.height);
+}
+
+cv::Rect2d Converter::qRectToCv(const QRectF & r) {
+	return cv::Rect2d(r.x(), r.y(), r.width(), r.height());
+}
 
 // Converter --------------------------------------------------------------------
 Converter::Converter() {
@@ -179,7 +222,7 @@ QPolygon Converter::stringToPoly(const QString& pointList) const {
 /// </summary>
 /// <param name="polygon">The polygon to convert.</param>
 /// <returns>A string representing the polygon.</returns>
-QString Converter::polyToString(const QPolygon& polygon) {
+QString Converter::polyToString(const QPolygon& polygon) const {
 
 	QString polyStr;
 
@@ -192,6 +235,14 @@ QString Converter::polyToString(const QPolygon& polygon) {
 	polyStr.remove(polyStr.length() - 1, 1);
 
 	return polyStr;
+}
+
+QPointF Converter::cvPointToQt(const cv::Point & pt) {
+	return QPointF(pt.x, pt.y);
+}
+
+cv::Point2d Converter::qPointToCv(const QPointF & pt) {
+	return cv::Point2d(pt.x(), pt.y());
 }
 
 // Timer --------------------------------------------------------------------

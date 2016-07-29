@@ -38,11 +38,15 @@
 // Qt Includes
 #pragma warning(pop)
 
-// Qt defines
+// Qt/CV defines
+namespace cv {
+	class Mat;
+}
 
 namespace rdf {
 
 // read defines
+
 class XmlTest {
 
 public:
@@ -53,7 +57,19 @@ public:
 
 protected:
 	DebugConfig mConfig;
+};
 
+class LayoutTest {
+	
+public:
+	LayoutTest(const DebugConfig& config = DebugConfig());
+
+	void testComponents();
+
+protected:
+	void computeComponents(cv::Mat& img) const;
+
+	DebugConfig mConfig;
 };
 
 

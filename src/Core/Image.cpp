@@ -68,8 +68,8 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 	QImage cImg;	// must be initialized here!	(otherwise the data is lost before clone())
 
 	try {
-		if (img.format() == QImage::Format_RGB32)
-			qDebug() << "we have an RGB32 in memory...";
+		//if (img.format() == QImage::Format_RGB32)
+		//	qDebug() << "we have an RGB32 in memory...";
 
 		if (img.format() == QImage::Format_ARGB32 || img.format() == QImage::Format_RGB32) {
 			mat2 = cv::Mat(img.height(), img.width(), CV_8UC4, (uchar*)img.bits(), img.bytesPerLine());
@@ -153,6 +153,12 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 		sImg = sImg.convertToFormat(QImage::Format_RGB32);
 	else if (fInfo.suffix().contains(QRegExp("(png)")))
 		sImg = sImg.convertToFormat(QImage::Format_RGB32);
+
+	if (compression == -1 && fInfo.suffix().contains(QRegExp("(png)"))) {
+		compression = 1;	// we want pngs always to be compressed
+	}
+	else if (compression == -1)
+		compression = 90;	// choose good default compression for jpgs
 
 	qDebug() << "img has alpha: " << (sImg.format() != QImage::Format_RGB888) << " img uses alpha: " << hasAlpha;
 
@@ -280,13 +286,13 @@ void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const 
 QString Image::printImage(const cv::Mat& img, const QString name) const {
 	QString imgInfo;
 	if (img.depth() == CV_32FC1)
-		imgInfo = rdf::printMat<float>(img, name);
+		imgInfo = rdf::Image::printMat<float>(img, name);
 	else if (img.depth() == CV_64FC1)
-		imgInfo = rdf::printMat<double>(img, name);
+		imgInfo = rdf::Image::printMat<double>(img, name);
 	else if (img.depth() == CV_8UC1) {
 		cv::Mat tmp;
 		img.convertTo(tmp, CV_32FC1);
-		imgInfo = rdf::printMat<float>(tmp, name);
+		imgInfo = rdf::Image::printMat<float>(tmp, name);
 	}
 	else
 		imgInfo = "I could not visualize the mat";

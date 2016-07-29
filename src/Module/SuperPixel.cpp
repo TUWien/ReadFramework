@@ -32,11 +32,15 @@
 
 #include "SuperPixel.h"
 
+#include "Image.h"
+#include "Drawer.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
-#include <opencv2/stitching/detail/seam_finders.hpp>
+//#include <opencv2/stitching/detail/seam_finders.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -66,37 +70,52 @@ bool SuperPixel::compute() {
 	if (!checkInput())
 		return false;
 
-	cv::detail::GraphCutSeamFinder seamFinder;
+	cv::Ptr<cv::MSER> mser = cv::MSER::create();
 
-	std::vector<cv::Point> corners;
-	corners.push_back(cv::Point(0, 0));
-	corners.push_back(cv::Point(100, 200));
+	std::vector<std::vector<cv::Point> > centers;
+	std::vector<cv::Rect> bboxes;
+	mser->detectRegions(mSrcImg, centers, bboxes);
 
-	cv::UMat src;
-	cv::cvtColor(mSrcImg, src, CV_RGBA2RGB);
+	mDstImg = mSrcImg.clone();
 
-	std::vector<cv::UMat> mats;
-	mats.push_back(src);
+	// TODO: put into a drawer class...
+	for (auto set : centers) {
+		Drawer::instance().setColor(Drawer::instance().getRandomColor());
+		mDstImg = Drawer::instance().drawPoints(mDstImg, set);
+	}
 
-	qDebug() << "src channels: " << mSrcImg.channels();
+	//Drawer::instance().setColor(Drawer::instance().getRandomColor());
+	//mDstImg = Drawer::instance().drawRects(mDstImg, bboxes);
 
-	seamFinder.find(mats, corners, mMask);
+	//cv::detail::GraphCutSeamFinder seamFinder;
 
-	qDebug() << "mMask size: " << mMask.size();
-	mDebug << " computed...";
+	//std::vector<cv::Point> corners;
+	//corners.push_back(cv::Point(0, 0));
+	//corners.push_back(cv::Point(100, 100));
+
+	//cv::UMat src;
+	//cv::cvtColor(mSrcImg, src, CV_RGBA2RGB);
+
+	//std::vector<cv::UMat> mats;
+	//mats.push_back(src);
+	//mats.push_back(src);
+
+	//mMask.push_back(cv::UMat(src.size(), CV_8UC1, cv::Scalar(255)));
+	//mMask.push_back(cv::UMat(src.size(), CV_8UC1, cv::Scalar(255)));
+
+	//qDebug() << "src channels: " << mSrcImg.channels();
+
+	//seamFinder.find(mats, corners, mMask);
+
+	//qDebug() << "mMask size: " << mMask.size();
+	mDebug << "computed...";
 
 	return true;
 }
 
 cv::Mat SuperPixel::binaryImage() const {
 	
-	if (mMask.empty())
-		return cv::Mat();
-	
-	cv::Mat img;
-	mMask[0].copyTo(img);
-
-	return img;
+	return mDstImg;
 }
 
 QString SuperPixel::toString() const {
@@ -104,6 +123,27 @@ QString SuperPixel::toString() const {
 	QString msg = debugName();
 
 	return msg;
+}
+
+// SuperPixelConfig --------------------------------------------------------------------
+SuperPixelConfig::SuperPixelConfig() : ModuleConfig("Super Pixel") {
+}
+
+QString SuperPixelConfig::toString() const {
+	return ModuleConfig::toString();
+}
+
+void SuperPixelConfig::load(const QSettings & /*settings*/) {
+
+	// add parameters
+	//mThresh = settings.value("thresh", mThresh).toInt();
+
+}
+
+void SuperPixelConfig::save(QSettings & /*settings*/) const {
+
+	// add parameters
+	//settings.setValue("thresh", mThresh);
 }
 
 }

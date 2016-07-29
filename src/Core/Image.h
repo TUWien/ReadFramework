@@ -54,6 +54,23 @@
 
 namespace rdf {
 
+// read defines
+/// <summary>
+/// Basic image class
+/// </summary>
+class DllCoreExport Image {
+
+public:
+	static Image& instance();
+
+	cv::Mat qImage2Mat(const QImage& img);
+	QImage mat2QImage(const cv::Mat& img);
+	bool save(const QImage& img, const QString& savePath, int compression = -1) const;
+	bool save(const cv::Mat& img, const QString& savePath, int compression = -1) const;
+	bool alphaChannelUsed(const QImage& img) const;
+	void imageInfo(const cv::Mat& img, const QString name) const;
+	QString printImage(const cv::Mat& img, const QString name) const;
+
 	/// <summary>
 	/// Prints the values of a cv::Mat to copy it to Matlab.
 	/// </summary>
@@ -87,24 +104,6 @@ namespace rdf {
 
 		return msg;
 	}
-
-
-// read defines
-/// <summary>
-/// Basic image class
-/// </summary>
-	class DllCoreExport Image {
-
-public:
-	static Image& instance();
-
-	cv::Mat qImage2Mat(const QImage& img);
-	QImage mat2QImage(const cv::Mat& img);
-	bool save(const QImage& img, const QString& savePath, int compression = 90) const;
-	bool save(const cv::Mat& img, const QString& savePath, int compression = 90) const;
-	bool alphaChannelUsed(const QImage& img) const;
-	void imageInfo(const cv::Mat& img, const QString name) const;
-	QString printImage(const cv::Mat& img, const QString name) const;
 
 private:
 	Image();

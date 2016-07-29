@@ -87,8 +87,7 @@ class DllCoreExport Config {
 
 public:
 	static Config& instance();
-	static GlobalSettings& global();		// convenience
-	static GlobalSettings& paint();		// convenience
+	static GlobalSettings& global();	// convenience
 	QSettings& settings();
 
 	void load();

@@ -32,35 +32,63 @@
 
 #pragma once
 
+#include <vector>
+
 #pragma warning(push, 0)	// no warnings from includes
-#include <QString>
+#include <QColor>
+#include <QPen>
+
+#include <opencv2\core\core.hpp>
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
-// Qt defines
+// Qt/CV defines
+namespace cv {
+	class Mat;
+}
+
+class QPainter;
+class QPointF;
+class QRectF;
+class QPen;
 
 namespace rdf {
 
 // read defines
-class DebugConfig{
+
+class DllCoreExport Drawer {
 
 public:
-	DebugConfig();
+	static Drawer& instance();
 
-	void setImagePath(const QString& path);
-	QString imagePath() const;
+	cv::Mat drawPoints(const cv::Mat& img, const std::vector<cv::Point>& pts) const;
+	void drawPoints(QPainter& p, const QVector<QPointF>& pts) const;
 
-	void setXmlPath(const QString& path);
-	QString xmlPath() const;
+	cv::Mat drawRects(const cv::Mat& img, const std::vector<cv::Rect>& rects) const;
+	void drawRects(QPainter& p, const QVector<QRectF>& rects) const;
+	void drawRect(QPainter& p, const QRectF& rect) const;
 
-	void setOutputPath(const QString& path);
-	QString outputPath() const;
+	void setColor(const QColor& col);
+	void setStrokeWidth(int strokeWidth);
+	void setPen(const QPen& pen);
 
-protected:
-	QString mImagePath;
-	QString mXMLPath;
-	QString mOutputPath;
+	QColor getRandomColor(int idx = -1) const;
+	QVector<QColor> colors() const;
+
+	// add general drawing functions here
+
+private:
+	Drawer();
+	Drawer(const Drawer&);
+
+	QPen mPen;
 };
 
 };

@@ -61,7 +61,7 @@ namespace rdf {
 class DllModuleExport ModuleConfig {
 
 public:
-	ModuleConfig();
+	ModuleConfig(const QString& moduleName = "Generic Module");
 
 	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const ModuleConfig& m);
 	friend DllModuleExport QDebug operator<< (QDebug d, const ModuleConfig &m);

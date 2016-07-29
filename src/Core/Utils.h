@@ -36,6 +36,8 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QTime>
+
+#include <opencv2\core\core.hpp>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
@@ -61,6 +63,9 @@ public:
 
 	void initFramework() const;
 	void registerVersion() const;
+	static double rand();
+
+	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;
 
 private:
 	Utils();
@@ -74,7 +79,14 @@ public:
 	static Converter& instance();
 
 	QPolygon stringToPoly(const QString& pointList) const;
-	QString polyToString(const QPolygon& poly);
+	QString polyToString(const QPolygon& poly) const;
+
+	static QPointF cvPointToQt(const cv::Point& pt);
+	static cv::Point2d qPointToCv(const QPointF& pt);
+
+	static QRectF cvRectToQt(const cv::Rect& r);
+	static cv::Rect2d qRectToCv(const QRectF& r);
+
 
 private:
 	Converter();

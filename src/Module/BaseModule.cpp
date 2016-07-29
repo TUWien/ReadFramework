@@ -41,8 +41,8 @@
 namespace rdf {
 
 // ModuleConfig --------------------------------------------------------------------
-ModuleConfig::ModuleConfig() {
-	mModuleName = "Generic Module";
+ModuleConfig::ModuleConfig(const QString& moduleName) {
+	mModuleName = moduleName;
 }
 
 void ModuleConfig::loadSettings() {
