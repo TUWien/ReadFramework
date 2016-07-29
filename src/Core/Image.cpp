@@ -38,6 +38,7 @@
 #include <QImageWriter>
 #include <QFileInfo>
 #include <QPixmap>
+#include <QPainter>
 #pragma warning(pop)
 
 namespace rdf {
@@ -306,6 +307,46 @@ QString Image::printImage(const cv::Mat& img, const QString name) const {
 		imgInfo = "I could not visualize the mat";
 
 	return imgInfo;
+}
+
+// Histogram --------------------------------------------------------------------
+Histogram::Histogram(const cv::Mat & values) {
+	assert(values.depth() == CV_32SC1 && values.rows == 1);
+	mValues = values;
+}
+
+Histogram::Histogram(const QVector<int>& values) {
+
+	mValues = cv::Mat(1, values.size(), CV_32SC1);
+	unsigned int* hPtr = mValues.ptr<unsigned int>();
+
+	for (int idx = 0; idx < values.size(); idx++)
+		hPtr[idx] = values[idx];
+}
+
+void Histogram::draw(QPainter & p) {
+
+	int pw = p.device()->width();
+	int ph = p.device()->height();
+
+	double step = pw/mValues.cols;
+	double mVal = max();
+	QLineF cLine(0, 0, 0, 0);
+
+	unsigned int* hPtr = mValues.ptr<unsigned int>();
+	for (int idx = 0; idx < mValues.cols; idx++) {
+
+		double upper = (double)hPtr[idx] / mVal * ph;
+		cLine.setP2(QPointF(cLine.p2().x(), upper));
+		cLine.translate(QPointF(step, 0));
+		p.drawLine(cLine);
+	}
+}
+
+double Histogram::max() const {
+	double mVal;
+	cv::minMaxLoc(mValues, 0, &mVal);
+	return mVal;
 }
 
 }

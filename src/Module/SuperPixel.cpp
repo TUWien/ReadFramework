@@ -51,6 +51,7 @@ namespace rdf {
 // SuperPixel --------------------------------------------------------------------
 SuperPixel::SuperPixel(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
+	mConfig = QSharedPointer<SuperPixelConfig>::create();
 }
 
 bool SuperPixel::checkInput() const {
@@ -87,15 +88,19 @@ bool SuperPixel::compute() {
 
 	assert(elements.size() == bboxes.size());
 	
-	QPixmap pm = Image::instance().mat2QPixmap(img);
-	QPainter p(&pm);
 	qDebug() << "MSER computed in " << dt;
 
 	for (int idx = 0; idx < elements.size(); idx++) {
 		MserBlob cb(elements[idx], Converter::cvRectToQt(bboxes[idx]));
-		cb.draw(p);
 		mBlobs << cb;
 	}
+
+	// draw to dst img
+	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPainter p(&pm);
+
+	for (auto cb : mBlobs)
+		cb.draw(p);
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
 

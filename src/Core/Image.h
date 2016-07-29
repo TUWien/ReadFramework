@@ -55,6 +55,20 @@ class QPixmap;
 
 namespace rdf {
 
+class DllCoreExport Histogram {
+
+public:
+	Histogram(const cv::Mat& values = cv::Mat());
+	Histogram(const QVector<int>& values);
+
+	void draw(QPainter& p);
+
+	double max() const;
+
+protected:
+	cv::Mat mValues;
+};
+
 // read defines
 /// <summary>
 /// Basic image class

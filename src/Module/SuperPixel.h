@@ -103,7 +103,6 @@ private:
 	QVector<MserBlob> mBlobs;
 
 	bool checkInput() const override;
-
 };
 
 };
