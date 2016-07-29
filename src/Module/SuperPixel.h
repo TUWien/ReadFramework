@@ -35,6 +35,9 @@
 #include "BaseModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
+#include <QRectF>
+#include <QVector>
+#include <QPainter>
 #pragma warning(pop)
 
 #ifndef DllModuleExport
@@ -51,6 +54,23 @@ namespace rdf {
 
 // read defines
 
+class DllModuleExport MserBlob {
+
+public:
+	MserBlob(const std::vector<cv::Point>& pts = std::vector<cv::Point>(),
+		const QRectF& bbox = QRectF());
+
+	int64 area() const;
+	QPointF center() const;
+	QRectF bbox() const;
+
+	void draw(QPainter& p);
+
+protected:
+	QRectF mBBox;
+	std::vector<cv::Point> mPts;
+};
+
 class DllModuleExport SuperPixelConfig : public ModuleConfig {
 
 public:
@@ -63,7 +83,6 @@ protected:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 };
-
 
 class DllModuleExport SuperPixel : public Module {
 
@@ -80,6 +99,8 @@ public:
 private:
 	cv::Mat mSrcImg;
 	cv::Mat mDstImg;
+
+	QVector<MserBlob> mBlobs;
 
 	bool checkInput() const override;
 

@@ -69,7 +69,9 @@ public:
 	static Drawer& instance();
 
 	cv::Mat drawPoints(const cv::Mat& img, const std::vector<cv::Point>& pts) const;
+	void drawPoints(QPainter& p, const std::vector<cv::Point>& pts) const;
 	void drawPoints(QPainter& p, const QVector<QPointF>& pts) const;
+	void drawPoint(QPainter& p, const QPointF& pt) const;
 
 	cv::Mat drawRects(const cv::Mat& img, const std::vector<cv::Rect>& rects) const;
 	void drawRects(QPainter& p, const QVector<QRectF>& rects) const;

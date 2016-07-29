@@ -72,10 +72,12 @@ bool SuperPixel::compute() {
 	if (!checkInput())
 		return false;
 
+	Timer dt;
+
 	cv::Mat img = mSrcImg.clone();
 	img = IP::grayscale(img);
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
-	//img = IP::invert(img);
+	img = IP::invert(img);
 
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
 
@@ -83,7 +85,20 @@ bool SuperPixel::compute() {
 	std::vector<cv::Rect> bboxes;
 	mser->detectRegions(img, elements, bboxes);
 
-	mDstImg = img.clone();
+	assert(elements.size() == bboxes.size());
+	
+	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPainter p(&pm);
+	qDebug() << "MSER computed in " << dt;
+
+	for (int idx = 0; idx < elements.size(); idx++) {
+		MserBlob cb(elements[idx], Converter::cvRectToQt(bboxes[idx]));
+		cb.draw(p);
+		mBlobs << cb;
+	}
+
+	mDstImg = Image::instance().qPixmap2Mat(pm);
+
 	//mDstImg.setTo(cv::Scalar(255));
 
 	//// TODO: put into a drawer class...
@@ -94,18 +109,18 @@ bool SuperPixel::compute() {
 	//	mDstImg = Drawer::instance().drawPoints(mDstImg, set);
 	//}
 
-	std::vector<cv::Point> cc;
-	for (cv::Rect r : bboxes) {
-		QRectF qr = Converter::cvRectToQt(r);
-		cc.push_back(Converter::qPointToCv(qr.center()));
-	}
+	//std::vector<cv::Point> cc;
+	//for (cv::Rect r : bboxes) {
+	//	QRectF qr = Converter::cvRectToQt(r);
+	//	cc.push_back(Converter::qPointToCv(qr.center()));
+	//}
 
-	// TODO: put into a drawer class...
-	QColor col = Drawer::instance().getRandomColor();
-	col.setAlpha(100);
-	Drawer::instance().setColor(col);
-	Drawer::instance().setStrokeWidth(3);
-	mDstImg = Drawer::instance().drawPoints(mDstImg, cc);
+	//// TODO: put into a drawer class...
+	//QColor col = Drawer::instance().getRandomColor();
+	//col.setAlpha(100);
+	//Drawer::instance().setColor(col);
+	//Drawer::instance().setStrokeWidth(3);
+	//mDstImg = Drawer::instance().drawPoints(mDstImg, cc);
 
 
 
@@ -133,7 +148,7 @@ bool SuperPixel::compute() {
 	//seamFinder.find(mats, corners, mMask);
 
 	//qDebug() << "mMask size: " << mMask.size();
-	mDebug << "computed...";
+	mDebug << "computed in" << dt;
 
 	return true;
 }
@@ -169,6 +184,43 @@ void SuperPixelConfig::save(QSettings & /*settings*/) const {
 
 	// add parameters
 	//settings.setValue("thresh", mThresh);
+}
+
+// MserBlob --------------------------------------------------------------------
+MserBlob::MserBlob(const std::vector<cv::Point>& pts, const QRectF & bbox) {
+	mPts = pts;
+	mBBox = bbox;
+}
+
+int64 MserBlob::area() const {
+	return mPts.size();
+}
+
+QPointF MserBlob::center() const {
+	return bbox().center();
+}
+
+QRectF MserBlob::bbox() const {
+	// TODO: if needed compute it here
+	return mBBox;
+}
+
+void MserBlob::draw(QPainter & p) {
+	
+	QColor col = Drawer::instance().getRandomColor();
+	col.setAlpha(30);
+	Drawer::instance().setColor(col);
+	Drawer::instance().drawPoints(p, mPts);
+
+	// draw bounding box
+	col.setAlpha(255);
+	Drawer::instance().setStrokeWidth(1);
+	Drawer::instance().setColor(col);
+	Drawer::instance().drawRect(p, bbox());
+
+	// draw center
+	Drawer::instance().setStrokeWidth(3);
+	Drawer::instance().drawPoint(p, bbox().center());
 }
 
 }

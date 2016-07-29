@@ -51,6 +51,7 @@
 #endif
 
 // Qt defines
+class QPixmap;
 
 namespace rdf {
 
@@ -65,6 +66,9 @@ public:
 
 	cv::Mat qImage2Mat(const QImage& img);
 	QImage mat2QImage(const cv::Mat& img);
+	cv::Mat qPixmap2Mat(const QPixmap& img);
+	QPixmap mat2QPixmap(const cv::Mat& img);
+
 	bool save(const QImage& img, const QString& savePath, int compression = -1) const;
 	bool save(const cv::Mat& img, const QString& savePath, int compression = -1) const;
 	bool alphaChannelUsed(const QImage& img) const;

@@ -37,6 +37,7 @@
 #include <QBuffer>
 #include <QImageWriter>
 #include <QFileInfo>
+#include <QPixmap>
 #pragma warning(pop)
 
 namespace rdf {
@@ -122,11 +123,18 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	if (cvImg.type() == CV_8UC4) {
 		qImg = QImage(cvImg.data, (int)cvImg.cols, (int)cvImg.rows, (int)cvImg.step, QImage::Format_ARGB32);
 	}
-
-
+	
 	qImg = qImg.copy();
 
 	return qImg;
+}
+
+cv::Mat Image::qPixmap2Mat(const QPixmap & img) {
+	return qImage2Mat(img.toImage());
+}
+
+QPixmap Image::mat2QPixmap(const cv::Mat & img) {
+	return QPixmap::fromImage(mat2QImage(img));
 }
 
 /// <summary>
