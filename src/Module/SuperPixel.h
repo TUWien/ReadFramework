@@ -73,6 +73,7 @@ public:
 	void draw(QPainter& p);
 
 protected:
+	Vector2D mCenter;
 	Rect mBBox;
 	std::vector<cv::Point> mPts;
 };
@@ -110,11 +111,14 @@ private:
 	QVector<MserBlob> mBlobs;
 	QVector<Triangle> mTriangles;
 
+	// parameters
+	int mMinArea = 100;
+
 	bool checkInput() const override;
 
 	QVector<MserBlob> getBlobs(const cv::Mat& img, int kernelSize) const;
 	QVector<MserBlob> mser(const cv::Mat& img) const;
-	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.7) const;
+	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.4) const;
 	int filterDuplicates(QVector<MserBlob>& blobs) const;
 	int filterUnique(QVector<MserBlob>& blobs, double areaRatio = 0.7) const;
 };

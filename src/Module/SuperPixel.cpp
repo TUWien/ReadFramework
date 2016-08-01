@@ -83,7 +83,7 @@ QVector<MserBlob> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) cons
 QVector<MserBlob> SuperPixel::mser(const cv::Mat & img) const {
 	
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
-	mser->setMinArea(100);
+	mser->setMinArea(mMinArea);
 
 	std::vector<std::vector<cv::Point> > pixels;
 	std::vector<cv::Rect> boxes;
@@ -190,7 +190,6 @@ bool SuperPixel::compute() {
 	cv::Mat img = mSrcImg.clone();
 	img = IP::grayscale(img);
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
-	//img = IP::invert(img);
 
 	for (int idx = 0; idx < 5; idx += 2) {
 
@@ -200,32 +199,36 @@ bool SuperPixel::compute() {
 		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << idx << "in" << dti;
 	}
 
-	//Timer dtf;
-	//int nF = filterDuplicates(mBlobs);
-	//qDebug() << nF << "filtered (duplicates) in" << dtf;
+	Timer dtf;
+	int nF = filterDuplicates(mBlobs);
+	qDebug() << nF << "filtered (duplicates) in" << dtf;
 
 	//dtf.start();
-	//nF = filterUnique(mBlobs);
+	//nF = filterUnique(mBlobs, 0.001);
 	//qDebug() << nF << "filtered (unique area) in" << dtf;
 
 	// compute delauney triangulation
+	dtf.start();
 	mTriangles = connect(mBlobs);
+	qDebug() << "delauney computed in " << dtf;
 
 	// draw to dst img
+	dtf.start();
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	QPainter p(&pm);
 
 	p.setPen(ColorManager::instance().colors()[0]);
 
-	//for (auto t : mTriangles)
-	//	t.draw(p);
+	for (auto t : mTriangles)
+		t.draw(p);
 
-	for (auto cb : mBlobs)
-		cb.draw(p);
+	//for (auto cb : mBlobs)
+	//	cb.draw(p);
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
+	qDebug() << "drawing takes" << dtf;
 
-	mDebug << "computed in" << dt;
+	mDebug << mBlobs.size() << "regions computed in" << dt;
 
 	return true;
 }
@@ -286,8 +289,10 @@ void SuperPixelConfig::save(QSettings & /*settings*/) const {
 
 // MserBlob --------------------------------------------------------------------
 MserBlob::MserBlob(const std::vector<cv::Point>& pts, const QRectF & bbox) {
+
 	mPts = pts;
 	mBBox = bbox;
+	mCenter = bbox.center();	// cache center
 }
 
 double MserBlob::area() const {
@@ -311,7 +316,7 @@ double MserBlob::uniqueArea(const QVector<MserBlob>& blobs) const {
 }
 
 Vector2D MserBlob::center() const {
-	return bbox().center();
+	return mCenter;
 }
 
 Rect MserBlob::bbox() const {
