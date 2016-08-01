@@ -64,12 +64,17 @@ namespace rdf {
 		int searchXOffset() const;
 		int searchYOffset() const;
 
+		QString templDatabase() const;
+		void setTemplDatabase(QString s);
+
 
 		QString toString() const override;
 
 	private:
 		void load(const QSettings& settings) override;
 		void save(QSettings& settings) const override;
+
+		QString mTemplDatabase;
 
 		float mThreshLineLenRatio = 0.6f;
 		float mDistThreshold = 30.0;
@@ -80,12 +85,14 @@ namespace rdf {
 
 	};
 
-
 	class DllModuleExport FormFeatures : public Module {
 
 	public:
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+
+		bool loadTemplateDatabase(QString db);
+		QVector<rdf::FormFeatures> templatesDb() const;
 
 		cv::Mat getMatchedLineImg(const cv::Mat srcImg, cv::Point offset = cv::Point(0,0)) const;
 
@@ -104,6 +111,7 @@ namespace rdf {
 		void setVerLines(const QVector<rdf::Line>& v);
 		QVector<rdf::Line> verLinesMatched() const;
 		cv::Point offset() const;
+		double error() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
 
@@ -114,6 +122,8 @@ namespace rdf {
 		//int thresh() const;
 		QString toString() const override;
 
+		void setFormName(QString s);
+		QString formName() const;
 
 	protected:
 
@@ -129,9 +139,12 @@ namespace rdf {
 		bool mPreFilter = true;
 		int preFilterArea = 10;
 		double mPageAngle = 0.0;
+		double mMinError = std::numeric_limits<double>::max();
 
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
+
+		QVector<rdf::FormFeatures> mTemplates;
 
 		QVector<rdf::Line> mHorLinesMatched;
 		QVector<rdf::Line> mVerLinesMatched;
@@ -141,6 +154,7 @@ namespace rdf {
 		// parameters
 
 		bool checkInput() const override;
+		QString mFormName;
 
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;

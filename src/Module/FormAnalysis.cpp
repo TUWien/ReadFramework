@@ -35,12 +35,15 @@
 #include "Algorithms.h"
 #include "SkewEstimation.h"
 #include "Image.h"
+#include "PageParser.h"
+#include "Elements.h"
 
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QSettings>
-
+#include <QFileInfo>
+#include <QDir>
 #include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
@@ -57,6 +60,77 @@ namespace rdf {
 
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 	}
+
+	bool FormFeatures::loadTemplateDatabase(QString db)	{
+
+		QString dbDir = db.isEmpty() ? config()->templDatabase() : db;
+
+		mTemplates.clear();
+		
+		////QFileInfo fileInfo(dbDir);
+		QDir dir = QDir(db);
+
+		if (!dir.exists()) {
+			qWarning() << "I cannot load the forms from" << dir.absolutePath() << "since it is not existing...";
+			return false;
+		}
+
+		// only load files which have the same basename as the nmf with an index
+		// e.g.: nmf.yml -> nmf-01.yml
+		QRegExp filePattern("*.xml");
+		QStringList files = dir.entryList();
+		qSort(files.begin(), files.end());
+
+		if (files.empty()) {
+			qWarning() << "sorry, I could not load form templates from: " << dir.absolutePath();
+			return false;
+		}
+
+		for (const QString& fp : files) {
+
+			if (filePattern.exactMatch(fp)) {
+				//load templates
+				rdf::PageXmlParser parser;
+				parser.read(QFileInfo(dir, fp).absoluteFilePath());
+				auto pe = parser.page();
+
+				//read xml separators and store them to testinfo
+				QVector<rdf::Line> hLines;
+				QVector<rdf::Line> vLines;
+
+				QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion());// pe->rootRegion()->children();
+				for (auto i : test) {
+					if (i->type() == i->type_separator) {
+						rdf::SeparatorRegion* tSep = dynamic_cast<rdf::SeparatorRegion*>(i.data());
+						if (tSep) {
+							if (tSep->line().isHorizontal(5.0))
+								hLines.push_back(tSep->line());
+
+							if (tSep->line().isVertical(5.0))
+								vLines.push_back(tSep->line());
+						}
+					}
+				}
+				FormFeatures templ;
+				templ.setVerLines(vLines);
+				templ.setHorLines(hLines);
+				templ.setFormName(fp);
+				mTemplates.push_back(templ);
+			}
+		}
+
+		if (mTemplates.empty()) {
+			qWarning() << "Sorry, I could not load the form templates from " << dir.absolutePath();
+			return false;
+		}
+
+		return true;
+	}
+
+	QVector<rdf::FormFeatures> FormFeatures::templatesDb() const {
+		return mTemplates;
+	}
+
 	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg, cv::Point offset) const	{
 
 		cv::Mat finalImg = srcImg.clone();
@@ -281,6 +355,7 @@ namespace rdf {
 			//check if the average distance of the matched lines is smaller then the errorThr (default: 15px)
 			if (minError/(finalAcceptedHor+finalAcceptedVer) < config()->errorThr()) {
 				mOffset = offSet;
+				mMinError = (double)minError;
 				return true;
 			}
 		}
@@ -328,6 +403,10 @@ namespace rdf {
 		return mOffset;
 	}
 
+	double FormFeatures::error() const	{
+		return mMinError;
+	}
+
 	QSharedPointer<FormFeaturesConfig> FormFeatures::config() const	{
 		return qSharedPointerDynamicCast<FormFeaturesConfig>(mConfig);
 	}
@@ -348,6 +427,14 @@ namespace rdf {
 	QString FormFeatures::toString() const
 	{
 		return QString("Form Features class calculates line and layout features for form classification");
+	}
+
+	void FormFeatures::setFormName(QString s) 	{
+		mFormName = s;
+	}
+
+	QString FormFeatures::formName() const 	{
+		return mFormName;
 	}
 
 	float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
@@ -487,6 +574,14 @@ namespace rdf {
 		return mSearchYOffset;
 	}
 
+	QString FormFeaturesConfig::templDatabase() const {
+		return mTemplDatabase;
+	}
+
+	void FormFeaturesConfig::setTemplDatabase(QString s) {
+		mTemplDatabase = s;
+	}
+
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
 		msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
@@ -499,10 +594,12 @@ namespace rdf {
 		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toFloat();
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toFloat();
 		mErrorThr = settings.value("errorThr", mErrorThr).toFloat();
+		mTemplDatabase = settings.value("templDatabase", mTemplDatabase).toString();
 	}
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("distThreshold", mDistThreshold);
 		settings.setValue("errorThr", mErrorThr);
+		settings.setValue("templDatabase", mTemplDatabase);
 	}
 }
