@@ -57,6 +57,7 @@ public:
 	static cv::Mat grayscale(const cv::Mat& src);
 
 	static cv::Mat computeHist(const cv::Mat& data, int width, int numElements = -1, double* maxBin = 0);
+	static void draw(const std::vector<cv::Point>& pts, cv::Mat& img, cv::Scalar val = cv::Scalar::all(255));
 
 };
 

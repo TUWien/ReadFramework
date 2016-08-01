@@ -62,14 +62,18 @@ public:
 	MserBlob(const std::vector<cv::Point>& pts = std::vector<cv::Point>(),
 		const QRectF& bbox = QRectF());
 
-	int64 area() const;
+	double area() const;
+	double uniqueArea(const QVector<MserBlob>& blobs) const;
 	Vector2D center() const;
-	QRectF bbox() const;
+	Rect bbox() const;
+
+	std::vector<cv::Point> pts() const;
+	std::vector<cv::Point> relativePts(const Vector2D& origin) const;
 
 	void draw(QPainter& p);
 
 protected:
-	QRectF mBBox;
+	Rect mBBox;
 	std::vector<cv::Point> mPts;
 };
 
@@ -107,6 +111,12 @@ private:
 	QVector<Triangle> mTriangles;
 
 	bool checkInput() const override;
+
+	QVector<MserBlob> getBlobs(const cv::Mat& img, int kernelSize) const;
+	QVector<MserBlob> mser(const cv::Mat& img) const;
+	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.7) const;
+	int filterDuplicates(QVector<MserBlob>& blobs) const;
+	int filterUnique(QVector<MserBlob>& blobs, double areaRatio = 0.7) const;
 };
 
 };

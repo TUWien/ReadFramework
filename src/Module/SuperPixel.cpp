@@ -64,6 +64,118 @@ bool SuperPixel::checkInput() const {
 	return true;
 }
 
+QVector<MserBlob> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
+
+	if (kernelSize > 0) {
+		cv::Size kSize(kernelSize, kernelSize);
+		cv::Mat k = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+			cv::Size(2 * kSize.width + 1, 2 * kSize.height + 1),
+			cv::Point(kSize.width, kSize.height));
+
+		// NOTE: dilate, erode is conter-intuitive because ink is usually dark
+		cv::dilate(img, img, k);
+		cv::erode(img, img, k);
+	}
+
+	return mser(img);
+}
+
+QVector<MserBlob> SuperPixel::mser(const cv::Mat & img) const {
+	
+	cv::Ptr<cv::MSER> mser = cv::MSER::create();
+	mser->setMinArea(100);
+
+	std::vector<std::vector<cv::Point> > pixels;
+	std::vector<cv::Rect> boxes;
+	mser->detectRegions(img, pixels, boxes);
+
+	assert(pixels.size() == boxes.size());
+
+	int nF = filterAspectRatio(pixels, boxes);
+	qDebug() << nF << "filtered (aspect ratio)";
+
+	// collect
+	QVector<MserBlob> blobs;
+	for (int idx = 0; idx < pixels.size(); idx++) {
+		MserBlob cb(pixels[idx], Converter::cvRectToQt(boxes[idx]));
+		blobs << cb;
+	}
+
+	return blobs;
+}
+
+int SuperPixel::filterAspectRatio(std::vector<std::vector<cv::Point>>& pixels, std::vector<cv::Rect>& boxes, double aRatio) const {
+
+	assert(pixels.size() == boxes.size());
+
+	// filter w.r.t aspect ratio
+	std::vector<std::vector<cv::Point> > elementsClean;
+	std::vector<cv::Rect> boxesClean;
+
+	for (int idx = 0; idx < pixels.size(); idx++) {
+
+		cv::Rect b = boxes[idx];
+		double cARatio = (double)qMin(b.width, b.height) / qMax(b.width, b.height);
+
+		if (cARatio > aRatio) {
+			boxesClean.push_back(b);
+			elementsClean.push_back(pixels[idx]);
+		}
+	}
+
+	int numRemoved = (int)(pixels.size() - elementsClean.size());
+
+	pixels = elementsClean;
+	boxes = boxesClean;
+
+	return numRemoved;
+}
+
+int SuperPixel::filterDuplicates(QVector<MserBlob>& blobs) const {
+
+	QVector<MserBlob> blobsClean;
+
+	for (const MserBlob& b : blobs) {
+
+		bool isNew = true;
+		for (const MserBlob& cb : blobsClean) {
+						
+			if (b.center() == cb.center()) {
+				isNew = false;
+				break;
+			}
+		}
+
+		if (isNew)
+			blobsClean << b;
+
+	}
+	
+	int numRemoved = blobs.size() - blobsClean.size();
+
+	blobs = blobsClean;
+
+	return numRemoved;
+}
+
+int SuperPixel::filterUnique(QVector<MserBlob>& blobs, double areaRatio) const {
+
+	QVector<MserBlob> blobsClean;
+
+	for (const MserBlob& b : blobs) {
+
+		double ua = b.uniqueArea(blobs);
+		if (ua / b.area() > areaRatio)
+			blobsClean << b;
+	}
+
+	int numRemoved = blobs.size() - blobsClean.size();
+
+	blobs = blobsClean;
+
+	return numRemoved;
+}
+
 bool SuperPixel::isEmpty() const {
 	return mSrcImg.empty();
 }
@@ -80,28 +192,21 @@ bool SuperPixel::compute() {
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
 	//img = IP::invert(img);
 
-	cv::Size kSize(1, 1);
-	cv::Mat k = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2*kSize.width + 1, 2*kSize.height+1),
-		cv::Point(kSize.width, kSize.height) );
-	cv::dilate(img, img, k);
-	//cv::dilate(img, img, k);
+	for (int idx = 0; idx < 5; idx += 2) {
 
-	cv::Ptr<cv::MSER> mser = cv::MSER::create();
-	mser->setMinArea(100);
-
-	std::vector<std::vector<cv::Point> > elements;
-	std::vector<cv::Rect> bboxes;
-	mser->detectRegions(img, elements, bboxes);
-
-	assert(elements.size() == bboxes.size());
-
-	qDebug() << "MSER found" << elements.size() << "regions in" << dt;
-
-	for (int idx = 0; idx < elements.size(); idx++) {
-		MserBlob cb(elements[idx], Converter::cvRectToQt(bboxes[idx]));
-		mBlobs << cb;
+		Timer dti;
+		QVector<MserBlob> b = getBlobs(img, idx);
+		mBlobs.append(b);
+		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << idx << "in" << dti;
 	}
+
+	//Timer dtf;
+	//int nF = filterDuplicates(mBlobs);
+	//qDebug() << nF << "filtered (duplicates) in" << dtf;
+
+	//dtf.start();
+	//nF = filterUnique(mBlobs);
+	//qDebug() << nF << "filtered (unique area) in" << dtf;
 
 	// compute delauney triangulation
 	mTriangles = connect(mBlobs);
@@ -185,17 +290,50 @@ MserBlob::MserBlob(const std::vector<cv::Point>& pts, const QRectF & bbox) {
 	mBBox = bbox;
 }
 
-int64 MserBlob::area() const {
-	return mPts.size();
+double MserBlob::area() const {
+	return (double)mPts.size();
+}
+
+double MserBlob::uniqueArea(const QVector<MserBlob>& blobs) const {
+	
+	cv::Mat m(mBBox.size().toCvSize(), CV_8UC1);
+	IP::draw(relativePts(bbox().topLeft()), m, cv::Scalar::all(1));
+
+	for (const MserBlob& b : blobs) {
+
+		// remove pixels
+		if (bbox().contains(b.bbox())) {
+			IP::draw(b.relativePts(bbox().topLeft()), m, cv::Scalar::all(0));
+		}
+	}
+
+	return cv::sum(m)[0];
 }
 
 Vector2D MserBlob::center() const {
 	return bbox().center();
 }
 
-QRectF MserBlob::bbox() const {
+Rect MserBlob::bbox() const {
 	// TODO: if needed compute it here
 	return mBBox;
+}
+
+std::vector<cv::Point> MserBlob::pts() const {
+	return mPts;
+}
+
+std::vector<cv::Point> MserBlob::relativePts(const Vector2D & origin) const {
+	
+	std::vector<cv::Point> rPts;
+
+	for (const cv::Point& p : mPts) {
+
+		Vector2D rp = p - origin;
+		rPts.push_back(rp.toCvPoint());
+	}
+	
+	return rPts;
 }
 
 void MserBlob::draw(QPainter & p) {
@@ -209,11 +347,11 @@ void MserBlob::draw(QPainter & p) {
 	col.setAlpha(255);
 	Drawer::instance().setStrokeWidth(1);
 	Drawer::instance().setColor(col);
-	Drawer::instance().drawRect(p, bbox());
+	Drawer::instance().drawRect(p, bbox().toQRectF());
 
 	// draw center
 	Drawer::instance().setStrokeWidth(3);
-	Drawer::instance().drawPoint(p, bbox().center());
+	Drawer::instance().drawPoint(p, bbox().center().toQPointF());
 }
 
 }

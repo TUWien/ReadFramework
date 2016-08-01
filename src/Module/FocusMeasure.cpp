@@ -430,7 +430,7 @@ namespace rdf {
 
 	Patch::Patch(cv::Point p, int w, int h, double f)
 	{
-		mUpperLeft = p;
+		mTopLeft = p;
 		mWidth = w;
 		mHeight = h;
 		mFm = f;
@@ -438,7 +438,7 @@ namespace rdf {
 
 	Patch::Patch(cv::Point p, int w, int h, double f, double fRef)
 	{
-		mUpperLeft = p;
+		mTopLeft = p;
 		mWidth = w;
 		mHeight = h;
 		mFm = f;
@@ -447,19 +447,19 @@ namespace rdf {
 
 	void Patch::setPosition(cv::Point p, int w, int h)
 	{
-		mUpperLeft = p;
+		mTopLeft = p;
 		mWidth = w;
 		mHeight = h;
 	}
 
 	cv::Point Patch::upperLeft() const
 	{
-		return mUpperLeft;
+		return mTopLeft;
 	}
 
 	cv::Point Patch::center() const
 	{
-		cv::Point center(mUpperLeft.x+mWidth/2, mUpperLeft.y+mHeight/2);
+		cv::Point center(mTopLeft.x+mWidth/2, mTopLeft.y+mHeight/2);
 
 		return center;
 	}

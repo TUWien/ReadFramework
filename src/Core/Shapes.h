@@ -144,11 +144,22 @@ public:
 	Vector2D(double x, double y);
 	Vector2D(const QPoint& p);
 	Vector2D(const QPointF& p);
+	Vector2D(const QSize& s);
+	Vector2D(const QSizeF& s);
 	Vector2D(const cv::Point& v);
 
+	DllCoreExport friend bool operator==(const Vector2D& l, const Vector2D& r);
+	DllCoreExport friend bool operator!=(const Vector2D& l, const Vector2D& r);
+	DllCoreExport friend Vector2D operator+(const Vector2D& l, const Vector2D& r);
+	DllCoreExport friend Vector2D operator-(const Vector2D& l, const Vector2D& r);
+
+	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const Vector2D& v);
+	DllCoreExport friend QDebug operator<< (QDebug d, const Vector2D &v);
+
+	void operator+=(const Vector2D& vec);
+	void operator-=(const Vector2D& vec);
+
 	bool isNull() const;
-	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Vector2D& v);
-	friend DllCoreExport QDebug operator<< (QDebug d, const Vector2D &v);
 
 	void setX(double x);
 	double x() const;
@@ -158,9 +169,12 @@ public:
 
 	QPoint toQPoint() const;
 	QPointF toQPointF() const;
+	QSize toQSize() const;
+	QSizeF toQSizeF() const;
 
 	cv::Point toCvPoint() const;
 	cv::Point2d toCvPointF() const;
+	cv::Size toCvSize() const;
 
 	QString toString() const;
 
@@ -196,6 +210,51 @@ protected:
 	bool mIsNull = true;
 
 	QVector<Vector2D> mPts;
+};
+
+class DllCoreExport Rect {
+
+public:
+	Rect();
+	Rect(const QRect& rect);
+	Rect(const QRectF& rect);
+	Rect(const cv::Rect& rect);
+
+	bool isNull() const;
+
+	// return types
+	double width() const;
+	double height() const;
+	Vector2D size() const;
+
+	double top() const;
+	double bottom() const;
+	double left() const;
+	double right() const;
+
+	Vector2D topLeft() const;
+	Vector2D topRight() const;
+	Vector2D bottomLeft() const;
+	Vector2D bottomRight() const;
+	Vector2D center() const;
+
+	// setter
+	void move(const Vector2D& vec);
+	void setSize(const Vector2D& newSize);
+
+	// conversions
+	QRect toQRect() const;
+	QRectF toQRectF() const;
+	cv::Rect toCvRect() const;
+
+	// geometry
+	bool contains(const Rect& o) const;
+
+protected:
+	bool mIsNull = true;
+	
+	Vector2D mTopLeft;
+	Vector2D mSize;
 };
 
 };

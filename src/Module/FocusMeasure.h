@@ -139,7 +139,7 @@ namespace rdf {
 
 	protected:
 
-		cv::Point mUpperLeft;
+		cv::Point mTopLeft;
 		int mWidth = 0;
 		int mHeight = 0;
 

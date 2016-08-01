@@ -455,10 +455,32 @@ Vector2D::Vector2D(const QPointF & p) {
 	mY = p.y();
 }
 
+Vector2D::Vector2D(const QSize & s) {
+	mIsNull = false;
+	mX = s.width();
+	mY = s.height();
+}
+
+Vector2D::Vector2D(const QSizeF & s) {
+	mIsNull = false;
+	mX = s.width();
+	mY = s.height();
+}
+
 Vector2D::Vector2D(const cv::Point & p) {
 	mIsNull = false;
 	mX = p.x;
 	mY = p.y;
+}
+
+void Vector2D::operator+=(const Vector2D & vec) {
+	mX += vec.x();
+	mY += vec.y();
+}
+
+void Vector2D::operator-=(const Vector2D & vec) {
+	mX -= vec.x();
+	mY -= vec.y();
 }
 
 bool Vector2D::isNull() const {
@@ -469,6 +491,22 @@ QDebug operator<<(QDebug d, const Vector2D& v) {
 
 	d << qPrintable(v.toString());
 	return d;
+}
+
+bool operator==(const Vector2D & l, const Vector2D & r) {
+	return l.x() == r.x() && l.y() == r.y();
+}
+
+bool operator!=(const Vector2D & l, const Vector2D & r) {
+	return !(l == r);
+}
+
+Vector2D operator+(const Vector2D & l, const Vector2D & r) {
+	return Vector2D(l.x() + r.x(), l.y() + r.y());
+}
+
+Vector2D operator-(const Vector2D & l, const Vector2D & r) {
+	return Vector2D(l.x() - r.x(), l.y() - r.y());
 }
 
 QDataStream& operator<<(QDataStream& s, const Vector2D& v) {
@@ -503,12 +541,24 @@ QPointF Vector2D::toQPointF() const {
 	return QPointF(x(), y());
 }
 
+QSize Vector2D::toQSize() const {
+	return QSize(qRound(x()), qRound(y()));
+}
+
+QSizeF Vector2D::toQSizeF() const {
+	return QSizeF(x(), y());
+}
+
 cv::Point Vector2D::toCvPoint() const {
 	return cv::Point(qRound(x()), qRound(y()));
 }
 
 cv::Point2d Vector2D::toCvPointF() const {
 	return cv::Point2d(x(), y());
+}
+
+cv::Size Vector2D::toCvSize() const {
+	return cv::Size(qRound(x()), qRound(y()));
 }
 
 QString Vector2D::toString() const {
@@ -575,6 +625,108 @@ void Triangle::draw(QPainter& p) const {
 	p.drawLine(p0().toQPointF(), p1().toQPointF());
 	p.drawLine(p1().toQPointF(), p2().toQPointF());
 	p.drawLine(p2().toQPointF(), p0().toQPointF());
+}
+
+// Rect --------------------------------------------------------------------
+Rect::Rect() {
+}
+
+Rect::Rect(const QRect & rect) {
+	mIsNull = false;
+	mTopLeft = rect.topLeft();
+	mSize = rect.size();
+}
+
+Rect::Rect(const QRectF & rect) {
+	mIsNull = false;
+	mTopLeft = rect.topLeft();
+	mSize = rect.size();
+}
+
+Rect::Rect(const cv::Rect & rect) {
+	mIsNull = false;
+	mTopLeft = Vector2D(rect.x, rect.y);
+	mSize = Vector2D(rect.width, rect.height);
+}
+
+bool Rect::isNull() const {
+	return mIsNull;
+}
+
+double Rect::width() const {
+	return mSize.x();
+}
+
+double Rect::height() const {
+	return mSize.y();
+}
+
+Vector2D Rect::size() const {
+	return mSize;
+}
+
+double Rect::top() const {
+	return mTopLeft.y();
+}
+
+double Rect::bottom() const {
+	return top()+height();
+}
+
+double Rect::left() const {
+	return mTopLeft.x();
+}
+
+double Rect::right() const {
+	return left()+width();
+}
+
+Vector2D Rect::topLeft() const {
+	return mTopLeft;
+}
+
+Vector2D Rect::topRight() const {
+	return Vector2D(right(), top());
+}
+
+Vector2D Rect::bottomLeft() const {
+	return Vector2D(left(), bottom());
+}
+
+Vector2D Rect::bottomRight() const {
+	return Vector2D(right(), bottom());
+}
+
+Vector2D Rect::center() const {
+	return Vector2D(left()+width()/2.0, top()+height()/2.0);
+}
+
+void Rect::move(const Vector2D & vec) {
+	mTopLeft += vec;
+}
+
+void Rect::setSize(const Vector2D & newSize) {
+	mSize = newSize;
+}
+
+QRect Rect::toQRect() const {
+	return QRect(mTopLeft.toQPoint(), mSize.toQSize());
+}
+
+QRectF Rect::toQRectF() const {
+	return QRectF(mTopLeft.toQPointF(), mSize.toQSizeF());
+}
+
+cv::Rect Rect::toCvRect() const {
+	return cv::Rect(qRound(top()), qRound(left()), qRound(width()), qRound(height()));
+}
+
+bool Rect::contains(const Rect & o) const {
+	
+	return (top()	<= o.top() &&
+			bottom()>= o.bottom() &&
+			left()	<= o.left() &&
+			right() >= o.right());
 }
 
 }
