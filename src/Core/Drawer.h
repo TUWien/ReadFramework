@@ -81,9 +81,6 @@ public:
 	void setStrokeWidth(int strokeWidth);
 	void setPen(const QPen& pen);
 
-	QColor getRandomColor(int idx = -1) const;
-	QVector<QColor> colors() const;
-
 	// add general drawing functions here
 
 private:

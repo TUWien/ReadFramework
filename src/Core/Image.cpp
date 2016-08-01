@@ -31,6 +31,7 @@
  *******************************************************************************************************/
 
 #include "Image.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -136,6 +137,17 @@ cv::Mat Image::qPixmap2Mat(const QPixmap & img) {
 
 QPixmap Image::mat2QPixmap(const cv::Mat & img) {
 	return QPixmap::fromImage(mat2QImage(img));
+}
+
+cv::Mat Image::qVector2Mat(const QVector<float>& data) {
+
+	cv::Mat m(1, data.size(), CV_32FC1);
+
+	float* mPtr = m.ptr<float>();
+	for (int idx = 0; idx < data.size(); idx++)
+		mPtr[idx] = data[idx];
+
+	return m;
 }
 
 /// <summary>
@@ -311,42 +323,62 @@ QString Image::printImage(const cv::Mat& img, const QString name) const {
 
 // Histogram --------------------------------------------------------------------
 Histogram::Histogram(const cv::Mat & values) {
-	assert(values.depth() == CV_32SC1 && values.rows == 1);
-	mValues = values;
+	assert(values.depth() == CV_32FC1 && values.rows == 1);
+	mHist = values;
 }
 
 Histogram::Histogram(const QVector<int>& values) {
 
-	mValues = cv::Mat(1, values.size(), CV_32SC1);
-	unsigned int* hPtr = mValues.ptr<unsigned int>();
+	mHist = cv::Mat(1, values.size(), CV_32FC1);
+	unsigned int* hPtr = mHist.ptr<unsigned int>();
 
 	for (int idx = 0; idx < values.size(); idx++)
 		hPtr[idx] = values[idx];
 }
 
+cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
+
+	QPen cp = pen;
+
+	// make a nice default pen
+	if (cp == QPen()) {
+		cp = QPen(ColorManager::instance().colors()[0]);
+	}
+
+	QPixmap pm(hist().cols, 100);
+	pm.fill(bgCol);
+
+	QPainter p(&pm);
+	p.setPen(cp);
+	draw(p);
+
+	return Image::instance().qPixmap2Mat(pm);
+}
+
 void Histogram::draw(QPainter & p) {
 
-	int pw = p.device()->width();
 	int ph = p.device()->height();
 
-	double step = pw/mValues.cols;
 	double mVal = max();
-	QLineF cLine(0, 0, 0, 0);
 
-	unsigned int* hPtr = mValues.ptr<unsigned int>();
-	for (int idx = 0; idx < mValues.cols; idx++) {
-
-		double upper = (double)hPtr[idx] / mVal * ph;
-		cLine.setP2(QPointF(cLine.p2().x(), upper));
-		cLine.translate(QPointF(step, 0));
-		p.drawLine(cLine);
+	float* hPtr = mHist.ptr<float>();
+	for (int idx = 0; idx < mHist.cols; idx++) {
+		
+		QPoint p1(idx, ph);
+		QPoint p2(idx, ph - qRound((double)hPtr[idx] / mVal * ph));
+		p.drawLine(p1, p2);
 	}
+}
+
+cv::Mat Histogram::hist() const {
+	return mHist;
 }
 
 double Histogram::max() const {
 	double mVal;
-	cv::minMaxLoc(mValues, 0, &mVal);
+	cv::minMaxLoc(mHist, 0, &mVal);
 	return mVal;
 }
+
 
 }

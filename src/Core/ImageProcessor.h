@@ -55,6 +55,9 @@ class DllCoreExport IP {	// basically a namespace for now
 public:
 	static cv::Mat invert(const cv::Mat& src);
 	static cv::Mat grayscale(const cv::Mat& src);
+
+	static cv::Mat computeHist(const cv::Mat& data, int width, int numElements = -1, double* maxBin = 0);
+
 };
 
 };

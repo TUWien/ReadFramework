@@ -36,6 +36,8 @@
 #include <QSharedPointer>
 #include <QImage>
 #include <QString>
+#include <QColor>
+#include <QPen>
 
 #include "opencv2/core/core.hpp"
 #pragma warning(pop)
@@ -61,12 +63,15 @@ public:
 	Histogram(const cv::Mat& values = cv::Mat());
 	Histogram(const QVector<int>& values);
 
-	void draw(QPainter& p);
+	cv::Mat draw(const QPen& pen = QPen(), const QColor& bgCol = QColor(255, 255, 255));
 
+	cv::Mat hist() const;
 	double max() const;
 
 protected:
-	cv::Mat mValues;
+	void draw(QPainter& p);
+
+	cv::Mat mHist;
 };
 
 // read defines
@@ -82,6 +87,7 @@ public:
 	QImage mat2QImage(const cv::Mat& img);
 	cv::Mat qPixmap2Mat(const QPixmap& img);
 	QPixmap mat2QPixmap(const cv::Mat& img);
+	cv::Mat qVector2Mat(const QVector<float>& data);
 
 	bool save(const QImage& img, const QString& savePath, int compression = -1) const;
 	bool save(const cv::Mat& img, const QString& savePath, int compression = -1) const;

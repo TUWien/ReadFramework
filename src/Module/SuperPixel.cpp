@@ -78,7 +78,7 @@ bool SuperPixel::compute() {
 	cv::Mat img = mSrcImg.clone();
 	img = IP::grayscale(img);
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
-	img = IP::invert(img);
+	//img = IP::invert(img);
 
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
 
@@ -90,10 +90,19 @@ bool SuperPixel::compute() {
 	
 	qDebug() << "MSER computed in " << dt;
 
+	QVector<float> mserSize;
+
 	for (int idx = 0; idx < elements.size(); idx++) {
 		MserBlob cb(elements[idx], Converter::cvRectToQt(bboxes[idx]));
 		mBlobs << cb;
+		mserSize << cb.area();
 	}
+
+	cv::Mat sizeHist = IP::computeHist(Image::instance().qVector2Mat(mserSize), 1000);
+
+	Histogram hist(sizeHist);
+	mDstImg = hist.draw();
+
 
 	// draw to dst img
 	QPixmap pm = Image::instance().mat2QPixmap(img);
@@ -103,6 +112,14 @@ bool SuperPixel::compute() {
 		cb.draw(p);
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
+
+
+	//Histogram hist = IP::computeHist(mSrcImg, 255);
+	//qDebug().noquote() << Image::instance().printImage(hist.hist(), "hist");
+
+
+
+	// TODO: compute the area histogram - see for filtering
 
 	//mDstImg.setTo(cv::Scalar(255));
 
@@ -212,7 +229,7 @@ QRectF MserBlob::bbox() const {
 
 void MserBlob::draw(QPainter & p) {
 	
-	QColor col = Drawer::instance().getRandomColor();
+	QColor col = ColorManager::instance().getRandomColor();
 	col.setAlpha(30);
 	Drawer::instance().setColor(col);
 	Drawer::instance().drawPoints(p, mPts);

@@ -72,6 +72,19 @@ private:
 	Utils(const Utils&);
 };
 
+class DllCoreExport ColorManager {
+
+public:
+	static ColorManager& instance();
+
+	QColor getRandomColor(int idx = -1) const;
+	QVector<QColor> colors() const;
+
+private:
+	ColorManager();
+	ColorManager(const ColorManager&);
+};
+
 
 class DllCoreExport Converter {
 

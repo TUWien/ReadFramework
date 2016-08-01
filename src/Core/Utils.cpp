@@ -39,6 +39,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTime>
+#include <QColor>
 
 #include <opencv2\core\core.hpp>
 #pragma warning(pop)
@@ -161,13 +162,50 @@ QString Utils::createFilePath(const QString & filePath, const QString & attribut
 	return info.absoluteFilePath();
 }
 
-
-QRectF Converter::cvRectToQt(const cv::Rect & r) {
-	return QRectF(r.x, r.y, r.width, r.height);
+// ColorManager --------------------------------------------------------------------
+ColorManager::ColorManager() {
 }
 
-cv::Rect2d Converter::qRectToCv(const QRectF & r) {
-	return cv::Rect2d(r.x(), r.y(), r.width(), r.height());
+ColorManager& ColorManager::instance() {
+
+	static QSharedPointer<ColorManager> inst;
+	if (!inst)
+		inst = QSharedPointer<ColorManager>(new ColorManager());
+	return *inst;
+}
+
+QColor ColorManager::getRandomColor(int idx) const {
+
+	QVector<QColor> cols = colors();
+	int maxCols = cols.size();
+	if (idx == -1)
+		idx = qRound(Utils::rand()*maxCols*3);
+
+	assert(idx >= 0 && cols.size() > 0);
+
+	QColor col = cols[idx % cols.size()];
+
+	// currently not hit
+	if (idx > 2 * cols.size())
+		col = col.darker();
+	else if (idx > cols.size())
+		col = col.lighter();
+
+	return col;
+}
+
+QVector<QColor> ColorManager::colors() const {
+
+	static QVector<QColor> cols;
+
+	if (cols.empty()) {
+		cols << QColor(238, 120, 34);
+		cols << QColor(240, 168, 47);
+		cols << QColor(120, 192, 167);
+		cols << QColor(251, 234, 181);
+	}
+
+	return cols;
 }
 
 // Converter --------------------------------------------------------------------
@@ -180,6 +218,14 @@ Converter& Converter::instance() {
 	if (!inst)
 		inst = QSharedPointer<Converter>(new Converter());
 	return *inst;
+}
+
+QRectF Converter::cvRectToQt(const cv::Rect & r) {
+	return QRectF(r.x, r.y, r.width, r.height);
+}
+
+cv::Rect2d Converter::qRectToCv(const QRectF & r) {
+	return cv::Rect2d(r.x(), r.y(), r.width(), r.height());
 }
 
 /// <summary>

@@ -70,4 +70,45 @@ cv::Mat IP::grayscale(const cv::Mat & src) {
 	return channels[0];
 }
 
+/// <summary>
+/// Computes the histogram of data.
+/// Data can be any type (it will be reduced to CV_32F).
+/// </summary>
+/// <param name="data">The data.</param>
+/// <param name="width">The length of the resulting histogram.</param>
+/// <param name="numElements">The number elements if data has more elements, it will be downsampled accordingly.</param>
+/// <param name="maxBin">The maximal bin of the resulting histogram.</param>
+/// <returns>A 1xN CV_32F. Each element represents a bin computed from data.</returns>
+cv::Mat IP::computeHist(const cv::Mat & data, int width, int numElements, double * maxBin) {
+	
+	cv::Mat reducedData = data;
+
+	// convert data
+	if (data.depth() != CV_32F)
+		reducedData.convertTo(reducedData, CV_32F);
+
+	reducedData = reducedData.reshape(1, 1);
+
+	// downsample data
+	if (numElements > 0 && numElements < data.cols)
+		cv::resize(data, reducedData, cv::Size(numElements, data.rows), 0.0, 0.0, CV_INTER_NN);
+
+	double minV, maxV;
+	cv::minMaxLoc(reducedData, &minV, &maxV);
+
+	float hranges[] = {(float)minV, (float)maxV};
+	const float* phranges = hranges;
+
+	cv::Mat hist;
+	cv::calcHist(&reducedData, 1, 0, cv::Mat(), hist, 1, &width, &phranges);
+
+	if (maxBin)
+		cv::minMaxLoc(hist, 0, maxBin);
+
+	hist = hist.t();
+	cv::normalize(hist, hist, 0, 1.0f, cv::NORM_MINMAX);
+
+	return hist;
+}
+
 }
