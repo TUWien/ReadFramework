@@ -37,6 +37,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QDebug>
+#include <QPainter>
 #pragma warning(pop)
 
 namespace rdf {
@@ -432,5 +433,148 @@ float Line::diffAngle(const Line& l) const {
 	return fabs(angleLine - angleL);
 }
 
+// Vector2D --------------------------------------------------------------------
+Vector2D::Vector2D() {
+}
+
+Vector2D::Vector2D(double x, double y) {
+	mIsNull = false;
+	mX = x;
+	mY = y;
+}
+
+Vector2D::Vector2D(const QPoint & p) {
+	mIsNull = p.isNull();
+	mX = p.x();
+	mY = p.y();
+}
+
+Vector2D::Vector2D(const QPointF & p) {
+	mIsNull = p.isNull();
+	mX = p.x();
+	mY = p.y();
+}
+
+Vector2D::Vector2D(const cv::Point & p) {
+	mIsNull = false;
+	mX = p.x;
+	mY = p.y;
+}
+
+bool Vector2D::isNull() const {
+	return mIsNull;
+}
+
+QDebug operator<<(QDebug d, const Vector2D& v) {
+
+	d << qPrintable(v.toString());
+	return d;
+}
+
+QDataStream& operator<<(QDataStream& s, const Vector2D& v) {
+
+	s << v.toString();	// for now show children too
+	return s;
+}
+
+void Vector2D::setX(double x) {
+	mIsNull = false;
+	mX = x;
+}
+
+double Vector2D::x() const {
+	return mX;
+}
+
+void Vector2D::setY(double y) {
+	mIsNull = false;
+	mY = y;
+}
+
+double Vector2D::y() const {
+	return mY;
+}
+
+QPoint Vector2D::toQPoint() const {
+	return QPoint(qRound(x()), qRound(y()));
+}
+
+QPointF Vector2D::toQPointF() const {
+	return QPointF(x(), y());
+}
+
+cv::Point Vector2D::toCvPoint() const {
+	return cv::Point(qRound(x()), qRound(y()));
+}
+
+cv::Point2d Vector2D::toCvPointF() const {
+	return cv::Point2d(x(), y());
+}
+
+QString Vector2D::toString() const {
+
+	QString msg;
+	msg += "[" + QString::number(x()) + ", " + QString::number(y()) + "]";
+	return msg;
+}
+
+void Vector2D::draw(QPainter & p) const {
+	p.drawPoint(toQPointF());
+}
+
+// Triangle --------------------------------------------------------------------
+Triangle::Triangle() {
+
+}
+
+Triangle::Triangle(const cv::Vec6f & vec) {
+	setVec(vec);
+}
+
+bool Triangle::isNull() const {
+	return mIsNull;
+}
+
+void Triangle::setVec(const cv::Vec6f & vec) {
+
+	mIsNull = false;
+	mPts << Vector2D(vec[0], vec[1]);
+	mPts << Vector2D(vec[2], vec[3]);
+	mPts << Vector2D(vec[4], vec[5]);
+}
+
+Vector2D Triangle::p0() const {
+	return pointAt(0);
+}
+
+Vector2D Triangle::p1() const {
+	return pointAt(1);
+}
+
+Vector2D Triangle::p2() const {
+	return pointAt(2);
+}
+
+Vector2D Triangle::pointAt(int idx) const {
+
+	// It's a triangle so the max index is expected to be 2
+	assert(idx < 3);
+
+	if (idx >= mPts.size())
+		return Vector2D();
+	else
+		return mPts[idx];
+}
+
+void Triangle::draw(QPainter& p) const {
+
+	if (isNull())
+		return;
+
+	// draw edges
+	p.drawLine(p0().toQPointF(), p1().toQPointF());
+	p.drawLine(p1().toQPointF(), p2().toQPointF());
+	p.drawLine(p2().toQPointF(), p0().toQPointF());
+}
 
 }

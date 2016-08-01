@@ -34,6 +34,8 @@
 
 #include "BaseModule.h"
 
+#include "Shapes.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QRectF>
 #include <QVector>
@@ -61,7 +63,7 @@ public:
 		const QRectF& bbox = QRectF());
 
 	int64 area() const;
-	QPointF center() const;
+	Vector2D center() const;
 	QRectF bbox() const;
 
 	void draw(QPainter& p);
@@ -91,6 +93,7 @@ public:
 
 	bool isEmpty() const override;
 	bool compute() override;
+	QVector<Triangle> connect(const QVector<MserBlob>& blobs) const;
 
 	cv::Mat binaryImage() const;
 
@@ -101,6 +104,7 @@ private:
 	cv::Mat mDstImg;
 
 	QVector<MserBlob> mBlobs;
+	QVector<Triangle> mTriangles;
 
 	bool checkInput() const override;
 };

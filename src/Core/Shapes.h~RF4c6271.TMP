@@ -47,11 +47,7 @@
 #endif
 #endif
 
-#pragma warning(disable: 4251)	// dll interface warning
-
 // Qt defines
-class QPainter;
-
 namespace rdf {
 
 // read defines
@@ -140,15 +136,7 @@ protected:
 class DllCoreExport Vector2D {
 
 public:
-	Vector2D();
-	Vector2D(double x, double y);
 	Vector2D(const QPoint& p);
-	Vector2D(const QPointF& p);
-	Vector2D(const cv::Point& v);
-
-	bool isNull() const;
-	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Vector2D& v);
-	friend DllCoreExport QDebug operator<< (QDebug d, const Vector2D &v);
 
 	void setX(double x);
 	double x() const;
@@ -156,46 +144,26 @@ public:
 	void setY(double y);
 	double y() const;
 
-	QPoint toQPoint() const;
-	QPointF toQPointF() const;
-
-	cv::Point toCvPoint() const;
-	cv::Point2d toCvPointF() const;
-
-	QString toString() const;
-
-	void draw(QPainter& p) const;
-
 protected:
 	bool mIsNull = true;
 
-	double mX = 0;
-	double mY = 0;
+	double mX;
+	double mY;
 };
 
 class DllCoreExport Triangle {
 
 public:
-	Triangle();
 	Triangle(const cv::Vec6f& vec);
-
-	bool isNull() const;
-
-	void setVec(const cv::Vec6f& vec);
-
-	Vector2D p0() const;
-	Vector2D p1() const;
-	Vector2D p2() const;
-
-	Vector2D pointAt(int idx = 0) const;
-
-	void draw(QPainter& p) const;
 
 protected:
 
 	bool mIsNull = true;
 
-	QVector<Vector2D> mPts;
+	Vector2D p0;
+	Vector2D p1;
+	Vector2D p2;
+
 };
 
 };

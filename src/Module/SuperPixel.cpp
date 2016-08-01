@@ -88,91 +88,55 @@ bool SuperPixel::compute() {
 
 	assert(elements.size() == bboxes.size());
 	
-	qDebug() << "MSER computed in " << dt;
-
-	QVector<float> mserSize;
+	qDebug() << "MSER found" << elements.size() << "regions in" << dt;
 
 	for (int idx = 0; idx < elements.size(); idx++) {
 		MserBlob cb(elements[idx], Converter::cvRectToQt(bboxes[idx]));
 		mBlobs << cb;
-		mserSize << cb.area();
 	}
 
-	cv::Mat sizeHist = IP::computeHist(Image::instance().qVector2Mat(mserSize), 1000);
-
-	Histogram hist(sizeHist);
-	mDstImg = hist.draw();
-
+	// compute delauney triangulation
+	mTriangles = connect(mBlobs);
 
 	// draw to dst img
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	QPainter p(&pm);
 
-	for (auto cb : mBlobs)
-		cb.draw(p);
+
+	p.setPen(ColorManager::instance().colors()[0]);
+
+	for (auto t : mTriangles)
+		t.draw(p);
+
+	//for (auto cb : mBlobs)
+	//	cb.draw(p);
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
 
-
-	//Histogram hist = IP::computeHist(mSrcImg, 255);
-	//qDebug().noquote() << Image::instance().printImage(hist.hist(), "hist");
-
-
-
-	// TODO: compute the area histogram - see for filtering
-
-	//mDstImg.setTo(cv::Scalar(255));
-
-	//// TODO: put into a drawer class...
-	//for (auto set : elements) {
-	//	QColor col;// = Drawer::instance().getRandomColor();
-	//	col.setAlpha(30);
-	//	Drawer::instance().setColor(col);
-	//	mDstImg = Drawer::instance().drawPoints(mDstImg, set);
-	//}
-
-	//std::vector<cv::Point> cc;
-	//for (cv::Rect r : bboxes) {
-	//	QRectF qr = Converter::cvRectToQt(r);
-	//	cc.push_back(Converter::qPointToCv(qr.center()));
-	//}
-
-	//// TODO: put into a drawer class...
-	//QColor col = Drawer::instance().getRandomColor();
-	//col.setAlpha(100);
-	//Drawer::instance().setColor(col);
-	//Drawer::instance().setStrokeWidth(3);
-	//mDstImg = Drawer::instance().drawPoints(mDstImg, cc);
-
-
-
-	//Drawer::instance().setColor(Drawer::instance().getRandomColor());
-	//mDstImg = Drawer::instance().drawRects(mDstImg, bboxes);
-
-	//cv::detail::GraphCutSeamFinder seamFinder;
-
-	//std::vector<cv::Point> corners;
-	//corners.push_back(cv::Point(0, 0));
-	//corners.push_back(cv::Point(100, 100));
-
-	//cv::UMat src;
-	//cv::cvtColor(mSrcImg, src, CV_RGBA2RGB);
-
-	//std::vector<cv::UMat> mats;
-	//mats.push_back(src);
-	//mats.push_back(src);
-
-	//mMask.push_back(cv::UMat(src.size(), CV_8UC1, cv::Scalar(255)));
-	//mMask.push_back(cv::UMat(src.size(), CV_8UC1, cv::Scalar(255)));
-
-	//qDebug() << "src channels: " << mSrcImg.channels();
-
-	//seamFinder.find(mats, corners, mMask);
-
-	//qDebug() << "mMask size: " << mMask.size();
 	mDebug << "computed in" << dt;
 
 	return true;
+}
+
+QVector<Triangle> SuperPixel::connect(const QVector<MserBlob>& blobs) const {
+
+	cv::Rect rect(cv::Point(), mSrcImg.size());
+
+	// Create an instance of Subdiv2D
+	cv::Subdiv2D subdiv(rect);
+
+	for (const MserBlob& b : blobs)
+		subdiv.insert(b.center().toCvPointF());
+
+	std::vector<cv::Vec6f> triangles;
+	subdiv.getTriangleList(triangles);
+
+	// convert to our datatype
+	QVector<Triangle> rTriangles;
+	for (const cv::Vec6f& t : triangles)
+		rTriangles << t;
+
+	return rTriangles;
 }
 
 cv::Mat SuperPixel::binaryImage() const {
@@ -218,7 +182,7 @@ int64 MserBlob::area() const {
 	return mPts.size();
 }
 
-QPointF MserBlob::center() const {
+Vector2D MserBlob::center() const {
 	return bbox().center();
 }
 
