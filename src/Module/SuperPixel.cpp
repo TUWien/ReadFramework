@@ -80,14 +80,22 @@ bool SuperPixel::compute() {
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
 	//img = IP::invert(img);
 
+	cv::Size kSize(1, 1);
+	cv::Mat k = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+		cv::Size(2*kSize.width + 1, 2*kSize.height+1),
+		cv::Point(kSize.width, kSize.height) );
+	cv::dilate(img, img, k);
+	//cv::dilate(img, img, k);
+
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
+	mser->setMinArea(100);
 
 	std::vector<std::vector<cv::Point> > elements;
 	std::vector<cv::Rect> bboxes;
 	mser->detectRegions(img, elements, bboxes);
 
 	assert(elements.size() == bboxes.size());
-	
+
 	qDebug() << "MSER found" << elements.size() << "regions in" << dt;
 
 	for (int idx = 0; idx < elements.size(); idx++) {
@@ -102,14 +110,13 @@ bool SuperPixel::compute() {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	QPainter p(&pm);
 
-
 	p.setPen(ColorManager::instance().colors()[0]);
 
-	for (auto t : mTriangles)
-		t.draw(p);
+	//for (auto t : mTriangles)
+	//	t.draw(p);
 
-	//for (auto cb : mBlobs)
-	//	cb.draw(p);
+	for (auto cb : mBlobs)
+		cb.draw(p);
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
 

@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath("D:/read/test/superPixel.png");
+		dc.setOutputPath("D:/read/test/superPixel.jpg");
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 
