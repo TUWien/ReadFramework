@@ -9,7 +9,8 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     ] ],
     [ "DebugMarkus.cpp", "_debug_markus_8cpp.html", null ],
     [ "DebugMarkus.h", "_debug_markus_8h.html", [
-      [ "XmlTest", "classrdf_1_1_xml_test.html", "classrdf_1_1_xml_test" ]
+      [ "XmlTest", "classrdf_1_1_xml_test.html", "classrdf_1_1_xml_test" ],
+      [ "LayoutTest", "classrdf_1_1_layout_test.html", "classrdf_1_1_layout_test" ]
     ] ],
     [ "DebugStefan.cpp", "_debug_stefan_8cpp.html", null ],
     [ "DebugStefan.h", "_debug_stefan_8h.html", null ],

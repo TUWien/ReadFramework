@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['separatorregion',['SeparatorRegion',['../classrdf_1_1_separator_region.html',1,'rdf']]],
-  ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html',1,'rdf']]],
-  ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
-  ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]]
+  ['rect',['Rect',['../classrdf_1_1_rect.html',1,'rdf']]],
+  ['region',['Region',['../classrdf_1_1_region.html',1,'rdf']]],
+  ['regionmanager',['RegionManager',['../classrdf_1_1_region_manager.html',1,'rdf']]],
+  ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html',1,'rdf']]],
+  ['regionxmlhelper',['RegionXmlHelper',['../classrdf_1_1_region_xml_helper.html',1,'rdf']]]
 ];

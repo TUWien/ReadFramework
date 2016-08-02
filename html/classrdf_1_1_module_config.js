@@ -1,6 +1,6 @@
 var classrdf_1_1_module_config =
 [
-    [ "ModuleConfig", "classrdf_1_1_module_config.html#ac6e87309925bd69be555a4c13c5ba276", null ],
+    [ "ModuleConfig", "classrdf_1_1_module_config.html#ae65377987b0c184c7c127b8de6492f06", null ],
     [ "load", "classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409", null ],
     [ "loadSettings", "classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947", null ],
     [ "name", "classrdf_1_1_module_config.html#a3c3aefe966e688ef3081585a7de5cd8a", null ],

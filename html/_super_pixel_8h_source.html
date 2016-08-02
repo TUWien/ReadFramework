@@ -141,47 +141,118 @@ $(document).ready(function(){initNavTree('_super_pixel_8h_source.html','');});
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_base_module_8h.html">BaseModule.h</a>&quot;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#pragma warning(push, 0)    // no warnings from includes</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#ifndef DllModuleExport</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef DLL_MODULE_EXPORT</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_EXPORT</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_IMPORT</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">// Qt defines</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">namespace </span>rdf {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">// read defines</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classrdf_1_1_super_pixel.html">   53</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_super_pixel.html">SuperPixel</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module.html">Module</a> {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="classrdf_1_1_super_pixel.html">SuperPixel</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_shapes_8h.html">Shapes.h</a>&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pixel_8h.html">Pixel.h</a>&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#pragma warning(push, 0)    // no warnings from includes</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;QRectF&gt;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#include &lt;QVector&gt;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#include &lt;QPainter&gt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#ifndef DllModuleExport</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef DLL_MODULE_EXPORT</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_EXPORT</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_IMPORT</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">// Qt defines</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">namespace </span>rdf {</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">bool</span> compute() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    cv::Mat binaryImage() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    QString toString() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    cv::Mat mSrcImg;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::vector&lt;cv::UMat&gt; mMask;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">// read defines</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classrdf_1_1_mser_blob.html">   60</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_mser_blob.html">MserBlob</a> {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="classrdf_1_1_mser_blob.html">MserBlob</a>(<span class="keyword">const</span> std::vector&lt;cv::Point&gt;&amp; pts = std::vector&lt;cv::Point&gt;(),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">const</span> QRectF&amp; bbox = QRectF());</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">double</span> area() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">double</span> uniqueArea(<span class="keyword">const</span> QVector&lt;MserBlob&gt;&amp; blobs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> center() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> bbox() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};</div>
-<div class="ttc" id="classrdf_1_1_super_pixel_html"><div class="ttname"><a href="classrdf_1_1_super_pixel.html">rdf::SuperPixel</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:53</div></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::vector&lt;cv::Point&gt; pts() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::vector&lt;cv::Point&gt; relativePts(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; origin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> getAxis() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="classrdf_1_1_pixel.html">Pixel</a> toPixel() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classrdf_1_1_mser_blob.html#a91c07055545b0999ac2e84d715a3e652">   80</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_mser_blob.html#a91c07055545b0999ac2e84d715a3e652">mCenter</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classrdf_1_1_mser_blob.html#a41bcecd9c748d7d1f6d7a6f84410bc62">   81</a></span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> <a class="code" href="classrdf_1_1_mser_blob.html#a41bcecd9c748d7d1f6d7a6f84410bc62">mBBox</a>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">   82</a></span>&#160;    std::vector&lt;cv::Point&gt; <a class="code" href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">mPts</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classrdf_1_1_super_pixel_config.html">   85</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_super_pixel_config.html">SuperPixelConfig</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module_config.html">ModuleConfig</a> {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <a class="code" href="classrdf_1_1_super_pixel_config.html">SuperPixelConfig</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">virtual</span> QString toString() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">void</span> load(<span class="keyword">const</span> QSettings&amp; settings) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">void</span> save(QSettings&amp; settings) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;};</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classrdf_1_1_super_pixel.html">   98</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_super_pixel.html">SuperPixel</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module.html">Module</a> {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="classrdf_1_1_super_pixel.html">SuperPixel</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">bool</span> compute() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    QVector&lt;Triangle&gt; connect(<span class="keyword">const</span> QVector&lt;MserBlob&gt;&amp; blobs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    cv::Mat binaryImage() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    QString toString() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    QVector&lt;Pixel&gt; getSuperPixels() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    cv::Mat mSrcImg;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    cv::Mat mDstImg;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    QVector&lt;MserBlob&gt; mBlobs;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    QVector&lt;Pixel&gt; mPixels;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    QVector&lt;Triangle&gt; mTriangles;   <span class="comment">// TODO: remove</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">// parameters</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">int</span> mMinArea = 100;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    QVector&lt;MserBlob&gt; getBlobs(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> kernelSize) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    QVector&lt;MserBlob&gt; mser(<span class="keyword">const</span> cv::Mat&amp; img) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">int</span> filterAspectRatio(std::vector&lt;std::vector&lt;cv::Point&gt; &gt;&amp; elements, std::vector&lt;cv::Rect&gt;&amp; boxes, <span class="keywordtype">double</span> aRatio = 0.4) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">int</span> filterDuplicates(QVector&lt;MserBlob&gt;&amp; blobs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">int</span> filterUnique(QVector&lt;MserBlob&gt;&amp; blobs, <span class="keywordtype">double</span> areaRatio = 0.7) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;};</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;};</div>
+<div class="ttc" id="classrdf_1_1_mser_blob_html_a91c07055545b0999ac2e84d715a3e652"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a91c07055545b0999ac2e84d715a3e652">rdf::MserBlob::mCenter</a></div><div class="ttdeci">Vector2D mCenter</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:80</div></div>
+<div class="ttc" id="classrdf_1_1_mser_blob_html_a00c71fbe3f35bf9caf0d871d2640440e"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">rdf::MserBlob::mPts</a></div><div class="ttdeci">std::vector&lt; cv::Point &gt; mPts</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:82</div></div>
+<div class="ttc" id="classrdf_1_1_super_pixel_config_html"><div class="ttname"><a href="classrdf_1_1_super_pixel_config.html">rdf::SuperPixelConfig</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:85</div></div>
+<div class="ttc" id="classrdf_1_1_module_config_html"><div class="ttname"><a href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></div><div class="ttdef"><b>Definition:</b> BaseModule.h:61</div></div>
+<div class="ttc" id="classrdf_1_1_super_pixel_html"><div class="ttname"><a href="classrdf_1_1_super_pixel.html">rdf::SuperPixel</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:98</div></div>
+<div class="ttc" id="classrdf_1_1_mser_blob_html"><div class="ttname"><a href="classrdf_1_1_mser_blob.html">rdf::MserBlob</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:60</div></div>
+<div class="ttc" id="_pixel_8h_html"><div class="ttname"><a href="_pixel_8h.html">Pixel.h</a></div></div>
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:48</div></div>
+<div class="ttc" id="classrdf_1_1_vector2_d_html"><div class="ttname"><a href="classrdf_1_1_vector2_d.html">rdf::Vector2D</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:140</div></div>
+<div class="ttc" id="_shapes_8h_html"><div class="ttname"><a href="_shapes_8h.html">Shapes.h</a></div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html"><div class="ttname"><a href="classrdf_1_1_pixel.html">rdf::Pixel</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:54</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:94</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:215</div></div>
+<div class="ttc" id="classrdf_1_1_mser_blob_html_a41bcecd9c748d7d1f6d7a6f84410bc62"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a41bcecd9c748d7d1f6d7a6f84410bc62">rdf::MserBlob::mBBox</a></div><div class="ttdeci">Rect mBBox</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:81</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

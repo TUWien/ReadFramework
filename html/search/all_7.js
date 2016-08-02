@@ -7,12 +7,15 @@ var searchData=
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html#aa7ec4eed4f45c9286d94187fc91ccca0',1,'rdf::GenericSettings']]],
   ['get1dgauss',['get1DGauss',['../classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f',1,'rdf::Algorithms']]],
   ['getangle',['getAngle',['../classrdf_1_1_base_skew_estimation.html#ab24f61909aff210dc07edf9d935cddcb',1,'rdf::BaseSkewEstimation']]],
+  ['getaxis',['getAxis',['../classrdf_1_1_mser_blob.html#a85177138a9f6ae8f121d66c831ffd201',1,'rdf::MserBlob']]],
   ['getbiggestblob',['getBiggestBlob',['../classrdf_1_1_blob_manager.html#a75fa4e3373dd8c9bdc674f012901f52f',1,'rdf::BlobManager']]],
   ['getconfig',['getConfig',['../classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0',1,'rdf::RegionManager']]],
   ['gethlines',['getHLines',['../classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637',1,'rdf::LineTrace']]],
   ['getlines',['getLines',['../classrdf_1_1_line_trace.html#aaa2586bb273c9ee9c03689e5d3b91cbb',1,'rdf::LineTrace']]],
   ['getmatchedlineimg',['getMatchedLineImg',['../classrdf_1_1_form_features.html#a46c60cc8c2f11f496923bf8f8453edfd',1,'rdf::FormFeatures']]],
+  ['getrandomcolor',['getRandomColor',['../classrdf_1_1_color_manager.html#a3bcdc76cab1169d894f31c378e11c911',1,'rdf::ColorManager']]],
   ['getselectedlines',['getSelectedLines',['../classrdf_1_1_base_skew_estimation.html#aa2e8fc89e88fa6bec2a4c846aead0511',1,'rdf::BaseSkewEstimation']]],
+  ['getsuperpixels',['getSuperPixels',['../classrdf_1_1_super_pixel.html#a9b613b7e267779f9f4c9fe885b86b7ee',1,'rdf::SuperPixel']]],
   ['getthreshotsu',['getThreshOtsu',['../classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597',1,'rdf::Algorithms']]],
   ['gettotal',['getTotal',['../classrdf_1_1_timer.html#a19c55bb89adf7b93b1247db0078cf345',1,'rdf::Timer']]],
   ['getvlines',['getVLines',['../classrdf_1_1_line_trace.html#a939ed5b4fbd84586f3da9909d7158f3c',1,'rdf::LineTrace']]],
@@ -23,5 +26,6 @@ var searchData=
   ['glva',['GLVA',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313fea578917d27a412e984734ee5d2d90a8d2',1,'rdf::FocusEstimation']]],
   ['glvn',['GLVN',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feac1c4d4ae6a21a80dac68ac2899a3a75a',1,'rdf::FocusEstimation']]],
   ['gras',['GRAS',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feae6deb3c899437835482a85cca3b755e9',1,'rdf::FocusEstimation']]],
-  ['grat',['GRAT',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feaa8e90c7e5ad6a3ab2092a68083129aee',1,'rdf::FocusEstimation']]]
+  ['grat',['GRAT',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feaa8e90c7e5ad6a3ab2092a68083129aee',1,'rdf::FocusEstimation']]],
+  ['grayscale',['grayscale',['../classrdf_1_1_i_p.html#adecd9e050385f1a8654df810805dfd4d',1,'rdf::IP']]]
 ];

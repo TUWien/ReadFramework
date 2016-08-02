@@ -7,6 +7,7 @@ var searchData=
   ['baseskewestimationconfig',['BaseSkewEstimationConfig',['../classrdf_1_1_base_skew_estimation_config.html#ab43f1c78f082f07b31cc525bb451c584',1,'rdf::BaseSkewEstimationConfig']]],
   ['basiccontrast',['BasicContrast',['../classrdf_1_1_basic_contrast.html#a324ddce418943eaa2f5aa030fc58ea5e',1,'rdf::BasicContrast::BasicContrast()'],['../classrdf_1_1_basic_contrast.html#ae77a82f95ca411ee01203a9efe286a86',1,'rdf::BasicContrast::BasicContrast(const cv::Mat &amp;img)']]],
   ['basicfm',['BasicFM',['../classrdf_1_1_basic_f_m.html#accaef98e5c81edbc4bd3cdef0f6453a9',1,'rdf::BasicFM::BasicFM()'],['../classrdf_1_1_basic_f_m.html#a7b9839bd4aaa518e3ae8c812d787cec6',1,'rdf::BasicFM::BasicFM(const cv::Mat &amp;img)']]],
+  ['bbox',['bbox',['../classrdf_1_1_mser_blob.html#aaf8b9a273b65a3783bddfada22ca8c5a',1,'rdf::MserBlob']]],
   ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa',1,'rdf::BinarizationSuAdapted']]],
   ['binarizationsufgdweight',['BinarizationSuFgdWeight',['../classrdf_1_1_binarization_su_fgd_weight.html#ab3af93b360e3aae9ec3875fb20dc0fca',1,'rdf::BinarizationSuFgdWeight']]],
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html#a8f1ad72deae51b99cf8d4cb8e6c7770f',1,'rdf::BinarizationTest']]],
@@ -15,5 +16,8 @@ var searchData=
   ['blob',['Blob',['../classrdf_1_1_blob.html#a524cc4f4349f4e41faceb1df4dcaed5f',1,'rdf::Blob::Blob()'],['../classrdf_1_1_blob.html#af1e9cf46848b6a6b0118dba3e7c8c32e',1,'rdf::Blob::Blob(const QVector&lt; cv::Point &gt; &amp;outerC, const QVector&lt; QVector&lt; cv::Point &gt; &gt; &amp;innerC)']]],
   ['bloborientation',['blobOrientation',['../classrdf_1_1_blob.html#a98b9ac417405ae6b3604e731e3bde347',1,'rdf::Blob']]],
   ['blobs',['Blobs',['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()'],['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const ']]],
+  ['bottom',['bottom',['../classrdf_1_1_rect.html#acb999b56599ee23d188bf25a10a22e72',1,'rdf::Rect']]],
+  ['bottomleft',['bottomLeft',['../classrdf_1_1_rect.html#a8613dea770761f945cf45aa9e2ecfc7f',1,'rdf::Rect']]],
+  ['bottomright',['bottomRight',['../classrdf_1_1_rect.html#acd06ee546649f572888c67fa7ed273b4',1,'rdf::Rect']]],
   ['brush',['brush',['../classrdf_1_1_region_type_config.html#a12fedcf767a2ece1e35fd138c13e9b66',1,'rdf::RegionTypeConfig']]]
 ];

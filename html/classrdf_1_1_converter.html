@@ -119,16 +119,72 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e69e5cca8cdb1c448afc16a40f42bc5"><td class="memItemLeft" align="right" valign="top">QPolygon&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5">stringToPoly</a> (const QString &amp;pointList) const </td></tr>
 <tr class="memdesc:a5e69e5cca8cdb1c448afc16a40f42bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a PAGE points attribute to a polygon. the format is: p1x,p1y p2x,p2y (for two points p1, p2)  <a href="#a5e69e5cca8cdb1c448afc16a40f42bc5">More...</a><br/></td></tr>
 <tr class="separator:a5e69e5cca8cdb1c448afc16a40f42bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acab5ac0a7d0c58db70a8f2d2b15c5cd4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#acab5ac0a7d0c58db70a8f2d2b15c5cd4">polyToString</a> (const QPolygon &amp;poly)</td></tr>
-<tr class="memdesc:acab5ac0a7d0c58db70a8f2d2b15c5cd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a QPolygon to QString according to the PAGE XML format. A line would look like this: p1x,p1y p2x,p2y  <a href="#acab5ac0a7d0c58db70a8f2d2b15c5cd4">More...</a><br/></td></tr>
-<tr class="separator:acab5ac0a7d0c58db70a8f2d2b15c5cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4102e512b6cc054be79df465d5ad06"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a8c4102e512b6cc054be79df465d5ad06">polyToString</a> (const QPolygon &amp;poly) const </td></tr>
+<tr class="memdesc:a8c4102e512b6cc054be79df465d5ad06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a QPolygon to QString according to the PAGE XML format. A line would look like this: p1x,p1y p2x,p2y  <a href="#a8c4102e512b6cc054be79df465d5ad06">More...</a><br/></td></tr>
+<tr class="separator:a8c4102e512b6cc054be79df465d5ad06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5678116dcc71673db6d5c9a53268b6bf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_converter.html">Converter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a5678116dcc71673db6d5c9a53268b6bf">instance</a> ()</td></tr>
 <tr class="separator:a5678116dcc71673db6d5c9a53268b6bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a365f6341ed56425fc00773198b482cbc"><td class="memItemLeft" align="right" valign="top">static QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a365f6341ed56425fc00773198b482cbc">cvPointToQt</a> (const cv::Point &amp;pt)</td></tr>
+<tr class="separator:a365f6341ed56425fc00773198b482cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee80eefede761140dda2713ea0f97019"><td class="memItemLeft" align="right" valign="top">static cv::Point2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#aee80eefede761140dda2713ea0f97019">qPointToCv</a> (const QPointF &amp;pt)</td></tr>
+<tr class="separator:aee80eefede761140dda2713ea0f97019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a769c9bb3ae981309a99a8d77b0a85d5e"><td class="memItemLeft" align="right" valign="top">static QRectF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a769c9bb3ae981309a99a8d77b0a85d5e">cvRectToQt</a> (const cv::Rect &amp;r)</td></tr>
+<tr class="separator:a769c9bb3ae981309a99a8d77b0a85d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3678f2222bb6774a8b8dc40c7401de53"><td class="memItemLeft" align="right" valign="top">static cv::Rect2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_converter.html#a3678f2222bb6774a8b8dc40c7401de53">qRectToCv</a> (const QRectF &amp;r)</td></tr>
+<tr class="separator:a3678f2222bb6774a8b8dc40c7401de53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a365f6341ed56425fc00773198b482cbc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPointF rdf::Converter::cvPointToQt </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Point &amp;&#160;</td>
+          <td class="paramname"><em>pt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a769c9bb3ae981309a99a8d77b0a85d5e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QRectF rdf::Converter::cvRectToQt </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Rect &amp;&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5678116dcc71673db6d5c9a53268b6bf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +208,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acab5ac0a7d0c58db70a8f2d2b15c5cd4"></a>
+<a class="anchor" id="a8c4102e512b6cc054be79df465d5ad06"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -161,7 +217,7 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const QPolygon &amp;&#160;</td>
           <td class="paramname"><em>polygon</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -174,6 +230,54 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A string representing the polygon.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aee80eefede761140dda2713ea0f97019"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Point2d rdf::Converter::qPointToCv </td>
+          <td>(</td>
+          <td class="paramtype">const QPointF &amp;&#160;</td>
+          <td class="paramname"><em>pt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3678f2222bb6774a8b8dc40c7401de53"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Rect2d rdf::Converter::qRectToCv </td>
+          <td>(</td>
+          <td class="paramtype">const QRectF &amp;&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

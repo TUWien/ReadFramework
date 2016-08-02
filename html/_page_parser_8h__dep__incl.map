@@ -1,5 +1,6 @@
 <map id="src/Core/PageParser.h" name="src/Core/PageParser.h">
 <area shape="rect" id="node2" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="5,80,173,107"/>
 <area shape="rect" id="node3" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="198,80,348,107"/>
-<area shape="rect" id="node4" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="373,80,568,107"/>
+<area shape="rect" id="node4" href="$_debug_utils_8cpp.html" title="src/DebugUtils.cpp" alt="" coords="373,80,507,107"/>
+<area shape="rect" id="node5" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="532,80,727,107"/>
 </map>

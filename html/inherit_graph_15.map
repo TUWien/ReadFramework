@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classrdf_1_1_line.html" title="A basic line class including stroke width (thickness). " alt="" coords="5,5,75,32"/>
+<area shape="rect" id="node1" href="$classrdf_1_1_generic_settings.html" title="rdf::GenericSettings" alt="" coords="5,5,144,32"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_global_settings.html" title="rdf::GlobalSettings" alt="" coords="192,5,323,32"/>
 </map>

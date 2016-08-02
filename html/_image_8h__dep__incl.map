@@ -1,10 +1,12 @@
 <map id="src/Core/Image.h" name="src/Core/Image.h">
 <area shape="rect" id="node2" href="$_algorithms_8cpp.html" title="src/Core/Algorithms.cpp" alt="" coords="5,80,168,107"/>
-<area shape="rect" id="node3" href="$_image_8cpp.html" title="src/Core/Image.cpp" alt="" coords="193,80,329,107"/>
-<area shape="rect" id="node4" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="355,80,480,107"/>
-<area shape="rect" id="node5" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="505,80,655,107"/>
-<area shape="rect" id="node6" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="679,80,861,107"/>
-<area shape="rect" id="node7" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="887,80,1081,107"/>
-<area shape="rect" id="node8" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1106,80,1277,107"/>
-<area shape="rect" id="node9" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="1303,80,1512,107"/>
+<area shape="rect" id="node3" href="$_drawer_8cpp.html" title="src/Core/Drawer.cpp" alt="" coords="193,80,335,107"/>
+<area shape="rect" id="node4" href="$_image_8cpp.html" title="src/Core/Image.cpp" alt="" coords="359,80,496,107"/>
+<area shape="rect" id="node5" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="521,80,647,107"/>
+<area shape="rect" id="node6" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="671,80,821,107"/>
+<area shape="rect" id="node7" href="$_binarization_8cpp.html" title="src/Module/Binarization.cpp" alt="" coords="846,80,1028,107"/>
+<area shape="rect" id="node8" href="$_form_analysis_8cpp.html" title="src/Module/FormAnalysis.cpp" alt="" coords="1053,80,1248,107"/>
+<area shape="rect" id="node9" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1273,80,1444,107"/>
+<area shape="rect" id="node10" href="$_skew_estimation_8cpp.html" title="src/Module/SkewEstimation.cpp" alt="" coords="1469,80,1679,107"/>
+<area shape="rect" id="node11" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="1704,80,1883,107"/>
 </map>

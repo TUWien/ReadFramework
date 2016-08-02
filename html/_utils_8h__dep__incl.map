@@ -1,8 +1,12 @@
 <map id="src/Core/Utils.h" name="src/Core/Utils.h">
-<area shape="rect" id="node2" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="5,80,173,107"/>
-<area shape="rect" id="node3" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="198,80,343,107"/>
-<area shape="rect" id="node4" href="$_utils_8cpp.html" title="src/Core/Utils.cpp" alt="" coords="368,80,496,107"/>
-<area shape="rect" id="node5" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="520,80,645,107"/>
-<area shape="rect" id="node6" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="670,80,820,107"/>
-<area shape="rect" id="node7" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="845,80,941,107"/>
+<area shape="rect" id="node2" href="$_drawer_8cpp.html" title="src/Core/Drawer.cpp" alt="" coords="5,80,147,107"/>
+<area shape="rect" id="node3" href="$_image_8cpp.html" title="src/Core/Image.cpp" alt="" coords="171,80,308,107"/>
+<area shape="rect" id="node4" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="333,80,501,107"/>
+<area shape="rect" id="node5" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="526,80,671,107"/>
+<area shape="rect" id="node6" href="$_utils_8cpp.html" title="src/Core/Utils.cpp" alt="" coords="696,80,824,107"/>
+<area shape="rect" id="node7" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="848,80,973,107"/>
+<area shape="rect" id="node8" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="998,80,1148,107"/>
+<area shape="rect" id="node9" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="1173,80,1269,107"/>
+<area shape="rect" id="node10" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="1295,80,1473,107"/>
+<area shape="rect" id="node11" href="$_text_block_segmentation_8cpp.html" title="src/Module/TextBlockSegmentation.cpp" alt="" coords="1498,80,1752,107"/>
 </map>

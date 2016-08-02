@@ -120,13 +120,62 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a97572717e077a27129193b8a6b1cb0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade7ef305b08a8c414b71b15f7cd339a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9">registerVersion</a> () const </td></tr>
 <tr class="separator:ade7ef305b08a8c414b71b15f7cd339a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ab3c111bc36a67cdf094a3186bfc91"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#a38ab3c111bc36a67cdf094a3186bfc91">createFilePath</a> (const QString &amp;filePath, const QString &amp;attribute, const QString &amp;newSuffix=QString()) const </td></tr>
+<tr class="memdesc:a38ab3c111bc36a67cdf094a3186bfc91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new file path from filePath. Hence, C:.png can be turned into C:-something.xml  <a href="#a38ab3c111bc36a67cdf094a3186bfc91">More...</a><br/></td></tr>
+<tr class="separator:a38ab3c111bc36a67cdf094a3186bfc91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:abfbc03f27fcbab98a52410d93205b70f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_utils.html">Utils</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#abfbc03f27fcbab98a52410d93205b70f">instance</a> ()</td></tr>
 <tr class="separator:abfbc03f27fcbab98a52410d93205b70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af133a2a28a611eb7c7df293e9741d484"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#af133a2a28a611eb7c7df293e9741d484">rand</a> ()</td></tr>
+<tr class="memdesc:af133a2a28a611eb7c7df293e9741d484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a random number within [0 1].  <a href="#af133a2a28a611eb7c7df293e9741d484">More...</a><br/></td></tr>
+<tr class="separator:af133a2a28a611eb7c7df293e9741d484"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a38ab3c111bc36a67cdf094a3186bfc91"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString rdf::Utils::createFilePath </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>attribute</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>newSuffix</em> = <code>QString()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new file path from filePath. Hence, C:.png can be turned into C:-something.xml </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>The old file path.</td></tr>
+    <tr><td class="paramname">attribute</td><td>An attribute string which is appended to the filename.</td></tr>
+    <tr><td class="paramname">newSuffix</td><td>A new suffix, the old suffix is used if empty.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new file path.</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a97572717e077a27129193b8a6b1cb0df"></a>
 <div class="memitem">
 <div class="memproto">
@@ -162,6 +211,32 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af133a2a28a611eb7c7df293e9741d484"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Utils::rand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a random number within [0 1]. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
