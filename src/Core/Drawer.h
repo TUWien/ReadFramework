@@ -38,7 +38,7 @@
 #include <QColor>
 #include <QPen>
 
-#include <opencv2\core\core.hpp>
+#include <opencv2/core/core.hpp>
 #pragma warning(pop)
 
 #ifndef DllCoreExport

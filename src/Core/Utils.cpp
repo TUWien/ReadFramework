@@ -41,7 +41,7 @@
 #include <QTime>
 #include <QColor>
 
-#include <opencv2\core\core.hpp>
+#include <opencv2/core/core.hpp>
 #pragma warning(pop)
 
 // needed for registering the file version

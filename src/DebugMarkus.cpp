@@ -39,6 +39,7 @@
 #include "Elements.h"
 
 #include "SuperPixel.h"
+#include "TextBlockSegmentation.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -143,12 +144,16 @@ void LayoutTest::testComponents() {
 
 void LayoutTest::computeComponents(cv::Mat & img) const {
 
-	rdf::SuperPixel sp(img);
+	rdf::SuperPixel superPixel(img);
 	
-	if (!sp.compute())
+	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	cv::Mat mask = sp.binaryImage();
+	QVector<Pixel> sp = superPixel.getSuperPixels();
+
+	rdf::TextBlockSegmentation tb(sp);
+
+	cv::Mat mask = superPixel.binaryImage();
 
 	// save mask
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-mask");

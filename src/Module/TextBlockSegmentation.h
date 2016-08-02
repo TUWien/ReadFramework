@@ -67,10 +67,10 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport TextBlock : public Module {
+class DllModuleExport TextBlockSegmentation : public Module {
 
 public:
-	TextBlock(const QVector<Pixel>& superPixels = QVector<Pixel>());
+	TextBlockSegmentation(const QVector<Pixel>& superPixels = QVector<Pixel>());
 
 	bool isEmpty() const override;
 	bool compute() override;

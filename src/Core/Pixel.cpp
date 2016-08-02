@@ -32,6 +32,8 @@
 
 #include "Pixel.h"
 
+#include "ImageProcessor.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #pragma warning(pop)
@@ -43,10 +45,11 @@ Pixel::Pixel() {
 
 }
 
-Pixel::Pixel(const Vector2D & center, const std::vector<cv::Point>& pts) {
+Pixel::Pixel(const Vector2D & center, const Vector2D& axis) {
+	
 	mIsNull = false;
 	mCenter = center;
-	// TODO: estimate axis
+	mAxis = axis;
 }
 
 bool Pixel::isNull() const {

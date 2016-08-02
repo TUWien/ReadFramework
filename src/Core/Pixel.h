@@ -55,7 +55,7 @@ class DllCoreExport Pixel {
 
 public:
 	Pixel();
-	Pixel(const Vector2D& center, const std::vector<cv::Point>& pts);
+	Pixel(const Vector2D& center, const Vector2D& axis);
 
 	bool isNull() const;
 
@@ -67,7 +67,6 @@ protected:
 
 	Vector2D mCenter;
 	Vector2D mAxis;
-
 };
 
 };

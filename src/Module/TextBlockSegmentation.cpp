@@ -49,16 +49,16 @@ QString TextBlockConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-// TextBlock --------------------------------------------------------------------
-TextBlock::TextBlock(const QVector<Pixel>& superPixels) {
+// TextBlockSegmentation --------------------------------------------------------------------
+TextBlockSegmentation::TextBlockSegmentation(const QVector<Pixel>& superPixels) {
 	mSuperPixels = superPixels;
 }
 
-bool TextBlock::isEmpty() const {
+bool TextBlockSegmentation::isEmpty() const {
 	return mSuperPixels.isEmpty();
 }
 
-bool TextBlock::compute() {
+bool TextBlockSegmentation::compute() {
 
 	Timer dt;
 
@@ -70,15 +70,15 @@ bool TextBlock::compute() {
 	return true;
 }
 
-cv::Mat TextBlock::displayImage() const {
+cv::Mat TextBlockSegmentation::displayImage() const {
 	return mDisplayImage;
 }
 
-QString TextBlock::toString() const {
+QString TextBlockSegmentation::toString() const {
 	return QString();
 }
 
-bool TextBlock::checkInput() const {
+bool TextBlockSegmentation::checkInput() const {
 	
 	return !mSuperPixels.isEmpty();
 }

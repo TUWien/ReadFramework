@@ -35,6 +35,7 @@
 #include "BaseModule.h"
 
 #include "Shapes.h"
+#include "Pixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QRectF>
@@ -72,6 +73,9 @@ public:
 
 	void draw(QPainter& p);
 
+	Vector2D getAxis() const;
+	Pixel toPixel() const;
+
 protected:
 	Vector2D mCenter;
 	Rect mBBox;
@@ -104,12 +108,15 @@ public:
 
 	QString toString() const override;
 
+	QVector<Pixel> getSuperPixels() const;
+
 private:
 	cv::Mat mSrcImg;
 	cv::Mat mDstImg;
 
 	QVector<MserBlob> mBlobs;
-	QVector<Triangle> mTriangles;
+	QVector<Pixel> mPixels;
+	QVector<Triangle> mTriangles;	// TODO: remove
 
 	// parameters
 	int mMinArea = 100;

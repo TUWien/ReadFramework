@@ -207,6 +207,10 @@ bool SuperPixel::compute() {
 	//nF = filterUnique(mBlobs, 0.001);
 	//qDebug() << nF << "filtered (unique area) in" << dtf;
 
+	// convert to pixels
+	for (const MserBlob& b : mBlobs)
+		mPixels << b.toPixel();
+
 	// compute delauney triangulation
 	dtf.start();
 	mTriangles = connect(mBlobs);
@@ -264,6 +268,10 @@ QString SuperPixel::toString() const {
 	QString msg = debugName();
 
 	return msg;
+}
+
+QVector<Pixel> SuperPixel::getSuperPixels() const {
+	return mPixels;
 }
 
 // SuperPixelConfig --------------------------------------------------------------------
@@ -339,6 +347,22 @@ std::vector<cv::Point> MserBlob::relativePts(const Vector2D & origin) const {
 	}
 	
 	return rPts;
+}
+
+Vector2D MserBlob::getAxis() const {
+
+	cv::Mat img(bbox().size().toCvSize(), CV_32FC1);
+	IP::draw(mPts, img);
+	//cv::Mat m(pts);
+	cv::PCA pca(img, cv::Mat(), CV_PCA_DATA_AS_COL);
+	float dx = pca.eigenvectors.at<float>(0,0);
+	float dy = pca.eigenvectors.at<float>(0,1);
+
+	return Vector2D(dx, dy);
+}
+
+Pixel MserBlob::toPixel() const {
+	return Pixel(center(), getAxis());
 }
 
 void MserBlob::draw(QPainter & p) {
