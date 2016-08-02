@@ -50,6 +50,9 @@
 #endif
 #endif
 
+#define DK_DEG2RAD	0.017453292519943
+#define DK_RAD2DEG 	57.295779513082323
+
 // Qt defines
 class QSettings;
 

@@ -66,7 +66,7 @@ namespace rdf {
 /// <param name="momentValue">The statistical moment value (0.5 = median, 0.25 and 0.75 = quartiles).</param>
 /// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
 /// <returns>The statistical moment.</returns>
-	template <typename numFmt>
+template <typename numFmt>
 static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
 
 	QList<numFmt> values = valuesIn;

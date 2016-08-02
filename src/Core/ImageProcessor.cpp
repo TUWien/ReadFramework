@@ -58,8 +58,12 @@ cv::Mat IP::invert(const cv::Mat & src) {
 /// <returns></returns>
 cv::Mat IP::grayscale(const cv::Mat & src) {
 	
-	assert(src.channels() == 3);
-	
+	// is already grayscale?
+	if (src.channels() == 1)
+		return src;
+
+	assert(src.channels() == 3 || src.channels() == 4);
+
 	cv::Mat dst;
 	cv::cvtColor(src, dst, CV_RGB2Luv);
 	
@@ -111,19 +115,17 @@ cv::Mat IP::computeHist(const cv::Mat & data, int width, int numElements, double
 	return hist;
 }
 
-void IP::draw(const std::vector<cv::Point>& pts, cv::Mat & img, cv::Scalar val) {
+void IP::draw(const std::vector<cv::Point>& pts, cv::Mat & img, unsigned char val) {
 
 	// we support 8UC1 for now
 	assert(img.depth() == CV_8UC1);
-
-	unsigned char* iPtr = img.ptr<unsigned char>();
 
 	for (const cv::Point& p : pts) {
 
 		assert(p.x >= 0 && p.x < img.cols);
 		assert(p.y >= 0 && p.y < img.rows);
 
-
+		img.at<unsigned char>(p) = val;
 	}
 }
 

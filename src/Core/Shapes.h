@@ -158,14 +158,18 @@ public:
 
 	void operator+=(const Vector2D& vec);
 	void operator-=(const Vector2D& vec);
+	
+	// scalar operators
+	void operator*=(const double& scalar);
+	void operator/=(const double& scalar);
 
 	bool isNull() const;
 
-	void setX(double x);
-	double x() const;
+	inline void setX(double x);
+	inline double x() const;
 	
-	void setY(double y);
-	double y() const;
+	inline void setY(double y);
+	inline double y() const;
 
 	QPoint toQPoint() const;
 	QPointF toQPointF() const;
@@ -179,6 +183,9 @@ public:
 	QString toString() const;
 
 	void draw(QPainter& p) const;
+
+	double angle() const;
+	double length() const;
 
 protected:
 	bool mIsNull = true;
@@ -220,23 +227,27 @@ public:
 	Rect(const QRectF& rect);
 	Rect(const cv::Rect& rect);
 
+	DllCoreExport friend bool operator==(const Rect& l, const Rect& r);
+	DllCoreExport friend bool operator!=(const Rect& l, const Rect& r);
+
 	bool isNull() const;
 
 	// return types
 	double width() const;
 	double height() const;
 	Vector2D size() const;
+	Vector2D diagonal() const;
 
 	double top() const;
 	double bottom() const;
 	double left() const;
 	double right() const;
 
-	Vector2D topLeft() const;
-	Vector2D topRight() const;
-	Vector2D bottomLeft() const;
-	Vector2D bottomRight() const;
-	Vector2D center() const;
+	inline Vector2D topLeft() const;
+	inline Vector2D topRight() const;
+	inline Vector2D bottomLeft() const;
+	inline Vector2D bottomRight() const;
+	inline Vector2D center() const;
 
 	// setter
 	void move(const Vector2D& vec);
@@ -255,6 +266,47 @@ protected:
 	
 	Vector2D mTopLeft;
 	Vector2D mSize;
+};
+
+class DllCoreExport Ellipse {
+
+public:
+	Ellipse();
+	Ellipse(const Vector2D& center, const Vector2D& axis = Vector2D(), double angle = 0.0);
+	Ellipse(const cv::RotatedRect& rect);
+
+	DllCoreExport friend QDebug operator<< (QDebug d, const Ellipse &e);
+
+	static Ellipse fromData(const std::vector<cv::Point>& pts, const Rect& bbox);
+	//static Ellipse fromData(const cv::Mat& means, const cv::Mat& covs);
+	//static Ellipse fromImage(const cv::Mat& img);
+	//bool axisFromCov(const cv::Mat& cov);
+
+	bool isNull() const;
+
+	QString toString() const;
+
+	void setCenter(const Vector2D& center);
+	Vector2D center() const;
+
+	void setAxis(const Vector2D& axis);
+	Vector2D axis() const;
+
+	void setAngle(double angle);
+	double angle() const;
+
+	void move(const Vector2D& vec);
+
+	void draw(QPainter& p, double alpha = 0.0) const;
+
+
+protected:
+	
+	bool mIsNull = true;
+
+	Vector2D mCenter;
+	Vector2D mAxis;
+	double mAngle = 0.0;
 };
 
 };

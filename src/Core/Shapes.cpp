@@ -483,6 +483,16 @@ void Vector2D::operator-=(const Vector2D & vec) {
 	mY -= vec.y();
 }
 
+void Vector2D::operator*=(const double & scalar) {
+	mX *= scalar;
+	mY *= scalar;
+}
+
+void Vector2D::operator/=(const double & scalar) {
+	mX /= scalar;
+	mY /= scalar;
+}
+
 bool Vector2D::isNull() const {
 	return mIsNull;
 }
@@ -494,7 +504,7 @@ QDebug operator<<(QDebug d, const Vector2D& v) {
 }
 
 bool operator==(const Vector2D & l, const Vector2D & r) {
-	return l.x() == r.x() && l.y() == r.y();
+	return l.mX == r.mX && l.mY == r.mY;
 }
 
 bool operator!=(const Vector2D & l, const Vector2D & r) {
@@ -570,6 +580,14 @@ QString Vector2D::toString() const {
 
 void Vector2D::draw(QPainter & p) const {
 	p.drawPoint(toQPointF());
+}
+
+double Vector2D::angle() const {
+	return std::atan(y()/x());
+}
+
+double Vector2D::length() const {
+	return std::sqrt(mX*mX + mY*mY);
 }
 
 // Triangle --------------------------------------------------------------------
@@ -649,6 +667,15 @@ Rect::Rect(const cv::Rect & rect) {
 	mSize = Vector2D(rect.width, rect.height);
 }
 
+bool operator==(const Rect & l, const Rect & r) {
+	//return l.topLeft() == r.topLeft() && l.size() == r.size();
+	return l.mTopLeft == r.mTopLeft && l.mSize == r.mSize;	// this is faster
+}
+
+bool operator!=(const Rect & l, const Rect & r) {
+	return !(l == r);
+}
+
 bool Rect::isNull() const {
 	return mIsNull;
 }
@@ -663,6 +690,10 @@ double Rect::height() const {
 
 Vector2D Rect::size() const {
 	return mSize;
+}
+
+Vector2D Rect::diagonal() const {
+	return bottomRight()-mTopLeft;
 }
 
 double Rect::top() const {
@@ -727,6 +758,213 @@ bool Rect::contains(const Rect & o) const {
 			bottom()>= o.bottom() &&
 			left()	<= o.left() &&
 			right() >= o.right());
+}
+
+// Ellipse --------------------------------------------------------------------
+Ellipse::Ellipse() {
+
+}
+
+Ellipse::Ellipse(const Vector2D & center, const Vector2D & axis, double angle) {
+	
+	mIsNull = false;
+	mCenter = center;
+	mAxis = axis;
+	mAngle = angle;
+}
+
+Ellipse::Ellipse(const cv::RotatedRect & rect) {
+
+	mIsNull = false;
+
+	mCenter.setX(rect.center.x);
+	mCenter.setY(rect.center.y);
+
+	mAxis.setX(rect.size.width/2.0);
+	mAxis.setY(rect.size.height/2.0);
+
+	mAngle = rect.angle*DK_DEG2RAD;
+}
+
+QDebug operator<<(QDebug d, const Ellipse& e) {
+
+	d << qPrintable(e.toString());
+	return d;
+}
+
+//Ellipse Ellipse::fromData(const cv::Mat & means, const cv::Mat & cov) {
+//
+//	// TODO: not tested
+//	assert(means.depth() == CV_64FC1 && means.rows == 1 && means.cols == 2);
+//	assert(cov.depth() == CV_64FC1 && cov.rows == 2 && cov.cols == 2);
+//
+//	// get the center
+//	Ellipse e(Vector2D(means.ptr<double>()[0], means.ptr<double>()[1]));
+//
+//	if (e.axisFromCov(cov))
+//		return e;
+//	else
+//		return Ellipse();
+//}
+
+Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts, const Rect& bbox) {
+		
+	// estimate center
+	Vector2D c;
+	for (const cv::Point& p : pts) {
+		Vector2D cp(p);
+		c += cp;
+	}
+	c /= (double)pts.size();
+
+	Ellipse e(c);
+
+	// convert pts
+	cv::Mat cPointsMat((int)pts.size(), 2, CV_32FC1);
+
+	for (int rIdx = 0; rIdx < cPointsMat.rows; rIdx++) {
+		float* ptrM = cPointsMat.ptr<float>(rIdx);
+
+		ptrM[0] = (float)pts[rIdx].x;
+		ptrM[1] = (float)pts[rIdx].y;
+	}
+
+	// find the angle
+	cv::PCA pca(cPointsMat, cv::Mat(), CV_PCA_DATA_AS_ROW);
+	float dx = pca.eigenvectors.at<float>(0,0);
+	float dy = pca.eigenvectors.at<float>(0,1);
+	
+	Vector2D ev(dx, dy);
+	e.setAngle(ev.angle());
+
+	// now compute and equalize the axis
+	double ev0 = pca.eigenvalues.at<float>(0,0);
+	double ev1 = pca.eigenvalues.at<float>(1,0);
+
+	// guarantee that ellipses are never much larger than the blobs bounding box
+	double dl = bbox.diagonal().length();
+	if (!bbox.isNull() && ev0 > dl) 
+		ev0 = dl;
+	if (!bbox.isNull() && ev1 > dl) 
+		ev1 = dl;
+
+	Vector2D axis(ev0, ev1);
+	axis /= 2.0;
+
+	e.setAxis(axis);
+
+	return e;
+}
+
+//Ellipse Ellipse::fromImage(const cv::Mat & img) {
+//
+//	// we expect a binary region here
+//	assert(img.depth() == CV_8U);
+//
+//	cv::Moments m = cv::moments(img, true);
+//
+//	// get the center
+//	double area = m.m00;
+//	Vector2D c(m.m01 / area, m.m10 / area);
+//	Ellipse e(c);
+//
+//	cv::Mat cov(2, 2, CV_64FC1);
+//	cov.at<double>(0, 0) = m.nu21;
+//	cov.at<double>(0, 1) = m.nu02;
+//	cov.at<double>(1, 0) = m.nu20;
+//	cov.at<double>(1, 1) = m.nu12;
+//
+//	if (e.axisFromCov(cov))
+//		return e;
+//	else
+//		return Ellipse();
+//}
+//
+//bool Ellipse::axisFromCov(const cv::Mat & cov) {
+//
+//	assert(cov.depth() == CV_64FC1);
+//
+//	cv::Mat eVal, eVec;
+//	bool worked = cv::eigen(cov, eVal, eVec);
+//
+//	if (!worked) {
+//		qWarning() << "warning cv::eigen did not seem to work...";
+//		return false;
+//	}
+//
+//	// get axis from eigen values
+//	mAxis = Vector2D(eVal.ptr<double>()[0], eVal.ptr<double>(1)[0]);
+//	
+//	// get angle of first eigen vector
+//	Vector2D vec(eVec.ptr<double>()[0], eVec.ptr<double>()[1]);
+//	mAngle = vec.angle();
+//
+//	return true;
+//}
+
+bool Ellipse::isNull() const {
+	return mIsNull;
+}
+
+QString Ellipse::toString() const {
+
+	return QString("c %1 axis %3 angle %5")
+		.arg(mCenter.toString())
+		.arg(mAxis.toString())
+		.arg(mAngle);
+}
+
+void Ellipse::setCenter(const Vector2D & center) {
+	mIsNull = false;
+	mCenter = center;
+}
+
+Vector2D Ellipse::center() const {
+	return mCenter;
+}
+
+void Ellipse::setAxis(const Vector2D & axis) {
+	mIsNull = false;
+	mAxis = axis;
+}
+
+Vector2D Ellipse::axis() const {
+	return mAxis;
+}
+
+void Ellipse::setAngle(double angle) {
+	mIsNull = false;
+	mAngle = angle;
+}
+
+double Ellipse::angle() const {
+	return mAngle;
+}
+
+void Ellipse::move(const Vector2D & vec) {
+	mCenter += vec;
+}
+
+void Ellipse::draw(QPainter& p, double alpha) const {
+
+	if (isNull())
+		return;
+
+	QPen pen = p.pen();
+	QColor col = pen.brush().color();
+	col.setAlpha(qRound(alpha*100));
+	//pen.setColor(col);
+	p.setBrush(col);
+
+	p.translate(mCenter.toQPointF());
+	p.rotate(mAngle*DK_RAD2DEG);
+	p.drawEllipse(QPointF(0.0, 0.0), mAxis.x(), mAxis.y());
+	p.rotate(-mAngle*DK_RAD2DEG);
+	p.translate(-mCenter.toQPointF());
+
+	// draw center
+	p.drawPoint(mCenter.toQPointF());
+
 }
 
 }

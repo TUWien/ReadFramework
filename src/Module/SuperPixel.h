@@ -60,7 +60,7 @@ namespace rdf {
 class DllModuleExport MserBlob {
 
 public:
-	MserBlob(const std::vector<cv::Point>& pts = std::vector<cv::Point>(),
+	MserBlob(const QSharedPointer<std::vector<cv::Point> >& pts = QSharedPointer<std::vector<cv::Point> >(),
 		const QRectF& bbox = QRectF());
 
 	double area() const;
@@ -68,18 +68,18 @@ public:
 	Vector2D center() const;
 	Rect bbox() const;
 
-	std::vector<cv::Point> pts() const;
-	std::vector<cv::Point> relativePts(const Vector2D& origin) const;
+	QSharedPointer<std::vector<cv::Point> > pts() const;
+	QSharedPointer<std::vector<cv::Point> > relativePts(const Vector2D& origin) const;
 
 	void draw(QPainter& p);
 
-	Vector2D getAxis() const;
 	Pixel toPixel() const;
+	cv::Mat toBinaryMask() const;
 
 protected:
 	Vector2D mCenter;
 	Rect mBBox;
-	std::vector<cv::Point> mPts;
+	QSharedPointer<std::vector<cv::Point> > mPts;
 };
 
 class DllModuleExport SuperPixelConfig : public ModuleConfig {

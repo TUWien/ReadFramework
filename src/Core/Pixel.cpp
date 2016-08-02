@@ -45,11 +45,10 @@ Pixel::Pixel() {
 
 }
 
-Pixel::Pixel(const Vector2D & center, const Vector2D& axis) {
-	
+Pixel::Pixel(const Ellipse & ellipse) {
+
 	mIsNull = false;
-	mCenter = center;
-	mAxis = axis;
+	mEllipse = ellipse;
 }
 
 bool Pixel::isNull() const {
@@ -57,11 +56,24 @@ bool Pixel::isNull() const {
 }
 
 Vector2D Pixel::center() const {
-	return mCenter;
+	return mEllipse.center();
 }
 
-Vector2D Pixel::axis() const {
-	return mAxis;
+Vector2D Pixel::size() const {
+	return mEllipse.axis();
+}
+
+double Pixel::angle() const {
+	return mEllipse.angle();
+}
+
+Ellipse Pixel::ellipse() const {
+	return mEllipse;
+}
+
+void Pixel::draw(QPainter & p) const {
+
+	mEllipse.draw(p);
 }
 
 }

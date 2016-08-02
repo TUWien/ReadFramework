@@ -156,7 +156,7 @@ void LayoutTest::computeComponents(cv::Mat & img) const {
 	cv::Mat mask = superPixel.binaryImage();
 
 	// save mask
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-mask");
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-mser");
 	rdf::Image::instance().save(mask, maskPath);
 
 }

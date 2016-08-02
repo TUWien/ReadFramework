@@ -55,18 +55,21 @@ class DllCoreExport Pixel {
 
 public:
 	Pixel();
-	Pixel(const Vector2D& center, const Vector2D& axis);
+	Pixel(const Ellipse& ellipse);
 
 	bool isNull() const;
 
 	Vector2D center() const;
-	Vector2D axis() const;
+	Vector2D size() const;
+	double angle() const;
+	Ellipse ellipse() const;
+
+	void draw(QPainter& p) const;
 
 protected:
 	bool mIsNull = true;
 
-	Vector2D mCenter;
-	Vector2D mAxis;
+	Ellipse mEllipse;
 };
 
 };

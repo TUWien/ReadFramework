@@ -137,4 +137,8 @@ void Drawer::setPen(const QPen& pen) {
 	mPen = pen;
 }
 
+QPen Drawer::pen() const {
+	return mPen;
+}
+
 }

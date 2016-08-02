@@ -80,6 +80,7 @@ public:
 	void setColor(const QColor& col);
 	void setStrokeWidth(int strokeWidth);
 	void setPen(const QPen& pen);
+	QPen pen() const;
 
 	// add general drawing functions here
 

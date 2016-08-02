@@ -156,16 +156,16 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
-		dc.setImagePath("D:/read/test/two-lines-connected.jpg");
 		dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
 		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
 		dc.setImagePath("D:/read/test/00000197.jpg");
-		
+		dc.setImagePath("D:/read/test/two-lines-connected.jpg");
+
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result"));
+		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result", "png"));
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 
