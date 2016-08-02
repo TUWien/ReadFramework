@@ -78,6 +78,7 @@ namespace rdf {
 		// only load files which have the same basename as the nmf with an index
 		// e.g.: nmf.yml -> nmf-01.yml
 		QRegExp filePattern("*.xml");
+		filePattern.setPatternSyntax(QRegExp::Wildcard);
 		QStringList files = dir.entryList();
 		qSort(files.begin(), files.end());
 
