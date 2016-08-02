@@ -224,20 +224,18 @@ bool SuperPixel::compute() {
 	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
 	QPainter p(&pm);
 
-	p.setPen(ColorManager::instance().colors()[0]);
+	p.setPen(QColor(255,100,100));
 
 	//for (auto t : mTriangles)
 	//	t.draw(p);
 
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		//QPen pen(ColorManager::instance().getRandomColor());
-		//pen.setBrush(pen.color());
-		//p.setPen(pen);
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		p.setPen(Drawer::instance().pen());
 
-		mBlobs[idx].draw(p);
+		//mBlobs[idx].draw(p);
 		mPixels[idx].ellipse().draw(p, 0.3);
-		qDebug() << mPixels[idx].ellipse();
+		//qDebug() << mPixels[idx].ellipse();
 	}
 
 	mDstImg = Image::instance().qPixmap2Mat(pm);
