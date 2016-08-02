@@ -112,10 +112,12 @@ namespace rdf {
 						}
 					}
 				}
+
 				FormFeatures templ;
 				templ.setVerLines(vLines);
 				templ.setHorLines(hLines);
 				templ.setFormName(fp);
+				templ.setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
 				mTemplates.push_back(templ);
 			}
 		}
