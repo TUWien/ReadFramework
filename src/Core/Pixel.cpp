@@ -37,6 +37,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
+#include <QPainter>
 #pragma warning(pop)
 
 namespace rdf {
@@ -116,7 +117,7 @@ cv::Mat MserBlob::toBinaryMask() const {
 
 QSharedPointer<Pixel> MserBlob::toPixel() const {
 
-	Ellipse e = Ellipse::fromData(mPts, bbox());
+	Ellipse e = Ellipse::fromData(mPts);
 	QSharedPointer<Pixel> p(new Pixel(e, id()));	// assign my ID to pixel - so we can trace back that they are related
 
 	return p;
@@ -208,6 +209,39 @@ Ellipse Pixel::ellipse() const {
 void Pixel::draw(QPainter & p) const {
 
 	mEllipse.draw(p);
+}
+
+PixelEdge::PixelEdge() {
+}
+
+// PixelEdge --------------------------------------------------------------------
+PixelEdge::PixelEdge(const QSharedPointer<Pixel> first, 
+	const QSharedPointer<Pixel> second, 
+	const QString & id) : 
+	BaseElement(id) {
+
+	mIsNull = false;
+	mFirst = first;
+	mSecond = second;
+}
+
+bool PixelEdge::isNull() const {
+	return mIsNull;
+}
+
+Line PixelEdge::edge() const {
+
+	if (!mFirst || !mSecond)
+		return Line();
+
+	Line l(mFirst->center(), mSecond->center());
+
+	return l;
+}
+
+void PixelEdge::draw(QPainter & p) const {
+
+	edge().draw(p);
 }
 
 }

@@ -114,4 +114,25 @@ protected:
 	Ellipse mEllipse;
 };
 
+class DllCoreExport PixelEdge : public BaseElement {
+
+public:
+	PixelEdge();
+
+	PixelEdge(const QSharedPointer<Pixel> first, 
+		const QSharedPointer<Pixel> second,
+		const QString& id = QString());
+
+	bool isNull() const;
+
+	Line edge() const;
+	void draw(QPainter& p) const;
+
+protected:
+	bool mIsNull = true;
+
+	QSharedPointer<Pixel> mFirst;
+	QSharedPointer<Pixel> mSecond;
+};
+
 };

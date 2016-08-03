@@ -144,8 +144,12 @@ Line::Line(const cv::Point p1, const cv::Point p2, float thickness) {
 	mThickness = thickness;
 }
 
-cv::Point Line::startPointCV() const
-{
+Line::Line(const Vector2D & p1, const Vector2D & p2, float thickness) {
+	mLine = QLine(p1.toQPoint(), p2.toQPoint());
+	mThickness = thickness;
+}
+
+cv::Point Line::startPointCV() const {
 	return cv::Point(mLine.p1().x(), mLine.p1().y());
 }
 
@@ -192,10 +196,10 @@ float Line::thickness() const {
 /// Returns the line length.
 /// </summary>
 /// <returns>The line length.</returns>
-float Line::length() const {
+double Line::length() const {
 	QPoint diff = mLine.p2() - mLine.p1();
 
-	return (float)sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+	return sqrt(diff.x()*diff.x() + diff.y()*diff.y());
 
 }
 
@@ -268,6 +272,17 @@ bool Line::isVertical(float mAngleTresh) const
 	else
 		return false;
 
+}
+
+void Line::draw(QPainter & p) const {
+
+	QPen pen = p.pen();
+	QPen penL = pen;
+	penL.setWidthF(mThickness);
+	p.setPen(penL);
+
+	p.drawLine(mLine);
+	p.setPen(pen);
 }
 
 /// <summary>
@@ -807,7 +822,7 @@ QDebug operator<<(QDebug d, const Ellipse& e) {
 //		return Ellipse();
 //}
 
-Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts, const Rect& bbox) {
+Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts) {
 		
 	// estimate center
 	Vector2D c;

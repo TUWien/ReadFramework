@@ -55,6 +55,7 @@ class QPainter;
 namespace rdf {
 
 // read defines
+class Vector2D;
 
 class DllCoreExport Polygon {
 
@@ -107,7 +108,7 @@ public:
 	Line(const QLine& line = QLine(), float thickness = 1);
 	Line(const Polygon& poly);
 	Line(const cv::Point p1, const cv::Point p2, float thickness = 1);
-
+	Line(const Vector2D& p1, const Vector2D& p2, float thickness = 1);
 
 	cv::Point startPointCV() const;
 	cv::Point endPointCV() const;
@@ -115,7 +116,7 @@ public:
 	void setLine(const QLine& line, float thickness = 1);
 	QLine line() const;
 	float thickness() const;
-	float length() const;
+	double length() const;
 	double angle() const;
 	float minDistance(const Line& l) const;
 	float distance(const QPoint p) const;
@@ -131,6 +132,8 @@ public:
 	QPoint endPoint() const;
 	bool isHorizontal(float mAngleTresh = 0.5) const;
 	bool isVertical(float mAngleTresh = 0.5) const;
+
+	void draw(QPainter& p) const;
 
 protected:
 	QLine mLine;
@@ -277,7 +280,7 @@ public:
 
 	DllCoreExport friend QDebug operator<< (QDebug d, const Ellipse &e);
 
-	static Ellipse fromData(const std::vector<cv::Point>& pts, const Rect& bbox);
+	static Ellipse fromData(const std::vector<cv::Point>& pts);
 	//static Ellipse fromData(const cv::Mat& means, const cv::Mat& covs);
 	//static Ellipse fromImage(const cv::Mat& img);
 	//bool axisFromCov(const cv::Mat& cov);

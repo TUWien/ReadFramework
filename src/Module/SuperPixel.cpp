@@ -40,7 +40,6 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
-//#include <opencv2/stitching/detail/seam_finders.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #pragma warning(pop)
@@ -198,27 +197,6 @@ bool SuperPixel::compute() {
 	return true;
 }
 
-//QVector<Triangle> SuperPixel::connect(const QVector<MserBlob>& blobs) const {
-//
-//	cv::Rect rect(cv::Point(), mSrcImg.size());
-//
-//	// Create an instance of Subdiv2D
-//	cv::Subdiv2D subdiv(rect);
-//
-//	for (const MserBlob& b : blobs)
-//		subdiv.insert(b.center().toCvPointF());
-//
-//	std::vector<cv::Vec6f> triangles;
-//	subdiv.getTriangleList(triangles);
-//
-//	// convert to our datatype
-//	QVector<Triangle> rTriangles;
-//	for (const cv::Vec6f& t : triangles)
-//		rTriangles << t;
-//
-//	return rTriangles;
-//}
-
 QString SuperPixel::toString() const {
 
 	QString msg = debugName();
@@ -242,7 +220,7 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 
 	// draw super pixels
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
+	QPixmap pm = Image::instance().mat2QPixmap(img);
 	QPainter p(&pm);
 
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
@@ -263,7 +241,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
+	QPixmap pm = Image::instance().mat2QPixmap(img);
 	QPainter p(&pm);
 
 	for (auto b : mBlobs) {

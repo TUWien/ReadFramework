@@ -151,15 +151,21 @@ void LayoutTest::computeComponents(cv::Mat & img) const {
 
 	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
-	rdf::TextBlockSegmentation tb(sp);
+	rdf::TextBlockSegmentation textBlocks(img, sp);
+	if (!textBlocks.compute())
+		qWarning() << "could not compute text block segmentation!";
 
-	cv::Mat spImg = superPixel.drawSuperPixels(img);
+	// drawing
+	cv::Mat rImg = img.clone();
 
-	// save mask
+	// draw edges
+	rImg = textBlocks.draw(rImg);
+
+	// save super pixel image
+	//rImg = superPixel.drawSuperPixels(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
-	rdf::Image::instance().save(spImg, maskPath);
+	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;
-
 }
 
 }

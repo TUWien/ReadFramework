@@ -101,7 +101,6 @@ private:
 	QVector<QSharedPointer<Pixel> > mPixels;
 	
 	//QVector<QSharedPointer<Triangle> > mTriangles;	// TODO: remove
-	//QVector<Triangle> connect(const QVector<MserBlob>& blobs) const;
 
 	bool checkInput() const override;
 
