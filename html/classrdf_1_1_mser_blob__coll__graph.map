@@ -1,4 +1,5 @@
 <map id="rdf::MserBlob" name="rdf::MserBlob">
-<area shape="rect" id="node2" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="94,109,167,136"/>
-<area shape="rect" id="node3" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="5,5,104,32"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,109,128,136"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="255,109,328,136"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="166,5,265,32"/>
 </map>

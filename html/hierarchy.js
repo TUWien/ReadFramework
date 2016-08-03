@@ -1,6 +1,11 @@
 var hierarchy =
 [
     [ "rdf::Algorithms", "classrdf_1_1_algorithms.html", null ],
+    [ "rdf::BaseElement", "classrdf_1_1_base_element.html", [
+      [ "rdf::MserBlob", "classrdf_1_1_mser_blob.html", null ],
+      [ "rdf::Pixel", "classrdf_1_1_pixel.html", null ],
+      [ "rdf::PixelEdge", "classrdf_1_1_pixel_edge.html", null ]
+    ] ],
     [ "rdf::BaseLine", "classrdf_1_1_base_line.html", null ],
     [ "rdf::BasicContrast", "classrdf_1_1_basic_contrast.html", null ],
     [ "rdf::BasicFM", "classrdf_1_1_basic_f_m.html", null ],
@@ -14,6 +19,7 @@ var hierarchy =
     [ "rdf::Converter", "classrdf_1_1_converter.html", null ],
     [ "rdf::DebugConfig", "classrdf_1_1_debug_config.html", null ],
     [ "rdf::Drawer", "classrdf_1_1_drawer.html", null ],
+    [ "rdf::Ellipse", "classrdf_1_1_ellipse.html", null ],
     [ "rdf::FocusEstimation", "classrdf_1_1_focus_estimation.html", null ],
     [ "rdf::GenericSettings", "classrdf_1_1_generic_settings.html", [
       [ "rdf::GlobalSettings", "classrdf_1_1_global_settings.html", null ]
@@ -45,11 +51,9 @@ var hierarchy =
       [ "rdf::SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", null ],
       [ "rdf::TextBlockConfig", "classrdf_1_1_text_block_config.html", null ]
     ] ],
-    [ "rdf::MserBlob", "classrdf_1_1_mser_blob.html", null ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],
     [ "rdf::PageXmlParser", "classrdf_1_1_page_xml_parser.html", null ],
     [ "rdf::Patch", "classrdf_1_1_patch.html", null ],
-    [ "rdf::Pixel", "classrdf_1_1_pixel.html", null ],
     [ "rdf::Polygon", "classrdf_1_1_polygon.html", null ],
     [ "rdf::Rect", "classrdf_1_1_rect.html", null ],
     [ "rdf::Region", "classrdf_1_1_region.html", [

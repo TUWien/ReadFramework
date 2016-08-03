@@ -129,16 +129,22 @@ Collaboration diagram for rdf::TextBlockSegmentation:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a666d6d478ed804c87d3d4e97fe63fd13"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a666d6d478ed804c87d3d4e97fe63fd13">TextBlockSegmentation</a> (const QVector&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;superPixels=QVector&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt;())</td></tr>
-<tr class="separator:a666d6d478ed804c87d3d4e97fe63fd13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d15c5765b3914dc1e94555cc92b245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a75d15c5765b3914dc1e94555cc92b245">TextBlockSegmentation</a> (const cv::Mat &amp;srcImg=cv::Mat(), const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;superPixels=QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt;())</td></tr>
+<tr class="separator:a75d15c5765b3914dc1e94555cc92b245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ca6195acc1d5167481ad6935fbaaf6f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a8ca6195acc1d5167481ad6935fbaaf6f">isEmpty</a> () const override</td></tr>
 <tr class="memdesc:a8ca6195acc1d5167481ad6935fbaaf6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed.  <a href="#a8ca6195acc1d5167481ad6935fbaaf6f">More...</a><br/></td></tr>
 <tr class="separator:a8ca6195acc1d5167481ad6935fbaaf6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98ff320e56d864046d985ac88fd1ae01"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a98ff320e56d864046d985ac88fd1ae01">compute</a> () override</td></tr>
 <tr class="memdesc:a98ff320e56d864046d985ac88fd1ae01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#a98ff320e56d864046d985ac88fd1ae01">More...</a><br/></td></tr>
 <tr class="separator:a98ff320e56d864046d985ac88fd1ae01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac284672c9f9e1561327d1c46d2c168be"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#ac284672c9f9e1561327d1c46d2c168be">displayImage</a> () const </td></tr>
-<tr class="separator:ac284672c9f9e1561327d1c46d2c168be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63c6de0bda7960fc9392b8c15af0e60e"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a63c6de0bda7960fc9392b8c15af0e60e">filterEdges</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;pixelEdges, double factor=3.0)</td></tr>
+<tr class="separator:a63c6de0bda7960fc9392b8c15af0e60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac95c44a903f416ddca96d034a2c2c8ac"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#ac95c44a903f416ddca96d034a2c2c8ac">connect</a> (QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;superPixels) const </td></tr>
+<tr class="separator:ac95c44a903f416ddca96d034a2c2c8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69ed6e8cf03e19b9fb8dfcd16a6f5f0d"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a69ed6e8cf03e19b9fb8dfcd16a6f5f0d">draw</a> (const cv::Mat &amp;img) const </td></tr>
+<tr class="separator:a69ed6e8cf03e19b9fb8dfcd16a6f5f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6377af2e36cce923d6e49d96f7ab74"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#afa6377af2e36cce923d6e49d96f7ab74">toString</a> () const override</td></tr>
 <tr class="memdesc:afa6377af2e36cce923d6e49d96f7ab74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#afa6377af2e36cce923d6e49d96f7ab74">More...</a><br/></td></tr>
 <tr class="separator:afa6377af2e36cce923d6e49d96f7ab74"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,16 +170,26 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ab95cf35f9dff6adbc42e37284d6a2e6c inherit pro_attribs_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a666d6d478ed804c87d3d4e97fe63fd13"></a>
+<a class="anchor" id="a75d15c5765b3914dc1e94555cc92b245"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">rdf::TextBlockSegmentation::TextBlockSegmentation </td>
           <td>(</td>
-          <td class="paramtype">const QVector&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>superPixels</em> = <code>QVector&lt;<a class="el" href="classrdf_1_1_pixel.html">Pixel</a>&gt;()</code></td><td>)</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>srcImg</em> = <code>cv::Mat()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>superPixels</em> = <code>QVector&lt;QSharedPointer&lt;<a class="el" href="classrdf_1_1_pixel.html">Pixel</a>&gt;&#160;&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -209,15 +225,58 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac284672c9f9e1561327d1c46d2c168be"></a>
+<a class="anchor" id="ac95c44a903f416ddca96d034a2c2c8ac"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cv::Mat rdf::TextBlockSegmentation::displayImage </td>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; rdf::TextBlockSegmentation::connect </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>superPixels</em></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a69ed6e8cf03e19b9fb8dfcd16a6f5f0d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::TextBlockSegmentation::draw </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>img</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a63c6de0bda7960fc9392b8c15af0e60e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; rdf::TextBlockSegmentation::filterEdges </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pixelEdges</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>factor</em> = <code>3.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

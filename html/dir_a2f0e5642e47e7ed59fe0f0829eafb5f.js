@@ -2,6 +2,8 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
 [
     [ "Algorithms.cpp", "_algorithms_8cpp.html", "_algorithms_8cpp" ],
     [ "Algorithms.h", "_algorithms_8h.html", "_algorithms_8h" ],
+    [ "BaseImageElement.cpp", "_base_image_element_8cpp.html", "_base_image_element_8cpp" ],
+    [ "BaseImageElement.h", "_base_image_element_8h.html", "_base_image_element_8h" ],
     [ "Blobs.cpp", "_blobs_8cpp.html", null ],
     [ "Blobs.h", "_blobs_8h.html", [
       [ "Blob", "classrdf_1_1_blob.html", "classrdf_1_1_blob" ],
@@ -31,7 +33,9 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "PageParser.h", "_page_parser_8h.html", "_page_parser_8h" ],
     [ "Pixel.cpp", "_pixel_8cpp.html", null ],
     [ "Pixel.h", "_pixel_8h.html", [
-      [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ]
+      [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
+      [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
+      [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ]
     ] ],
     [ "Settings.cpp", "_settings_8cpp.html", null ],
     [ "Settings.h", "_settings_8h.html", "_settings_8h" ],

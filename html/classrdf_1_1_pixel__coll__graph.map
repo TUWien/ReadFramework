@@ -1,3 +1,5 @@
 <map id="rdf::Pixel" name="rdf::Pixel">
-<area shape="rect" id="node2" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="5,5,104,32"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,109,128,136"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="153,109,236,136"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="145,5,244,32"/>
 </map>

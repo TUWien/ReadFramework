@@ -5,7 +5,7 @@ var searchData=
   ['rect',['Rect',['../classrdf_1_1_rect.html#a7aa1c20146103cc72f0591a6997e29a0',1,'rdf::Rect::Rect()'],['../classrdf_1_1_rect.html#ad870bbe9bdbbf6336dcc12d5655a5530',1,'rdf::Rect::Rect(const QRect &amp;rect)'],['../classrdf_1_1_rect.html#aed96c1b78fe5dd73e95e961973445896',1,'rdf::Rect::Rect(const QRectF &amp;rect)'],['../classrdf_1_1_rect.html#a2723e1b02a305817f687d8ccfb5d105f',1,'rdf::Rect::Rect(const cv::Rect &amp;rect)']]],
   ['region',['Region',['../classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0',1,'rdf::Region']]],
   ['regionsat',['regionsAt',['../classrdf_1_1_region_manager.html#adb08d7cee5f305538f2109c41970eabc',1,'rdf::RegionManager']]],
-  ['regiontypeconfig',['regionTypeConfig',['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()'],['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()']]],
+  ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()'],['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],
   ['relativepts',['relativePts',['../classrdf_1_1_mser_blob.html#a59442dac9650371caa8e2c94aaaa486a',1,'rdf::MserBlob']]],
   ['removechild',['removeChild',['../classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361',1,'rdf::Region']]],

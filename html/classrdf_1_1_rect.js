@@ -9,6 +9,7 @@ var classrdf_1_1_rect =
     [ "bottomRight", "classrdf_1_1_rect.html#acd06ee546649f572888c67fa7ed273b4", null ],
     [ "center", "classrdf_1_1_rect.html#a9c0b450713ad46397ffd4228162471ef", null ],
     [ "contains", "classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63", null ],
+    [ "diagonal", "classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f", null ],
     [ "height", "classrdf_1_1_rect.html#a45fd9cb736b030f2cbaeeb2c4ae9cab6", null ],
     [ "isNull", "classrdf_1_1_rect.html#a4d3ce91e4603f28b73be81d868b1526d", null ],
     [ "left", "classrdf_1_1_rect.html#a89bc72017df7e6acd028017611fe10d5", null ],
@@ -23,6 +24,8 @@ var classrdf_1_1_rect =
     [ "toQRect", "classrdf_1_1_rect.html#aeeeb75ebda0aaa6c8a4b5bba0c0b68f4", null ],
     [ "toQRectF", "classrdf_1_1_rect.html#adc9b2cb837e5248e85b10b1776574792", null ],
     [ "width", "classrdf_1_1_rect.html#afcedbe5c1f54a7e5e55186fa6f68dc5f", null ],
+    [ "operator!=", "classrdf_1_1_rect.html#a2b04610eb95305dcc0da4704fcb60a25", null ],
+    [ "operator==", "classrdf_1_1_rect.html#a568681a28e7dc16ee38d38b4483f8c60", null ],
     [ "mIsNull", "classrdf_1_1_rect.html#a5a5bbefdbc3ebef362dcb98c7b435e89", null ],
     [ "mSize", "classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373", null ],
     [ "mTopLeft", "classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5", null ]

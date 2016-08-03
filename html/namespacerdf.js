@@ -1,6 +1,7 @@
 var namespacerdf =
 [
     [ "Algorithms", "classrdf_1_1_algorithms.html", "classrdf_1_1_algorithms" ],
+    [ "BaseElement", "classrdf_1_1_base_element.html", "classrdf_1_1_base_element" ],
     [ "Blob", "classrdf_1_1_blob.html", "classrdf_1_1_blob" ],
     [ "Blobs", "classrdf_1_1_blobs.html", "classrdf_1_1_blobs" ],
     [ "BlobManager", "classrdf_1_1_blob_manager.html", "classrdf_1_1_blob_manager" ],
@@ -16,7 +17,9 @@ var namespacerdf =
     [ "Image", "classrdf_1_1_image.html", "classrdf_1_1_image" ],
     [ "IP", "classrdf_1_1_i_p.html", null ],
     [ "PageXmlParser", "classrdf_1_1_page_xml_parser.html", "classrdf_1_1_page_xml_parser" ],
+    [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
     [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
+    [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
     [ "GenericSettings", "classrdf_1_1_generic_settings.html", "classrdf_1_1_generic_settings" ],
     [ "GlobalSettings", "classrdf_1_1_global_settings.html", "classrdf_1_1_global_settings" ],
     [ "Config", "classrdf_1_1_config.html", "classrdf_1_1_config" ],
@@ -26,6 +29,7 @@ var namespacerdf =
     [ "Vector2D", "classrdf_1_1_vector2_d.html", "classrdf_1_1_vector2_d" ],
     [ "Triangle", "classrdf_1_1_triangle.html", "classrdf_1_1_triangle" ],
     [ "Rect", "classrdf_1_1_rect.html", "classrdf_1_1_rect" ],
+    [ "Ellipse", "classrdf_1_1_ellipse.html", "classrdf_1_1_ellipse" ],
     [ "Utils", "classrdf_1_1_utils.html", "classrdf_1_1_utils" ],
     [ "ColorManager", "classrdf_1_1_color_manager.html", "classrdf_1_1_color_manager" ],
     [ "Converter", "classrdf_1_1_converter.html", "classrdf_1_1_converter" ],
@@ -53,7 +57,6 @@ var namespacerdf =
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
     [ "BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", "classrdf_1_1_base_skew_estimation_config" ],
     [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
-    [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
     [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ],
     [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],

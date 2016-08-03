@@ -36,7 +36,6 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     ] ],
     [ "SuperPixel.cpp", "_super_pixel_8cpp.html", null ],
     [ "SuperPixel.h", "_super_pixel_8h.html", [
-      [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
       [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],
       [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]
     ] ],

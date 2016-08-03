@@ -1,5 +1,6 @@
 <map id="src/Module/SuperPixel.h" name="src/Module/SuperPixel.h">
-<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="102,80,207,107"/>
-<area shape="rect" id="node6" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="291,155,367,181"/>
-<area shape="rect" id="node9" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="231,80,293,107"/>
+<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="23,80,128,107"/>
+<area shape="rect" id="node6" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="427,155,503,181"/>
+<area shape="rect" id="node9" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="242,80,304,107"/>
+<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="256,155,403,181"/>
 </map>

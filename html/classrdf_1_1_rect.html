@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_rect.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classrdf_1_1_rect-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">rdf::Rect Class Reference</div>  </div>
@@ -139,6 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a45fd9cb736b030f2cbaeeb2c4ae9cab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65ae17ca5ce041865eec2f955cee4084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a65ae17ca5ce041865eec2f955cee4084">size</a> () const </td></tr>
 <tr class="separator:a65ae17ca5ce041865eec2f955cee4084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a782ef217d69e62e4b6c838f6f559337f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f">diagonal</a> () const </td></tr>
+<tr class="separator:a782ef217d69e62e4b6c838f6f559337f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67aa6de143e387a877070633085cde71"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a67aa6de143e387a877070633085cde71">top</a> () const </td></tr>
 <tr class="separator:a67aa6de143e387a877070633085cde71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb999b56599ee23d188bf25a10a22e72"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#acb999b56599ee23d188bf25a10a22e72">bottom</a> () const </td></tr>
@@ -178,6 +181,13 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:ade1e8386b5100585263cf720fa51eae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ab90d6290acc1e955148b1b33035373"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">mSize</a></td></tr>
 <tr class="separator:a0ab90d6290acc1e955148b1b33035373"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a568681a28e7dc16ee38d38b4483f8c60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a568681a28e7dc16ee38d38b4483f8c60">operator==</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;l, const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;r)</td></tr>
+<tr class="separator:a568681a28e7dc16ee38d38b4483f8c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b04610eb95305dcc0da4704fcb60a25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a2b04610eb95305dcc0da4704fcb60a25">operator!=</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;l, const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;r)</td></tr>
+<tr class="separator:a2b04610eb95305dcc0da4704fcb60a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a7aa1c20146103cc72f0591a6997e29a0"></a>
@@ -313,6 +323,21 @@ Protected Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
           <td class="paramname"><em>o</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a782ef217d69e62e4b6c838f6f559337f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> rdf::Rect::diagonal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -528,6 +553,75 @@ Protected Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a2b04610eb95305dcc0da4704fcb60a25"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend bool operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a568681a28e7dc16ee38d38b4483f8c60"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend bool operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

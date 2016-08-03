@@ -21,7 +21,9 @@ var searchData=
   ['minwidth',['minWidth',['../classrdf_1_1_line_trace_config.html#a2c0389ba860da02abef6ac52947fff97',1,'rdf::LineTraceConfig']]],
   ['module',['Module',['../classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99',1,'rdf::Module']]],
   ['moduleconfig',['ModuleConfig',['../classrdf_1_1_module_config.html#ae65377987b0c184c7c127b8de6492f06',1,'rdf::ModuleConfig']]],
-  ['move',['move',['../classrdf_1_1_rect.html#a604d03742d79f08927e4587f5551457f',1,'rdf::Rect']]],
-  ['mserblob',['MserBlob',['../classrdf_1_1_mser_blob.html#a1e50b0ac908cee4a21fc9c07406e0983',1,'rdf::MserBlob']]],
+  ['move',['move',['../classrdf_1_1_rect.html#a604d03742d79f08927e4587f5551457f',1,'rdf::Rect::move()'],['../classrdf_1_1_ellipse.html#a9c48349cc5aa66a3695c8b66927aa694',1,'rdf::Ellipse::move()']]],
+  ['mserblob',['MserBlob',['../classrdf_1_1_mser_blob.html#a7a6a216def53f69947dfb854d81d81e2',1,'rdf::MserBlob']]],
+  ['msermaxarea',['mserMaxArea',['../classrdf_1_1_super_pixel_config.html#a7ac698aab8f0d6330e5c3b4ab6bfb893',1,'rdf::SuperPixelConfig']]],
+  ['mserminarea',['mserMinArea',['../classrdf_1_1_super_pixel_config.html#a9c1c80d9869db9f33c04a5c725c4f6c7',1,'rdf::SuperPixelConfig']]],
   ['mulmask',['mulMask',['../classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0',1,'rdf::Algorithms']]]
 ];

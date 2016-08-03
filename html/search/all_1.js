@@ -7,9 +7,9 @@ var searchData=
   ['algorithms_2eh',['Algorithms.h',['../_algorithms_8h.html',1,'']]],
   ['allregions',['allRegions',['../classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9',1,'rdf::Region']]],
   ['alphachannelused',['alphaChannelUsed',['../classrdf_1_1_image.html#aa49eccb7b2236eaf3d69201de0beee94',1,'rdf::Image']]],
-  ['angle',['angle',['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line']]],
+  ['angle',['angle',['../classrdf_1_1_pixel.html#a707eebe6c883a435b00210931f951f97',1,'rdf::Pixel::angle()'],['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line::angle()'],['../classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a',1,'rdf::Vector2D::angle()'],['../classrdf_1_1_ellipse.html#a54576d14cd33382560a98e8a5e9572ad',1,'rdf::Ellipse::angle()']]],
   ['applydebugsettings',['applyDebugSettings',['../main_8cpp.html#aa24e7b49b7682c20114e2ebe999825fb',1,'main.cpp']]],
-  ['area',['area',['../classrdf_1_1_patch.html#a221e27175020312fc49ae77cb1d27cf1',1,'rdf::Patch::area()'],['../classrdf_1_1_mser_blob.html#a9b474acfcb0a5b7a3ade2dd80be7405c',1,'rdf::MserBlob::area()']]],
+  ['area',['area',['../classrdf_1_1_mser_blob.html#a9b474acfcb0a5b7a3ade2dd80be7405c',1,'rdf::MserBlob::area()'],['../classrdf_1_1_patch.html#a221e27175020312fc49ae77cb1d27cf1',1,'rdf::Patch::area()']]],
   ['assigndefaultcolor',['assignDefaultColor',['../classrdf_1_1_region_type_config.html#aa5142eccf04249d4d786497b3d2b0187',1,'rdf::RegionTypeConfig']]],
   ['attr_5fcustom',['attr_custom',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63a3b3aeac3a465fe95b580dc8771029bd9',1,'rdf::RegionXmlHelper']]],
   ['attr_5fid',['attr_id',['../classrdf_1_1_region_xml_helper.html#a8b958c95098c0cc0594f6c44e487fa63a451cca229b0dbfa0c26ba45935f1657f',1,'rdf::RegionXmlHelper']]],
@@ -21,5 +21,5 @@ var searchData=
   ['attr_5ftext_5ftype',['attr_text_type',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda49ec9b091c2bd5c1e244e319be6c858d',1,'rdf::PageXmlParser']]],
   ['attr_5fxmlns',['attr_xmlns',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda2954cc860a265d321fdc748e213b0e61',1,'rdf::PageXmlParser']]],
   ['attr_5fxsi',['attr_xsi',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fda16784f4fd4f83c37540c106383ef2f66',1,'rdf::PageXmlParser']]],
-  ['axis',['axis',['../classrdf_1_1_pixel.html#a258d42a6d90999de0ce7dd3be9cd8c28',1,'rdf::Pixel']]]
+  ['axis',['axis',['../classrdf_1_1_ellipse.html#ab1a8926d6f200a1fa56dbda3dcd48d0a',1,'rdf::Ellipse']]]
 ];

@@ -135,6 +135,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aafd1b4576b23057f913dac98e1222d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08a136c6b96a88f04079465c3604501a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a08a136c6b96a88f04079465c3604501a">operator-=</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;vec)</td></tr>
 <tr class="separator:a08a136c6b96a88f04079465c3604501a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c7449bd1bf4c1eaf2565e8684116940"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a5c7449bd1bf4c1eaf2565e8684116940">operator*=</a> (const double &amp;scalar)</td></tr>
+<tr class="separator:a5c7449bd1bf4c1eaf2565e8684116940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add5d5b3acbea3a54c7db93704c3d1011"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#add5d5b3acbea3a54c7db93704c3d1011">operator/=</a> (const double &amp;scalar)</td></tr>
+<tr class="separator:add5d5b3acbea3a54c7db93704c3d1011"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5db010a5e57592c9ac3678d9fca034f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a5db010a5e57592c9ac3678d9fca034f1">isNull</a> () const </td></tr>
 <tr class="separator:a5db010a5e57592c9ac3678d9fca034f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af019c53c88351ab0a3a6de08245f016f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#af019c53c88351ab0a3a6de08245f016f">setX</a> (double <a class="el" href="classrdf_1_1_vector2_d.html#ae28dac900758d136841d5d88ab82c72f">x</a>)</td></tr>
@@ -163,6 +167,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a579b9e8b480907cfd3d785595db35fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37e09d4b9ade53ad34787c5df1a7e7a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a37e09d4b9ade53ad34787c5df1a7e7a9">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a37e09d4b9ade53ad34787c5df1a7e7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad21e917b5a42fd05190e664b2f56b43a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a">angle</a> () const </td></tr>
+<tr class="separator:ad21e917b5a42fd05190e664b2f56b43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe14ad567a8a01be2b5bb4415d3ab8e9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9">length</a> () const </td></tr>
+<tr class="separator:abe14ad567a8a01be2b5bb4415d3ab8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -311,6 +319,21 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad21e917b5a42fd05190e664b2f56b43a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Vector2D::angle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a37e09d4b9ade53ad34787c5df1a7e7a9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -342,6 +365,37 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abe14ad567a8a01be2b5bb4415d3ab8e9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Vector2D::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5c7449bd1bf4c1eaf2565e8684116940"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Vector2D::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>scalar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aafd1b4576b23057f913dac98e1222d81"></a>
 <div class="memitem">
 <div class="memproto">
@@ -367,6 +421,22 @@ Friends</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
           <td class="paramname"><em>vec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="add5d5b3acbea3a54c7db93704c3d1011"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Vector2D::operator/= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>scalar</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

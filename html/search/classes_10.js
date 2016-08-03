@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xmltest',['XmlTest',['../classrdf_1_1_xml_test.html',1,'rdf']]]
+  ['vector2d',['Vector2D',['../classrdf_1_1_vector2_d.html',1,'rdf']]]
 ];

@@ -123,6 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a38ab3c111bc36a67cdf094a3186bfc91"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#a38ab3c111bc36a67cdf094a3186bfc91">createFilePath</a> (const QString &amp;filePath, const QString &amp;attribute, const QString &amp;newSuffix=QString()) const </td></tr>
 <tr class="memdesc:a38ab3c111bc36a67cdf094a3186bfc91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new file path from filePath. Hence, C:.png can be turned into C:-something.xml  <a href="#a38ab3c111bc36a67cdf094a3186bfc91">More...</a><br/></td></tr>
 <tr class="separator:a38ab3c111bc36a67cdf094a3186bfc91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53379c74a413e2bfebc881cfa69202fb"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_utils.html#a53379c74a413e2bfebc881cfa69202fb">baseName</a> (const QString &amp;filePath) const </td></tr>
+<tr class="memdesc:a53379c74a413e2bfebc881cfa69202fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filePath without suffix. C:/temp/something.png -&gt; C:/temp/something This fixes an issue of Qt QFileInfo::baseName which returns wrong basenames if the filename contains dots Qt baseName: Best. 901 Nr. 112 00147.jpg -&gt; Best. This method: Best. 901 Nr. 112 00147.jpg -&gt; Best. 901 Nr. 112 00147  <a href="#a53379c74a413e2bfebc881cfa69202fb">More...</a><br/></td></tr>
+<tr class="separator:a53379c74a413e2bfebc881cfa69202fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -133,6 +136,31 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:af133a2a28a611eb7c7df293e9741d484"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a53379c74a413e2bfebc881cfa69202fb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString rdf::Utils::baseName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the filePath without suffix. C:/temp/something.png -&gt; C:/temp/something This fixes an issue of Qt QFileInfo::baseName which returns wrong basenames if the filename contains dots Qt baseName: Best. 901 Nr. 112 00147.jpg -&gt; Best. This method: Best. 901 Nr. 112 00147.jpg -&gt; Best. 901 Nr. 112 00147 </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>The file path.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The file path without suffix.</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a38ab3c111bc36a67cdf094a3186bfc91"></a>
 <div class="memitem">
 <div class="memproto">
