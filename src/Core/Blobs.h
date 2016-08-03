@@ -56,10 +56,10 @@
 
 namespace rdf {
 
-	/// <summary>
-	/// A class that defines a single blob within an image.
-	/// </summary>
-	class DllCoreExport Blob {
+/// <summary>
+/// A class that defines a single blob within an image.
+/// </summary>
+class DllCoreExport Blob {
 
 public:
 

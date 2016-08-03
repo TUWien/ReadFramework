@@ -236,13 +236,17 @@ bool Line::isHorizontal(float mAngleTresh) const
 	double lineAngle = angle();
 
 	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
-	angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+	//old version
+	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
 
-	float diffangle = fabs(0.0f - angleNewLine);
+	//float diffangle = fabs(0.0f - angleNewLine);
 
-	angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
 
-	diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+	float a = 0.0f;
+	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
+		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
 
 	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
 		return true;
@@ -259,13 +263,17 @@ bool Line::isVertical(float mAngleTresh) const
 
 
 	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
-	angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+	//old version
+	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
 
-	float diffangle = fabs((float)CV_PI*0.5f - (float)angleNewLine);
+	//float diffangle = fabs((float)CV_PI*0.5f - (float)angleNewLine);
 
-	angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
 
-	diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
+	float a = (float)CV_PI*0.5f;
+	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
+		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
 
 	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
 		return true;

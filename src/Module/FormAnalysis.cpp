@@ -78,6 +78,7 @@ namespace rdf {
 		// only load files which have the same basename as the nmf with an index
 		// e.g.: nmf.yml -> nmf-01.yml
 		QRegExp filePattern("*.xml");
+		filePattern.setPatternSyntax(QRegExp::Wildcard);
 		QStringList files = dir.entryList();
 		qSort(files.begin(), files.end());
 
@@ -111,10 +112,12 @@ namespace rdf {
 						}
 					}
 				}
+
 				FormFeatures templ;
 				templ.setVerLines(vLines);
 				templ.setHorLines(hLines);
 				templ.setFormName(fp);
+				templ.setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
 				mTemplates.push_back(templ);
 			}
 		}
@@ -217,6 +220,12 @@ namespace rdf {
 	}
 
 	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)	{
+
+		//if empty, create it.. can happen if the only xmls are used to set the line information
+		//function errLine needs it for 'tracing'
+		if (mSrcImg.empty()) {
+			mSrcImg = cv::Mat::zeros(mSizeSrc, CV_8UC1);
+		}
 
 		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);
 		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::lessX1);

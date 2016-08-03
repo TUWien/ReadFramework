@@ -89,8 +89,13 @@ namespace rdf {
 		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
 		//rdf::BaseBinarizationSu testBin(inputImg);
+		//testBin.setPreFiltering(false);
 		//testBin.compute();
 		//cv::Mat binImg = testBin.binaryImage();
+		//rdf::LineTrace linetest(binImg);
+		//linetest.compute();
+		//Image::instance().save(binImg, "D:\\tmp\\test.tif");
+
 
 		cv::Mat mask = Algorithms::instance().estimateMask(inputG);
 		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
