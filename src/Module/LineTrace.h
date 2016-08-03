@@ -133,7 +133,7 @@ private:
 ///	It is also possible to filter lines according a specified angle.
 /// </summary>
 /// <seealso cref="Module" />
-	class DllModuleExport LineTrace : public Module {
+class DllModuleExport LineTrace : public Module {
 
 public:
 	LineTrace(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
