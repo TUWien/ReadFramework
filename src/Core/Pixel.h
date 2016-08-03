@@ -78,7 +78,7 @@ public:
 	cv::Mat toBinaryMask() const;
 
 	// filters
-	static int MserBlob::filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs);
+	static int filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs);
 
 protected:
 	Vector2D mCenter;

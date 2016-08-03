@@ -168,11 +168,11 @@ public:
 
 	bool isNull() const;
 
-	inline void setX(double x);
-	inline double x() const;
+	void setX(double x);
+	double x() const;
 	
-	inline void setY(double y);
-	inline double y() const;
+	void setY(double y);
+	double y() const;
 
 	QPoint toQPoint() const;
 	QPointF toQPointF() const;
@@ -246,11 +246,11 @@ public:
 	double left() const;
 	double right() const;
 
-	inline Vector2D topLeft() const;
-	inline Vector2D topRight() const;
-	inline Vector2D bottomLeft() const;
-	inline Vector2D bottomRight() const;
-	inline Vector2D center() const;
+	Vector2D topLeft() const;
+	Vector2D topRight() const;
+	Vector2D bottomLeft() const;
+	Vector2D bottomRight() const;
+	Vector2D center() const;
 
 	// setter
 	void move(const Vector2D& vec);
