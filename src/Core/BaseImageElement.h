@@ -30,57 +30,37 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "TextBlockSegmentation.h"
-
-#include "Utils.h"
+#pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QDebug>
+#include <QObject>
 #pragma warning(pop)
+
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 
 namespace rdf {
 
-// TextBlockConfig --------------------------------------------------------------------
-TextBlockConfig::TextBlockConfig() {
-	mModuleName = "Text Block";
-}
+// read defines
 
-QString TextBlockConfig::toString() const {
-	return ModuleConfig::toString();
-}
+class DllCoreExport BaseElement {
 
-// TextBlockSegmentation --------------------------------------------------------------------
-TextBlockSegmentation::TextBlockSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels) {
-	mSuperPixels = superPixels;
-}
+public:
+	BaseElement(const QString& id = QString());
 
-bool TextBlockSegmentation::isEmpty() const {
-	return mSuperPixels.isEmpty();
-}
+	DllCoreExport friend bool operator==(const BaseElement& l, const BaseElement& r);
+	DllCoreExport friend bool operator!=(const BaseElement& l, const BaseElement& r);
+	QString id() const;
 
-bool TextBlockSegmentation::compute() {
+protected:
+	QString mId;
+};
 
-	Timer dt;
-
-	if (!checkInput())
-		return false;
-
-	mDebug << "computed in" << dt;
-
-	return true;
-}
-
-cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
-	return img;
-}
-
-QString TextBlockSegmentation::toString() const {
-	return QString();
-}
-
-bool TextBlockSegmentation::checkInput() const {
-	
-	return !mSuperPixels.isEmpty();
-}
-
-}
+};

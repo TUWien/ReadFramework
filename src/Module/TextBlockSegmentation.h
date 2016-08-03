@@ -70,18 +70,17 @@ protected:
 class DllModuleExport TextBlockSegmentation : public Module {
 
 public:
-	TextBlockSegmentation(const QVector<Pixel>& superPixels = QVector<Pixel>());
+	TextBlockSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
 
 	bool isEmpty() const override;
 	bool compute() override;
 	
-	cv::Mat displayImage() const;
+	cv::Mat draw(const cv::Mat& img) const;
 
 	QString toString() const override;
 
 private:
-	QVector<Pixel> mSuperPixels;
-	cv::Mat mDisplayImage;
+	QVector<QSharedPointer<Pixel> > mSuperPixels;
 
 	bool checkInput() const override;
 };

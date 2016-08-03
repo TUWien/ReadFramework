@@ -33,9 +33,11 @@
 #pragma once
 
 #include "Shapes.h"
+#include "BaseImageElement.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
+#include <QSharedPointer>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -50,12 +52,52 @@
 
 namespace rdf {
 
+class Pixel;
+
+class DllCoreExport MserBlob : public BaseElement {
+
+public:
+	MserBlob(const std::vector<cv::Point>& pts = std::vector<cv::Point>(),
+		const QRectF& bbox = QRectF(),
+		const QString& id = QString());
+
+	bool isNull() const;
+
+	double area() const;
+	Vector2D center() const;
+	Rect bbox() const;
+
+	std::vector<cv::Point> pts() const;
+	std::vector<cv::Point> relativePts(const Vector2D& origin) const;
+	
+	//double uniqueArea(const QVector<MserBlob>& blobs) const;
+	void draw(QPainter& p);
+
+	// conversions
+	QSharedPointer<Pixel> toPixel() const;
+	cv::Mat toBinaryMask() const;
+
+	// filters
+	static int MserBlob::filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs);
+
+protected:
+	Vector2D mCenter;
+	Rect mBBox;
+	std::vector<cv::Point> mPts;
+};
+
 // read defines
-class DllCoreExport Pixel {
+/// <summary>
+/// This class represents a single instance
+/// of super pixels which are needed for the 
+/// layout analysis.
+/// </summary>
+/// <seealso cref="BaseElement" />
+class DllCoreExport Pixel : public BaseElement {
 
 public:
 	Pixel();
-	Pixel(const Ellipse& ellipse);
+	Pixel(const Ellipse& ellipse, const QString& id = QString());
 
 	bool isNull() const;
 

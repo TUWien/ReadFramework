@@ -149,15 +149,15 @@ void LayoutTest::computeComponents(cv::Mat & img) const {
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	QVector<Pixel> sp = superPixel.getSuperPixels();
+	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
 	rdf::TextBlockSegmentation tb(sp);
 
-	cv::Mat mask = superPixel.binaryImage();
+	cv::Mat spImg = superPixel.drawSuperPixels(img);
 
 	// save mask
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-mser");
-	rdf::Image::instance().save(mask, maskPath);
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
+	rdf::Image::instance().save(spImg, maskPath);
 	qDebug() << "results written to" << maskPath;
 
 }

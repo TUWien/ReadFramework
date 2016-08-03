@@ -33,19 +33,153 @@
 #include "Pixel.h"
 
 #include "ImageProcessor.h"
+#include "Drawer.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QColor>
 #pragma warning(pop)
 
 namespace rdf {
 
 
+// MserBlob --------------------------------------------------------------------
+MserBlob::MserBlob(const std::vector<cv::Point>& pts, 
+		const QRectF & bbox, 
+		const QString& id) : BaseElement(id) {
+
+	mPts = pts;
+	mBBox = bbox;
+	mCenter = bbox.center();	// cache center
+}
+
+bool MserBlob::isNull() const {
+	return mPts.empty();
+}
+
+double MserBlob::area() const {
+
+	return (double)mPts.size();
+}
+
+//double MserBlob::uniqueArea(const QVector<MserBlob>& blobs) const {
+//
+//	if (!mPts)
+//		return 0;
+//
+//	cv::Mat m(mBBox.size().toCvSize(), CV_8UC1);
+//	IP::draw(*relativePts(bbox().topLeft()), m, 1);
+//
+//	for (const MserBlob& b : blobs) {
+//
+//		// remove pixels
+//		if (bbox().contains(b.bbox())) {
+//			IP::draw(*b.relativePts(bbox().topLeft()), m, 0);
+//		}
+//	}
+//
+//	return cv::sum(m)[0];
+//}
+
+Vector2D MserBlob::center() const {
+	return mCenter;
+}
+
+Rect MserBlob::bbox() const {
+	// TODO: if needed compute it here
+	return mBBox;
+}
+
+std::vector<cv::Point> MserBlob::pts() const {
+	return mPts;
+}
+
+std::vector<cv::Point> MserBlob::relativePts(const Vector2D & origin) const {
+
+	std::vector<cv::Point> rPts;
+
+	for (const cv::Point& p : mPts) {
+
+		Vector2D rp = p - origin;
+		rPts.push_back(rp.toCvPoint());
+	}
+
+	return rPts;
+}
+
+cv::Mat MserBlob::toBinaryMask() const {
+
+	cv::Mat img(bbox().size().toCvSize(), CV_8UC1, cv::Scalar(0));
+	IP::draw(relativePts(bbox().topLeft()), img, 1);
+
+	return img;
+}
+
+QSharedPointer<Pixel> MserBlob::toPixel() const {
+
+	Ellipse e = Ellipse::fromData(mPts, bbox());
+	QSharedPointer<Pixel> p(new Pixel(e, id()));	// assign my ID to pixel - so we can trace back that they are related
+
+	return p;
+}
+
+void MserBlob::draw(QPainter & p) {
+
+	QColor col = Drawer::instance().pen().color();
+	col.setAlpha(30);
+	Drawer::instance().setColor(col);
+	Drawer::instance().drawPoints(p, mPts);
+
+	// draw bounding box
+	col.setAlpha(255);
+	Drawer::instance().setStrokeWidth(1);
+	Drawer::instance().setColor(col);
+	Drawer::instance().drawRect(p, bbox().toQRectF());
+
+	// draw center
+	//Drawer::instance().setStrokeWidth(3);
+	Drawer::instance().drawPoint(p, bbox().center().toQPointF());
+}
+
+int MserBlob::filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs) {
+
+	QVector<QSharedPointer<MserBlob> > blobsClean;
+
+	for (const QSharedPointer<MserBlob>& b : blobs) {
+
+		if (!b)
+			continue;
+
+		bool isNew = true;
+		for (const QSharedPointer<MserBlob>& cb : blobsClean) {
+
+			if (!cb)
+				continue;
+
+			if (b->bbox() == cb->bbox()) {
+				isNew = false;
+				break;
+			}
+		}
+
+		if (isNew)
+			blobsClean << b;
+
+	}
+
+	// collect results
+	int numRemoved = blobs.size() - blobsClean.size();
+	blobs = blobsClean;
+
+	return numRemoved;
+}
+
+
+// Pixel --------------------------------------------------------------------
 Pixel::Pixel() {
 
 }
 
-Pixel::Pixel(const Ellipse & ellipse) {
+Pixel::Pixel(const Ellipse & ellipse, const QString& id) : BaseElement(id) {
 
 	mIsNull = false;
 	mEllipse = ellipse;

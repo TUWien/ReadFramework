@@ -49,7 +49,6 @@
 #define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
-// Qt defines
 
 // Qt defines
 class QSettings;

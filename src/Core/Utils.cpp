@@ -156,10 +156,35 @@ QString Utils::createFilePath(const QString & filePath, const QString & attribut
 	
 	QFileInfo info(filePath);
 	QString suffix = (newSuffix.isEmpty()) ? info.suffix() : newSuffix;
-	QString newFileName = info.baseName() + attribute + "." + suffix;
-	info.setFile(info.absoluteDir(), newFileName);
+	QString newFilePath = baseName(filePath) + attribute + "." + suffix;
 
-	return info.absoluteFilePath();
+	return newFilePath;
+}
+
+/// <summary>
+/// Returns the filePath without suffix.
+/// C:/temp/something.png -> C:/temp/something
+/// This fixes an issue of Qt QFileInfo::baseName which 
+/// returns wrong basenames if the filename contains dots
+/// Qt baseName:
+/// Best. 901 Nr. 112 00147.jpg -> Best.
+/// This method:
+/// Best. 901 Nr. 112 00147.jpg -> Best. 901 Nr. 112 00147
+/// </summary>
+/// <param name="filePath">The file path.</param>
+/// <returns>The file path without suffix.</returns>
+QString Utils::baseName(const QString & filePath) const {
+
+	QString suffix = QFileInfo(filePath).suffix();
+
+	int sI = filePath.lastIndexOf(suffix);
+
+	if (sI < 1) {
+		qWarning() << "Cannot extract basename:" << filePath << "does not have a suffix";
+		return filePath;
+	}
+
+	return filePath.left(sI-1);	// -1 to remove the point
 }
 
 // ColorManager --------------------------------------------------------------------

@@ -30,57 +30,49 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "TextBlockSegmentation.h"
-
-#include "Utils.h"
+#include "BaseImageElement.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QDebug>
+#include <QUuid>
 #pragma warning(pop)
 
 namespace rdf {
 
-// TextBlockConfig --------------------------------------------------------------------
-TextBlockConfig::TextBlockConfig() {
-	mModuleName = "Text Block";
-}
 
-QString TextBlockConfig::toString() const {
-	return ModuleConfig::toString();
-}
-
-// TextBlockSegmentation --------------------------------------------------------------------
-TextBlockSegmentation::TextBlockSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels) {
-	mSuperPixels = superPixels;
-}
-
-bool TextBlockSegmentation::isEmpty() const {
-	return mSuperPixels.isEmpty();
-}
-
-bool TextBlockSegmentation::compute() {
-
-	Timer dt;
-
-	if (!checkInput())
-		return false;
-
-	mDebug << "computed in" << dt;
-
-	return true;
-}
-
-cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
-	return img;
-}
-
-QString TextBlockSegmentation::toString() const {
-	return QString();
-}
-
-bool TextBlockSegmentation::checkInput() const {
+// BaseElement --------------------------------------------------------------------
+/// <summary>
+/// This class keeps an ID to keep track of transformed
+/// elements during a processing chain.
+/// You can e.g. generate Pixel elements from MserBlobs.
+/// After filtering, processing etc. you can map back to the
+/// (pixel accurate) MserBlob using this ID.
+/// </summary>
+/// <param name="id">The identifier, if empty a new ID is generated.</param>
+BaseElement::BaseElement(const QString& id) {
 	
-	return !mSuperPixels.isEmpty();
+	mId = id.isEmpty() ? QUuid::createUuid().toString() : id;
+}
+
+/// <summary>
+/// Returns true if l and r have the same id.
+/// </summary>
+/// <param name="l">An element to compare.</param>
+/// <param name="r">An element to compare.</param>
+/// <returns></returns>
+bool operator==(const BaseElement & l, const BaseElement & r) {
+	return l.id() == r.id();
+}
+
+bool operator!=(const BaseElement & l, const BaseElement & r) {
+	return !(l == r);
+}
+
+/// <summary>
+/// Returns the elment's id.
+/// </summary>
+/// <returns></returns>
+QString BaseElement::id() const {
+	return mId;
 }
 
 }

@@ -64,7 +64,7 @@ bool SuperPixel::checkInput() const {
 	return true;
 }
 
-QVector<MserBlob> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
+QVector<QSharedPointer<MserBlob> > SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
 
 	if (kernelSize > 0) {
 		cv::Size kSize(kernelSize, kernelSize);
@@ -80,10 +80,11 @@ QVector<MserBlob> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) cons
 	return mser(img);
 }
 
-QVector<MserBlob> SuperPixel::mser(const cv::Mat & img) const {
+QVector<QSharedPointer<MserBlob> > SuperPixel::mser(const cv::Mat & img) const {
 	
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
-	mser->setMinArea(mMinArea);
+	mser->setMinArea(config()->mserMinArea());
+	mser->setMaxArea(config()->mserMaxArea());
 
 	std::vector<std::vector<cv::Point> > pixels;
 	std::vector<cv::Rect> boxes;
@@ -91,14 +92,14 @@ QVector<MserBlob> SuperPixel::mser(const cv::Mat & img) const {
 
 	assert(pixels.size() == boxes.size());
 
+	Timer dtf;
 	int nF = filterAspectRatio(pixels, boxes);
-	qDebug() << nF << "filtered (aspect ratio)";
+	qDebug() << nF << "filtered (aspect ratio) in " << dtf;
 
 	// collect
-	QVector<MserBlob> blobs;
+	QVector<QSharedPointer<MserBlob> > blobs;
 	for (int idx = 0; idx < pixels.size(); idx++) {
-		QSharedPointer<std::vector<cv::Point> > cPixels(new std::vector<cv::Point>(pixels[idx]));
-		MserBlob cb(cPixels, Converter::cvRectToQt(boxes[idx]));
+		QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], Converter::cvRectToQt(boxes[idx])));
 		blobs << cb;
 	}
 
@@ -132,50 +133,23 @@ int SuperPixel::filterAspectRatio(std::vector<std::vector<cv::Point>>& pixels, s
 	return numRemoved;
 }
 
-int SuperPixel::filterDuplicates(QVector<MserBlob>& blobs) const {
-
-	QVector<MserBlob> blobsClean;
-
-	for (const MserBlob& b : blobs) {
-
-		bool isNew = true;
-		for (const MserBlob& cb : blobsClean) {
-						
-			if (b.bbox() == cb.bbox()) {
-				isNew = false;
-				break;
-			}
-		}
-
-		if (isNew)
-			blobsClean << b;
-
-	}
-	
-	int numRemoved = blobs.size() - blobsClean.size();
-
-	blobs = blobsClean;
-
-	return numRemoved;
-}
-
-int SuperPixel::filterUnique(QVector<MserBlob>& blobs, double areaRatio) const {
-
-	QVector<MserBlob> blobsClean;
-
-	for (const MserBlob& b : blobs) {
-
-		double ua = b.uniqueArea(blobs);
-		if (ua / b.area() > areaRatio)
-			blobsClean << b;
-	}
-
-	int numRemoved = blobs.size() - blobsClean.size();
-
-	blobs = blobsClean;
-
-	return numRemoved;
-}
+//int SuperPixel::filterUnique(QVector<MserBlob>& blobs, double areaRatio) const {
+//
+//	QVector<MserBlob> blobsClean;
+//
+//	for (const MserBlob& b : blobs) {
+//
+//		double ua = b.uniqueArea(blobs);
+//		if (ua / b.area() > areaRatio)
+//			blobsClean << b;
+//	}
+//
+//	int numRemoved = blobs.size() - blobsClean.size();
+//
+//	blobs = blobsClean;
+//
+//	return numRemoved;
+//}
 
 bool SuperPixel::isEmpty() const {
 	return mSrcImg.empty();
@@ -195,13 +169,13 @@ bool SuperPixel::compute() {
 	for (int idx = 0; idx < 5; idx += 2) {
 
 		Timer dti;
-		QVector<MserBlob> b = getBlobs(img, idx);
+		QVector<QSharedPointer<MserBlob> > b = getBlobs(img, idx);
 		mBlobs.append(b);
 		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << idx << "in" << dti;
 	}
 
 	Timer dtf;
-	int nF = filterDuplicates(mBlobs);
+	int nF = MserBlob::filterDuplicates(mBlobs);
 	qDebug() << nF << "filtered (duplicates) in" << dtf;
 
 	//dtf.start();
@@ -210,67 +184,40 @@ bool SuperPixel::compute() {
 
 	dtf.start();
 	// convert to pixels
-	for (const MserBlob& b : mBlobs)
-		mPixels << b.toPixel();
+	for (const QSharedPointer<MserBlob>& b : mBlobs)
+		mPixels << b->toPixel();
 	qDebug() << "conversion to pixel takes" << dtf;
 
-	// compute delauney triangulation
-	dtf.start();
-	mTriangles = connect(mBlobs);
-	qDebug() << "delauney computed in " << dtf;
-
-	// draw to dst img
-	dtf.start();
-	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
-	QPainter p(&pm);
-
-	p.setPen(QColor(255,100,100));
-
-	//for (auto t : mTriangles)
-	//	t.draw(p);
-
-	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
-		p.setPen(Drawer::instance().pen());
-
-		//mBlobs[idx].draw(p);
-		mPixels[idx].ellipse().draw(p, 0.3);
-		//qDebug() << mPixels[idx].ellipse();
-	}
-
-	mDstImg = Image::instance().qPixmap2Mat(pm);
-	qDebug() << "drawing takes" << dtf;
+	//// compute delauney triangulation
+	//dtf.start();
+	//mTriangles = connect(mBlobs);
+	//qDebug() << "delauney computed in " << dtf;
 
 	mDebug << mBlobs.size() << "regions computed in" << dt;
 
 	return true;
 }
 
-QVector<Triangle> SuperPixel::connect(const QVector<MserBlob>& blobs) const {
-
-	cv::Rect rect(cv::Point(), mSrcImg.size());
-
-	// Create an instance of Subdiv2D
-	cv::Subdiv2D subdiv(rect);
-
-	for (const MserBlob& b : blobs)
-		subdiv.insert(b.center().toCvPointF());
-
-	std::vector<cv::Vec6f> triangles;
-	subdiv.getTriangleList(triangles);
-
-	// convert to our datatype
-	QVector<Triangle> rTriangles;
-	for (const cv::Vec6f& t : triangles)
-		rTriangles << t;
-
-	return rTriangles;
-}
-
-cv::Mat SuperPixel::binaryImage() const {
-	
-	return mDstImg;
-}
+//QVector<Triangle> SuperPixel::connect(const QVector<MserBlob>& blobs) const {
+//
+//	cv::Rect rect(cv::Point(), mSrcImg.size());
+//
+//	// Create an instance of Subdiv2D
+//	cv::Subdiv2D subdiv(rect);
+//
+//	for (const MserBlob& b : blobs)
+//		subdiv.insert(b.center().toCvPointF());
+//
+//	std::vector<cv::Vec6f> triangles;
+//	subdiv.getTriangleList(triangles);
+//
+//	// convert to our datatype
+//	QVector<Triangle> rTriangles;
+//	for (const cv::Vec6f& t : triangles)
+//		rTriangles << t;
+//
+//	return rTriangles;
+//}
 
 QString SuperPixel::toString() const {
 
@@ -279,8 +226,56 @@ QString SuperPixel::toString() const {
 	return msg;
 }
 
-QVector<Pixel> SuperPixel::getSuperPixels() const {
+QVector<QSharedPointer<Pixel> > SuperPixel::getSuperPixels() const {
 	return mPixels;
+}
+
+QVector<QSharedPointer<MserBlob>> SuperPixel::getMserBlobs() const {
+	return mBlobs;
+}
+
+QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
+	return qSharedPointerDynamicCast<SuperPixelConfig>(mConfig);
+}
+
+cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
+
+	// draw super pixels
+	Timer dtf;
+	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
+	QPainter p(&pm);
+
+	for (int idx = 0; idx < mBlobs.size(); idx++) {
+		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		p.setPen(Drawer::instance().pen());
+
+		//// uncomment if you want to see MSER & SuperPixel at the same time
+		//mBlobs[idx].draw(p);
+		mPixels[idx]->ellipse().draw(p, 0.3);
+		//qDebug() << mPixels[idx].ellipse();
+	}
+
+	qDebug() << "drawing takes" << dtf;
+	return Image::instance().qPixmap2Mat(pm);
+}
+
+cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
+
+	// draw mser blobs
+	Timer dtf;
+	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
+	QPainter p(&pm);
+
+	for (auto b : mBlobs) {
+		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		p.setPen(Drawer::instance().pen());
+
+		b->draw(p);
+	}
+
+	qDebug() << "drawing takes" << dtf;
+	
+	return Image::instance().qPixmap2Mat(pm);
 }
 
 // SuperPixelConfig --------------------------------------------------------------------
@@ -291,119 +286,27 @@ QString SuperPixelConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-void SuperPixelConfig::load(const QSettings & /*settings*/) {
+int SuperPixelConfig::mserMinArea() const {
+	return mMserMinArea;
+}
+
+int SuperPixelConfig::mserMaxArea() const {
+	return mMserMaxArea;
+}
+
+void SuperPixelConfig::load(const QSettings & settings) {
 
 	// add parameters
-	//mThresh = settings.value("thresh", mThresh).toInt();
+	mMserMinArea = settings.value("MserMinArea", mMserMinArea).toInt();
+	mMserMaxArea = settings.value("MserMaxArea", mMserMaxArea).toInt();
 
 }
 
-void SuperPixelConfig::save(QSettings & /*settings*/) const {
+void SuperPixelConfig::save(QSettings & settings) const {
 
 	// add parameters
-	//settings.setValue("thresh", mThresh);
-}
-
-// MserBlob --------------------------------------------------------------------
-MserBlob::MserBlob(const QSharedPointer<std::vector<cv::Point> >& pts, const QRectF & bbox) {
-
-	mPts = pts;
-	mBBox = bbox;
-	mCenter = bbox.center();	// cache center
-}
-
-double MserBlob::area() const {
-	
-	if (!mPts)
-		return 0;
-	
-	return (double)mPts->size();
-}
-
-double MserBlob::uniqueArea(const QVector<MserBlob>& blobs) const {
-	
-	if (!mPts)
-		return 0;
-
-	cv::Mat m(mBBox.size().toCvSize(), CV_8UC1);
-	IP::draw(*relativePts(bbox().topLeft()), m, 1);
-
-	for (const MserBlob& b : blobs) {
-
-		// remove pixels
-		if (bbox().contains(b.bbox())) {
-			IP::draw(*b.relativePts(bbox().topLeft()), m, 0);
-		}
-	}
-
-	return cv::sum(m)[0];
-}
-
-Vector2D MserBlob::center() const {
-	return mCenter;
-}
-
-Rect MserBlob::bbox() const {
-	// TODO: if needed compute it here
-	return mBBox;
-}
-
-QSharedPointer<std::vector<cv::Point> > MserBlob::pts() const {
-	return mPts;
-}
-
-QSharedPointer<std::vector<cv::Point> > MserBlob::relativePts(const Vector2D & origin) const {
-	
-	if (!mPts)
-		return QSharedPointer<std::vector<cv::Point> >();
-
-	QSharedPointer<std::vector<cv::Point> > rPts(new std::vector<cv::Point>());
-
-	for (const cv::Point& p : *mPts) {
-
-		Vector2D rp = p - origin;
-		rPts->push_back(rp.toCvPoint());
-	}
-
-	return rPts;
-}
-
-cv::Mat MserBlob::toBinaryMask() const {
-
-	cv::Mat img(bbox().size().toCvSize(), CV_8UC1, cv::Scalar(0));
-	IP::draw(*relativePts(bbox().topLeft()), img, 1);
-	
-	return img;
-}
-
-Pixel MserBlob::toPixel() const {
-
-	if (!mPts)
-		return Pixel();
-
-	Ellipse e = Ellipse::fromData(*mPts, bbox());
-	return Pixel(e);
-}
-
-void MserBlob::draw(QPainter & p) {
-	
-	if (!mPts)
-		return;
-
-	QColor col = Drawer::instance().pen().color();
-	col.setAlpha(30);
-	Drawer::instance().setColor(col);
-	Drawer::instance().drawPoints(p, *mPts);
-
-	// draw bounding box
-	col.setAlpha(255);
-	Drawer::instance().setStrokeWidth(1);
-	Drawer::instance().setColor(col);
-	Drawer::instance().drawRect(p, bbox().toQRectF());
-
-	// draw center
-	//Drawer::instance().setStrokeWidth(3);
-	Drawer::instance().drawPoint(p, bbox().center().toQPointF());
+	settings.setValue("MserMinArea", mMserMinArea);
+	settings.setValue("MserMaxArea", mMserMaxArea);
 }
 
 }

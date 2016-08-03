@@ -57,31 +57,6 @@ namespace rdf {
 
 // read defines
 
-class DllModuleExport MserBlob {
-
-public:
-	MserBlob(const QSharedPointer<std::vector<cv::Point> >& pts = QSharedPointer<std::vector<cv::Point> >(),
-		const QRectF& bbox = QRectF());
-
-	double area() const;
-	double uniqueArea(const QVector<MserBlob>& blobs) const;
-	Vector2D center() const;
-	Rect bbox() const;
-
-	QSharedPointer<std::vector<cv::Point> > pts() const;
-	QSharedPointer<std::vector<cv::Point> > relativePts(const Vector2D& origin) const;
-
-	void draw(QPainter& p);
-
-	Pixel toPixel() const;
-	cv::Mat toBinaryMask() const;
-
-protected:
-	Vector2D mCenter;
-	Rect mBBox;
-	QSharedPointer<std::vector<cv::Point> > mPts;
-};
-
 class DllModuleExport SuperPixelConfig : public ModuleConfig {
 
 public:
@@ -89,7 +64,12 @@ public:
 
 	virtual QString toString() const override;
 
+	int mserMinArea() const;
+	int mserMaxArea() const;
+
 protected:
+	int mMserMinArea = 50;
+	int mMserMaxArea = 100000;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
@@ -102,32 +82,33 @@ public:
 
 	bool isEmpty() const override;
 	bool compute() override;
-	QVector<Triangle> connect(const QVector<MserBlob>& blobs) const;
-
-	cv::Mat binaryImage() const;
-
+		
 	QString toString() const override;
+	QSharedPointer<SuperPixelConfig> config() const;
 
-	QVector<Pixel> getSuperPixels() const;
+	// results - available after compute() is called
+	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+	QVector<QSharedPointer<MserBlob> > getMserBlobs() const;
+
+	cv::Mat drawSuperPixels(const cv::Mat& img) const;
+	cv::Mat drawMserBlobs(const cv::Mat& img) const;
 
 private:
 	cv::Mat mSrcImg;
-	cv::Mat mDstImg;
 
-	QVector<MserBlob> mBlobs;
-	QVector<Pixel> mPixels;
-	QVector<Triangle> mTriangles;	// TODO: remove
-
-	// parameters
-	int mMinArea = 100;
+	// results
+	QVector<QSharedPointer<MserBlob> > mBlobs;
+	QVector<QSharedPointer<Pixel> > mPixels;
+	
+	//QVector<QSharedPointer<Triangle> > mTriangles;	// TODO: remove
+	//QVector<Triangle> connect(const QVector<MserBlob>& blobs) const;
 
 	bool checkInput() const override;
 
-	QVector<MserBlob> getBlobs(const cv::Mat& img, int kernelSize) const;
-	QVector<MserBlob> mser(const cv::Mat& img) const;
-	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.4) const;
-	int filterDuplicates(QVector<MserBlob>& blobs) const;
-	int filterUnique(QVector<MserBlob>& blobs, double areaRatio = 0.7) const;
+	QVector<QSharedPointer<MserBlob> > getBlobs(const cv::Mat& img, int kernelSize) const;
+	QVector<QSharedPointer<MserBlob> > mser(const cv::Mat& img) const;
+	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.2) const;
+	//int filterUnique(QVector<MserBlob>& blobs, double areaRatio = 0.7) const;
 };
 
 };
