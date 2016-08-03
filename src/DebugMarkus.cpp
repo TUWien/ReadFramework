@@ -158,6 +158,7 @@ void LayoutTest::computeComponents(cv::Mat & img) const {
 	// save mask
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-mser");
 	rdf::Image::instance().save(mask, maskPath);
+	qDebug() << "results written to" << maskPath;
 
 }
 

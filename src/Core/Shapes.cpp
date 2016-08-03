@@ -832,24 +832,17 @@ Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts, const Rect& bbox) {
 	// find the angle
 	cv::PCA pca(cPointsMat, cv::Mat(), CV_PCA_DATA_AS_ROW);
 
-	Vector2D eVec0(pca.eigenvectors.at<float>(0,0),
+	Vector2D eVec(pca.eigenvectors.at<float>(0,0),
 				 pca.eigenvectors.at<float>(0,1));
 
-	e.setAngle(eVec0.angle());
+	e.setAngle(eVec.angle());
 
 	// now compute and equalize the axis
 	double ev0 = pca.eigenvalues.at<float>(0,0);
 	double ev1 = pca.eigenvalues.at<float>(1,0);
 
-	//// guarantee that ellipses are never much larger than the blobs bounding box
-	//double dl = bbox.diagonal().length();
-	//if (!bbox.isNull() && ev0 > dl) 
-	//	ev0 = dl;
-	//if (!bbox.isNull() && ev1 > dl) 
-	//	ev1 = dl;
-
 	Vector2D axis(std::sqrt(ev0), std::sqrt(ev1));
-	axis *= 2.0;	// don't know why : )
+	axis *= 2.0;	// two dimensions - (normalized value)
 
 	e.setAxis(axis);
 
