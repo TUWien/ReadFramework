@@ -221,6 +221,12 @@ namespace rdf {
 
 	bool FormFeatures::compareWithTemplate(const FormFeatures & fTempl)	{
 
+		//if empty, create it.. can happen if the only xmls are used to set the line information
+		//function errLine needs it for 'tracing'
+		if (mSrcImg.empty()) {
+			mSrcImg = cv::Mat::zeros(mSizeSrc, CV_8UC1);
+		}
+
 		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);
 		std::sort(mVerLines.begin(), mVerLines.end(), rdf::Line::lessX1);
 		
