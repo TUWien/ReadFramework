@@ -1,5 +1,3 @@
-#include "TextBlockSegmentation.h"
-#include "TextBlockSegmentation.h"
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
@@ -93,7 +91,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 	double meanEdgeLength = 0;
 
 	for (auto pe : pixelEdges)
-		meanEdgeLength += pe->edge().length();
+		meanEdgeLength += pe->scaledEdgeLength();
 	
 	meanEdgeLength /= pixelEdges.size();
 	double maxEdgeLength = meanEdgeLength * factor;
@@ -102,7 +100,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 
 	for (auto pe : pixelEdges) {
 
-		if (pe->edge().length() < maxEdgeLength)
+		if (pe->scaledEdgeLength() < maxEdgeLength)
 			pixelEdgesClean << pe;
 	}
 
@@ -149,7 +147,9 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	
 	QPainter p(&pm);
-	Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+	QColor col = ColorManager::instance().getRandomColor();
+	col = col.darker();
+	Drawer::instance().setColor(col);
 	p.setPen(Drawer::instance().pen());
 
 	for (auto b : mEdges) {

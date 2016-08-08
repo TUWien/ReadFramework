@@ -124,14 +124,17 @@ public:
 
 	bool isNull() const;
 
+	double scaledEdgeLength() const;
 	Line edge() const;
 	void draw(QPainter& p) const;
+
 
 protected:
 	bool mIsNull = true;
 
 	QSharedPointer<Pixel> mFirst;
 	QSharedPointer<Pixel> mSecond;
+	Line mEdge;
 };
 
 };

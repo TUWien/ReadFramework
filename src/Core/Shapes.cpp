@@ -982,6 +982,14 @@ Vector2D Ellipse::axis() const {
 	return mAxis;
 }
 
+double Ellipse::majorAxis() const {
+	return qMax(mAxis.x(), mAxis.y());
+}
+
+double Ellipse::minorAxis() const {
+	return qMin(mAxis.x(), mAxis.y());
+}
+
 void Ellipse::setAngle(double angle) {
 	mIsNull = false;
 	mAngle = angle;

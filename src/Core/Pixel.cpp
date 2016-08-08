@@ -206,20 +206,32 @@ PixelEdge::PixelEdge(const QSharedPointer<Pixel> first,
 	mIsNull = false;
 	mFirst = first;
 	mSecond = second;
+
+	// cache edge
+	if (mFirst && mSecond)
+		mEdge = Line(mFirst->center(), mSecond->center());
+
 }
 
 bool PixelEdge::isNull() const {
 	return mIsNull;
 }
 
-Line PixelEdge::edge() const {
+double PixelEdge::scaledEdgeLength() const {
 
 	if (!mFirst || !mSecond)
-		return Line();
+		return 0.0;
 
-	Line l(mFirst->center(), mSecond->center());
+	// get minimum scale
+	double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());
+	assert(ms > 0);
 
-	return l;
+	return edge().length() / ms;
+}
+
+Line PixelEdge::edge() const {
+
+	return mEdge;
 }
 
 void PixelEdge::draw(QPainter & p) const {

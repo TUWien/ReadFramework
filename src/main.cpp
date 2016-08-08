@@ -168,7 +168,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result", "png"));
+		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result", "tif"));
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 

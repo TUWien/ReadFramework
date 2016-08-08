@@ -131,12 +131,6 @@ void LayoutTest::testComponents() {
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::instance().qImage2Mat(img);
 
-	//// binarize
-	//rdf::BinarizationSuAdapted binarizeImg(imgCv, cv::Mat());
-	//binarizeImg.compute();
-	//cv::Mat bwImg = binarizeImg.binaryImage();
-	//qInfo() << "binarised in" << dt;
-
 	computeComponents(imgCv);
 
 	qInfo() << "components found in" << dt;

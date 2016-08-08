@@ -77,8 +77,7 @@ public:
 	bool compute() override;
 	QSharedPointer<TextBlockConfig> config() const;
 
-	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 3.0);
-	
+	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 1.2);
 	QVector<QSharedPointer<PixelEdge> > connect(QVector<QSharedPointer<Pixel> >& superPixels) const;
 
 	cv::Mat draw(const cv::Mat& img) const;

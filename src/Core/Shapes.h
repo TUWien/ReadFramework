@@ -302,13 +302,15 @@ public:
 	void setAxis(const Vector2D& axis);
 	Vector2D axis() const;
 
+	double majorAxis() const;
+	double minorAxis() const;
+
 	void setAngle(double angle);
 	double angle() const;
 
 	void move(const Vector2D& vec);
 
 	void draw(QPainter& p, double alpha = 0.0) const;
-
 
 protected:
 	
