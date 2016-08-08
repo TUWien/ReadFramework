@@ -253,8 +253,8 @@ namespace rdf {
 		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
 		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
 
-		float hLen = 0, hLenTemp = 0;
-		float vLen = 0, vLenTemp = 0;
+		double hLen = 0, hLenTemp = 0;
+		double vLen = 0, vLenTemp = 0;
 		
 		//calculate entire horizontal and vertical line lengths of the detected lines
 		//of the current document
@@ -272,8 +272,8 @@ namespace rdf {
 			vLenTemp += i.length();
 		}
 
-		float ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
-		float ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
+		double ratioHor = hLen < hLenTemp ? hLen / hLenTemp : hLenTemp / hLen;
+		double ratioVer = vLen < vLenTemp ? vLen / vLenTemp : vLenTemp / vLen;
 
 		//at least mThreshLineLenRatio (default: 60%) of the lines must be detected in the current document
 		if (ratioHor < config()->threshLineLenRation() || ratioVer < config()->threshLineLenRation()) {
@@ -294,11 +294,11 @@ namespace rdf {
 		float finalErrorH = 0;
 		float finalErrorV = 0;
 		cv::Point offSet(0, 0);
-		float acceptedHor = 0;
-		float acceptedVer = 0;
-		float finalAcceptedHor = 0;
-		float finalAcceptedVer = 0;
-		float minError = std::numeric_limits<float>::max();
+		double acceptedHor = 0;
+		double acceptedVer = 0;
+		double finalAcceptedHor = 0;
+		double finalAcceptedVer = 0;
+		double minError = std::numeric_limits<double>::max();
 		QVector<rdf::Line> horLinesMatched, verLinesMatched;
 
 		for (int iX = 0; iX < offsetsX.size(); iX++) {
@@ -314,7 +314,7 @@ namespace rdf {
 						float tmp = errLine(distImg, mHorLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mHorLines[i].length()) {
-							horizontalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+							horizontalError += tmp < std::numeric_limits<double>::max() ? tmp : 0;
 							acceptedHor += mHorLines[i].length();
 							horLinesMatched.push_back(mHorLines[i]);
 						}
@@ -323,7 +323,7 @@ namespace rdf {
 						float tmp = errLine(distImg, mVerLines[i], cv::Point(offsetsX[iX], offsetsY[iY]));
 						//accept line or not depending on the distance, otherwise assumed as noise
 						if (tmp < config()->distThreshold()*mVerLines[i].length()) {
-							verticalError += tmp < std::numeric_limits<float>::max() ? tmp : 0;
+							verticalError += tmp < std::numeric_limits<double>::max() ? tmp : 0;
 							acceptedVer += mVerLines[i].length();
 							verLinesMatched.push_back(mVerLines[i]);
 						}

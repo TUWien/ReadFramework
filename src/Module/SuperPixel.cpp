@@ -170,27 +170,17 @@ bool SuperPixel::compute() {
 		Timer dti;
 		QVector<QSharedPointer<MserBlob> > b = getBlobs(img, idx);
 		mBlobs.append(b);
-		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << idx << "in" << dti;
+		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
 	}
 
-	Timer dtf;
-	int nF = MserBlob::filterDuplicates(mBlobs);
-	qDebug() << nF << "filtered (duplicates) in" << dtf;
+	//int nF = MserBlob::filterDuplicates(mBlobs);
+	//qDebug() << nF << "filtered (duplicates) in" << dtf;
 
-	//dtf.start();
-	//nF = filterUnique(mBlobs, 0.001);
-	//qDebug() << nF << "filtered (unique area) in" << dtf;
-
-	dtf.start();
 	// convert to pixels
+	Timer dtf;
 	for (const QSharedPointer<MserBlob>& b : mBlobs)
 		mPixels << b->toPixel();
 	qDebug() << "conversion to pixel takes" << dtf;
-
-	//// compute delauney triangulation
-	//dtf.start();
-	//mTriangles = connect(mBlobs);
-	//qDebug() << "delauney computed in " << dtf;
 
 	mDebug << mBlobs.size() << "regions computed in" << dt;
 

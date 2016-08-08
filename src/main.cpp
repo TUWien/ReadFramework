@@ -162,7 +162,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
 	
-		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
+		dc.setImagePath("D:/read/test/two-lines-connected.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}
