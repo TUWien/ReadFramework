@@ -63,7 +63,7 @@ bool SuperPixel::checkInput() const {
 	return true;
 }
 
-QVector<QSharedPointer<MserBlob> > SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
+QSharedPointer<MserContainer> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
 
 	if (kernelSize > 0) {
 		cv::Size kSize(kernelSize, kernelSize);
@@ -79,84 +79,83 @@ QVector<QSharedPointer<MserBlob> > SuperPixel::getBlobs(const cv::Mat & img, int
 	return mser(img);
 }
 
-QVector<QSharedPointer<MserBlob> > SuperPixel::mser(const cv::Mat & img) const {
+QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 	
 	cv::Ptr<cv::MSER> mser = cv::MSER::create();
 	mser->setMinArea(config()->mserMinArea());
 	mser->setMaxArea(config()->mserMaxArea());
 
-	std::vector<std::vector<cv::Point> > pixels;
-	std::vector<cv::Rect> boxes;
-	mser->detectRegions(img, pixels, boxes);
+	QSharedPointer<MserContainer> blobs(new MserContainer());
+	mser->detectRegions(img, blobs->pixels, blobs->boxes);
 
 	assert(pixels.size() == boxes.size());
 
 	Timer dtf;
-	int nF = filterAspectRatio(pixels, boxes);
-	qDebug() << nF << "filtered (aspect ratio) in " << dtf;
+	int nF = filterAspectRatio(*blobs);
+	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	dtf.start();
-	nF = filterDuplicates(pixels, boxes);
-	qDebug() << nF << "filtered (duplicates) in " << dtf;
+	nF = filterDuplicates(*blobs);
+	qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
-	// collect the blobs
-	QVector<QSharedPointer<MserBlob> > blobs;
+	//// collect the blobs
+	//QVector<QSharedPointer<MserBlob> > blobs;
 
-	for (int idx = 0; idx < pixels.size(); idx++) {
-		
-		Rect r = Converter::cvRectToQt(boxes[idx]);
-		QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], r));
-		blobs << cb;
-	}
+	//for (int idx = 0; idx < pixels.size(); idx++) {
+	//	
+	//	Rect r = Converter::cvRectToQt(boxes[idx]);
+	//	QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], r));
+	//	blobs << cb;
+	//}
 
 	return blobs;
 }
 
-int SuperPixel::filterAspectRatio(std::vector<std::vector<cv::Point>>& pixels, std::vector<cv::Rect>& boxes, double aRatio) const {
+int SuperPixel::filterAspectRatio(MserContainer& blobs, double aRatio) const {
 
 	assert(pixels.size() == boxes.size());
 
 	// filter w.r.t aspect ratio
-	std::vector<std::vector<cv::Point> > elementsClean;
+	std::vector<std::vector<cv::Point> > pixelsClean;
 	std::vector<cv::Rect> boxesClean;
 
-	for (int idx = 0; idx < pixels.size(); idx++) {
+	for (int idx = 0; idx < blobs.pixels.size(); idx++) {
 
-		cv::Rect b = boxes[idx];
+		cv::Rect b = blobs.boxes[idx];
 		double cARatio = (double)qMin(b.width, b.height) / qMax(b.width, b.height);
 
 		if (cARatio > aRatio) {
 			boxesClean.push_back(b);
-			elementsClean.push_back(pixels[idx]);
+			pixelsClean.push_back(blobs.pixels[idx]);
 		}
 	}
 
-	int numRemoved = (int)(pixels.size() - elementsClean.size());
+	int numRemoved = (int)(blobs.pixels.size() - pixelsClean.size());
 
-	pixels = elementsClean;
-	boxes = boxesClean;
+	blobs.pixels = pixelsClean;
+	blobs.boxes = boxesClean;
 
 	return numRemoved;
 }
 
-int SuperPixel::filterDuplicates(std::vector<std::vector<cv::Point>>& elements, std::vector<cv::Rect>& boxes, int eps) const {
+int SuperPixel::filterDuplicates(MserContainer& blobs, int eps) const {
 
 	int cnt = 0;
 
-	std::vector<std::vector<cv::Point>> elementsClean;
+	std::vector<std::vector<cv::Point>> pixelsClean;
 	std::vector<cv::Rect> boxesClean;
 
-	for (int idx = 0; idx < boxes.size(); idx++) {
+	for (int idx = 0; idx < blobs.boxes.size(); idx++) {
 
-		const cv::Rect& r = boxes[idx];
+		const cv::Rect& r = blobs.boxes[idx];
 		bool duplicate = false;
 
-		for (int cIdx = idx+1; cIdx < boxes.size(); cIdx++) {
+		for (int cIdx = idx+1; cIdx < blobs.boxes.size(); cIdx++) {
 
 			if (idx == cIdx)
 				continue;
 
-			const cv::Rect& cr = boxes[cIdx];
+			const cv::Rect& cr = blobs.boxes[cIdx];
 
 			if (abs(r.x - cr.x) < eps &&
 				abs(r.y - cr.y) < eps &&
@@ -170,13 +169,13 @@ int SuperPixel::filterDuplicates(std::vector<std::vector<cv::Point>>& elements, 
 		}
 
 		if (!duplicate) {
-			elementsClean.push_back(elements[idx]);
-			boxesClean.push_back(boxes[idx]);
+			pixelsClean.push_back(blobs.pixels[idx]);
+			boxesClean.push_back(blobs.boxes[idx]);
 		}
 	}
 
-	elements = elementsClean;
-	boxes = boxesClean;
+	blobs.pixels = pixelsClean;
+	blobs.boxes = boxesClean;
 
 	return cnt;
 }
@@ -196,16 +195,24 @@ bool SuperPixel::compute() {
 	img = IP::grayscale(img);
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
 
+	QSharedPointer<MserContainer> rawBlobs(new MserContainer());
+
 	for (int idx = 0; idx < 5; idx += 2) {
 
 		Timer dti;
-		QVector<QSharedPointer<MserBlob> > b = getBlobs(img, idx);
-		mBlobs.append(b);
-		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
+		QSharedPointer<MserContainer> cb = getBlobs(img, idx);
+		rawBlobs->append(*cb);
+		qDebug() << cb->size() << "/" << rawBlobs->size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
 	}
 
-	// convert to pixels
+	// filter duplicates that occur from different erosion sizes
 	Timer dtf;
+	int nf = filterDuplicates(*rawBlobs);
+	qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
+
+	// convert to pixels
+	dtf.start();
+	mBlobs = rawBlobs->toBlobs();
 	for (const QSharedPointer<MserBlob>& b : mBlobs)
 		mPixels << b->toPixel();
 	qDebug() << "conversion to pixel takes" << dtf;
@@ -303,6 +310,29 @@ void SuperPixelConfig::save(QSettings & settings) const {
 	// add parameters
 	settings.setValue("MserMinArea", mMserMinArea);
 	settings.setValue("MserMaxArea", mMserMaxArea);
+}
+
+void MserContainer::append(const MserContainer & o) {
+
+	std::move(o.pixels.begin(), o.pixels.end(), std::back_inserter(pixels));
+	std::move(o.boxes.begin(), o.boxes.end(), std::back_inserter(boxes));
+}
+
+QVector<QSharedPointer<MserBlob>> MserContainer::toBlobs() const {
+	
+	QVector<QSharedPointer<MserBlob> > blobs;
+	for (int idx = 0; idx < pixels.size(); idx++) {
+
+		QSharedPointer<MserBlob> b(new MserBlob(pixels[idx], boxes[idx]));
+		blobs << b;
+	}
+		
+	
+	return blobs;
+}
+
+size_t MserContainer::size() const {
+	return pixels.size();
 }
 
 }

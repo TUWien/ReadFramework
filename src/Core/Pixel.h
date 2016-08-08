@@ -107,7 +107,7 @@ public:
 	Ellipse ellipse() const;
 	Rect bbox() const;
 
-	void draw(QPainter& p) const;
+	void draw(QPainter& p, double alpha = 0.3) const;
 
 protected:
 	bool mIsNull = true;

@@ -134,7 +134,7 @@ void LayoutTest::testComponents() {
 
 	computeComponents(imgCv);
 
-	qInfo() << "components found in" << dt;
+	qInfo() << "total computation time:" << dt;
 }
 
 void LayoutTest::computeComponents(const cv::Mat & src) const {
@@ -154,8 +154,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 		qWarning() << "could not compute text block segmentation!";
 
 	// drawing
-	cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(100));
-	//cv::Mat rImg = img.clone();
+	//cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(150));
+	cv::Mat rImg = img.clone();
 
 	// draw edges
 	rImg = textBlocks.draw(rImg);

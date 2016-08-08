@@ -194,8 +194,8 @@ Rect Pixel::bbox() const {
 	return mBBox;
 }
 
-void Pixel::draw(QPainter & p) const {
-	mEllipse.draw(p);
+void Pixel::draw(QPainter & p, double alpha) const {
+	mEllipse.draw(p, alpha);
 }
 
 PixelEdge::PixelEdge() {

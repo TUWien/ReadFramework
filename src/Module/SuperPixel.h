@@ -75,6 +75,20 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
+class MserContainer {
+
+public:
+	MserContainer() {};
+
+	void append(const MserContainer& o);
+	
+	QVector<QSharedPointer<MserBlob> > toBlobs() const;
+	size_t size() const;
+
+	std::vector<std::vector<cv::Point> > pixels;
+	std::vector<cv::Rect> boxes;
+};
+
 class DllModuleExport SuperPixel : public Module {
 
 public:
@@ -102,10 +116,10 @@ private:
 	
 	bool checkInput() const override;
 
-	QVector<QSharedPointer<MserBlob> > getBlobs(const cv::Mat& img, int kernelSize) const;
-	QVector<QSharedPointer<MserBlob> > mser(const cv::Mat& img) const;
-	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.2) const;
-	int filterDuplicates(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, int eps = 5) const;
+	QSharedPointer<MserContainer> getBlobs(const cv::Mat& img, int kernelSize) const;
+	QSharedPointer<MserContainer> mser(const cv::Mat& img) const;
+	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.2) const;
+	int filterDuplicates(MserContainer& blobs, int eps = 5) const;
 };
 
 };
