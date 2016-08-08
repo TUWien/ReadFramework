@@ -119,7 +119,7 @@ cv::Mat MserBlob::toBinaryMask() const {
 QSharedPointer<Pixel> MserBlob::toPixel() const {
 
 	Ellipse e = Ellipse::fromData(mPts);
-	QSharedPointer<Pixel> p(new Pixel(e, id()));	// assign my ID to pixel - so we can trace back that they are related
+	QSharedPointer<Pixel> p(new Pixel(e, bbox(), id()));	// assign my ID to pixel - so we can trace back that they are related
 
 	return p;
 }
@@ -163,10 +163,11 @@ Pixel::Pixel() {
 
 }
 
-Pixel::Pixel(const Ellipse & ellipse, const QString& id) : BaseElement(id) {
+Pixel::Pixel(const Ellipse & ellipse, const Rect& bbox, const QString& id) : BaseElement(id) {
 
 	mIsNull = false;
 	mEllipse = ellipse;
+	mBBox = bbox;
 }
 
 bool Pixel::isNull() const {
@@ -189,8 +190,11 @@ Ellipse Pixel::ellipse() const {
 	return mEllipse;
 }
 
-void Pixel::draw(QPainter & p) const {
+Rect Pixel::bbox() const {
+	return mBBox;
+}
 
+void Pixel::draw(QPainter & p) const {
 	mEllipse.draw(p);
 }
 
@@ -234,9 +238,81 @@ Line PixelEdge::edge() const {
 	return mEdge;
 }
 
+QSharedPointer<Pixel> PixelEdge::first() const {
+	
+	return mFirst;
+}
+
+QSharedPointer<Pixel> PixelEdge::second() const {
+
+	return mSecond;
+}
+
 void PixelEdge::draw(QPainter & p) const {
 
 	edge().draw(p);
 }
+
+// PixelSet --------------------------------------------------------------------
+PixelSet::PixelSet() {
+}
+
+bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {
+
+	return mSet.contains(pixel);
+}
+
+void PixelSet::merge(const PixelSet& o) {
+
+	mSet.append(o.pixels());
+}
+
+void PixelSet::add(const QSharedPointer<Pixel>& pixel) {
+	mSet << pixel;
+}
+
+QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
+	return mSet;
+}
+
+Polygon PixelSet::polygon() {
+
+	return Polygon();
+}
+
+Rect PixelSet::boundingBox() {
+
+	double top = DBL_MAX, left = DBL_MAX;
+	double bottom = -DBL_MAX, right = -DBL_MAX;
+
+	for (const QSharedPointer<Pixel> p : mSet) {
+
+		if (!p)
+			continue;
+
+		const Rect& r = p->bbox();
+
+		if (r.top() < top)
+			top = r.top();
+		if (r.bottom() > bottom)
+			bottom = r.bottom();
+		if (r.left() < left)
+			left = r.left();
+		if (r.right() > right)
+			right = r.right();
+	}
+
+	return Rect(left, top, right-left, bottom-top);
+}
+
+void PixelSet::draw(QPainter& p) {
+
+	for (auto px : mSet)
+		px->draw(p);
+
+	//p.drawRect(boundingBox().toQRectF());
+}
+
+
 
 }

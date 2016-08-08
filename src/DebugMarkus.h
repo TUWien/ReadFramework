@@ -67,7 +67,7 @@ public:
 	void testComponents();
 
 protected:
-	void computeComponents(cv::Mat& img) const;
+	void computeComponents(const cv::Mat& src) const;
 
 	DebugConfig mConfig;
 };

@@ -45,6 +45,7 @@
 #include <QDebug>
 #include <QImage>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -136,7 +137,10 @@ void LayoutTest::testComponents() {
 	qInfo() << "components found in" << dt;
 }
 
-void LayoutTest::computeComponents(cv::Mat & img) const {
+void LayoutTest::computeComponents(const cv::Mat & src) const {
+
+	cv::Mat img = src.clone();
+	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);
 
 	rdf::SuperPixel superPixel(img);
 	
@@ -150,7 +154,8 @@ void LayoutTest::computeComponents(cv::Mat & img) const {
 		qWarning() << "could not compute text block segmentation!";
 
 	// drawing
-	cv::Mat rImg = img.clone();
+	cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(100));
+	//cv::Mat rImg = img.clone();
 
 	// draw edges
 	rImg = textBlocks.draw(rImg);

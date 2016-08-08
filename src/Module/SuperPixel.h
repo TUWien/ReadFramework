@@ -69,7 +69,7 @@ public:
 
 protected:
 	int mMserMinArea = 50;
-	int mMserMaxArea = 100000;
+	int mMserMaxArea = 1000;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

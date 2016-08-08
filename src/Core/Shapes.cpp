@@ -329,15 +329,13 @@ float Line::distance(const QPoint p) const {
 	return (float)abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (FLT_EPSILON + sqrt(normalVec.x()*normalVec.x() + normalVec.y()*normalVec.y())));
 }
 
-int Line::horizontalOverlap(const Line & l) const
-{
+int Line::horizontalOverlap(const Line & l) const {
 	int ol = std::max(mLine.x1(), l.startPoint().x()) - std::min(mLine.x2(), l.endPoint().x());
 
 	return ol;
 }
 
-int Line::verticalOverlap(const Line & l) const
-{
+int Line::verticalOverlap(const Line & l) const {
 	int ol = std::max(mLine.y1(), l.startPoint().y()) - std::min(mLine.y2(), l.endPoint().y());
 
 	return ol;
@@ -524,6 +522,14 @@ Vector2D Vector2D::min(const Vector2D & v1, const Vector2D & v2) {
 	return Vector2D(qMin(v1.x(), v2.x()), qMin(v1.y(), v2.y()));
 }
 
+Vector2D Vector2D::max() {
+	return Vector2D(std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+}
+
+Vector2D Vector2D::min() {
+	return Vector2D(std::numeric_limits<double>::min(), std::numeric_limits<double>::min());
+}
+
 bool Vector2D::isNull() const {
 	return mIsNull;
 }
@@ -697,6 +703,19 @@ Rect::Rect(const cv::Rect & rect) {
 	mTopLeft = Vector2D(rect.x, rect.y);
 	mSize = Vector2D(rect.width, rect.height);
 }
+
+Rect::Rect(const Vector2D & topLeft, const Vector2D & size) {
+	mIsNull = false;
+	mTopLeft = topLeft;
+	mSize = size;
+}
+
+Rect::Rect(double x, double y, double width, double height) {
+	mIsNull = false;
+	mTopLeft = Vector2D(x,y);
+	mSize = Vector2D(width, height);
+}
+
 
 bool operator==(const Rect & l, const Rect & r) {
 	//return l.topLeft() == r.topLeft() && l.size() == r.size();

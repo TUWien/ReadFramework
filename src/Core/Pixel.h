@@ -38,6 +38,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 #include <QSharedPointer>
+#include <QVector>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -96,7 +97,7 @@ class DllCoreExport Pixel : public BaseElement {
 
 public:
 	Pixel();
-	Pixel(const Ellipse& ellipse, const QString& id = QString());
+	Pixel(const Ellipse& ellipse, const Rect& bbox, const QString& id = QString());
 
 	bool isNull() const;
 
@@ -104,6 +105,7 @@ public:
 	Vector2D size() const;
 	double angle() const;
 	Ellipse ellipse() const;
+	Rect bbox() const;
 
 	void draw(QPainter& p) const;
 
@@ -111,6 +113,7 @@ protected:
 	bool mIsNull = true;
 
 	Ellipse mEllipse;
+	Rect mBBox;
 };
 
 class DllCoreExport PixelEdge : public BaseElement {
@@ -128,6 +131,8 @@ public:
 	Line edge() const;
 	void draw(QPainter& p) const;
 
+	QSharedPointer<Pixel> first() const;
+	QSharedPointer<Pixel> second() const;
 
 protected:
 	bool mIsNull = true;
@@ -135,6 +140,27 @@ protected:
 	QSharedPointer<Pixel> mFirst;
 	QSharedPointer<Pixel> mSecond;
 	Line mEdge;
+};
+
+class DllCoreExport PixelSet : public BaseElement {
+
+public:
+	PixelSet();
+	//PixelSet(const QVector<QSharedPointer<Pixel> >& set);
+
+	bool contains(const QSharedPointer<Pixel>& pixel) const;
+	void merge(const PixelSet& o);
+	void add(const QSharedPointer<Pixel>& pixel);
+
+	QVector<QSharedPointer<Pixel> > pixels() const;
+
+	Polygon polygon();
+	Rect boundingBox();
+
+	void draw(QPainter& p);
+
+protected:
+	QVector<QSharedPointer<Pixel> > mSet;
 };
 
 };

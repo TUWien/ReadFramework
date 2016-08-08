@@ -76,6 +76,8 @@ bool TextBlockSegmentation::compute() {
 
 	mEdges = connect(mSuperPixels);
 	mEdges = filterEdges(mEdges);
+	
+	mTextBlocks = createTextBlocks(mEdges);
 
 	mDebug << "computed in" << dt;
 
@@ -96,7 +98,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 	meanEdgeLength /= pixelEdges.size();
 	double maxEdgeLength = meanEdgeLength * factor;
 
-	QVector<QSharedPointer<PixelEdge>> pixelEdgesClean;
+	QVector<QSharedPointer<PixelEdge> > pixelEdgesClean;
 
 	for (auto pe : pixelEdges) {
 
@@ -156,6 +158,13 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 		b->draw(p);
 	}
 
+	for (auto tb : mTextBlocks) {
+		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		p.setPen(Drawer::instance().pen());
+
+		tb->draw(p);
+	}
+
 	mDebug << mEdges.size() << "edges drawn in" << dtf;
 
 	return Image::instance().qPixmap2Mat(pm);
@@ -168,6 +177,55 @@ QString TextBlockSegmentation::toString() const {
 bool TextBlockSegmentation::checkInput() const {
 	
 	return !mSuperPixels.isEmpty();
+}
+
+QVector<QSharedPointer<PixelSet> > TextBlockSegmentation::createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const {
+	
+	QVector<QSharedPointer<PixelSet> > sets;
+
+	for (const QSharedPointer<PixelEdge> e : edges) {
+
+		int fIdx = -1;
+		int sIdx = -1;
+
+		for (int idx = 0; idx < sets.size(); idx++) {
+
+			if (sets[idx]->contains(e->first()))
+				fIdx = idx;
+			if (sets[idx]->contains(e->second()))
+				sIdx = idx;
+
+			if (fIdx != -1 && sIdx != -1)
+				break;
+		}
+
+		// none is contained in a set
+		if (fIdx == -1 && sIdx == -1) {
+			QSharedPointer<PixelSet> ps(new PixelSet());
+			ps->add(e->first());
+			ps->add(e->second());
+			sets << ps;
+		}
+		// add first to the set of second
+		else if (fIdx == -1) {
+			sets[sIdx]->add(e->first());
+		}
+		// add second to the set of first
+		else if (sIdx == -1) {
+			sets[fIdx]->add(e->second());
+		}
+		// two different idx? - merge the sets
+		else if (fIdx != sIdx) {
+			sets[fIdx]->merge(*sets[sIdx]);
+			sets.remove(sIdx);
+		}
+		// else : nothing to do - they are both already added
+
+	}
+
+	qDebug() << "I found" << sets.size() << "text blocks";
+	
+	return sets;
 }
 
 }

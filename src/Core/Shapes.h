@@ -169,6 +169,8 @@ public:
 	// static functions
 	static Vector2D max(const Vector2D& v1, const Vector2D& v2);
 	static Vector2D min(const Vector2D& v1, const Vector2D& v2);
+	static Vector2D max();
+	static Vector2D min();
 
 	bool isNull() const;
 
@@ -233,6 +235,8 @@ public:
 	Rect(const QRect& rect);
 	Rect(const QRectF& rect);
 	Rect(const cv::Rect& rect);
+	Rect(const Vector2D& topLeft, const Vector2D& size);
+	Rect(double x, double y, double width, double height);
 
 	DllCoreExport friend bool operator==(const Rect& l, const Rect& r);
 	DllCoreExport friend bool operator!=(const Rect& l, const Rect& r);
