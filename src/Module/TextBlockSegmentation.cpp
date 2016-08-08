@@ -62,6 +62,7 @@ TextBlockSegmentation::TextBlockSegmentation(const cv::Mat& srcImg,
 	
 	mSrcImg = srcImg;
 	mSuperPixels = superPixels;
+	mConfig = QSharedPointer<TextBlockConfig>::create();
 }
 
 bool TextBlockSegmentation::isEmpty() const {
@@ -81,6 +82,10 @@ bool TextBlockSegmentation::compute() {
 	mDebug << "computed in" << dt;
 
 	return true;
+}
+
+QSharedPointer<TextBlockConfig> TextBlockSegmentation::config() const {
+	return qSharedPointerDynamicCast<TextBlockConfig>(mConfig);
 }
 
 QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVector<QSharedPointer<PixelEdge>>& pixelEdges, double factor) {

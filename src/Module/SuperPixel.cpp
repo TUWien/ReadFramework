@@ -95,10 +95,17 @@ QVector<QSharedPointer<MserBlob> > SuperPixel::mser(const cv::Mat & img) const {
 	int nF = filterAspectRatio(pixels, boxes);
 	qDebug() << nF << "filtered (aspect ratio) in " << dtf;
 
-	// collect
+	dtf.start();
+	nF = filterDuplicates(pixels, boxes);
+	qDebug() << nF << "filtered (duplicates) in " << dtf;
+
+	// collect the blobs
 	QVector<QSharedPointer<MserBlob> > blobs;
+
 	for (int idx = 0; idx < pixels.size(); idx++) {
-		QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], Converter::cvRectToQt(boxes[idx])));
+		
+		Rect r = Converter::cvRectToQt(boxes[idx]);
+		QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], r));
 		blobs << cb;
 	}
 
@@ -132,23 +139,47 @@ int SuperPixel::filterAspectRatio(std::vector<std::vector<cv::Point>>& pixels, s
 	return numRemoved;
 }
 
-//int SuperPixel::filterUnique(QVector<MserBlob>& blobs, double areaRatio) const {
-//
-//	QVector<MserBlob> blobsClean;
-//
-//	for (const MserBlob& b : blobs) {
-//
-//		double ua = b.uniqueArea(blobs);
-//		if (ua / b.area() > areaRatio)
-//			blobsClean << b;
-//	}
-//
-//	int numRemoved = blobs.size() - blobsClean.size();
-//
-//	blobs = blobsClean;
-//
-//	return numRemoved;
-//}
+int SuperPixel::filterDuplicates(std::vector<std::vector<cv::Point>>& elements, std::vector<cv::Rect>& boxes, int eps) const {
+
+	int cnt = 0;
+
+	std::vector<std::vector<cv::Point>> elementsClean;
+	std::vector<cv::Rect> boxesClean;
+
+	for (int idx = 0; idx < boxes.size(); idx++) {
+
+		const cv::Rect& r = boxes[idx];
+		bool duplicate = false;
+
+		for (int cIdx = idx+1; cIdx < boxes.size(); cIdx++) {
+
+			if (idx == cIdx)
+				continue;
+
+			const cv::Rect& cr = boxes[cIdx];
+
+			if (abs(r.x - cr.x) < eps &&
+				abs(r.y - cr.y) < eps &&
+				abs(r.width - cr.width) < eps &&
+				abs(r.height - cr.height) < eps) {
+
+				cnt++;
+				duplicate = true;
+				break;
+			}
+		}
+
+		if (!duplicate) {
+			elementsClean.push_back(elements[idx]);
+			boxesClean.push_back(boxes[idx]);
+		}
+	}
+
+	elements = elementsClean;
+	boxes = boxesClean;
+
+	return cnt;
+}
 
 bool SuperPixel::isEmpty() const {
 	return mSrcImg.empty();
@@ -172,9 +203,6 @@ bool SuperPixel::compute() {
 		mBlobs.append(b);
 		qDebug() << b.size() << "/" << mBlobs.size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
 	}
-
-	//int nF = MserBlob::filterDuplicates(mBlobs);
-	//qDebug() << nF << "filtered (duplicates) in" << dtf;
 
 	// convert to pixels
 	Timer dtf;

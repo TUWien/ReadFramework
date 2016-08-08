@@ -100,14 +100,12 @@ private:
 	QVector<QSharedPointer<MserBlob> > mBlobs;
 	QVector<QSharedPointer<Pixel> > mPixels;
 	
-	//QVector<QSharedPointer<Triangle> > mTriangles;	// TODO: remove
-
 	bool checkInput() const override;
 
 	QVector<QSharedPointer<MserBlob> > getBlobs(const cv::Mat& img, int kernelSize) const;
 	QVector<QSharedPointer<MserBlob> > mser(const cv::Mat& img) const;
 	int filterAspectRatio(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, double aRatio = 0.2) const;
-	//int filterUnique(QVector<MserBlob>& blobs, double areaRatio = 0.7) const;
+	int filterDuplicates(std::vector<std::vector<cv::Point> >& elements, std::vector<cv::Rect>& boxes, int eps = 5) const;
 };
 
 };

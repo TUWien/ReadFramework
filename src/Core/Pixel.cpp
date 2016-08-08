@@ -46,7 +46,7 @@ namespace rdf {
 
 // MserBlob --------------------------------------------------------------------
 MserBlob::MserBlob(const std::vector<cv::Point>& pts, 
-		const QRectF & bbox, 
+		const Rect & bbox, 
 		const QString& id) : BaseElement(id) {
 
 	mPts = pts;
@@ -124,6 +124,22 @@ QSharedPointer<Pixel> MserBlob::toPixel() const {
 	return p;
 }
 
+double MserBlob::overlapArea(const Rect& r) const {
+
+	if (!mBBox.contains(r))
+		return 0.0;
+
+	Vector2D tl = Vector2D::max(mBBox.topLeft(), r.topLeft());
+	Vector2D br = Vector2D::min(mBBox.bottomRight(), r.bottomRight());
+
+	double width = br.x() - tl.x();
+	double height = br.y() - tl.y();
+
+	assert(width > 0 && height > 0);
+
+	return width * height;
+}
+
 void MserBlob::draw(QPainter & p) {
 
 	QColor col = Drawer::instance().pen().color();
@@ -141,40 +157,6 @@ void MserBlob::draw(QPainter & p) {
 	//Drawer::instance().setStrokeWidth(3);
 	Drawer::instance().drawPoint(p, bbox().center().toQPointF());
 }
-
-int MserBlob::filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs) {
-
-	QVector<QSharedPointer<MserBlob> > blobsClean;
-
-	for (const QSharedPointer<MserBlob>& b : blobs) {
-
-		if (!b)
-			continue;
-
-		bool isNew = true;
-		for (const QSharedPointer<MserBlob>& cb : blobsClean) {
-
-			if (!cb)
-				continue;
-
-			if (b->bbox() == cb->bbox()) {
-				isNew = false;
-				break;
-			}
-		}
-
-		if (isNew)
-			blobsClean << b;
-
-	}
-
-	// collect results
-	int numRemoved = blobs.size() - blobsClean.size();
-	blobs = blobsClean;
-
-	return numRemoved;
-}
-
 
 // Pixel --------------------------------------------------------------------
 Pixel::Pixel() {

@@ -166,6 +166,10 @@ public:
 	void operator*=(const double& scalar);
 	void operator/=(const double& scalar);
 
+	// static functions
+	static Vector2D max(const Vector2D& v1, const Vector2D& v2);
+	static Vector2D min(const Vector2D& v1, const Vector2D& v2);
+
 	bool isNull() const;
 
 	void setX(double x);
@@ -263,6 +267,9 @@ public:
 
 	// geometry
 	bool contains(const Rect& o) const;
+	bool isProximate(const Rect& o, double eps = 10.0) const;
+	double area() const;
+	
 
 protected:
 	bool mIsNull = true;

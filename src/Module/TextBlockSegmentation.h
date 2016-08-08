@@ -75,6 +75,7 @@ public:
 
 	bool isEmpty() const override;
 	bool compute() override;
+	QSharedPointer<TextBlockConfig> config() const;
 
 	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 3.0);
 	

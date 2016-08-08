@@ -516,6 +516,14 @@ void Vector2D::operator/=(const double & scalar) {
 	mY /= scalar;
 }
 
+Vector2D Vector2D::max(const Vector2D & v1, const Vector2D & v2) {
+	return Vector2D(qMax(v1.x(), v2.x()), qMax(v1.y(), v2.y()));
+}
+
+Vector2D Vector2D::min(const Vector2D & v1, const Vector2D & v2) {
+	return Vector2D(qMin(v1.x(), v2.x()), qMin(v1.y(), v2.y()));
+}
+
 bool Vector2D::isNull() const {
 	return mIsNull;
 }
@@ -781,6 +789,32 @@ bool Rect::contains(const Rect & o) const {
 			bottom()>= o.bottom() &&
 			left()	<= o.left() &&
 			right() >= o.right());
+}
+
+/// <summary>
+/// Returns true if the centers are closer than eps.
+/// NOTE: the city block metric is used to compare the centers.
+/// </summary>
+/// <param name="o">The other rect.</param>
+/// <param name="eps">The epsilon region.</param>
+/// <returns>
+///   <c>true</c> if the specified o is close; otherwise, <c>false</c>.
+/// </returns>
+bool Rect::isProximate(const Rect & o, double eps) const {
+
+	Vector2D c = center();
+	Vector2D co = o.center();
+
+	if (abs(c.x() - co.x()) > eps)
+		return false;
+	else if (abs(c.y() - co.y()) > eps)
+		return false;
+
+	return true;
+}
+
+double Rect::area() const {
+	return width() * height();
 }
 
 // Ellipse --------------------------------------------------------------------

@@ -58,7 +58,7 @@ class DllCoreExport MserBlob : public BaseElement {
 
 public:
 	MserBlob(const std::vector<cv::Point>& pts = std::vector<cv::Point>(),
-		const QRectF& bbox = QRectF(),
+		const Rect& bbox = Rect(),
 		const QString& id = QString());
 
 	bool isNull() const;
@@ -77,8 +77,7 @@ public:
 	QSharedPointer<Pixel> toPixel() const;
 	cv::Mat toBinaryMask() const;
 
-	// filters
-	static int filterDuplicates(QVector<QSharedPointer<MserBlob> >& blobs);
+	double overlapArea(const Rect& r) const;
 
 protected:
 	Vector2D mCenter;
