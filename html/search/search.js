@@ -12,7 +12,7 @@ var indexSectionsWithContent =
   2: "cr",
   3: "abdefilmprstu",
   4: "abcdefghiklmnopqrstuvwxy",
-  5: "hmsvwx",
+  5: "bhmpsvwx",
   6: "cefmrtx",
   7: "abdghlmrstvw",
   8: "o",

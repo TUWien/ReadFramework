@@ -132,6 +132,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aed96c1b78fe5dd73e95e961973445896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2723e1b02a305817f687d8ccfb5d105f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a2723e1b02a305817f687d8ccfb5d105f">Rect</a> (const cv::Rect &amp;rect)</td></tr>
 <tr class="separator:a2723e1b02a305817f687d8ccfb5d105f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0633659feb25d6682c4e86e74e412d90"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a0633659feb25d6682c4e86e74e412d90">Rect</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;<a class="el" href="classrdf_1_1_rect.html#a28214a7c95f89754b665b8e5723024a2">topLeft</a>, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;<a class="el" href="classrdf_1_1_rect.html#a65ae17ca5ce041865eec2f955cee4084">size</a>)</td></tr>
+<tr class="separator:a0633659feb25d6682c4e86e74e412d90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c07c6d9ab74b746f9d7c6ea7a47fca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a92c07c6d9ab74b746f9d7c6ea7a47fca">Rect</a> (double x, double y, double <a class="el" href="classrdf_1_1_rect.html#afcedbe5c1f54a7e5e55186fa6f68dc5f">width</a>, double <a class="el" href="classrdf_1_1_rect.html#a45fd9cb736b030f2cbaeeb2c4ae9cab6">height</a>)</td></tr>
+<tr class="separator:a92c07c6d9ab74b746f9d7c6ea7a47fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d3ce91e4603f28b73be81d868b1526d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a4d3ce91e4603f28b73be81d868b1526d">isNull</a> () const </td></tr>
 <tr class="separator:a4d3ce91e4603f28b73be81d868b1526d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcedbe5c1f54a7e5e55186fa6f68dc5f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#afcedbe5c1f54a7e5e55186fa6f68dc5f">width</a> () const </td></tr>
@@ -172,6 +176,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab77c4743b24ec4e05f01dd0f1bfcccd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a890b495aeca3e437c54f4590da16fa63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63">contains</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;o) const </td></tr>
 <tr class="separator:a890b495aeca3e437c54f4590da16fa63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e1dfa0faf52ce1ecc6cef1d5f970277"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a9e1dfa0faf52ce1ecc6cef1d5f970277">isProximate</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;o, double eps=10.0) const </td></tr>
+<tr class="memdesc:a9e1dfa0faf52ce1ecc6cef1d5f970277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the centers are closer than eps. NOTE: the city block metric is used to compare the centers.  <a href="#a9e1dfa0faf52ce1ecc6cef1d5f970277">More...</a><br/></td></tr>
+<tr class="separator:a9e1dfa0faf52ce1ecc6cef1d5f970277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee2036137d167869c1a8baa8dd279c24"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#aee2036137d167869c1a8baa8dd279c24">area</a> () const </td></tr>
+<tr class="separator:aee2036137d167869c1a8baa8dd279c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -253,7 +262,86 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a0633659feb25d6682c4e86e74e412d90"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rdf::Rect::Rect </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>topLeft</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a92c07c6d9ab74b746f9d7c6ea7a47fca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rdf::Rect::Rect </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aee2036137d167869c1a8baa8dd279c24"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Rect::area </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="acb999b56599ee23d188bf25a10a22e72"></a>
 <div class="memitem">
 <div class="memproto">
@@ -372,6 +460,42 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9e1dfa0faf52ce1ecc6cef1d5f970277"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::Rect::isProximate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
+          <td class="paramname"><em>o</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eps</em> = <code>10.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the centers are closer than eps. NOTE: the city block metric is used to compare the centers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td>The other rect.</td></tr>
+    <tr><td class="paramname">eps</td><td>The epsilon region.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the specified o is close; otherwise, <code>false</code>. </dd></dl>
 
 </div>
 </div>

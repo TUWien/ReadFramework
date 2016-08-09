@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vlines',['vLines',['../classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d',1,'rdf::LineTrace']]]
+  ['pixels',['pixels',['../classrdf_1_1_mser_container.html#aa97b3efeed4a53d4249256d120879119',1,'rdf::MserContainer']]]
 ];

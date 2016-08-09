@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hlines',['hLines',['../classrdf_1_1_line_trace.html#a32a98487798c1aec06dc39cf8133397f',1,'rdf::LineTrace']]]
+  ['boxes',['boxes',['../classrdf_1_1_mser_container.html#ad9b4e2cc85cfb93771e23c3a019475cd',1,'rdf::MserContainer']]]
 ];

@@ -1,11 +1,11 @@
 <map id="src/Module/SuperPixel.cpp" name="src/Module/SuperPixel.cpp">
-<area shape="rect" id="node2" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="592,88,688,115"/>
-<area shape="rect" id="node15" href="$_image_8h.html" title="Image.h" alt="" coords="893,171,963,197"/>
-<area shape="rect" id="node20" href="$_image_processor_8h.html" title="ImageProcessor.h" alt="" coords="363,245,491,272"/>
-<area shape="rect" id="node21" href="$_drawer_8h.html" title="Drawer.h" alt="" coords="1065,171,1139,197"/>
-<area shape="rect" id="node23" href="$_utils_8h.html" title="Utils.h" alt="" coords="1271,171,1331,197"/>
-<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="477,171,581,197"/>
+<area shape="rect" id="node2" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="361,88,457,115"/>
+<area shape="rect" id="node15" href="$_image_8h.html" title="Image.h" alt="" coords="977,171,1047,197"/>
+<area shape="rect" id="node20" href="$_image_processor_8h.html" title="ImageProcessor.h" alt="" coords="699,245,827,272"/>
+<area shape="rect" id="node21" href="$_drawer_8h.html" title="Drawer.h" alt="" coords="1163,171,1236,197"/>
+<area shape="rect" id="node23" href="$_utils_8h.html" title="Utils.h" alt="" coords="1369,171,1428,197"/>
+<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="565,171,669,197"/>
 <area shape="rect" id="node7" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="40,245,116,272"/>
-<area shape="rect" id="node10" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="294,171,356,197"/>
+<area shape="rect" id="node10" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="237,171,299,197"/>
 <area shape="rect" id="node11" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="141,245,288,272"/>
 </map>

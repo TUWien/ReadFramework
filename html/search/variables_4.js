@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['workingdir',['workingDir',['../classrdf_1_1_global_settings.html#a3c0203cc3e917627c7185fac363874ae',1,'rdf::GlobalSettings']]]
+  ['settingsfilename',['settingsFileName',['../classrdf_1_1_global_settings.html#afda273400126b7158db3ea5e7795a7e3',1,'rdf::GlobalSettings']]]
 ];

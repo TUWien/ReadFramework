@@ -22,6 +22,7 @@ var searchData=
   ['ishorizontal',['isHorizontal',['../classrdf_1_1_line.html#a7862d5c1d0bd7136fbc65ad128eee0a7',1,'rdf::Line']]],
   ['isnull',['isNull',['../classrdf_1_1_mser_blob.html#a04381b9cf90221c2134c4d2bffe60f29',1,'rdf::MserBlob::isNull()'],['../classrdf_1_1_pixel.html#a63c79053e9ff2f9e2b4398946f1d0f1e',1,'rdf::Pixel::isNull()'],['../classrdf_1_1_pixel_edge.html#a45382f3199d554479ab8ab8ef6d9146a',1,'rdf::PixelEdge::isNull()'],['../classrdf_1_1_vector2_d.html#a5db010a5e57592c9ac3678d9fca034f1',1,'rdf::Vector2D::isNull()'],['../classrdf_1_1_triangle.html#a66cfdfd0c25b9546b2e2db9c1acf911d',1,'rdf::Triangle::isNull()'],['../classrdf_1_1_rect.html#a4d3ce91e4603f28b73be81d868b1526d',1,'rdf::Rect::isNull()'],['../classrdf_1_1_ellipse.html#af09586b7027758255a20d92475bfc4c0',1,'rdf::Ellipse::isNull()']]],
   ['isportable',['isPortable',['../classrdf_1_1_config.html#a494dbcb9881d539ea78fb6562e998f69',1,'rdf::Config']]],
+  ['isproximate',['isProximate',['../classrdf_1_1_rect.html#a9e1dfa0faf52ce1ecc6cef1d5f970277',1,'rdf::Rect']]],
   ['isvalidtypename',['isValidTypeName',['../classrdf_1_1_region_manager.html#aeae5aed693e12b27946a61fa2f6de015',1,'rdf::RegionManager']]],
   ['isvertical',['isVertical',['../classrdf_1_1_line.html#ac26947a698686df16ee376fe792b42d5',1,'rdf::Line']]]
 ];

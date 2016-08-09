@@ -137,9 +137,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98ff320e56d864046d985ac88fd1ae01"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a98ff320e56d864046d985ac88fd1ae01">compute</a> () override</td></tr>
 <tr class="memdesc:a98ff320e56d864046d985ac88fd1ae01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#a98ff320e56d864046d985ac88fd1ae01">More...</a><br/></td></tr>
 <tr class="separator:a98ff320e56d864046d985ac88fd1ae01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c6de0bda7960fc9392b8c15af0e60e"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
-&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a63c6de0bda7960fc9392b8c15af0e60e">filterEdges</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;pixelEdges, double factor=3.0)</td></tr>
-<tr class="separator:a63c6de0bda7960fc9392b8c15af0e60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1813fceb7f03a798752ca50f95370836"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_text_block_config.html">TextBlockConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#a1813fceb7f03a798752ca50f95370836">config</a> () const </td></tr>
+<tr class="separator:a1813fceb7f03a798752ca50f95370836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac93d655a268f6a4e7a190b51fdf7cb67"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#ac93d655a268f6a4e7a190b51fdf7cb67">filterEdges</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;pixelEdges, double factor=1.2)</td></tr>
+<tr class="separator:ac93d655a268f6a4e7a190b51fdf7cb67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac95c44a903f416ddca96d034a2c2c8ac"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
 &lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_text_block_segmentation.html#ac95c44a903f416ddca96d034a2c2c8ac">connect</a> (QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;superPixels) const </td></tr>
 <tr class="separator:ac95c44a903f416ddca96d034a2c2c8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,6 +227,21 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1813fceb7f03a798752ca50f95370836"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_text_block_config.html">TextBlockConfig</a> &gt; rdf::TextBlockSegmentation::config </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac95c44a903f416ddca96d034a2c2c8ac"></a>
 <div class="memitem">
 <div class="memproto">
@@ -257,7 +274,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a63c6de0bda7960fc9392b8c15af0e60e"></a>
+<a class="anchor" id="ac93d655a268f6a4e7a190b51fdf7cb67"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -271,7 +288,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>factor</em> = <code>3.0</code>&#160;</td>
+          <td class="paramname"><em>factor</em> = <code>1.2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

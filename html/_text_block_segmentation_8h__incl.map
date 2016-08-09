@@ -1,6 +1,6 @@
 <map id="src/Module/TextBlockSegmentation.h" name="src/Module/TextBlockSegmentation.h">
-<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="17,80,121,107"/>
-<area shape="rect" id="node6" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="187,80,249,107"/>
-<area shape="rect" id="node7" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="427,155,503,181"/>
-<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="256,155,403,181"/>
+<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="157,80,261,107"/>
+<area shape="rect" id="node6" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="323,80,385,107"/>
+<area shape="rect" id="node7" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="253,155,329,181"/>
+<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="456,155,603,181"/>
 </map>

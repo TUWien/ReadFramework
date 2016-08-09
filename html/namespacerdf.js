@@ -20,6 +20,7 @@ var namespacerdf =
     [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
     [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
     [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
+    [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
     [ "GenericSettings", "classrdf_1_1_generic_settings.html", "classrdf_1_1_generic_settings" ],
     [ "GlobalSettings", "classrdf_1_1_global_settings.html", "classrdf_1_1_global_settings" ],
     [ "Config", "classrdf_1_1_config.html", "classrdf_1_1_config" ],
@@ -58,6 +59,7 @@ var namespacerdf =
     [ "BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", "classrdf_1_1_base_skew_estimation_config" ],
     [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
     [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],
+    [ "MserContainer", "classrdf_1_1_mser_container.html", "classrdf_1_1_mser_container" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ],
     [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
     [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ]

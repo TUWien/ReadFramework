@@ -1,16 +1,16 @@
 <map id="src/DebugMarkus.cpp" name="src/DebugMarkus.cpp">
-<area shape="rect" id="node2" href="$_debug_markus_8h.html" title="DebugMarkus.h" alt="" coords="408,80,523,107"/>
-<area shape="rect" id="node5" href="$_page_parser_8h.html" title="PageParser.h" alt="" coords="515,155,616,181"/>
-<area shape="rect" id="node7" href="$_utils_8h.html" title="Utils.h" alt="" coords="151,155,211,181"/>
-<area shape="rect" id="node11" href="$_image_8h.html" title="Image.h" alt="" coords="299,155,368,181"/>
-<area shape="rect" id="node15" href="$_binarization_8h.html" title="Binarization.h" alt="" coords="1044,80,1145,107"/>
-<area shape="rect" id="node18" href="$_line_trace_8h.html" title="LineTrace.h" alt="" coords="929,80,1020,107"/>
-<area shape="rect" id="node23" href="$_elements_8h.html" title="Elements.h" alt="" coords="817,80,905,107"/>
-<area shape="rect" id="node25" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="1367,80,1463,107"/>
-<area shape="rect" id="node30" href="$_text_block_segmentation_8h.html" title="TextBlockSegmentation.h" alt="" coords="1170,80,1341,107"/>
-<area shape="rect" id="node3" href="$_debug_utils_8h.html" title="DebugUtils.h" alt="" coords="392,155,491,181"/>
-<area shape="rect" id="node16" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="1155,155,1260,181"/>
-<area shape="rect" id="node19" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="937,229,1013,256"/>
-<area shape="rect" id="node26" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="1387,155,1449,181"/>
-<area shape="rect" id="node27" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="1387,229,1533,256"/>
+<area shape="rect" id="node2" href="$_debug_markus_8h.html" title="DebugMarkus.h" alt="" coords="458,80,573,107"/>
+<area shape="rect" id="node5" href="$_page_parser_8h.html" title="PageParser.h" alt="" coords="565,155,666,181"/>
+<area shape="rect" id="node7" href="$_utils_8h.html" title="Utils.h" alt="" coords="131,155,190,181"/>
+<area shape="rect" id="node11" href="$_image_8h.html" title="Image.h" alt="" coords="349,155,418,181"/>
+<area shape="rect" id="node15" href="$_binarization_8h.html" title="Binarization.h" alt="" coords="741,80,842,107"/>
+<area shape="rect" id="node18" href="$_line_trace_8h.html" title="LineTrace.h" alt="" coords="1064,80,1154,107"/>
+<area shape="rect" id="node23" href="$_elements_8h.html" title="Elements.h" alt="" coords="1473,155,1561,181"/>
+<area shape="rect" id="node25" href="$_super_pixel_8h.html" title="SuperPixel.h" alt="" coords="1178,80,1274,107"/>
+<area shape="rect" id="node30" href="$_text_block_segmentation_8h.html" title="TextBlockSegmentation.h" alt="" coords="867,80,1038,107"/>
+<area shape="rect" id="node3" href="$_debug_utils_8h.html" title="DebugUtils.h" alt="" coords="442,155,541,181"/>
+<area shape="rect" id="node16" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="863,155,968,181"/>
+<area shape="rect" id="node19" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="1281,229,1357,256"/>
+<area shape="rect" id="node26" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="992,155,1054,181"/>
+<area shape="rect" id="node27" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="1009,229,1156,256"/>
 </map>
