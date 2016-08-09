@@ -211,11 +211,9 @@ bool SuperPixel::compute() {
 	qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
 
 	// convert to pixels
-	dtf.start();
 	mBlobs = rawBlobs->toBlobs();
 	for (const QSharedPointer<MserBlob>& b : mBlobs)
 		mPixels << b->toPixel();
-	qDebug() << "conversion to pixel takes" << dtf;
 
 	mDebug << mBlobs.size() << "regions computed in" << dt;
 

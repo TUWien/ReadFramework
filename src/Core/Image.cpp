@@ -162,7 +162,6 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 	bool saved = false;
 
 	QFileInfo fInfo(savePath);
-	qDebug() << "extension: " << fInfo.suffix();
 
 	bool hasAlpha = alphaChannelUsed(img);
 	QImage sImg = img;
@@ -181,20 +180,7 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 	else if (compression == -1)
 		compression = 90;	// choose good default compression for jpgs
 
-	qDebug() << "img has alpha: " << (sImg.format() != QImage::Format_RGB888) << " img uses alpha: " << hasAlpha;
-
-	//QBuffer fileBuffer(ba.data());
-	//fileBuffer.open(QIODevice::WriteOnly);
-	//QImageWriter* imgWriter = new QImageWriter(&fileBuffer, fInfo.suffix().toStdString().c_str());
-	//imgWriter->setCompression(compression);
-	//imgWriter->setQuality(compression);
-//#if QT_VERSION >= 0x050500
-//	imgWriter->setOptimizedWrite(true);			// this saves space TODO: user option here?
-//	imgWriter->setProgressiveScanWrite(true);
-//#endif
-	//saved = imgWriter->write(sImg);
-	//delete imgWriter;
-
+	//qDebug() << "img has alpha: " << (sImg.format() != QImage::Format_RGB888) << " img uses alpha: " << hasAlpha;
 	saved = sImg.save(savePath, 0, compression);
 
 	if (!saved) qWarning() << "could not save " << savePath;
