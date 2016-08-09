@@ -195,6 +195,12 @@ Rect Pixel::bbox() const {
 }
 
 void Pixel::draw(QPainter & p, double alpha) const {
+	
+	QPen pen = p.pen();
+	p.setPen(QColor(100, 100, 100));
+	p.drawText(center().toQPoint(), id());
+	p.setPen(pen);
+
 	mEllipse.draw(p, alpha);
 }
 

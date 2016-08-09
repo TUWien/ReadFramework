@@ -155,6 +155,7 @@ public:
 	DllCoreExport friend bool operator!=(const Vector2D& l, const Vector2D& r);
 	DllCoreExport friend Vector2D operator+(const Vector2D& l, const Vector2D& r);
 	DllCoreExport friend Vector2D operator-(const Vector2D& l, const Vector2D& r);
+	DllCoreExport friend double operator*(const Vector2D& l, const Vector2D& r);
 
 	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const Vector2D& v);
 	DllCoreExport friend QDebug operator<< (QDebug d, const Vector2D &v);
@@ -195,6 +196,7 @@ public:
 
 	double angle() const;
 	double length() const;
+	void rotate(double angle);
 
 protected:
 	bool mIsNull = true;

@@ -107,6 +107,8 @@ public:
 	cv::Mat drawSuperPixels(const cv::Mat& img) const;
 	cv::Mat drawMserBlobs(const cv::Mat& img) const;
 
+	void localOrientation(QVector<QSharedPointer<Pixel> >& set) const;
+
 private:
 	cv::Mat mSrcImg;
 
@@ -120,6 +122,12 @@ private:
 	QSharedPointer<MserContainer> mser(const cv::Mat& img) const;
 	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.2) const;
 	int filterDuplicates(MserContainer& blobs, int eps = 5) const;
+
+	void localOrientation(QVector<QSharedPointer<Pixel> >& set, double radius, int n) const;
+	void localOrientationDebug(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius) const;
+	void localOrientation(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius, int n) const;
+	void localOrientation(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, const Vector2D& histVec, cv::Mat& orHist) const;
+
 };
 
 };

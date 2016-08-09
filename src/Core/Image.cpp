@@ -32,6 +32,7 @@
 
 #include "Image.h"
 #include "Utils.h"
+#include "Shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -352,6 +353,21 @@ void Histogram::draw(QPainter & p) {
 		
 		QPoint p1(idx, ph);
 		QPoint p2(idx, ph - qRound((double)hPtr[idx] / mVal * ph));
+		p.drawLine(p1, p2);
+	}
+}
+
+void Histogram::draw(QPainter & p, const Rect& r) {
+
+	int ph = qRound(r.height());
+
+	double mVal = max();
+
+	float* hPtr = mHist.ptr<float>();
+	for (int idx = 0; idx < mHist.cols; idx++) {
+
+		QPointF p1(idx + r.left(), ph + r.bottom());
+		QPointF p2(idx + r.left(), ph + r.bottom() - qRound((double)hPtr[idx] / mVal * ph));
 		p.drawLine(p1, p2);
 	}
 }

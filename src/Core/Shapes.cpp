@@ -556,6 +556,16 @@ Vector2D operator-(const Vector2D & l, const Vector2D & r) {
 	return Vector2D(l.x() - r.x(), l.y() - r.y());
 }
 
+/// <summary>
+/// Computes the scalar product between l and r.
+/// </summary>
+/// <param name="l">A vector l.</param>
+/// <param name="r">A vector r.</param>
+/// <returns></returns>
+double operator*(const Vector2D & l, const Vector2D & r) {
+	return l.mX * r.mX + l.mY * r.mY;
+}
+
 QDataStream& operator<<(QDataStream& s, const Vector2D& v) {
 
 	s << v.toString();	// for now show children too
@@ -625,6 +635,12 @@ double Vector2D::angle() const {
 
 double Vector2D::length() const {
 	return std::sqrt(mX*mX + mY*mY);
+}
+
+void Vector2D::rotate(double angle) {
+	double xTmp = mX;
+	mX =  xTmp * std::cos(angle) + mY * std::sin(angle);
+	mY = -xTmp * std::sin(angle) + mY * std::cos(angle);
 }
 
 // Triangle --------------------------------------------------------------------

@@ -162,6 +162,9 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/00075751.tif");
 	
 		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
+		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336-crop.jpg");
+		dc.setImagePath("D:/read/test/00075751-crop.tif");
+		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}

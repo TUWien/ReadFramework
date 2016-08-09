@@ -57,6 +57,8 @@ class QPixmap;
 
 namespace rdf {
 
+class Rect;
+
 class DllCoreExport Histogram {
 
 public:
@@ -64,6 +66,7 @@ public:
 	Histogram(const QVector<int>& values);
 
 	cv::Mat draw(const QPen& pen = QPen(), const QColor& bgCol = QColor(255, 255, 255));
+	void draw(QPainter& p, const Rect& r);
 
 	cv::Mat hist() const;
 	double max() const;
