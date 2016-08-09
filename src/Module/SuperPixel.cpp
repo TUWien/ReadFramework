@@ -87,8 +87,7 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 
 	QSharedPointer<MserContainer> blobs(new MserContainer());
 	mser->detectRegions(img, blobs->pixels, blobs->boxes);
-
-	assert(pixels.size() == boxes.size());
+	assert(blobs->pixels.size() == blobs->boxes.size());
 
 	Timer dtf;
 	int nF = filterAspectRatio(*blobs);
@@ -113,7 +112,7 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 
 int SuperPixel::filterAspectRatio(MserContainer& blobs, double aRatio) const {
 
-	assert(pixels.size() == boxes.size());
+	assert(blobs.pixels.size() == blobs.boxes.size());
 
 	// filter w.r.t aspect ratio
 	std::vector<std::vector<cv::Point> > pixelsClean;
