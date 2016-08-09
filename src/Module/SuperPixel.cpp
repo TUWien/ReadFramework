@@ -197,7 +197,7 @@ bool SuperPixel::compute() {
 
 	QSharedPointer<MserContainer> rawBlobs(new MserContainer());
 
-	for (int idx = 0; idx < 5; idx += 2) {
+	for (int idx = 0; idx < 10; idx += 4) {
 
 		Timer dti;
 		QSharedPointer<MserContainer> cb = getBlobs(img, idx);
