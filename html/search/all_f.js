@@ -28,7 +28,7 @@ var searchData=
   ['pixelset',['PixelSet',['../classrdf_1_1_pixel_set.html#a2ef571f5251049d1a4c0f794092f4d58',1,'rdf::PixelSet']]],
   ['pointat',['pointAt',['../classrdf_1_1_triangle.html#ab0ae4a2e4d3fdd9172e4a8cddcb9897e',1,'rdf::Triangle']]],
   ['polygon',['Polygon',['../classrdf_1_1_polygon.html',1,'rdf']]],
-  ['polygon',['Polygon',['../classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9',1,'rdf::Polygon::Polygon()'],['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_pixel_set.html#aebb8f1790fc1640f81506c5117e1c760',1,'rdf::PixelSet::polygon()'],['../classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972',1,'rdf::Polygon::polygon()'],['../classrdf_1_1_base_line.html#a42f4fecd40a10f4d933a870bae030a80',1,'rdf::BaseLine::polygon()']]],
+  ['polygon',['polygon',['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_pixel_set.html#aebb8f1790fc1640f81506c5117e1c760',1,'rdf::PixelSet::polygon()'],['../classrdf_1_1_polygon.html#acc4be6d67b6fdbdaa5c512fa8f9f8972',1,'rdf::Polygon::polygon()'],['../classrdf_1_1_base_line.html#a42f4fecd40a10f4d933a870bae030a80',1,'rdf::BaseLine::polygon()'],['../classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9',1,'rdf::Polygon::Polygon()']]],
   ['polytostring',['polyToString',['../classrdf_1_1_converter.html#a8c4102e512b6cc054be79df465d5ad06',1,'rdf::Converter']]],
   ['prefilterarea',['preFilterArea',['../classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf',1,'rdf::Algorithms']]],
   ['printimage',['printImage',['../classrdf_1_1_image.html#a1511ff1ef43c13e0ceac7f2afa29d976',1,'rdf::Image']]],

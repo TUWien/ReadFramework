@@ -14,7 +14,7 @@ var searchData=
   ['getmserblobs',['getMserBlobs',['../classrdf_1_1_super_pixel.html#a787277c0ee8035c57f155e5d18c3d590',1,'rdf::SuperPixel']]],
   ['getrandomcolor',['getRandomColor',['../classrdf_1_1_color_manager.html#a3bcdc76cab1169d894f31c378e11c911',1,'rdf::ColorManager']]],
   ['getselectedlines',['getSelectedLines',['../classrdf_1_1_base_skew_estimation.html#aa2e8fc89e88fa6bec2a4c846aead0511',1,'rdf::BaseSkewEstimation']]],
-  ['getsuperpixels',['getSuperPixels',['../classrdf_1_1_super_pixel.html#ae18538b80586e2db6bce16fd52d51d96',1,'rdf::SuperPixel']]],
+  ['getsuperpixels',['getSuperPixels',['../classrdf_1_1_super_pixel.html#ae18538b80586e2db6bce16fd52d51d96',1,'rdf::SuperPixel::getSuperPixels()'],['../classrdf_1_1_local_orientation.html#ad9277c4f87b894c50995a6d148a3b101',1,'rdf::LocalOrientation::getSuperPixels()']]],
   ['getthreshotsu',['getThreshOtsu',['../classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597',1,'rdf::Algorithms']]],
   ['gettotal',['getTotal',['../classrdf_1_1_timer.html#a19c55bb89adf7b93b1247db0078cf345',1,'rdf::Timer']]],
   ['getvlines',['getVLines',['../classrdf_1_1_line_trace.html#a939ed5b4fbd84586f3da9909d7158f3c',1,'rdf::LineTrace']]],

@@ -2,6 +2,7 @@ var searchData=
 [
   ['offset',['offset',['../classrdf_1_1_form_features.html#a36874d7afa5fc4131e95faeb62cec68f',1,'rdf::FormFeatures']]],
   ['operator_21_3d',['operator!=',['../namespacerdf.html#a46f339c4273da8c09ad7d180ed7c36f3',1,'rdf::operator!=(const BaseElement &amp;l, const BaseElement &amp;r)'],['../namespacerdf.html#a793cece4a88addf28b83d9a1b95b912a',1,'rdf::operator!=(const Vector2D &amp;l, const Vector2D &amp;r)'],['../namespacerdf.html#a95c88d1d55ac2c365e5c54c0c42da7fc',1,'rdf::operator!=(const Rect &amp;l, const Rect &amp;r)']]],
+  ['operator_2a',['operator*',['../namespacerdf.html#a458e35e77b768483fc9e99f17d25c96a',1,'rdf']]],
   ['operator_2a_3d',['operator*=',['../classrdf_1_1_vector2_d.html#a5c7449bd1bf4c1eaf2565e8684116940',1,'rdf::Vector2D']]],
   ['operator_2b',['operator+',['../namespacerdf.html#ad42333e17556b01eb90e9d0dd56f2e54',1,'rdf']]],
   ['operator_2b_3d',['operator+=',['../classrdf_1_1_vector2_d.html#aafd1b4576b23057f913dac98e1222d81',1,'rdf::Vector2D']]],

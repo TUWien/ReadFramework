@@ -1,10 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classrdf_1_1_module_config.html" title="rdf::ModuleConfig" alt="" coords="5,157,131,184"/>
+<area shape="rect" id="node1" href="$classrdf_1_1_module_config.html" title="rdf::ModuleConfig" alt="" coords="5,183,131,209"/>
 <area shape="rect" id="node2" href="$classrdf_1_1_base_binarization_su_config.html" title="rdf::BaseBinarizationSuConfig" alt="" coords="184,5,381,32"/>
 <area shape="rect" id="node3" href="$classrdf_1_1_base_skew_estimation_config.html" title="rdf::BaseSkewEstimationConfig" alt="" coords="179,56,387,83"/>
 <area shape="rect" id="node4" href="$classrdf_1_1_form_features_config.html" title="rdf::FormFeaturesConfig" alt="" coords="201,107,365,133"/>
 <area shape="rect" id="node5" href="$classrdf_1_1_line_trace_config.html" title="rdf::LineTraceConfig" alt="" coords="213,157,353,184"/>
-<area shape="rect" id="node6" href="$classrdf_1_1_simple_binarization_config.html" title="rdf::SimpleBinarizationConfig" alt="" coords="187,208,378,235"/>
-<area shape="rect" id="node7" href="$classrdf_1_1_super_pixel_config.html" title="rdf::SuperPixelConfig" alt="" coords="209,259,356,285"/>
-<area shape="rect" id="node8" href="$classrdf_1_1_text_block_config.html" title="rdf::TextBlockConfig" alt="" coords="211,309,354,336"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_local_orientation_config.html" title="rdf::LocalOrientationConfig" alt="" coords="194,208,371,235"/>
+<area shape="rect" id="node7" href="$classrdf_1_1_simple_binarization_config.html" title="rdf::SimpleBinarizationConfig" alt="" coords="187,259,378,285"/>
+<area shape="rect" id="node8" href="$classrdf_1_1_super_pixel_config.html" title="rdf::SuperPixelConfig" alt="" coords="209,309,356,336"/>
+<area shape="rect" id="node9" href="$classrdf_1_1_text_block_config.html" title="rdf::TextBlockConfig" alt="" coords="211,360,354,387"/>
 </map>

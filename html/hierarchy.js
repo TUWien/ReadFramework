@@ -39,6 +39,7 @@ var hierarchy =
       [ "rdf::BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", null ],
       [ "rdf::FormFeatures", "classrdf_1_1_form_features.html", null ],
       [ "rdf::LineTrace", "classrdf_1_1_line_trace.html", null ],
+      [ "rdf::LocalOrientation", "classrdf_1_1_local_orientation.html", null ],
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ],
       [ "rdf::TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", null ]
@@ -48,6 +49,7 @@ var hierarchy =
       [ "rdf::BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", null ],
       [ "rdf::FormFeaturesConfig", "classrdf_1_1_form_features_config.html", null ],
       [ "rdf::LineTraceConfig", "classrdf_1_1_line_trace_config.html", null ],
+      [ "rdf::LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", null ],
       [ "rdf::SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", null ],
       [ "rdf::SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", null ],
       [ "rdf::TextBlockConfig", "classrdf_1_1_text_block_config.html", null ]

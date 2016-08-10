@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a9e5bb484c4acfe4d6effc2c32e789663',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_image.html#a34d4f8abe3999b342df35c0128004da6',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()'],['../classrdf_1_1_super_pixel_config.html#ad215c64ccec5fc0b7b01b8067a03b0b3',1,'rdf::SuperPixelConfig::save()']]],
+  ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a9e5bb484c4acfe4d6effc2c32e789663',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_image.html#a34d4f8abe3999b342df35c0128004da6',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()'],['../classrdf_1_1_super_pixel_config.html#ad215c64ccec5fc0b7b01b8067a03b0b3',1,'rdf::SuperPixelConfig::save()'],['../classrdf_1_1_local_orientation_config.html#a10fafde54bbf6a040420f51f3ee9da5a',1,'rdf::LocalOrientationConfig::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module_config.html#acdf8ca83534fc9b93543fea400ac0ebf',1,'rdf::ModuleConfig']]],
   ['scalededgelength',['scaledEdgeLength',['../classrdf_1_1_pixel_edge.html#a516e7563ce69527346ac3066891d7862',1,'rdf::PixelEdge']]],
+  ['scaleivl',['scaleIvl',['../classrdf_1_1_local_orientation_config.html#a26817f28992a2cfbf64a9bfb757987e8',1,'rdf::LocalOrientationConfig']]],
   ['searchxoffset',['searchXOffset',['../classrdf_1_1_form_features_config.html#ae7b6767aedd982ccb9817709b7b75de1',1,'rdf::FormFeaturesConfig']]],
   ['searchyoffset',['searchYOffset',['../classrdf_1_1_form_features_config.html#ae1b8bc7e70fec2338c95e053b1258202',1,'rdf::FormFeaturesConfig']]],
   ['second',['second',['../classrdf_1_1_pixel_edge.html#acc8ca19bf4590382b87c74b53523306b',1,'rdf::PixelEdge']]],
@@ -126,6 +127,6 @@ var searchData=
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]],
-  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html#aead8f86d63747293cd02a23304b00479',1,'rdf::SuperPixelConfig']]],
-  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html',1,'rdf']]]
+  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html',1,'rdf']]],
+  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html#aead8f86d63747293cd02a23304b00479',1,'rdf::SuperPixelConfig']]]
 ];

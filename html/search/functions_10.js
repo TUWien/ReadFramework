@@ -14,5 +14,6 @@ var searchData=
   ['ripplearea',['rippleArea',['../classrdf_1_1_line_trace_config.html#ac085162bbde6a3057fc70c848528cbfc',1,'rdf::LineTraceConfig']]],
   ['ripplelen',['rippleLen',['../classrdf_1_1_line_trace_config.html#a7b8bc7c919b82a5d343ee55ae43eb67f',1,'rdf::LineTraceConfig']]],
   ['rootregion',['rootRegion',['../classrdf_1_1_page_element.html#a5df1b5290bc6170b7c425c5b96639c56',1,'rdf::PageElement']]],
+  ['rotate',['rotate',['../classrdf_1_1_vector2_d.html#a22a537b82fb9d48580cbb5165e3af40a',1,'rdf::Vector2D']]],
   ['rotateimage',['rotateImage',['../classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade',1,'rdf::Algorithms']]]
 ];

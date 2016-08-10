@@ -172,6 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad21e917b5a42fd05190e664b2f56b43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe14ad567a8a01be2b5bb4415d3ab8e9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9">length</a> () const </td></tr>
 <tr class="separator:abe14ad567a8a01be2b5bb4415d3ab8e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22a537b82fb9d48580cbb5165e3af40a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a22a537b82fb9d48580cbb5165e3af40a">rotate</a> (double <a class="el" href="classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a">angle</a>)</td></tr>
+<tr class="separator:a22a537b82fb9d48580cbb5165e3af40a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -203,6 +205,9 @@ Friends</h2></td></tr>
 <tr class="separator:a82ea591ac29efd5cce8e3d619b359a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab686ba95701bfa6e5cf028527689d12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#aab686ba95701bfa6e5cf028527689d12">operator-</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;l, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;r)</td></tr>
 <tr class="separator:aab686ba95701bfa6e5cf028527689d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adba960e1ebca0e9d14b1e349232ae1ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#adba960e1ebca0e9d14b1e349232ae1ed">operator*</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;l, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;r)</td></tr>
+<tr class="memdesc:adba960e1ebca0e9d14b1e349232ae1ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the scalar product between l and r.  <a href="#adba960e1ebca0e9d14b1e349232ae1ed">More...</a><br/></td></tr>
+<tr class="separator:adba960e1ebca0e9d14b1e349232ae1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e91f8ff28763d1732d176cec7506a2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend QDataStream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a5e91f8ff28763d1732d176cec7506a2c">operator&lt;&lt;</a> (QDataStream &amp;s, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;v)</td></tr>
 <tr class="separator:a5e91f8ff28763d1732d176cec7506a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0276cf482c10aa28c96d261fe635d931"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend QDebug&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a0276cf482c10aa28c96d261fe635d931">operator&lt;&lt;</a> (QDebug d, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;v)</td></tr>
@@ -570,6 +575,22 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a22a537b82fb9d48580cbb5165e3af40a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Vector2D::rotate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af019c53c88351ab0a3a6de08245f016f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -784,6 +805,50 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adba960e1ebca0e9d14b1e349232ae1ed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend double operator* </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the scalar product between l and r. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">l</td><td>A vector l.</td></tr>
+    <tr><td class="paramname">r</td><td>A vector r.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

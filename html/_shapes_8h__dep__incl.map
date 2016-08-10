@@ -3,10 +3,11 @@
 <area shape="rect" id="node6" href="$_shapes_8cpp.html" title="src/Core/Shapes.cpp" alt="" coords="5,229,149,256"/>
 <area shape="rect" id="node7" href="$_debug_flo_8cpp.html" title="src/DebugFlo.cpp" alt="" coords="1384,229,1509,256"/>
 <area shape="rect" id="node13" href="$_elements_8h.html" title="src/Core/Elements.h" alt="" coords="1739,155,1881,181"/>
-<area shape="rect" id="node19" href="$_pixel_8h.html" title="src/Core/Pixel.h" alt="" coords="2059,80,2175,107"/>
-<area shape="rect" id="node20" href="$_pixel_8cpp.html" title="src/Core/Pixel.cpp" alt="" coords="2411,155,2540,181"/>
-<area shape="rect" id="node21" href="$_super_pixel_8h.html" title="src/Module/SuperPixel.h" alt="" coords="1958,155,2121,181"/>
-<area shape="rect" id="node25" href="$_line_trace_8h.html" title="src/Module/LineTrace.h" alt="" coords="1545,80,1703,107"/>
+<area shape="rect" id="node19" href="$_image_8cpp.html" title="src/Core/Image.cpp" alt="" coords="2174,80,2311,107"/>
+<area shape="rect" id="node20" href="$_pixel_8h.html" title="src/Core/Pixel.h" alt="" coords="1982,80,2097,107"/>
+<area shape="rect" id="node21" href="$_pixel_8cpp.html" title="src/Core/Pixel.cpp" alt="" coords="2411,155,2540,181"/>
+<area shape="rect" id="node22" href="$_super_pixel_8h.html" title="src/Module/SuperPixel.h" alt="" coords="1958,155,2121,181"/>
+<area shape="rect" id="node26" href="$_line_trace_8h.html" title="src/Module/LineTrace.h" alt="" coords="1545,80,1703,107"/>
 <area shape="rect" id="node3" href="$_algorithms_8h.html" title="src/Core/Algorithms.h" alt="" coords="901,155,1049,181"/>
 <area shape="rect" id="node5" href="$_blobs_8cpp.html" title="src/Core/Blobs.cpp" alt="" coords="174,229,308,256"/>
 <area shape="rect" id="node11" href="$_line_trace_8cpp.html" title="src/Module/LineTrace.cpp" alt="" coords="1187,229,1359,256"/>
@@ -20,8 +21,8 @@
 <area shape="rect" id="node18" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="2007,229,2157,256"/>
 <area shape="rect" id="node16" href="$_elements_helper_8cpp.html" title="src/Core/ElementsHelper.cpp" alt="" coords="2032,304,2227,331"/>
 <area shape="rect" id="node17" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="1838,304,2007,331"/>
-<area shape="rect" id="node23" href="$_text_block_segmentation_8h.html" title="src/Module/TextBlockSegmentation.h" alt="" coords="2147,155,2387,181"/>
-<area shape="rect" id="node22" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="2183,229,2361,256"/>
-<area shape="rect" id="node24" href="$_text_block_segmentation_8cpp.html" title="src/Module/TextBlockSegmentation.cpp" alt="" coords="2386,229,2640,256"/>
-<area shape="rect" id="node26" href="$_form_analysis_8h.html" title="src/Module/FormAnalysis.h" alt="" coords="1533,155,1715,181"/>
+<area shape="rect" id="node24" href="$_text_block_segmentation_8h.html" title="src/Module/TextBlockSegmentation.h" alt="" coords="2147,155,2387,181"/>
+<area shape="rect" id="node23" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="2183,229,2361,256"/>
+<area shape="rect" id="node25" href="$_text_block_segmentation_8cpp.html" title="src/Module/TextBlockSegmentation.cpp" alt="" coords="2386,229,2640,256"/>
+<area shape="rect" id="node27" href="$_form_analysis_8h.html" title="src/Module/FormAnalysis.h" alt="" coords="1533,155,1715,181"/>
 </map>

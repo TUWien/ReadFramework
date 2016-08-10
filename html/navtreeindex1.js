@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classrdf_1_1_basic_f_m.html#a5fea695f3753d0dbe14e7bdef827ebac":[1,0,1,47,12],
 "classrdf_1_1_basic_f_m.html#a665084061864eced707d60269186a985":[1,0,1,47,4],
 "classrdf_1_1_basic_f_m.html#a6e18d5bb080eab1279dd23b61b589f3b":[1,0,1,47,5],
 "classrdf_1_1_basic_f_m.html#a70feccbc25fa4428cfac0faa04cce1c1":[1,0,1,47,6],
@@ -230,12 +231,13 @@ var NAVTREEINDEX1 =
 "classrdf_1_1_global_settings.html#afda273400126b7158db3ea5e7795a7e3":[1,0,1,22,4],
 "classrdf_1_1_histogram.html":[1,0,1,13],
 "classrdf_1_1_histogram.html#a276e0d6ee6b56e00fe3c555c4020b773":[1,0,1,13,0],
-"classrdf_1_1_histogram.html#a387ce05adb9d05257f06baefda8d93b9":[1,0,1,13,3],
+"classrdf_1_1_histogram.html#a387ce05adb9d05257f06baefda8d93b9":[1,0,1,13,4],
+"classrdf_1_1_histogram.html#a48bd9ca295bd8b0e9b9b25bef99b82e4":[1,0,1,13,3],
 "classrdf_1_1_histogram.html#a51b6aecdbab2b7b7d6db04444db482f3":[1,0,1,13,2],
-"classrdf_1_1_histogram.html#a864308556031f326aea8e364b893b9d4":[1,0,1,13,6],
-"classrdf_1_1_histogram.html#ad56d49f7cb04f30177a98012501018f1":[1,0,1,13,5],
+"classrdf_1_1_histogram.html#a864308556031f326aea8e364b893b9d4":[1,0,1,13,7],
+"classrdf_1_1_histogram.html#ad56d49f7cb04f30177a98012501018f1":[1,0,1,13,6],
 "classrdf_1_1_histogram.html#ad698cf4ebc55bd1c5620f49ca5c75c4f":[1,0,1,13,1],
-"classrdf_1_1_histogram.html#aed8ebdfa99b0f4319c26b2dd5434ccbb":[1,0,1,13,4],
+"classrdf_1_1_histogram.html#aed8ebdfa99b0f4319c26b2dd5434ccbb":[1,0,1,13,5],
 "classrdf_1_1_i_p.html":[1,0,1,15],
 "classrdf_1_1_image.html":[1,0,1,14],
 "classrdf_1_1_image.html#a1511ff1ef43c13e0ceac7f2afa29d976":[1,0,1,14,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classrdf_1_1_image.html#a83ae582ae50a1cc668fb75e14d7c9d51":[1,0,1,14,1],
 "classrdf_1_1_image.html#a9e5bb484c4acfe4d6effc2c32e789663":[1,0,1,14,8],
 "classrdf_1_1_image.html#aa49eccb7b2236eaf3d69201de0beee94":[1,0,1,14,0],
-"classrdf_1_1_image.html#ad226c1776f2435c3126931d03099ffa4":[1,0,1,14,5],
-"classrdf_1_1_layout_test.html":[1,0,1,37],
-"classrdf_1_1_layout_test.html#a1f130b4dd326dc845f4e1da68228fcad":[1,0,1,37,0]
+"classrdf_1_1_image.html#ad226c1776f2435c3126931d03099ffa4":[1,0,1,14,5]
 };

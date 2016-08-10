@@ -61,6 +61,8 @@ var namespacerdf =
     [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],
     [ "MserContainer", "classrdf_1_1_mser_container.html", "classrdf_1_1_mser_container" ],
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ],
+    [ "LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", "classrdf_1_1_local_orientation_config" ],
+    [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
     [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
     [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ]
 ];

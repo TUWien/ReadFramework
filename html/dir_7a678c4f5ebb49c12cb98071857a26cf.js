@@ -38,7 +38,9 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "SuperPixel.h", "_super_pixel_8h.html", [
       [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],
       [ "MserContainer", "classrdf_1_1_mser_container.html", "classrdf_1_1_mser_container" ],
-      [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ]
+      [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ],
+      [ "LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", "classrdf_1_1_local_orientation_config" ],
+      [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ]
     ] ],
     [ "TextBlockSegmentation.cpp", "_text_block_segmentation_8cpp.html", null ],
     [ "TextBlockSegmentation.h", "_text_block_segmentation_8h.html", [
