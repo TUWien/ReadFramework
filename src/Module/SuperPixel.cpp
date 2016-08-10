@@ -214,10 +214,6 @@ bool SuperPixel::compute() {
 	for (const QSharedPointer<MserBlob>& b : mBlobs)
 		mPixels << b->toPixel();
 
-	dtf.start();
-	localOrientation(mPixels);
-	qDebug() << "local orientation estimation takes" << dtf;
-
 	mDebug << mBlobs.size() << "regions computed in" << dt;
 
 	return true;
@@ -282,148 +278,6 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 	return Image::instance().qPixmap2Mat(pm);
 }
 
-void SuperPixel::localOrientation(QVector<QSharedPointer<Pixel>>& set) const {
-
-	localOrientation(set, 250, 8);
-
-}
-
-void SuperPixel::localOrientation(QVector<QSharedPointer<Pixel>>& set, double radius, int n) const {
-
-	// loop here
-	//for (QSharedPointer<Pixel>& p : set) {
-	//	localOrientation(p, set, radius, n);
-	//}
-
-	// debug
-	QSharedPointer<Pixel> visPix;
-	for (auto p : set)
-		//if (p->id() == "636") {
-		if (p->id() == "1012") {
-			visPix = p;
-			break;
-		}
-
-	localOrientationDebug(visPix, set, radius);
-
-}
-
-void SuperPixel::localOrientationDebug(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, double radius) const {
-
-	// debug - remove
-	QPixmap pm = Image::instance().mat2QPixmap(mSrcImg);
-	QPainter painter(&pm);
-	
-	Ellipse e(pixel->center(), Vector2D(radius, radius));
-	e.draw(painter, 0.3);
-	painter.setPen(ColorManager::instance().colors()[2]);
-
-	const Vector2D& ec = pixel->center();
-	QVector<QSharedPointer<Pixel> > neighbors;
-
-	// create neighbor set
-	for (const QSharedPointer<Pixel>& p : set) {
-
-		if (Vector2D(ec - p->center()).length() < radius) {
-			neighbors << p;
-			p->draw(painter);
-		}
-	}
-
-	painter.setPen(ColorManager::instance().colors()[0]);
-	pixel->draw(painter);
-
-	// compute all orientations
-	int histSize = 100;
-	int n = 8;
-	cv::Mat orHist(n, histSize, CV_32FC1);
-	for (int k = 0; k < n; k++) {
-		
-		// create orientation vector
-		double cAngle = k * CV_PI / n;
-		Vector2D orVec(radius, 0);
-		orVec.rotate(cAngle);
-
-		cv::Mat cRow = orHist.row(k);
-		localOrientation(pixel, neighbors, orVec, cRow);
-
-		rdf::Histogram h(cRow);
-		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
-		h.draw(painter, r);
-		painter.drawText(r.bottomLeft().toQPoint(), QString::number(cAngle * DK_RAD2DEG));
-	}
-
-	cv::Mat dbImg = Image::instance().qPixmap2Mat(pm);
-	Image::instance().save(dbImg, "D:/read/test/localNeighbors.tif");
-}
-
-void SuperPixel::localOrientation(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, double radius, int n) const {
-
-	const Vector2D& ec = pixel->center();
-	QVector<QSharedPointer<Pixel> > neighbors;
-
-	// create neighbor set
-	for (const QSharedPointer<Pixel>& p : set) {
-
-		if (Vector2D(ec - p->center()).length() < radius) {
-			neighbors << p;
-		}
-	}
-
-	// compute all orientations
-	int histSize = 100;
-	cv::Mat orHist(n, histSize, CV_32FC1);
-	for (int k = 0; k < n; k++) {
-
-		// create orientation vector
-		double cAngle = k * CV_PI / n;
-		Vector2D orVec(radius, 0);
-		orVec.rotate(cAngle);
-
-		cv::Mat cRow = orHist.row(k);
-		localOrientation(pixel, neighbors, orVec, cRow);
-		// TODO: set the orientation histogram here
-	}
-}
-
-void SuperPixel::localOrientation(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, const Vector2D & histVec, cv::Mat& orHist) const {
-	
-	
-	double hl = histVec.length();
-	Vector2D histVecNorm = histVec;
-	histVecNorm /= hl;
-	double scale = 1.0 / (2 * hl) * (orHist.cols - 1);
-
-	const Vector2D pc = pixel->center();
-	
-	// prepare histogram
-	orHist.setTo(0);
-	float* orPtr = orHist.ptr<float>();
-
-	for (const QSharedPointer<Pixel>& p : set) {
-
-		Vector2D lc = p->center() - pc;
-		double v = histVecNorm * lc;
-
-		// bin it
-		int hIdx = qRound((v + hl) * scale);
-		assert(hIdx >= 0 && hIdx < orHist.cols);
-
-		orPtr[hIdx] += 1;
-
-		//// estimate radius (assuming circles)
-		//const Vector2D& a = p->ellipse().axis();
-		//int r = qRound((a.x() + a.y()) / 2.0 * scale);
-		//int start = (hIdx - r < 0) ? 0 : hIdx - r;
-
-		//for (int idx = start; idx < hIdx + r && idx < orHist.cols; idx++) {
-		//	orPtr[idx] += 1;
-		//}
-		
-	}
-}
-
-
 // SuperPixelConfig --------------------------------------------------------------------
 SuperPixelConfig::SuperPixelConfig() : ModuleConfig("Super Pixel") {
 }
@@ -455,6 +309,7 @@ void SuperPixelConfig::save(QSettings & settings) const {
 	settings.setValue("MserMaxArea", mMserMaxArea);
 }
 
+// MserContainer --------------------------------------------------------------------
 void MserContainer::append(const MserContainer & o) {
 
 	std::move(o.pixels.begin(), o.pixels.end(), std::back_inserter(pixels));
@@ -475,6 +330,268 @@ QVector<QSharedPointer<MserBlob>> MserContainer::toBlobs() const {
 
 size_t MserContainer::size() const {
 	return pixels.size();
+}
+
+// LocalOrientationConfig --------------------------------------------------------------------
+LocalOrientationConfig::LocalOrientationConfig() : ModuleConfig("Local Orientation") {
+}
+
+QString LocalOrientationConfig::toString() const {
+	
+	QString msg;
+	msg += " scales " + scaleIvl().toString();
+	msg += " orientations " + QString::number(numOrientations());
+
+	return msg;
+}
+
+int LocalOrientationConfig::maxScale() const {
+	return mMaxScale;
+}
+
+int LocalOrientationConfig::minScale() const {
+	return mMinScale;
+}
+
+Vector2D LocalOrientationConfig::scaleIvl() const {
+	return Vector2D(mMinScale, mMaxScale);
+}
+
+int LocalOrientationConfig::numOrientations() const {
+	return mNumOr;
+}
+
+int LocalOrientationConfig::histSize() const {
+	return mHistSize;
+}
+
+void LocalOrientationConfig::load(const QSettings & settings) {
+
+	// add parameters
+	mMaxScale = settings.value("MaxScale", mMaxScale).toInt();
+	mMinScale = settings.value("MinScale", mMinScale).toInt();
+	mNumOr = settings.value("NumOrientations", mNumOr).toInt();
+	mHistSize = settings.value("HistSize", mHistSize).toInt();
+
+}
+
+void LocalOrientationConfig::save(QSettings & settings) const {
+
+	// add parameters
+	settings.setValue("MaxScale", mMaxScale);
+	settings.setValue("MinScale", mMinScale);
+	settings.setValue("NumOrientations", mNumOr);
+	settings.setValue("HistSize", mHistSize);
+}
+
+// LocalOrientation --------------------------------------------------------------------
+LocalOrientation::LocalOrientation(const QVector<QSharedPointer<Pixel> >& set) {
+	mSet = set;
+	mConfig = QSharedPointer<LocalOrientationConfig>::create();
+}
+
+bool LocalOrientation::isEmpty() const {
+	return mSet.isEmpty();
+}
+
+bool LocalOrientation::compute() {
+	
+	if (!checkInput())
+		return false;
+	
+	Timer dt;
+	for (QSharedPointer<Pixel> p : mSet)
+		computeScales(p, mSet);
+
+	mDebug << config()->toString();
+	mDebug << "computed in" << dt;
+
+	return true;
+}
+
+QString LocalOrientation::toString() const {
+	return config()->toString();
+}
+
+QSharedPointer<LocalOrientationConfig> LocalOrientation::config() const {
+	return qSharedPointerDynamicCast<LocalOrientationConfig>(mConfig);
+}
+
+QVector<QSharedPointer<Pixel>> LocalOrientation::getSuperPixels() const {
+	return mSet;
+}
+
+bool LocalOrientation::checkInput() const {
+	return !mSet.isEmpty();
+}
+
+void LocalOrientation::computeScales(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set) const {
+	
+	const Vector2D& ec = pixel->center();
+	QVector<QSharedPointer<Pixel> > cSet = set;
+	
+	// iterate over all scales
+	for (double cRadius = config()->maxScale(); cRadius >= config()->minScale(); cRadius /= 2.0) {
+
+		QVector<QSharedPointer<Pixel> > neighbors;
+
+		// create neighbor set
+		for (const QSharedPointer<Pixel>& p : cSet) {
+
+			if (Vector2D(ec - p->center()).length() < cRadius) {
+				neighbors << p;
+			}
+		}
+
+		// compute orientation histograms
+		computeAllOrHists(pixel, neighbors, cRadius);
+
+		// reduce the set (since we reduce the radius, it must be contained in the current set)
+		cSet = neighbors;
+	}
+
+}
+
+void LocalOrientation::computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, double radius) const {
+
+	const Vector2D& ec = pixel->center();
+	QVector<QSharedPointer<Pixel> > neighbors;
+
+	// create neighbor set
+	for (const QSharedPointer<Pixel>& p : set) {
+
+		if (Vector2D(ec - p->center()).length() < radius) {
+			neighbors << p;
+		}
+	}
+
+	// compute all orientations
+	int nOr = config()->numOrientations();
+	int histSize = config()->histSize();
+	cv::Mat orHist(nOr, histSize, CV_32FC1);
+
+	for (int k = 0; k < nOr; k++) {
+
+		// create orientation vector
+		double cAngle = k * CV_PI / nOr;
+		Vector2D orVec(radius, 0);
+		orVec.rotate(cAngle);
+
+		cv::Mat cRow = orHist.row(k);
+		computeOrHist(pixel, neighbors, orVec, cRow);
+
+		// TODO: set the orientation histogram here
+	}
+}
+
+void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, const Vector2D & histVec, cv::Mat& orHist) const {
+
+
+	double hl = histVec.length();
+	Vector2D histVecNorm = histVec;
+	histVecNorm /= hl;
+	double scale = 1.0 / (2 * hl) * (orHist.cols - 1);
+
+	const Vector2D pc = pixel->center();
+
+	// prepare histogram
+	orHist.setTo(0);
+	float* orPtr = orHist.ptr<float>();
+
+	for (const QSharedPointer<Pixel>& p : set) {
+
+		Vector2D lc = p->center() - pc;
+		double v = histVecNorm * lc;
+
+		// bin it
+		int hIdx = qRound((v + hl) * scale);
+		assert(hIdx >= 0 && hIdx < orHist.cols);
+
+		orPtr[hIdx] += 1;
+
+		//// estimate radius (assuming circles)
+		//const Vector2D& a = p->ellipse().axis();
+		//int r = qRound((a.x() + a.y()) / 2.0 * scale);
+		//int start = (hIdx - r < 0) ? 0 : hIdx - r;
+
+		//for (int idx = start; idx < hIdx + r && idx < orHist.cols; idx++) {
+		//	orPtr[idx] += 1;
+		//}
+
+	}
+
+	// DFT according to Koo16
+	cv::dft(orHist, orHist);
+	assert(!orHist.empty());
+
+	float* lf = orHist.ptr<float>();
+	float lfv = *lf;
+	*lf = 0.0f;
+	lfv *= lfv;
+	//cv::log(orHist.mul(orHist) / lfv + 1.0, orHist);
+
+}
+
+cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
+
+	QSharedPointer<Pixel> pixel;
+	for (auto p : mSet)
+		if (p->id() == id) {
+			pixel = p;
+			break;
+		}
+
+	if (!pixel) {
+		qInfo() << "cannot draw local orientation for" << id << "because I did not find it...";
+		return img;
+	}
+
+	// debug - remove
+	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPainter painter(&pm);
+
+	Ellipse e(pixel->center(), Vector2D(radius, radius));
+	e.draw(painter, 0.3);
+	painter.setPen(ColorManager::instance().colors()[2]);
+
+	const Vector2D& ec = pixel->center();
+	QVector<QSharedPointer<Pixel> > neighbors;
+
+	// create neighbor set
+	for (const QSharedPointer<Pixel>& p : mSet) {
+
+		if (Vector2D(ec - p->center()).length() < radius) {
+			neighbors << p;
+			p->draw(painter);
+		}
+	}
+
+	// draw the selected pixel in a different color
+	painter.setPen(ColorManager::instance().colors()[0]);
+	pixel->draw(painter);
+
+	// compute all orientations
+	int histSize = config()->histSize();
+	int nOr = config()->numOrientations();
+	cv::Mat orHist(nOr, histSize, CV_32FC1);
+	
+	for (int k = 0; k < nOr; k++) {
+
+		// create orientation vector
+		double cAngle = k * CV_PI / nOr;
+		Vector2D orVec(radius, 0);
+		orVec.rotate(cAngle);
+
+		cv::Mat cRow = orHist.row(k);
+		computeOrHist(pixel, neighbors, orVec, cRow);
+
+		rdf::Histogram h(cRow);
+		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
+		h.draw(painter, r);
+		painter.drawText(r.bottomLeft().toQPoint(), QString::number(cAngle * DK_RAD2DEG));
+	}
+
+	return Image::instance().qPixmap2Mat(pm);
 }
 
 }

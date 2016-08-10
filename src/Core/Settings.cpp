@@ -37,6 +37,7 @@
 #include <QDir>
 #include <QCoreApplication>
 #include <QSettings>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -143,6 +144,7 @@ void Config::load() {
 
 	mGlobal.load(mSettings);
 	mGlobalInit = mGlobal;
+	qInfo() << "loading settings from" << mGlobal.settingsFileName;
 }
 
 void Config::save() const {

@@ -107,8 +107,6 @@ public:
 	cv::Mat drawSuperPixels(const cv::Mat& img) const;
 	cv::Mat drawMserBlobs(const cv::Mat& img) const;
 
-	void localOrientation(QVector<QSharedPointer<Pixel> >& set) const;
-
 private:
 	cv::Mat mSrcImg;
 
@@ -123,11 +121,62 @@ private:
 	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.2) const;
 	int filterDuplicates(MserContainer& blobs, int eps = 5) const;
 
-	void localOrientation(QVector<QSharedPointer<Pixel> >& set, double radius, int n) const;
-	void localOrientationDebug(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius) const;
-	void localOrientation(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius, int n) const;
-	void localOrientation(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, const Vector2D& histVec, cv::Mat& orHist) const;
+};
+
+
+class DllModuleExport LocalOrientationConfig : public ModuleConfig {
+
+public:
+	LocalOrientationConfig();
+
+	virtual QString toString() const override;
+
+	int maxScale() const;
+	int minScale() const;
+	Vector2D scaleIvl() const;
+	int numOrientations() const;
+	int histSize() const;
+
+protected:
+	int mMaxScale = 256;	// radius (in px) of the maximum scale
+	int mMinScale = 64;		// radius (in px) of the minimum scale
+	int mNumOr = 32;		// number of orientation histograms
+	int mHistSize = 128;	// size of the orientation histogram
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+class DllModuleExport LocalOrientation : public Module {
+
+public:
+	LocalOrientation(const QVector<QSharedPointer<Pixel> >& set = QVector<QSharedPointer<Pixel> >());
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	QString toString() const override;
+	QSharedPointer<LocalOrientationConfig> config() const;
+
+	// results - available after compute() is called
+	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+
+	cv::Mat draw(const cv::Mat& img, const QString& id, double radius) const;
+
+private:
+	
+	// input/output
+	QVector<QSharedPointer<Pixel> > mSet;
+
+	bool checkInput() const override;
+
+	void computeOrHist(QVector<QSharedPointer<Pixel> >& set, double radius, int n) const;
+
+	void computeScales(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set) const;
+	void computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius) const;
+	void computeOrHist(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, const Vector2D& histVec, cv::Mat& orHist) const;
 
 };
+
 
 };

@@ -37,6 +37,7 @@
 #include "Binarization.h"
 #include "LineTrace.h"
 #include "Elements.h"
+#include "Settings.h"
 
 #include "SuperPixel.h"
 #include "TextBlockSegmentation.h"
@@ -149,6 +150,10 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
+	rdf::LocalOrientation lo(sp);
+	if (!lo.compute())
+		qWarning() << "could not compute local orientation";
+
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";
@@ -158,7 +163,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	cv::Mat rImg = img.clone();
 
 	// draw edges
-	rImg = textBlocks.draw(rImg);
+	//rImg = textBlocks.draw(rImg);
+	rImg = lo.draw(rImg, "669", 256);
 
 	// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);
