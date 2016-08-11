@@ -86,7 +86,37 @@ protected:
 	std::vector<cv::Point> mPts;
 };
 
-// read defines
+class DllCoreExport PixelStats : public BaseElement {
+
+public:
+	PixelStats(const QString& id = QString());
+
+	bool isEmpty() const;
+
+	int dominantOrientationIndex() const;
+	double dominantOrientation() const;
+	
+	int dominantScaleIndex() const;
+	double dominantScale() const;
+
+	int numOrientations() const;
+	int histSize() const;
+
+	double lineSpacing() const;
+
+	void addOrHist(double scale, const cv::Mat& orHist);
+	cv::Mat hist(int orIdx, int scaleIdx = 0) const;
+
+protected:
+	QVector<cv::Mat> mOrHists;
+	QVector<double> mScales;
+
+	int mDominantOrIdx = -1;
+	int mDominantScaleIdx = -1;
+	int mDominantPeakIdx = -1;
+	double mDominantPeakVal = 0.0;
+};
+
 /// <summary>
 /// This class represents a single instance
 /// of super pixels which are needed for the 
@@ -106,14 +136,18 @@ public:
 	double angle() const;
 	Ellipse ellipse() const;
 	Rect bbox() const;
+	
+	void setStats(const PixelStats& stats);
+	QSharedPointer<PixelStats> stats() const;
 
-	void draw(QPainter& p, double alpha = 0.3) const;
+	void draw(QPainter& p, double alpha = 0.3, bool showId = false) const;
 
 protected:
 	bool mIsNull = true;
 
 	Ellipse mEllipse;
 	Rect mBBox;
+	QSharedPointer<PixelStats> mStats;
 };
 
 class DllCoreExport PixelEdge : public BaseElement {

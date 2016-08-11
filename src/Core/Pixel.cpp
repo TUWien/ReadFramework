@@ -38,6 +38,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
+#include <QDebug>
 #include <QPainter>
 #pragma warning(pop)
 
@@ -158,6 +159,95 @@ void MserBlob::draw(QPainter & p) {
 	Drawer::instance().drawPoint(p, bbox().center().toQPointF());
 }
 
+// PixelStats --------------------------------------------------------------------
+PixelStats::PixelStats(const QString& id) : BaseElement(id) {
+
+}
+
+bool PixelStats::isEmpty() const {
+	return mOrHists.isEmpty();
+}
+
+int PixelStats::dominantOrientationIndex() const {
+
+	return mDominantOrIdx;
+}
+
+double PixelStats::dominantOrientation() const {
+
+	if (mOrHists.isEmpty() || mDominantOrIdx == -1.0)
+		return 0.0;
+
+	return mDominantOrIdx * CV_PI / mOrHists[0].rows;
+}
+
+int PixelStats::dominantScaleIndex() const {
+
+	return mDominantScaleIdx;
+}
+
+double PixelStats::dominantScale() const {
+
+	if (mDominantScaleIdx < 0 || mDominantScaleIdx >= mScales.size())
+		return 0.0;
+
+	return mScales[mDominantScaleIdx];
+}
+
+double PixelStats::lineSpacing() const {
+
+	// divide by two for the dominant scale is the diameter, not the radius
+	return (double)mDominantPeakIdx/histSize() * dominantScale()/2.0;
+}
+
+int PixelStats::histSize() const {
+
+	if (mOrHists.empty())
+		return 0;
+
+	return mOrHists[0].cols;
+}
+
+int PixelStats::numOrientations() const {
+
+	if (mOrHists.empty())
+		return 0;
+
+	return mOrHists[0].rows;
+}
+
+cv::Mat PixelStats::hist(int orIdx, int scaleIdx) const {
+
+	if (scaleIdx < 0 || scaleIdx >= mOrHists.size())
+		return cv::Mat();
+
+	cv::Mat hists = mOrHists[scaleIdx];
+	if (orIdx < 0 || orIdx >= hists.rows)
+		return cv::Mat();
+
+	return hists.row(orIdx);
+}
+
+void PixelStats::addOrHist(double scale, const cv::Mat& orHist) {
+
+	mScales << scale;
+	mOrHists << orHist;
+
+	double maxVal = 0;
+	cv::Point maxIdx;
+
+	cv::minMaxLoc(orHist, 0, &maxVal, 0, &maxIdx);
+
+	if (maxVal > mDominantPeakVal) {
+		mDominantScaleIdx = mOrHists.size() - 1;
+		mDominantOrIdx = maxIdx.y;
+		mDominantPeakIdx = maxIdx.x;
+		mDominantPeakVal = maxVal;
+	}
+	//else
+	//	qDebug() << scale << "rejected";
+}
+
 // Pixel --------------------------------------------------------------------
 Pixel::Pixel() {
 
@@ -168,6 +258,7 @@ Pixel::Pixel(const Ellipse & ellipse, const Rect& bbox, const QString& id) : Bas
 	mIsNull = false;
 	mEllipse = ellipse;
 	mBBox = bbox;
+	mStats = QSharedPointer<PixelStats>(new PixelStats(id));
 }
 
 bool Pixel::isNull() const {
@@ -194,14 +285,34 @@ Rect Pixel::bbox() const {
 	return mBBox;
 }
 
-void Pixel::draw(QPainter & p, double alpha) const {
+QSharedPointer<PixelStats> Pixel::stats() const {
+	return mStats;
+}
+
+void Pixel::draw(QPainter & p, double alpha, bool showId) const {
 	
+	if (showId) {
+		QPen pen = p.pen();
+		p.setPen(QColor(33, 33, 33));
+		p.drawText(center().toQPoint(), id());
+		p.setPen(pen);
+	}
+
 	QPen pen = p.pen();
-	p.setPen(QColor(100, 100, 100));
-	p.drawText(center().toQPoint(), id());
+	p.setPen(pen.color().darker());
+	
+	Vector2D vec(1, 0);
+	vec *= mStats->lineSpacing();
+	vec.rotate(mStats->dominantOrientation());
+	vec = vec + center();
 	p.setPen(pen);
 
-	mEllipse.draw(p, alpha);
+	//qDebug() << "line spacing:" << mStats->lineSpacing();
+	//qDebug() << "hist size: " << mStats->hist(0).rows << "x" << mStats->hist(0).cols;
+
+	p.drawLine(Line(center(), vec).line());
+
+	//mEllipse.draw(p, alpha);
 }
 
 PixelEdge::PixelEdge() {

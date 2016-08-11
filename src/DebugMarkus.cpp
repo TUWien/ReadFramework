@@ -163,8 +163,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	cv::Mat rImg = img.clone();
 
 	// draw edges
-	//rImg = textBlocks.draw(rImg);
-	rImg = lo.draw(rImg, "669", 256);
+	rImg = textBlocks.draw(rImg);
+	//rImg = lo.draw(rImg, "2282", 256);
 
 	// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);

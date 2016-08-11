@@ -479,13 +479,14 @@ void LocalOrientation::computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVe
 
 		cv::Mat cRow = orHist.row(k);
 		computeOrHist(pixel, neighbors, orVec, cRow);
-
-		// TODO: set the orientation histogram here
 	}
+
+	QSharedPointer<PixelStats> stats = pixel->stats();
+	assert(stats);
+	stats->addOrHist(radius, orHist);
 }
 
 void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, const Vector2D & histVec, cv::Mat& orHist) const {
-
 
 	double hl = histVec.length();
 	Vector2D histVecNorm = histVec;
@@ -526,10 +527,18 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const Q
 
 	float* lf = orHist.ptr<float>();
 	float lfv = *lf;
-	*lf = 0.0f;
-	lfv *= lfv;
-	//cv::log(orHist.mul(orHist) / lfv + 1.0, orHist);
+	
+	// remove very low frequencies
+	for (int idx = 0; idx < 5 && idx < orHist.cols; idx++)
+		lf[idx] = 0.0f;
 
+	//// remove very high frequencies
+	//for (int idx = orHist.cols - 1; idx > orHist.cols - 5 && idx > 0; idx--)
+	//	lf[idx] = 0.0f;
+
+	// see Koo et al 2016
+	// log( X(k)^2/X(0)^2 )
+	cv::log(orHist.mul(orHist) / (lfv*lfv) + 1.0, orHist);
 }
 
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
@@ -562,7 +571,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p;
-			p->draw(painter);
+			p->draw(painter, 0.3, true);
 		}
 	}
 
