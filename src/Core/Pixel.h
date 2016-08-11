@@ -89,32 +89,52 @@ protected:
 class DllCoreExport PixelStats : public BaseElement {
 
 public:
-	PixelStats(const QString& id = QString());
+	PixelStats(const cv::Mat& orHist = cv::Mat(), 
+		const cv::Mat& sparsity = cv::Mat(), 
+		double scale = 0.0, 
+		const QString& id = QString());
+
+	/* row index of data */
+	enum DataIndex {
+		all_data = -1,
+		max_val_idx,
+		sparsity_idx,
+		spacing_idx,
+		combined_idx,
+
+		idx_end,
+	};
 
 	bool isEmpty() const;
 
-	int dominantOrientationIndex() const;
-	double dominantOrientation() const;
+	int orientationIndex() const;
+	double orientation() const;
 	
-	int dominantScaleIndex() const;
-	double dominantScale() const;
+	double scale() const;
 
 	int numOrientations() const;
-	int histSize() const;
 
+	int lineSpacingIndex() const;
 	double lineSpacing() const;
 
-	void addOrHist(double scale, const cv::Mat& orHist);
-	cv::Mat hist(int orIdx, int scaleIdx = 0) const;
+	double maxVal() const;
+
+	cv::Mat data(const DataIndex& dIdx = all_data);
 
 protected:
-	QVector<cv::Mat> mOrHists;
-	QVector<double> mScales;
+	cv::Mat mData;	// MxN orientation histograms M ... idx_end and N ... number of orientations
+	double mScale = 0.0;
+	double mMaxVal = 0.0;
 
-	int mDominantOrIdx = -1;
-	int mDominantScaleIdx = -1;
-	int mDominantPeakIdx = -1;
-	double mDominantPeakVal = 0.0;
+	int mHistSize = 0;
+	int mOrIdx = -1;
+
+	//int mDominantOrIdx = -1;
+	//int mDominantScaleIdx = -1;
+	//int mDominantPeakIdx = -1;
+	//double mDominantPeakVal = 0.0;
+
+	void convertData(const cv::Mat& orHist, const cv::Mat& sparsity);
 };
 
 /// <summary>
@@ -137,8 +157,8 @@ public:
 	Ellipse ellipse() const;
 	Rect bbox() const;
 	
-	void setStats(const PixelStats& stats);
-	QSharedPointer<PixelStats> stats() const;
+	void addStats(const QSharedPointer<PixelStats>& stats);
+	QSharedPointer<PixelStats> stats(int idx = -1) const;
 
 	void draw(QPainter& p, double alpha = 0.3, bool showId = false) const;
 
@@ -147,7 +167,7 @@ protected:
 
 	Ellipse mEllipse;
 	Rect mBBox;
-	QSharedPointer<PixelStats> mStats;
+	QVector<QSharedPointer<PixelStats> > mStats;
 };
 
 class DllCoreExport PixelEdge : public BaseElement {

@@ -251,7 +251,7 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 
 		//// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->ellipse().draw(p, 0.3);
+		mPixels[idx]->draw(p, 0.3);
 		//qDebug() << mPixels[idx].ellipse();
 	}
 
@@ -469,24 +469,30 @@ void LocalOrientation::computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVe
 	int nOr = config()->numOrientations();
 	int histSize = config()->histSize();
 	cv::Mat orHist(nOr, histSize, CV_32FC1);
+	cv::Mat sparsity(1, nOr, CV_32FC1);
 
 	for (int k = 0; k < nOr; k++) {
 
 		// create orientation vector
+		float sp = 0.0f;
 		double cAngle = k * CV_PI / nOr;
 		Vector2D orVec(radius, 0);
 		orVec.rotate(cAngle);
 
 		cv::Mat cRow = orHist.row(k);
-		computeOrHist(pixel, neighbors, orVec, cRow);
+		computeOrHist(pixel, neighbors, orVec, cRow, sp);
+
+		sparsity.at<float>(0, k) = sp;
 	}
 
-	QSharedPointer<PixelStats> stats = pixel->stats();
-	assert(stats);
-	stats->addOrHist(radius, orHist);
+	pixel->addStats(QSharedPointer<PixelStats>(new PixelStats(orHist, sparsity, radius, pixel->id())));
 }
 
-void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, const Vector2D & histVec, cv::Mat& orHist) const {
+void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, 
+	const QVector<QSharedPointer<Pixel>>& set, 
+	const Vector2D & histVec, 
+	cv::Mat& orHist,
+	float& sparsity) const {
 
 	double hl = histVec.length();
 	Vector2D histVecNorm = histVec;
@@ -521,6 +527,8 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const Q
 
 	}
 
+	sparsity = (float)(cv::sum(orHist == 0)[0]/(orHist.cols*255.0));
+
 	// DFT according to Koo16
 	cv::dft(orHist, orHist);
 	assert(!orHist.empty());
@@ -529,7 +537,7 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, const Q
 	float lfv = *lf;
 	
 	// remove very low frequencies
-	for (int idx = 0; idx < 5 && idx < orHist.cols; idx++)
+	for (int idx = 0; idx < 10 && idx < orHist.cols; idx++)
 		lf[idx] = 0.0f;
 
 	//// remove very high frequencies
@@ -571,7 +579,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p;
-			p->draw(painter, 0.3, true);
+			p->draw(painter, 0.3);
 		}
 	}
 
@@ -587,12 +595,13 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	for (int k = 0; k < nOr; k++) {
 
 		// create orientation vector
+		float sp = 0.0f;	// not needed
 		double cAngle = k * CV_PI / nOr;
 		Vector2D orVec(radius, 0);
 		orVec.rotate(cAngle);
 
 		cv::Mat cRow = orHist.row(k);
-		computeOrHist(pixel, neighbors, orVec, cRow);
+		computeOrHist(pixel, neighbors, orVec, cRow, sp);
 
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);

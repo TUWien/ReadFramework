@@ -68,7 +68,7 @@ public:
 	int mserMaxArea() const;
 
 protected:
-	int mMserMinArea = 15;
+	int mMserMinArea = 50;
 	int mMserMaxArea = 1000;
 
 	void load(const QSettings& settings) override;
@@ -139,7 +139,7 @@ public:
 
 protected:
 	int mMaxScale = 256;	// radius (in px) of the maximum scale
-	int mMinScale = 256;	// radius (in px) of the minimum scale
+	int mMinScale = 64;	// radius (in px) of the minimum scale
 	int mNumOr = 32;		// number of orientation histograms
 	int mHistSize = 64;		// size of the orientation histogram
 
@@ -172,7 +172,11 @@ private:
 
 	void computeScales(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set) const;
 	void computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius) const;
-	void computeOrHist(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, const Vector2D& histVec, cv::Mat& orHist) const;
+	void computeOrHist(const QSharedPointer<Pixel>& pixel, 
+		const QVector<QSharedPointer<Pixel> >& set, 
+		const Vector2D& histVec, 
+		cv::Mat& orHist,
+		float& sparsity) const;
 
 };
 

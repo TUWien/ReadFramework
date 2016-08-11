@@ -148,7 +148,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
+	QVector<QSharedPointer<Pixel> >& sp = superPixel.getSuperPixels();
 
 	rdf::LocalOrientation lo(sp);
 	if (!lo.compute())
@@ -162,12 +162,14 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(150));
 	cv::Mat rImg = img.clone();
 
-	// draw edges
-	rImg = textBlocks.draw(rImg);
-	//rImg = lo.draw(rImg, "2282", 256);
+	//// draw edges
+	//rImg = textBlocks.draw(rImg);
+	//rImg = lo.draw(rImg, "507", 256);
+	//rImg = lo.draw(rImg, "507", 128);
+	//rImg = lo.draw(rImg, "507", 64);
 
-	// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
+	//// save super pixel image
+	rImg = superPixel.drawSuperPixels(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;

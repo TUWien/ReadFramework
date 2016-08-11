@@ -35,6 +35,8 @@
 #include "ImageProcessor.h"
 #include "Drawer.h"
 #include "Shapes.h"
+#include "Utils.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -160,92 +162,100 @@ void MserBlob::draw(QPainter & p) {
 }
 
 // PixelStats --------------------------------------------------------------------
-PixelStats::PixelStats(const QString& id) : BaseElement(id) {
+PixelStats::PixelStats(const cv::Mat& orHist, 
+	const cv::Mat& sparsity, 
+	double scale, 
+	const QString& id) : BaseElement(id) {
 
+	mScale = scale;
+	convertData(orHist, sparsity);
+
+}
+
+void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
+
+	double lambda = 0.5;	// weights sparsity & line frequency measure
+	assert(orHist.cols == sparsity.cols);
+
+	// enrich our data
+	mData = cv::Mat(idx_end, orHist.rows, CV_32FC1);
+	sparsity.copyTo(mData.row(sparsity_idx));
+
+	float* maxP = mData.ptr<float>(max_val_idx);
+	float* spP = mData.ptr<float>(sparsity_idx);
+	float* tlP = mData.ptr<float>(spacing_idx);
+	float* cbP = mData.ptr<float>(combined_idx);
+
+	for (int rIdx = 0; rIdx < orHist.rows; rIdx++) {
+
+		double maxVal = 0;
+		cv::Point maxIdx;
+		cv::minMaxLoc(orHist.row(rIdx), 0, &maxVal, 0, &maxIdx);
+
+		maxP[rIdx] = (float)maxVal;
+		tlP[rIdx] = (float)maxIdx.x;
+		cbP[rIdx] = (float)(maxVal*lambda + (1.0 - lambda) * spP[rIdx]);
+	}
+
+
+	// find dominant peak
+	cv::Point maxIdx;
+	cv::minMaxLoc(mData.row(combined_idx), 0, &mMaxVal, 0, &maxIdx);
+
+	mOrIdx = maxIdx.x;
+	mHistSize = orHist.cols;
 }
 
 bool PixelStats::isEmpty() const {
-	return mOrHists.isEmpty();
+	return mData.empty();
 }
 
-int PixelStats::dominantOrientationIndex() const {
+int PixelStats::orientationIndex() const {
 
-	return mDominantOrIdx;
+	return mOrIdx;
 }
 
-double PixelStats::dominantOrientation() const {
+double PixelStats::orientation() const {
 
-	if (mOrHists.isEmpty() || mDominantOrIdx == -1.0)
-		return 0.0;
-
-	return mDominantOrIdx * CV_PI / mOrHists[0].rows;
+	return mOrIdx * CV_PI / numOrientations();
 }
 
-int PixelStats::dominantScaleIndex() const {
+int PixelStats::lineSpacingIndex() const {
 
-	return mDominantScaleIdx;
-}
+	if (mData.rows < spacing_idx || mOrIdx < 0 || mOrIdx >= mData.cols)
+		return 0;
 
-double PixelStats::dominantScale() const {
-
-	if (mDominantScaleIdx < 0 || mDominantScaleIdx >= mScales.size())
-		return 0.0;
-
-	return mScales[mDominantScaleIdx];
+	return qRound(mData.ptr<float>(spacing_idx)[mOrIdx]);
 }
 
 double PixelStats::lineSpacing() const {
 
-	// divide by two for the dominant scale is the diameter, not the radius
-	return (double)mDominantPeakIdx/histSize() * dominantScale()/2.0;
-}
-
-int PixelStats::histSize() const {
-
-	if (mOrHists.empty())
-		return 0;
-
-	return mOrHists[0].cols;
+	// * 2.0 -> radius vs. diameter
+	return (double)lineSpacingIndex()/mHistSize * mHistSize/scale() * scale() * 2.0;
 }
 
 int PixelStats::numOrientations() const {
 
-	if (mOrHists.empty())
-		return 0;
-
-	return mOrHists[0].rows;
+	return mData.cols;
 }
 
-cv::Mat PixelStats::hist(int orIdx, int scaleIdx) const {
-
-	if (scaleIdx < 0 || scaleIdx >= mOrHists.size())
-		return cv::Mat();
-
-	cv::Mat hists = mOrHists[scaleIdx];
-	if (orIdx < 0 || orIdx >= hists.rows)
-		return cv::Mat();
-
-	return hists.row(orIdx);
+double PixelStats::maxVal() const {
+	
+	return mMaxVal;
 }
 
-void PixelStats::addOrHist(double scale, const cv::Mat& orHist) {
+double PixelStats::scale() const {
+	
+	return mScale;
+}
 
-	mScales << scale;
-	mOrHists << orHist;
+cv::Mat PixelStats::data(const DataIndex& dIdx) {
 
-	double maxVal = 0;
-	cv::Point maxIdx;
+	if (dIdx == all_data)
+		return mData;
 
-	cv::minMaxLoc(orHist, 0, &maxVal, 0, &maxIdx);
-
-	if (maxVal > mDominantPeakVal) {
-		mDominantScaleIdx = mOrHists.size() - 1;
-		mDominantOrIdx = maxIdx.y;
-		mDominantPeakIdx = maxIdx.x;
-		mDominantPeakVal = maxVal;
-	}
-	//else
-	//	qDebug() << scale << "rejected";
+	assert(dIdx >= 0 && dIdx <= mData.cols);
+	return mData.row(dIdx);
 }
 
 // Pixel --------------------------------------------------------------------
@@ -258,7 +268,6 @@ Pixel::Pixel(const Ellipse & ellipse, const Rect& bbox, const QString& id) : Bas
 	mIsNull = false;
 	mEllipse = ellipse;
 	mBBox = bbox;
-	mStats = QSharedPointer<PixelStats>(new PixelStats(id));
 }
 
 bool Pixel::isNull() const {
@@ -285,34 +294,83 @@ Rect Pixel::bbox() const {
 	return mBBox;
 }
 
-QSharedPointer<PixelStats> Pixel::stats() const {
-	return mStats;
+
+void Pixel::addStats(const QSharedPointer<PixelStats>& stats) {
+	mStats << stats;
+}
+
+QSharedPointer<PixelStats> Pixel::stats(int idx) const {
+	
+	// select best scale by default
+	if (idx == -1) {
+
+
+		QSharedPointer<PixelStats> bps;
+		double mv = -1.0;
+
+		for (auto ps : mStats) {
+			
+			if (mv < ps->maxVal()) {
+				bps = ps;
+				mv = ps->maxVal();
+			}
+		}
+
+		return bps;
+	}
+
+	if (idx < 0 || idx >= mStats.size()) {
+		qWarning() << "cannot return PixelStats at" << idx;
+		return QSharedPointer<PixelStats>();
+	}
+	
+	return mStats[idx];
 }
 
 void Pixel::draw(QPainter & p, double alpha, bool showId) const {
 	
 	if (showId) {
 		QPen pen = p.pen();
-		p.setPen(QColor(33, 33, 33));
+		p.setPen(QColor(255, 33, 33));
 		p.drawText(center().toQPoint(), id());
 		p.setPen(pen);
 	}
 
-	QPen pen = p.pen();
-	p.setPen(pen.color().darker());
-	
-	Vector2D vec(1, 0);
-	vec *= mStats->lineSpacing();
-	vec.rotate(mStats->dominantOrientation());
-	vec = vec + center();
-	p.setPen(pen);
+	if (stats()) {
 
-	//qDebug() << "line spacing:" << mStats->lineSpacing();
-	//qDebug() << "hist size: " << mStats->hist(0).rows << "x" << mStats->hist(0).cols;
 
-	p.drawLine(Line(center(), vec).line());
+		auto s = stats();
 
-	//mEllipse.draw(p, alpha);
+		//if (id() == "507") {
+		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::sparsity_idx), "sparsity");
+		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::combined_idx), "combined");
+		//	qDebug() << "max val: " << s->maxVal();
+		//}
+
+		QColor c(255,33,33);
+
+		if (s->scale() == 256)
+			c = ColorManager::instance().colors()[0];
+		else if (s->scale() == 128)
+			c = ColorManager::instance().colors()[1];
+		else if (s->scale() == 64)
+			c = ColorManager::instance().colors()[2];
+
+		QPen pen = p.pen();
+		p.setPen(c);
+
+		Vector2D vec(1, 0);
+		vec *= stats()->lineSpacing();
+		vec.rotate(stats()->orientation());
+		vec = vec + center();
+
+		p.drawLine(Line(center(), vec).line());
+		p.setPen(pen);
+
+	}
+	else
+		mEllipse.draw(p, alpha);
+
 }
 
 PixelEdge::PixelEdge() {
