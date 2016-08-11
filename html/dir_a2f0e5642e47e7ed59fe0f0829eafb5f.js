@@ -34,6 +34,7 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "Pixel.cpp", "_pixel_8cpp.html", null ],
     [ "Pixel.h", "_pixel_8h.html", [
       [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
+      [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
       [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
       [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
       [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ]

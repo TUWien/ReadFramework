@@ -5,7 +5,8 @@ var hierarchy =
       [ "rdf::MserBlob", "classrdf_1_1_mser_blob.html", null ],
       [ "rdf::Pixel", "classrdf_1_1_pixel.html", null ],
       [ "rdf::PixelEdge", "classrdf_1_1_pixel_edge.html", null ],
-      [ "rdf::PixelSet", "classrdf_1_1_pixel_set.html", null ]
+      [ "rdf::PixelSet", "classrdf_1_1_pixel_set.html", null ],
+      [ "rdf::PixelStats", "classrdf_1_1_pixel_stats.html", null ]
     ] ],
     [ "rdf::BaseLine", "classrdf_1_1_base_line.html", null ],
     [ "rdf::BasicContrast", "classrdf_1_1_basic_contrast.html", null ],

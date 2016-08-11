@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type',['Type',['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f',1,'rdf::Region']]]
+  ['roottags',['RootTags',['../classrdf_1_1_page_xml_parser.html#ab50cae4158fbf6422bc22653108066fd',1,'rdf::PageXmlParser']]]
 ];

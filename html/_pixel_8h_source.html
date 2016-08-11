@@ -193,97 +193,160 @@ $(document).ready(function(){initNavTree('_pixel_8h_source.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">   86</a></span>&#160;    std::vector&lt;cv::Point&gt; <a class="code" href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">mPts</a>;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;};</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">// read defines</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html">   96</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel.html">Pixel</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="classrdf_1_1_pixel.html">Pixel</a>();</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="classrdf_1_1_pixel.html">Pixel</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>&amp; ellipse, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; bbox, <span class="keyword">const</span> QString&amp; <span class="keywordtype">id</span> = QString());</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> center() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> size() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">double</span> angle() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> ellipse() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> bbox() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html">   89</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel_stats.html">PixelStats</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="classrdf_1_1_pixel_stats.html">PixelStats</a>(<span class="keyword">const</span> cv::Mat&amp; orHist = cv::Mat(), </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keyword">const</span> cv::Mat&amp; sparsity = cv::Mat(), </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">double</span> scale = 0.0, </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">const</span> QString&amp; <span class="keywordtype">id</span> = QString());</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">/* row index of data */</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc">   98</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc">DataIndex</a> {</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfcafea549a3e36dd22572cf846ad71b51cc">   99</a></span>&#160;        all_data = -1,</div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca426f16b8b2d73f9d5186bcd22b1aade0">  100</a></span>&#160;        <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca426f16b8b2d73f9d5186bcd22b1aade0">max_val_idx</a>,</div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfcae3cfcbadb49f5893bbc938593fc82533">  101</a></span>&#160;        <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfcae3cfcbadb49f5893bbc938593fc82533">sparsity_idx</a>,</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76">  102</a></span>&#160;        <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76">spacing_idx</a>,</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca4a1e8cdf79e2c5549cb8751d1981a7ba">  103</a></span>&#160;        <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca4a1e8cdf79e2c5549cb8751d1981a7ba">combined_idx</a>,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca8ea00d95a58fc1fc8bd3d1fdf5ec4cc3">  105</a></span>&#160;        <a class="code" href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca8ea00d95a58fc1fc8bd3d1fdf5ec4cc3">idx_end</a>,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    };</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p, <span class="keywordtype">double</span> alpha = 0.3) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#a44c6fc1cbc8339509fb03c883efbaece">  113</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">int</span> orientationIndex() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">double</span> orientation() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">double</span> scale() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">  115</a></span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> <a class="code" href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">mEllipse</a>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">  116</a></span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> <a class="code" href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">mBBox</a>;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;};</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html">  119</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a>();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">int</span> numOrientations() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">int</span> lineSpacingIndex() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">double</span> lineSpacing() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">double</span> maxVal() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    cv::Mat data(<span class="keyword">const</span> DataIndex&amp; dIdx = all_data);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a>(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt; first, </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keyword">const</span> QSharedPointer&lt;Pixel&gt; second,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">const</span> QString&amp; <span class="keywordtype">id</span> = QString());</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">double</span> scaledEdgeLength() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <a class="code" href="classrdf_1_1_line.html">Line</a> edge() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    QSharedPointer&lt;Pixel&gt; first() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    QSharedPointer&lt;Pixel&gt; second() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#af8025a0833b880d188904dc7a90a4a33">  125</a></span>&#160;    cv::Mat <a class="code" href="classrdf_1_1_pixel_stats.html#af8025a0833b880d188904dc7a90a4a33">mData</a>;  <span class="comment">// MxN orientation histograms M ... idx_end and N ... number of orientations</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#ae6c39e8226f0997d3a056bc318931025">  126</a></span>&#160;    <span class="keywordtype">double</span> mScale = 0.0;</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a9d3ae33f25ffdb64d59d73b47af7f453">  127</a></span>&#160;    <span class="keywordtype">double</span> mMaxVal = 0.0;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#a4837f5039a63e78732666700accb4904">  129</a></span>&#160;    <span class="keywordtype">int</span> mHistSize = 0;</div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_stats.html#ad04829df4522db39e2061f987c982aeb">  130</a></span>&#160;    <span class="keywordtype">int</span> mOrIdx = -1;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="comment">//int mDominantOrIdx = -1;</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="comment">//int mDominantScaleIdx = -1;</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="comment">//int mDominantPeakIdx = -1;</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="comment">//double mDominantPeakVal = 0.0;</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a5de59a6cac70587a0e5ca0b838b8f2d6">  138</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">void</span> convertData(<span class="keyword">const</span> cv::Mat&amp; orHist, <span class="keyword">const</span> cv::Mat&amp; sparsity);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;};</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">  140</a></span>&#160;    QSharedPointer&lt;Pixel&gt; <a class="code" href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">mFirst</a>;</div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">  141</a></span>&#160;    QSharedPointer&lt;Pixel&gt; <a class="code" href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">mSecond</a>;</div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">  142</a></span>&#160;    <a class="code" href="classrdf_1_1_line.html">Line</a> <a class="code" href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">mEdge</a>;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;};</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set.html">  145</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a>();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="comment">//PixelSet(const QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set);</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt;&amp; pixel) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">void</span> merge(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a>&amp; o);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt;&amp; pixel);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; pixels() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <a class="code" href="classrdf_1_1_polygon.html">Polygon</a> polygon();</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> boundingBox();</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">  163</a></span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; <a class="code" href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">mSet</a>;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;};</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;};</div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html">  146</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel.html">Pixel</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <a class="code" href="classrdf_1_1_pixel.html">Pixel</a>();</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="classrdf_1_1_pixel.html">Pixel</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>&amp; ellipse, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; bbox, <span class="keyword">const</span> QString&amp; <span class="keywordtype">id</span> = QString());</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> center() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> size() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">double</span> angle() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> ellipse() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> bbox() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordtype">void</span> addStats(<span class="keyword">const</span> QSharedPointer&lt;PixelStats&gt;&amp; stats);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    QSharedPointer&lt;PixelStats&gt; stats(<span class="keywordtype">int</span> idx = -1) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p, <span class="keywordtype">double</span> alpha = 0.3, <span class="keywordtype">bool</span> showId = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#a44c6fc1cbc8339509fb03c883efbaece">  166</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">  168</a></span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> <a class="code" href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">mEllipse</a>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">  169</a></span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> <a class="code" href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">mBBox</a>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel.html#ae416d11ac12407d2bd5ae7015ba6b6e8">  170</a></span>&#160;    QVector&lt;QSharedPointer&lt;PixelStats&gt; &gt; <a class="code" href="classrdf_1_1_pixel.html#ae416d11ac12407d2bd5ae7015ba6b6e8">mStats</a>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;};</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html">  173</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a>();</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <a class="code" href="classrdf_1_1_pixel_edge.html">PixelEdge</a>(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt; first, </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keyword">const</span> QSharedPointer&lt;Pixel&gt; second,</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keyword">const</span> QString&amp; <span class="keywordtype">id</span> = QString());</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordtype">double</span> scaledEdgeLength() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <a class="code" href="classrdf_1_1_line.html">Line</a> edge() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    QSharedPointer&lt;Pixel&gt; first() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    QSharedPointer&lt;Pixel&gt; second() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a5de59a6cac70587a0e5ca0b838b8f2d6">  192</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">  194</a></span>&#160;    QSharedPointer&lt;Pixel&gt; <a class="code" href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">mFirst</a>;</div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">  195</a></span>&#160;    QSharedPointer&lt;Pixel&gt; <a class="code" href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">mSecond</a>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">  196</a></span>&#160;    <a class="code" href="classrdf_1_1_line.html">Line</a> <a class="code" href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">mEdge</a>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;};</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set.html">  199</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_base_element.html">BaseElement</a> {</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a>();</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">//PixelSet(const QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set);</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt;&amp; pixel) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordtype">void</span> merge(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_pixel_set.html">PixelSet</a>&amp; o);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt;&amp; pixel);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; pixels() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <a class="code" href="classrdf_1_1_polygon.html">Polygon</a> polygon();</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> boundingBox();</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00217"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">  217</a></span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; <a class="code" href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">mSet</a>;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;};</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_mser_blob_html_a91c07055545b0999ac2e84d715a3e652"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a91c07055545b0999ac2e84d715a3e652">rdf::MserBlob::mCenter</a></div><div class="ttdeci">Vector2D mCenter</div><div class="ttdef"><b>Definition:</b> Pixel.h:84</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfca4a1e8cdf79e2c5549cb8751d1981a7ba"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca4a1e8cdf79e2c5549cb8751d1981a7ba">rdf::PixelStats::combined_idx</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:103</div></div>
 <div class="ttc" id="classrdf_1_1_mser_blob_html_a00c71fbe3f35bf9caf0d871d2640440e"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e">rdf::MserBlob::mPts</a></div><div class="ttdeci">std::vector&lt; cv::Point &gt; mPts</div><div class="ttdef"><b>Definition:</b> Pixel.h:86</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_edge_html_a4e5134ac3d257e6da88a03535f47c0a0"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">rdf::PixelEdge::mEdge</a></div><div class="ttdeci">Line mEdge</div><div class="ttdef"><b>Definition:</b> Pixel.h:142</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_edge_html_a4e5134ac3d257e6da88a03535f47c0a0"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0">rdf::PixelEdge::mEdge</a></div><div class="ttdeci">Line mEdge</div><div class="ttdef"><b>Definition:</b> Pixel.h:196</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfca426f16b8b2d73f9d5186bcd22b1aade0"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca426f16b8b2d73f9d5186bcd22b1aade0">rdf::PixelStats::max_val_idx</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:100</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html">rdf::PixelStats</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:89</div></div>
 <div class="ttc" id="classrdf_1_1_ellipse_html"><div class="ttname"><a href="classrdf_1_1_ellipse.html">rdf::Ellipse</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:287</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html_ae416d11ac12407d2bd5ae7015ba6b6e8"><div class="ttname"><a href="classrdf_1_1_pixel.html#ae416d11ac12407d2bd5ae7015ba6b6e8">rdf::Pixel::mStats</a></div><div class="ttdeci">QVector&lt; QSharedPointer&lt; PixelStats &gt; &gt; mStats</div><div class="ttdef"><b>Definition:</b> Pixel.h:170</div></div>
 <div class="ttc" id="classrdf_1_1_mser_blob_html"><div class="ttname"><a href="classrdf_1_1_mser_blob.html">rdf::MserBlob</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:58</div></div>
 <div class="ttc" id="_base_image_element_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> BaseImageElement.h:43</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_html_af34fcf41eba325cf4a7ded7773f2e64f"><div class="ttname"><a href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">rdf::Pixel::mEllipse</a></div><div class="ttdeci">Ellipse mEllipse</div><div class="ttdef"><b>Definition:</b> Pixel.h:115</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_set_html"><div class="ttname"><a href="classrdf_1_1_pixel_set.html">rdf::PixelSet</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:145</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_html_a85be4842ba067c992f9d3916b39159c9"><div class="ttname"><a href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">rdf::Pixel::mBBox</a></div><div class="ttdeci">Rect mBBox</div><div class="ttdef"><b>Definition:</b> Pixel.h:116</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_edge_html"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html">rdf::PixelEdge</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:119</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_edge_html_a069812e7f03a3fa5b3135ad1a3482195"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">rdf::PixelEdge::mFirst</a></div><div class="ttdeci">QSharedPointer&lt; Pixel &gt; mFirst</div><div class="ttdef"><b>Definition:</b> Pixel.h:140</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_set_html_afa283c2f78317d3c97e2d6753f8bc4b1"><div class="ttname"><a href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">rdf::PixelSet::mSet</a></div><div class="ttdeci">QVector&lt; QSharedPointer&lt; Pixel &gt; &gt; mSet</div><div class="ttdef"><b>Definition:</b> Pixel.h:163</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html_af34fcf41eba325cf4a7ded7773f2e64f"><div class="ttname"><a href="classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f">rdf::Pixel::mEllipse</a></div><div class="ttdeci">Ellipse mEllipse</div><div class="ttdef"><b>Definition:</b> Pixel.h:168</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_set_html"><div class="ttname"><a href="classrdf_1_1_pixel_set.html">rdf::PixelSet</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:199</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html_a85be4842ba067c992f9d3916b39159c9"><div class="ttname"><a href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">rdf::Pixel::mBBox</a></div><div class="ttdeci">Rect mBBox</div><div class="ttdef"><b>Definition:</b> Pixel.h:169</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_edge_html"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html">rdf::PixelEdge</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:173</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_edge_html_a069812e7f03a3fa5b3135ad1a3482195"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195">rdf::PixelEdge::mFirst</a></div><div class="ttdeci">QSharedPointer&lt; Pixel &gt; mFirst</div><div class="ttdef"><b>Definition:</b> Pixel.h:194</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfca8ea00d95a58fc1fc8bd3d1fdf5ec4cc3"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca8ea00d95a58fc1fc8bd3d1fdf5ec4cc3">rdf::PixelStats::idx_end</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:105</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfcae3cfcbadb49f5893bbc938593fc82533"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfcae3cfcbadb49f5893bbc938593fc82533">rdf::PixelStats::sparsity_idx</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:101</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfc"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc">rdf::PixelStats::DataIndex</a></div><div class="ttdeci">DataIndex</div><div class="ttdef"><b>Definition:</b> Pixel.h:98</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_set_html_afa283c2f78317d3c97e2d6753f8bc4b1"><div class="ttname"><a href="classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1">rdf::PixelSet::mSet</a></div><div class="ttdeci">QVector&lt; QSharedPointer&lt; Pixel &gt; &gt; mSet</div><div class="ttdef"><b>Definition:</b> Pixel.h:217</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html"><div class="ttname"><a href="classrdf_1_1_vector2_d.html">rdf::Vector2D</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:143</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_edge_html_a777d021335e95572f238049604561c5b"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">rdf::PixelEdge::mSecond</a></div><div class="ttdeci">QSharedPointer&lt; Pixel &gt; mSecond</div><div class="ttdef"><b>Definition:</b> Pixel.h:141</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_edge_html_a777d021335e95572f238049604561c5b"><div class="ttname"><a href="classrdf_1_1_pixel_edge.html#a777d021335e95572f238049604561c5b">rdf::PixelEdge::mSecond</a></div><div class="ttdeci">QSharedPointer&lt; Pixel &gt; mSecond</div><div class="ttdef"><b>Definition:</b> Pixel.h:195</div></div>
 <div class="ttc" id="_shapes_8h_html"><div class="ttname"><a href="_shapes_8h.html">Shapes.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_base_element_html"><div class="ttname"><a href="classrdf_1_1_base_element.html">rdf::BaseElement</a></div><div class="ttdef"><b>Definition:</b> BaseImageElement.h:53</div></div>
 <div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:105</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_af8025a0833b880d188904dc7a90a4a33"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#af8025a0833b880d188904dc7a90a4a33">rdf::PixelStats::mData</a></div><div class="ttdeci">cv::Mat mData</div><div class="ttdef"><b>Definition:</b> Pixel.h:125</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_stats_html_a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76"><div class="ttname"><a href="classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76">rdf::PixelStats::spacing_idx</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:102</div></div>
 <div class="ttc" id="classrdf_1_1_polygon_html"><div class="ttname"><a href="classrdf_1_1_polygon.html">rdf::Polygon</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:60</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_html"><div class="ttname"><a href="classrdf_1_1_pixel.html">rdf::Pixel</a></div><div class="ttdoc">This class represents a single instance of super pixels which are needed for the layout analysis...</div><div class="ttdef"><b>Definition:</b> Pixel.h:96</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html"><div class="ttname"><a href="classrdf_1_1_pixel.html">rdf::Pixel</a></div><div class="ttdoc">This class represents a single instance of super pixels which are needed for the layout analysis...</div><div class="ttdef"><b>Definition:</b> Pixel.h:146</div></div>
 <div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:233</div></div>
 <div class="ttc" id="_base_image_element_8h_html"><div class="ttname"><a href="_base_image_element_8h.html">BaseImageElement.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_mser_blob_html_a41bcecd9c748d7d1f6d7a6f84410bc62"><div class="ttname"><a href="classrdf_1_1_mser_blob.html#a41bcecd9c748d7d1f6d7a6f84410bc62">rdf::MserBlob::mBBox</a></div><div class="ttdeci">Rect mBBox</div><div class="ttdef"><b>Definition:</b> Pixel.h:85</div></div>

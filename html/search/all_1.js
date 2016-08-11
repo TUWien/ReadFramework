@@ -2,10 +2,12 @@ var searchData=
 [
   ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet']]],
   ['addchild',['addChild',['../classrdf_1_1_region.html#a77b35f891e22ffd53338bd573b88e682',1,'rdf::Region']]],
+  ['addstats',['addStats',['../classrdf_1_1_pixel.html#a73e43f55e32d298e86574537174bbb94',1,'rdf::Pixel']]],
   ['adduniquechild',['addUniqueChild',['../classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396',1,'rdf::Region']]],
   ['algorithms',['Algorithms',['../classrdf_1_1_algorithms.html',1,'rdf']]],
   ['algorithms_2ecpp',['Algorithms.cpp',['../_algorithms_8cpp.html',1,'']]],
   ['algorithms_2eh',['Algorithms.h',['../_algorithms_8h.html',1,'']]],
+  ['all_5fdata',['all_data',['../classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfcafea549a3e36dd22572cf846ad71b51cc',1,'rdf::PixelStats']]],
   ['allregions',['allRegions',['../classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9',1,'rdf::Region']]],
   ['alphachannelused',['alphaChannelUsed',['../classrdf_1_1_image.html#aa49eccb7b2236eaf3d69201de0beee94',1,'rdf::Image']]],
   ['angle',['angle',['../classrdf_1_1_pixel.html#a707eebe6c883a435b00210931f951f97',1,'rdf::Pixel::angle()'],['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line::angle()'],['../classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a',1,'rdf::Vector2D::angle()'],['../classrdf_1_1_ellipse.html#a54576d14cd33382560a98e8a5e9572ad',1,'rdf::Ellipse::angle()']]],

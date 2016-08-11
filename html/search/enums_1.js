@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['edgedirection',['EdgeDirection',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997',1,'rdf::BaseSkewEstimation']]]
+  ['dataindex',['DataIndex',['../classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc',1,'rdf::PixelStats']]]
 ];

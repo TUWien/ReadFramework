@@ -40,6 +40,7 @@ var searchData=
   ['contains',['contains',['../classrdf_1_1_pixel_set.html#ab36a3e5c335bd21f3e994320b2c45e5d',1,'rdf::PixelSet::contains()'],['../classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63',1,'rdf::Rect::contains()']]],
   ['contrastestimation',['ContrastEstimation',['../classrdf_1_1_contrast_estimation.html#a470441409ce5796f1fc1852c5231bca8',1,'rdf::ContrastEstimation::ContrastEstimation()'],['../classrdf_1_1_contrast_estimation.html#a340fc982853fc4599250fe78fac16e01',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img)'],['../classrdf_1_1_contrast_estimation.html#a4a4167d540b5edb1f651d4b3f16f126d',1,'rdf::ContrastEstimation::ContrastEstimation(const cv::Mat &amp;img, int wSize)']]],
   ['contrastval',['contrastVal',['../classrdf_1_1_base_binarization_su.html#adec4e6a29c32487f2afe082c866b21b7',1,'rdf::BaseBinarizationSu::contrastVal()'],['../classrdf_1_1_binarization_su_adapted.html#af7e5b70815484b5871e9cb7c3f4a52c9',1,'rdf::BinarizationSuAdapted::contrastVal()']]],
+  ['convertdata',['convertData',['../classrdf_1_1_pixel_stats.html#a455ff96916e0feb4816edc2aca0bdeb9',1,'rdf::PixelStats']]],
   ['convolveintegralimage',['convolveIntegralImage',['../classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76',1,'rdf::Algorithms']]],
   ['convolvesymmetric',['convolveSymmetric',['../classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092',1,'rdf::Algorithms']]],
   ['cpatches',['cPatches',['../classrdf_1_1_contrast_estimation.html#a998c5fa5ac2eb2d897d62e8e7c2652ae',1,'rdf::ContrastEstimation']]],

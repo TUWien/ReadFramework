@@ -149,8 +149,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a558f594d7d175c16150f941c146f8cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05a484f8a8d1a1ede111e46a91bba9de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a05a484f8a8d1a1ede111e46a91bba9de">bbox</a> () const </td></tr>
 <tr class="separator:a05a484f8a8d1a1ede111e46a91bba9de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee26a84d075bf3c76f22ba3af6fa9514"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#aee26a84d075bf3c76f22ba3af6fa9514">draw</a> (QPainter &amp;p, double alpha=0.3) const </td></tr>
-<tr class="separator:aee26a84d075bf3c76f22ba3af6fa9514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73e43f55e32d298e86574537174bbb94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a73e43f55e32d298e86574537174bbb94">addStats</a> (const QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt; &amp;<a class="el" href="classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb">stats</a>)</td></tr>
+<tr class="separator:a73e43f55e32d298e86574537174bbb94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd067430336c429abf72a5a4d43a8eb"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb">stats</a> (int idx=-1) const </td></tr>
+<tr class="separator:aecd067430336c429abf72a5a4d43a8eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17ecb668033ab1d6ec61230be9fb103a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a17ecb668033ab1d6ec61230be9fb103a">draw</a> (QPainter &amp;p, double alpha=0.3, bool showId=false) const </td></tr>
+<tr class="separator:a17ecb668033ab1d6ec61230be9fb103a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca">BaseElement</a> (const QString &amp;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">id</a>=QString())</td></tr>
 <tr class="memdesc:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class keeps an ID to keep track of transformed elements during a processing chain. You can e.g. generate <a class="el" href="classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis...">Pixel</a> elements from MserBlobs. After filtering, processing etc. you can map back to the (pixel accurate) <a class="el" href="classrdf_1_1_mser_blob.html">MserBlob</a> using this ID.  <a href="#a34b6a09b0436365f198ce4d36b8039ca">More...</a><br/></td></tr>
@@ -167,6 +171,9 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:af34fcf41eba325cf4a7ded7773f2e64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85be4842ba067c992f9d3916b39159c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9">mBBox</a></td></tr>
 <tr class="separator:a85be4842ba067c992f9d3916b39159c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae416d11ac12407d2bd5ae7015ba6b6e8"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#ae416d11ac12407d2bd5ae7015ba6b6e8">mStats</a></td></tr>
+<tr class="separator:ae416d11ac12407d2bd5ae7015ba6b6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a20f4d76a5e4cc5ef2384c065d6b519d3 inherit pro_attribs_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a20f4d76a5e4cc5ef2384c065d6b519d3">mId</a></td></tr>
 <tr class="separator:a20f4d76a5e4cc5ef2384c065d6b519d3 inherit pro_attribs_classrdf_1_1_base_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,6 +230,22 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a73e43f55e32d298e86574537174bbb94"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Pixel::addStats </td>
+          <td>(</td>
+          <td class="paramtype">const QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>stats</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a707eebe6c883a435b00210931f951f97"></a>
 <div class="memitem">
 <div class="memproto">
@@ -268,7 +291,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aee26a84d075bf3c76f22ba3af6fa9514"></a>
+<a class="anchor" id="a17ecb668033ab1d6ec61230be9fb103a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -282,7 +305,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>0.3</code>&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>0.3</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>showId</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -332,6 +361,22 @@ Protected Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> rdf::Pixel::size </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aecd067430336c429abf72a5a4d43a8eb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt; rdf::Pixel::stats </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>idx</em> = <code>-1</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -389,6 +434,26 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool rdf::Pixel::mIsNull = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae416d11ac12407d2bd5ae7015ba6b6e8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QSharedPointer&lt;<a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a>&gt; &gt; rdf::Pixel::mStats</td>
         </tr>
       </table>
   </td>

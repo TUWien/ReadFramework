@@ -2,6 +2,7 @@ var searchData=
 [
   ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a9e5bb484c4acfe4d6effc2c32e789663',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_image.html#a34d4f8abe3999b342df35c0128004da6',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()'],['../classrdf_1_1_super_pixel_config.html#ad215c64ccec5fc0b7b01b8067a03b0b3',1,'rdf::SuperPixelConfig::save()'],['../classrdf_1_1_local_orientation_config.html#a10fafde54bbf6a040420f51f3ee9da5a',1,'rdf::LocalOrientationConfig::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module_config.html#acdf8ca83534fc9b93543fea400ac0ebf',1,'rdf::ModuleConfig']]],
+  ['scale',['scale',['../classrdf_1_1_pixel_stats.html#a9ab79d8b60edb1f3c2e4c814c9e9aa79',1,'rdf::PixelStats']]],
   ['scalededgelength',['scaledEdgeLength',['../classrdf_1_1_pixel_edge.html#a516e7563ce69527346ac3066891d7862',1,'rdf::PixelEdge']]],
   ['scaleivl',['scaleIvl',['../classrdf_1_1_local_orientation_config.html#a26817f28992a2cfbf64a9bfb757987e8',1,'rdf::LocalOrientationConfig']]],
   ['searchxoffset',['searchXOffset',['../classrdf_1_1_form_features_config.html#ae7b6767aedd982ccb9817709b7b75de1',1,'rdf::FormFeaturesConfig']]],
@@ -109,6 +110,7 @@ var searchData=
   ['startpoint',['startPoint',['../classrdf_1_1_base_line.html#a3cf2f1cd2ea83bd9b0e93ee0f3e2cfa1',1,'rdf::BaseLine::startPoint()'],['../classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc',1,'rdf::Line::startPoint()']]],
   ['startpointcv',['startPointCV',['../classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29',1,'rdf::Line']]],
   ['statmomentmat',['statMomentMat',['../classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716',1,'rdf::Algorithms']]],
+  ['stats',['stats',['../classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb',1,'rdf::Pixel']]],
   ['stringifytime',['stringifyTime',['../classrdf_1_1_timer.html#af586aafef198953ac77a80d14ed09dea',1,'rdf::Timer']]],
   ['stringtopoly',['stringToPoly',['../classrdf_1_1_converter.html#a5e69e5cca8cdb1c448afc16a40f42bc5',1,'rdf::Converter']]],
   ['strokewidth',['strokeWidth',['../classrdf_1_1_base_binarization_su.html#a0f8a42a30d627a0e3abcddad654e1d84',1,'rdf::BaseBinarizationSu']]],

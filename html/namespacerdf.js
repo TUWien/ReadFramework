@@ -18,6 +18,7 @@ var namespacerdf =
     [ "IP", "classrdf_1_1_i_p.html", null ],
     [ "PageXmlParser", "classrdf_1_1_page_xml_parser.html", "classrdf_1_1_page_xml_parser" ],
     [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
+    [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
     [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
     [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
     [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],

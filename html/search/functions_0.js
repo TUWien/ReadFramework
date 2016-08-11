@@ -2,6 +2,7 @@ var searchData=
 [
   ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet']]],
   ['addchild',['addChild',['../classrdf_1_1_region.html#a77b35f891e22ffd53338bd573b88e682',1,'rdf::Region']]],
+  ['addstats',['addStats',['../classrdf_1_1_pixel.html#a73e43f55e32d298e86574537174bbb94',1,'rdf::Pixel']]],
   ['adduniquechild',['addUniqueChild',['../classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396',1,'rdf::Region']]],
   ['allregions',['allRegions',['../classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9',1,'rdf::Region']]],
   ['alphachannelused',['alphaChannelUsed',['../classrdf_1_1_image.html#aa49eccb7b2236eaf3d69201de0beee94',1,'rdf::Image']]],
