@@ -175,7 +175,7 @@ PixelStats::PixelStats(const cv::Mat& orHist,
 void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
 
 	double lambda = 0.5;	// weights sparsity & line frequency measure
-	assert(orHist.cols == sparsity.cols);
+	assert(orHist.rows == sparsity.cols);
 
 	// enrich our data
 	mData = cv::Mat(idx_end, orHist.rows, CV_32FC1);

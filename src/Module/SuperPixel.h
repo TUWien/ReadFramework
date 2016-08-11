@@ -139,7 +139,7 @@ public:
 
 protected:
 	int mMaxScale = 256;	// radius (in px) of the maximum scale
-	int mMinScale = 64;	// radius (in px) of the minimum scale
+	int mMinScale = 128;	// radius (in px) of the minimum scale
 	int mNumOr = 32;		// number of orientation histograms
 	int mHistSize = 64;		// size of the orientation histogram
 

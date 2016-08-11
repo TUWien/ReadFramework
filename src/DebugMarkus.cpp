@@ -148,7 +148,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	QVector<QSharedPointer<Pixel> >& sp = superPixel.getSuperPixels();
+	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
 	rdf::LocalOrientation lo(sp);
 	if (!lo.compute())
