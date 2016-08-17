@@ -73,10 +73,14 @@ file(GLOB MODULE_HEADERS "src/Module/*.h")
 file(GLOB CORE_SOURCES "src/Core/*.cpp")
 file(GLOB CORE_HEADERS "src/Core/*.h")
 
+# external headers
+file(GLOB EXT_HEADERS "src/3rdparty/*.hpp")
+
 # gather information for building
 include_directories (
 	${CMAKE_BINARY_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Core
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Module
 	)

@@ -42,6 +42,8 @@
 #include <QColor>
 #include <QDebug>
 #include <QPainter>
+
+#include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -188,21 +190,20 @@ void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
 
 	for (int rIdx = 0; rIdx < orHist.rows; rIdx++) {
 
-		double maxVal = 0;
-		cv::Point maxIdx;
-		cv::minMaxLoc(orHist.row(rIdx), 0, &maxVal, 0, &maxIdx);
+		double minVal = 0;
+		cv::Point minIdx;
+		cv::minMaxLoc(orHist.row(rIdx), &minVal, 0, &minIdx);
 
-		maxP[rIdx] = (float)maxVal;
-		tlP[rIdx] = (float)maxIdx.x;
-		cbP[rIdx] = (float)(maxVal*lambda + (1.0 - lambda) * spP[rIdx]);
+		maxP[rIdx] = (float)minVal;
+		tlP[rIdx] = (float)minIdx.x;
+		cbP[rIdx] = (float)(minVal*lambda + (1.0 - lambda) * spP[rIdx]);
 	}
 
-
 	// find dominant peak
-	cv::Point maxIdx;
-	cv::minMaxLoc(mData.row(combined_idx), 0, &mMaxVal, 0, &maxIdx);
+	cv::Point minIdx;
+	cv::minMaxLoc(mData.row(combined_idx), &mMinVal, 0, &minIdx);
 
-	mOrIdx = maxIdx.x;
+	mOrIdx = minIdx.x;
 	mHistSize = orHist.cols;
 }
 
@@ -239,9 +240,9 @@ int PixelStats::numOrientations() const {
 	return mData.cols;
 }
 
-double PixelStats::maxVal() const {
+double PixelStats::minVal() const {
 	
-	return mMaxVal;
+	return mMinVal;
 }
 
 double PixelStats::scale() const {
@@ -306,13 +307,13 @@ QSharedPointer<PixelStats> Pixel::stats(int idx) const {
 
 
 		QSharedPointer<PixelStats> bps;
-		double mv = -1.0;
+		double minScaleV = DBL_MAX;
 
 		for (auto ps : mStats) {
 			
-			if (mv < ps->maxVal()) {
+			if (minScaleV > ps->minVal()) {
 				bps = ps;
-				mv = ps->maxVal();
+				minScaleV = ps->minVal();
 			}
 		}
 
@@ -344,7 +345,7 @@ void Pixel::draw(QPainter & p, double alpha, bool showId) const {
 		//if (id() == "507") {
 		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::sparsity_idx), "sparsity");
 		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::combined_idx), "combined");
-		//	qDebug() << "max val: " << s->maxVal();
+		//	qDebug() << "max val: " << s->minVal();
 		//}
 
 		QColor c(255,33,33);
@@ -480,12 +481,43 @@ Rect PixelSet::boundingBox() {
 	return Rect(left, top, right-left, bottom-top);
 }
 
+QVector<QSharedPointer<PixelEdge> > PixelSet::connect(QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
+
+	// Create an instance of Subdiv2D
+	cv::Subdiv2D subdiv(rect.toCvRect());
+
+	QVector<int> ids;
+	for (const QSharedPointer<Pixel>& b : superPixels)
+		ids << subdiv.insert(b->center().toCvPointF());
+
+	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
+	QVector<QSharedPointer<PixelEdge> > edges;
+	for (int idx = 0; idx < (superPixels.size()-8)*3; idx++) {
+
+		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
+		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
+
+		// there are a few edges that lead to nowhere
+		if (orgVertex == -1 || dstVertex == -1) {
+			continue;
+		}
+
+		assert(orgVertex >= 0 && orgVertex < superPixels.size());
+		assert(dstVertex >= 0 && dstVertex < superPixels.size());
+
+		QSharedPointer<PixelEdge> pe(new PixelEdge(superPixels[orgVertex], superPixels[dstVertex]));
+		edges << pe;
+	}
+
+	return edges;
+}
+
 void PixelSet::draw(QPainter& p) {
 
 	for (auto px : mSet)
 		px->draw(p);
 
-	//p.drawRect(boundingBox().toQRectF());
+	p.drawRect(boundingBox().toQRectF());
 }
 
 

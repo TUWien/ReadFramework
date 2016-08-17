@@ -40,7 +40,6 @@
 #include <QDebug>
 #include <QPainter>
 
-#include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -74,7 +73,8 @@ bool TextBlockSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	mEdges = connect(mSuperPixels);
+	Rect r(0, 0, mSrcImg.cols+1, mSrcImg.rows+1);
+	mEdges = PixelSet::connect(mSuperPixels, r);
 	mEdges = filterEdges(mEdges);
 	
 	mTextBlocks = createTextBlocks(mEdges);
@@ -109,39 +109,6 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 	return pixelEdgesClean;
 }
 
-QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::connect(QVector<QSharedPointer<Pixel> >& superPixels) const {
-
-
-	// Create an instance of Subdiv2D
-	cv::Rect rect(cv::Point(), mSrcImg.size());
-	cv::Subdiv2D subdiv(rect);
-
-	QVector<int> ids;
-	for (const QSharedPointer<Pixel>& b : superPixels)
-		ids << subdiv.insert(b->center().toCvPointF());
-
-	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
-	QVector<QSharedPointer<PixelEdge> > edges;
-	for (int idx = 0; idx < superPixels.size()*3; idx++) {
-
-		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
-		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
-
-		// there are a few edges that lead to nowhere
-		if (orgVertex == -1 || dstVertex == -1) {
-			continue;
-		}
-		
-		assert(orgVertex >= 0 && orgVertex < superPixels.size());
-		assert(dstVertex >= 0 && dstVertex < superPixels.size());
-
-		QSharedPointer<PixelEdge> pe(new PixelEdge(superPixels[orgVertex], superPixels[dstVertex]));
-		edges << pe;
-	}
-
-	return edges;
-}
-
 cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	
 	// draw mser blobs
@@ -150,7 +117,6 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	
 	QPainter p(&pm);
 	QColor col = ColorManager::instance().getRandomColor();
-	col = col.darker();
 	Drawer::instance().setColor(col);
 	p.setPen(Drawer::instance().pen());
 

@@ -37,11 +37,14 @@
 #include "Drawer.h"
 #include "Utils.h"
 
+#include "GCGraph.hpp"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
+
 #pragma warning(pop)
 
 namespace rdf {
@@ -118,7 +121,7 @@ int SuperPixel::filterAspectRatio(MserContainer& blobs, double aRatio) const {
 	std::vector<std::vector<cv::Point> > pixelsClean;
 	std::vector<cv::Rect> boxesClean;
 
-	for (int idx = 0; idx < blobs.pixels.size(); idx++) {
+	for (unsigned int idx = 0; idx < blobs.pixels.size(); idx++) {
 
 		cv::Rect b = blobs.boxes[idx];
 		double cARatio = (double)qMin(b.width, b.height) / qMax(b.width, b.height);
@@ -144,12 +147,12 @@ int SuperPixel::filterDuplicates(MserContainer& blobs, int eps) const {
 	std::vector<std::vector<cv::Point>> pixelsClean;
 	std::vector<cv::Rect> boxesClean;
 
-	for (int idx = 0; idx < blobs.boxes.size(); idx++) {
+	for (unsigned int idx = 0; idx < blobs.boxes.size(); idx++) {
 
 		const cv::Rect& r = blobs.boxes[idx];
 		bool duplicate = false;
 
-		for (int cIdx = idx+1; cIdx < blobs.boxes.size(); cIdx++) {
+		for (unsigned int cIdx = idx+1; cIdx < blobs.boxes.size(); cIdx++) {
 
 			if (idx == cIdx)
 				continue;
@@ -319,7 +322,7 @@ void MserContainer::append(const MserContainer & o) {
 QVector<QSharedPointer<MserBlob>> MserContainer::toBlobs() const {
 	
 	QVector<QSharedPointer<MserBlob> > blobs;
-	for (int idx = 0; idx < pixels.size(); idx++) {
+	for (unsigned int idx = 0; idx < pixels.size(); idx++) {
 
 		QSharedPointer<MserBlob> b(new MserBlob(pixels[idx], boxes[idx], QString::number(idx)));
 		blobs << b;
@@ -527,7 +530,7 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel,
 
 	}
 
-	sparsity = (float)(cv::sum(orHist == 0)[0]/(orHist.cols*255.0));
+	sparsity = (float)std::log(cv::sum(orHist != 0)[0]/(orHist.cols*255.0));
 
 	// DFT according to Koo16
 	cv::dft(orHist, orHist);
@@ -547,6 +550,7 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel,
 	// see Koo et al 2016
 	// log( X(k)^2/X(0)^2 )
 	cv::log(orHist.mul(orHist) / (lfv*lfv) + 1.0, orHist);
+	orHist *= -1.0f;
 }
 
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
@@ -610,6 +614,51 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	return Image::instance().qPixmap2Mat(pm);
+}
+
+
+// PixelSetOrientation --------------------------------------------------------------------
+PixelSetOrientation::PixelSetOrientation(const QVector<QSharedPointer<Pixel>>& set) {
+	mSet = set;
+}
+
+bool PixelSetOrientation::isEmpty() const {
+	return mSet.isEmpty();
+}
+
+bool PixelSetOrientation::compute() {
+	
+	if (!checkInput())
+		return false;
+
+	return true;
+}
+
+QVector<QSharedPointer<Pixel>> PixelSetOrientation::getSuperPixels() const {
+	
+	return mSet;
+}
+
+bool PixelSetOrientation::checkInput() const {
+	return !isEmpty();
+}
+
+void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& pixel, const QVector<QSharedPointer<PixelEdge>>& edges) {
+
+
+	rd3::GCGraph<double> graph;
+	graph.create(pixel.size(), edges.size());
+
+	for (int idx = 0; idx < pixel.size(); idx++) {
+
+		int vtxIdx = graph.addVtx();
+
+		double fromSource = 0, toSink = 0;
+
+		//graph.a
+
+	}
+
 }
 
 }

@@ -180,5 +180,31 @@ private:
 
 };
 
+class DllModuleExport PixelSetOrientation : public Module {
+
+public:
+	PixelSetOrientation(const QVector<QSharedPointer<Pixel> >& set);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	//QString toString() const override;
+	//QSharedPointer<LocalOrientationConfig> config() const;
+
+	// results - available after compute() is called
+	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+
+	//cv::Mat draw(const cv::Mat& img, const QString& id, double radius) const;
+
+private:
+
+	// input/output
+	QVector<QSharedPointer<Pixel> > mSet;
+
+	bool checkInput() const override;
+
+	void constructGraph(const QVector<QSharedPointer<Pixel> >& pixel, const QVector<QSharedPointer<PixelEdge> >& edges);
+
+};
 
 };

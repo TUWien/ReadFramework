@@ -117,14 +117,14 @@ public:
 	int lineSpacingIndex() const;
 	double lineSpacing() const;
 
-	double maxVal() const;
+	double minVal() const;
 
 	cv::Mat data(const DataIndex& dIdx = all_data);
 
 protected:
 	cv::Mat mData;	// MxN orientation histograms M ... idx_end and N ... number of orientations
 	double mScale = 0.0;
-	double mMaxVal = 0.0;
+	double mMinVal = 0.0;
 
 	int mHistSize = 0;
 	int mOrIdx = -1;
@@ -212,6 +212,8 @@ public:
 	Rect boundingBox();
 
 	void draw(QPainter& p);
+
+	static QVector<QSharedPointer<PixelEdge> > connect(QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
