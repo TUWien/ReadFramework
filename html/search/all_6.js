@@ -1,10 +1,12 @@
 var searchData=
 [
+  ['feasiblesites',['feasibleSites',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#ad0e1fb1e544346703e5944d210ae45b1',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
   ['filterangle',['filterAngle',['../classrdf_1_1_blob_manager.html#a681da26310f6e2a993c62beab0e90148',1,'rdf::BlobManager']]],
   ['filterarea',['filterArea',['../classrdf_1_1_blob_manager.html#a79b51e41d19ad5e9498c2ba86972cf5a',1,'rdf::BlobManager']]],
-  ['filteredges',['filterEdges',['../classrdf_1_1_text_block_segmentation.html#ac93d655a268f6a4e7a190b51fdf7cb67',1,'rdf::TextBlockSegmentation']]],
+  ['filteredges',['filterEdges',['../classrdf_1_1_text_block_segmentation.html#a27a06937ded5691a214d15cf2fba19dc',1,'rdf::TextBlockSegmentation']]],
   ['filterlineangle',['filterLineAngle',['../classrdf_1_1_line_trace.html#aa0db4498043e6f4e5013f1db0842ffdf',1,'rdf::LineTrace']]],
   ['filtermar',['filterMar',['../classrdf_1_1_blob_manager.html#a4986f0811c732e9045753b5ee788102a',1,'rdf::BlobManager']]],
+  ['finalizeneighbors',['finalizeNeighbors',['../class_g_coptimization.html#a4626f2e9deec4dee79e13e0f60707e35',1,'GCoptimization::finalizeNeighbors()'],['../class_g_coptimization_grid_graph.html#a1ce1ee5b7368aa94b9a442755b74f5c8',1,'GCoptimizationGridGraph::finalizeNeighbors()'],['../class_g_coptimization_general_graph.html#a3547ada8bdb072a94df6456ceae1a2e6',1,'GCoptimizationGeneralGraph::finalizeNeighbors()']]],
   ['findoffsets',['findOffsets',['../classrdf_1_1_form_features.html#a061e2f313fdeca7641139dbd092435c5',1,'rdf::FormFeatures']]],
   ['first',['first',['../classrdf_1_1_pixel_edge.html#adef496eb08642ae8c2436e4b87ca00e1',1,'rdf::PixelEdge']]],
   ['fm',['fm',['../classrdf_1_1_patch.html#a1a42077556b90e83973621bc5672dbb6',1,'rdf::Patch']]],

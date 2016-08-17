@@ -14,14 +14,15 @@ var classrdf_1_1_pixel_stats =
     [ "isEmpty", "classrdf_1_1_pixel_stats.html#aabff888077bea016dfef906751f08b47", null ],
     [ "lineSpacing", "classrdf_1_1_pixel_stats.html#aad08f50acd58a101d365db08e9f7e9a9", null ],
     [ "lineSpacingIndex", "classrdf_1_1_pixel_stats.html#a08c69cbccc3e3382e20432bca87ee6dd", null ],
-    [ "maxVal", "classrdf_1_1_pixel_stats.html#a7e2bd89de66199a3d4f5cd1a247a83ce", null ],
+    [ "minVal", "classrdf_1_1_pixel_stats.html#a529c44295f52118c07b4de7d13406fbf", null ],
     [ "numOrientations", "classrdf_1_1_pixel_stats.html#a79fdccf70493b2c6c2f4d6333cce4691", null ],
     [ "orientation", "classrdf_1_1_pixel_stats.html#adb4a2b7e950495bd23c4e89d27327a43", null ],
     [ "orientationIndex", "classrdf_1_1_pixel_stats.html#aa2bd86cc6bda7654ed975b4b14bafa36", null ],
     [ "scale", "classrdf_1_1_pixel_stats.html#a9ab79d8b60edb1f3c2e4c814c9e9aa79", null ],
+    [ "setOrientationIndex", "classrdf_1_1_pixel_stats.html#abd3fd3fb133e245102e5592f722d8b05", null ],
     [ "mData", "classrdf_1_1_pixel_stats.html#af8025a0833b880d188904dc7a90a4a33", null ],
     [ "mHistSize", "classrdf_1_1_pixel_stats.html#a4837f5039a63e78732666700accb4904", null ],
-    [ "mMaxVal", "classrdf_1_1_pixel_stats.html#a9d3ae33f25ffdb64d59d73b47af7f453", null ],
+    [ "mMinVal", "classrdf_1_1_pixel_stats.html#a86868618a22f72c38a3a576712e8ee77", null ],
     [ "mOrIdx", "classrdf_1_1_pixel_stats.html#ad04829df4522db39e2061f987c982aeb", null ],
     [ "mScale", "classrdf_1_1_pixel_stats.html#ae6c39e8226f0997d3a056bc318931025", null ]
 ];

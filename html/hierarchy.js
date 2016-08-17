@@ -15,22 +15,45 @@ var hierarchy =
     [ "rdf::Blob", "classrdf_1_1_blob.html", null ],
     [ "rdf::BlobManager", "classrdf_1_1_blob_manager.html", null ],
     [ "rdf::Blobs", "classrdf_1_1_blobs.html", null ],
+    [ "Block< Type >", "class_block.html", null ],
+    [ "Block< node_id >", "class_block.html", null ],
     [ "rdf::ColorManager", "classrdf_1_1_color_manager.html", null ],
     [ "rdf::Config", "classrdf_1_1_config.html", null ],
     [ "rdf::ContrastEstimation", "classrdf_1_1_contrast_estimation.html", null ],
     [ "rdf::Converter", "classrdf_1_1_converter.html", null ],
+    [ "GCoptimization::DataCostFnFromArray", "struct_g_coptimization_1_1_data_cost_fn_from_array.html", null ],
+    [ "GCoptimization::DataCostFnFromFunction", "struct_g_coptimization_1_1_data_cost_fn_from_function.html", null ],
+    [ "GCoptimization::DataCostFnFromFunctionExtra", "struct_g_coptimization_1_1_data_cost_fn_from_function_extra.html", null ],
+    [ "GCoptimization::DataCostFnSparse", "class_g_coptimization_1_1_data_cost_fn_sparse.html", null ],
+    [ "GCoptimization::DataCostFunctor", "struct_g_coptimization_1_1_data_cost_functor.html", null ],
+    [ "DBlock< Type >", "class_d_block.html", null ],
+    [ "DBlock< nodeptr >", "class_d_block.html", null ],
     [ "rdf::DebugConfig", "classrdf_1_1_debug_config.html", null ],
     [ "rdf::Drawer", "classrdf_1_1_drawer.html", null ],
     [ "rdf::Ellipse", "classrdf_1_1_ellipse.html", null ],
     [ "rdf::FocusEstimation", "classrdf_1_1_focus_estimation.html", null ],
+    [ "GCException", "class_g_c_exception.html", null ],
+    [ "rd3::GCGraph< TWeight >", "classrd3_1_1_g_c_graph.html", null ],
+    [ "GCoptimization", "class_g_coptimization.html", [
+      [ "GCoptimizationGeneralGraph", "class_g_coptimization_general_graph.html", null ],
+      [ "GCoptimizationGridGraph", "class_g_coptimization_grid_graph.html", null ]
+    ] ],
     [ "rdf::GenericSettings", "classrdf_1_1_generic_settings.html", [
       [ "rdf::GlobalSettings", "classrdf_1_1_global_settings.html", null ]
     ] ],
+    [ "Graph< captype, tcaptype, flowtype >", "class_graph.html", [
+      [ "Energy< captype, tcaptype, flowtype >", "class_energy.html", null ]
+    ] ],
+    [ "GCoptimization::GreedyIter< GCoptimization::DataCostFnSparse >", "class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html", null ],
     [ "rdf::Histogram", "classrdf_1_1_histogram.html", null ],
     [ "rdf::Image", "classrdf_1_1_image.html", null ],
     [ "rdf::IP", "classrdf_1_1_i_p.html", null ],
+    [ "GCoptimization::DataCostFnSparse::iterator", "class_g_coptimization_1_1_data_cost_fn_sparse_1_1iterator.html", null ],
+    [ "GCoptimization::LabelCost", "struct_g_coptimization_1_1_label_cost.html", null ],
+    [ "GCoptimization::LabelCostIter", "struct_g_coptimization_1_1_label_cost_iter.html", null ],
     [ "rdf::LayoutTest", "classrdf_1_1_layout_test.html", null ],
     [ "rdf::Line", "classrdf_1_1_line.html", null ],
+    [ "LinkedBlockList", "class_linked_block_list.html", null ],
     [ "rdf::Module", "classrdf_1_1_module.html", [
       [ "rdf::BaseBinarizationSu", "classrdf_1_1_base_binarization_su.html", [
         [ "rdf::BinarizationSuAdapted", "classrdf_1_1_binarization_su_adapted.html", [
@@ -41,6 +64,7 @@ var hierarchy =
       [ "rdf::FormFeatures", "classrdf_1_1_form_features.html", null ],
       [ "rdf::LineTrace", "classrdf_1_1_line_trace.html", null ],
       [ "rdf::LocalOrientation", "classrdf_1_1_local_orientation.html", null ],
+      [ "rdf::PixelSetOrientation", "classrdf_1_1_pixel_set_orientation.html", null ],
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ],
       [ "rdf::TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", null ]
@@ -68,6 +92,12 @@ var hierarchy =
     [ "rdf::RegionManager", "classrdf_1_1_region_manager.html", null ],
     [ "rdf::RegionTypeConfig", "classrdf_1_1_region_type_config.html", null ],
     [ "rdf::RegionXmlHelper", "classrdf_1_1_region_xml_helper.html", null ],
+    [ "GCoptimization::SmoothCostFnFromArray", "struct_g_coptimization_1_1_smooth_cost_fn_from_array.html", null ],
+    [ "GCoptimization::SmoothCostFnFromFunction", "struct_g_coptimization_1_1_smooth_cost_fn_from_function.html", null ],
+    [ "GCoptimization::SmoothCostFnFromFunctionExtra", "struct_g_coptimization_1_1_smooth_cost_fn_from_function_extra.html", null ],
+    [ "GCoptimization::SmoothCostFnPotts", "struct_g_coptimization_1_1_smooth_cost_fn_potts.html", null ],
+    [ "GCoptimization::SmoothCostFunctor", "struct_g_coptimization_1_1_smooth_cost_functor.html", null ],
+    [ "GCoptimization::SparseDataCost", "struct_g_coptimization_1_1_sparse_data_cost.html", null ],
     [ "rdf::Timer", "classrdf_1_1_timer.html", null ],
     [ "rdf::Triangle", "classrdf_1_1_triangle.html", null ],
     [ "rdf::Utils", "classrdf_1_1_utils.html", null ],

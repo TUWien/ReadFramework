@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "ReadFramework", "index.html", [
+    [ "GCoptimization", "md_src_3rdparty_graphcut__r_e_a_d_m_e.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -16,6 +17,7 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
+        [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
@@ -26,6 +28,8 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -35,10 +39,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_algorithms_8cpp.html",
-"classrdf_1_1_basic_f_m.html#a5fea695f3753d0dbe14e7bdef827ebac",
-"classrdf_1_1_layout_test.html",
-"classrdf_1_1_pixel_edge.html#a069812e7f03a3fa5b3135ad1a3482195",
-"classrdf_1_1_timer.html#aaec2291461028243690f232ac75f491c"
+"class_g_coptimization.html#ac8aa5a0f9475e91225aa26aa35e1eb67",
+"classrdf_1_1_binarization_su_adapted.html",
+"classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0",
+"classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8",
+"classrdf_1_1_triangle.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

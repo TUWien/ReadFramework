@@ -13,5 +13,7 @@ var searchData=
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html',1,'rdf']]],
   ['blob',['Blob',['../classrdf_1_1_blob.html',1,'rdf']]],
   ['blobmanager',['BlobManager',['../classrdf_1_1_blob_manager.html',1,'rdf']]],
-  ['blobs',['Blobs',['../classrdf_1_1_blobs.html',1,'rdf']]]
+  ['blobs',['Blobs',['../classrdf_1_1_blobs.html',1,'rdf']]],
+  ['block',['Block',['../class_block.html',1,'']]],
+  ['block_3c_20node_5fid_20_3e',['Block&lt; node_id &gt;',['../class_block.html',1,'']]]
 ];

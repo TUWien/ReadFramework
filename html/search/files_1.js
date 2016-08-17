@@ -7,5 +7,6 @@ var searchData=
   ['binarization_2ecpp',['Binarization.cpp',['../_binarization_8cpp.html',1,'']]],
   ['binarization_2eh',['Binarization.h',['../_binarization_8h.html',1,'']]],
   ['blobs_2ecpp',['Blobs.cpp',['../_blobs_8cpp.html',1,'']]],
-  ['blobs_2eh',['Blobs.h',['../_blobs_8h.html',1,'']]]
+  ['blobs_2eh',['Blobs.h',['../_blobs_8h.html',1,'']]],
+  ['block_2eh',['block.h',['../block_8h.html',1,'']]]
 ];

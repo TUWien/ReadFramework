@@ -1,8 +1,10 @@
 var searchData=
 [
   ['rand',['rand',['../classrdf_1_1_utils.html#af133a2a28a611eb7c7df293e9741d484',1,'rdf::Utils']]],
+  ['rd3',['rd3',['../namespacerd3.html',1,'']]],
   ['rdf',['rdf',['../namespacerdf.html',1,'']]],
   ['read',['read',['../classrdf_1_1_region.html#a9be7a3a131e767f3e24ef01e4c8418fd',1,'rdf::Region::read()'],['../classrdf_1_1_text_line.html#af1b776b6782d79aa3da96191d2ea1582',1,'rdf::TextLine::read()'],['../classrdf_1_1_page_xml_parser.html#aee0cbb62b5f041bb470a7939a8dc3e77',1,'rdf::PageXmlParser::read()'],['../classrdf_1_1_polygon.html#a4335652867aca759c8d8a2d68a9e2b7d',1,'rdf::Polygon::read()'],['../classrdf_1_1_base_line.html#a5c2b4d416e0848f99a426ff936a7a81f',1,'rdf::BaseLine::read()']]],
+  ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
   ['rect',['Rect',['../classrdf_1_1_rect.html#a7aa1c20146103cc72f0591a6997e29a0',1,'rdf::Rect::Rect()'],['../classrdf_1_1_rect.html#ad870bbe9bdbbf6336dcc12d5655a5530',1,'rdf::Rect::Rect(const QRect &amp;rect)'],['../classrdf_1_1_rect.html#aed96c1b78fe5dd73e95e961973445896',1,'rdf::Rect::Rect(const QRectF &amp;rect)'],['../classrdf_1_1_rect.html#a2723e1b02a305817f687d8ccfb5d105f',1,'rdf::Rect::Rect(const cv::Rect &amp;rect)'],['../classrdf_1_1_rect.html#a0633659feb25d6682c4e86e74e412d90',1,'rdf::Rect::Rect(const Vector2D &amp;topLeft, const Vector2D &amp;size)'],['../classrdf_1_1_rect.html#a92c07c6d9ab74b746f9d7c6ea7a47fca',1,'rdf::Rect::Rect(double x, double y, double width, double height)']]],
   ['rect',['Rect',['../classrdf_1_1_rect.html',1,'rdf']]],
   ['region',['Region',['../classrdf_1_1_region.html',1,'rdf']]],
@@ -14,7 +16,10 @@ var searchData=
   ['regionxmlhelper',['RegionXmlHelper',['../classrdf_1_1_region_xml_helper.html',1,'rdf']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],
   ['relativepts',['relativePts',['../classrdf_1_1_mser_blob.html#a59442dac9650371caa8e2c94aaaa486a',1,'rdf::MserBlob']]],
+  ['remove_5ffrom_5fchanged_5flist',['remove_from_changed_list',['../class_graph.html#a7f8a692e81693a0d3c3b41b5e5552b15',1,'Graph']]],
   ['removechild',['removeChild',['../classrdf_1_1_region.html#ae5f61196d1dc694643fe8a5b998f4361',1,'rdf::Region']]],
+  ['report',['Report',['../class_g_c_exception.html#ac00498219f91dfe2e4a21b88dc1b5e1f',1,'GCException']]],
+  ['reset',['Reset',['../class_block.html#a36508e5b98b945ae26a2897ebad4f34b',1,'Block::Reset()'],['../class_graph.html#ae9325d452bf8e1cd354c221dfa3df434',1,'Graph::reset()']]],
   ['resetangle',['resetAngle',['../classrdf_1_1_line_trace.html#a7b84e3a12def8a99a2f1aef8b9c25f70',1,'rdf::LineTrace']]],
   ['resource_2eh',['resource.h',['../resource_8h.html',1,'']]],
   ['right',['right',['../classrdf_1_1_rect.html#aa326492885bf7887c38194c04efdb8ce',1,'rdf::Rect']]],

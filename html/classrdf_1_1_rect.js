@@ -13,6 +13,7 @@ var classrdf_1_1_rect =
     [ "center", "classrdf_1_1_rect.html#a9c0b450713ad46397ffd4228162471ef", null ],
     [ "contains", "classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63", null ],
     [ "diagonal", "classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f", null ],
+    [ "expand", "classrdf_1_1_rect.html#a9904dddabfb50cec3c9a5234ec8bbbf6", null ],
     [ "height", "classrdf_1_1_rect.html#a45fd9cb736b030f2cbaeeb2c4ae9cab6", null ],
     [ "isNull", "classrdf_1_1_rect.html#a4d3ce91e4603f28b73be81d868b1526d", null ],
     [ "isProximate", "classrdf_1_1_rect.html#a9e1dfa0faf52ce1ecc6cef1d5f970277", null ],

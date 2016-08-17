@@ -44,6 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -78,6 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li class="current"><a href="functions.html"><span>All</span></a></li>
       <li><a href="functions_func.html"><span>Functions</span></a></li>
       <li><a href="functions_vars.html"><span>Variables</span></a></li>
+      <li><a href="functions_type.html"><span>Typedefs</span></a></li>
       <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
       <li><a href="functions_eval.html"><span>Enumerator</span></a></li>
       <li><a href="functions_rela.html"><span>Related&#160;Functions</span></a></li>
@@ -109,6 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_w.html#index_w"><span>w</span></a></li>
       <li><a href="functions_x.html#index_x"><span>x</span></a></li>
       <li><a href="functions_y.html#index_y"><span>y</span></a></li>
+      <li><a href="functions_~.html#index_~"><span>~</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -131,7 +134,7 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -192,6 +195,9 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 </li>
 <li>templDatabase()
 : <a class="el" href="classrdf_1_1_form_features_config.html#a16e5c488a8e3ea56a68328a1ba407c8b">rdf::FormFeaturesConfig</a>
+</li>
+<li>termtype
+: <a class="el" href="class_graph.html#acf169ecfcbdb40fa5958e59a6daa6364">Graph&lt; captype, tcaptype, flowtype &gt;</a>
 </li>
 <li>testComponents()
 : <a class="el" href="classrdf_1_1_layout_test.html#abf6fc07de0aecbd071e486c0ab3e0d3c">rdf::LayoutTest</a>
@@ -304,15 +310,20 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 , <a class="el" href="classrdf_1_1_text_line.html#aedd2dd985d790c1c3bec672a2cb763ba">rdf::TextLine</a>
 , <a class="el" href="classrdf_1_1_vector2_d.html#a579b9e8b480907cfd3d785595db35fb0">rdf::Vector2D</a>
 </li>
+<li>TotalValue
+: <a class="el" href="class_energy.html#a11f4c65dfc6bbaab85c6d13aadb75cd5">Energy&lt; captype, tcaptype, flowtype &gt;</a>
+</li>
 <li>Triangle()
-: <a class="el" href="classrdf_1_1_triangle.html#a7515a5bcd65d86066f57d0f8c3c282af">rdf::Triangle</a>
+: <a class="el" href="classrdf_1_1_triangle.html#a554a37105d1d61d813145afddf08d188">rdf::Triangle</a>
+</li>
+<li>type()
+: <a class="el" href="classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9">rdf::Region</a>
 </li>
 <li>Type
 : <a class="el" href="classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f">rdf::Region</a>
 </li>
 <li>type()
-: <a class="el" href="classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9">rdf::Region</a>
-, <a class="el" href="classrdf_1_1_region_manager.html#ae7cc63decd01f65a2fa69e9aaaa136ed">rdf::RegionManager</a>
+: <a class="el" href="classrdf_1_1_region_manager.html#ae7cc63decd01f65a2fa69e9aaaa136ed">rdf::RegionManager</a>
 , <a class="el" href="classrdf_1_1_region_type_config.html#a7998a1559cf8fa42cd4fecba1b3e2530">rdf::RegionTypeConfig</a>
 </li>
 <li>type_end

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['settingsfilename',['settingsFileName',['../classrdf_1_1_global_settings.html#afda273400126b7158db3ea5e7795a7e3',1,'rdf::GlobalSettings']]]
+  ['hlines',['hLines',['../classrdf_1_1_line_trace.html#a32a98487798c1aec06dc39cf8133397f',1,'rdf::LineTrace']]]
 ];

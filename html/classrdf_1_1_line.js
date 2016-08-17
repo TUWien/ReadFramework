@@ -20,6 +20,7 @@ var classrdf_1_1_line =
     [ "merge", "classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a", null ],
     [ "minDistance", "classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff", null ],
     [ "setLine", "classrdf_1_1_line.html#a65df7726ac29280f450ea8c03848247c", null ],
+    [ "squaredLength", "classrdf_1_1_line.html#a3a9435029979cbf29ce26cf2b7f92a62", null ],
     [ "startPoint", "classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc", null ],
     [ "startPointCV", "classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29", null ],
     [ "thickness", "classrdf_1_1_line.html#aafb351d4d9d078a4b535338ab827287e", null ],

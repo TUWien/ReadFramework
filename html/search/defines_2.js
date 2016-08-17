@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['idi_5ficon1',['IDI_ICON1',['../resource_8h.html#a455fef2a9349aae3af8ef8f24f6fc9d8',1,'resource.h']]]
+  ['gcll_5fblock_5fsize',['GCLL_BLOCK_SIZE',['../_linked_block_list_8h.html#a66ad76c769b36ceaba6d6c3341fca393',1,'LinkedBlockList.h']]],
+  ['gco_5fmax_5fenergyterm',['GCO_MAX_ENERGYTERM',['../_g_coptimization_8h.html#a7349bb5c933d74d19dd20f4d07578adc',1,'GCoptimization.h']]]
 ];

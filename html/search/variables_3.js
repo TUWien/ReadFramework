@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pixels',['pixels',['../classrdf_1_1_mser_container.html#aa97b3efeed4a53d4249256d120879119',1,'rdf::MserContainer']]]
+  ['gco_5fclocks_5fper_5fsec',['GCO_CLOCKS_PER_SEC',['../_g_coptimization_8cpp.html#a07f7cd2902cd9a889716e51b5c60893d',1,'GCO_CLOCKS_PER_SEC():&#160;GCoptimization.cpp'],['../_g_coptimization_8h.html#a07f7cd2902cd9a889716e51b5c60893d',1,'GCO_CLOCKS_PER_SEC():&#160;GCoptimization.h']]]
 ];

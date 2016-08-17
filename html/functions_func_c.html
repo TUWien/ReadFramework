@@ -44,6 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -78,6 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions.html"><span>All</span></a></li>
       <li class="current"><a href="functions_func.html"><span>Functions</span></a></li>
       <li><a href="functions_vars.html"><span>Variables</span></a></li>
+      <li><a href="functions_type.html"><span>Typedefs</span></a></li>
       <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
       <li><a href="functions_eval.html"><span>Enumerator</span></a></li>
       <li><a href="functions_rela.html"><span>Related&#160;Functions</span></a></li>
@@ -109,6 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_w.html#index_w"><span>w</span></a></li>
       <li><a href="functions_func_x.html#index_x"><span>x</span></a></li>
       <li><a href="functions_func_y.html#index_y"><span>y</span></a></li>
+      <li><a href="functions_func_~.html#index_~"><span>~</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -131,7 +134,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -166,6 +169,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_line_trace.html#a51d03163246b743f741d00f2fdfbce94">rdf::LineTrace</a>
 , <a class="el" href="classrdf_1_1_module.html#a910f489d5bc14f60343f72b82af4ea60">rdf::Module</a>
 </li>
+<li>checkInterrupt()
+: <a class="el" href="class_g_coptimization.html#a94b50b8a17e8a9e755f429c8abbc7f67">GCoptimization</a>
+</li>
 <li>children()
 : <a class="el" href="classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1">rdf::Region</a>
 </li>
@@ -191,7 +197,18 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 : <a class="el" href="classrdf_1_1_base_binarization_su.html#aa5f29d1f4d3678883ca3c6cb4b79b0cd">rdf::BaseBinarizationSu</a>
 </li>
 <li>compute()
-: <a class="el" href="classrdf_1_1_base_binarization_su.html#a6bf0d05ccb33e3f4303980aa03e75d53">rdf::BaseBinarizationSu</a>
+: <a class="el" href="struct_g_coptimization_1_1_data_cost_fn_from_array.html#a0a3b7cd9d7ebba1c070439c44b684f49">GCoptimization::DataCostFnFromArray</a>
+, <a class="el" href="struct_g_coptimization_1_1_data_cost_fn_from_function.html#a1ad04e0a890b5f83b22d0232753ad3b3">GCoptimization::DataCostFnFromFunction</a>
+, <a class="el" href="struct_g_coptimization_1_1_data_cost_fn_from_function_extra.html#a64b03f1b5d1276efb0c1d8cdc7e2ff33">GCoptimization::DataCostFnFromFunctionExtra</a>
+, <a class="el" href="class_g_coptimization_1_1_data_cost_fn_sparse.html#aac7d0b66426c14962467705726d5ef60">GCoptimization::DataCostFnSparse</a>
+, <a class="el" href="struct_g_coptimization_1_1_data_cost_functor.html#aa11d105c7c8d0c42e203b7cea2660ed4">GCoptimization::DataCostFunctor</a>
+, <a class="el" href="class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#ad42e564f3a391a865e2e9bc48f44e1b0">GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;</a>
+, <a class="el" href="struct_g_coptimization_1_1_smooth_cost_fn_from_array.html#ae55aa8388f6155cd976bde6e4a659812">GCoptimization::SmoothCostFnFromArray</a>
+, <a class="el" href="struct_g_coptimization_1_1_smooth_cost_fn_from_function.html#ae84da1eefe71f35afff08100201b65f4">GCoptimization::SmoothCostFnFromFunction</a>
+, <a class="el" href="struct_g_coptimization_1_1_smooth_cost_fn_from_function_extra.html#a746d3766135e2c48c8e2efe5018a9162">GCoptimization::SmoothCostFnFromFunctionExtra</a>
+, <a class="el" href="struct_g_coptimization_1_1_smooth_cost_fn_potts.html#a120c69d2b8e235e847c44d21388022d4">GCoptimization::SmoothCostFnPotts</a>
+, <a class="el" href="struct_g_coptimization_1_1_smooth_cost_functor.html#a61f0e26e17334fb3c9656afb918982cd">GCoptimization::SmoothCostFunctor</a>
+, <a class="el" href="classrdf_1_1_base_binarization_su.html#a6bf0d05ccb33e3f4303980aa03e75d53">rdf::BaseBinarizationSu</a>
 , <a class="el" href="classrdf_1_1_base_skew_estimation.html#aaa02b423ad1136f9ea5e4ce6afd6b671">rdf::BaseSkewEstimation</a>
 , <a class="el" href="classrdf_1_1_binarization_su_adapted.html#a136b5542e5aa27a3c845f7d0460bd0f9">rdf::BinarizationSuAdapted</a>
 , <a class="el" href="classrdf_1_1_binarization_su_fgd_weight.html#a3cafb50f3fac345945ffe7905ae26f3a">rdf::BinarizationSuFgdWeight</a>
@@ -202,9 +219,13 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_line_trace.html#a8d80dd15e02bfe3e62283573cc93411f">rdf::LineTrace</a>
 , <a class="el" href="classrdf_1_1_local_orientation.html#ac82af8826ea8a526d17b55e1f4a95e2d">rdf::LocalOrientation</a>
 , <a class="el" href="classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c">rdf::Module</a>
+, <a class="el" href="classrdf_1_1_pixel_set_orientation.html#aeae55714c5a1fc8242ee1a5e349cdffd">rdf::PixelSetOrientation</a>
 , <a class="el" href="classrdf_1_1_simple_binarization.html#a61bbcc56936c2bd9e001d828068964f8">rdf::SimpleBinarization</a>
 , <a class="el" href="classrdf_1_1_super_pixel.html#abde4e8ba437892e2940dcc7814581af2">rdf::SuperPixel</a>
 , <a class="el" href="classrdf_1_1_text_block_segmentation.html#a98ff320e56d864046d985ac88fd1ae01">rdf::TextBlockSegmentation</a>
+</li>
+<li>compute_energy()
+: <a class="el" href="class_g_coptimization.html#a179172060bd0cdc6df4ee699e637507b">GCoptimization</a>
 </li>
 <li>computeBinaryInput()
 : <a class="el" href="classrdf_1_1_form_features.html#aa895a6fe46070ff711ba46e78207bc3d">rdf::FormFeatures</a>
@@ -285,14 +306,14 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_text_block_segmentation.html#a1813fceb7f03a798752ca50f95370836">rdf::TextBlockSegmentation</a>
 </li>
 <li>connect()
-: <a class="el" href="classrdf_1_1_text_block_segmentation.html#ac95c44a903f416ddca96d034a2c2c8ac">rdf::TextBlockSegmentation</a>
+: <a class="el" href="classrdf_1_1_pixel_set.html#a63d8445ef278e05271c1c82932fb1023">rdf::PixelSet</a>
 </li>
 <li>contains()
 : <a class="el" href="classrdf_1_1_pixel_set.html#ab36a3e5c335bd21f3e994320b2c45e5d">rdf::PixelSet</a>
 , <a class="el" href="classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63">rdf::Rect</a>
 </li>
 <li>ContrastEstimation()
-: <a class="el" href="classrdf_1_1_contrast_estimation.html#a470441409ce5796f1fc1852c5231bca8">rdf::ContrastEstimation</a>
+: <a class="el" href="classrdf_1_1_contrast_estimation.html#a4a4167d540b5edb1f651d4b3f16f126d">rdf::ContrastEstimation</a>
 </li>
 <li>contrastVal()
 : <a class="el" href="classrdf_1_1_base_binarization_su.html#adec4e6a29c32487f2afe082c866b21b7">rdf::BaseBinarizationSu</a>
@@ -307,8 +328,17 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 <li>convolveSymmetric()
 : <a class="el" href="classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092">rdf::Algorithms</a>
 </li>
+<li>Copy()
+: <a class="el" href="class_graph.html#ad6acf70f852f6d03d455e8b7869d112d">Graph&lt; captype, tcaptype, flowtype &gt;</a>
+</li>
+<li>cost()
+: <a class="el" href="class_g_coptimization_1_1_data_cost_fn_sparse_1_1iterator.html#a44b9d44a096629d0d545868bd3133e4f">GCoptimization::DataCostFnSparse::iterator</a>
+</li>
 <li>cPatches()
 : <a class="el" href="classrdf_1_1_contrast_estimation.html#a998c5fa5ac2eb2d897d62e8e7c2652ae">rdf::ContrastEstimation</a>
+</li>
+<li>create()
+: <a class="el" href="classrd3_1_1_g_c_graph.html#a54a2a964c6f38cd0ba5c09cafefd9ec0">rd3::GCGraph&lt; TWeight &gt;</a>
 </li>
 <li>createFilePath()
 : <a class="el" href="classrdf_1_1_utils.html#a38ab3c111bc36a67cdf094a3186bfc91">rdf::Utils</a>

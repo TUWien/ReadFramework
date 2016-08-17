@@ -44,6 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -75,7 +76,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li class="current"><a href="globals.html"><span>All</span></a></li>
       <li><a href="globals_func.html"><span>Functions</span></a></li>
+      <li><a href="globals_vars.html"><span>Variables</span></a></li>
+      <li><a href="globals_type.html"><span>Typedefs</span></a></li>
       <li><a href="globals_defs.html"><span>Macros</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow4" class="tabs3">
+    <ul class="tablist">
+      <li><a href="#index__"><span>_</span></a></li>
+      <li><a href="#index_a"><span>a</span></a></li>
+      <li><a href="#index_b"><span>b</span></a></li>
+      <li><a href="#index_d"><span>d</span></a></li>
+      <li><a href="#index_g"><span>g</span></a></li>
+      <li><a href="#index_i"><span>i</span></a></li>
+      <li><a href="#index_l"><span>l</span></a></li>
+      <li><a href="#index_m"><span>m</span></a></li>
+      <li><a href="#index_o"><span>o</span></a></li>
+      <li><a href="#index_s"><span>s</span></a></li>
+      <li class="current"><a href="#index_t"><span>t</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -98,7 +116,7 @@ $(document).ready(function(){initNavTree('globals.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -108,7 +126,9 @@ $(document).ready(function(){initNavTree('globals.html','');});
 </div>
 
 <div class="contents">
-<div class="textblock">Here is a list of all file members with links to the files they belong to:</div><ul>
+<div class="textblock">Here is a list of all file members with links to the files they belong to:</div>
+
+<h3><a class="anchor" id="index__"></a>- _ -</h3><ul>
 <li>_POP_FG_LIST
 : <a class="el" href="_algorithms_8cpp.html#a202df821b7a5d777556d0e244beb9b6e">Algorithms.cpp</a>
 </li>
@@ -118,9 +138,24 @@ $(document).ready(function(){initNavTree('globals.html','');});
 <li>_PUSH_FG_LIST_CLR
 : <a class="el" href="_algorithms_8cpp.html#a084ad476d22f33aee545ce5812d2298e">Algorithms.cpp</a>
 </li>
+</ul>
+
+
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>applyDebugSettings()
 : <a class="el" href="main_8cpp.html#aa24e7b49b7682c20114e2ebe999825fb">main.cpp</a>
 </li>
+</ul>
+
+
+<h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
+<li>BlockType
+: <a class="el" href="_linked_block_list_8h.html#a9131734b0566ce54ce652d8aae24ef48">LinkedBlockList.h</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
 <li>DK_DEG2RAD
 : <a class="el" href="_utils_8h.html#a7009b7a14bc0663691f0b84ffe27c337">Utils.h</a>
 </li>
@@ -129,20 +164,71 @@ $(document).ready(function(){initNavTree('globals.html','');});
 </li>
 <li>DllCoreExport
 : <a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Utils.h</a>
-, <a class="el" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Shapes.h</a>
-, <a class="el" href="_drawer_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Drawer.h</a>
-, <a class="el" href="_page_parser_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">PageParser.h</a>
-, <a class="el" href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">ImageProcessor.h</a>
 , <a class="el" href="_image_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Image.h</a>
 , <a class="el" href="_settings_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Settings.h</a>
+, <a class="el" href="_page_parser_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">PageParser.h</a>
+, <a class="el" href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">ImageProcessor.h</a>
+, <a class="el" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Shapes.h</a>
+, <a class="el" href="_drawer_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">Drawer.h</a>
 , <a class="el" href="_base_image_element_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">BaseImageElement.h</a>
 </li>
 <li>DllModuleExport
 : <a class="el" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">BaseModule.h</a>
 </li>
+</ul>
+
+
+<h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
+<li>GCLL_BLOCK_SIZE
+: <a class="el" href="_linked_block_list_8h.html#a66ad76c769b36ceaba6d6c3341fca393">LinkedBlockList.h</a>
+</li>
+<li>GCO_CLOCKS_PER_SEC
+: <a class="el" href="_g_coptimization_8cpp.html#a07f7cd2902cd9a889716e51b5c60893d">GCoptimization.cpp</a>
+, <a class="el" href="_g_coptimization_8h.html#a07f7cd2902cd9a889716e51b5c60893d">GCoptimization.h</a>
+</li>
+<li>GCO_MAX_ENERGYTERM
+: <a class="el" href="_g_coptimization_8h.html#a7349bb5c933d74d19dd20f4d07578adc">GCoptimization.h</a>
+</li>
+<li>gcoclock()
+: <a class="el" href="_g_coptimization_8cpp.html#a333df2084d7160efd73fac4460d3a833">GCoptimization.cpp</a>
+, <a class="el" href="_g_coptimization_8h.html#a333df2084d7160efd73fac4460d3a833">GCoptimization.h</a>
+</li>
+<li>gcoclock_t
+: <a class="el" href="_g_coptimization_8h.html#a5ac14b316a2a77b3d443a4032c79a4c2">GCoptimization.h</a>
+</li>
+<li>GCoptimization::applyNewLabeling&lt; GCoptimization::DataCostFnSparse &gt;()
+: <a class="el" href="_g_coptimization_8cpp.html#a8c0be73add14d53f9fa92c66834ce9a4">GCoptimization.cpp</a>
+</li>
+<li>GCoptimization::queryActiveSitesExpansion&lt; GCoptimization::DataCostFnSparse &gt;()
+: <a class="el" href="_g_coptimization_8cpp.html#a11bf933cad6277bc9b60009f345412c0">GCoptimization.cpp</a>
+</li>
+<li>GCoptimization::setupDataCostsExpansion&lt; GCoptimization::DataCostFnSparse &gt;()
+: <a class="el" href="_g_coptimization_8cpp.html#a2cc335aec46607cf091550fa48e32e5d">GCoptimization.cpp</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>IDI_ICON1
 : <a class="el" href="resource_8h.html#a455fef2a9349aae3af8ef8f24f6fc9d8">resource.h</a>
 </li>
+<li>INDEX0
+: <a class="el" href="_g_coptimization_8cpp.html#aaad859350c057d1d656932475b60c218">GCoptimization.cpp</a>
+</li>
+<li>INFINITE_D
+: <a class="el" href="maxflow_8cpp.html#aa9bc927cb28ad2010a73a6506fb39519">maxflow.cpp</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
+<li>ListType
+: <a class="el" href="_linked_block_list_8h.html#a3d36e64518b6c3a69cccc0b3634be1be">LinkedBlockList.h</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_m"></a>- m -</h3><ul>
 <li>main()
 : <a class="el" href="main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main.cpp</a>
 </li>
@@ -154,6 +240,33 @@ $(document).ready(function(){initNavTree('globals.html','');});
 </li>
 <li>mWarning
 : <a class="el" href="_base_module_8h.html#a15598c53f777fece82b873e3d67acd64">BaseModule.h</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_o"></a>- o -</h3><ul>
+<li>OLGA_INLINE
+: <a class="el" href="_g_coptimization_8h.html#afdfe5e97510186657f166dbd7712a6e0">GCoptimization.h</a>
+</li>
+<li>ORPHAN
+: <a class="el" href="maxflow_8cpp.html#ad4caaed3ae8075a052077724e8a1d41f">maxflow.cpp</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>slist_clear()
+: <a class="el" href="_g_coptimization_8cpp.html#ac9a4661c5aa6245ece627ff70f279980">GCoptimization.cpp</a>
+</li>
+<li>slist_prepend()
+: <a class="el" href="_g_coptimization_8cpp.html#af666182d2d64af93a5393a9442d1b4f1">GCoptimization.cpp</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_t"></a>- t -</h3><ul>
+<li>TERMINAL
+: <a class="el" href="maxflow_8cpp.html#a5250b667cb28dd60b71e6e04e23eac37">maxflow.cpp</a>
 </li>
 </ul>
 </div><!-- contents -->

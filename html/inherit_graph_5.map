@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classrdf_1_1_binarization_test.html" title="rdf::BinarizationTest" alt="" coords="5,5,144,32"/>
+<area shape="rect" id="node1" href="$class_g_coptimization.html" title="GCoptimization" alt="" coords="5,31,117,57"/>
+<area shape="rect" id="node2" href="$class_g_coptimization_general_graph.html" title="GCoptimizationGeneralGraph" alt="" coords="165,5,357,32"/>
+<area shape="rect" id="node3" href="$class_g_coptimization_grid_graph.html" title="GCoptimizationGridGraph" alt="" coords="176,56,347,83"/>
 </map>

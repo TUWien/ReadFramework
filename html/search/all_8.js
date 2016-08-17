@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['handleerror',['handleError',['../class_g_coptimization.html#a5d6c8a27958efe2cc7fd176e004d24e5',1,'GCoptimization']]],
+  ['hasnext',['hasNext',['../class_linked_block_list.html#a920493ce2d77f8fbd1b3c96a9ab19001',1,'LinkedBlockList']]],
   ['height',['height',['../classrdf_1_1_rect.html#a45fd9cb736b030f2cbaeeb2c4ae9cab6',1,'rdf::Rect::height()'],['../classrdf_1_1_patch.html#afb47b316d86a0d19ea40d73ccbaabbe8',1,'rdf::Patch::height()'],['../classrdf_1_1_base_skew_estimation_config.html#a7ca254ef839dfafcf9e295d394c2a7dc',1,'rdf::BaseSkewEstimationConfig::height()']]],
   ['hierarchy',['hierarchy',['../classrdf_1_1_blob.html#a36066d92733d078e0fe2793ab067b0cf',1,'rdf::Blob']]],
   ['hist',['hist',['../classrdf_1_1_histogram.html#aed8ebdfa99b0f4319c26b2dd5434ccbb',1,'rdf::Histogram']]],
