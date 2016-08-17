@@ -654,46 +654,24 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 	if (pixel.empty())
 		return;
 
-	// TODO: look for a correct scaling factor
-	double scaleFactor = 1000;
+	int gcIter = 2;	// # iterations of graph-cut (expansion)
 
-	// stats must be computed
+	// stats must be computed already
 	assert(pixel[0]->stats());
 
+	// the statistics columns == the number of possible labels
 	int nLabels = pixel[0]->stats()->data().cols;
 	
-	// fill costs
-	cv::Mat data(pixel.size(), nLabels, CV_32SC1);
+	// get costs and smoothness term
+	cv::Mat c = costs(nLabels);
+	cv::Mat sm = orientationDistMatrix(nLabels);
 
-	for (int idx = 0; idx < pixel.size(); idx++) {
-		
-		auto ps = pixel[idx]->stats();
-		assert(ps);
-
-		cv::Mat cData = ps->data(PixelStats::combined_idx);
-		cData.convertTo(data.row(idx), CV_32SC1, scaleFactor);	// TODO: check scaling
-	}
-
-	// setup smoothness term
-	cv::Mat sm(nLabels, nLabels, CV_32SC1);
-
-	for (int rIdx = 0; rIdx < sm.rows; rIdx++) {
-		
-		unsigned int* sPtr = sm.ptr<unsigned int>(rIdx);
-		
-		for (int cIdx = 0; cIdx < sm.cols; cIdx++) {
-		
-			// set smoothness cost for orientations
-			int diff = abs(rIdx - cIdx);
-			sPtr[cIdx] = qMin(diff, nLabels - diff);
-		}
-	}
-
+	// init the graph
 	QSharedPointer<GCoptimizationGeneralGraph> graph(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
-	graph->setDataCost(data.ptr<int>());
+	graph->setDataCost(c.ptr<int>());
 	graph->setSmoothCost(sm.ptr<int>());
 
-	// edge lookup
+	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	QMap<QString, QVector<int> > pixelEdges;
 	for (int idx = 0; idx < edges.size(); idx++) {
 
@@ -705,7 +683,7 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 		pixelEdges.insert(key, v);
 	}
 
-	// pixel lookup
+	// pixel lookup (maps pixel IDs to their current vector index)
 	QMap<QString, int> pixelLookup;
 	for (int idx = 0; idx < pixel.size(); idx++) {
 		pixelLookup.insert(pixel[idx]->id(), idx);
@@ -718,13 +696,13 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 
 			const QSharedPointer<PixelEdge>& pe = edges[i];
 			int sVtxIdx = pixelLookup.value(pe->second()->id());
-			int w = qRound(pe->edgeWeight() * scaleFactor);
+			int w = qRound(pe->edgeWeight() * mScaleFactor);
 			graph->setNeighbors(idx, sVtxIdx, w);
 		}
 	}
 
 	// run the expansion-move
-	graph->expansion(2);
+	graph->expansion(gcIter);
 
 	for (int idx = 0; idx < pixel.size(); idx++) {
 
@@ -732,6 +710,42 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 		ps->setOrientationIndex(graph->whatLabel(idx));
 	}
 
+}
+
+cv::Mat PixelSetOrientation::costs(int numLabels) const {
+	
+	// fill costs
+	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		auto ps = mSet[idx]->stats();
+		assert(ps);
+
+		cv::Mat cData = ps->data(PixelStats::combined_idx);
+		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);	// TODO: check scaling
+	}
+
+	return data;
+}
+
+cv::Mat PixelSetOrientation::orientationDistMatrix(int numLabels) const {
+	
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+
+		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+
+			// set smoothness cost for orientations
+			int diff = abs(rIdx - cIdx);
+			sPtr[cIdx] = qMin(diff, numLabels - diff);
+		}
+	}
+
+	return orDist;
 }
 
 }

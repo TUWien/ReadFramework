@@ -201,11 +201,13 @@ private:
 	// input/output
 	QVector<QSharedPointer<Pixel> > mSet;
 	Rect mImgRect;
+	double mScaleFactor = 1000.0;	// TODO: think about thato
 
 	bool checkInput() const override;
 
 	void constructGraph(const QVector<QSharedPointer<Pixel> >& pixel, const QVector<QSharedPointer<PixelEdge> >& edges);
-
+	cv::Mat costs(int numLabels) const;
+	cv::Mat orientationDistMatrix(int numLabels) const;
 };
 
 };
