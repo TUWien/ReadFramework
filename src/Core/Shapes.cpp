@@ -192,15 +192,19 @@ float Line::thickness() const {
 	return mThickness;
 }
 
+double Line::squaredLength() const {
+	
+	QPoint diff = mLine.p2() - mLine.p1();
+	return diff.x()*diff.x() + diff.y()*diff.y();
+}
+
 /// <summary>
 /// Returns the line length.
 /// </summary>
 /// <returns>The line length.</returns>
 double Line::length() const {
-	QPoint diff = mLine.p2() - mLine.p1();
 
-	return sqrt(diff.x()*diff.x() + diff.y()*diff.y());
-
+	return sqrt(squaredLength());
 }
 
 /// <summary>

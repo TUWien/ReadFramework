@@ -93,7 +93,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 	double meanEdgeLength = 0;
 
 	for (auto pe : pixelEdges)
-		meanEdgeLength += pe->scaledEdgeLength();
+		meanEdgeLength += pe->edgeWeight();
 	
 	meanEdgeLength /= pixelEdges.size();
 	double maxEdgeLength = meanEdgeLength * factor;
@@ -102,7 +102,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 
 	for (auto pe : pixelEdges) {
 
-		if (pe->scaledEdgeLength() < maxEdgeLength)
+		if (pe->edgeWeight() > maxEdgeLength)
 			pixelEdgesClean << pe;
 	}
 

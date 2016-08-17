@@ -181,7 +181,7 @@ public:
 
 	bool isNull() const;
 
-	double scaledEdgeLength() const;
+	double edgeWeight() const;
 	Line edge() const;
 	void draw(QPainter& p) const;
 

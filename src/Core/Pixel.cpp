@@ -397,16 +397,32 @@ bool PixelEdge::isNull() const {
 	return mIsNull;
 }
 
-double PixelEdge::scaledEdgeLength() const {
+double PixelEdge::edgeWeight() const {
 
 	if (!mFirst || !mSecond)
 		return 0.0;
 
-	// get minimum scale
-	double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());
-	assert(ms > 0);
+	double beta = 1.0;
 
-	return edge().length() / ms;
+	if (mFirst->stats() && mSecond->stats()) {
+	
+		double sp = mFirst->stats()->lineSpacing();
+		double sq = mSecond->stats()->lineSpacing();
+		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
+
+		// TODO: add mu(fp,fq) according to koo's indices
+		return exp(-nl);
+	}
+
+	qDebug() << "no stats when computing the scaled edges...";
+
+	return 0.0;
+
+	//// get minimum scale
+	//double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());
+	//assert(ms > 0);
+
+	//return edge().length() / ms;
 }
 
 Line PixelEdge::edge() const {

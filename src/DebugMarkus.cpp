@@ -169,8 +169,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	rImg = superPixel.drawSuperPixels(rImg);
-	//rImg = textBlocks.draw(rImg);
+	//rImg = superPixel.drawSuperPixels(rImg);
+	rImg = textBlocks.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;

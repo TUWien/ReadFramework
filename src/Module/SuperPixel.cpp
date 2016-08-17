@@ -653,9 +653,16 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 
 		int vtxIdx = graph.addVtx();
 
+		QSharedPointer<PixelStats> ps = pixel.at(idx)->stats();
+		
 		double fromSource = 0, toSink = 0;
+		cv::Mat cVals = ps->data(PixelStats::combined_idx);
+		cv::minMaxLoc(cVals, &toSink, &fromSource);
 
-		//graph.a
+		graph.addTermWeights(vtxIdx, fromSource, toSink);
+
+		// TODO: add edges
+		//graph.addEdges(vtxIdx, )
 
 	}
 

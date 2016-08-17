@@ -116,6 +116,7 @@ public:
 	void setLine(const QLine& line, float thickness = 1);
 	QLine line() const;
 	float thickness() const;
+	double squaredLength() const;
 	double length() const;
 	double angle() const;
 	float minDistance(const Line& l) const;
