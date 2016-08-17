@@ -56,6 +56,8 @@ public:
     void addTermWeights( int i, TWeight sourceW, TWeight sinkW );
     TWeight maxFlow();
     bool inSourceSegment( int i );
+	uchar vtxT( int i ) const;
+
 private:
     class Vtx
     {
@@ -383,4 +385,12 @@ bool GCGraph<TWeight>::inSourceSegment( int i )
     CV_Assert( i>=0 && i<(int)vtcs.size() );
     return vtcs[i].t == 0;
 }
+
+template <class TWeight>
+uchar GCGraph<TWeight>::vtxT( int i ) const
+{
+	CV_Assert( i>=0 && i<(int)vtcs.size() );
+	return vtcs[i].t;
+}
+
 }

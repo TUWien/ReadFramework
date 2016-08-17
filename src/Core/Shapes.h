@@ -167,6 +167,8 @@ public:
 	// scalar operators
 	void operator*=(const double& scalar);
 	void operator/=(const double& scalar);
+	void operator+=(const double& scalar);
+	void operator-=(const double& scalar);
 
 	// static functions
 	static Vector2D max(const Vector2D& v1, const Vector2D& v2);
@@ -265,6 +267,7 @@ public:
 
 	// setter
 	void move(const Vector2D& vec);
+	void expand(double v);
 	void setSize(const Vector2D& newSize);
 
 	// conversions

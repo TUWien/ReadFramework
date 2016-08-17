@@ -107,6 +107,7 @@ public:
 
 	bool isEmpty() const;
 
+	void setOrientationIndex(int orIdx);
 	int orientationIndex() const;
 	double orientation() const;
 	
@@ -200,7 +201,7 @@ class DllCoreExport PixelSet : public BaseElement {
 
 public:
 	PixelSet();
-	//PixelSet(const QVector<QSharedPointer<Pixel> >& set);
+	PixelSet(const QVector<QSharedPointer<Pixel> >& set);
 
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);

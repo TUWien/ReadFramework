@@ -30,7 +30,7 @@ add_library(${RDF_DLL_CORE_NAME} SHARED ${CORE_SOURCES} ${CORE_HEADERS} ${RDF_RC
 target_link_libraries(${RDF_DLL_CORE_NAME} ${VERSION_LIB} ${OpenCV_LIBS}) 
 
 # add module
-add_library(${RDF_DLL_MODULE_NAME} SHARED ${MODULE_SOURCES} ${MODULE_HEADERS} ${EXT_HEADERS} ${RDF_RC})
+add_library(${RDF_DLL_MODULE_NAME} SHARED ${MODULE_SOURCES} ${MODULE_HEADERS} ${GC_HEADERS} ${GC_SOURCES} ${RDF_RC})
 target_link_libraries(${RDF_DLL_MODULE_NAME} ${RDF_LIB_CORE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 
 add_dependencies(${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME})
@@ -92,7 +92,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "/W4 /O2 ${CMAKE_CXX_FLAGS_RELEASE}")
 
 file(GLOB RDF_AUTOMOC "${CMAKE_BINARY_DIR}/*_automoc.cpp")
 source_group("Generated Files" FILES ${RDF_RC} ${RDF_QM} ${RDF_AUTOMOC})
-source_group("3rdparty" FILES ${EXT_HEADERS})
+source_group("graphcut" FILES ${GC_HEADERS} ${GC_SOURCES})
 
 
 # set_source_files_properties(${NOMACS_TRANSLATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)

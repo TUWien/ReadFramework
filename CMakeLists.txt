@@ -74,7 +74,8 @@ file(GLOB CORE_SOURCES "src/Core/*.cpp")
 file(GLOB CORE_HEADERS "src/Core/*.h")
 
 # external headers
-file(GLOB EXT_HEADERS "src/3rdparty/*.hpp")
+file(GLOB GC_SOURCES "src/3rdparty/graphcut/*.cpp")
+file(GLOB GC_HEADERS "src/3rdparty/graphcut/*.h")
 
 # gather information for building
 include_directories (

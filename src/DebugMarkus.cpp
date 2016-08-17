@@ -154,6 +154,11 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
+	rdf::PixelSetOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
+	
+	if (!pse.compute())
+		qWarning() << "could not compute set orientation";
+
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";

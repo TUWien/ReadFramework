@@ -211,6 +211,12 @@ bool PixelStats::isEmpty() const {
 	return mData.empty();
 }
 
+void PixelStats::setOrientationIndex(int orIdx) {
+
+	assert(orIdx >= 0 && orIdx < mData.cols);
+	mOrIdx = orIdx;
+}
+
 int PixelStats::orientationIndex() const {
 
 	return mOrIdx;
@@ -447,6 +453,10 @@ void PixelEdge::draw(QPainter & p) const {
 
 // PixelSet --------------------------------------------------------------------
 PixelSet::PixelSet() {
+}
+
+PixelSet::PixelSet(const QVector<QSharedPointer<Pixel> >& set) {
+	mSet = set;
 }
 
 bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {

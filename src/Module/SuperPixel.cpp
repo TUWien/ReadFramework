@@ -45,6 +45,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
+#include "graphcut/GCoptimization.h"
+
 #pragma warning(pop)
 
 namespace rdf {
@@ -618,8 +620,9 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 
 // PixelSetOrientation --------------------------------------------------------------------
-PixelSetOrientation::PixelSetOrientation(const QVector<QSharedPointer<Pixel>>& set) {
+PixelSetOrientation::PixelSetOrientation(const QVector<QSharedPointer<Pixel>>& set, const Rect& imgRect) {
 	mSet = set;
+	mImgRect = imgRect;
 }
 
 bool PixelSetOrientation::isEmpty() const {
@@ -630,6 +633,9 @@ bool PixelSetOrientation::compute() {
 	
 	if (!checkInput())
 		return false;
+
+	QVector<QSharedPointer<PixelEdge> > edges = PixelSet::connect(mSet, mImgRect);
+	constructGraph(mSet, edges);
 
 	return true;
 }
@@ -645,25 +651,85 @@ bool PixelSetOrientation::checkInput() const {
 
 void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& pixel, const QVector<QSharedPointer<PixelEdge>>& edges) {
 
+	if (pixel.empty())
+		return;
 
-	rd3::GCGraph<double> graph;
-	graph.create(pixel.size(), edges.size());
+	// TODO: look for a correct scaling factor
+	double scaleFactor = 1000;
+
+	// stats must be computed
+	assert(pixel[0]->stats());
+
+	int nLabels = pixel[0]->stats()->data().cols;
+	
+	// fill costs
+	cv::Mat data(pixel.size(), nLabels, CV_32SC1);
+
+	for (int idx = 0; idx < pixel.size(); idx++) {
+		
+		auto ps = pixel[idx]->stats();
+		assert(ps);
+
+		cv::Mat cData = ps->data(PixelStats::combined_idx);
+		cData.convertTo(data.row(idx), CV_32SC1, scaleFactor);	// TODO: check scaling
+	}
+
+	// setup smoothness term
+	cv::Mat sm(nLabels, nLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < sm.rows; rIdx++) {
+		
+		unsigned int* sPtr = sm.ptr<unsigned int>(rIdx);
+		
+		for (int cIdx = 0; cIdx < sm.cols; cIdx++) {
+		
+			// set smoothness cost for orientations
+			int diff = abs(rIdx - cIdx);
+			sPtr[cIdx] = qMin(diff, nLabels - diff);
+		}
+	}
+
+	QSharedPointer<GCoptimizationGeneralGraph> graph(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
+	graph->setDataCost(data.ptr<int>());
+	graph->setSmoothCost(sm.ptr<int>());
+
+	// edge lookup
+	QMap<QString, QVector<int> > pixelEdges;
+	for (int idx = 0; idx < edges.size(); idx++) {
+
+		QString key = edges[idx]->first()->id();
+
+		QVector<int> v = pixelEdges.value(key);
+		v << idx;
+
+		pixelEdges.insert(key, v);
+	}
+
+	// pixel lookup
+	QMap<QString, int> pixelLookup;
+	for (int idx = 0; idx < pixel.size(); idx++) {
+		pixelLookup.insert(pixel[idx]->id(), idx);
+	}
+
+	// create neighbors
+	for (int idx = 0; idx < pixel.size(); idx++) {
+
+		for (int i : pixelEdges.value(pixel.at(idx)->id())) {
+
+			const QSharedPointer<PixelEdge>& pe = edges[i];
+			int sVtxIdx = pixelLookup.value(pe->second()->id());
+			int w = qRound(pe->edgeWeight() * scaleFactor);
+			graph->setNeighbors(idx, sVtxIdx, w);
+		}
+	}
+
+	// run the expansion-move
+	graph->expansion(2);
 
 	for (int idx = 0; idx < pixel.size(); idx++) {
 
-		int vtxIdx = graph.addVtx();
-
-		QSharedPointer<PixelStats> ps = pixel.at(idx)->stats();
-		
-		double fromSource = 0, toSink = 0;
-		cv::Mat cVals = ps->data(PixelStats::combined_idx);
-		cv::minMaxLoc(cVals, &toSink, &fromSource);
-
-		graph.addTermWeights(vtxIdx, fromSource, toSink);
-
-		// TODO: add edges
-		//graph.addEdges(vtxIdx, )
-
+		auto ps = pixel[idx]->stats();
+		ps->setOrientationIndex(graph->whatLabel(idx));
 	}
 
 }

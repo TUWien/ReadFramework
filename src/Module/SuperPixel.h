@@ -183,7 +183,7 @@ private:
 class DllModuleExport PixelSetOrientation : public Module {
 
 public:
-	PixelSetOrientation(const QVector<QSharedPointer<Pixel> >& set);
+	PixelSetOrientation(const QVector<QSharedPointer<Pixel> >& set, const Rect& imgRect);
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -200,6 +200,7 @@ private:
 
 	// input/output
 	QVector<QSharedPointer<Pixel> > mSet;
+	Rect mImgRect;
 
 	bool checkInput() const override;
 

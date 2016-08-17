@@ -518,6 +518,16 @@ void Vector2D::operator/=(const double & scalar) {
 	mY /= scalar;
 }
 
+void Vector2D::operator+=(const double & scalar) {
+	mX += scalar;
+	mY += scalar;
+}
+
+void Vector2D::operator-=(const double & scalar) {
+	mX -= scalar;
+	mY -= scalar;
+}
+
 Vector2D Vector2D::max(const Vector2D & v1, const Vector2D & v2) {
 	return Vector2D(qMax(v1.x(), v2.x()), qMax(v1.y(), v2.y()));
 }
@@ -804,6 +814,11 @@ Vector2D Rect::center() const {
 
 void Rect::move(const Vector2D & vec) {
 	mTopLeft += vec;
+}
+
+void Rect::expand(double v) {
+	mTopLeft -= 0.5*v;
+	mSize += v;
 }
 
 void Rect::setSize(const Vector2D & newSize) {

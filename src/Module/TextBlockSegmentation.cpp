@@ -73,7 +73,7 @@ bool TextBlockSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	Rect r(0, 0, mSrcImg.cols+1, mSrcImg.rows+1);
+	Rect r(0, 0, mSrcImg.cols, mSrcImg.rows);
 	mEdges = PixelSet::connect(mSuperPixels, r);
 	mEdges = filterEdges(mEdges);
 	
@@ -116,7 +116,7 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	
 	QPainter p(&pm);
-	QColor col = ColorManager::instance().getRandomColor();
+	QColor col = QColor(60, 60, 60);
 	Drawer::instance().setColor(col);
 	p.setPen(Drawer::instance().pen());
 
