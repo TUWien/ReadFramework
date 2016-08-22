@@ -72,6 +72,9 @@ public:
 	void setDrawBaseline(bool draw);
 	bool drawBaseline() const;
 	
+	void setDrawBaselineLimits(bool draw);
+	bool drawBaselineLimits() const;
+
 	void setDrawText(bool draw);
 	bool drawText() const;
 
@@ -93,6 +96,7 @@ protected:
 	bool mDraw = true;
 	bool mDrawPoly = true;
 	bool mDrawBaseline = false;
+	bool mDrawBaselineLimits = true;
 	bool mDrawText = true;
 
 	void assignDefaultColor(const Region::Type& type);

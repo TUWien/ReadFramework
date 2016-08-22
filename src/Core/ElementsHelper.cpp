@@ -75,6 +75,14 @@ bool RegionTypeConfig::drawBaseline() const {
 	return mDrawBaseline;
 }
 
+void RegionTypeConfig::setDrawBaselineLimits(bool draw) {
+	mDrawBaselineLimits = draw;
+}
+
+bool RegionTypeConfig::drawBaselineLimits() const {
+	return mDrawBaselineLimits;
+}
+
 void RegionTypeConfig::setDrawText(bool draw) {
 	mDrawText = draw;
 }

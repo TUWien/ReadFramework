@@ -164,8 +164,8 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 		QPainterPath path;
 		path.addPolygon(polygon().closedPolygon());
 
-		p.drawPath(path);
 		p.fillPath(path, config.brush());
+		p.drawPath(path);
 	}
 
 }
@@ -507,6 +507,23 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 		QPainterPath path;
 		path.addPolygon(poly);
 		p.drawPath(path);
+
+		if (config.drawBaselineLimits()) {
+
+			QBrush b = p.brush();				// backup
+			QPen pen = p.pen();					// backup
+			p.setBrush(pen.color().darker());	// we want the ends to be filled
+			p.setPen(Qt::NoPen);
+
+			// draw start & end points
+			int r = config.pen().width();
+			p.drawEllipse(mBaseLine.startPoint(), r, r);
+			p.drawEllipse(mBaseLine.endPoint(), r, r);
+
+			p.setBrush(b);						// reset
+			p.setPen(pen);						// reset
+		}
+
 	}
 
 	if (config.drawText() && !mText.isEmpty()) {
