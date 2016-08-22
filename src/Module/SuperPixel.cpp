@@ -477,7 +477,7 @@ void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& se
 	// compute all orientations
 	int nOr = config()->numOrientations();
 	int histSize = config()->histSize();
-	cv::Mat orHist(nOr, histSize, CV_32FC1);
+	cv::Mat orHist(nOr, histSize, CV_32FC1, cv::Scalar(0));
 	cv::Mat sparsity(1, nOr, CV_32FC1);
 
 	for (int k = 0; k < nOr; k++) {
@@ -512,7 +512,7 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 	const Vector2D pc = pixel->center();
 
 	// prepare histogram
-	orHist.setTo(0);
+	//orHist.setTo(0);
 	float* orPtr = orHist.ptr<float>();
 
 	for (const Pixel* p : set) {
@@ -537,28 +537,37 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 
 	}
 
-	sparsity = (float)std::log(cv::sum(orHist != 0)[0]/(orHist.cols*255.0));
+	double sumNonZero = 0;
+	//orPtr = orHist.ptr<float>();
+	
+	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
+		if (orPtr[cIdx] != 0)
+			sumNonZero++;
+	}
+
+	sparsity = (float)std::log(sumNonZero/orHist.cols);
+
+	//sparsity = (float)std::log(cv::sum(orHist != 0)[0]/(orHist.cols*255.0));
 
 	// DFT according to Koo16
 	cv::dft(orHist, orHist);
 	assert(!orHist.empty());
 
-	float* hPtr = orHist.ptr<float>();
-	float normValSq = *hPtr * *hPtr;	// the normalization term is always at [0] - we need it sqaured
+	//orPtr = orHist.ptr<float>();
+	float normValSq = *orPtr * *orPtr;	// the normalization term is always at [0] - we need it sqaured
 
 	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
 		
 		if (cIdx >= 10) {
 			// see Koo16: val = -log( (val*val) / (hist[0]*hist[0]) + 1.0);
-			hPtr[cIdx] *= hPtr[cIdx];
-			hPtr[cIdx] /= normValSq;
-			hPtr[cIdx] += 1.0f;	// for log
-			hPtr[cIdx] = std::log(hPtr[cIdx]);
-			hPtr[cIdx] *= -1.0f;
+			orPtr[cIdx] *= orPtr[cIdx];
+			orPtr[cIdx] /= normValSq;
+			orPtr[cIdx] += 1.0f;	// for log
+			orPtr[cIdx] = -std::log(orPtr[cIdx]);
 		}
 		else {
 			// remove very low frequencies - they might create larger peaks than the recurring frequency
-			hPtr[cIdx] = 0.0f;
+			orPtr[cIdx] = 0.0f;
 		}
 	}
 }
