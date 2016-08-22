@@ -40,6 +40,7 @@ var searchData=
   ['setdistthreshold',['setDistThreshold',['../classrdf_1_1_form_features_config.html#a30149b91ee91a2e2f777dc4487690ad6',1,'rdf::FormFeaturesConfig']]],
   ['setdraw',['setDraw',['../classrdf_1_1_region_type_config.html#afdfe485a0add60146090226baf405eb6',1,'rdf::RegionTypeConfig']]],
   ['setdrawbaseline',['setDrawBaseline',['../classrdf_1_1_region_type_config.html#a42f51ad7b1439b21e91485ea345b32eb',1,'rdf::RegionTypeConfig']]],
+  ['setdrawbaselinelimits',['setDrawBaselineLimits',['../classrdf_1_1_region_type_config.html#a6b5eb8dc10c4eae54f765d05ee525229',1,'rdf::RegionTypeConfig']]],
   ['setdrawpoly',['setDrawPoly',['../classrdf_1_1_region_type_config.html#abdbed4b1c0e9800342201eb560f887fe',1,'rdf::RegionTypeConfig']]],
   ['setdrawtext',['setDrawText',['../classrdf_1_1_region_type_config.html#af406b39581b4c8ebe62f5c2be486664e',1,'rdf::RegionTypeConfig']]],
   ['setepsilon',['setEpsilon',['../classrdf_1_1_base_skew_estimation_config.html#a4a4f614ddcfdd1fb336ec17ea559e888',1,'rdf::BaseSkewEstimationConfig']]],

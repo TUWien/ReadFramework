@@ -57,6 +57,7 @@ var searchData=
   ['mdatemodified',['mDateModified',['../classrdf_1_1_page_element.html#a7f7679b68ea20bb8aeb4553f8fd006d9',1,'rdf::PageElement']]],
   ['mdraw',['mDraw',['../classrdf_1_1_region_type_config.html#a1f067bad3c7ea08c5cf1ee25f3eae9c9',1,'rdf::RegionTypeConfig']]],
   ['mdrawbaseline',['mDrawBaseline',['../classrdf_1_1_region_type_config.html#ab0cda1a705de2c13f23a4a4543d9399b',1,'rdf::RegionTypeConfig']]],
+  ['mdrawbaselinelimits',['mDrawBaselineLimits',['../classrdf_1_1_region_type_config.html#aa8b3494590c7df1ea59b8db5019d916c',1,'rdf::RegionTypeConfig']]],
   ['mdrawpoly',['mDrawPoly',['../classrdf_1_1_region_type_config.html#a95bc7b402a689b582bd44cc45425c389',1,'rdf::RegionTypeConfig']]],
   ['mdrawtext',['mDrawText',['../classrdf_1_1_region_type_config.html#a202c66026037218748ec25ee9a193ac0',1,'rdf::RegionTypeConfig']]],
   ['medge',['mEdge',['../classrdf_1_1_pixel_edge.html#a4e5134ac3d257e6da88a03535f47c0a0',1,'rdf::PixelEdge']]],

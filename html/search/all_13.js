@@ -56,7 +56,7 @@ var searchData=
   ['totalvalue',['TotalValue',['../class_energy.html#a11f4c65dfc6bbaab85c6d13aadb75cd5',1,'Energy']]],
   ['triangle',['Triangle',['../classrdf_1_1_triangle.html',1,'rdf']]],
   ['triangle',['Triangle',['../classrdf_1_1_triangle.html#a554a37105d1d61d813145afddf08d188',1,'rdf::Triangle::Triangle()'],['../classrdf_1_1_triangle.html#a7515a5bcd65d86066f57d0f8c3c282af',1,'rdf::Triangle::Triangle(const cv::Vec6f &amp;vec)']]],
-  ['type',['type',['../classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9',1,'rdf::Region::type()'],['../classrdf_1_1_region_type_config.html#a7998a1559cf8fa42cd4fecba1b3e2530',1,'rdf::RegionTypeConfig::type()'],['../classrdf_1_1_region_manager.html#ae7cc63decd01f65a2fa69e9aaaa136ed',1,'rdf::RegionManager::type()'],['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f',1,'rdf::Region::Type()']]],
+  ['type',['Type',['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697f',1,'rdf::Region::Type()'],['../classrdf_1_1_region.html#a6981f360e29090988d1a37a96f32a7c9',1,'rdf::Region::type() const '],['../classrdf_1_1_region_type_config.html#a7998a1559cf8fa42cd4fecba1b3e2530',1,'rdf::RegionTypeConfig::type()'],['../classrdf_1_1_region_manager.html#ae7cc63decd01f65a2fa69e9aaaa136ed',1,'rdf::RegionManager::type()']]],
   ['type_5fend',['type_end',['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa83fff59e3f737b9afe884002a9d34c2f',1,'rdf::Region']]],
   ['type_5fgraphic',['type_graphic',['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa5aa47fd9d76f4919efcd26dfbe88bc61',1,'rdf::Region']]],
   ['type_5fimage',['type_image',['../classrdf_1_1_region.html#a813047248b70e746ba2eba4793c8697fa8552559107da30024c0d03905860b852',1,'rdf::Region']]],
