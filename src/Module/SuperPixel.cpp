@@ -344,7 +344,7 @@ LocalOrientationConfig::LocalOrientationConfig() : ModuleConfig("Local Orientati
 QString LocalOrientationConfig::toString() const {
 	
 	QString msg;
-	msg += " scales " + scaleIvl().toString();
+	msg += "scales " + scaleIvl().toString();
 	msg += " orientations " + QString::number(numOrientations());
 
 	return msg;
@@ -499,6 +499,7 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel,
 	cv::Mat& orHist,
 	float& sparsity) const {
 
+
 	double hl = histVec.length();
 	Vector2D histVecNorm = histVec;
 	histVecNorm /= hl;
@@ -538,21 +539,24 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel,
 	cv::dft(orHist, orHist);
 	assert(!orHist.empty());
 
-	float* lf = orHist.ptr<float>();
-	float lfv = *lf;
-	
-	// remove very low frequencies
-	for (int idx = 0; idx < 10 && idx < orHist.cols; idx++)
-		lf[idx] = 0.0f;
+	float* hPtr = orHist.ptr<float>();
+	float normValSq = *hPtr * *hPtr;	// the normalization term is always at [0] - we need it sqaured
 
-	//// remove very high frequencies
-	//for (int idx = orHist.cols - 1; idx > orHist.cols - 5 && idx > 0; idx--)
-	//	lf[idx] = 0.0f;
-
-	// see Koo et al 2016
-	// log( X(k)^2/X(0)^2 )
-	cv::log(orHist.mul(orHist) / (lfv*lfv) + 1.0, orHist);
-	orHist *= -1.0f;
+	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
+		
+		if (cIdx >= 10) {
+			// see Koo16: val = -log( (val*val) / (hist[0]*hist[0]) + 1.0);
+			hPtr[cIdx] *= hPtr[cIdx];
+			hPtr[cIdx] /= normValSq;
+			hPtr[cIdx] += 1.0f;	// for log
+			hPtr[cIdx] = std::log(hPtr[cIdx]);
+			hPtr[cIdx] *= -1.0f;
+		}
+		else {
+			// remove very low frequencies - they might create larger peaks than the recurring frequency
+			hPtr[cIdx] = 0.0f;
+		}
+	}
 }
 
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {

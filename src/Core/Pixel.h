@@ -152,7 +152,10 @@ public:
 
 	bool isNull() const;
 
-	Vector2D center() const;
+	inline Vector2D center() const {
+		return mEllipse.center();
+	};
+
 	Vector2D size() const;
 	double angle() const;
 	Ellipse ellipse() const;

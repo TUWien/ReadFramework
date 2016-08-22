@@ -1023,9 +1023,6 @@ void Ellipse::setCenter(const Vector2D & center) {
 	mCenter = center;
 }
 
-Vector2D Ellipse::center() const {
-	return mCenter;
-}
 
 void Ellipse::setAxis(const Vector2D & axis) {
 	mIsNull = false;

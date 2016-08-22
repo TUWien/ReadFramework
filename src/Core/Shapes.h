@@ -307,7 +307,9 @@ public:
 	QString toString() const;
 
 	void setCenter(const Vector2D& center);
-	Vector2D center() const;
+	inline Vector2D center() const {
+		return mCenter;
+	};
 
 	void setAxis(const Vector2D& axis);
 	Vector2D axis() const;

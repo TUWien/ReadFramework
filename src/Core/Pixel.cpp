@@ -281,9 +281,9 @@ bool Pixel::isNull() const {
 	return mIsNull;
 }
 
-Vector2D Pixel::center() const {
-	return mEllipse.center();
-}
+//Vector2D Pixel::center() const {
+//	return mEllipse.center();
+//}
 
 Vector2D Pixel::size() const {
 	return mEllipse.axis();
@@ -310,7 +310,6 @@ QSharedPointer<PixelStats> Pixel::stats(int idx) const {
 	
 	// select best scale by default
 	if (idx == -1) {
-
 
 		QSharedPointer<PixelStats> bps;
 		double minScaleV = DBL_MAX;
@@ -345,14 +344,7 @@ void Pixel::draw(QPainter & p, double alpha, bool showId) const {
 
 	if (stats()) {
 
-
 		auto s = stats();
-
-		//if (id() == "507") {
-		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::sparsity_idx), "sparsity");
-		//	qDebug().noquote() << Image::instance().printMat<float>(s->data(PixelStats::combined_idx), "combined");
-		//	qDebug() << "max val: " << s->minVal();
-		//}
 
 		QColor c(255,33,33);
 

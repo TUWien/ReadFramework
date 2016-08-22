@@ -161,7 +161,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/00000197.jpg");
 		dc.setImagePath("D:/read/test/00075751.tif");
 		//dc.setImagePath("D:/read/test/screenshot.png");
-		dc.setImagePath("D:/read/test/synthetic-test.png");
+		//dc.setImagePath("D:/read/test/synthetic-test.png");
 	
 		// debug images
 		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
