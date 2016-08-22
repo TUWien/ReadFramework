@@ -416,8 +416,12 @@ double PixelEdge::edgeWeight() const {
 		double sq = mSecond->stats()->lineSpacing();
 		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
 
+		if (1.0 - exp(-nl) < 0) {
+			qDebug() << "illegal edge weight: " << 1.0 - exp(-nl);
+		}
+
 		// TODO: add mu(fp,fq) according to koo's indices
-		return exp(-nl);
+		return 1.0-exp(-nl);
 	}
 
 	qDebug() << "no stats when computing the scaled edges...";
