@@ -152,23 +152,68 @@ public:
 	Vector2D(const QSizeF& s);
 	Vector2D(const cv::Point& v);
 
-	DllCoreExport friend bool operator==(const Vector2D& l, const Vector2D& r);
-	DllCoreExport friend bool operator!=(const Vector2D& l, const Vector2D& r);
-	DllCoreExport friend Vector2D operator+(const Vector2D& l, const Vector2D& r);
-	DllCoreExport friend Vector2D operator-(const Vector2D& l, const Vector2D& r);
-	DllCoreExport friend double operator*(const Vector2D& l, const Vector2D& r);
-
 	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const Vector2D& v);
 	DllCoreExport friend QDebug operator<< (QDebug d, const Vector2D &v);
 
-	void operator+=(const Vector2D& vec);
-	void operator-=(const Vector2D& vec);
+	// binary operators
+	DllCoreExport friend bool operator==(const Vector2D & l, const Vector2D & r) {
+		return l.mX == r.mX && l.mY == r.mY;
+	}
+
+	DllCoreExport friend bool operator!=(const Vector2D & l, const Vector2D & r) {
+		return !(l == r);
+	}
+
+	DllCoreExport friend Vector2D operator+(const Vector2D & l, const Vector2D & r) {
+		return Vector2D(l.x() + r.x(), l.y() + r.y());
+	}
+
+	DllCoreExport friend Vector2D operator-(const Vector2D & l, const Vector2D & r) {
+		return Vector2D(l.x() - r.x(), l.y() - r.y());
+	}
+
+	/// <summary>
+	/// Computes the scalar product between l and r.
+	/// </summary>
+	/// <param name="l">A vector l.</param>
+	/// <param name="r">A vector r.</param>
+	/// <returns></returns>
+	DllCoreExport friend double operator*(const Vector2D & l, const Vector2D & r) {
+		return l.mX * r.mX + l.mY * r.mY;
+	}
 	
+	// class member access operators
+	void operator+=(const Vector2D& vec) {
+		mX += vec.mX;
+		mY += vec.mY;
+	}
+
+	void operator-=(const Vector2D& vec) {
+		mX -= vec.mX;
+		mY -= vec.mY;
+	}
+
 	// scalar operators
-	void operator*=(const double& scalar);
-	void operator/=(const double& scalar);
-	void operator+=(const double& scalar);
-	void operator-=(const double& scalar);
+	void operator*=(const double& scalar) {
+		mX *= scalar;
+		mY *= scalar;
+	};
+
+	void operator/=(const double& scalar) {
+		mX /= scalar;
+		mY /= scalar;
+	};
+
+	void operator+=(const double& scalar) {
+	
+		mX += scalar;
+		mY += scalar;
+	};
+
+	void operator-=(const double& scalar) {
+		mX -= scalar;
+		mY -= scalar;
+	};
 
 	// static functions
 	static Vector2D max(const Vector2D& v1, const Vector2D& v2);
@@ -179,10 +224,14 @@ public:
 	bool isNull() const;
 
 	void setX(double x);
-	double x() const;
+	inline double x() const {
+		return mX;
+	};
 	
 	void setY(double y);
-	double y() const;
+	double y() const {
+		return mY;
+	};
 
 	QPoint toQPoint() const;
 	QPointF toQPointF() const;

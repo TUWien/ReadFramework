@@ -405,8 +405,13 @@ bool LocalOrientation::compute() {
 		return false;
 	
 	Timer dt;
-	for (QSharedPointer<Pixel> p : mSet)
-		computeScales(p, mSet);
+
+	QVector<Pixel*> ptrSet;
+	for (const QSharedPointer<Pixel> p : mSet)
+		ptrSet << p.data();
+
+	for (Pixel* p : ptrSet)
+		computeScales(p, ptrSet);
 
 	mDebug << config()->toString();
 	mDebug << "computed in" << dt;
@@ -430,18 +435,18 @@ bool LocalOrientation::checkInput() const {
 	return !mSet.isEmpty();
 }
 
-void LocalOrientation::computeScales(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set) const {
+void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) const {
 	
 	const Vector2D& ec = pixel->center();
-	QVector<QSharedPointer<Pixel> > cSet = set;
+	QVector<Pixel*> cSet = set;
 	
 	// iterate over all scales
 	for (double cRadius = config()->maxScale(); cRadius >= config()->minScale(); cRadius /= 2.0) {
 
-		QVector<QSharedPointer<Pixel> > neighbors;
+		QVector<Pixel*> neighbors;
 
 		// create neighbor set
-		for (const QSharedPointer<Pixel>& p : cSet) {
+		for (Pixel* p : cSet) {
 
 			if (Vector2D(ec - p->center()).length() < cRadius) {
 				neighbors << p;
@@ -454,16 +459,15 @@ void LocalOrientation::computeScales(QSharedPointer<Pixel>& pixel, const QVector
 		// reduce the set (since we reduce the radius, it must be contained in the current set)
 		cSet = neighbors;
 	}
-
 }
 
-void LocalOrientation::computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel>>& set, double radius) const {
+void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& set, double radius) const {
 
 	const Vector2D& ec = pixel->center();
-	QVector<QSharedPointer<Pixel> > neighbors;
+	QVector<const Pixel*> neighbors;
 
 	// create neighbor set
-	for (const QSharedPointer<Pixel>& p : set) {
+	for (const Pixel* p : set) {
 
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p;
@@ -493,8 +497,8 @@ void LocalOrientation::computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVe
 	pixel->addStats(QSharedPointer<PixelStats>(new PixelStats(orHist, sparsity, radius, pixel->id())));
 }
 
-void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel, 
-	const QVector<QSharedPointer<Pixel>>& set, 
+void LocalOrientation::computeOrHist(const Pixel* pixel, 
+	const QVector<const Pixel*>& set, 
 	const Vector2D & histVec, 
 	cv::Mat& orHist,
 	float& sparsity) const {
@@ -511,7 +515,7 @@ void LocalOrientation::computeOrHist(const QSharedPointer<Pixel>& pixel,
 	orHist.setTo(0);
 	float* orPtr = orHist.ptr<float>();
 
-	for (const QSharedPointer<Pixel>& p : set) {
+	for (const Pixel* p : set) {
 
 		Vector2D lc = p->center() - pc;
 		double v = histVecNorm * lc;
@@ -582,13 +586,13 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	painter.setPen(ColorManager::instance().colors()[2]);
 
 	const Vector2D& ec = pixel->center();
-	QVector<QSharedPointer<Pixel> > neighbors;
+	QVector<const Pixel*> neighbors;
 
 	// create neighbor set
 	for (const QSharedPointer<Pixel>& p : mSet) {
 
 		if (Vector2D(ec - p->center()).length() < radius) {
-			neighbors << p;
+			neighbors << p.data();
 			p->draw(painter, 0.3);
 		}
 	}
@@ -611,7 +615,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		orVec.rotate(cAngle);
 
 		cv::Mat cRow = orHist.row(k);
-		computeOrHist(pixel, neighbors, orVec, cRow, sp);
+		computeOrHist(pixel.data(), neighbors, orVec, cRow, sp);
 
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);

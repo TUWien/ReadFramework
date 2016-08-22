@@ -170,10 +170,10 @@ private:
 
 	bool checkInput() const override;
 
-	void computeScales(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set) const;
-	void computeAllOrHists(QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<Pixel> >& set, double radius) const;
-	void computeOrHist(const QSharedPointer<Pixel>& pixel, 
-		const QVector<QSharedPointer<Pixel> >& set, 
+	void computeScales(Pixel* pixel, const QVector<Pixel*>& set) const;
+	void computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& set, double radius) const;
+	void computeOrHist(const Pixel* pixel, 
+		const QVector<const Pixel*>& set, 
 		const Vector2D& histVec, 
 		cv::Mat& orHist,
 		float& sparsity) const;

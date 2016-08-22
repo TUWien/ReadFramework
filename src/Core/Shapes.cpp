@@ -498,36 +498,6 @@ Vector2D::Vector2D(const cv::Point & p) {
 	mY = p.y;
 }
 
-void Vector2D::operator+=(const Vector2D & vec) {
-	mX += vec.x();
-	mY += vec.y();
-}
-
-void Vector2D::operator-=(const Vector2D & vec) {
-	mX -= vec.x();
-	mY -= vec.y();
-}
-
-void Vector2D::operator*=(const double & scalar) {
-	mX *= scalar;
-	mY *= scalar;
-}
-
-void Vector2D::operator/=(const double & scalar) {
-	mX /= scalar;
-	mY /= scalar;
-}
-
-void Vector2D::operator+=(const double & scalar) {
-	mX += scalar;
-	mY += scalar;
-}
-
-void Vector2D::operator-=(const double & scalar) {
-	mX -= scalar;
-	mY -= scalar;
-}
-
 Vector2D Vector2D::max(const Vector2D & v1, const Vector2D & v2) {
 	return Vector2D(qMax(v1.x(), v2.x()), qMax(v1.y(), v2.y()));
 }
@@ -554,32 +524,6 @@ QDebug operator<<(QDebug d, const Vector2D& v) {
 	return d;
 }
 
-bool operator==(const Vector2D & l, const Vector2D & r) {
-	return l.mX == r.mX && l.mY == r.mY;
-}
-
-bool operator!=(const Vector2D & l, const Vector2D & r) {
-	return !(l == r);
-}
-
-Vector2D operator+(const Vector2D & l, const Vector2D & r) {
-	return Vector2D(l.x() + r.x(), l.y() + r.y());
-}
-
-Vector2D operator-(const Vector2D & l, const Vector2D & r) {
-	return Vector2D(l.x() - r.x(), l.y() - r.y());
-}
-
-/// <summary>
-/// Computes the scalar product between l and r.
-/// </summary>
-/// <param name="l">A vector l.</param>
-/// <param name="r">A vector r.</param>
-/// <returns></returns>
-double operator*(const Vector2D & l, const Vector2D & r) {
-	return l.mX * r.mX + l.mY * r.mY;
-}
-
 QDataStream& operator<<(QDataStream& s, const Vector2D& v) {
 
 	s << v.toString();	// for now show children too
@@ -591,17 +535,9 @@ void Vector2D::setX(double x) {
 	mX = x;
 }
 
-double Vector2D::x() const {
-	return mX;
-}
-
 void Vector2D::setY(double y) {
 	mIsNull = false;
 	mY = y;
-}
-
-double Vector2D::y() const {
-	return mY;
 }
 
 QPoint Vector2D::toQPoint() const {
