@@ -130,11 +130,6 @@ protected:
 	int mHistSize = 0;
 	int mOrIdx = -1;
 
-	//int mDominantOrIdx = -1;
-	//int mDominantScaleIdx = -1;
-	//int mDominantPeakIdx = -1;
-	//double mDominantPeakVal = 0.0;
-
 	void convertData(const cv::Mat& orHist, const cv::Mat& sparsity);
 };
 

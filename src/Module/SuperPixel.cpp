@@ -455,7 +455,12 @@ void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) c
 		// create neighbor set
 		for (Pixel* p : cSet) {
 
-			if (Vector2D(ec - p->center()).length() < cRadius) {
+			Vector2D lVec(ec - p->center());
+
+			if (abs(lVec.x()) > cRadius || abs(lVec.y()) > cRadius)
+				continue;
+
+			if (lVec.length() < cRadius) {
 				neighbors << p;
 			}
 		}
@@ -610,10 +615,11 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 	const Vector2D& ec = pixel->center();
 	QVector<const Pixel*> neighbors;
+	double sqRadius = radius*radius;
 
 	// create neighbor set
 	for (const QSharedPointer<Pixel>& p : mSet) {
-
+		
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p.data();
 			p->draw(painter, 0.3, true, false);
