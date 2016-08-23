@@ -143,6 +143,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	cv::Mat img = src.clone();
 	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);
 
+	Timer dt;
 	rdf::SuperPixel superPixel(img);
 	
 	if (!superPixel.compute())
@@ -154,14 +155,16 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
-	rdf::PixelSetOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
-	
-	if (!pse.compute())
-		qWarning() << "could not compute set orientation";
+	//rdf::PixelSetOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
+	//
+	//if (!pse.compute())
+	//	qWarning() << "could not compute set orientation";
 
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";
+
+	qInfo() << "algorithm computation time" << dt;
 
 	// drawing
 	//cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(150));

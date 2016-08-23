@@ -99,7 +99,7 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	dtf.start();
-	nF = filterDuplicates(*blobs);
+	nF = filterDuplicates(*blobs, 7, 10);
 	qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
 	//// collect the blobs
@@ -142,33 +142,40 @@ int SuperPixel::filterAspectRatio(MserContainer& blobs, double aRatio) const {
 	return numRemoved;
 }
 
-int SuperPixel::filterDuplicates(MserContainer& blobs, int eps) const {
+int SuperPixel::filterDuplicates(MserContainer& blobs, int eps, int upperBound) const {
 
 	int cnt = 0;
+	size_t nBoxes = blobs.boxes.size();
 
 	std::vector<std::vector<cv::Point>> pixelsClean;
 	std::vector<cv::Rect> boxesClean;
 
-	for (unsigned int idx = 0; idx < blobs.boxes.size(); idx++) {
+	for (size_t idx = 0; idx < nBoxes; idx++) {
 
 		const cv::Rect& r = blobs.boxes[idx];
 		bool duplicate = false;
 
-		for (unsigned int cIdx = idx+1; cIdx < blobs.boxes.size(); cIdx++) {
+		for (size_t cIdx = idx+1; cIdx < nBoxes; cIdx++) {
 
-			if (idx == cIdx)
-				continue;
+			// should never happen...
+			assert(idx != cIdx);
+
+			if (upperBound != -1 && cIdx > idx + upperBound)
+				break;
 
 			const cv::Rect& cr = blobs.boxes[cIdx];
 
-			if (abs(r.x - cr.x) < eps &&
-				abs(r.y - cr.y) < eps &&
-				abs(r.width - cr.width) < eps &&
-				abs(r.height - cr.height) < eps) {
+			if (abs(r.x - cr.x) < eps) {
+				if (abs(r.y - cr.y) < eps) {
+					if (abs(r.width - cr.width) < eps) {
+						if (abs(r.height - cr.height) < eps) {
 
-				cnt++;
-				duplicate = true;
-				break;
+							cnt++;
+							duplicate = true;
+							break;
+						}
+					}
+				}
 			}
 		}
 

@@ -119,7 +119,7 @@ private:
 	QSharedPointer<MserContainer> getBlobs(const cv::Mat& img, int kernelSize) const;
 	QSharedPointer<MserContainer> mser(const cv::Mat& img) const;
 	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.2) const;
-	int filterDuplicates(MserContainer& blobs, int eps = 5) const;
+	int filterDuplicates(MserContainer& blobs, int eps = 5, int upperBound = -1) const;
 
 };
 
