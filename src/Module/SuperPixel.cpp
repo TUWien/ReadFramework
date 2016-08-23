@@ -95,22 +95,12 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 	assert(blobs->pixels.size() == blobs->boxes.size());
 
 	Timer dtf;
-	int nF = filterAspectRatio(*blobs);
-	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
-
-	dtf.start();
-	nF = filterDuplicates(*blobs, 7, 10);
+	int nF = filterDuplicates(*blobs, 7, 10);
 	qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
-	//// collect the blobs
-	//QVector<QSharedPointer<MserBlob> > blobs;
-
-	//for (int idx = 0; idx < pixels.size(); idx++) {
-	//	
-	//	Rect r = Converter::cvRectToQt(boxes[idx]);
-	//	QSharedPointer<MserBlob> cb(new MserBlob(pixels[idx], r));
-	//	blobs << cb;
-	//}
+	dtf.start();
+	nF = filterAspectRatio(*blobs);
+	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	return blobs;
 }
@@ -165,17 +155,14 @@ int SuperPixel::filterDuplicates(MserContainer& blobs, int eps, int upperBound) 
 
 			const cv::Rect& cr = blobs.boxes[cIdx];
 
-			if (abs(r.x - cr.x) < eps) {
-				if (abs(r.y - cr.y) < eps) {
-					if (abs(r.width - cr.width) < eps) {
-						if (abs(r.height - cr.height) < eps) {
+			if (abs(r.x - cr.x) < eps &&
+				abs(r.y - cr.y) < eps &&
+				abs(r.width - cr.width) < eps &&
+				abs(r.height - cr.height) < eps) {
 
-							cnt++;
-							duplicate = true;
-							break;
-						}
-					}
-				}
+				cnt++;
+				duplicate = true;
+				break;
 			}
 		}
 
@@ -455,12 +442,7 @@ void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) c
 		// create neighbor set
 		for (Pixel* p : cSet) {
 
-			Vector2D lVec(ec - p->center());
-
-			if (abs(lVec.x()) > cRadius || abs(lVec.y()) > cRadius)
-				continue;
-
-			if (lVec.length() < cRadius) {
+			if (isNeighbor(ec, p->center(), cRadius)) {
 				neighbors << p;
 			}
 		}
@@ -476,19 +458,13 @@ void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) c
 void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& set, double radius) const {
 
 	const Vector2D& ec = pixel->center();
-	//Rect nbox;
-	//nbox.move(ec);
-	//nbox.setSize(Vector2D(2 * radius, 2 * radius));
 
 	QVector<const Pixel*> neighbors;
 
 	// create neighbor set
 	for (const Pixel* p : set) {
 
-		//if (!nbox.contains(p->center()))
-		//	continue;
-
-		if (Vector2D(ec - p->center()).length() < radius) {
+		if (isNeighbor(ec, p->center(), radius)) {
 			neighbors << p;
 		}
 	}
@@ -556,8 +532,8 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 
 	}
 
+	// estimate sparsity
 	double sumNonZero = 0;
-	//orPtr = orHist.ptr<float>();
 	
 	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
 		if (orPtr[cIdx] != 0)
@@ -565,8 +541,6 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 	}
 
 	sparsity = (float)std::log(sumNonZero/orHist.cols);
-
-	//sparsity = (float)std::log(cv::sum(orHist != 0)[0]/(orHist.cols*255.0));
 	
 	// DFT according to Koo16
 	cv::dft(orHist, orHist);
@@ -589,6 +563,21 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 			orPtr[cIdx] = 0.0f;
 		}
 	}
+}
+
+bool LocalOrientation::isNeighbor(const Vector2D & p1, const Vector2D & p2, double cRadius) const {
+
+	// speed things up a little
+	if (abs(p1.y() - p2.y()) > cRadius ||
+		abs(p1.x() - p2.x()) > cRadius)
+		return false;
+
+	Vector2D lVec(p1 - p2);
+
+	if (lVec.length() < cRadius)
+		return true;
+
+	return false;
 }
 
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
@@ -620,7 +609,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	// create neighbor set
 	for (const QSharedPointer<Pixel>& p : mSet) {
 		
-		if (Vector2D(ec - p->center()).length() < radius) {
+		if (isNeighbor(ec, p->center(), radius)) {
 			neighbors << p.data();
 			p->draw(painter, 0.3, true, false);
 		}

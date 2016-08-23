@@ -178,6 +178,8 @@ private:
 		cv::Mat& orHist,
 		float& sparsity) const;
 
+	bool isNeighbor(const Vector2D& p1, const Vector2D& p2, double cRadius) const;
+
 };
 
 class DllModuleExport PixelSetOrientation : public Module {
