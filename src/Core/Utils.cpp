@@ -365,32 +365,31 @@ QString Timer::stringifyTime(int ct) const {
 		return QString::number(ct) + " ms";
 
 	int v = qRound(ct / 1000.0);
+	int ms = ct % 1000;
 	int sec = v % 60;	v = qRound(v / 60.0);
 	int min = v % 60;	v = qRound(v / 60.0);
 	int h = v % 24;		v = qRound(v / 24.0);
 	int d = v;
-
-	QString ds = QString::number(d);
-	QString hs = QString::number(h);
-	QString mins = QString::number(min);
+	
+	QString mss = QString("%1").arg(ms, 3, 10, QChar('0')); // zero padding
 	QString secs = QString::number(sec);
+
+	if (ct < 10000)
+		return secs + "." + mss + " sec";
 
 	if (ct < 60000)
 		return secs + " sec";
 
-	if (min < 10)
-		mins = "0" + mins;
-	if (sec < 10)
-		secs = "0" + secs;
-	if (h < 10)
-		hs = "0" + hs;
+	QString ds = QString("%1").arg(d, 2, 10, QChar('0'));		// zero padding e.g. 01
+	QString hs = QString("%1").arg(h, 2, 10, QChar('0'));		// zero padding e.g. 01;
+	QString mins = QString("%1").arg(min, 2, 10, QChar('0'));	// zero padding e.g. 01;
 
 	if (ct < 3600000)
 		return mins + ":" + secs;
 	if (d == 0)
 		return hs + ":" + mins + ":" + secs;
 
-	return ds + "days" + hs + ":" + mins + ":" + secs;
+	return ds + "days " + hs + ":" + mins + ":" + secs;
 }
 
 void Timer::start() {

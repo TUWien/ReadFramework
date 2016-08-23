@@ -479,10 +479,11 @@ QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
 
 Polygon PixelSet::polygon() {
 
+	qWarning() << "PixelSet::polygon() not implemented yet";
 	return Polygon();
 }
 
-Rect PixelSet::boundingBox() {
+Rect PixelSet::boundingBox() const {
 
 	double top = DBL_MAX, left = DBL_MAX;
 	double bottom = -DBL_MAX, right = -DBL_MAX;
@@ -507,7 +508,7 @@ Rect PixelSet::boundingBox() {
 	return Rect(left, top, right-left, bottom-top);
 }
 
-QVector<QSharedPointer<PixelEdge> > PixelSet::connect(QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
+QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
 
 	// Create an instance of Subdiv2D
 	cv::Subdiv2D subdiv(rect.toCvRect());
@@ -538,7 +539,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(QVector<QSharedPointer<Pix
 	return edges;
 }
 
-void PixelSet::draw(QPainter& p) {
+void PixelSet::draw(QPainter& p) const {
 
 	for (auto px : mSet)
 		px->draw(p);
@@ -546,6 +547,67 @@ void PixelSet::draw(QPainter& p) {
 	p.drawRect(boundingBox().toQRectF());
 }
 
+// PixelGraph --------------------------------------------------------------------
+PixelGraph::PixelGraph() {
+
+}
+
+PixelGraph::PixelGraph(const QVector<QSharedPointer<Pixel>>& set) {
+	mSet = QSharedPointer<PixelSet>::create(set);
+}
+
+bool PixelGraph::isEmpty() const {
+	return !mSet || mSet->pixels().isEmpty();
+}
+
+void PixelGraph::draw(QPainter & p) const {
+
+	qDebug() << "PixelGraph::draw does not have an implementation yet";
+}
+
+void PixelGraph::connect(const Rect & rect) {
+
+	// nothing todo?
+	if (isEmpty())
+		return;
+
+	assert(mSet);
+	const QVector<QSharedPointer<Pixel> >& pixels = mSet->pixels();
+	mEdges = PixelSet::connect(pixels, rect);
+
+	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
+	for (int idx = 0; idx < mEdges.size(); idx++) {
+
+		QString key = mEdges[idx]->first()->id();
+
+		QVector<int> v = mPixelEdges.value(key);
+		v << idx;
+
+		mPixelEdges.insert(key, v);
+	}
+
+	// pixel lookup (maps pixel IDs to their current vector index)
+	for (int idx = 0; idx < pixels.size(); idx++) {
+		mPixelLookup.insert(pixels[idx]->id(), idx);
+	}
+
+}
+
+QSharedPointer<PixelSet> PixelGraph::set() const {
+	return mSet;
+}
+
+QVector<QSharedPointer<PixelEdge>> PixelGraph::edges() const {
+	return mEdges;
+}
+
+int PixelGraph::pixelIndex(const QString & pixelID) const {
+	return mPixelLookup.value(pixelID);
+};
+
+QVector<int> PixelGraph::edgeIndexes(const QString & pixelID) const {
+	return mPixelEdges.value(pixelID);
+};
 
 
 }

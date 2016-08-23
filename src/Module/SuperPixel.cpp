@@ -662,8 +662,11 @@ bool PixelSetOrientation::compute() {
 	if (!checkInput())
 		return false;
 
-	QVector<QSharedPointer<PixelEdge> > edges = PixelSet::connect(mSet, mImgRect);
-	constructGraph(mSet, edges);
+	Timer dt;
+	PixelGraph graph(mSet);
+	graph.connect(mImgRect);
+	graphCut(graph);
+	qInfo() << "[Graph Cut] computed in" << dt;
 
 	return true;
 }
@@ -677,65 +680,55 @@ bool PixelSetOrientation::checkInput() const {
 	return !isEmpty();
 }
 
-void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& pixel, const QVector<QSharedPointer<PixelEdge>>& edges) {
+void PixelSetOrientation::graphCut(const PixelGraph& graph) {
 
-	if (pixel.empty())
+	if (graph.isEmpty())
 		return;
 
 	int gcIter = 2;	// # iterations of graph-cut (expansion)
 
 	// stats must be computed already
+	QVector<QSharedPointer<Pixel> > pixel = graph.set()->pixels();
 	assert(pixel[0]->stats());
 
 	// the statistics columns == the number of possible labels
-	int nLabels = pixel[0]->stats()->data().cols;
+	int nLabels = graph.set()->pixels()[0]->stats()->data().cols;
 	
 	// get costs and smoothness term
-	cv::Mat c = costs(nLabels);
-	cv::Mat sm = orientationDistMatrix(nLabels);
+	cv::Mat c = costs(nLabels);					 // SetSize x #labels
+	cv::Mat sm = orientationDistMatrix(nLabels); // #labels x #labels
 
 	// init the graph
-	QSharedPointer<GCoptimizationGeneralGraph> graph(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
-	graph->setDataCost(c.ptr<int>());
-	graph->setSmoothCost(sm.ptr<int>());
-
-	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
-	QMap<QString, QVector<int> > pixelEdges;
-	for (int idx = 0; idx < edges.size(); idx++) {
-
-		QString key = edges[idx]->first()->id();
-
-		QVector<int> v = pixelEdges.value(key);
-		v << idx;
-
-		pixelEdges.insert(key, v);
-	}
-
-	// pixel lookup (maps pixel IDs to their current vector index)
-	QMap<QString, int> pixelLookup;
-	for (int idx = 0; idx < pixel.size(); idx++) {
-		pixelLookup.insert(pixel[idx]->id(), idx);
-	}
+	QSharedPointer<GCoptimizationGeneralGraph> graphCut(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
+	graphCut->setDataCost(c.ptr<int>());
+	graphCut->setSmoothCost(sm.ptr<int>());
 
 	// create neighbors
+	const QVector<QSharedPointer<PixelEdge> >& edges = graph.edges();
 	for (int idx = 0; idx < pixel.size(); idx++) {
 
-		for (int i : pixelEdges.value(pixel.at(idx)->id())) {
+		for (int edgeIdx : graph.edgeIndexes(pixel.at(idx)->id())) {
 
-			const QSharedPointer<PixelEdge>& pe = edges[i];
-			int sVtxIdx = pixelLookup.value(pe->second()->id());
+			assert(edgeIdx != -1);
+
+			// get vertex ID
+			const QSharedPointer<PixelEdge>& pe = edges[edgeIdx];
+			int sVtxIdx = graph.pixelIndex(pe->second()->id());
+			
+			// compute weight
 			int w = qRound((1.0-pe->edgeWeight()) * mScaleFactor);
-			graph->setNeighbors(idx, sVtxIdx, w);
+
+			graphCut->setNeighbors(idx, sVtxIdx, w);
 		}
 	}
 
 	// run the expansion-move
-	graph->expansion(gcIter);
+	graphCut->expansion(gcIter);
 
 	for (int idx = 0; idx < pixel.size(); idx++) {
 
 		auto ps = pixel[idx]->stats();
-		ps->setOrientationIndex(graph->whatLabel(idx));
+		ps->setOrientationIndex(graphCut->whatLabel(idx));
 	}
 
 }

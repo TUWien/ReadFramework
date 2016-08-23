@@ -39,6 +39,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QVector>
+#include <QMap>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -211,14 +212,40 @@ public:
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
 	Polygon polygon();
-	Rect boundingBox();
+	Rect boundingBox() const;
 
-	void draw(QPainter& p);
+	void draw(QPainter& p) const;
 
-	static QVector<QSharedPointer<PixelEdge> > connect(QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
+	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
+};
+
+class DllCoreExport PixelGraph : public BaseElement {
+
+public:
+	PixelGraph();
+	PixelGraph(const QVector<QSharedPointer<Pixel> >& set);
+
+	bool isEmpty() const;
+
+	void draw(QPainter& p) const;
+	void connect(const Rect& rect);
+
+	QSharedPointer<PixelSet> set() const;
+	QVector<QSharedPointer<PixelEdge> > edges() const;
+
+	int pixelIndex(const QString & pixelID) const;
+	QVector<int> edgeIndexes(const QString & pixelID) const;
+
+protected:
+	QSharedPointer<PixelSet> mSet;
+	QVector<QSharedPointer<PixelEdge> > mEdges;
+	
+	QMap<QString, int> mPixelLookup;			// maps pixel IDs to their current vector index
+	QMap<QString, QVector<int> > mPixelEdges;	// maps pixel IDs to their corresponding edge index
+
 };
 
 };

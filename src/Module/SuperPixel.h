@@ -207,7 +207,7 @@ private:
 
 	bool checkInput() const override;
 
-	void constructGraph(const QVector<QSharedPointer<Pixel> >& pixel, const QVector<QSharedPointer<PixelEdge> >& edges);
+	void graphCut(const PixelGraph& graph);
 	cv::Mat costs(int numLabels) const;
 	cv::Mat orientationDistMatrix(int numLabels) const;
 };
