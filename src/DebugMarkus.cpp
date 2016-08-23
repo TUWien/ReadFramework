@@ -169,7 +169,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	//// draw edges
 	//rImg = textBlocks.draw(rImg);
-	//rImg = lo.draw(rImg, "507", 256);
+	//rImg = lo.draw(rImg, "1012", 256);
 	//rImg = lo.draw(rImg, "507", 128);
 	//rImg = lo.draw(rImg, "507", 64);
 

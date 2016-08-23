@@ -156,15 +156,18 @@ public:
 		return mEllipse.center();
 	};
 
+	Rect bbox() const {
+		return mBBox;
+	};
+
 	Vector2D size() const;
 	double angle() const;
 	Ellipse ellipse() const;
-	Rect bbox() const;
 	
 	void addStats(const QSharedPointer<PixelStats>& stats);
 	QSharedPointer<PixelStats> stats(int idx = -1) const;
 
-	void draw(QPainter& p, double alpha = 0.3, bool showId = false) const;
+	void draw(QPainter& p, double alpha = 0.3, bool showEllipse = false, bool showId = false) const;
 
 protected:
 	bool mIsNull = true;

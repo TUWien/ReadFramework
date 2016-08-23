@@ -176,7 +176,7 @@ PixelStats::PixelStats(const cv::Mat& orHist,
 
 void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
 
-	double lambda = 0.5;	// weights sparsity & line frequency measure
+	double lambda = 0.5;	// weights sparsity & line frequency measure (1.0 is dft only)
 	assert(orHist.rows == sparsity.cols);
 
 	// enrich our data
@@ -297,9 +297,9 @@ Ellipse Pixel::ellipse() const {
 	return mEllipse;
 }
 
-Rect Pixel::bbox() const {
-	return mBBox;
-}
+//Rect Pixel::bbox() const {
+//	return mBBox;
+//}
 
 
 void Pixel::addStats(const QSharedPointer<PixelStats>& stats) {
@@ -333,7 +333,7 @@ QSharedPointer<PixelStats> Pixel::stats(int idx) const {
 	return mStats[idx];
 }
 
-void Pixel::draw(QPainter & p, double alpha, bool showId) const {
+void Pixel::draw(QPainter & p, double alpha, bool showEllipse, bool showId) const {
 	
 	if (showId) {
 		QPen pen = p.pen();
@@ -367,7 +367,8 @@ void Pixel::draw(QPainter & p, double alpha, bool showId) const {
 		p.setPen(pen);
 
 	}
-	else
+
+	if (!stats() || showEllipse)
 		mEllipse.draw(p, alpha);
 
 }
@@ -407,13 +408,16 @@ double PixelEdge::edgeWeight() const {
 		double sp = mFirst->stats()->lineSpacing();
 		double sq = mSecond->stats()->lineSpacing();
 		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
+		double ew = 1.0-exp(-nl);
 
-		if (1.0 - exp(-nl) < 0) {
-			qDebug() << "illegal edge weight: " << 1.0 - exp(-nl);
+		if (ew < 0.0 || ew > 1.0) {
+			qDebug() << "illegal edge weight: " << ew;
 		}
+		//else
+		//	qDebug() << "weight: " << nl;
 
 		// TODO: add mu(fp,fq) according to koo's indices
-		return 1.0-exp(-nl);
+		return ew;
 	}
 
 	qDebug() << "no stats when computing the scaled edges...";

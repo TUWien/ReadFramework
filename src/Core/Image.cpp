@@ -346,7 +346,7 @@ void Histogram::draw(QPainter & p) {
 
 	int ph = p.device()->height();
 
-	double mVal = max();
+	double mVal = max()-min();
 
 	float* hPtr = mHist.ptr<float>();
 	for (int idx = 0; idx < mHist.cols; idx++) {
@@ -361,7 +361,7 @@ void Histogram::draw(QPainter & p, const Rect& r) {
 
 	int ph = qRound(r.height());
 
-	double mVal = max();
+	double mVal = max()-min();
 
 	float* hPtr = mHist.ptr<float>();
 	for (int idx = 0; idx < mHist.cols; idx++) {
@@ -377,8 +377,14 @@ cv::Mat Histogram::hist() const {
 }
 
 double Histogram::max() const {
-	double mVal;
+	double mVal = 0;
 	cv::minMaxLoc(mHist, 0, &mVal);
+	return mVal;
+}
+
+double Histogram::min() const {
+	double mVal = 0;
+	cv::minMaxLoc(mHist, &mVal);
 	return mVal;
 }
 

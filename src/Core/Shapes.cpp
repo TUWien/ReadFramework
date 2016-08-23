@@ -781,6 +781,14 @@ bool Rect::contains(const Rect & o) const {
 			right() >= o.right());
 }
 
+bool Rect::contains(const Vector2D & pt) const {
+
+	return (top()	<= pt.y() &&
+		left()		<= pt.x() &&
+		bottom()	>= pt.y() &&
+		right()		>= pt.x());
+}
+
 /// <summary>
 /// Returns true if the centers are closer than eps.
 /// NOTE: the city block metric is used to compare the centers.
@@ -995,10 +1003,10 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	if (isNull())
 		return;
 
-	QPen pen = p.pen();
-	QColor col = pen.brush().color();
+	QBrush b = p.brush();	// backup
+
+	QColor col = p.pen().brush().color();
 	col.setAlpha(qRound(alpha*100));
-	//pen.setColor(col);
 	p.setBrush(col);
 
 	p.translate(mCenter.toQPointF());
@@ -1009,7 +1017,7 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 
 	// draw center
 	p.drawPoint(mCenter.toQPointF());
-
+	p.setBrush(b);
 }
 
 }

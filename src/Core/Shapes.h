@@ -326,6 +326,7 @@ public:
 
 	// geometry
 	bool contains(const Rect& o) const;
+	bool contains(const Vector2D& pt) const;
 	bool isProximate(const Rect& o, double eps = 10.0) const;
 	double area() const;
 	

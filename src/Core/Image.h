@@ -70,6 +70,7 @@ public:
 
 	cv::Mat hist() const;
 	double max() const;
+	double min() const;
 
 protected:
 	void draw(QPainter& p);

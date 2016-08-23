@@ -464,10 +464,17 @@ void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) c
 void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& set, double radius) const {
 
 	const Vector2D& ec = pixel->center();
+	//Rect nbox;
+	//nbox.move(ec);
+	//nbox.setSize(Vector2D(2 * radius, 2 * radius));
+
 	QVector<const Pixel*> neighbors;
 
 	// create neighbor set
 	for (const Pixel* p : set) {
+
+		//if (!nbox.contains(p->center()))
+		//	continue;
 
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p;
@@ -548,13 +555,13 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 	sparsity = (float)std::log(sumNonZero/orHist.cols);
 
 	//sparsity = (float)std::log(cv::sum(orHist != 0)[0]/(orHist.cols*255.0));
-
+	
 	// DFT according to Koo16
 	cv::dft(orHist, orHist);
 	assert(!orHist.empty());
 
 	//orPtr = orHist.ptr<float>();
-	float normValSq = *orPtr * *orPtr;	// the normalization term is always at [0] - we need it sqaured
+	float normValSq = orPtr[0] * orPtr[0];	// the normalization term is always at [0] - we need it sqaured
 
 	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
 		
@@ -563,7 +570,7 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 			orPtr[cIdx] *= orPtr[cIdx];
 			orPtr[cIdx] /= normValSq;
 			orPtr[cIdx] += 1.0f;	// for log
-			orPtr[cIdx] = -std::log(orPtr[cIdx]);
+			orPtr[cIdx] = std::log(orPtr[cIdx]) * -1.0f;
 		}
 		else {
 			// remove very low frequencies - they might create larger peaks than the recurring frequency
@@ -602,18 +609,18 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 		if (Vector2D(ec - p->center()).length() < radius) {
 			neighbors << p.data();
-			p->draw(painter, 0.3);
+			p->draw(painter, 0.3, true, false);
 		}
 	}
 
 	// draw the selected pixel in a different color
 	painter.setPen(ColorManager::instance().colors()[0]);
-	pixel->draw(painter);
+	pixel->draw(painter, 0.3, true, true);
 
 	// compute all orientations
 	int histSize = config()->histSize();
 	int nOr = config()->numOrientations();
-	cv::Mat orHist(nOr, histSize, CV_32FC1);
+	cv::Mat orHist(nOr, histSize, CV_32FC1, cv::Scalar(0));
 	
 	for (int k = 0; k < nOr; k++) {
 
@@ -625,6 +632,8 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 		cv::Mat cRow = orHist.row(k);
 		computeOrHist(pixel.data(), neighbors, orVec, cRow, sp);
+
+		//qDebug().noquote() << Image::instance().printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
 
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
@@ -713,7 +722,7 @@ void PixelSetOrientation::constructGraph(const QVector<QSharedPointer<Pixel>>& p
 
 			const QSharedPointer<PixelEdge>& pe = edges[i];
 			int sVtxIdx = pixelLookup.value(pe->second()->id());
-			int w = qRound(pe->edgeWeight() * mScaleFactor);
+			int w = qRound((1.0-pe->edgeWeight()) * mScaleFactor);
 			graph->setNeighbors(idx, sVtxIdx, w);
 		}
 	}
