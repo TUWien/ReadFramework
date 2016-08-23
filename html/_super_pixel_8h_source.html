@@ -227,7 +227,7 @@ $(document).ready(function(){initNavTree('_super_pixel_8h_source.html','');});
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    QSharedPointer&lt;MserContainer&gt; getBlobs(<span class="keyword">const</span> cv::Mat&amp; img, <span class="keywordtype">int</span> kernelSize) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    QSharedPointer&lt;MserContainer&gt; mser(<span class="keyword">const</span> cv::Mat&amp; img) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">int</span> filterAspectRatio(<a class="code" href="classrdf_1_1_mser_container.html">MserContainer</a>&amp; blobs, <span class="keywordtype">double</span> aRatio = 0.2) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">int</span> filterDuplicates(<a class="code" href="classrdf_1_1_mser_container.html">MserContainer</a>&amp; blobs, <span class="keywordtype">int</span> eps = 5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">int</span> filterDuplicates(<a class="code" href="classrdf_1_1_mser_container.html">MserContainer</a>&amp; blobs, <span class="keywordtype">int</span> eps = 5, <span class="keywordtype">int</span> upperBound = -1) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
@@ -278,52 +278,54 @@ $(document).ready(function(){initNavTree('_super_pixel_8h_source.html','');});
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">void</span> computeScales(QSharedPointer&lt;Pixel&gt;&amp; pixel, <span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordtype">void</span> computeAllOrHists(QSharedPointer&lt;Pixel&gt;&amp; pixel, <span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set, <span class="keywordtype">double</span> radius) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keywordtype">void</span> computeOrHist(<span class="keyword">const</span> QSharedPointer&lt;Pixel&gt;&amp; pixel, </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set, </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">void</span> computeScales(<a class="code" href="classrdf_1_1_pixel.html">Pixel</a>* pixel, <span class="keyword">const</span> QVector&lt;Pixel*&gt;&amp; set) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordtype">void</span> computeAllOrHists(<a class="code" href="classrdf_1_1_pixel.html">Pixel</a>* pixel, <span class="keyword">const</span> QVector&lt;Pixel*&gt;&amp; set, <span class="keywordtype">double</span> radius) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keywordtype">void</span> computeOrHist(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_pixel.html">Pixel</a>* pixel, </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keyword">const</span> QVector&lt;const Pixel*&gt;&amp; set, </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; histVec, </div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        cv::Mat&amp; orHist,</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordtype">float</span>&amp; sparsity) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;};</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keywordtype">bool</span> isNeighbor(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; p2, <span class="keywordtype">double</span> cRadius) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set_orientation.html">  183</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_pixel_set_orientation.html">PixelSetOrientation</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module.html">Module</a> {</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;};</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <a class="code" href="classrdf_1_1_pixel_set_orientation.html">PixelSetOrientation</a>(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; imgRect);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="keywordtype">bool</span> compute() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="comment">//QString toString() const override;</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="comment">//QSharedPointer&lt;LocalOrientationConfig&gt; config() const;</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="comment">// results - available after compute() is called</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; getSuperPixels() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="comment">//cv::Mat draw(const cv::Mat&amp; img, const QString&amp; id, double radius) const;</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="classrdf_1_1_pixel_set_orientation.html">  185</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_pixel_set_orientation.html">PixelSetOrientation</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module.html">Module</a> {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <a class="code" href="classrdf_1_1_pixel_set_orientation.html">PixelSetOrientation</a>(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; set, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; imgRect);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keywordtype">bool</span> compute() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="comment">//QString toString() const override;</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="comment">//QSharedPointer&lt;LocalOrientationConfig&gt; config() const;</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="comment">// results - available after compute() is called</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; getSuperPixels() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="comment">//cv::Mat draw(const cv::Mat&amp; img, const QString&amp; id, double radius) const;</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">// input/output</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; mSet;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> mImgRect;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordtype">double</span> mScaleFactor = 1000.0;   <span class="comment">// TODO: think about thato</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">// input/output</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    QVector&lt;QSharedPointer&lt;Pixel&gt; &gt; mSet;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a> mImgRect;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordtype">double</span> mScaleFactor = 1000.0;   <span class="comment">// TODO: think about that</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">void</span> constructGraph(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; pixel, <span class="keyword">const</span> QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt;&amp; edges);</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    cv::Mat costs(<span class="keywordtype">int</span> numLabels) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    cv::Mat orientationDistMatrix(<span class="keywordtype">int</span> numLabels) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;};</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordtype">void</span> constructGraph(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;Pixel&gt; &gt;&amp; pixel, <span class="keyword">const</span> QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt;&amp; edges);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    cv::Mat costs(<span class="keywordtype">int</span> numLabels) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    cv::Mat orientationDistMatrix(<span class="keywordtype">int</span> numLabels) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;};</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_mser_container_html_ad5a49d35c01ba63cd8a9abe53bdc2637"><div class="ttname"><a href="classrdf_1_1_mser_container.html#ad5a49d35c01ba63cd8a9abe53bdc2637">rdf::MserContainer::MserContainer</a></div><div class="ttdeci">MserContainer()</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:81</div></div>
 <div class="ttc" id="classrdf_1_1_super_pixel_config_html"><div class="ttname"><a href="classrdf_1_1_super_pixel_config.html">rdf::SuperPixelConfig</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:60</div></div>
 <div class="ttc" id="classrdf_1_1_module_config_html"><div class="ttname"><a href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></div><div class="ttdef"><b>Definition:</b> BaseModule.h:61</div></div>
 <div class="ttc" id="classrdf_1_1_super_pixel_html"><div class="ttname"><a href="classrdf_1_1_super_pixel.html">rdf::SuperPixel</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:92</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_set_orientation_html"><div class="ttname"><a href="classrdf_1_1_pixel_set_orientation.html">rdf::PixelSetOrientation</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:183</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_set_orientation_html"><div class="ttname"><a href="classrdf_1_1_pixel_set_orientation.html">rdf::PixelSetOrientation</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:185</div></div>
 <div class="ttc" id="classrdf_1_1_mser_container_html"><div class="ttname"><a href="classrdf_1_1_mser_container.html">rdf::MserContainer</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:78</div></div>
 <div class="ttc" id="_pixel_8h_html"><div class="ttname"><a href="_pixel_8h.html">Pixel.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_mser_container_html_ad9b4e2cc85cfb93771e23c3a019475cd"><div class="ttname"><a href="classrdf_1_1_mser_container.html#ad9b4e2cc85cfb93771e23c3a019475cd">rdf::MserContainer::boxes</a></div><div class="ttdeci">std::vector&lt; cv::Rect &gt; boxes</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:89</div></div>
@@ -334,11 +336,12 @@ $(document).ready(function(){initNavTree('_super_pixel_8h_source.html','');});
 <div class="ttc" id="_shapes_8h_html"><div class="ttname"><a href="_shapes_8h.html">Shapes.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_mser_container_html_aa97b3efeed4a53d4249256d120879119"><div class="ttname"><a href="classrdf_1_1_mser_container.html#aa97b3efeed4a53d4249256d120879119">rdf::MserContainer::pixels</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; cv::Point &gt; &gt; pixels</div><div class="ttdef"><b>Definition:</b> SuperPixel.h:88</div></div>
 <div class="ttc" id="classrdf_1_1_local_orientation_config_html"><div class="ttname"><a href="classrdf_1_1_local_orientation_config.html">rdf::LocalOrientationConfig</a></div><div class="ttdef"><b>Definition:</b> SuperPixel.h:127</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_html"><div class="ttname"><a href="classrdf_1_1_pixel.html">rdf::Pixel</a></div><div class="ttdoc">This class represents a single instance of super pixels which are needed for the layout analysis...</div><div class="ttdef"><b>Definition:</b> Pixel.h:142</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:94</div></div>
-<div class="ttc" id="classrdf_1_1_mser_container_html_af9a4a664d210989e050a012fd5967a12"><div class="ttname"><a href="classrdf_1_1_mser_container.html#af9a4a664d210989e050a012fd5967a12">rdf::MserContainer::toBlobs</a></div><div class="ttdeci">QVector&lt; QSharedPointer&lt; MserBlob &gt; &gt; toBlobs() const </div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:324</div></div>
-<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:236</div></div>
-<div class="ttc" id="classrdf_1_1_mser_container_html_a3d3a4acb166cdb788bff4fdd185dbb4b"><div class="ttname"><a href="classrdf_1_1_mser_container.html#a3d3a4acb166cdb788bff4fdd185dbb4b">rdf::MserContainer::size</a></div><div class="ttdeci">size_t size() const </div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:336</div></div>
-<div class="ttc" id="classrdf_1_1_mser_container_html_a37730e180ef46d4908a39b0c6757c204"><div class="ttname"><a href="classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204">rdf::MserContainer::append</a></div><div class="ttdeci">void append(const MserContainer &amp;o)</div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:318</div></div>
+<div class="ttc" id="classrdf_1_1_mser_container_html_af9a4a664d210989e050a012fd5967a12"><div class="ttname"><a href="classrdf_1_1_mser_container.html#af9a4a664d210989e050a012fd5967a12">rdf::MserContainer::toBlobs</a></div><div class="ttdeci">QVector&lt; QSharedPointer&lt; MserBlob &gt; &gt; toBlobs() const </div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:318</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:285</div></div>
+<div class="ttc" id="classrdf_1_1_mser_container_html_a3d3a4acb166cdb788bff4fdd185dbb4b"><div class="ttname"><a href="classrdf_1_1_mser_container.html#a3d3a4acb166cdb788bff4fdd185dbb4b">rdf::MserContainer::size</a></div><div class="ttdeci">size_t size() const </div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:330</div></div>
+<div class="ttc" id="classrdf_1_1_mser_container_html_a37730e180ef46d4908a39b0c6757c204"><div class="ttname"><a href="classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204">rdf::MserContainer::append</a></div><div class="ttdeci">void append(const MserContainer &amp;o)</div><div class="ttdef"><b>Definition:</b> SuperPixel.cpp:312</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

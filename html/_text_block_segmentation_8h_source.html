@@ -185,7 +185,7 @@ $(document).ready(function(){initNavTree('_text_block_segmentation_8h_source.htm
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">bool</span> compute() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    QSharedPointer&lt;TextBlockConfig&gt; config() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt; filterEdges(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt;&amp; pixelEdges, <span class="keywordtype">double</span> factor = 0.25);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt; filterEdges(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;PixelEdge&gt; &gt;&amp; pixelEdges, <span class="keywordtype">double</span> factor = 2.5);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    cv::Mat draw(<span class="keyword">const</span> cv::Mat&amp; img) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    QString toString() <span class="keyword">const override</span>;</div>

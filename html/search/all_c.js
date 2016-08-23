@@ -99,7 +99,7 @@ var searchData=
   ['mimagefilename',['mImageFileName',['../classrdf_1_1_page_element.html#ad0390dfc9e33a3a521654c9ce6ad8d61',1,'rdf::PageElement']]],
   ['mimagepath',['mImagePath',['../classrdf_1_1_debug_config.html#a2a5243111233896b3e5ae8f7e9d4476c',1,'rdf::DebugConfig']]],
   ['mimagesize',['mImageSize',['../classrdf_1_1_page_element.html#ae189bd494931348db7f24a6b3293850a',1,'rdf::PageElement']]],
-  ['min',['min',['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
+  ['min',['min',['../classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55',1,'rdf::Histogram::min()'],['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
   ['minarea',['minArea',['../classrdf_1_1_line_trace_config.html#a6404667bfba7e6408ea3a9bdaceaa973',1,'rdf::LineTraceConfig']]],
   ['mindistance',['minDistance',['../classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff',1,'rdf::Line']]],
   ['minfo',['mInfo',['../_base_module_8h.html#a1e4a7f5ff75dc4ec8cd026858cf8ce0f',1,'BaseModule.h']]],

@@ -1,10 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classrdf_1_1_binarization_su_adapted.html":[2,0,2,46],
-"classrdf_1_1_binarization_su_adapted.html#a03997e818de410d2722b22900baa1ac8":[2,0,2,46,1],
-"classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa":[2,0,2,46,0],
-"classrdf_1_1_binarization_su_adapted.html#a0ce9554e1f6ba0bf9a5ec83be07ecee2":[2,0,2,46,5],
-"classrdf_1_1_binarization_su_adapted.html#a136b5542e5aa27a3c845f7d0460bd0f9":[2,0,2,46,2],
 "classrdf_1_1_binarization_su_adapted.html#a386276e0a9503b44f9cccdb0d7ba7c60":[2,0,2,46,6],
 "classrdf_1_1_binarization_su_adapted.html#a6ad950523dbd82d5ba0b09f508d603e9":[2,0,2,46,9],
 "classrdf_1_1_binarization_su_adapted.html#a7d4597ed54bbaa58534bccc44f0b068f":[2,0,2,46,4],
@@ -221,7 +216,8 @@ var NAVTREEINDEX2 =
 "classrdf_1_1_histogram.html#a387ce05adb9d05257f06baefda8d93b9":[2,0,2,13,4],
 "classrdf_1_1_histogram.html#a48bd9ca295bd8b0e9b9b25bef99b82e4":[2,0,2,13,3],
 "classrdf_1_1_histogram.html#a51b6aecdbab2b7b7d6db04444db482f3":[2,0,2,13,2],
-"classrdf_1_1_histogram.html#a864308556031f326aea8e364b893b9d4":[2,0,2,13,7],
+"classrdf_1_1_histogram.html#a864308556031f326aea8e364b893b9d4":[2,0,2,13,8],
+"classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55":[2,0,2,13,7],
 "classrdf_1_1_histogram.html#ad56d49f7cb04f30177a98012501018f1":[2,0,2,13,6],
 "classrdf_1_1_histogram.html#ad698cf4ebc55bd1c5620f49ca5c75c4f":[2,0,2,13,1],
 "classrdf_1_1_histogram.html#aed8ebdfa99b0f4319c26b2dd5434ccbb":[2,0,2,13,5],
@@ -249,5 +245,9 @@ var NAVTREEINDEX2 =
 "classrdf_1_1_line.html#a1d5a3500945272528666b43171d89fa0":[2,0,2,27,25],
 "classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45":[2,0,2,27,26],
 "classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff":[2,0,2,27,18],
-"classrdf_1_1_line.html#a33b954a52b2a9429922f57624aa30285":[2,0,2,27,15]
+"classrdf_1_1_line.html#a33b954a52b2a9429922f57624aa30285":[2,0,2,27,15],
+"classrdf_1_1_line.html#a36b82d6783ee9423a07db8e76be972f0":[2,0,2,27,16],
+"classrdf_1_1_line.html#a3a9435029979cbf29ce26cf2b7f92a62":[2,0,2,27,20],
+"classrdf_1_1_line.html#a4b2a8461800cadc3283d83337ac97af5":[2,0,2,27,11],
+"classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29":[2,0,2,27,22]
 };

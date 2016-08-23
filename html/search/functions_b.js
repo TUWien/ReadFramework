@@ -18,7 +18,7 @@ var searchData=
   ['maxslopediff',['maxSlopeDiff',['../classrdf_1_1_line_trace_config.html#a33c87207edfded18cecae06dc15e0f0e',1,'rdf::LineTraceConfig']]],
   ['maxsloperotat',['maxSlopeRotat',['../classrdf_1_1_line_trace_config.html#ac7fdc5b085519a46ccefdf6749274100',1,'rdf::LineTraceConfig']]],
   ['merge',['merge',['../classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054',1,'rdf::PixelSet::merge()'],['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line::merge()']]],
-  ['min',['min',['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
+  ['min',['min',['../classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55',1,'rdf::Histogram::min()'],['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
   ['minarea',['minArea',['../classrdf_1_1_line_trace_config.html#a6404667bfba7e6408ea3a9bdaceaa973',1,'rdf::LineTraceConfig']]],
   ['mindistance',['minDistance',['../classrdf_1_1_line.html#a33362ce23d2c58339e003e508c2caaff',1,'rdf::Line']]],
   ['minimize',['minimize',['../class_energy.html#add49d9b4c4a056a75cd4ab6da8056c71',1,'Energy']]],

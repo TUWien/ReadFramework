@@ -7,5 +7,6 @@ var classrdf_1_1_histogram =
     [ "draw", "classrdf_1_1_histogram.html#a387ce05adb9d05257f06baefda8d93b9", null ],
     [ "hist", "classrdf_1_1_histogram.html#aed8ebdfa99b0f4319c26b2dd5434ccbb", null ],
     [ "max", "classrdf_1_1_histogram.html#ad56d49f7cb04f30177a98012501018f1", null ],
+    [ "min", "classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55", null ],
     [ "mHist", "classrdf_1_1_histogram.html#a864308556031f326aea8e364b893b9d4", null ]
 ];
