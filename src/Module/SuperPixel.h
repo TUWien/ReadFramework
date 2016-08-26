@@ -182,10 +182,10 @@ private:
 
 };
 
-class DllModuleExport PixelSetOrientation : public Module {
+class DllModuleExport GraphCutOrientation : public Module {
 
 public:
-	PixelSetOrientation(const QVector<QSharedPointer<Pixel> >& set, const Rect& imgRect);
+	GraphCutOrientation(const QVector<QSharedPointer<Pixel> >& set, const Rect& imgRect);
 
 	bool isEmpty() const override;
 	bool compute() override;

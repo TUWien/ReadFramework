@@ -163,7 +163,16 @@ public:
 	void addStats(const QSharedPointer<PixelStats>& stats);
 	QSharedPointer<PixelStats> stats(int idx = -1) const;
 
-	void draw(QPainter& p, double alpha = 0.3, bool showEllipse = false, bool showId = false) const;
+	enum DrawFlag {
+		draw_ellipse_only = 0,
+		draw_stats_only,
+		draw_ellipse_stats,
+		draw_all,
+
+		draw_end
+	};
+
+	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = draw_stats_only) const;
 
 protected:
 	bool mIsNull = true;
@@ -217,6 +226,7 @@ public:
 	void draw(QPainter& p) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
+	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;

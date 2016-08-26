@@ -158,17 +158,20 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.imagePath().isEmpty()) {
 		dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
 		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
-		dc.setImagePath("D:/read/test/00000197.jpg");
-		dc.setImagePath("D:/read/test/00075751.tif");
+		//dc.setImagePath("D:/read/test/00000197.jpg");
+		//dc.setImagePath("D:/read/test/00075751.tif");
 		//dc.setImagePath("D:/read/test/screenshot.png");
 		//dc.setImagePath("D:/read/test/synthetic-test.png");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
-	
+		//dc.setImagePath("D:/read/test/56_csrc.jpg");
+		//dc.setImagePath("D:/read/test/102_csrc.jpg");
+
 		// debug images
 		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336-crop.jpg");
 		//dc.setImagePath("D:/read/test/00075751-crop.tif");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
+		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}

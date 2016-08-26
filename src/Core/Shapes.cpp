@@ -286,6 +286,14 @@ bool Line::isVertical(float mAngleTresh) const
 
 }
 
+/// <summary>
+/// Returns the line's orientation vector.
+/// </summary>
+/// <returns></returns>
+Vector2D Line::vector() const {
+	return Vector2D(endPoint()) - Vector2D(startPoint());
+}
+
 void Line::draw(QPainter & p) const {
 
 	QPen pen = p.pen();
@@ -682,6 +690,10 @@ Rect::Rect(double x, double y, double width, double height) {
 	mSize = Vector2D(width, height);
 }
 
+Rect::Rect(const cv::Mat & img) {
+	mIsNull = !img.empty();
+	mSize = Vector2D(img.cols, img.rows);
+}
 
 bool operator==(const Rect & l, const Rect & r) {
 	//return l.topLeft() == r.topLeft() && l.size() == r.size();

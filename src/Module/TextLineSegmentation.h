@@ -36,16 +36,10 @@
 #include "Pixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
-#else
-#define DllModuleExport Q_DECL_IMPORT
-#endif
-#endif
+// TODO: add DllExport magic
 
 // Qt defines
 
@@ -53,11 +47,10 @@ namespace rdf {
 
 // read defines
 
-
-class DllModuleExport TextBlockConfig : public ModuleConfig {
+class DllModuleExport TextLineConfig : public ModuleConfig {
 
 public:
-	TextBlockConfig();
+	TextLineConfig();
 
 	virtual QString toString() const override;
 
@@ -67,17 +60,15 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport TextBlockSegmentation : public Module {
+class DllModuleExport TextLineSegmentation : public Module {
 
 public:
-	TextBlockSegmentation(const cv::Mat& srcImg = cv::Mat(), 
+	TextLineSegmentation(const Rect& imgRect,
 		const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
 
 	bool isEmpty() const override;
 	bool compute() override;
-	QSharedPointer<TextBlockConfig> config() const;
-
-	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 12.5);
+	QSharedPointer<TextLineConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
@@ -85,13 +76,11 @@ public:
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	QVector<QSharedPointer<PixelEdge> > mEdges;
-	QVector<QSharedPointer<PixelSet> > mTextBlocks;
-	cv::Mat mSrcImg;
+	Rect mImgRect;
 
 	bool checkInput() const override;
-	
-	// TODO: remove (it's now in PixelSet)
-	QVector<QSharedPointer<PixelSet> > createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const;
+	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& edges, double factor = 10.0) const;
+	double edgeWeight(const QSharedPointer<Pixel>& pixel, const QSharedPointer<PixelEdge>& edge) const;
 };
 
 };

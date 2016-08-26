@@ -611,13 +611,13 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		
 		if (isNeighbor(ec, p->center(), radius)) {
 			neighbors << p.data();
-			p->draw(painter, 0.3, true, false);
+			p->draw(painter, 0.3, Pixel::draw_ellipse_stats);
 		}
 	}
 
 	// draw the selected pixel in a different color
 	painter.setPen(ColorManager::instance().colors()[0]);
-	pixel->draw(painter, 0.3, true, true);
+	pixel->draw(painter, 0.3, Pixel::draw_all);
 
 	// compute all orientations
 	int histSize = config()->histSize();
@@ -647,17 +647,17 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 }
 
 
-// PixelSetOrientation --------------------------------------------------------------------
-PixelSetOrientation::PixelSetOrientation(const QVector<QSharedPointer<Pixel>>& set, const Rect& imgRect) {
+// GraphCutOrientation --------------------------------------------------------------------
+GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set, const Rect& imgRect) {
 	mSet = set;
 	mImgRect = imgRect;
 }
 
-bool PixelSetOrientation::isEmpty() const {
+bool GraphCutOrientation::isEmpty() const {
 	return mSet.isEmpty();
 }
 
-bool PixelSetOrientation::compute() {
+bool GraphCutOrientation::compute() {
 	
 	if (!checkInput())
 		return false;
@@ -671,16 +671,16 @@ bool PixelSetOrientation::compute() {
 	return true;
 }
 
-QVector<QSharedPointer<Pixel>> PixelSetOrientation::getSuperPixels() const {
+QVector<QSharedPointer<Pixel>> GraphCutOrientation::getSuperPixels() const {
 	
 	return mSet;
 }
 
-bool PixelSetOrientation::checkInput() const {
+bool GraphCutOrientation::checkInput() const {
 	return !isEmpty();
 }
 
-void PixelSetOrientation::graphCut(const PixelGraph& graph) {
+void GraphCutOrientation::graphCut(const PixelGraph& graph) {
 
 	if (graph.isEmpty())
 		return;
@@ -733,7 +733,7 @@ void PixelSetOrientation::graphCut(const PixelGraph& graph) {
 
 }
 
-cv::Mat PixelSetOrientation::costs(int numLabels) const {
+cv::Mat GraphCutOrientation::costs(int numLabels) const {
 	
 	// fill costs
 	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
@@ -750,7 +750,7 @@ cv::Mat PixelSetOrientation::costs(int numLabels) const {
 	return data;
 }
 
-cv::Mat PixelSetOrientation::orientationDistMatrix(int numLabels) const {
+cv::Mat GraphCutOrientation::orientationDistMatrix(int numLabels) const {
 	
 	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
 

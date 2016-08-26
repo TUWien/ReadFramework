@@ -333,30 +333,30 @@ QSharedPointer<PixelStats> Pixel::stats(int idx) const {
 	return mStats[idx];
 }
 
-void Pixel::draw(QPainter & p, double alpha, bool showEllipse, bool showId) const {
+void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	
-	if (showId) {
+	if (df == draw_all) {
 		QPen pen = p.pen();
 		p.setPen(QColor(255, 33, 33));
 		p.drawText(center().toQPoint(), id());
 		p.setPen(pen);
 	}
 
-	if (stats()) {
+	if (stats() && (df != draw_ellipse_only)) {
 
 		auto s = stats();
 
-		QColor c(255,33,33);
+		//QColor c(255,33,33);
 
-		if (s->scale() == 256)
-			c = ColorManager::instance().colors()[0];
-		else if (s->scale() == 128)
-			c = ColorManager::instance().colors()[1];
-		else if (s->scale() == 64)
-			c = ColorManager::instance().colors()[2];
+		//if (s->scale() == 256)
+		//	c = ColorManager::instance().colors()[0];
+		//else if (s->scale() == 128)
+		//	c = ColorManager::instance().colors()[1];
+		//else if (s->scale() == 64)
+		//	c = ColorManager::instance().colors()[2];
 
-		QPen pen = p.pen();
-		p.setPen(c);
+		//QPen pen = p.pen();
+		//p.setPen(c);
 
 		Vector2D vec(1, 0);
 		vec *= stats()->lineSpacing();
@@ -364,11 +364,11 @@ void Pixel::draw(QPainter & p, double alpha, bool showEllipse, bool showId) cons
 		vec = vec + center();
 
 		p.drawLine(Line(center(), vec).line());
-		p.setPen(pen);
+		//p.setPen(pen);
 
 	}
 
-	if (!stats() || showEllipse)
+	if (!stats() || df != draw_stats_only)
 		mEllipse.draw(p, alpha);
 
 }
@@ -539,10 +539,57 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 	return edges;
 }
 
+QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges) {
+
+	QVector<QSharedPointer<PixelSet> > sets;
+
+	for (const QSharedPointer<PixelEdge> e : edges) {
+
+		int fIdx = -1;
+		int sIdx = -1;
+
+		for (int idx = 0; idx < sets.size(); idx++) {
+
+			if (sets[idx]->contains(e->first()))
+				fIdx = idx;
+			if (sets[idx]->contains(e->second()))
+				sIdx = idx;
+
+			if (fIdx != -1 && sIdx != -1)
+				break;
+		}
+
+		// none is contained in a set
+		if (fIdx == -1 && sIdx == -1) {
+			QSharedPointer<PixelSet> ps(new PixelSet());
+			ps->add(e->first());
+			ps->add(e->second());
+			sets << ps;
+		}
+		// add first to the set of second
+		else if (fIdx == -1) {
+			sets[sIdx]->add(e->first());
+		}
+		// add second to the set of first
+		else if (sIdx == -1) {
+			sets[fIdx]->add(e->second());
+		}
+		// two different idx? - merge the sets
+		else if (fIdx != sIdx) {
+			sets[fIdx]->merge(*sets[sIdx]);
+			sets.remove(sIdx);
+		}
+		// else : nothing to do - they are both already added
+
+	}
+
+	return sets;
+}
+
 void PixelSet::draw(QPainter& p) const {
 
 	for (auto px : mSet)
-		px->draw(p);
+		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
 
 	p.drawRect(boundingBox().toQRectF());
 }

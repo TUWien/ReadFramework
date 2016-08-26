@@ -41,6 +41,7 @@
 
 #include "SuperPixel.h"
 #include "TextBlockSegmentation.h"
+#include "TextLineSegmentation.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -155,13 +156,17 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
-	rdf::PixelSetOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
+	rdf::GraphCutOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
 	
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
+		qWarning() << "could not compute text block segmentation!";
+
+	rdf::TextLineSegmentation textLines(Rect(img), sp);
+	if (!textLines.compute())
 		qWarning() << "could not compute text block segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
@@ -178,7 +183,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	//// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);
-	rImg = textBlocks.draw(rImg);
+	//rImg = textBlocks.draw(rImg);
+	rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;

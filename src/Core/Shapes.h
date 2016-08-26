@@ -133,6 +133,7 @@ public:
 	QPoint endPoint() const;
 	bool isHorizontal(float mAngleTresh = 0.5) const;
 	bool isVertical(float mAngleTresh = 0.5) const;
+	Vector2D vector() const;
 
 	void draw(QPainter& p) const;
 
@@ -291,6 +292,7 @@ public:
 	Rect(const cv::Rect& rect);
 	Rect(const Vector2D& topLeft, const Vector2D& size);
 	Rect(double x, double y, double width, double height);
+	Rect(const cv::Mat& img);
 
 	DllCoreExport friend bool operator==(const Rect& l, const Rect& r);
 	DllCoreExport friend bool operator!=(const Rect& l, const Rect& r);
