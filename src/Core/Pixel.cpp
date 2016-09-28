@@ -451,6 +451,54 @@ void PixelEdge::draw(QPainter & p) const {
 	edge().draw(p);
 }
 
+// LineEdge --------------------------------------------------------------------
+LineEdge::LineEdge() {
+}
+
+LineEdge::LineEdge(const PixelEdge & pe) : PixelEdge(pe) {
+	mStatsWeight = calcWeight();
+}
+
+LineEdge::LineEdge(
+	const QSharedPointer<Pixel> first, 
+	const QSharedPointer<Pixel> second, 
+	const QString & id) : 
+	PixelEdge(first, second, id) {
+
+	mStatsWeight = calcWeight();
+}
+
+double LineEdge::edgeWeight() const {
+	return mStatsWeight;
+}
+
+double LineEdge::calcWeight() const {
+	double d1 = statsWeight(mFirst);
+	double d2 = statsWeight(mSecond);
+
+	return qMax(abs(d1), abs(d2));
+}
+
+double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {
+
+	if (!pixel)
+		return DBL_MAX;
+
+	if (!pixel->stats()) {
+		qWarning() << "pixel stats are NULL where they must not be...";
+		return DBL_MAX;
+	}
+
+	QSharedPointer<PixelStats> stats = pixel->stats();
+
+	Vector2D vec(1, 0);
+	vec.rotate(stats->orientation());
+
+	Vector2D eVec = edge().vector();
+
+	return vec * eVec;
+}
+
 // PixelSet --------------------------------------------------------------------
 PixelSet::PixelSet() {
 }
@@ -589,7 +637,7 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 void PixelSet::draw(QPainter& p) const {
 
 	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
 	p.drawRect(boundingBox().toQRectF());
 }

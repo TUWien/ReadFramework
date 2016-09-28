@@ -71,7 +71,11 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	mEdges = PixelSet::connect(mSuperPixels, mImgRect);
+	QVector<QSharedPointer<PixelEdge> > pEdges = PixelSet::connect(mSuperPixels, mImgRect);
+
+	for (const QSharedPointer<PixelEdge>& pe : pEdges)
+		mEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
+
 	mEdges = filterEdges(mEdges);
 
 	mDebug << "computed in" << dt;
@@ -83,40 +87,32 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 	return qSharedPointerDynamicCast<TextLineConfig>(mConfig);
 }
 
-QVector<QSharedPointer<PixelEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<PixelEdge>>& pixelEdges, double factor) const {
+QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& pixelEdges, double factor) const {
 
-	QVector<QSharedPointer<PixelEdge> > pixelEdgesClean;
+	QVector<QSharedPointer<LineEdge> > pixelEdgesClean;
 
 	for (auto pe : pixelEdges) {
 
-		double w1 = edgeWeight(pe->first(), pe);
-		double w2 = edgeWeight(pe->second(), pe);
-
-		if (qMax(abs(w1), abs(w2)) < factor)
+		if (pe->edgeWeight() < factor)
 			pixelEdgesClean << pe;
 	}
 
 	return pixelEdgesClean;
 }
 
-double TextLineSegmentation::edgeWeight(const QSharedPointer<Pixel>& pixel, const QSharedPointer<PixelEdge>& edge) const {
+void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge>>& edges) const {
 
-	if (!pixel || !edge)
-		return DBL_MAX;
+	QVector<QSharedPointer<PixelSet> > clusters;
 
-	if (!pixel->stats()) {
-		mWarning << "pixel stats are NULL where they must not be...";
-		return DBL_MAX;
+	for (const QSharedPointer<PixelEdge>& pe : edges) {
+		QSharedPointer<PixelSet> ps(new PixelSet());
+		ps->add(pe->first());
+		ps->add(pe->second());
 	}
 
-	QSharedPointer<PixelStats> stats = pixel->stats();
+	// TODO: go on here...
 
-	Vector2D vec(1, 0);
-	vec.rotate(stats->orientation());
 
-	Vector2D eVec = edge->edge().vector();
-
-	return vec * eVec;
 }
 
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
@@ -134,14 +130,19 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 		b->draw(p);
 	}
 
-	auto sets = PixelSet::fromEdges(mEdges);
+	// why do I have to do this?
+	QVector<QSharedPointer<PixelEdge> > pe;
+	for (auto e : mEdges)
+		pe << e;
+
+	auto sets = PixelSet::fromEdges(pe);
 
 	for (auto set : sets) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
 		p.setPen(Drawer::instance().pen());
 
 		for (auto pixel : set->pixels()) {
-			pixel->draw(p, .3, Pixel::draw_ellipse_stats);
+			pixel->draw(p, .3, Pixel::draw_ellipse_only);
 		}
 	}
 

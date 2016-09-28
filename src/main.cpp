@@ -161,7 +161,9 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/00000197.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		//dc.setImagePath("D:/read/test/screenshot.png");
-		//dc.setImagePath("D:/read/test/synthetic-test.png");
+		dc.setImagePath("D:/read/test/synthetic-test.png");
+		dc.setImagePath("D:/read/data/Herbarium/George_Forrest_Herbarium_Specimens/E00000017.jpg");
+	
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
 		//dc.setImagePath("D:/read/test/56_csrc.jpg");
 		//dc.setImagePath("D:/read/test/102_csrc.jpg");

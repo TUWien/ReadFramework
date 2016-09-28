@@ -193,7 +193,7 @@ public:
 
 	bool isNull() const;
 
-	double edgeWeight() const;
+	virtual double edgeWeight() const;
 	Line edge() const;
 	void draw(QPainter& p) const;
 
@@ -206,6 +206,26 @@ protected:
 	QSharedPointer<Pixel> mFirst;
 	QSharedPointer<Pixel> mSecond;
 	Line mEdge;
+};
+
+class DllCoreExport LineEdge : public PixelEdge {
+
+public:
+	LineEdge();
+
+	LineEdge(const PixelEdge& pe);
+
+	LineEdge(const QSharedPointer<Pixel> first, 
+		const QSharedPointer<Pixel> second,
+		const QString& id = QString());
+
+	virtual double edgeWeight() const override;
+
+protected:
+	double mStatsWeight = 0.0;
+
+	double statsWeight(const QSharedPointer<Pixel>& pixel) const;
+	double calcWeight() const;
 };
 
 class DllCoreExport PixelSet : public BaseElement {

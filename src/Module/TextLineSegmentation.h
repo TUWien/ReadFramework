@@ -75,12 +75,13 @@ public:
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
-	QVector<QSharedPointer<PixelEdge> > mEdges;
+	QVector<QSharedPointer<LineEdge> > mEdges;
 	Rect mImgRect;
 
 	bool checkInput() const override;
-	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& edges, double factor = 10.0) const;
-	double edgeWeight(const QSharedPointer<Pixel>& pixel, const QSharedPointer<PixelEdge>& edge) const;
+	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
+	
+	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
 };
 
 };
