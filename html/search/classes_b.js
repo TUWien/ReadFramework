@@ -5,8 +5,8 @@ var searchData=
   ['patch',['Patch',['../classrdf_1_1_patch.html',1,'rdf']]],
   ['pixel',['Pixel',['../classrdf_1_1_pixel.html',1,'rdf']]],
   ['pixeledge',['PixelEdge',['../classrdf_1_1_pixel_edge.html',1,'rdf']]],
+  ['pixelgraph',['PixelGraph',['../classrdf_1_1_pixel_graph.html',1,'rdf']]],
   ['pixelset',['PixelSet',['../classrdf_1_1_pixel_set.html',1,'rdf']]],
-  ['pixelsetorientation',['PixelSetOrientation',['../classrdf_1_1_pixel_set_orientation.html',1,'rdf']]],
   ['pixelstats',['PixelStats',['../classrdf_1_1_pixel_stats.html',1,'rdf']]],
   ['polygon',['Polygon',['../classrdf_1_1_polygon.html',1,'rdf']]]
 ];

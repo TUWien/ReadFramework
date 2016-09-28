@@ -2,8 +2,10 @@ var searchData=
 [
   ['edge',['edge',['../classrdf_1_1_pixel_edge.html#a02785827a89896b5162a2179ec2b8116',1,'rdf::PixelEdge']]],
   ['edgedirection',['EdgeDirection',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997',1,'rdf::BaseSkewEstimation']]],
+  ['edgeindexes',['edgeIndexes',['../classrdf_1_1_pixel_graph.html#acaf7849b90439097dc6a43d842414e1f',1,'rdf::PixelGraph']]],
   ['edgemap',['edgeMap',['../classrdf_1_1_base_skew_estimation.html#ac1b4206579fae1d4a605b48556f1768d',1,'rdf::BaseSkewEstimation']]],
-  ['edgeweight',['edgeWeight',['../classrdf_1_1_pixel_edge.html#a32cc94fe3856ca9777d11818b5651af9',1,'rdf::PixelEdge']]],
+  ['edges',['edges',['../classrdf_1_1_pixel_graph.html#a837e2e04e260bb325e4778cc33afe987',1,'rdf::PixelGraph']]],
+  ['edgeweight',['edgeWeight',['../classrdf_1_1_pixel_edge.html#a32cc94fe3856ca9777d11818b5651af9',1,'rdf::PixelEdge::edgeWeight()'],['../classrdf_1_1_line_edge.html#afaf0fdc7aecb00581d037fcfaa9e3cbe',1,'rdf::LineEdge::edgeWeight()']]],
   ['elapsed',['elapsed',['../classrdf_1_1_timer.html#a1c4e719921172ca9fa4ce0fe15a38751',1,'rdf::Timer']]],
   ['elements_2ecpp',['Elements.cpp',['../_elements_8cpp.html',1,'']]],
   ['elements_2eh',['Elements.h',['../_elements_8h.html',1,'']]],

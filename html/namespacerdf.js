@@ -21,7 +21,9 @@ var namespacerdf =
     [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
     [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
     [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
+    [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],
     [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
+    [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ],
     [ "GenericSettings", "classrdf_1_1_generic_settings.html", "classrdf_1_1_generic_settings" ],
     [ "GlobalSettings", "classrdf_1_1_global_settings.html", "classrdf_1_1_global_settings" ],
     [ "Config", "classrdf_1_1_config.html", "classrdf_1_1_config" ],
@@ -64,7 +66,9 @@ var namespacerdf =
     [ "SuperPixel", "classrdf_1_1_super_pixel.html", "classrdf_1_1_super_pixel" ],
     [ "LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", "classrdf_1_1_local_orientation_config" ],
     [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
-    [ "PixelSetOrientation", "classrdf_1_1_pixel_set_orientation.html", "classrdf_1_1_pixel_set_orientation" ],
+    [ "GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", "classrdf_1_1_graph_cut_orientation" ],
     [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
-    [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ]
+    [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ],
+    [ "TextLineConfig", "classrdf_1_1_text_line_config.html", "classrdf_1_1_text_line_config" ],
+    [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ]
 ];

@@ -4,7 +4,10 @@ var hierarchy =
     [ "rdf::BaseElement", "classrdf_1_1_base_element.html", [
       [ "rdf::MserBlob", "classrdf_1_1_mser_blob.html", null ],
       [ "rdf::Pixel", "classrdf_1_1_pixel.html", null ],
-      [ "rdf::PixelEdge", "classrdf_1_1_pixel_edge.html", null ],
+      [ "rdf::PixelEdge", "classrdf_1_1_pixel_edge.html", [
+        [ "rdf::LineEdge", "classrdf_1_1_line_edge.html", null ]
+      ] ],
+      [ "rdf::PixelGraph", "classrdf_1_1_pixel_graph.html", null ],
       [ "rdf::PixelSet", "classrdf_1_1_pixel_set.html", null ],
       [ "rdf::PixelStats", "classrdf_1_1_pixel_stats.html", null ]
     ] ],
@@ -62,12 +65,13 @@ var hierarchy =
       ] ],
       [ "rdf::BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", null ],
       [ "rdf::FormFeatures", "classrdf_1_1_form_features.html", null ],
+      [ "rdf::GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", null ],
       [ "rdf::LineTrace", "classrdf_1_1_line_trace.html", null ],
       [ "rdf::LocalOrientation", "classrdf_1_1_local_orientation.html", null ],
-      [ "rdf::PixelSetOrientation", "classrdf_1_1_pixel_set_orientation.html", null ],
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ],
-      [ "rdf::TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", null ]
+      [ "rdf::TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", null ],
+      [ "rdf::TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", null ]
     ] ],
     [ "rdf::ModuleConfig", "classrdf_1_1_module_config.html", [
       [ "rdf::BaseBinarizationSuConfig", "classrdf_1_1_base_binarization_su_config.html", null ],
@@ -77,7 +81,8 @@ var hierarchy =
       [ "rdf::LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", null ],
       [ "rdf::SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", null ],
       [ "rdf::SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", null ],
-      [ "rdf::TextBlockConfig", "classrdf_1_1_text_block_config.html", null ]
+      [ "rdf::TextBlockConfig", "classrdf_1_1_text_block_config.html", null ],
+      [ "rdf::TextLineConfig", "classrdf_1_1_text_line_config.html", null ]
     ] ],
     [ "rdf::MserContainer", "classrdf_1_1_mser_container.html", null ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],

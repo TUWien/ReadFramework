@@ -1,0 +1,5 @@
+<map id="rdf::LineEdge" name="rdf::LineEdge">
+<area shape="rect" id="node2" href="$classrdf_1_1_pixel_edge.html" title="rdf::PixelEdge" alt="" coords="75,96,179,123"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,5,128,32"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_line.html" title="A basic line class including stroke width (thickness). " alt="" coords="152,5,221,32"/>
+</map>

@@ -1,10 +1,10 @@
 <map id="src/Module/TextBlockSegmentation.cpp" name="src/Module/TextBlockSegmentation.cpp">
-<area shape="rect" id="node2" href="$_text_block_segmentation_8h.html" title="TextBlockSegmentation.h" alt="" coords="402,80,573,107"/>
-<area shape="rect" id="node13" href="$_image_8h.html" title="Image.h" alt="" coords="953,155,1023,181"/>
-<area shape="rect" id="node18" href="$_drawer_8h.html" title="Drawer.h" alt="" coords="1215,155,1288,181"/>
-<area shape="rect" id="node20" href="$_utils_8h.html" title="Utils.h" alt="" coords="715,155,775,181"/>
-<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="435,155,540,181"/>
-<area shape="rect" id="node7" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="290,155,352,181"/>
-<area shape="rect" id="node8" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="373,229,449,256"/>
+<area shape="rect" id="node2" href="$_text_block_segmentation_8h.html" title="TextBlockSegmentation.h" alt="" coords="483,80,655,107"/>
+<area shape="rect" id="node14" href="$_image_8h.html" title="Image.h" alt="" coords="1036,155,1105,181"/>
+<area shape="rect" id="node19" href="$_drawer_8h.html" title="Drawer.h" alt="" coords="1297,155,1371,181"/>
+<area shape="rect" id="node21" href="$_utils_8h.html" title="Utils.h" alt="" coords="850,155,909,181"/>
+<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="517,155,621,181"/>
+<area shape="rect" id="node7" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="313,155,375,181"/>
+<area shape="rect" id="node8" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="455,229,531,256"/>
 <area shape="rect" id="node11" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="5,229,152,256"/>
 </map>

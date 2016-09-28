@@ -23,6 +23,6 @@ var searchData=
   ['bottom',['bottom',['../classrdf_1_1_rect.html#acb999b56599ee23d188bf25a10a22e72',1,'rdf::Rect']]],
   ['bottomleft',['bottomLeft',['../classrdf_1_1_rect.html#a8613dea770761f945cf45aa9e2ecfc7f',1,'rdf::Rect']]],
   ['bottomright',['bottomRight',['../classrdf_1_1_rect.html#acd06ee546649f572888c67fa7ed273b4',1,'rdf::Rect']]],
-  ['boundingbox',['boundingBox',['../classrdf_1_1_pixel_set.html#a5107a9612a799096c929b15d00675c27',1,'rdf::PixelSet']]],
+  ['boundingbox',['boundingBox',['../classrdf_1_1_pixel_set.html#a52435de7253d8dcb6f16a4c87ee3cfdf',1,'rdf::PixelSet']]],
   ['brush',['brush',['../classrdf_1_1_region_type_config.html#a12fedcf767a2ece1e35fd138c13e9b66',1,'rdf::RegionTypeConfig']]]
 ];

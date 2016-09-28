@@ -37,7 +37,9 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
       [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
       [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
       [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
-      [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ]
+      [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],
+      [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
+      [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ]
     ] ],
     [ "Settings.cpp", "_settings_8cpp.html", null ],
     [ "Settings.h", "_settings_8h.html", "_settings_8h" ],

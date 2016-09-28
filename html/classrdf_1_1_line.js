@@ -24,6 +24,7 @@ var classrdf_1_1_line =
     [ "startPoint", "classrdf_1_1_line.html#ae7fbaa5b13dfad42638f370739991fbc", null ],
     [ "startPointCV", "classrdf_1_1_line.html#a4ba6d92741beb1ff29412229d065fa29", null ],
     [ "thickness", "classrdf_1_1_line.html#aafb351d4d9d078a4b535338ab827287e", null ],
+    [ "vector", "classrdf_1_1_line.html#ac7167784dbca03525dc87b90b5d41237", null ],
     [ "verticalOverlap", "classrdf_1_1_line.html#a1a0eef75f307c454efbc0ef31056b4b9", null ],
     [ "within", "classrdf_1_1_line.html#a1d5a3500945272528666b43171d89fa0", null ],
     [ "mLine", "classrdf_1_1_line.html#a225e6dc566a1d95563f1786813e92d45", null ],

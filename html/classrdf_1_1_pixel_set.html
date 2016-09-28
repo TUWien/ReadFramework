@@ -146,10 +146,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1c83da338c13aba8e23f819e77c50381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebb8f1790fc1640f81506c5117e1c760"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#aebb8f1790fc1640f81506c5117e1c760">polygon</a> ()</td></tr>
 <tr class="separator:aebb8f1790fc1640f81506c5117e1c760"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5107a9612a799096c929b15d00675c27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a5107a9612a799096c929b15d00675c27">boundingBox</a> ()</td></tr>
-<tr class="separator:a5107a9612a799096c929b15d00675c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af94eafa888d613b5e537eeac6d7bc8f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#af94eafa888d613b5e537eeac6d7bc8f8">draw</a> (QPainter &amp;p)</td></tr>
-<tr class="separator:af94eafa888d613b5e537eeac6d7bc8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52435de7253d8dcb6f16a4c87ee3cfdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a52435de7253d8dcb6f16a4c87ee3cfdf">boundingBox</a> () const </td></tr>
+<tr class="separator:a52435de7253d8dcb6f16a4c87ee3cfdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96fd9913d3b5b1c435605d6adec90889"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a96fd9913d3b5b1c435605d6adec90889">draw</a> (QPainter &amp;p) const </td></tr>
+<tr class="separator:a96fd9913d3b5b1c435605d6adec90889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca">BaseElement</a> (const QString &amp;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">id</a>=QString())</td></tr>
 <tr class="memdesc:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class keeps an ID to keep track of transformed elements during a processing chain. You can e.g. generate <a class="el" href="classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis...">Pixel</a> elements from MserBlobs. After filtering, processing etc. you can map back to the (pixel accurate) <a class="el" href="classrdf_1_1_mser_blob.html">MserBlob</a> using this ID.  <a href="#a34b6a09b0436365f198ce4d36b8039ca">More...</a><br/></td></tr>
@@ -160,9 +160,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a63d8445ef278e05271c1c82932fb1023"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QSharedPointer<br class="typebreak"/>
-&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a63d8445ef278e05271c1c82932fb1023">connect</a> (QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;superPixels, const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;rect)</td></tr>
-<tr class="separator:a63d8445ef278e05271c1c82932fb1023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eb3e4a66098e7d7ffe01311bb4e338b"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a0eb3e4a66098e7d7ffe01311bb4e338b">connect</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;superPixels, const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;rect)</td></tr>
+<tr class="separator:a0eb3e4a66098e7d7ffe01311bb4e338b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b7e064412c514d1c1fae1ff1cae809"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a56b7e064412c514d1c1fae1ff1cae809">fromEdges</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;edges)</td></tr>
+<tr class="separator:a56b7e064412c514d1c1fae1ff1cae809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -221,7 +224,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5107a9612a799096c929b15d00675c27"></a>
+<a class="anchor" id="a52435de7253d8dcb6f16a4c87ee3cfdf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -229,14 +232,14 @@ Protected Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classrdf_1_1_rect.html">Rect</a> rdf::PixelSet::boundingBox </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a63d8445ef278e05271c1c82932fb1023"></a>
+<a class="anchor" id="a0eb3e4a66098e7d7ffe01311bb4e338b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -246,7 +249,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; rdf::PixelSet::connect </td>
           <td>(</td>
-          <td class="paramtype">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>superPixels</em>, </td>
         </tr>
         <tr>
@@ -286,7 +289,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af94eafa888d613b5e537eeac6d7bc8f8"></a>
+<a class="anchor" id="a96fd9913d3b5b1c435605d6adec90889"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -295,9 +298,33 @@ Protected Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">QPainter &amp;&#160;</td>
           <td class="paramname"><em>p</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a56b7e064412c514d1c1fae1ff1cae809"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &gt; &gt; rdf::PixelSet::fromEdges </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edges</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

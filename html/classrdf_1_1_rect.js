@@ -6,6 +6,7 @@ var classrdf_1_1_rect =
     [ "Rect", "classrdf_1_1_rect.html#a2723e1b02a305817f687d8ccfb5d105f", null ],
     [ "Rect", "classrdf_1_1_rect.html#a0633659feb25d6682c4e86e74e412d90", null ],
     [ "Rect", "classrdf_1_1_rect.html#a92c07c6d9ab74b746f9d7c6ea7a47fca", null ],
+    [ "Rect", "classrdf_1_1_rect.html#a50dfbf5bb6fc37de966352182009e2a5", null ],
     [ "area", "classrdf_1_1_rect.html#aee2036137d167869c1a8baa8dd279c24", null ],
     [ "bottom", "classrdf_1_1_rect.html#acb999b56599ee23d188bf25a10a22e72", null ],
     [ "bottomLeft", "classrdf_1_1_rect.html#a8613dea770761f945cf45aa9e2ecfc7f", null ],

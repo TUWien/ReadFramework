@@ -105,6 +105,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_pixel.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrdf_1_1_pixel-members.html">List of all members</a>  </div>
@@ -132,6 +133,19 @@ Collaboration diagram for rdf::Pixel:</div>
 <area shape="rect" id="node2" href="classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,109,128,136"/><area shape="rect" id="node3" href="classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="153,109,225,136"/><area shape="rect" id="node4" href="classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="193,5,292,32"/><area shape="rect" id="node5" href="classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="250,109,333,136"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ade29eb367427a211924ce40c012c0fc1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1">DrawFlag</a> { <br/>
+&#160;&#160;<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1af27af41b99a626dae40c3a8f5a14a015">draw_ellipse_only</a> = 0, 
+<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf">draw_stats_only</a>, 
+<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ae76323021804b8788767803a9784b575">draw_ellipse_stats</a>, 
+<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ac364ced53f9de377d367d3ed6d23bc10">draw_all</a>, 
+<br/>
+&#160;&#160;<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1a166ba4ccd93363555f8e9eb131ebfafb">draw_end</a>
+<br/>
+ }</td></tr>
+<tr class="separator:ade29eb367427a211924ce40c012c0fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a68adef7bc3164b994d9baafac9abf9a1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a68adef7bc3164b994d9baafac9abf9a1">Pixel</a> ()</td></tr>
@@ -154,8 +168,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a73e43f55e32d298e86574537174bbb94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecd067430336c429abf72a5a4d43a8eb"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_stats.html">PixelStats</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb">stats</a> (int idx=-1) const </td></tr>
 <tr class="separator:aecd067430336c429abf72a5a4d43a8eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8593a3ad91bf8033c378a6048a20bb9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a8593a3ad91bf8033c378a6048a20bb9c">draw</a> (QPainter &amp;p, double alpha=0.3, bool showEllipse=false, bool showId=false) const </td></tr>
-<tr class="separator:a8593a3ad91bf8033c378a6048a20bb9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a388a7eb29cba0de8b0360b2ecc0c7f2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a388a7eb29cba0de8b0360b2ecc0c7f2d">draw</a> (QPainter &amp;p, double alpha=0.3, const <a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1">DrawFlag</a> &amp;df=<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf">draw_stats_only</a>) const </td></tr>
+<tr class="separator:a388a7eb29cba0de8b0360b2ecc0c7f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca">BaseElement</a> (const QString &amp;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">id</a>=QString())</td></tr>
 <tr class="memdesc:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class keeps an ID to keep track of transformed elements during a processing chain. You can e.g. generate <a class="el" href="classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis...">Pixel</a> elements from MserBlobs. After filtering, processing etc. you can map back to the (pixel accurate) <a class="el" href="classrdf_1_1_mser_blob.html">MserBlob</a> using this ID.  <a href="#a34b6a09b0436365f198ce4d36b8039ca">More...</a><br/></td></tr>
@@ -182,7 +196,32 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represents a single instance of super pixels which are needed for the layout analysis. </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="classrdf_1_1_base_element.html">BaseElement</a></dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="ade29eb367427a211924ce40c012c0fc1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1">rdf::Pixel::DrawFlag</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ade29eb367427a211924ce40c012c0fc1af27af41b99a626dae40c3a8f5a14a015"></a>draw_ellipse_only</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf"></a>draw_stats_only</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade29eb367427a211924ce40c012c0fc1ae76323021804b8788767803a9784b575"></a>draw_ellipse_stats</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade29eb367427a211924ce40c012c0fc1ac364ced53f9de377d367d3ed6d23bc10"></a>draw_all</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade29eb367427a211924ce40c012c0fc1a166ba4ccd93363555f8e9eb131ebfafb"></a>draw_end</em>&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a68adef7bc3164b994d9baafac9abf9a1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +347,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8593a3ad91bf8033c378a6048a20bb9c"></a>
+<a class="anchor" id="a388a7eb29cba0de8b0360b2ecc0c7f2d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -327,14 +366,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showEllipse</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showId</em> = <code>false</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1">DrawFlag</a> &amp;&#160;</td>
+          <td class="paramname"><em>df</em> = <code><a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf">draw_stats_only</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>

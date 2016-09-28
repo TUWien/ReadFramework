@@ -1,12 +1,19 @@
 var classrdf_1_1_pixel =
 [
+    [ "DrawFlag", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1", [
+      [ "draw_ellipse_only", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1af27af41b99a626dae40c3a8f5a14a015", null ],
+      [ "draw_stats_only", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf", null ],
+      [ "draw_ellipse_stats", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ae76323021804b8788767803a9784b575", null ],
+      [ "draw_all", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ac364ced53f9de377d367d3ed6d23bc10", null ],
+      [ "draw_end", "classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1a166ba4ccd93363555f8e9eb131ebfafb", null ]
+    ] ],
     [ "Pixel", "classrdf_1_1_pixel.html#a68adef7bc3164b994d9baafac9abf9a1", null ],
     [ "Pixel", "classrdf_1_1_pixel.html#abdd1edc23d0d1dca63a5470eed7edeb9", null ],
     [ "addStats", "classrdf_1_1_pixel.html#a73e43f55e32d298e86574537174bbb94", null ],
     [ "angle", "classrdf_1_1_pixel.html#a707eebe6c883a435b00210931f951f97", null ],
     [ "bbox", "classrdf_1_1_pixel.html#a05a484f8a8d1a1ede111e46a91bba9de", null ],
     [ "center", "classrdf_1_1_pixel.html#a944d7e9fd9c697578f3ec84c1662a377", null ],
-    [ "draw", "classrdf_1_1_pixel.html#a8593a3ad91bf8033c378a6048a20bb9c", null ],
+    [ "draw", "classrdf_1_1_pixel.html#a388a7eb29cba0de8b0360b2ecc0c7f2d", null ],
     [ "ellipse", "classrdf_1_1_pixel.html#a558f594d7d175c16150f941c146f8cc7", null ],
     [ "isNull", "classrdf_1_1_pixel.html#a63c79053e9ff2f9e2b4398946f1d0f1e", null ],
     [ "size", "classrdf_1_1_pixel.html#a44a54d556906a5e0d0b5b8d8780fae2b", null ],
