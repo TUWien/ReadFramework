@@ -375,6 +375,7 @@ public:
 	void move(const Vector2D& vec);
 
 	void draw(QPainter& p, double alpha = 0.0) const;
+	Vector2D getPoint(double angle) const;
 
 protected:
 	

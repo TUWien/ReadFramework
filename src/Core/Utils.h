@@ -68,6 +68,9 @@ public:
 	void registerVersion() const;
 	static double rand();
 
+	static double normAngle(double angle, double minAngle = 0.0, double maxAngle = CV_PI*2);
+	static double angleDist(double angle1, double angle2);
+
 	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;
 	QString baseName(const QString& filePath) const;
 

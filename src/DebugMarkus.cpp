@@ -161,6 +161,15 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 
+	// filter according to orientation
+	QVector<QSharedPointer<Pixel> > spf;
+	for (auto pixel : sp) {
+		if (pixel->stats()->orientation() == 0 || 
+			pixel->stats()->orientation() == CV_PI*0.5)
+			spf << pixel;
+	}
+	sp = spf;
+
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";

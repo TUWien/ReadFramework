@@ -365,8 +365,16 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 
 		p.drawLine(Line(center(), vec).line());
 		//p.setPen(pen);
-
 	}
+
+	//if (stats()) {
+	//	QPen pe = p.pen();
+	//	p.setPen(QColor(255, 0, 0));
+	//	Vector2D upper = mEllipse.getPoint(stats()->orientation());
+	//	Vector2D lower = mEllipse.getPoint(stats()->orientation() + CV_PI);
+	//	p.drawLine(upper.toQPointF(), lower.toQPointF());
+	//	p.setPen(pe);
+	//}
 
 	if (!stats() || df != draw_stats_only)
 		mEllipse.draw(p, alpha);

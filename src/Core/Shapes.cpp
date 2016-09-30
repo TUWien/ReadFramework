@@ -1024,12 +1024,45 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	p.translate(mCenter.toQPointF());
 	p.rotate(mAngle*DK_RAD2DEG);
 	p.drawEllipse(QPointF(0.0, 0.0), mAxis.x(), mAxis.y());
+	p.drawLine(QPointF(), QPointF(mAxis.x(), 0));
 	p.rotate(-mAngle*DK_RAD2DEG);
 	p.translate(-mCenter.toQPointF());
 
 	// draw center
 	p.drawPoint(mCenter.toQPointF());
 	p.setBrush(b);
+}
+
+/// <summary>
+/// Returns the ellipse point of angle.
+/// 0 degree corresponds to the positive x-axis.
+/// The angle is clockwise.
+/// </summary>
+/// <param name="angle">An angle.</param>
+/// <returns></returns>
+Vector2D Ellipse::getPoint(double angle) const {
+
+	angle = -angle;		// make the angle clockwise
+	double lAngle = angle + mAngle;
+
+	double a = mAxis.x();
+	double b = mAxis.y();
+	
+	double tt = std::tan(lAngle);
+	double x = (a*b) / (std::sqrt(b*b + a*a * (tt*tt)));
+
+	double xa = x / a;
+	double y = std::sqrt(1.0-(xa*xa)) * b;
+
+	Vector2D ptr(x, y);
+	Vector2D pt(1, 0);
+	pt *= ptr.length();
+	pt.rotate(angle);
+
+	// now transform to world coordinates
+	pt += center();
+
+	return pt;
 }
 
 }
