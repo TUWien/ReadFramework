@@ -37,6 +37,7 @@
 #include "Shapes.h"
 #include "Utils.h"
 #include "Image.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -564,6 +565,38 @@ Rect PixelSet::boundingBox() const {
 	return Rect(left, top, right-left, bottom-top);
 }
 
+BaseLine PixelSet::baseline() const {
+
+	std::vector<cv::Point> lowerProfile;
+
+	// TODO: calculate the mean angle
+	for (auto p : mSet) {
+		if (p->stats()) {
+			double angle = p->stats()->orientation();
+			lowerProfile.push_back(p->ellipse().getPoint(angle).toCvPoint());	// get ellipse point at the bottom
+		}
+	}
+
+	cv::Vec4f lowerLineVec;
+	cv::fitLine(lowerProfile, lowerLineVec, CV_DIST_WELSCH, 0, 10, 0.01);
+
+	Vector2D x0(lowerLineVec[2], lowerLineVec[3]);
+	Vector2D x1 = x0 + Vector2D(lowerLineVec[0], lowerLineVec[1]);
+	
+	Line lowerLine(x0, x1);
+	lowerLine = lowerLine.extendBorder(boundingBox());
+
+	// reject baseline?
+	double meanAngle = mSet.empty() || mSet[0]->stats() ? 0.0 : mSet[0]->stats()->orientation();
+	if (abs(Algorithms::instance().angleDist(lowerLine.angle(), meanAngle)) > CV_PI*0.1)
+		return BaseLine();
+
+	BaseLine bl;
+	bl.setPolygon(lowerLine.toPoly().toPolygon());
+
+	return bl;
+}
+
 QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
 
 	// Create an instance of Subdiv2D
@@ -643,6 +676,19 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 }
 
 void PixelSet::draw(QPainter& p) const {
+
+	BaseLine bl = baseline();
+	if (!bl.isEmpty()) {
+		QPen pen = p.pen();
+		QPen bPen = pen;
+		bPen.setWidth(3);
+		p.setPen(bPen);
+		//for (auto bp : bl.polygon())
+		//	p.drawPoint(bp);
+		p.drawPolygon(bl.polygon());
+		p.setPen(pen);
+		return;
+	}
 
 	for (auto px : mSet)
 		px->draw(p, 0.3, Pixel::draw_ellipse_only);

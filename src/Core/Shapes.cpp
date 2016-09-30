@@ -125,7 +125,7 @@ QPoint BaseLine::endPoint() const {
 /// </summary>
 /// <param name="line">The line.</param>
 /// <param name="thickness">The stroke width.</param>
-Line::Line(const QLine& line, float thickness) {
+Line::Line(const QLineF& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
 }
@@ -149,13 +149,10 @@ Line::Line(const Vector2D & p1, const Vector2D & p2, float thickness) {
 	mThickness = thickness;
 }
 
-cv::Point Line::startPointCV() const {
-	return cv::Point(mLine.p1().x(), mLine.p1().y());
-}
+Line::Line(double p1x, double p1y, double p2x, double p2y, float thickness) {
 
-cv::Point Line::endPointCV() const
-{
-	return cv::Point(mLine.p2().x(), mLine.p2().y());
+	mLine = QLineF(p1x, p1y, p2x, p2y);
+	mThickness = thickness;
 }
 
 /// <summary>
@@ -171,7 +168,7 @@ bool Line::isEmpty() const {
 /// </summary>
 /// <param name="line">The line.</param>
 /// <param name="thickness">The stroke width.</param>
-void Line::setLine(const QLine& line, float thickness) {
+void Line::setLine(const QLineF& line, float thickness) {
 	mLine = line;
 	mThickness = thickness;
 }
@@ -180,8 +177,16 @@ void Line::setLine(const QLine& line, float thickness) {
 /// Returns the line information.
 /// </summary>
 /// <returns>The line.</returns>
-QLine Line::line() const {
+QLineF Line::line() const {
 	return mLine;
+}
+
+QPolygonF Line::toPoly() const {
+	
+	QPolygonF poly;
+	poly << mLine.p1();
+	poly << mLine.p2();
+	return poly;
 }
 
 /// <summary>
@@ -194,7 +199,7 @@ float Line::thickness() const {
 
 double Line::squaredLength() const {
 	
-	QPoint diff = mLine.p2() - mLine.p1();
+	QPointF diff = mLine.p2() - mLine.p1();
 	return diff.x()*diff.x() + diff.y()*diff.y();
 }
 
@@ -213,7 +218,7 @@ double Line::length() const {
 /// <returns>The line angle [-pi,+pi] in radians.</returns>
 double Line::angle() const {
 
-	QPoint diff = mLine.p2() - mLine.p1();
+	QPointF diff = mLine.p2() - mLine.p1();
 
 	return atan2(diff.y(), diff.x());
 
@@ -223,7 +228,7 @@ double Line::angle() const {
 /// Returns the start point.
 /// </summary>
 /// <returns>The start point.</returns>
-QPoint Line::startPoint() const {
+Vector2D Line::p1() const {
 	return mLine.p1();
 }
 
@@ -231,15 +236,22 @@ QPoint Line::startPoint() const {
 /// Returns the end point.
 /// </summary>
 /// <returns>The end point.</returns>
-QPoint Line::endPoint() const {
+Vector2D Line::p2() const {
 	return mLine.p2();
 }
 
-bool Line::isHorizontal(float mAngleTresh) const
-{
+/// <summary>
+/// Determines whether the specified m angle tresh is horizontal.
+/// </summary>
+/// <param name="mAngleTresh">The m angle tresh.</param>
+/// <returns>
+///   <c>true</c> if the specified m angle tresh is horizontal; otherwise, <c>false</c>.
+/// </returns>
+bool Line::isHorizontal(float mAngleTresh) const {
+	
 	double lineAngle = angle();
 
-	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
+	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0f, CV_PI);
 	//old version
 	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
 
@@ -266,7 +278,7 @@ bool Line::isVertical(float mAngleTresh) const
 	//lineAngle = angle
 
 
-	float angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
+	double angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
 	//old version
 	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
 
@@ -291,7 +303,7 @@ bool Line::isVertical(float mAngleTresh) const
 /// </summary>
 /// <returns></returns>
 Vector2D Line::vector() const {
-	return Vector2D(endPoint()) - Vector2D(startPoint());
+	return p1() - p2();
 }
 
 void Line::draw(QPainter & p) const {
@@ -306,18 +318,83 @@ void Line::draw(QPainter & p) const {
 }
 
 /// <summary>
+/// Extends the line until the borders of the box.
+/// </summary>
+/// <param name="box">the 'cropping' box.</param>
+Line Line::extendBorder(const Rect & box) const {
+
+	// form DkSnippet
+	Vector2D gradient = vector();
+	Vector2D gradientBorderEnd, gradientBorderStart;
+
+	if (gradient.x() == 0)		//line is vertical
+		return Line(Vector2D(mLine.p1().x(), box.top()), Vector2D(mLine.p1().x(), box.bottom()));
+	if (gradient.y() == 0)		//line is horizontal
+		return Line(box.left(), mLine.p1().y(), box.right(), mLine.p1().y());
+
+	double xStart, xEnd, yStart, yEnd;
+
+	//gradientBorder is needed to check if line cuts horizontal or vertical border
+	//vector points to first or third quadrant
+	if (gradient.x()*gradient.y() < 0) {
+		gradientBorderEnd.setX(box.right() - mLine.p1().x());	//+
+		gradientBorderEnd.setY(box.top() - mLine.p1().y());	//-
+
+		gradientBorderStart.setX(box.left() - mLine.p1().x());	//-
+		gradientBorderStart.setY(box.bottom() - mLine.p1().y());//+
+
+		yEnd = box.top();
+		yStart = box.bottom();
+		xEnd = box.right();
+		xStart = box.left();
+		//vector goes down
+		//vector points to second or fourth quadrant
+	} else {
+		gradientBorderEnd.setX(box.right() -mLine.p1().x());		//+
+		gradientBorderEnd.setY(box.bottom()-mLine.p1().y());		//+
+
+		gradientBorderStart.setX(box.left()-mLine.p1().x());		//-
+		gradientBorderStart.setY(box.top() - mLine.p1().y());		//-
+
+		yEnd = box.bottom();
+		yStart = box.top();
+		xEnd = box.right();
+		xStart = box.left();
+	}
+	
+	Vector2D start, end;
+
+	if (std::abs(gradient.y()/gradient.x()) > std::abs(gradientBorderEnd.y()/gradientBorderEnd.x()))
+		end = Vector2D(mLine.p1().x() + gradient.x()/gradient.y() * gradientBorderEnd.y(), yEnd);
+	else
+		end = Vector2D(xEnd, mLine.p1().y() + gradient.y()/gradient.x() * gradientBorderEnd.x());
+
+	if (fabs(gradient.y()/gradient.x()) > fabs(gradientBorderStart.y()/gradientBorderStart.x()))
+		start = Vector2D(mLine.p1().x() + gradient.x()/gradient.y() * gradientBorderStart.y() , yStart);
+	else
+		start = Vector2D(xStart, mLine.p1().y() + gradient.y()/gradient.x() * gradientBorderStart.x());
+
+
+	if (mLine.p1().x() > p2().x()) {	//line direction is from right to left -> switch end points
+		return Line(end, start);
+	}
+	
+	return Line(start, end);
+}
+
+/// <summary>
 /// Returns the minimum distance of the line endings of line l to the line endings of the current line instance.
 /// </summary>
 /// <param name="l">The line l to which the minimum distance is computed.</param>
 /// <returns>The minimum distance.</returns>
-float Line::minDistance(const Line& l) const {
+double Line::minDistance(const Line& l) const {
 
-	float dist1 = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
-	float dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
+	double dist1 = Vector2D(mLine.p1() - l.line().p1()).length();
+	double dist2 = Vector2D(mLine.p1() - l.line().p2()).length();
 	dist1 = (dist1 < dist2) ? dist1 : dist2;
-	dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
+	dist2 = Vector2D(mLine.p2() - l.line().p1()).length();
 	dist1 = (dist1 < dist2) ? dist1 : dist2;
-	dist2 = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+	dist2 = Vector2D(mLine.p2() - l.line().p2()).length();
 	dist1 = (dist1 < dist2) ? dist1 : dist2;
 
 	return dist1;
@@ -328,27 +405,27 @@ float Line::minDistance(const Line& l) const {
 /// </summary>
 /// <param name="p">The p.</param>
 /// <returns>The distance of point p.</returns>
-float Line::distance(const QPoint p) const {
+double Line::distance(const Vector2D& p) const {
 
-	QPoint normalVec = mLine.p2() - mLine.p1();
+	Vector2D normalVec = mLine.p2() - mLine.p1();
 
-	int x = normalVec.x();
+	double x = normalVec.x();
 	normalVec.setX(-normalVec.y());
 	normalVec.setY(x);
 
-	QPoint tmp = p - mLine.p2();
+	Vector2D tmp = p - Vector2D(mLine.p2());
 
-	return (float)abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (FLT_EPSILON + sqrt(normalVec.x()*normalVec.x() + normalVec.y()*normalVec.y())));
+	return (float)std::abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (DBL_EPSILON + normalVec.length()));
 }
 
-int Line::horizontalOverlap(const Line & l) const {
-	int ol = std::max(mLine.x1(), l.startPoint().x()) - std::min(mLine.x2(), l.endPoint().x());
+double Line::horizontalOverlap(const Line & l) const {
+	double ol = std::max(mLine.x1(), l.p1().x()) - std::min(mLine.x2(), l.p2().x());
 
 	return ol;
 }
 
-int Line::verticalOverlap(const Line & l) const {
-	int ol = std::max(mLine.y1(), l.startPoint().y()) - std::min(mLine.y2(), l.endPoint().y());
+double Line::verticalOverlap(const Line & l) const {
+	double ol = std::max(mLine.y1(), l.p1().y()) - std::min(mLine.y2(), l.p2().y());
 
 	return ol;
 }
@@ -358,19 +435,19 @@ int Line::verticalOverlap(const Line & l) const {
 /// </summary>
 /// <param name="p">The point p to be checked.</param>
 /// <returns>True if p is within the current line instance.</returns>
-bool Line::within(const QPoint& p) const {
+bool Line::within(const Vector2D& p) const {
 
-	QPoint tmp = mLine.p2() - mLine.p1();
-	QPoint tmp2(p.x() - mLine.p2().x(), p.y() - mLine.p2().y());	//p-end
-	QPoint tmp3(p.x() - mLine.p1().x(), p.y() - mLine.p1().y());	//p-start
+	Vector2D tmp = mLine.p2() - mLine.p1();
+	Vector2D pe = p - mLine.p2();	//p-end
+	Vector2D ps = p - mLine.p2();	//p-start
 	
-	return (tmp.x()*tmp2.x() + tmp.y()*tmp2.y()) * (tmp.x()*tmp3.x() + tmp.y()*tmp3.y()) < 0;
+	return (tmp.x()*pe.x() + tmp.y()*pe.y()) * (tmp.x()*ps.x() + tmp.y()*ps.y()) < 0;
 
 }
 
 bool Line::lessX1(const Line& l1, const Line& l2) {
 
-	if (l1.startPoint().x() < l2.startPoint().x())
+	if (l1.p1().x() < l2.p2().x())
 		return true;
 	else
 		return false;
@@ -378,10 +455,23 @@ bool Line::lessX1(const Line& l1, const Line& l2) {
 
 bool Line::lessY1(const Line& l1, const Line& l2) {
 
-	if (l1.startPoint().y() <l2.startPoint().y())
+	if (l1.p1().y() < l2.p1().y())
 		return true;
 	else
 		return false;
+}
+
+cv::Mat Line::toMat(const Line & l) const {
+
+	cv::Mat distMat = cv::Mat(1, 4, CV_64FC1);
+	double* ptr = distMat.ptr<double>();
+
+	ptr[0] = Vector2D(mLine.p1() - l.line().p1()).length();
+	ptr[1] = Vector2D(mLine.p1() - l.line().p2()).length();
+	ptr[2] = Vector2D(mLine.p2() - l.line().p1()).length();
+	ptr[3] = Vector2D(mLine.p2() - l.line().p2()).length();
+
+	return distMat;
 }
 
 /// <summary>
@@ -391,13 +481,7 @@ bool Line::lessY1(const Line& l1, const Line& l2) {
 /// <returns>The merged line.</returns>
 Line Line::merge(const Line& l) const {
 
-	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
-	float* ptr = dist.ptr<float>();
-
-	ptr[0] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
-	ptr[1] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
-	ptr[2] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
-	ptr[3] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+	cv::Mat dist = toMat(l);
 
 	cv::Point maxIdxP;
 	minMaxLoc(dist, 0, 0, 0, &maxIdxP);
@@ -407,10 +491,10 @@ Line Line::merge(const Line& l) const {
 	Line mergedLine;
 
 	switch (maxIdx) {
-	case 0: mergedLine = Line(QLine(mLine.p1(), l.line().p1()), thickness);	break;
-	case 1: mergedLine = Line(QLine(mLine.p1(), l.line().p2()), thickness);	break;
-	case 2: mergedLine = Line(QLine(mLine.p2(), l.line().p1()), thickness);	break;
-	case 3: mergedLine = Line(QLine(mLine.p2(), l.line().p2()), thickness);	break;
+	case 0: mergedLine = Line(mLine.p1(), l.line().p1(), thickness);	break;
+	case 1: mergedLine = Line(mLine.p1(), l.line().p2(), thickness);	break;
+	case 2: mergedLine = Line(mLine.p2(), l.line().p1(), thickness);	break;
+	case 3: mergedLine = Line(mLine.p2(), l.line().p2(), thickness);	break;
 	}
 
 	return mergedLine;
@@ -423,13 +507,7 @@ Line Line::merge(const Line& l) const {
 /// <returns>The gap line.</returns>
 Line Line::gapLine(const Line& l) const {
 
-	cv::Mat dist = cv::Mat(1, 4, CV_32FC1);
-	float* ptr = dist.ptr<float>();
-
-	ptr[0] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p1());
-	ptr[1] = rdf::Algorithms::instance().euclideanDistance(mLine.p1(), l.line().p2());
-	ptr[2] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p1());
-	ptr[3] = rdf::Algorithms::instance().euclideanDistance(mLine.p2(), l.line().p2());
+	cv::Mat dist = toMat(l);
 
 	cv::Point minIdxP;
 	minMaxLoc(dist, 0, 0, &minIdxP);
@@ -439,10 +517,10 @@ Line Line::gapLine(const Line& l) const {
 	Line gapLine;
 
 	switch (minIdx) {
-	case 0: gapLine = Line(QLine(mLine.p1(), l.line().p1()), thickness);	break;
-	case 1: gapLine = Line(QLine(mLine.p1(), l.line().p2()), thickness);	break;
-	case 2: gapLine = Line(QLine(mLine.p2(), l.line().p1()), thickness);	break;
-	case 3: gapLine = Line(QLine(mLine.p2(), l.line().p2()), thickness);	break;
+	case 0: gapLine = Line(mLine.p1(), l.line().p1(), thickness);	break;
+	case 1: gapLine = Line(mLine.p1(), l.line().p2(), thickness);	break;
+	case 2: gapLine = Line(mLine.p2(), l.line().p1(), thickness);	break;
+	case 3: gapLine = Line(mLine.p2(), l.line().p2(), thickness);	break;
 	}
 
 	return gapLine;
@@ -453,17 +531,17 @@ Line Line::gapLine(const Line& l) const {
 /// </summary>
 /// <param name="l">The line l.</param>
 /// <returns>The angle difference in rad.</returns>
-float Line::diffAngle(const Line& l) const {
+double Line::diffAngle(const Line& l) const {
 
-	float angleLine, angleL;
+	double angleLine, angleL;
 
 	//angleLine
-	angleLine = Algorithms::instance().normAngleRad((float)angle(), 0.0f, (float)CV_PI);
-	angleLine = angleLine > (float)CV_PI*0.5f ? (float)CV_PI - angleLine : angleLine;
-	angleL = Algorithms::instance().normAngleRad((float)l.angle(), 0.0f, (float)CV_PI);
-	angleL = angleL > (float)CV_PI*0.5f ? (float)CV_PI - angleL : angleL;
+	angleLine = Algorithms::instance().normAngleRad(angle(), 0.0, CV_PI);
+	angleLine = angleLine > CV_PI*0.5 ? CV_PI - angleLine : angleLine;
+	angleL = Algorithms::instance().normAngleRad(l.angle(), 0.0, CV_PI);
+	angleL = angleL > CV_PI*0.5 ? CV_PI - angleL : angleL;
 	
-	return fabs(angleLine - angleL);
+	return std::abs(angleLine - angleL);
 }
 
 // Vector2D --------------------------------------------------------------------

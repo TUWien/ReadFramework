@@ -56,6 +56,7 @@ namespace rdf {
 
 // read defines
 class Vector2D;
+class Rect;
 
 class DllCoreExport Polygon {
 
@@ -105,41 +106,49 @@ protected:
 class DllCoreExport Line {
 
 public:
-	Line(const QLine& line = QLine(), float thickness = 1);
+	Line(const QLineF& line = QLineF(), float thickness = 1);
 	Line(const Polygon& poly);
-	Line(const cv::Point p1, const cv::Point p2, float thickness = 1);
+	Line(const cv::Point p1, const cv::Point p2, float thickness = 1);	// hsould be cv::Point2d
 	Line(const Vector2D& p1, const Vector2D& p2, float thickness = 1);
+	Line(double p1x, double p1y, double p2x, double p2y, float thickness = 1);
 
-	cv::Point startPointCV() const;
-	cv::Point endPointCV() const;
 	bool isEmpty() const;
-	void setLine(const QLine& line, float thickness = 1);
-	QLine line() const;
+	void setLine(const QLineF& line, float thickness = 1);
 	float thickness() const;
 	double squaredLength() const;
 	double length() const;
 	double angle() const;
-	float minDistance(const Line& l) const;
-	float distance(const QPoint p) const;
-	int horizontalOverlap(const Line& l) const;
-	int verticalOverlap(const Line& l) const;
+	double minDistance(const Line& l) const;
+	double distance(const Vector2D& p) const;
+	double horizontalOverlap(const Line& l) const;
+	double verticalOverlap(const Line& l) const;
 	Line merge(const Line& l) const;
 	Line gapLine(const Line& l) const;
-	float diffAngle(const Line& l) const;
-	bool within(const QPoint& p) const;
-	static bool lessX1(const Line& l1, const Line& l2);
-	static bool lessY1(const Line& l1, const Line& l2);
-	QPoint startPoint() const;
-	QPoint endPoint() const;
+	double diffAngle(const Line& l) const;
+	bool within(const Vector2D& p) const;
+	
+	// getter
+	Vector2D p1() const;
+	Vector2D p2() const;
+	QLineF line() const;
+	QPolygonF toPoly() const;
+
 	bool isHorizontal(float mAngleTresh = 0.5) const;
 	bool isVertical(float mAngleTresh = 0.5) const;
+
 	Vector2D vector() const;
 
 	void draw(QPainter& p) const;
+	Line extendBorder(const Rect& box) const;
+
+	static bool lessX1(const Line& l1, const Line& l2);
+	static bool lessY1(const Line& l1, const Line& l2);
 
 protected:
-	QLine mLine;
+	QLineF mLine;
 	float mThickness = 1;
+
+	cv::Mat toMat(const Line& l) const;
 };
 
 class DllCoreExport Vector2D {
@@ -182,7 +191,15 @@ public:
 	DllCoreExport friend double operator*(const Vector2D & l, const Vector2D & r) {
 		return l.mX * r.mX + l.mY * r.mY;
 	}
-	
+
+	DllCoreExport friend Vector2D operator*(const Vector2D & l, double s) {
+		return Vector2D(l.mX * s, l.mY * s);
+	}
+
+	DllCoreExport friend Vector2D operator*(double s, const Vector2D & l) {
+		return Vector2D(l.mX * s, l.mY * s);
+	}
+
 	// class member access operators
 	void operator+=(const Vector2D& vec) {
 		mX += vec.mX;

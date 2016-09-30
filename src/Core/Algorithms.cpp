@@ -824,7 +824,7 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) c
 /// <param name="startIvl">The intervals lower bound.</param>
 /// <param name="endIvl">The intervals upper bound.</param>
 /// <returns>The angle within [startIvl endIvl].</returns>
-float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const {
+double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) const {
 	// this could be a bottleneck
 	if (abs(angle) > 1000)
 		return angle;
@@ -838,15 +838,20 @@ float Algorithms::normAngleRad(float angle, float startIvl, float endIvl) const 
 }
 
 /// <summary>
-/// Returns euclidean distance between two vectors
+/// Computes the distance between two angles.
+/// Hence, min(angleDiff, CV_PI*2-(angleDiff))
 /// </summary>
-/// <param name="p1">Vector p1.</param>
-/// <param name="p2">Vector p2.</param>
-/// <returns>The Euclidean distance.</returns>
-float Algorithms::euclideanDistance(const QPoint& p1, const QPoint& p2) const {
+/// <param name="angle1">The angle1.</param>
+/// <param name="angle2">The angle2.</param>
+/// <returns>The angular distance.</returns>
+double Algorithms::angleDist(double angle1, double angle2) const {
 
-	return (float)sqrt((p1.x() - p2.x())*(p1.x() - p2.x()) + (p1.y() - p2.y())*(p1.y() - p2.y()));
+	angle1 = normAngleRad(angle1);
+	angle2 = normAngleRad(angle2);
 
+	double dist = normAngleRad(angle1 - angle2);
+
+	return std::min(dist, CV_PI*2.0 - dist);
 }
 
 /// <summary>

@@ -80,8 +80,10 @@ private:
 
 	bool checkInput() const override;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
-	
+	QVector<QSharedPointer<PixelSet> > toSets() const;
+
 	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
+
 };
 
 };

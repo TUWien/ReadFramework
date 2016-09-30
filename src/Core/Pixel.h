@@ -242,6 +242,7 @@ public:
 
 	Polygon polygon();
 	Rect boundingBox() const;
+	BaseLine baseline() const;
 
 	void draw(QPainter& p) const;
 

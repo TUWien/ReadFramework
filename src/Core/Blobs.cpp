@@ -413,7 +413,7 @@ QVector<Blob> BlobManager::filterMar(float maxAspectRatio, int minWidth, const B
 /// <param name="maxAngleDiff">The maximum angle difference in degree.</param>
 /// <param name="blobs">The blobs.</param>
 /// <returns>The filtered blob vector</returns>
-QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Blobs& blobs) const {
+QVector<Blob> BlobManager::filterAngle(double angle, double maxAngleDiff, const Blobs& blobs) const {
 
 	QVector<Blob> filtered;
 	float o;
@@ -422,19 +422,19 @@ QVector<Blob> BlobManager::filterAngle(float angle, float maxAngleDiff, const Bl
 
 		o = blob.blobOrientation();
 
-		float a = Algorithms::instance().normAngleRad((float)angle, 0.0f, (float)CV_PI);
-		a = a >(float)CV_PI*0.5f ? (float)CV_PI - a : a;
-		float angleNewLine = Algorithms::instance().normAngleRad(o, 0.0f, (float)CV_PI);
-		angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
+		double a = Algorithms::instance().normAngleRad(angle, 0.0, CV_PI);
+		a = a > CV_PI*0.5 ? CV_PI - a : a;
+		double angleNewLine = Algorithms::instance().normAngleRad(o, 0.0, CV_PI);
+		angleNewLine = angleNewLine > CV_PI*0.5 ? CV_PI - angleNewLine : angleNewLine;
 
-		float diffangle = fabs(a - (float)angleNewLine);
+		double diffangle = std::abs(a - angleNewLine);
 
-		a = a > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - a : a;
-		angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
+		a = a > CV_PI*0.25 ? CV_PI*0.5 - a : a;
+		angleNewLine = angleNewLine > CV_PI*0.25 ? CV_PI*0.5 - angleNewLine : angleNewLine;
 
-		diffangle = diffangle < fabs(a - (float)angleNewLine) ? diffangle : fabs(a - (float)angleNewLine);
+		diffangle = diffangle < std::abs(a - angleNewLine) ? diffangle : std::abs(a - angleNewLine);
 
-		if (diffangle <= maxAngleDiff / 180.0f*(float)CV_PI)
+		if (diffangle <= maxAngleDiff / 180.0*CV_PI)
 			filtered.append(blob);
 	}
 

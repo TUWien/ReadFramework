@@ -156,8 +156,8 @@ public:
 	cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
 	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
 	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
-	float normAngleRad(float angle, float startIvl, float endIvl) const;
-	float euclideanDistance(const QPoint& p1, const QPoint& p2) const;
+	double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2*CV_PI) const;
+	double angleDist(double angle1, double angle2) const;
 	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
 	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	QPointF calcRotationSize(double angleRad, QPointF srcSize);

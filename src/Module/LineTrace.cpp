@@ -225,16 +225,16 @@ namespace rdf {
 
 		for (auto l : hLines) {
 
-			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
-			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+			cv::Point2d pStart(l.p1().x(), l.p1().y());
+			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 
 			cv::line(synLinImg, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
 		}
 
 		for (auto l : vLines) {
 
-			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
-			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+			cv::Point2d pStart(l.p1().x(), l.p1().y());
+			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 
 			cv::line(synLinImg, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
 		}
@@ -251,16 +251,16 @@ namespace rdf {
 
 		for (auto l : hline) {
 
-			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
-			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+			cv::Point2d pStart(l.p1().x(), l.p1().y());
+			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 
 			cv::line(img, pStart, pEnd, hCol, (int)l.thickness(), 8, 0);
 		}
 
 		for (auto l : vline) {
 
-			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
-			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+			cv::Point2d pStart(l.p1().x(), l.p1().y());
+			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 
 			cv::line(img, pStart, pEnd, vCol, (int)l.thickness(), 8, 0);
 		}
@@ -281,11 +281,11 @@ namespace rdf {
 				}
 
 				rdf::Line cmpLine = *lineIterCmp;
-				float dist = cLine.minDistance(cmpLine);
+				double dist = cLine.minDistance(cmpLine);
 
 				if (dist > config()->maxGap()) continue;
 
-				float diffAngle = cLine.diffAngle(cmpLine);
+				double diffAngle = cLine.diffAngle(cmpLine);
 				if (diffAngle > qDegreesToRadians(config()->maxSlopeDiff())) continue;
 				
 				//orientation of new line differ in orientation with connecting lines by maxSlopeDiff degree
@@ -293,11 +293,11 @@ namespace rdf {
 				rdf::Line newLine, gapLine;
 				newLine = cLine.merge(cmpLine);
 
-				float angle1 = (float)newLine.diffAngle(cLine);
-				float angle2 = (float)newLine.diffAngle(cmpLine);
-				float angle = angle1 > angle2 ? angle1 : angle2;
+				double angle1 = newLine.diffAngle(cLine);
+				double angle2 = newLine.diffAngle(cmpLine);
+				double angle = angle1 > angle2 ? angle1 : angle2;
 
-				float weight = 1.0f - (dist / config()->maxGap());
+				double weight = 1.0f - (dist / config()->maxGap());
 				if (angle > (weight * qDegreesToRadians(config()->maxAngleDiff()))) continue;
 
 				gapLine = cLine.gapLine(cmpLine);
@@ -382,8 +382,8 @@ namespace rdf {
 
 		for (auto l : lines) {
 
-			cv::Point pStart(l.startPoint().x(), l.startPoint().y());
-			cv::Point pEnd(l.endPoint().x(), l.endPoint().y());
+			cv::Point2d pStart(l.p1().x(), l.p1().y());
+			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 
 			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
 		}
@@ -421,15 +421,13 @@ namespace rdf {
 
 		for (auto l : lines) {
 			
-			float a = Algorithms::instance().normAngleRad((float)angle, 0.0f, (float)CV_PI);
+			double a = Algorithms::instance().normAngleRad(angle, 0.0, CV_PI);
+			double angleNewLine = Algorithms::instance().normAngleRad(l.angle(), 0.0, CV_PI);
 
-			float angleNewLine = Algorithms::instance().normAngleRad((float)l.angle(), 0.0f, (float)CV_PI);
+			double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
+				, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
 
-			float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
-				, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
-
-
-			if (diffangle < angleDiff / 180.0f*(float)CV_PI)
+			if (diffangle < angleDiff / 180.0*CV_PI)
 				resultLines.append(l);
 
 		}

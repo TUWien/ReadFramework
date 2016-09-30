@@ -144,30 +144,6 @@ double Utils::rand() {
 	return (double)qrand() / RAND_MAX;
 }
 
-double Utils::normAngle(double angle, double minAngle, double maxAngle) {
-	
-	double dr = maxAngle - minAngle;
-	assert(dr > 0);
-
-	while (angle < minAngle)
-		angle += dr;
-
-	while (angle >= maxAngle)
-		angle -= dr;
-
-	return angle;
-}
-
-double Utils::angleDist(double angle1, double angle2) {
-
-	angle1 = normAngle(angle1);
-	angle2 = normAngle(angle2);
-
-	double dist = normAngle(angle1 - angle2);
-
-	return std::min(dist, CV_PI*2.0 - dist);
-}
-
 /// <summary>
 /// Creates a new file path from filePath.
 /// Hence, C:\temp\josef.png can be turned into C:\temp\josef-something.xml

@@ -726,9 +726,10 @@ SeparatorRegion::SeparatorRegion() : Region() {
 
 void SeparatorRegion::setLine(const Line & line) {
 
-	QPolygon qlp;
-	qlp << line.startPoint() << line.endPoint();
-	Polygon p(qlp);
+	QLineF l = line.line();
+	QPolygonF qlp;
+	qlp << l.p1() << l.p2();
+	Polygon p(qlp.toPolygon());
 
 	setPolygon(p);
 	mLine = line;
@@ -757,7 +758,7 @@ bool SeparatorRegion::operator==(const Region & sr1) {
 	if (l1.isEmpty() || mLine.isEmpty())
 		return false;
 
-	if (l1.startPoint() == mLine.startPoint() && l1.endPoint() == mLine.endPoint())
+	if (l1.p1() == mLine.p1() && l1.p2() == mLine.p2())
 		return true;
 	else
 		return false;

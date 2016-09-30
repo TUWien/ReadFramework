@@ -134,29 +134,29 @@ namespace rdf {
 		return mTemplates;
 	}
 
-	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat srcImg, cv::Point offset) const	{
+	cv::Mat FormFeatures::getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset) const {
 
 		cv::Mat finalImg = srcImg.clone();
 
 		QVector<rdf::Line> hl, vl;
 
 		for (auto h : mHorLinesMatched) {
-			hl.push_back(rdf::Line(h.startPointCV() + offset, h.endPointCV() + offset, h.thickness()));
+			hl.push_back(rdf::Line(h.p1() + offset, h.p2() + offset, h.thickness()));
 		}
 		for (auto v : mVerLinesMatched) {
-			vl.push_back(rdf::Line(v.startPointCV() + offset, v.endPointCV() + offset, v.thickness()));
+			vl.push_back(rdf::Line(v.p1() + offset, v.p2() + offset, v.thickness()));
 		}
 
 		rdf::LineTrace::generateLineImage(hl, vl, finalImg, cv::Scalar(0,255,0), cv::Scalar(0,0,255));
 
 		return finalImg;
 	}
-	void FormFeatures::setInputImg(const cv::Mat & img)
-	{
+
+	void FormFeatures::setInputImg(const cv::Mat & img) {
 		mSrcImg = img;
 	}
-	void FormFeatures::setMask(const cv::Mat & mask)
-	{
+
+	void FormFeatures::setMask(const cv::Mat & mask) {
 		mMask = mask;
 	}
 	bool FormFeatures::isEmpty() const
@@ -449,7 +449,7 @@ namespace rdf {
 	float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
 	{
 
-		cv::LineIterator it(mSrcImg, l.startPointCV(), l.endPointCV());
+		cv::LineIterator it(mSrcImg, l.p1().toCvPointF(), l.p2().toCvPointF());
 		float distance = 0;
 		float outsidePixel = 0;
 		float max = 0;
@@ -488,20 +488,20 @@ namespace rdf {
 		if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of horizontal lines if template and current Image contains horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
-				int yLineTemp = hT[i].startPointCV().y;
+				double yLineTemp = hT[i].p1().toCvPointF().y;
 				for (int j = 0; j < mHorLines.size(); j++) {
-					int diffYLine = yLineTemp - mHorLines[j].startPointCV().y;
-					offY.push_back(diffYLine);
+					double diffYLine = yLineTemp - mHorLines[j].p1().y();
+					offY.push_back(qRound(diffYLine));
 				}
 			}
 		}
 		else if (!vT.empty() && !mVerLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < vT.size(); i++) {
-				int yLineTemp = vT[i].startPointCV().y;
+				double yLineTemp = vT[i].p1().y();
 				for (int j = 0; j < mVerLines.size(); j++) {
-					int diffYLine = yLineTemp - mVerLines[j].startPointCV().y;
-					offY.push_back(diffYLine);
+					double diffYLine = yLineTemp - mVerLines[j].p1().y();
+					offY.push_back(qRound(diffYLine));
 				}
 			}
 		}
@@ -512,20 +512,20 @@ namespace rdf {
 		if (!vT.empty() && !mVerLines.empty()) {
 			//use X difference of vertical lines if template and current Image contains vertical lines
 			for (int i = 0; i < vT.size(); i++) {
-				int xLineTemp = vT[i].startPointCV().x;
+				double xLineTemp = vT[i].p1().x();
 				for (int j = 0; j < mVerLines.size(); j++) {
-					int diffXLine = xLineTemp - mVerLines[j].startPointCV().x;
-					offX.push_back(diffXLine);
+					double diffXLine = xLineTemp - mVerLines[j].p1().x();
+					offX.push_back(qRound(diffXLine));
 				}
 			}
 		}
 		else if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of starting point of vertical lines if template or current image contains no horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
-				int xLineTemp = hT[i].startPointCV().x;
+				double xLineTemp = hT[i].p1().x();
 				for (int j = 0; j < mHorLines.size(); j++) {
-					int diffXLine = xLineTemp - mHorLines[j].startPointCV().x;
-					offX.push_back(diffXLine);
+					double diffXLine = xLineTemp - mHorLines[j].p1().x();
+					offX.push_back(qRound(diffXLine));
 				}
 			}
 		}

@@ -78,6 +78,10 @@ bool TextLineSegmentation::compute() {
 
 	mEdges = filterEdges(mEdges);
 
+	// filtering - NOTE: experimental!
+	auto sets = PixelSet::fromEdges(mEdges);
+
+
 	mDebug << "computed in" << dt;
 
 	return true;
@@ -100,6 +104,16 @@ QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVect
 	return pixelEdgesClean;
 }
 
+QVector<QSharedPointer<PixelSet>> TextLineSegmentation::toSets() const {
+
+	// why do I have to do this?
+	QVector<QSharedPointer<PixelEdge> > pe;
+	for (auto e : mEdges)
+		pe << e;
+
+	return PixelSet::fromEdges(pe);
+}
+
 void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge>>& edges) const {
 
 	QVector<QSharedPointer<PixelSet> > clusters;
@@ -111,7 +125,6 @@ void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge>>& edges) 
 	}
 
 	// TODO: go on here...
-
 
 }
 
@@ -130,20 +143,16 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 		b->draw(p);
 	}
 
-	// why do I have to do this?
-	QVector<QSharedPointer<PixelEdge> > pe;
-	for (auto e : mEdges)
-		pe << e;
-
-	auto sets = PixelSet::fromEdges(pe);
+	auto sets = toSets();
 
 	for (auto set : sets) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
 		p.setPen(Drawer::instance().pen());
+		set->draw(p);
 
-		for (auto pixel : set->pixels()) {
-			pixel->draw(p, .3, Pixel::draw_ellipse_only);
-		}
+		//for (auto pixel : set->pixels()) {
+		//	pixel->draw(p, .3, Pixel::draw_ellipse_only);
+		//}
 	}
 
 	mDebug << mEdges.size() << "edges drawn in" << dtf;
