@@ -565,14 +565,13 @@ Rect PixelSet::boundingBox() const {
 	return Rect(left, top, right-left, bottom-top);
 }
 
-BaseLine PixelSet::baseline() const {
+Line PixelSet::baseline(double offsetAngle) const {
 
 	std::vector<cv::Point> lowerProfile;
 
-	// TODO: calculate the mean angle
 	for (auto p : mSet) {
 		if (p->stats()) {
-			double angle = p->stats()->orientation();
+			double angle = p->stats()->orientation() + offsetAngle;
 			lowerProfile.push_back(p->ellipse().getPoint(angle).toCvPoint());	// get ellipse point at the bottom
 		}
 	}
@@ -581,20 +580,43 @@ BaseLine PixelSet::baseline() const {
 	cv::fitLine(lowerProfile, lowerLineVec, CV_DIST_WELSCH, 0, 10, 0.01);
 
 	Vector2D x0(lowerLineVec[2], lowerLineVec[3]);
-	Vector2D x1 = x0 + Vector2D(lowerLineVec[0], lowerLineVec[1]);
+	Vector2D x1 = x0 + Vector2D(lowerLineVec[0], lowerLineVec[1]) * 200.0;
 	
-	Line lowerLine(x0, x1);
-	lowerLine = lowerLine.extendBorder(boundingBox());
+	Line baseLine(x0, x1);
+	baseLine = baseLine.extendBorder(boundingBox());
 
-	// reject baseline?
-	double meanAngle = mSet.empty() || mSet[0]->stats() ? 0.0 : mSet[0]->stats()->orientation();
-	if (abs(Algorithms::instance().angleDist(lowerLine.angle(), meanAngle)) > CV_PI*0.1)
-		return BaseLine();
+	//// reject baseline?
+	//// TODO: calculate the mean angle
+	//double meanAngle = mSet.empty() || mSet[0]->stats() ? 0.0 : mSet[0]->stats()->orientation();
 
-	BaseLine bl;
-	bl.setPolygon(lowerLine.toPoly().toPolygon());
+	//if (abs(Algorithms::instance().angleDist(lowerLine.angle(), meanAngle)) > CV_PI*0.1)
+	//	return BaseLine();
 
-	return bl;
+	return baseLine;
+}
+
+Ellipse PixelSet::profileRect() const {
+	
+	// TODO: this is not fixed yet
+	Line bLine = baseline();
+	if (bLine.isEmpty())
+		return Ellipse();
+
+	Line xLine = baseline(CV_PI);
+
+	double angle = (bLine.angle() + Algorithms::instance().angleDist(xLine.angle(), bLine.angle())*0.5f);
+	
+	Vector2D blc = bLine.p1() + bLine.vector() * 0.5;
+	Vector2D xlc = xLine.p1() + xLine.vector() * 0.5;
+	Vector2D centerLine = blc - xlc;
+	Vector2D center = xlc + centerLine * 0.5;
+
+	Ellipse el;
+	el.setAngle(angle);
+	el.setCenter(center);
+	el.setAxis(Vector2D(std::max(bLine.length(), xLine.length()), centerLine.length()));
+
+	return el;
 }
 
 QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
@@ -677,21 +699,35 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 
 void PixelSet::draw(QPainter& p) const {
 
-	BaseLine bl = baseline();
+	//Ellipse el = profileRect();
+	//if (!el.isNull()) {
+
+	//	QPen pen = p.pen();
+	//	QPen bPen = pen;
+	//	bPen.setWidth(5);
+	//	p.setPen(bPen);
+	//	el.draw(p);
+	//	p.setPen(pen);
+	//	return;
+	//}
+
+	Line bl = baseline();
 	if (!bl.isEmpty()) {
-		QPen pen = p.pen();
-		QPen bPen = pen;
-		bPen.setWidth(3);
-		p.setPen(bPen);
-		//for (auto bp : bl.polygon())
-		//	p.drawPoint(bp);
-		p.drawPolygon(bl.polygon());
-		p.setPen(pen);
+
+		bl.setThickness(4);
+		bl.draw(p);
+	}
+
+	Line xl = baseline(CV_PI);
+	if (!xl.isEmpty()) {
+
+		xl.setThickness(2);
+		xl.draw(p);
 		return;
 	}
 
-	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+	//for (auto px : mSet)
+	//	px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
 	p.drawRect(boundingBox().toQRectF());
 }
@@ -709,7 +745,7 @@ bool PixelGraph::isEmpty() const {
 	return !mSet || mSet->pixels().isEmpty();
 }
 
-void PixelGraph::draw(QPainter & p) const {
+void PixelGraph::draw(QPainter &) const {
 
 	qDebug() << "PixelGraph::draw does not have an implementation yet";
 }

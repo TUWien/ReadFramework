@@ -86,7 +86,7 @@ public:
 
 	bool isEmpty() const;
 
-	void setPolygon(QPolygon& baseLine);
+	void setPolygon(const QPolygon& baseLine);
 	QPolygon polygon() const;
 
 	void read(const QString& pointList);
@@ -114,6 +114,7 @@ public:
 
 	bool isEmpty() const;
 	void setLine(const QLineF& line, float thickness = 1);
+	void setThickness(float thickness);
 	float thickness() const;
 	double squaredLength() const;
 	double length() const;

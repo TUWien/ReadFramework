@@ -86,7 +86,7 @@ bool BaseLine::isEmpty() const {
 	return mBaseLine.isEmpty();
 }
 
-void BaseLine::setPolygon(QPolygon & baseLine) {
+void BaseLine::setPolygon(const QPolygon & baseLine) {
 	mBaseLine = baseLine;
 }
 
@@ -170,6 +170,10 @@ bool Line::isEmpty() const {
 /// <param name="thickness">The stroke width.</param>
 void Line::setLine(const QLineF& line, float thickness) {
 	mLine = line;
+	mThickness = thickness;
+}
+
+void Line::setThickness(float thickness) {
 	mThickness = thickness;
 }
 
@@ -327,10 +331,10 @@ Line Line::extendBorder(const Rect & box) const {
 	Vector2D gradient = vector();
 	Vector2D gradientBorderEnd, gradientBorderStart;
 
-	if (gradient.x() == 0)		//line is vertical
-		return Line(Vector2D(mLine.p1().x(), box.top()), Vector2D(mLine.p1().x(), box.bottom()));
-	if (gradient.y() == 0)		//line is horizontal
-		return Line(box.left(), mLine.p1().y(), box.right(), mLine.p1().y());
+	//if (gradient.x() == 0)		//line is vertical
+	//	return Line(Vector2D(mLine.p1().x(), box.top()), Vector2D(mLine.p1().x(), box.bottom()));
+	//if (gradient.y() == 0)		//line is horizontal
+	//	return Line(box.left(), mLine.p1().y(), box.right(), mLine.p1().y());
 
 	double xStart, xEnd, yStart, yEnd;
 

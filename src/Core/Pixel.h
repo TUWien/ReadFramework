@@ -242,7 +242,8 @@ public:
 
 	Polygon polygon();
 	Rect boundingBox() const;
-	BaseLine baseline() const;
+	Line baseline(double offsetAngle = 0.0) const;
+	Ellipse profileRect() const;
 
 	void draw(QPainter& p) const;
 

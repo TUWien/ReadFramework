@@ -606,7 +606,6 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 	const Vector2D& ec = pixel->center();
 	QVector<const Pixel*> neighbors;
-	double sqRadius = radius*radius;
 
 	// create neighbor set
 	for (const QSharedPointer<Pixel>& p : mSet) {

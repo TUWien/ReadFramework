@@ -78,10 +78,6 @@ bool TextLineSegmentation::compute() {
 
 	mEdges = filterEdges(mEdges);
 
-	// filtering - NOTE: experimental!
-	auto sets = PixelSet::fromEdges(mEdges);
-
-
 	mDebug << "computed in" << dt;
 
 	return true;
@@ -111,7 +107,17 @@ QVector<QSharedPointer<PixelSet>> TextLineSegmentation::toSets() const {
 	for (auto e : mEdges)
 		pe << e;
 
-	return PixelSet::fromEdges(pe);
+	QVector<QSharedPointer<PixelSet> > allSets = PixelSet::fromEdges(pe);
+	QVector<QSharedPointer<PixelSet> > filteredSets;
+
+	for (auto s : allSets) {
+
+		//if (!s->baseline().isEmpty())
+		if (s->pixels().size() > 10)
+			filteredSets << s;
+	}
+
+	return filteredSets;
 }
 
 void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge>>& edges) const {
@@ -135,16 +141,18 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 
 	QPainter p(&pm);
-	QColor col = QColor(0, 60, 60);
-	Drawer::instance().setColor(col);
-	p.setPen(Drawer::instance().pen());
+	
+	//// this block draws the edges
+	//QColor col = QColor(0, 60, 60);
+	//Drawer::instance().setColor(col);
+	//p.setPen(Drawer::instance().pen());
 
-	for (auto b : mEdges) {
-		b->draw(p);
-	}
+	//for (auto b : mEdges) {
+	//	b->draw(p);
+	//}
 
 	auto sets = toSets();
-
+	
 	for (auto set : sets) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
 		p.setPen(Drawer::instance().pen());
