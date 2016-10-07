@@ -32,9 +32,11 @@
 
 #include "FocusMeasure.h"
 #include "Algorithms.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include "opencv2/imgproc/imgproc.hpp"
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -54,13 +56,41 @@ namespace rdf {
 
 		if (checkInput()) {
 
-			cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
-			cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
-			dH = cv::abs(dH);
-			dV = cv::abs(dV);
+			//rdf::Timer dt;
+			//this should be the faster version...
+			cv::Mat FM(mSrcImg.rows - 2, mSrcImg.cols - 2, mSrcImg.type());
 
-			cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 2), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 2)));
-			FM = FM.mul(FM);
+			for (int rowIdx = 0; rowIdx < mSrcImg.rows - 2; rowIdx++) {
+
+				const double *ptrSrc = mSrcImg.ptr<double>(rowIdx);
+				const double *ptrSrc2 = mSrcImg.ptr<double>(rowIdx+2);
+				
+				double *ptrFm = FM.ptr<double>(rowIdx);
+
+				for (int colIdx = 0; colIdx < mSrcImg.cols-2; colIdx++) {
+
+					double diffH = ptrSrc[colIdx + 2] - ptrSrc[colIdx];
+					double diffV = ptrSrc2[colIdx] - ptrSrc[colIdx];
+
+					ptrFm[colIdx] = cv::max(cv::abs(diffH), cv::abs(diffV));
+					ptrFm[colIdx] *= ptrFm[colIdx];
+				}
+
+			}
+
+			//qDebug() << "new version took me: " << dt;
+
+
+			//old version
+			//cv::Mat dH = mSrcImg(cv::Range::all(), cv::Range(2, mSrcImg.cols)) - mSrcImg(cv::Range::all(), cv::Range(0, mSrcImg.cols - 2));
+			//cv::Mat dV = mSrcImg(cv::Range(2, mSrcImg.rows), cv::Range::all()) - mSrcImg(cv::Range(0, mSrcImg.rows - 2), cv::Range::all());
+			//dH = cv::abs(dH);
+			//dV = cv::abs(dV);
+
+			//cv::Mat FM = cv::max(dH(cv::Range(0, dH.rows - 2), cv::Range::all()), dV(cv::Range::all(), cv::Range(0, dV.cols - 2)));
+			//FM = FM.mul(FM);
+
+			//qDebug() << "old version took me: " << dt;
 
 			cv::Scalar fm = cv::mean(FM);
 			//normalize
