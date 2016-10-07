@@ -10,7 +10,7 @@ var searchData=
   ['verlines',['verLines',['../classrdf_1_1_form_features.html#a7f9cceb13b2afd30bef5306e9a161e42',1,'rdf::FormFeatures']]],
   ['verlinesmatched',['verLinesMatched',['../classrdf_1_1_form_features.html#a26674d806205a62abaec7333c38f120a',1,'rdf::FormFeatures']]],
   ['vertical',['VERTICAL',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997af847d1ca53fcb96592612a071cc15e02',1,'rdf::BaseSkewEstimation']]],
-  ['verticaloverlap',['verticalOverlap',['../classrdf_1_1_line.html#a1a0eef75f307c454efbc0ef31056b4b9',1,'rdf::Line']]],
+  ['verticaloverlap',['verticalOverlap',['../classrdf_1_1_line.html#a1684a9d813ac02e017df92c07b806627',1,'rdf::Line']]],
   ['vlines',['vLines',['../classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d',1,'rdf::LineTrace']]],
   ['vtxt',['vtxT',['../classrd3_1_1_g_c_graph.html#a8ef016dc7804096842730dde2a1fc339',1,'rd3::GCGraph']]]
 ];

@@ -7,6 +7,7 @@ var classrdf_1_1_ellipse =
     [ "axis", "classrdf_1_1_ellipse.html#ab1a8926d6f200a1fa56dbda3dcd48d0a", null ],
     [ "center", "classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0", null ],
     [ "draw", "classrdf_1_1_ellipse.html#aecf6779f58df14f8d34ceb21c260bfbc", null ],
+    [ "getPoint", "classrdf_1_1_ellipse.html#a8c87aa93233fc0caf8c36df3205e5f84", null ],
     [ "isNull", "classrdf_1_1_ellipse.html#af09586b7027758255a20d92475bfc4c0", null ],
     [ "majorAxis", "classrdf_1_1_ellipse.html#a16278b3a754c1e8e321e3bd46a6e9c74", null ],
     [ "minorAxis", "classrdf_1_1_ellipse.html#adce797c47d3116d9186821d568097142", null ],

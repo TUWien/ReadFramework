@@ -174,12 +174,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a06babedf8ef3f5a1b5838a4072351597"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597">getThreshOtsu</a> (const cv::Mat &amp;hist, const double otsuThresh=0) const </td></tr>
 <tr class="memdesc:a06babedf8ef3f5a1b5838a4072351597"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Otsu threshold based on a certain histogram.  <a href="#a06babedf8ef3f5a1b5838a4072351597">More...</a><br/></td></tr>
 <tr class="separator:a06babedf8ef3f5a1b5838a4072351597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9f83de0133580a1fec39a550d17bcd7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#af9f83de0133580a1fec39a550d17bcd7">normAngleRad</a> (float angle, float startIvl, float endIvl) const </td></tr>
-<tr class="memdesc:af9f83de0133580a1fec39a550d17bcd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized angle within startIvl and endIvl.  <a href="#af9f83de0133580a1fec39a550d17bcd7">More...</a><br/></td></tr>
-<tr class="separator:af9f83de0133580a1fec39a550d17bcd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ee47d9e9be1b11d5172e17069e226a1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a1ee47d9e9be1b11d5172e17069e226a1">euclideanDistance</a> (const QPoint &amp;p1, const QPoint &amp;p2) const </td></tr>
-<tr class="memdesc:a1ee47d9e9be1b11d5172e17069e226a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns euclidean distance between two vectors  <a href="#a1ee47d9e9be1b11d5172e17069e226a1">More...</a><br/></td></tr>
-<tr class="separator:a1ee47d9e9be1b11d5172e17069e226a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a287e0c050f58d1e9a89a8a976e9c4a93">normAngleRad</a> (double angle, double startIvl=0.0, double endIvl=2 *CV_PI) const </td></tr>
+<tr class="memdesc:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized angle within startIvl and endIvl.  <a href="#a287e0c050f58d1e9a89a8a976e9c4a93">More...</a><br/></td></tr>
+<tr class="separator:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83b4e11d1f53744c6fce02d7411ae343"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a83b4e11d1f53744c6fce02d7411ae343">angleDist</a> (double angle1, double angle2) const </td></tr>
+<tr class="memdesc:a83b4e11d1f53744c6fce02d7411ae343"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff))  <a href="#a83b4e11d1f53744c6fce02d7411ae343">More...</a><br/></td></tr>
+<tr class="separator:a83b4e11d1f53744c6fce02d7411ae343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500">estimateMask</a> (const cv::Mat &amp;src, bool preFilter=true) const </td></tr>
 <tr class="memdesc:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the mask.  <a href="#a07c2d9ff5b5105399332dcb0ba3f3500">More...</a><br/></td></tr>
 <tr class="separator:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,6 +235,42 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a83b4e11d1f53744c6fce02d7411ae343"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::angleDist </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff)) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle1</td><td>The angle1.</td></tr>
+    <tr><td class="paramname">angle2</td><td>The angle2.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The angular distance.</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aa34ac689fbc59c3a6b695510011911cb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -564,42 +600,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1ee47d9e9be1b11d5172e17069e226a1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float rdf::Algorithms::euclideanDistance </td>
-          <td>(</td>
-          <td class="paramtype">const QPoint &amp;&#160;</td>
-          <td class="paramname"><em>p1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QPoint &amp;&#160;</td>
-          <td class="paramname"><em>p2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns euclidean distance between two vectors </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p1</td><td>Vector p1.</td></tr>
-    <tr><td class="paramname">p2</td><td>Vector p2.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The Euclidean distance.</dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a673736acbbddca56620c74642e8f617f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -754,27 +754,27 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af9f83de0133580a1fec39a550d17bcd7"></a>
+<a class="anchor" id="a287e0c050f58d1e9a89a8a976e9c4a93"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float rdf::Algorithms::normAngleRad </td>
+          <td class="memname">double rdf::Algorithms::normAngleRad </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>angle</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>startIvl</em>, </td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>startIvl</em> = <code>0.0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>endIvl</em>&#160;</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>endIvl</em> = <code>2*CV_PI</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

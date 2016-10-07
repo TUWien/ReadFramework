@@ -3,7 +3,7 @@ var searchData=
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html#aab215a591d0aa492646d0e488b896b09',1,'rdf::BaseBinarizationSu']]],
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html#a033a57638775862b6965aa735ce2ad9a',1,'rdf::BaseBinarizationSuConfig']]],
   ['baseelement',['BaseElement',['../classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca',1,'rdf::BaseElement']]],
-  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
+  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_pixel_set.html#a03babcd14ce5c5a507a8f87949795606',1,'rdf::PixelSet::baseline()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
   ['basename',['baseName',['../classrdf_1_1_utils.html#a53379c74a413e2bfebc881cfa69202fb',1,'rdf::Utils']]],
   ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#ad9894e5f9a0114b1c9dd274d336bdcc2',1,'rdf::BaseSkewEstimation']]],
   ['baseskewestimationconfig',['BaseSkewEstimationConfig',['../classrdf_1_1_base_skew_estimation_config.html#ab43f1c78f082f07b31cc525bb451c584',1,'rdf::BaseSkewEstimationConfig']]],

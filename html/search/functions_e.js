@@ -1,8 +1,8 @@
 var searchData=
 [
   ['p0',['p0',['../classrdf_1_1_triangle.html#a1a08ef66e26d317d66f92a5e840ef63a',1,'rdf::Triangle']]],
-  ['p1',['p1',['../classrdf_1_1_triangle.html#aba28dd8bbb314752ac5e1c0f3cf0b67e',1,'rdf::Triangle']]],
-  ['p2',['p2',['../classrdf_1_1_triangle.html#ab3e660a54936eafa39d399d179f57ced',1,'rdf::Triangle']]],
+  ['p1',['p1',['../classrdf_1_1_line.html#aab94099872c9434e57e473acfcaa6390',1,'rdf::Line::p1()'],['../classrdf_1_1_triangle.html#aba28dd8bbb314752ac5e1c0f3cf0b67e',1,'rdf::Triangle::p1()']]],
+  ['p2',['p2',['../classrdf_1_1_line.html#ae78cf1f12ec02b09ccba99dac5f10578',1,'rdf::Line::p2()'],['../classrdf_1_1_triangle.html#ab3e660a54936eafa39d399d179f57ced',1,'rdf::Triangle::p2()']]],
   ['page',['page',['../classrdf_1_1_page_xml_parser.html#ab819f5bcf6a7e5c6959af23325d4ab96',1,'rdf::PageXmlParser']]],
   ['pageelement',['PageElement',['../classrdf_1_1_page_element.html#ad8f0d4fa7e5cc0614b6abd1869e56a5f',1,'rdf::PageElement']]],
   ['pagexmlparser',['PageXmlParser',['../classrdf_1_1_page_xml_parser.html#a2752073547167adcf9f3d37c43cf5baa',1,'rdf::PageXmlParser']]],
@@ -25,6 +25,7 @@ var searchData=
   ['prefilterarea',['preFilterArea',['../classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf',1,'rdf::Algorithms']]],
   ['printimage',['printImage',['../classrdf_1_1_image.html#a1511ff1ef43c13e0ceac7f2afa29d976',1,'rdf::Image']]],
   ['printmat',['printMat',['../classrdf_1_1_image.html#a0eb134f357bbf204f8a63129772ce9fd',1,'rdf::Image']]],
+  ['profilerect',['profileRect',['../classrdf_1_1_pixel_set.html#a53c191bc9991060cdc0325fd06e51b61',1,'rdf::PixelSet']]],
   ['pts',['pts',['../classrdf_1_1_mser_blob.html#ac2c467ec1aa74544c68253582a9d7da9',1,'rdf::MserBlob']]],
   ['put',['put',['../classrdf_1_1_timer.html#a10b24dda5986736f1bee69ea0290685c',1,'rdf::Timer']]]
 ];

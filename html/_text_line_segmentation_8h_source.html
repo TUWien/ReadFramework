@@ -188,11 +188,13 @@ $(document).ready(function(){initNavTree('_text_line_segmentation_8h_source.html
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">bool</span> checkInput() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    QVector&lt;QSharedPointer&lt;LineEdge&gt; &gt; filterEdges(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;LineEdge&gt; &gt;&amp; edges, <span class="keywordtype">double</span> factor = 10.0) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> slac(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;LineEdge&gt; &gt;&amp; edges) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;};</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    QVector&lt;QSharedPointer&lt;PixelSet&gt; &gt; toSets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> slac(<span class="keyword">const</span> QVector&lt;QSharedPointer&lt;LineEdge&gt; &gt;&amp; edges) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;};</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_module_config_html"><div class="ttname"><a href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></div><div class="ttdef"><b>Definition:</b> BaseModule.h:61</div></div>
 <div class="ttc" id="_pixel_8h_html"><div class="ttname"><a href="_pixel_8h.html">Pixel.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_text_line_segmentation_html"><div class="ttname"><a href="classrdf_1_1_text_line_segmentation.html">rdf::TextLineSegmentation</a></div><div class="ttdef"><b>Definition:</b> TextLineSegmentation.h:63</div></div>
@@ -200,7 +202,7 @@ $(document).ready(function(){initNavTree('_text_line_segmentation_8h_source.html
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:48</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:94</div></div>
 <div class="ttc" id="classrdf_1_1_text_line_config_html"><div class="ttname"><a href="classrdf_1_1_text_line_config.html">rdf::TextLineConfig</a></div><div class="ttdef"><b>Definition:</b> TextLineSegmentation.h:50</div></div>
-<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:286</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:304</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

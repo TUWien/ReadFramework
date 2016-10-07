@@ -32,6 +32,8 @@ var classrdf_1_1_vector2_d =
     [ "y", "classrdf_1_1_vector2_d.html#a865fac7a2d0dd3c79d7f9ac6c88957c6", null ],
     [ "operator!=", "classrdf_1_1_vector2_d.html#aa213cda7d963a5d2c85f7477fb3221ef", null ],
     [ "operator*", "classrdf_1_1_vector2_d.html#adba960e1ebca0e9d14b1e349232ae1ed", null ],
+    [ "operator*", "classrdf_1_1_vector2_d.html#aa4b6688da6fb0b94e9b18198c8647e2f", null ],
+    [ "operator*", "classrdf_1_1_vector2_d.html#a6d705e3e0ab0e7abcfe9750a5ed3a3b4", null ],
     [ "operator+", "classrdf_1_1_vector2_d.html#a82ea591ac29efd5cce8e3d619b359a5b", null ],
     [ "operator-", "classrdf_1_1_vector2_d.html#aab686ba95701bfa6e5cf028527689d12", null ],
     [ "operator<<", "classrdf_1_1_vector2_d.html#a5e91f8ff28763d1732d176cec7506a2c", null ],

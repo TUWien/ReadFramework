@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('_form_analysis_8h_source.html','');});
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">bool</span> loadTemplateDatabase(QString db);</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        QVector&lt;rdf::FormFeatures&gt; templatesDb() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        cv::Mat getMatchedLineImg(<span class="keyword">const</span> cv::Mat srcImg, cv::Point offset = cv::Point(0,0)) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        cv::Mat getMatchedLineImg(<span class="keyword">const</span> cv::Mat&amp; srcImg, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; offset = <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>(0,0)) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">void</span> setInputImg(<span class="keyword">const</span> cv::Mat&amp; img);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordtype">void</span> setMask(<span class="keyword">const</span> cv::Mat&amp; mask);</div>
@@ -274,7 +274,8 @@ $(document).ready(function(){initNavTree('_form_analysis_8h_source.html','');});
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_form_features_html"><div class="ttname"><a href="classrdf_1_1_form_features.html">rdf::FormFeatures</a></div><div class="ttdef"><b>Definition:</b> FormAnalysis.h:88</div></div>
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:48</div></div>
-<div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:105</div></div>
+<div class="ttc" id="classrdf_1_1_vector2_d_html"><div class="ttname"><a href="classrdf_1_1_vector2_d.html">rdf::Vector2D</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:155</div></div>
+<div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:106</div></div>
 <div class="ttc" id="classrdf_1_1_form_features_config_html"><div class="ttname"><a href="classrdf_1_1_form_features_config.html">rdf::FormFeaturesConfig</a></div><div class="ttdef"><b>Definition:</b> FormAnalysis.h:50</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:94</div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -14,8 +14,7 @@ var searchData=
   ['ellipse',['Ellipse',['../classrdf_1_1_ellipse.html',1,'rdf']]],
   ['ellipse',['ellipse',['../classrdf_1_1_pixel.html#a558f594d7d175c16150f941c146f8cc7',1,'rdf::Pixel::ellipse()'],['../classrdf_1_1_ellipse.html#a62582ad6135dd11f580b7c798008635d',1,'rdf::Ellipse::Ellipse()'],['../classrdf_1_1_ellipse.html#a4fb8d9d8d85c417c8be091788525bfd1',1,'rdf::Ellipse::Ellipse(const Vector2D &amp;center, const Vector2D &amp;axis=Vector2D(), double angle=0.0)'],['../classrdf_1_1_ellipse.html#a3b828c43354dec1599fb20a67d0f202a',1,'rdf::Ellipse::Ellipse(const cv::RotatedRect &amp;rect)']]],
   ['end',['end',['../class_g_coptimization_1_1_data_cost_fn_sparse.html#a942578b7db163943ef07e19cc92ef9c0',1,'GCoptimization::DataCostFnSparse']]],
-  ['endpoint',['endPoint',['../classrdf_1_1_base_line.html#a7c658f7796568f2496b1c00516473373',1,'rdf::BaseLine::endPoint()'],['../classrdf_1_1_line.html#abd8ce6d16188f8a1b3a60157ff866e6a',1,'rdf::Line::endPoint()']]],
-  ['endpointcv',['endPointCV',['../classrdf_1_1_line.html#a177492ebef51e5879e3bf330df7888d4',1,'rdf::Line']]],
+  ['endpoint',['endPoint',['../classrdf_1_1_base_line.html#a7c658f7796568f2496b1c00516473373',1,'rdf::BaseLine']]],
   ['energy',['Energy',['../class_energy.html',1,'Energy&lt; captype, tcaptype, flowtype &gt;'],['../class_energy.html#a20fea13ef9edc2d7f67d0e8a26024eda',1,'Energy::Energy()']]],
   ['energy_2eh',['energy.h',['../energy_8h.html',1,'']]],
   ['energyt',['EnergyT',['../class_g_coptimization.html#aa1b1a4d8ffae969fa2c73f032a07830e',1,'GCoptimization']]],
@@ -28,7 +27,7 @@ var searchData=
   ['error',['error',['../classrdf_1_1_form_features.html#abd369e6c5472a26a1d2fb406c185bc9a',1,'rdf::FormFeatures']]],
   ['errorthr',['errorThr',['../classrdf_1_1_form_features_config.html#ad90db61d4bed3d1acd7e9c0fd62c9bfe',1,'rdf::FormFeaturesConfig']]],
   ['estimatemask',['estimateMask',['../classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500',1,'rdf::Algorithms']]],
-  ['euclideandistance',['euclideanDistance',['../classrdf_1_1_algorithms.html#a1ee47d9e9be1b11d5172e17069e226a1',1,'rdf::Algorithms']]],
   ['expand',['expand',['../classrdf_1_1_rect.html#a9904dddabfb50cec3c9a5234ec8bbbf6',1,'rdf::Rect']]],
-  ['expansion',['expansion',['../class_g_coptimization.html#a2c5ab9dc116aef620f07fbdfe7b228d5',1,'GCoptimization']]]
+  ['expansion',['expansion',['../class_g_coptimization.html#a2c5ab9dc116aef620f07fbdfe7b228d5',1,'GCoptimization']]],
+  ['extendborder',['extendBorder',['../classrdf_1_1_line.html#adeb6d12d4bba5bdfe1f760be3d80cddc',1,'rdf::Line']]]
 ];
