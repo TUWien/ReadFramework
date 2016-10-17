@@ -35,6 +35,7 @@
 #include "Image.h"
 #include "Drawer.h"
 #include "Utils.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -74,12 +75,17 @@ bool TextBlockSegmentation::compute() {
 		return false;
 
 	Rect r(0, 0, mSrcImg.cols, mSrcImg.rows);
-	mEdges = PixelSet::connect(mSuperPixels, r);
-	mEdges = filterEdges(mEdges);
-	
-	mTextBlocks = createTextBlocks(mEdges);
+	mGraph = QSharedPointer<PixelGraph>::create(mSuperPixels);
+	mGraph->connect(r, PixelSet::connect_region);
 
-	mDebug << "computed in" << dt;
+	mSuperPixels = findTabStopCandidates(mGraph);
+	//mEdges = PixelSet::connect(mSuperPixels, r);
+	//mEdges = filterEdges(mEdges);
+	//
+	//mTextBlocks = createTextBlocks(mEdges);
+
+	mDebug << "I found" << mSuperPixels.size() << "tab stop candidates";
+	mDebug << "text blocks computed in" << dt;
 
 	return true;
 }
@@ -116,13 +122,23 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	
 	QPainter p(&pm);
-	QColor col = QColor(60, 60, 60);
+	QColor col = ColorManager::instance().darkGray();
 	Drawer::instance().setColor(col);
 	p.setPen(Drawer::instance().pen());
 
-	for (auto b : mEdges) {
-		b->draw(p);
-	}
+	//for (auto b : mGraph->edges()) {
+	//	b->draw(p);
+	//}
+
+	//PixelGraph pg(mSuperPixels);
+	//pg.connect(Rect(0, 0, mSrcImg.cols, mSrcImg.rows));
+	//pg.draw(p);
+
+	//mGraph->draw(p);
+
+	p.setPen(ColorManager::instance().colors()[2]);
+	for (auto px : mSuperPixels)
+		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
 	for (auto tb : mTextBlocks) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
@@ -130,8 +146,6 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 
 		tb->draw(p);
 	}
-
-	mDebug << mEdges.size() << "edges drawn in" << dtf;
 
 	return Image::instance().qPixmap2Mat(pm);
 }
@@ -192,6 +206,33 @@ QVector<QSharedPointer<PixelSet> > TextBlockSegmentation::createTextBlocks(const
 	qDebug() << "I found" << sets.size() << "text blocks";
 	
 	return sets;
+}
+
+QVector<QSharedPointer<Pixel> > TextBlockSegmentation::findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const {
+
+	QVector<QSharedPointer<Pixel> > tabStops;
+	QVector<QSharedPointer<PixelEdge> > edges = graph->edges();
+	double epsilon = 0.1;	// what we consider to be orthogonal
+	double minEdgeLength = 20;
+
+	for (const QSharedPointer<Pixel>& pixel : graph->set()->pixels()) {
+
+		if (!pixel->stats()) {
+			mWarning << "pixel stats NULL where they should not be, pixel ID:" << pixel->id();
+			continue;
+		}
+
+
+		QVector<QSharedPointer<PixelEdge> > edges = graph->edges(pixel->id());
+		pixel->setTabStop(PixelTabStop::create(pixel, edges));
+
+		if (pixel->tabStop().type() != PixelTabStop::type_none)
+			tabStops << pixel;
+	}
+
+	mInfo << "I found" << tabStops.size() << "tab stop candidates";
+
+	return tabStops;
 }
 
 }

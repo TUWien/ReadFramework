@@ -233,6 +233,14 @@ QVector<QColor> ColorManager::colors() const {
 	return cols;
 }
 
+QColor ColorManager::darkGray(double alpha) const {
+	return QColor(66, 66, 66, qRound(alpha*255));
+}
+
+QColor ColorManager::red(double alpha) const {
+	return QColor(200, 50, 50, qRound(alpha*255));
+}
+
 // Converter --------------------------------------------------------------------
 Converter::Converter() {
 }

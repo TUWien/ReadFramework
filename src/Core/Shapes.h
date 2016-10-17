@@ -269,6 +269,8 @@ public:
 	double length() const;
 	void rotate(double angle);
 
+	bool isNeighbor(const Vector2D& other, double radius) const;
+
 protected:
 	bool mIsNull = true;
 

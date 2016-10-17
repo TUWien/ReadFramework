@@ -683,6 +683,21 @@ void Vector2D::rotate(double angle) {
 	mY = -xTmp * std::sin(angle) + mY * std::cos(angle);
 }
 
+bool Vector2D::isNeighbor(const Vector2D & p1, double radius) const {
+
+	// speed things up a little
+	if (abs(y() - p1.y()) > radius ||
+		abs(x() - p1.x()) > radius)
+		return false;
+
+	Vector2D lVec(*this - p1);
+
+	if (lVec.length() < radius)
+		return true;
+
+	return false;
+}
+
 // Triangle --------------------------------------------------------------------
 Triangle::Triangle() {
 

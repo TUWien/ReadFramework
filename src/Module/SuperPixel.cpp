@@ -444,7 +444,7 @@ void LocalOrientation::computeScales(Pixel* pixel, const QVector<Pixel*>& set) c
 		// create neighbor set
 		for (Pixel* p : cSet) {
 
-			if (isNeighbor(ec, p->center(), cRadius)) {
+			if (ec.isNeighbor(p->center(), cRadius)) {
 				neighbors << p;
 			}
 		}
@@ -466,7 +466,7 @@ void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& se
 	// create neighbor set
 	for (const Pixel* p : set) {
 
-		if (isNeighbor(ec, p->center(), radius)) {
+		if (ec.isNeighbor(p->center(), radius)) {
 			neighbors << p;
 		}
 	}
@@ -567,21 +567,6 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 	}
 }
 
-bool LocalOrientation::isNeighbor(const Vector2D & p1, const Vector2D & p2, double cRadius) const {
-
-	// speed things up a little
-	if (abs(p1.y() - p2.y()) > cRadius ||
-		abs(p1.x() - p2.x()) > cRadius)
-		return false;
-
-	Vector2D lVec(p1 - p2);
-
-	if (lVec.length() < cRadius)
-		return true;
-
-	return false;
-}
-
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
 
 	QSharedPointer<Pixel> pixel;
@@ -610,7 +595,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	// create neighbor set
 	for (const QSharedPointer<Pixel>& p : mSet) {
 		
-		if (isNeighbor(ec, p->center(), radius)) {
+		if (ec.isNeighbor(p->center(), radius)) {
 			neighbors << p.data();
 			p->draw(painter, 0.3, Pixel::draw_ellipse_stats);
 		}

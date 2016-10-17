@@ -118,7 +118,7 @@ private:
 
 	QSharedPointer<MserContainer> getBlobs(const cv::Mat& img, int kernelSize) const;
 	QSharedPointer<MserContainer> mser(const cv::Mat& img) const;
-	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.2) const;
+	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.1) const;
 	int filterDuplicates(MserContainer& blobs, int eps = 5, int upperBound = -1) const;
 
 };
@@ -177,8 +177,6 @@ private:
 		const Vector2D& histVec, 
 		cv::Mat& orHist,
 		float& sparsity) const;
-
-	bool isNeighbor(const Vector2D& p1, const Vector2D& p2, double cRadius) const;
 
 };
 

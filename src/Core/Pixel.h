@@ -55,6 +55,7 @@
 namespace rdf {
 
 class Pixel;
+class PixelEdge;
 
 class DllCoreExport MserBlob : public BaseElement {
 
@@ -87,6 +88,11 @@ protected:
 	std::vector<cv::Point> mPts;
 };
 
+/// <summary>
+/// This class holds Pixel statistics which are found 
+/// when computing the local orientation.
+/// </summary>
+/// <seealso cref="BaseElement" />
 class DllCoreExport PixelStats : public BaseElement {
 
 public:
@@ -111,7 +117,8 @@ public:
 	void setOrientationIndex(int orIdx);
 	int orientationIndex() const;
 	double orientation() const;
-	
+	Vector2D orVec() const;
+
 	double scale() const;
 
 	int numOrientations() const;
@@ -132,6 +139,32 @@ protected:
 	int mOrIdx = -1;
 
 	void convertData(const cv::Mat& orHist, const cv::Mat& sparsity);
+};
+
+class DllCoreExport PixelTabStop : public BaseElement {
+
+public:
+
+	enum Type {
+		type_none,
+		type_left,
+		type_right,
+		type_isolated,
+
+		type_end
+
+	};
+
+	PixelTabStop(const Type& type = type_none);
+
+
+	static PixelTabStop create(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<PixelEdge> >& edges);
+
+	double orientation() const;
+	Type type() const;
+
+protected:
+	Type mType;
 };
 
 /// <summary>
@@ -163,6 +196,9 @@ public:
 	void addStats(const QSharedPointer<PixelStats>& stats);
 	QSharedPointer<PixelStats> stats(int idx = -1) const;
 
+	void setTabStop(const PixelTabStop& tabStop);
+	PixelTabStop tabStop() const;
+
 	enum DrawFlag {
 		draw_ellipse_only = 0,
 		draw_stats_only,
@@ -180,6 +216,7 @@ protected:
 	Ellipse mEllipse;
 	Rect mBBox;
 	QVector<QSharedPointer<PixelStats> > mStats;
+	PixelTabStop mTabStop;
 };
 
 class DllCoreExport PixelEdge : public BaseElement {
@@ -234,6 +271,13 @@ public:
 	PixelSet();
 	PixelSet(const QVector<QSharedPointer<Pixel> >& set);
 
+	enum ConnectionMode {
+		connect_delauney,
+		connect_region,
+
+		connect_end
+	};
+
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
@@ -247,11 +291,14 @@ public:
 
 	void draw(QPainter& p) const;
 
-	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
+	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
+
+	static QVector<QSharedPointer<PixelEdge> > connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
+	static QVector<QSharedPointer<PixelEdge> > connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
 };
 
 class DllCoreExport PixelGraph : public BaseElement {
@@ -263,9 +310,11 @@ public:
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
-	void connect(const Rect& rect);
+	void connect(const Rect& rect, const PixelSet::ConnectionMode& mode = PixelSet::connect_delauney);
 
 	QSharedPointer<PixelSet> set() const;
+	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;
+	QVector<QSharedPointer<PixelEdge> > edges(const QVector<int>& edgeIDs) const;
 	QVector<QSharedPointer<PixelEdge> > edges() const;
 
 	int pixelIndex(const QString & pixelID) const;

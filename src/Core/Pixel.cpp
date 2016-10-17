@@ -228,6 +228,18 @@ double PixelStats::orientation() const {
 	return mOrIdx * CV_PI / numOrientations();
 }
 
+/// <summary>
+/// Returns the orientation vector scaled to unit length.
+/// </summary>
+/// <returns>The orientation vector (0° = postive y-axis).</returns>
+Vector2D PixelStats::orVec() const {
+	
+	Vector2D vec(1, 0);
+	vec.rotate(orientation());
+
+	return vec;
+}
+
 int PixelStats::lineSpacingIndex() const {
 
 	if (mData.rows < spacing_idx || mOrIdx < 0 || mOrIdx >= mData.cols)
@@ -334,6 +346,19 @@ QSharedPointer<PixelStats> Pixel::stats(int idx) const {
 	return mStats[idx];
 }
 
+void Pixel::setTabStop(const PixelTabStop& tabStop) {
+	mTabStop = tabStop;
+}
+
+/// <summary>
+/// Returns tab stop statistics or NULL if tab stops are not computed.
+/// PixelTabStop stores if the Pixel is a tab stop (left/right) candidate or not.
+/// </summary>
+/// <returns>Tab stop statistics.</returns>
+PixelTabStop Pixel::tabStop() const {
+	return mTabStop;
+}
+
 void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	
 	if (df == draw_all) {
@@ -359,13 +384,26 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 		//QPen pen = p.pen();
 		//p.setPen(c);
 
-		Vector2D vec(1, 0);
+		Vector2D vec = stats()->orVec();
 		vec *= stats()->lineSpacing();
-		vec.rotate(stats()->orientation());
+		
 		vec = vec + center();
 
 		p.drawLine(Line(center(), vec).line());
 		//p.setPen(pen);
+	}
+
+	if (stats() && tabStop().type() != PixelTabStop::type_none) {
+
+		// get tab vec
+		Vector2D vec = stats()->orVec();
+		vec *= 40;
+		vec.rotate(tabStop().orientation());
+
+		QPen oPen = p.pen();
+		p.setPen(ColorManager::instance().red());
+		p.drawLine(Line(center(), center()+vec).line());
+		p.setPen(oPen);
 	}
 
 	//if (stats()) {
@@ -498,11 +536,7 @@ double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {
 		return DBL_MAX;
 	}
 
-	QSharedPointer<PixelStats> stats = pixel->stats();
-
-	Vector2D vec(1, 0);
-	vec.rotate(stats->orientation());
-
+	Vector2D vec = pixel->stats()->orVec();
 	Vector2D eVec = edge().vector();
 
 	return vec * eVec;
@@ -619,8 +653,23 @@ Ellipse PixelSet::profileRect() const {
 	return el;
 }
 
-QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
+QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode) {
 
+	switch (mode) {
+	case connect_delauney: {
+		return connectDelauney(superPixels, rect);
+		break;
+	}
+	case connect_region: {
+		return connectRegion(superPixels);
+	}
+	}
+
+	qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
+	return connectDelauney(superPixels, rect);
+}
+
+QVector<QSharedPointer<PixelEdge> > PixelSet::connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
 	// Create an instance of Subdiv2D
 	cv::Subdiv2D subdiv(rect.toCvRect());
 
@@ -645,6 +694,34 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 
 		QSharedPointer<PixelEdge> pe(new PixelEdge(superPixels[orgVertex], superPixels[dstVertex]));
 		edges << pe;
+	}
+
+	return edges;
+}
+
+QVector<QSharedPointer<PixelEdge> > PixelSet::connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier) {
+	
+	QVector<QSharedPointer<PixelEdge> > edges;
+
+	for (const QSharedPointer<Pixel>& px : superPixels) {
+
+		if (!px->stats()) {
+			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
+			continue;
+		}
+
+		double cR = px->stats()->lineSpacing() * multiplier;
+		const Vector2D& pxc = px->center();
+
+		for (const QSharedPointer<Pixel>& npx : superPixels) {
+
+			if (npx->id() == px->id())
+				continue;
+
+			if (pxc.isNeighbor(npx->center(), cR))
+				edges << QSharedPointer<PixelEdge>::create(px, npx);
+
+		}
 	}
 
 	return edges;
@@ -699,35 +776,23 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 
 void PixelSet::draw(QPainter& p) const {
 
-	//Ellipse el = profileRect();
-	//if (!el.isNull()) {
+	//Line bl = baseline();
+	//if (!bl.isEmpty()) {
 
-	//	QPen pen = p.pen();
-	//	QPen bPen = pen;
-	//	bPen.setWidth(5);
-	//	p.setPen(bPen);
-	//	el.draw(p);
-	//	p.setPen(pen);
+	//	bl.setThickness(4);
+	//	bl.draw(p);
+	//}
+
+	//Line xl = baseline(CV_PI);
+	//if (!xl.isEmpty()) {
+
+	//	xl.setThickness(2);
+	//	xl.draw(p);
 	//	return;
 	//}
 
-	Line bl = baseline();
-	if (!bl.isEmpty()) {
-
-		bl.setThickness(4);
-		bl.draw(p);
-	}
-
-	Line xl = baseline(CV_PI);
-	if (!xl.isEmpty()) {
-
-		xl.setThickness(2);
-		xl.draw(p);
-		return;
-	}
-
-	//for (auto px : mSet)
-	//	px->draw(p, 0.3, Pixel::draw_ellipse_only);
+	for (auto px : mSet)
+		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
 	p.drawRect(boundingBox().toQRectF());
 }
@@ -745,12 +810,19 @@ bool PixelGraph::isEmpty() const {
 	return !mSet || mSet->pixels().isEmpty();
 }
 
-void PixelGraph::draw(QPainter &) const {
+void PixelGraph::draw(QPainter& p) const {
 
-	qDebug() << "PixelGraph::draw does not have an implementation yet";
+	p.setPen(ColorManager::instance().colors()[0]);
+	for (auto px : mSet->pixels())
+		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+
+	p.setPen(ColorManager::instance().darkGray(.4));
+	for (auto e : edges())
+		e->draw(p);
+
 }
 
-void PixelGraph::connect(const Rect & rect) {
+void PixelGraph::connect(const Rect & rect, const PixelSet::ConnectionMode& mode) {
 
 	// nothing todo?
 	if (isEmpty())
@@ -758,7 +830,7 @@ void PixelGraph::connect(const Rect & rect) {
 
 	assert(mSet);
 	const QVector<QSharedPointer<Pixel> >& pixels = mSet->pixels();
-	mEdges = PixelSet::connect(pixels, rect);
+	mEdges = PixelSet::connect(pixels, rect, mode);
 
 	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	for (int idx = 0; idx < mEdges.size(); idx++) {
@@ -782,17 +854,142 @@ QSharedPointer<PixelSet> PixelGraph::set() const {
 	return mSet;
 }
 
-QVector<QSharedPointer<PixelEdge>> PixelGraph::edges() const {
+/// <summary>
+/// Returns all pixel edges which were found using Delauney triangulation.
+/// </summary>
+/// <returns>A vector of PixelEdges which connect 2 pixels each.</returns>
+QVector<QSharedPointer<PixelEdge> > PixelGraph::edges() const {
+
 	return mEdges;
 }
 
+/// <summary>
+/// Returns all edges connected to the pixel with ID pixelID.
+/// </summary>
+/// <param name="pixelID">The pixel identifier.</param>
+/// <returns></returns>
+QVector<QSharedPointer<PixelEdge>> PixelGraph::edges(const QString & pixelID) const {
+
+	return edges(edgeIndexes(pixelID));
+}
+
+/// <summary>
+/// Returns a vector with all edges in the ID vector edgeIDs.
+/// </summary>
+/// <param name="edgeIDs">The edge IDs.</param>
+/// <returns></returns>
+QVector<QSharedPointer<PixelEdge> > PixelGraph::edges(const QVector<int>& edgeIDs) const {
+
+	QVector<QSharedPointer<PixelEdge> > pe;
+	for (int eId : edgeIDs) {
+		assert(eId >= 0 && eId < mEdges.length());
+		pe << mEdges[eId];
+	}
+
+	return pe;
+}
+
+/// <summary>
+/// Maps pixel IDs (pixel->id()) to their current vector index.
+/// </summary>
+/// <param name="pixelID">The unique ID of a pixel.</param>
+/// <returns>The current vector position.</returns>
 int PixelGraph::pixelIndex(const QString & pixelID) const {
 	return mPixelLookup.value(pixelID);
 };
 
+/// <summary>
+/// Returns all edges indexes of the current pixel.
+/// Each pixel has N edges in the graph. This function
+/// returns a vector with all edge indexes of the current pixel.
+/// The edge objects can then be retreived using edges()[idx].
+/// </summary>
+/// <param name="pixelID">Unique pixel ID.</param>
+/// <returns>A vector with edge indexes.</returns>
 QVector<int> PixelGraph::edgeIndexes(const QString & pixelID) const {
 	return mPixelEdges.value(pixelID);
 };
+
+// PixelTabStop --------------------------------------------------------------------
+PixelTabStop::PixelTabStop(const Type & type) {
+	mType = type;
+}
+
+PixelTabStop PixelTabStop::create(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<PixelEdge> >& edges) {
+
+	double epsilon = 0.1;	// what we consider to be orthogonal
+	double minEdgeLength = 10;
+
+	Vector2D pVec = pixel->stats()->orVec();
+	pVec.rotate(CV_PI*0.5);
+
+	int vEdgeCnt = 0;
+
+	QVector<double> cwe;	// clock-wise edges (0°)
+	QVector<double> cce;	// counter-clockwise edges (180°)
+
+	for (QSharedPointer<PixelEdge> e : edges) {
+
+		Vector2D eVec = e->edge().vector();
+
+		if (eVec.length() < minEdgeLength)
+			continue;
+
+		double theta = pVec * eVec / (pVec.length() * eVec.length());
+		//qDebug() << "theta: " << theta;
+
+		if (abs(1.0 - abs(theta)) < .25) {
+
+			if (theta > 0)
+				cwe << abs(theta*eVec.length());
+			else
+				cce << abs(theta*eVec.length());
+		}
+		else if (abs(theta) < epsilon)
+			vEdgeCnt++;
+	}
+
+	PixelTabStop::Type mode = PixelTabStop::type_none;
+	if (cwe.empty() && !cce.empty()) {
+		mode = PixelTabStop::type_right;
+	}
+	else if (!cwe.empty() && cce.empty()) {
+		mode = PixelTabStop::type_left;
+	}
+	else {
+
+		double minCC = Algorithms::instance().min(cce);
+		double minCW = Algorithms::instance().min(cwe);
+
+		double neighborRel = 0.5;
+		if (minCC / minCW < neighborRel)
+			mode = PixelTabStop::type_right;
+		else if (minCW / minCC < neighborRel)
+			mode = PixelTabStop::type_left;
+	}
+
+	return PixelTabStop(mode);
+}
+
+/// <summary>
+/// Returns the angle corresponding to the tab stop.
+/// Hence, if this angle is applied to the pixel's orientation,
+/// the vector points into the tab stops empty region (away from the textline).
+/// </summary>
+/// <returns></returns>
+double PixelTabStop::orientation() const {
+
+	if (type() == type_left)
+		return CV_PI*0.5;
+	else if (type() == type_right)
+		return -CV_PI*0.5;
+
+	return 0.0;
+}
+
+PixelTabStop::Type PixelTabStop::type() const {
+	return mType;
+}
 
 
 }

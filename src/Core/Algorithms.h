@@ -160,7 +160,9 @@ public:
 	double angleDist(double angle1, double angle2) const;
 	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
 	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
-	QPointF calcRotationSize(double angleRad, QPointF srcSize);
+	QPointF calcRotationSize(double angleRad, QPointF srcSize) const;
+	double min(const QVector<double>& vec) const;
+	double max(const QVector<double>& vec) const;
 
 private:
 	Algorithms();

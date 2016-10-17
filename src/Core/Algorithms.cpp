@@ -1037,14 +1037,35 @@ cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interp
 	return rImg;
 }
 
+double Algorithms::min(const QVector<double>& vec) const {
+
+	double mn = DBL_MAX;
+
+	for (double v : vec)
+		if (mn > v)
+			mn = v;
+
+	return mn;
+}
+
+double Algorithms::max(const QVector<double>& vec) const {
+
+	double mx = -DBL_MAX;
+
+	for (double v : vec)
+		if (mx < v)
+			mx = v;
+
+	return mx;
+}
+
 /// <summary>
 /// Calculates the image size of the rotated image.
 /// </summary>
 /// <param name="angleRad">The angle in RAD.</param>
 /// <param name="srcSize">Size of the source image.</param>
 /// <returns>The Size of the rotated image.</returns>
-QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize)
-{
+QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize) const {
 	QPointF nSl = srcSize;
 	QPointF nSr(srcSize.y(), srcSize.x());
 

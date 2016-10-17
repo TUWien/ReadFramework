@@ -84,6 +84,9 @@ public:
 	QColor getRandomColor(int idx = -1) const;
 	QVector<QColor> colors() const;
 
+	QColor darkGray(double alpha = 1.0) const;
+	QColor red(double alpha = 1.0) const;
+
 private:
 	ColorManager();
 	ColorManager(const ColorManager&);

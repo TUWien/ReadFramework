@@ -161,22 +161,22 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 
-	// filter according to orientation
-	QVector<QSharedPointer<Pixel> > spf;
-	for (auto pixel : sp) {
-		if (pixel->stats()->orientation() == 0 || 
-			pixel->stats()->orientation() == CV_PI*0.5)
-			spf << pixel;
-	}
-	sp = spf;
+	//// filter according to orientation
+	//QVector<QSharedPointer<Pixel> > spf;
+	//for (auto pixel : sp) {
+	//	if (pixel->stats()->orientation() == 0 || 
+	//		pixel->stats()->orientation() == CV_PI*0.5)
+	//		spf << pixel;
+	//}
+	//sp = spf;
 
 	rdf::TextBlockSegmentation textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";
 
-	rdf::TextLineSegmentation textLines(Rect(img), sp);
-	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+	//rdf::TextLineSegmentation textLines(Rect(img), sp);
+	//if (!textLines.compute())
+	//	qWarning() << "could not compute text block segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -192,8 +192,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	//// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);
-	//rImg = textBlocks.draw(rImg);
-	rImg = textLines.draw(rImg);
+	rImg = textBlocks.draw(rImg);
+	//rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;

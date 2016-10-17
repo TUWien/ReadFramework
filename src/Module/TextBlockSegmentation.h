@@ -77,14 +77,16 @@ public:
 	bool compute() override;
 	QSharedPointer<TextBlockConfig> config() const;
 
-	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 12.5);
+	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 2.5);
 
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
-	QVector<QSharedPointer<PixelEdge> > mEdges;
+	QSharedPointer<PixelGraph> mGraph;
+
+	//QVector<QSharedPointer<PixelEdge> > mEdges;
 	QVector<QSharedPointer<PixelSet> > mTextBlocks;
 	cv::Mat mSrcImg;
 
@@ -92,6 +94,7 @@ private:
 	
 	// TODO: remove (it's now in PixelSet)
 	QVector<QSharedPointer<PixelSet> > createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const;
+	QVector<QSharedPointer<Pixel> > findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const;
 };
 
 };
