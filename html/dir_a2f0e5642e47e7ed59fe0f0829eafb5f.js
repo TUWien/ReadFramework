@@ -1,7 +1,9 @@
 var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
 [
     [ "Algorithms.cpp", "_algorithms_8cpp.html", "_algorithms_8cpp" ],
-    [ "Algorithms.h", "_algorithms_8h.html", "_algorithms_8h" ],
+    [ "Algorithms.h", "_algorithms_8h.html", [
+      [ "Algorithms", "classrdf_1_1_algorithms.html", "classrdf_1_1_algorithms" ]
+    ] ],
     [ "BaseImageElement.cpp", "_base_image_element_8cpp.html", "_base_image_element_8cpp" ],
     [ "BaseImageElement.h", "_base_image_element_8h.html", "_base_image_element_8h" ],
     [ "Blobs.cpp", "_blobs_8cpp.html", null ],
@@ -35,6 +37,7 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "Pixel.h", "_pixel_8h.html", [
       [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
       [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
+      [ "PixelTabStop", "classrdf_1_1_pixel_tab_stop.html", "classrdf_1_1_pixel_tab_stop" ],
       [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
       [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
       [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],

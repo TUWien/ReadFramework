@@ -156,9 +156,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6f15da4a25f448c8172f93262e2e795d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a6f15da4a25f448c8172f93262e2e795d">setBorderConst</a> (cv::Mat &amp;src, float val=0.0f) const </td></tr>
 <tr class="memdesc:a6f15da4a25f448c8172f93262e2e795d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the border to a constant value (1 pixel width).  <a href="#a6f15da4a25f448c8172f93262e2e795d">More...</a><br/></td></tr>
 <tr class="separator:a6f15da4a25f448c8172f93262e2e795d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bdcc07665f67c4dfd19ee90f525e716"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1) const </td></tr>
-<tr class="memdesc:a5bdcc07665f67c4dfd19ee90f525e716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#a5bdcc07665f67c4dfd19ee90f525e716">More...</a><br/></td></tr>
-<tr class="separator:a5bdcc07665f67c4dfd19ee90f525e716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa04af29216ee45ce3c74c500aed2d645"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa04af29216ee45ce3c74c500aed2d645">invertImg</a> (cv::Mat &amp;srcImg, cv::Mat mask=cv::Mat())</td></tr>
 <tr class="memdesc:aa04af29216ee45ce3c74c500aed2d645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts the img.  <a href="#aa04af29216ee45ce3c74c500aed2d645">More...</a><br/></td></tr>
 <tr class="separator:aa04af29216ee45ce3c74c500aed2d645"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,23 +174,42 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a287e0c050f58d1e9a89a8a976e9c4a93">normAngleRad</a> (double angle, double startIvl=0.0, double endIvl=2 *CV_PI) const </td></tr>
 <tr class="memdesc:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized angle within startIvl and endIvl.  <a href="#a287e0c050f58d1e9a89a8a976e9c4a93">More...</a><br/></td></tr>
 <tr class="separator:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83b4e11d1f53744c6fce02d7411ae343"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a83b4e11d1f53744c6fce02d7411ae343">angleDist</a> (double angle1, double angle2) const </td></tr>
-<tr class="memdesc:a83b4e11d1f53744c6fce02d7411ae343"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff))  <a href="#a83b4e11d1f53744c6fce02d7411ae343">More...</a><br/></td></tr>
-<tr class="separator:a83b4e11d1f53744c6fce02d7411ae343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aca3bce848d3cfaa66aa9633c879fc3e4">angleDist</a> (double angle1, double angle2, double maxAngle=2 *CV_PI) const </td></tr>
+<tr class="memdesc:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff))  <a href="#aca3bce848d3cfaa66aa9633c879fc3e4">More...</a><br/></td></tr>
+<tr class="separator:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500">estimateMask</a> (const cv::Mat &amp;src, bool preFilter=true) const </td></tr>
 <tr class="memdesc:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the mask.  <a href="#a07c2d9ff5b5105399332dcb0ba3f3500">More...</a><br/></td></tr>
 <tr class="separator:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
 <tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
 <tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa34ac689fbc59c3a6b695510011911cb"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa34ac689fbc59c3a6b695510011911cb">calcRotationSize</a> (double angleRad, QPointF srcSize)</td></tr>
-<tr class="memdesc:aa34ac689fbc59c3a6b695510011911cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#aa34ac689fbc59c3a6b695510011911cb">More...</a><br/></td></tr>
-<tr class="separator:aa34ac689fbc59c3a6b695510011911cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a939afbf02fea9900332b0537fc6fd64c"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a939afbf02fea9900332b0537fc6fd64c">calcRotationSize</a> (double angleRad, QPointF srcSize) const </td></tr>
+<tr class="memdesc:a939afbf02fea9900332b0537fc6fd64c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a939afbf02fea9900332b0537fc6fd64c">More...</a><br/></td></tr>
+<tr class="separator:a939afbf02fea9900332b0537fc6fd64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a106c96fdb655c2b159dc0513087060c4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a106c96fdb655c2b159dc0513087060c4">min</a> (const QVector&lt; double &gt; &amp;vec) const </td></tr>
+<tr class="memdesc:a106c96fdb655c2b159dc0513087060c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum of the vector or DBL_MAX if vec is empty.  <a href="#a106c96fdb655c2b159dc0513087060c4">More...</a><br/></td></tr>
+<tr class="separator:a106c96fdb655c2b159dc0513087060c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ae67a0b0d9d7bdfeeb4ec199a4125bd1e">max</a> (const QVector&lt; double &gt; &amp;vec) const </td></tr>
+<tr class="memdesc:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value of vec or -DBL_MAX if vec is empty.  <a href="#ae67a0b0d9d7bdfeeb4ec199a4125bd1e">More...</a><br/></td></tr>
+<tr class="separator:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0aa6288c996ef6afda47af22adcbe778"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_algorithms.html">Algorithms</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a0aa6288c996ef6afda47af22adcbe778">instance</a> ()</td></tr>
 <tr class="separator:a0aa6288c996ef6afda47af22adcbe778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac828d9184e38e9d91436bb1adc7a19d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1)</td></tr>
+<tr class="memdesc:aac828d9184e38e9d91436bb1adc7a19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#aac828d9184e38e9d91436bb1adc7a19d">More...</a><br/></td></tr>
+<tr class="separator:aac828d9184e38e9d91436bb1adc7a19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae604f0795b89799a9005497722aa0cda"><td class="memTemplParams" colspan="2">template&lt;typename numFmt &gt; </td></tr>
+<tr class="memitem:ae604f0795b89799a9005497722aa0cda"><td class="memTemplItemLeft" align="right" valign="top">static double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ae604f0795b89799a9005497722aa0cda">statMoment</a> (const QList&lt; numFmt &gt; &amp;valuesIn, float momentValue, int interpolated=1)</td></tr>
+<tr class="memdesc:ae604f0795b89799a9005497722aa0cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments (quantiles).  <a href="#ae604f0795b89799a9005497722aa0cda">More...</a><br/></td></tr>
+<tr class="separator:ae604f0795b89799a9005497722aa0cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ec8f775a98d0f93d4ee82edfb8f164e"><td class="memTemplParams" colspan="2">template&lt;typename sFmt , typename mFmt &gt; </td></tr>
+<tr class="memitem:a4ec8f775a98d0f93d4ee82edfb8f164e"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a4ec8f775a98d0f93d4ee82edfb8f164e">mulMaskIntern</a> (cv::Mat src, const cv::Mat mask)</td></tr>
+<tr class="separator:a4ec8f775a98d0f93d4ee82edfb8f164e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d6c52633a839a744021b5e080c86106"><td class="memTemplParams" colspan="2">template&lt;typename sFmt &gt; </td></tr>
+<tr class="memitem:a0d6c52633a839a744021b5e080c86106"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a0d6c52633a839a744021b5e080c86106">setBorderConstIntern</a> (cv::Mat src, sFmt val)</td></tr>
+<tr class="separator:a0d6c52633a839a744021b5e080c86106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains basic algorithms to manipulate images. </p>
@@ -235,7 +251,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a83b4e11d1f53744c6fce02d7411ae343"></a>
+<a class="anchor" id="aca3bce848d3cfaa66aa9633c879fc3e4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -249,7 +265,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>angle2</em>&#160;</td>
+          <td class="paramname"><em>angle2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxAngle</em> = <code>2*CV_PI</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -271,7 +293,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa34ac689fbc59c3a6b695510011911cb"></a>
+<a class="anchor" id="a939afbf02fea9900332b0537fc6fd64c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -290,7 +312,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -719,6 +741,56 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae67a0b0d9d7bdfeeb4ec199a4125bd1e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::max </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the maximum value of vec or -DBL_MAX if vec is empty. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vec</td><td>A vector with double values.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the maximum</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a106c96fdb655c2b159dc0513087060c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::min </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the minimum of the vector or DBL_MAX if vec is empty. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vec</td><td>A vector with double values.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the minimum</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="afdf64f1a347d5c17c57d3356472e51c0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -751,6 +823,42 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a4ec8f775a98d0f93d4ee82edfb8f164e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename sFmt , typename mFmt &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void rdf::Algorithms::mulMaskIntern </td>
+          <td>(</td>
+          <td class="paramtype">cv::Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Mat&#160;</td>
+          <td class="paramname"><em>mask</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -925,12 +1033,104 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5bdcc07665f67c4dfd19ee90f525e716"></a>
+<a class="anchor" id="a0d6c52633a839a744021b5e080c86106"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename sFmt &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float rdf::Algorithms::statMomentMat </td>
+          <td class="memname">static void rdf::Algorithms::setBorderConstIntern </td>
+          <td>(</td>
+          <td class="paramtype">cv::Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">sFmt&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae604f0795b89799a9005497722aa0cda"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename numFmt &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double rdf::Algorithms::statMoment </td>
+          <td>(</td>
+          <td class="paramtype">const QList&lt; numFmt &gt; &amp;&#160;</td>
+          <td class="paramname"><em>valuesIn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>momentValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>interpolated</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes robust statistical moments (quantiles). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">valuesIn</td><td>The statistical set (samples).</td></tr>
+    <tr><td class="paramname">momentValue</td><td>The statistical moment value (0.5 = median, 0.25 and 0.75 = quartiles).</td></tr>
+    <tr><td class="paramname">interpolated</td><td>A flag if the value should be interpolated if the length of the list is even.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The statistical moment.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aac828d9184e38e9d91436bb1adc7a19d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::statMomentMat </td>
           <td>(</td>
           <td class="paramtype">const cv::Mat&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -962,9 +1162,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Computes robust statistical moments of an image. The quantiles of an image (or median) are computed. </p>

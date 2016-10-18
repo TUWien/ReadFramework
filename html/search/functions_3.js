@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['darkgray',['darkGray',['../classrdf_1_1_color_manager.html#ace3a854b37c22dd438cf6387576724d9',1,'rdf::ColorManager']]],
   ['data',['data',['../classrdf_1_1_pixel_stats.html#aa5140f5410d3b32278c6212d723dc88f',1,'rdf::PixelStats']]],
   ['datacostfnfromarray',['DataCostFnFromArray',['../struct_g_coptimization_1_1_data_cost_fn_from_array.html#a77fe6d10856014a86c04d33ef1a41479',1,'GCoptimization::DataCostFnFromArray']]],
   ['datacostfnfromfunction',['DataCostFnFromFunction',['../struct_g_coptimization_1_1_data_cost_fn_from_function.html#a9e0c0ff899ec68e03fce7a8a9aa57434',1,'GCoptimization::DataCostFnFromFunction']]],

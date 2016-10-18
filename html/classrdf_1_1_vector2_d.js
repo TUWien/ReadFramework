@@ -9,6 +9,7 @@ var classrdf_1_1_vector2_d =
     [ "Vector2D", "classrdf_1_1_vector2_d.html#a4ec5c40d55ba6b4983ce0a91712f80a7", null ],
     [ "angle", "classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a", null ],
     [ "draw", "classrdf_1_1_vector2_d.html#a37e09d4b9ade53ad34787c5df1a7e7a9", null ],
+    [ "isNeighbor", "classrdf_1_1_vector2_d.html#acc3daf696b9d8cd2034803d0a0e8ea67", null ],
     [ "isNull", "classrdf_1_1_vector2_d.html#a5db010a5e57592c9ac3678d9fca034f1", null ],
     [ "length", "classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9", null ],
     [ "operator*=", "classrdf_1_1_vector2_d.html#a5c7449bd1bf4c1eaf2565e8684116940", null ],

@@ -28,7 +28,7 @@ var searchData=
   ['alpha_5fexpansion',['alpha_expansion',['../class_g_coptimization.html#a66d6a83f1df5aae78bdd0c494fdba058',1,'GCoptimization']]],
   ['alphachannelused',['alphaChannelUsed',['../classrdf_1_1_image.html#aa49eccb7b2236eaf3d69201de0beee94',1,'rdf::Image']]],
   ['angle',['angle',['../classrdf_1_1_pixel.html#a707eebe6c883a435b00210931f951f97',1,'rdf::Pixel::angle()'],['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line::angle()'],['../classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a',1,'rdf::Vector2D::angle()'],['../classrdf_1_1_ellipse.html#a54576d14cd33382560a98e8a5e9572ad',1,'rdf::Ellipse::angle()']]],
-  ['angledist',['angleDist',['../classrdf_1_1_algorithms.html#a83b4e11d1f53744c6fce02d7411ae343',1,'rdf::Algorithms']]],
+  ['angledist',['angleDist',['../classrdf_1_1_algorithms.html#aca3bce848d3cfaa66aa9633c879fc3e4',1,'rdf::Algorithms']]],
   ['append',['append',['../classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204',1,'rdf::MserContainer']]],
   ['applydebugsettings',['applyDebugSettings',['../main_8cpp.html#aa24e7b49b7682c20114e2ebe999825fb',1,'main.cpp']]],
   ['applynewlabeling',['applyNewLabeling',['../class_g_coptimization.html#a9f7aa44b1feddde883086af22e7b1b2f',1,'GCoptimization']]],

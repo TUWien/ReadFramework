@@ -1,9 +1,10 @@
 <map id="rdf::BaseElement" name="rdf::BaseElement">
-<area shape="rect" id="node2" href="$classrdf_1_1_mser_blob.html" title="rdf::MserBlob" alt="" coords="5,80,104,107"/>
-<area shape="rect" id="node3" href="$classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis..." alt="" coords="128,80,201,107"/>
-<area shape="rect" id="node4" href="$classrdf_1_1_pixel_edge.html" title="rdf::PixelEdge" alt="" coords="227,80,331,107"/>
-<area shape="rect" id="node6" href="$classrdf_1_1_pixel_graph.html" title="rdf::PixelGraph" alt="" coords="355,80,464,107"/>
-<area shape="rect" id="node7" href="$classrdf_1_1_pixel_set.html" title="rdf::PixelSet" alt="" coords="489,80,583,107"/>
-<area shape="rect" id="node8" href="$classrdf_1_1_pixel_stats.html" title="rdf::PixelStats" alt="" coords="607,80,712,107"/>
-<area shape="rect" id="node5" href="$classrdf_1_1_line_edge.html" title="rdf::LineEdge" alt="" coords="229,155,328,181"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_mser_blob.html" title="rdf::MserBlob" alt="" coords="187,5,287,32"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis..." alt="" coords="200,56,275,83"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_pixel_edge.html" title="rdf::PixelEdge" alt="" coords="185,107,289,133"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_pixel_graph.html" title="rdf::PixelGraph" alt="" coords="183,157,292,184"/>
+<area shape="rect" id="node7" href="$classrdf_1_1_pixel_set.html" title="rdf::PixelSet" alt="" coords="190,208,285,235"/>
+<area shape="rect" id="node8" href="$classrdf_1_1_pixel_stats.html" title="This class holds Pixel statistics which are found when computing the local orientation. " alt="" coords="185,259,290,285"/>
+<area shape="rect" id="node9" href="$classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="176,309,299,336"/>
+<area shape="rect" id="node5" href="$classrdf_1_1_line_edge.html" title="rdf::LineEdge" alt="" coords="347,107,445,133"/>
 </map>

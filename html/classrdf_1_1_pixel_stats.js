@@ -18,6 +18,7 @@ var classrdf_1_1_pixel_stats =
     [ "numOrientations", "classrdf_1_1_pixel_stats.html#a79fdccf70493b2c6c2f4d6333cce4691", null ],
     [ "orientation", "classrdf_1_1_pixel_stats.html#adb4a2b7e950495bd23c4e89d27327a43", null ],
     [ "orientationIndex", "classrdf_1_1_pixel_stats.html#aa2bd86cc6bda7654ed975b4b14bafa36", null ],
+    [ "orVec", "classrdf_1_1_pixel_stats.html#af32bc847ac8b7fc23a6235c0a9e2f59d", null ],
     [ "scale", "classrdf_1_1_pixel_stats.html#a9ab79d8b60edb1f3c2e4c814c9e9aa79", null ],
     [ "setOrientationIndex", "classrdf_1_1_pixel_stats.html#abd3fd3fb133e245102e5592f722d8b05", null ],
     [ "mData", "classrdf_1_1_pixel_stats.html#af8025a0833b880d188904dc7a90a4a33", null ],

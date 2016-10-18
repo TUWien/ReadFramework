@@ -8,8 +8,8 @@ var classrdf_1_1_algorithms =
       [ "SQUARE", "classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc", null ],
       [ "DISK", "classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a474d155e77a9eb896f3e990e3fe6a351", null ]
     ] ],
-    [ "angleDist", "classrdf_1_1_algorithms.html#a83b4e11d1f53744c6fce02d7411ae343", null ],
-    [ "calcRotationSize", "classrdf_1_1_algorithms.html#aa34ac689fbc59c3a6b695510011911cb", null ],
+    [ "angleDist", "classrdf_1_1_algorithms.html#aca3bce848d3cfaa66aa9633c879fc3e4", null ],
+    [ "calcRotationSize", "classrdf_1_1_algorithms.html#a939afbf02fea9900332b0537fc6fd64c", null ],
     [ "computeHist", "classrdf_1_1_algorithms.html#a151df7095898865c591deab878403c78", null ],
     [ "convolveIntegralImage", "classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76", null ],
     [ "convolveSymmetric", "classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092", null ],
@@ -20,11 +20,12 @@ var classrdf_1_1_algorithms =
     [ "get1DGauss", "classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f", null ],
     [ "getThreshOtsu", "classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597", null ],
     [ "invertImg", "classrdf_1_1_algorithms.html#aa04af29216ee45ce3c74c500aed2d645", null ],
+    [ "max", "classrdf_1_1_algorithms.html#ae67a0b0d9d7bdfeeb4ec199a4125bd1e", null ],
+    [ "min", "classrdf_1_1_algorithms.html#a106c96fdb655c2b159dc0513087060c4", null ],
     [ "mulMask", "classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0", null ],
     [ "normAngleRad", "classrdf_1_1_algorithms.html#a287e0c050f58d1e9a89a8a976e9c4a93", null ],
     [ "preFilterArea", "classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf", null ],
     [ "rotateImage", "classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade", null ],
     [ "setBorderConst", "classrdf_1_1_algorithms.html#a6f15da4a25f448c8172f93262e2e795d", null ],
-    [ "statMomentMat", "classrdf_1_1_algorithms.html#a5bdcc07665f67c4dfd19ee90f525e716", null ],
     [ "threshOtsu", "classrdf_1_1_algorithms.html#a9d4c29693ab0fcadff876ec369ddf696", null ]
 ];

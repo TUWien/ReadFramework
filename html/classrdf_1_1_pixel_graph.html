@@ -139,16 +139,27 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4fbaf63565a295c252716d856ff6c946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a842e99543e250453faa7d1a395865205"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a842e99543e250453faa7d1a395865205">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a842e99543e250453faa7d1a395865205"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4e81451bcc219e05c41e4faaa0882e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#ab4e81451bcc219e05c41e4faaa0882e3">connect</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;rect)</td></tr>
-<tr class="separator:ab4e81451bcc219e05c41e4faaa0882e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4f7c1c8f942320ee2d8e80e5c0cb4f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#aa4f7c1c8f942320ee2d8e80e5c0cb4f7">connect</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;rect, const <a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdf">PixelSet::ConnectionMode</a> &amp;mode=<a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfacaac44b36237b9e2f76b29dcb86a7b8e">PixelSet::connect_delauney</a>)</td></tr>
+<tr class="separator:aa4f7c1c8f942320ee2d8e80e5c0cb4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a0d5bb31905b82da4feae34e691289"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#ab8a0d5bb31905b82da4feae34e691289">set</a> () const </td></tr>
 <tr class="separator:ab8a0d5bb31905b82da4feae34e691289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66aec429fbb0e4dfdaae82199ef9af3f"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a66aec429fbb0e4dfdaae82199ef9af3f">edges</a> (const QString &amp;pixelID) const </td></tr>
+<tr class="memdesc:a66aec429fbb0e4dfdaae82199ef9af3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all edges connected to the pixel with ID pixelID.  <a href="#a66aec429fbb0e4dfdaae82199ef9af3f">More...</a><br/></td></tr>
+<tr class="separator:a66aec429fbb0e4dfdaae82199ef9af3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469e4f623351a8e0123c900acb3e4647"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a469e4f623351a8e0123c900acb3e4647">edges</a> (const QVector&lt; int &gt; &amp;edgeIDs) const </td></tr>
+<tr class="memdesc:a469e4f623351a8e0123c900acb3e4647"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector with all edges in the ID vector edgeIDs.  <a href="#a469e4f623351a8e0123c900acb3e4647">More...</a><br/></td></tr>
+<tr class="separator:a469e4f623351a8e0123c900acb3e4647"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a837e2e04e260bb325e4778cc33afe987"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
 &lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a837e2e04e260bb325e4778cc33afe987">edges</a> () const </td></tr>
+<tr class="memdesc:a837e2e04e260bb325e4778cc33afe987"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all pixel edges which were found using Delauney triangulation.  <a href="#a837e2e04e260bb325e4778cc33afe987">More...</a><br/></td></tr>
 <tr class="separator:a837e2e04e260bb325e4778cc33afe987"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5c08396322b64bf984a4a7b9400bf9a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#af5c08396322b64bf984a4a7b9400bf9a">pixelIndex</a> (const QString &amp;pixelID) const </td></tr>
+<tr class="memdesc:af5c08396322b64bf984a4a7b9400bf9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps pixel IDs (pixel-&gt;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae" title="Returns the elment&#39;s id. ">id()</a>) to their current vector index.  <a href="#af5c08396322b64bf984a4a7b9400bf9a">More...</a><br/></td></tr>
 <tr class="separator:af5c08396322b64bf984a4a7b9400bf9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaf7849b90439097dc6a43d842414e1f"><td class="memItemLeft" align="right" valign="top">QVector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#acaf7849b90439097dc6a43d842414e1f">edgeIndexes</a> (const QString &amp;pixelID) const </td></tr>
+<tr class="memdesc:acaf7849b90439097dc6a43d842414e1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all edges indexes of the current pixel. Each pixel has N edges in the graph. This function returns a vector with all edge indexes of the current pixel. The edge objects can then be retreived using <a class="el" href="classrdf_1_1_pixel_graph.html#a66aec429fbb0e4dfdaae82199ef9af3f" title="Returns all edges connected to the pixel with ID pixelID. ">edges()</a>[idx].  <a href="#acaf7849b90439097dc6a43d842414e1f">More...</a><br/></td></tr>
 <tr class="separator:acaf7849b90439097dc6a43d842414e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca">BaseElement</a> (const QString &amp;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">id</a>=QString())</td></tr>
@@ -206,7 +217,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab4e81451bcc219e05c41e4faaa0882e3"></a>
+<a class="anchor" id="aa4f7c1c8f942320ee2d8e80e5c0cb4f7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -214,8 +225,18 @@ Protected Attributes</h2></td></tr>
           <td class="memname">void rdf::PixelGraph::connect </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
-          <td class="paramname"><em>rect</em></td><td>)</td>
+          <td class="paramname"><em>rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdf">PixelSet::ConnectionMode</a> &amp;&#160;</td>
+          <td class="paramname"><em>mode</em> = <code><a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfacaac44b36237b9e2f76b29dcb86a7b8e">PixelSet::connect_delauney</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -252,6 +273,65 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns all edges indexes of the current pixel. Each pixel has N edges in the graph. This function returns a vector with all edge indexes of the current pixel. The edge objects can then be retreived using <a class="el" href="classrdf_1_1_pixel_graph.html#a66aec429fbb0e4dfdaae82199ef9af3f" title="Returns all edges connected to the pixel with ID pixelID. ">edges()</a>[idx]. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixelID</td><td>Unique pixel ID.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector with edge indexes.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a66aec429fbb0e4dfdaae82199ef9af3f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; rdf::PixelGraph::edges </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pixelID</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all edges connected to the pixel with ID pixelID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixelID</td><td>The pixel identifier.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a469e4f623351a8e0123c900acb3e4647"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; rdf::PixelGraph::edges </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edgeIDs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector with all edges in the ID vector edgeIDs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">edgeIDs</td><td>The edge IDs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a837e2e04e260bb325e4778cc33afe987"></a>
@@ -266,6 +346,9 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Returns all pixel edges which were found using Delauney triangulation. </p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of PixelEdges which connect 2 pixels each.</dd></dl>
 
 </div>
 </div>
@@ -297,6 +380,15 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Maps pixel IDs (pixel-&gt;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae" title="Returns the elment&#39;s id. ">id()</a>) to their current vector index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixelID</td><td>The unique ID of a pixel.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The current vector position.</dd></dl>
 
 </div>
 </div>

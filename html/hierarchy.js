@@ -9,7 +9,8 @@ var hierarchy =
       ] ],
       [ "rdf::PixelGraph", "classrdf_1_1_pixel_graph.html", null ],
       [ "rdf::PixelSet", "classrdf_1_1_pixel_set.html", null ],
-      [ "rdf::PixelStats", "classrdf_1_1_pixel_stats.html", null ]
+      [ "rdf::PixelStats", "classrdf_1_1_pixel_stats.html", null ],
+      [ "rdf::PixelTabStop", "classrdf_1_1_pixel_tab_stop.html", null ]
     ] ],
     [ "rdf::BaseLine", "classrdf_1_1_base_line.html", null ],
     [ "rdf::BasicContrast", "classrdf_1_1_basic_contrast.html", null ],

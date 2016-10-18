@@ -19,6 +19,7 @@ var namespacerdf =
     [ "PageXmlParser", "classrdf_1_1_page_xml_parser.html", "classrdf_1_1_page_xml_parser" ],
     [ "MserBlob", "classrdf_1_1_mser_blob.html", "classrdf_1_1_mser_blob" ],
     [ "PixelStats", "classrdf_1_1_pixel_stats.html", "classrdf_1_1_pixel_stats" ],
+    [ "PixelTabStop", "classrdf_1_1_pixel_tab_stop.html", "classrdf_1_1_pixel_tab_stop" ],
     [ "Pixel", "classrdf_1_1_pixel.html", "classrdf_1_1_pixel" ],
     [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
     [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],

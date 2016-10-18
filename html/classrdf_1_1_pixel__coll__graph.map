@@ -1,6 +1,7 @@
 <map id="rdf::Pixel" name="rdf::Pixel">
-<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,109,128,136"/>
-<area shape="rect" id="node3" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="153,109,225,136"/>
-<area shape="rect" id="node4" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="193,5,292,32"/>
-<area shape="rect" id="node5" href="$classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="250,109,333,136"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,5,128,32"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="56,109,179,136"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="203,109,276,136"/>
+<area shape="rect" id="node5" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="199,5,299,32"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="301,109,384,136"/>
 </map>

@@ -368,163 +368,165 @@ $(document).ready(function(){initNavTree('_shapes_8h_source.html','');});
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keywordtype">double</span> length() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keywordtype">void</span> rotate(<span class="keywordtype">double</span> angle);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#a489cf5844649370af8f0c353f631a6a0">  273</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
-<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#a13fc7bf07f1c84f27806ad3349efdfa4">  275</a></span>&#160;    <span class="keywordtype">double</span> mX = 0;</div>
-<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#ab2e7f470e7c134c45f9a5319f6da475b">  276</a></span>&#160;    <span class="keywordtype">double</span> mY = 0;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;};</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html">  279</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_triangle.html">Triangle</a> {</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordtype">bool</span> isNeighbor(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; other, <span class="keywordtype">double</span> radius) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#a489cf5844649370af8f0c353f631a6a0">  275</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#a13fc7bf07f1c84f27806ad3349efdfa4">  277</a></span>&#160;    <span class="keywordtype">double</span> mX = 0;</div>
+<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="classrdf_1_1_vector2_d.html#ab2e7f470e7c134c45f9a5319f6da475b">  278</a></span>&#160;    <span class="keywordtype">double</span> mY = 0;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;};</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <a class="code" href="classrdf_1_1_triangle.html">Triangle</a>();</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <a class="code" href="classrdf_1_1_triangle.html">Triangle</a>(<span class="keyword">const</span> cv::Vec6f&amp; vec);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html">  281</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_triangle.html">Triangle</a> {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <a class="code" href="classrdf_1_1_triangle.html">Triangle</a>();</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <a class="code" href="classrdf_1_1_triangle.html">Triangle</a>(<span class="keyword">const</span> cv::Vec6f&amp; vec);</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keywordtype">void</span> setVec(<span class="keyword">const</span> cv::Vec6f&amp; vec);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p0() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p1() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p2() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> pointAt(<span class="keywordtype">int</span> idx = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordtype">void</span> setVec(<span class="keyword">const</span> cv::Vec6f&amp; vec);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p0() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p1() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> p2() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> pointAt(<span class="keywordtype">int</span> idx = 0) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
-<div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html#a6d467c41f0ff502164f905cd42b44f14">  299</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
-<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">  301</a></span>&#160;    QVector&lt;Vector2D&gt; <a class="code" href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">mPts</a>;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;};</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;</div>
-<div class="line"><a name="l00304"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html">  304</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_rect.html">Rect</a> {</div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html#a6d467c41f0ff502164f905cd42b44f14">  301</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
+<div class="line"><a name="l00303"></a><span class="lineno"><a class="line" href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">  303</a></span>&#160;    QVector&lt;Vector2D&gt; <a class="code" href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">mPts</a>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;};</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>();</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> QRect&amp; rect);</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> QRectF&amp; rect);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> cv::Rect&amp; rect);</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; topLeft, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; size);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> width, <span class="keywordtype">double</span> height);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacerdf.html#a9871ab1847913d0c913cb059cad4751d">operator==</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; l, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; r);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacerdf.html#a46f339c4273da8c09ad7d180ed7c36f3">operator!=</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; l, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; r);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html">  306</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_rect.html">Rect</a> {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>();</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> QRect&amp; rect);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> QRectF&amp; rect);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> cv::Rect&amp; rect);</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; topLeft, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; size);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> width, <span class="keywordtype">double</span> height);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <a class="code" href="classrdf_1_1_rect.html">Rect</a>(<span class="keyword">const</span> cv::Mat&amp; img);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacerdf.html#a9871ab1847913d0c913cb059cad4751d">operator==</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; l, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; r);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacerdf.html#a46f339c4273da8c09ad7d180ed7c36f3">operator!=</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; l, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; r);</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="comment">// return types</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordtype">double</span> width() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordtype">double</span> height() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> size() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> diagonal() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordtype">double</span> top() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="keywordtype">double</span> bottom() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="keywordtype">double</span> left() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keywordtype">double</span> right() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> topLeft() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> topRight() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> bottomLeft() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> bottomRight() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> center() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="comment">// setter</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordtype">void</span> move(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; vec);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="keywordtype">void</span> expand(<span class="keywordtype">double</span> v);</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keywordtype">void</span> setSize(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; newSize);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="comment">// conversions</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    QRect toQRect() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    QRectF toQRectF() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    cv::Rect toCvRect() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="comment">// geometry</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; o) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; pt) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keywordtype">bool</span> isProximate(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; o, <span class="keywordtype">double</span> eps = 10.0) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keywordtype">double</span> area() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#a5a5bbefdbc3ebef362dcb98c7b435e89">  355</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    </div>
-<div class="line"><a name="l00357"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">  357</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">mTopLeft</a>;</div>
-<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">  358</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">mSize</a>;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;};</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;</div>
-<div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html">  361</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="comment">// return types</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keywordtype">double</span> width() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordtype">double</span> height() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> size() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> diagonal() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="keywordtype">double</span> top() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keywordtype">double</span> bottom() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordtype">double</span> left() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordtype">double</span> right() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> topLeft() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> topRight() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> bottomLeft() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> bottomRight() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> center() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="comment">// setter</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keywordtype">void</span> move(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; vec);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordtype">void</span> expand(<span class="keywordtype">double</span> v);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordtype">void</span> setSize(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; newSize);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="comment">// conversions</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    QRect toQRect() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    QRectF toQRectF() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    cv::Rect toCvRect() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="comment">// geometry</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; o) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; pt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordtype">bool</span> isProximate(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_rect.html">Rect</a>&amp; o, <span class="keywordtype">double</span> eps = 10.0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordtype">double</span> area() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00357"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#a5a5bbefdbc3ebef362dcb98c7b435e89">  357</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    </div>
+<div class="line"><a name="l00359"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">  359</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">mTopLeft</a>;</div>
+<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">  360</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">mSize</a>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;};</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>();</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; center, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; axis = <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>(), <span class="keywordtype">double</span> angle = 0.0);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>(<span class="keyword">const</span> cv::RotatedRect&amp; rect);</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> QDebug <a class="code" href="namespacerdf.html#afe016bb57a4f09aeb9cba098b36700ff">operator&lt;&lt; </a>(QDebug d, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> &amp;e);</div>
+<div class="line"><a name="l00363"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html">  363</a></span>&#160;<span class="keyword">class </span><a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>();</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; center, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; axis = <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>(), <span class="keywordtype">double</span> angle = 0.0);</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a>(<span class="keyword">const</span> cv::RotatedRect&amp; rect);</div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keyword">static</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> fromData(<span class="keyword">const</span> std::vector&lt;cv::Point&gt;&amp; pts);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="comment">//static Ellipse fromData(const cv::Mat&amp; means, const cv::Mat&amp; covs);</span></div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="comment">//static Ellipse fromImage(const cv::Mat&amp; img);</span></div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="comment">//bool axisFromCov(const cv::Mat&amp; cov);</span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <a class="code" href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keyword">friend</span> QDebug <a class="code" href="namespacerdf.html#afe016bb57a4f09aeb9cba098b36700ff">operator&lt;&lt; </a>(QDebug d, <span class="keyword">const</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> &amp;e);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keyword">static</span> <a class="code" href="classrdf_1_1_ellipse.html">Ellipse</a> fromData(<span class="keyword">const</span> std::vector&lt;cv::Point&gt;&amp; pts);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="comment">//static Ellipse fromData(const cv::Mat&amp; means, const cv::Mat&amp; covs);</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment">//static Ellipse fromImage(const cv::Mat&amp; img);</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="comment">//bool axisFromCov(const cv::Mat&amp; cov);</span></div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    QString toString() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keywordtype">bool</span> isNull() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keywordtype">void</span> setCenter(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; center);</div>
-<div class="line"><a name="l00380"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">  380</a></span>&#160;    <span class="keyword">inline</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">center</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordflow">return</span> mCenter;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    };</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordtype">void</span> setAxis(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; axis);</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> axis() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keywordtype">double</span> majorAxis() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordtype">double</span> minorAxis() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordtype">void</span> setAngle(<span class="keywordtype">double</span> angle);</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordtype">double</span> angle() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordtype">void</span> move(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; vec);</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    QString toString() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keywordtype">void</span> setCenter(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; center);</div>
+<div class="line"><a name="l00382"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">  382</a></span>&#160;    <span class="keyword">inline</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">center</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordflow">return</span> mCenter;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    };</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keywordtype">void</span> setAxis(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; axis);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> axis() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keywordtype">double</span> majorAxis() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordtype">double</span> minorAxis() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordtype">void</span> setAngle(<span class="keywordtype">double</span> angle);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordtype">double</span> angle() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p, <span class="keywordtype">double</span> alpha = 0.0) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> getPoint(<span class="keywordtype">double</span> angle) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    </div>
-<div class="line"><a name="l00400"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aff7811fb88dff213d801838f1d8bd2d3">  400</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;</div>
-<div class="line"><a name="l00402"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">  402</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">mCenter</a>;</div>
-<div class="line"><a name="l00403"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">  403</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">mAxis</a>;</div>
-<div class="line"><a name="l00404"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#ac7c24d4e5ff2f380dc86701c5ed147ec">  404</a></span>&#160;    <span class="keywordtype">double</span> mAngle = 0.0;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;};</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keywordtype">void</span> move(<span class="keyword">const</span> <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a>&amp; vec);</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordtype">void</span> draw(QPainter&amp; p, <span class="keywordtype">double</span> alpha = 0.0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> getPoint(<span class="keywordtype">double</span> angle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    </div>
+<div class="line"><a name="l00402"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aff7811fb88dff213d801838f1d8bd2d3">  402</a></span>&#160;    <span class="keywordtype">bool</span> mIsNull = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
+<div class="line"><a name="l00404"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">  404</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">mCenter</a>;</div>
+<div class="line"><a name="l00405"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">  405</a></span>&#160;    <a class="code" href="classrdf_1_1_vector2_d.html">Vector2D</a> <a class="code" href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">mAxis</a>;</div>
+<div class="line"><a name="l00406"></a><span class="lineno"><a class="line" href="classrdf_1_1_ellipse.html#ac7c24d4e5ff2f380dc86701c5ed147ec">  406</a></span>&#160;    <span class="keywordtype">double</span> mAngle = 0.0;</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;};</div>
-<div class="ttc" id="classrdf_1_1_ellipse_html_a3347e65fba981e42c8fed65f36d1be9b"><div class="ttname"><a href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">rdf::Ellipse::mCenter</a></div><div class="ttdeci">Vector2D mCenter</div><div class="ttdef"><b>Definition:</b> Shapes.h:402</div></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;};</div>
+<div class="ttc" id="classrdf_1_1_ellipse_html_a3347e65fba981e42c8fed65f36d1be9b"><div class="ttname"><a href="classrdf_1_1_ellipse.html#a3347e65fba981e42c8fed65f36d1be9b">rdf::Ellipse::mCenter</a></div><div class="ttdeci">Vector2D mCenter</div><div class="ttdef"><b>Definition:</b> Shapes.h:404</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_aafd1b4576b23057f913dac98e1222d81"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#aafd1b4576b23057f913dac98e1222d81">rdf::Vector2D::operator+=</a></div><div class="ttdeci">void operator+=(const Vector2D &amp;vec)</div><div class="ttdef"><b>Definition:</b> Shapes.h:205</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_ae28dac900758d136841d5d88ab82c72f"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#ae28dac900758d136841d5d88ab82c72f">rdf::Vector2D::x</a></div><div class="ttdeci">double x() const </div><div class="ttdef"><b>Definition:</b> Shapes.h:246</div></div>
-<div class="ttc" id="classrdf_1_1_ellipse_html"><div class="ttname"><a href="classrdf_1_1_ellipse.html">rdf::Ellipse</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:361</div></div>
+<div class="ttc" id="classrdf_1_1_ellipse_html"><div class="ttname"><a href="classrdf_1_1_ellipse.html">rdf::Ellipse</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:363</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a5c7449bd1bf4c1eaf2565e8684116940"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a5c7449bd1bf4c1eaf2565e8684116940">rdf::Vector2D::operator*=</a></div><div class="ttdeci">void operator*=(const double &amp;scalar)</div><div class="ttdef"><b>Definition:</b> Shapes.h:216</div></div>
-<div class="ttc" id="classrdf_1_1_ellipse_html_aa75b3bbbe9f5674541efe4511d9529d0"><div class="ttname"><a href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">rdf::Ellipse::center</a></div><div class="ttdeci">Vector2D center() const </div><div class="ttdef"><b>Definition:</b> Shapes.h:380</div></div>
+<div class="ttc" id="classrdf_1_1_ellipse_html_aa75b3bbbe9f5674541efe4511d9529d0"><div class="ttname"><a href="classrdf_1_1_ellipse.html#aa75b3bbbe9f5674541efe4511d9529d0">rdf::Ellipse::center</a></div><div class="ttdeci">Vector2D center() const </div><div class="ttdef"><b>Definition:</b> Shapes.h:382</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a1eeb2f944bc2853f5c99e8f6ceace2c9"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a1eeb2f944bc2853f5c99e8f6ceace2c9">rdf::Vector2D::operator==</a></div><div class="ttdeci">DllCoreExport friend bool operator==(const Vector2D &amp;l, const Vector2D &amp;r)</div><div class="ttdef"><b>Definition:</b> Shapes.h:170</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a5f03a3c0d804cfb02b3bada8ae0caeb6"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a5f03a3c0d804cfb02b3bada8ae0caeb6">rdf::Vector2D::operator+=</a></div><div class="ttdeci">void operator+=(const double &amp;scalar)</div><div class="ttdef"><b>Definition:</b> Shapes.h:226</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a08a136c6b96a88f04079465c3604501a"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a08a136c6b96a88f04079465c3604501a">rdf::Vector2D::operator-=</a></div><div class="ttdeci">void operator-=(const Vector2D &amp;vec)</div><div class="ttdef"><b>Definition:</b> Shapes.h:210</div></div>
 <div class="ttc" id="namespacerdf_html_afe016bb57a4f09aeb9cba098b36700ff"><div class="ttname"><a href="namespacerdf.html#afe016bb57a4f09aeb9cba098b36700ff">rdf::operator&lt;&lt;</a></div><div class="ttdeci">QDataStream &amp; operator&lt;&lt;(QDataStream &amp;s, const Region &amp;r)</div><div class="ttdoc">Writes the Region r to the data stream s </div><div class="ttdef"><b>Definition:</b> Elements.cpp:61</div></div>
-<div class="ttc" id="classrdf_1_1_vector2_d_html_a13fc7bf07f1c84f27806ad3349efdfa4"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a13fc7bf07f1c84f27806ad3349efdfa4">rdf::Vector2D::mX</a></div><div class="ttdeci">double mX</div><div class="ttdef"><b>Definition:</b> Shapes.h:275</div></div>
+<div class="ttc" id="classrdf_1_1_vector2_d_html_a13fc7bf07f1c84f27806ad3349efdfa4"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a13fc7bf07f1c84f27806ad3349efdfa4">rdf::Vector2D::mX</a></div><div class="ttdeci">double mX</div><div class="ttdef"><b>Definition:</b> Shapes.h:277</div></div>
 <div class="ttc" id="classrdf_1_1_line_html_ab51861dc2168b97d9c0c6f1be2b55386"><div class="ttname"><a href="classrdf_1_1_line.html#ab51861dc2168b97d9c0c6f1be2b55386">rdf::Line::mLine</a></div><div class="ttdeci">QLineF mLine</div><div class="ttdef"><b>Definition:</b> Shapes.h:149</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_aa4b6688da6fb0b94e9b18198c8647e2f"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#aa4b6688da6fb0b94e9b18198c8647e2f">rdf::Vector2D::operator*</a></div><div class="ttdeci">DllCoreExport friend Vector2D operator*(const Vector2D &amp;l, double s)</div><div class="ttdef"><b>Definition:</b> Shapes.h:196</div></div>
-<div class="ttc" id="classrdf_1_1_vector2_d_html_ab2e7f470e7c134c45f9a5319f6da475b"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#ab2e7f470e7c134c45f9a5319f6da475b">rdf::Vector2D::mY</a></div><div class="ttdeci">double mY</div><div class="ttdef"><b>Definition:</b> Shapes.h:276</div></div>
-<div class="ttc" id="classrdf_1_1_triangle_html"><div class="ttname"><a href="classrdf_1_1_triangle.html">rdf::Triangle</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:279</div></div>
+<div class="ttc" id="classrdf_1_1_vector2_d_html_ab2e7f470e7c134c45f9a5319f6da475b"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#ab2e7f470e7c134c45f9a5319f6da475b">rdf::Vector2D::mY</a></div><div class="ttdeci">double mY</div><div class="ttdef"><b>Definition:</b> Shapes.h:278</div></div>
+<div class="ttc" id="classrdf_1_1_triangle_html"><div class="ttname"><a href="classrdf_1_1_triangle.html">rdf::Triangle</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:281</div></div>
 <div class="ttc" id="classrdf_1_1_polygon_html_a506abf1492416243393a341ca356b382"><div class="ttname"><a href="classrdf_1_1_polygon.html#a506abf1492416243393a341ca356b382">rdf::Polygon::mPoly</a></div><div class="ttdeci">QPolygon mPoly</div><div class="ttdef"><b>Definition:</b> Shapes.h:78</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_aab686ba95701bfa6e5cf028527689d12"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#aab686ba95701bfa6e5cf028527689d12">rdf::Vector2D::operator-</a></div><div class="ttdeci">DllCoreExport friend Vector2D operator-(const Vector2D &amp;l, const Vector2D &amp;r)</div><div class="ttdef"><b>Definition:</b> Shapes.h:182</div></div>
-<div class="ttc" id="classrdf_1_1_rect_html_ade1e8386b5100585263cf720fa51eae5"><div class="ttname"><a href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">rdf::Rect::mTopLeft</a></div><div class="ttdeci">Vector2D mTopLeft</div><div class="ttdef"><b>Definition:</b> Shapes.h:357</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html_ade1e8386b5100585263cf720fa51eae5"><div class="ttname"><a href="classrdf_1_1_rect.html#ade1e8386b5100585263cf720fa51eae5">rdf::Rect::mTopLeft</a></div><div class="ttdeci">Vector2D mTopLeft</div><div class="ttdef"><b>Definition:</b> Shapes.h:359</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html"><div class="ttname"><a href="classrdf_1_1_vector2_d.html">rdf::Vector2D</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:155</div></div>
 <div class="ttc" id="classrdf_1_1_base_line_html"><div class="ttname"><a href="classrdf_1_1_base_line.html">rdf::BaseLine</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:82</div></div>
-<div class="ttc" id="classrdf_1_1_triangle_html_ac577dcd1e2667cc156985812b4c2ec39"><div class="ttname"><a href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">rdf::Triangle::mPts</a></div><div class="ttdeci">QVector&lt; Vector2D &gt; mPts</div><div class="ttdef"><b>Definition:</b> Shapes.h:301</div></div>
+<div class="ttc" id="classrdf_1_1_triangle_html_ac577dcd1e2667cc156985812b4c2ec39"><div class="ttname"><a href="classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39">rdf::Triangle::mPts</a></div><div class="ttdeci">QVector&lt; Vector2D &gt; mPts</div><div class="ttdef"><b>Definition:</b> Shapes.h:303</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a82ea591ac29efd5cce8e3d619b359a5b"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a82ea591ac29efd5cce8e3d619b359a5b">rdf::Vector2D::operator+</a></div><div class="ttdeci">DllCoreExport friend Vector2D operator+(const Vector2D &amp;l, const Vector2D &amp;r)</div><div class="ttdef"><b>Definition:</b> Shapes.h:178</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_add5d5b3acbea3a54c7db93704c3d1011"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#add5d5b3acbea3a54c7db93704c3d1011">rdf::Vector2D::operator/=</a></div><div class="ttdeci">void operator/=(const double &amp;scalar)</div><div class="ttdef"><b>Definition:</b> Shapes.h:221</div></div>
 <div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:106</div></div>
@@ -532,14 +534,14 @@ $(document).ready(function(){initNavTree('_shapes_8h_source.html','');});
 <div class="ttc" id="classrdf_1_1_polygon_html"><div class="ttname"><a href="classrdf_1_1_polygon.html">rdf::Polygon</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:61</div></div>
 <div class="ttc" id="classrdf_1_1_base_line_html_a1c770a632f92b5e8045d33f0841daba9"><div class="ttname"><a href="classrdf_1_1_base_line.html#a1c770a632f92b5e8045d33f0841daba9">rdf::BaseLine::mBaseLine</a></div><div class="ttdeci">QPolygon mBaseLine</div><div class="ttdef"><b>Definition:</b> Shapes.h:99</div></div>
 <div class="ttc" id="_shapes_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_shapes_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> Shapes.h:46</div></div>
-<div class="ttc" id="classrdf_1_1_rect_html_a0ab90d6290acc1e955148b1b33035373"><div class="ttname"><a href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">rdf::Rect::mSize</a></div><div class="ttdeci">Vector2D mSize</div><div class="ttdef"><b>Definition:</b> Shapes.h:358</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html_a0ab90d6290acc1e955148b1b33035373"><div class="ttname"><a href="classrdf_1_1_rect.html#a0ab90d6290acc1e955148b1b33035373">rdf::Rect::mSize</a></div><div class="ttdeci">Vector2D mSize</div><div class="ttdef"><b>Definition:</b> Shapes.h:360</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_aec6294bf2d849a86806cd374c4b0bac6"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#aec6294bf2d849a86806cd374c4b0bac6">rdf::Vector2D::operator-=</a></div><div class="ttdeci">void operator-=(const double &amp;scalar)</div><div class="ttdef"><b>Definition:</b> Shapes.h:232</div></div>
-<div class="ttc" id="classrdf_1_1_ellipse_html_aa0750e94fdce57445805ebe59508b538"><div class="ttname"><a href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">rdf::Ellipse::mAxis</a></div><div class="ttdeci">Vector2D mAxis</div><div class="ttdef"><b>Definition:</b> Shapes.h:403</div></div>
+<div class="ttc" id="classrdf_1_1_ellipse_html_aa0750e94fdce57445805ebe59508b538"><div class="ttname"><a href="classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538">rdf::Ellipse::mAxis</a></div><div class="ttdeci">Vector2D mAxis</div><div class="ttdef"><b>Definition:</b> Shapes.h:405</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_adba960e1ebca0e9d14b1e349232ae1ed"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#adba960e1ebca0e9d14b1e349232ae1ed">rdf::Vector2D::operator*</a></div><div class="ttdeci">DllCoreExport friend double operator*(const Vector2D &amp;l, const Vector2D &amp;r)</div><div class="ttdoc">Computes the scalar product between l and r. </div><div class="ttdef"><b>Definition:</b> Shapes.h:192</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a865fac7a2d0dd3c79d7f9ac6c88957c6"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a865fac7a2d0dd3c79d7f9ac6c88957c6">rdf::Vector2D::y</a></div><div class="ttdeci">double y() const </div><div class="ttdef"><b>Definition:</b> Shapes.h:251</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_aa213cda7d963a5d2c85f7477fb3221ef"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#aa213cda7d963a5d2c85f7477fb3221ef">rdf::Vector2D::operator!=</a></div><div class="ttdeci">DllCoreExport friend bool operator!=(const Vector2D &amp;l, const Vector2D &amp;r)</div><div class="ttdef"><b>Definition:</b> Shapes.h:174</div></div>
 <div class="ttc" id="classrdf_1_1_vector2_d_html_a6d705e3e0ab0e7abcfe9750a5ed3a3b4"><div class="ttname"><a href="classrdf_1_1_vector2_d.html#a6d705e3e0ab0e7abcfe9750a5ed3a3b4">rdf::Vector2D::operator*</a></div><div class="ttdeci">DllCoreExport friend Vector2D operator*(double s, const Vector2D &amp;l)</div><div class="ttdef"><b>Definition:</b> Shapes.h:200</div></div>
-<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:304</div></div>
+<div class="ttc" id="classrdf_1_1_rect_html"><div class="ttname"><a href="classrdf_1_1_rect.html">rdf::Rect</a></div><div class="ttdef"><b>Definition:</b> Shapes.h:306</div></div>
 <div class="ttc" id="namespacerdf_html_a46f339c4273da8c09ad7d180ed7c36f3"><div class="ttname"><a href="namespacerdf.html#a46f339c4273da8c09ad7d180ed7c36f3">rdf::operator!=</a></div><div class="ttdeci">bool operator!=(const BaseElement &amp;l, const BaseElement &amp;r)</div><div class="ttdef"><b>Definition:</b> BaseImageElement.cpp:66</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
