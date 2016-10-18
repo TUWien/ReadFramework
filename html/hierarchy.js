@@ -104,6 +104,7 @@ var hierarchy =
     [ "GCoptimization::SmoothCostFnPotts", "struct_g_coptimization_1_1_smooth_cost_fn_potts.html", null ],
     [ "GCoptimization::SmoothCostFunctor", "struct_g_coptimization_1_1_smooth_cost_functor.html", null ],
     [ "GCoptimization::SparseDataCost", "struct_g_coptimization_1_1_sparse_data_cost.html", null ],
+    [ "rdf::TabStopCluster", "classrdf_1_1_tab_stop_cluster.html", null ],
     [ "rdf::Timer", "classrdf_1_1_timer.html", null ],
     [ "rdf::Triangle", "classrdf_1_1_triangle.html", null ],
     [ "rdf::Utils", "classrdf_1_1_utils.html", null ],

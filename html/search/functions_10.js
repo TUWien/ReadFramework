@@ -6,7 +6,7 @@ var searchData=
   ['red',['red',['../classrdf_1_1_color_manager.html#a9262c0165f30ab1b026d4feb2afb410d',1,'rdf::ColorManager']]],
   ['region',['Region',['../classrdf_1_1_region.html#aa8d2f6b90f534d1c7dfaa524ceac52b0',1,'rdf::Region']]],
   ['regionsat',['regionsAt',['../classrdf_1_1_region_manager.html#adb08d7cee5f305538f2109c41970eabc',1,'rdf::RegionManager']]],
-  ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()'],['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()']]],
+  ['regiontypeconfig',['regionTypeConfig',['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()'],['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],
   ['relativepts',['relativePts',['../classrdf_1_1_mser_blob.html#a59442dac9650371caa8e2c94aaaa486a',1,'rdf::MserBlob']]],
   ['remove',['remove',['../classrdf_1_1_pixel_set.html#a8c3d287617b4a2a9432fdc8dec6c5c01',1,'rdf::PixelSet']]],

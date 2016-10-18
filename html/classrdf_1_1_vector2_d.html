@@ -165,8 +165,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5f3bc42543ded116e6dae8683917d39a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab92a13cb71d33e5572b56b21af9dadd5"><td class="memItemLeft" align="right" valign="top">cv::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#ab92a13cb71d33e5572b56b21af9dadd5">toCvPoint</a> () const </td></tr>
 <tr class="separator:ab92a13cb71d33e5572b56b21af9dadd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60ec86eaf9b89d224c7d2780422032f0"><td class="memItemLeft" align="right" valign="top">cv::Point2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a60ec86eaf9b89d224c7d2780422032f0">toCvPointF</a> () const </td></tr>
-<tr class="separator:a60ec86eaf9b89d224c7d2780422032f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cfcaefc3c8a66a205ed80c68e93cc38"><td class="memItemLeft" align="right" valign="top">cv::Point2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a3cfcaefc3c8a66a205ed80c68e93cc38">toCvPoint2d</a> () const </td></tr>
+<tr class="separator:a3cfcaefc3c8a66a205ed80c68e93cc38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4565267d66032c4863db5322e5c6a2"><td class="memItemLeft" align="right" valign="top">cv::Point2f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#abe4565267d66032c4863db5322e5c6a2">toCvPoint2f</a> () const </td></tr>
+<tr class="separator:abe4565267d66032c4863db5322e5c6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a561ed68a7e8811cff706349b6744226f"><td class="memItemLeft" align="right" valign="top">cv::Size&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a561ed68a7e8811cff706349b6744226f">toCvSize</a> () const </td></tr>
 <tr class="separator:a561ed68a7e8811cff706349b6744226f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a579b9e8b480907cfd3d785595db35fb0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a579b9e8b480907cfd3d785595db35fb0">toString</a> () const </td></tr>
@@ -223,6 +225,8 @@ Friends</h2></td></tr>
 <tr class="separator:aa4b6688da6fb0b94e9b18198c8647e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d705e3e0ab0e7abcfe9750a5ed3a3b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#a6d705e3e0ab0e7abcfe9750a5ed3a3b4">operator*</a> (double s, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;l)</td></tr>
 <tr class="separator:a6d705e3e0ab0e7abcfe9750a5ed3a3b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f6d09f2fd1d5e625d0479492c43482"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_vector2_d.html#ac6f6d09f2fd1d5e625d0479492c43482">operator/</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;l, double s)</td></tr>
+<tr class="separator:ac6f6d09f2fd1d5e625d0479492c43482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0b7ec9484fc2cca62edbca40f3aa0d01"></a>
@@ -755,12 +759,27 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a60ec86eaf9b89d224c7d2780422032f0"></a>
+<a class="anchor" id="a3cfcaefc3c8a66a205ed80c68e93cc38"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cv::Point2d rdf::Vector2D::toCvPointF </td>
+          <td class="memname">cv::Point2d rdf::Vector2D::toCvPoint2d </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abe4565267d66032c4863db5322e5c6a2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Point2f rdf::Vector2D::toCvPoint2f </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1105,6 +1124,40 @@ Friends</h2></td></tr>
           <td></td>
           <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
           <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac6f6d09f2fd1d5e625d0479492c43482"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> friend <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> operator/ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

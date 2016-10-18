@@ -69,6 +69,7 @@ var namespacerdf =
     [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
     [ "GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", "classrdf_1_1_graph_cut_orientation" ],
     [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
+    [ "TabStopCluster", "classrdf_1_1_tab_stop_cluster.html", "classrdf_1_1_tab_stop_cluster" ],
     [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ],
     [ "TextLineConfig", "classrdf_1_1_text_line_config.html", "classrdf_1_1_text_line_config" ],
     [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ]

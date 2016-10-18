@@ -140,7 +140,7 @@ var searchData=
   ['mpen',['mPen',['../classrdf_1_1_region_type_config.html#a74a762538682a6651797648fd3fb1620',1,'rdf::RegionTypeConfig']]],
   ['mpixeledges',['mPixelEdges',['../classrdf_1_1_pixel_graph.html#a282d311556c37dfea3fb0f852b300acf',1,'rdf::PixelGraph']]],
   ['mpixellookup',['mPixelLookup',['../classrdf_1_1_pixel_graph.html#a1b49f0c5ab95b0939fb42a42cf37c243',1,'rdf::PixelGraph']]],
-  ['mpoly',['mPoly',['../classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1',1,'rdf::Region::mPoly()'],['../classrdf_1_1_polygon.html#a506abf1492416243393a341ca356b382',1,'rdf::Polygon::mPoly()']]],
+  ['mpoly',['mPoly',['../classrdf_1_1_region.html#a7581863ec9db9c687c059e53550d61f1',1,'rdf::Region::mPoly()'],['../classrdf_1_1_polygon.html#a1aa33a6097d2d83b92544bbf53ed011e',1,'rdf::Polygon::mPoly()']]],
   ['mprefilter',['mPreFilter',['../classrdf_1_1_base_binarization_su.html#a5e95d0d57105084c9bc13d2c5cd611e7',1,'rdf::BaseBinarizationSu']]],
   ['mprefiltersize',['mPreFilterSize',['../classrdf_1_1_base_binarization_su.html#a78742ee20ba8555cca898d7cb337e563',1,'rdf::BaseBinarizationSu']]],
   ['mpts',['mPts',['../classrdf_1_1_mser_blob.html#a00c71fbe3f35bf9caf0d871d2640440e',1,'rdf::MserBlob::mPts()'],['../classrdf_1_1_triangle.html#ac577dcd1e2667cc156985812b4c2ec39',1,'rdf::Triangle::mPts()']]],

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['tabstop',['tabStop',['../classrdf_1_1_pixel.html#a7bee729b97c5191b567381a4c8132f5d',1,'rdf::Pixel']]],
+  ['tabstopcluster',['TabStopCluster',['../classrdf_1_1_tab_stop_cluster.html#acbdfd398a6c5c81cdf7ce3eedcea6cdc',1,'rdf::TabStopCluster']]],
   ['tag',['tag',['../classrdf_1_1_region_xml_helper.html#aab3702188f893510256efa26f9cf605e',1,'rdf::RegionXmlHelper']]],
   ['tagname',['tagName',['../classrdf_1_1_page_xml_parser.html#ad045baf5b9df93a55a179bde558945b4',1,'rdf::PageXmlParser']]],
   ['templatesdb',['templatesDb',['../classrdf_1_1_form_features.html#a952479e18fca3744fed443e482fce7df',1,'rdf::FormFeatures']]],
@@ -22,7 +23,8 @@ var searchData=
   ['tobinarymask',['toBinaryMask',['../classrdf_1_1_mser_blob.html#aaccf8eb2f503f18cb8ab376b96c31e9c',1,'rdf::MserBlob']]],
   ['toblobs',['toBlobs',['../classrdf_1_1_mser_container.html#af9a4a664d210989e050a012fd5967a12',1,'rdf::MserContainer']]],
   ['tocvpoint',['toCvPoint',['../classrdf_1_1_vector2_d.html#ab92a13cb71d33e5572b56b21af9dadd5',1,'rdf::Vector2D']]],
-  ['tocvpointf',['toCvPointF',['../classrdf_1_1_vector2_d.html#a60ec86eaf9b89d224c7d2780422032f0',1,'rdf::Vector2D']]],
+  ['tocvpoint2d',['toCvPoint2d',['../classrdf_1_1_vector2_d.html#a3cfcaefc3c8a66a205ed80c68e93cc38',1,'rdf::Vector2D']]],
+  ['tocvpoint2f',['toCvPoint2f',['../classrdf_1_1_vector2_d.html#abe4565267d66032c4863db5322e5c6a2',1,'rdf::Vector2D']]],
   ['tocvrect',['toCvRect',['../classrdf_1_1_rect.html#ab77c4743b24ec4e05f01dd0f1bfcccd8',1,'rdf::Rect']]],
   ['tocvsize',['toCvSize',['../classrdf_1_1_vector2_d.html#a561ed68a7e8811cff706349b6744226f',1,'rdf::Vector2D']]],
   ['tomat',['toMat',['../classrdf_1_1_line.html#a81af49f8e0cd4e6e30948c3dc60b8ea9',1,'rdf::Line']]],

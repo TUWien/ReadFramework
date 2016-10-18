@@ -1,5 +1,15 @@
 var NAVTREEINDEX6 =
 {
+"resource_8h_source.html":[3,0,0,13],
+"struct_g_coptimization_1_1_data_cost_fn_from_array.html":[2,0,7,0],
+"struct_g_coptimization_1_1_data_cost_fn_from_array.html#a0a3b7cd9d7ebba1c070439c44b684f49":[2,0,7,0,1],
+"struct_g_coptimization_1_1_data_cost_fn_from_array.html#a77fe6d10856014a86c04d33ef1a41479":[2,0,7,0,0],
+"struct_g_coptimization_1_1_data_cost_fn_from_function.html":[2,0,7,1],
+"struct_g_coptimization_1_1_data_cost_fn_from_function.html#a1ad04e0a890b5f83b22d0232753ad3b3":[2,0,7,1,1],
+"struct_g_coptimization_1_1_data_cost_fn_from_function.html#a9e0c0ff899ec68e03fce7a8a9aa57434":[2,0,7,1,0],
+"struct_g_coptimization_1_1_data_cost_fn_from_function_extra.html":[2,0,7,2],
+"struct_g_coptimization_1_1_data_cost_fn_from_function_extra.html#a64b03f1b5d1276efb0c1d8cdc7e2ff33":[2,0,7,2,1],
+"struct_g_coptimization_1_1_data_cost_fn_from_function_extra.html#af174c3da51404deddb3d998919597a98":[2,0,7,2,0],
 "struct_g_coptimization_1_1_data_cost_functor.html":[2,0,7,4],
 "struct_g_coptimization_1_1_data_cost_functor.html#aa11d105c7c8d0c42e203b7cea2660ed4":[2,0,7,4,0],
 "struct_g_coptimization_1_1_label_cost.html":[2,0,7,6],

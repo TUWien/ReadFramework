@@ -15,7 +15,7 @@ var classrdf_1_1_pixel_set =
     [ "draw", "classrdf_1_1_pixel_set.html#a96fd9913d3b5b1c435605d6adec90889", null ],
     [ "merge", "classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054", null ],
     [ "pixels", "classrdf_1_1_pixel_set.html#a1c83da338c13aba8e23f819e77c50381", null ],
-    [ "polygon", "classrdf_1_1_pixel_set.html#aebb8f1790fc1640f81506c5117e1c760", null ],
+    [ "polygon", "classrdf_1_1_pixel_set.html#a909dd72774d049bb6d6cc5f3f385a104", null ],
     [ "profileRect", "classrdf_1_1_pixel_set.html#a53c191bc9991060cdc0325fd06e51b61", null ],
     [ "remove", "classrdf_1_1_pixel_set.html#a8c3d287617b4a2a9432fdc8dec6c5c01", null ],
     [ "mSet", "classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1", null ]
