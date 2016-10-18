@@ -201,6 +201,10 @@ public:
 		return Vector2D(l.mX * s, l.mY * s);
 	}
 
+	DllCoreExport friend Vector2D operator/(const Vector2D & l, double s) {
+		return Vector2D(l.mX / s, l.mY / s);
+	}
+
 	// class member access operators
 	void operator+=(const Vector2D& vec) {
 		mX += vec.mX;

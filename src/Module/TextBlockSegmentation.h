@@ -67,6 +67,23 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
+class DllModuleExport TabStopCluster {
+
+public:
+	TabStopCluster(const QSharedPointer<PixelSet>& ps);
+
+	void setLine(const Line& line);
+	Line line() const;
+	QSharedPointer<PixelSet> set() const;
+
+	void draw(QPainter& p) const;
+
+private:
+	QSharedPointer<PixelSet> mSet;
+	Line mLine;
+
+};
+
 class DllModuleExport TextBlockSegmentation : public Module {
 
 public:
@@ -85,7 +102,8 @@ public:
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	QSharedPointer<PixelGraph> mGraph;
-	QVector<Line> mLines;
+
+	QVector<QSharedPointer<TabStopCluster> > mTabStops;
 
 	//QVector<QSharedPointer<PixelEdge> > mEdges;
 	QVector<QSharedPointer<PixelSet> > mTextBlocks;
@@ -95,8 +113,10 @@ private:
 	
 	// TODO: remove (it's now in PixelSet)
 	QVector<QSharedPointer<PixelSet> > createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const;
+	
+	// find tabs
 	QVector<QSharedPointer<Pixel> > findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const;
-	QVector<Line> findTabs(QVector<QSharedPointer<Pixel> >& pixel) const;
+	QVector<QSharedPointer<TabStopCluster> > findTabs(const QVector<QSharedPointer<Pixel> >& pixel) const;
 	double medianOrientation(const QSharedPointer<PixelSet>& set) const;
 	void updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type& newType = PixelTabStop::type_none) const;
 };

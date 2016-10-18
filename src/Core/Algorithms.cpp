@@ -846,6 +846,8 @@ double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) co
 /// <returns>The angular distance.</returns>
 double Algorithms::angleDist(double angle1, double angle2, double maxAngle) const {
 
+	angle1 = normAngleRad(angle1);
+	angle2 = normAngleRad(angle2);
 	double dist = normAngleRad(angle1 - angle2, 0, maxAngle);
 
 	return std::min(dist, maxAngle - dist);

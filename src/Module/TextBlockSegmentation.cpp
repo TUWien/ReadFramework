@@ -79,7 +79,7 @@ bool TextBlockSegmentation::compute() {
 	mGraph->connect(r, PixelSet::connect_region);
 
 	mSuperPixels = findTabStopCandidates(mGraph);
-	mLines = findTabs(mSuperPixels);
+	mTabStops = findTabs(mSuperPixels);
 	//mEdges = PixelSet::connect(mSuperPixels, r);
 	//mEdges = filterEdges(mEdges);
 	//
@@ -141,9 +141,11 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	for (auto px : mSuperPixels)
 		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
-	p.setPen(ColorManager::instance().colors()[0]);
-	for (auto line : mLines)
-		line.draw(p);
+	for (auto ts : mTabStops) {
+		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		p.setPen(Drawer::instance().pen());
+		ts->draw(p);
+	}
 
 	for (auto tb : mTextBlocks) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
@@ -224,7 +226,6 @@ QVector<QSharedPointer<Pixel> > TextBlockSegmentation::findTabStopCandidates(con
 			continue;
 		}
 
-
 		QVector<QSharedPointer<PixelEdge> > edges = graph->edges(pixel->id());
 		pixel->setTabStop(PixelTabStop::create(pixel, edges));
 
@@ -237,16 +238,16 @@ QVector<QSharedPointer<Pixel> > TextBlockSegmentation::findTabStopCandidates(con
 	return tabStops;
 }
 
-QVector<Line> TextBlockSegmentation::findTabs(QVector<QSharedPointer<Pixel>>& pixel) const {
+QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const QVector<QSharedPointer<Pixel>>& pixel) const {
 	
 	// parameters 
 	int minClusterSize = 4;
+	double tabLineAngleDist = 0.6;	// angle difference (in radians) between the tabline found and the median tab orientation
 
 	QVector<QSharedPointer<PixelEdge> > edges = PixelSet::connect(pixel, Rect(), PixelSet::connect_tab_stops);
 	QVector<QSharedPointer<PixelSet> > ps = PixelSet::fromEdges(edges);
-	QVector<QSharedPointer<Pixel> > cPixel;
 
-	QVector<Line> lines;
+	QVector<QSharedPointer<TabStopCluster> > tabStops;
 	mDebug << ps.size() << "initial tab stop sets";
 
 	for (const QSharedPointer<PixelSet>& set : ps) {
@@ -259,22 +260,27 @@ QVector<Line> TextBlockSegmentation::findTabs(QVector<QSharedPointer<Pixel>>& pi
 			Line line = set->baseline(medAngle);
 			line.setThickness(4);
 
-			double tabStopAngle = Algorithms::instance().normAngleRad(medAngle - CV_PI*0.5, 0, CV_PI);
-			//if (Algorithms::instance().angleDist(line.angle(), tabStopAngle, CV_PI) < 0.1) {
-				lines << line;
-				cPixel << set->pixels();
-			//}
-		}
-		else {
-			for (auto px : set->pixels())
-				px->setTabStop(PixelTabStop());
+			Vector2D lineVec = line.vector();
+			lineVec = lineVec / lineVec.length();
+
+			Vector2D tabVec(1, 0);
+			tabVec.rotate(medAngle);
+
+			if (abs(lineVec*tabVec) < 0.5) {
+				
+				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(set));
+				tabStop->setLine(line);
+				tabStops << tabStop;
+			}
+			else
+				qDebug() << "tab stops rejected - wrong angle: " << abs(lineVec*tabVec);
 		}
 	}
 
 	//// update tab stop candidates
 	//pixel = cPixel;
 
-	return lines;
+	return tabStops;
 }
 
 double TextBlockSegmentation::medianOrientation(const QSharedPointer<PixelSet>& set) const {
@@ -312,6 +318,35 @@ void TextBlockSegmentation::updateTabStopCandidates(const QSharedPointer<PixelSe
 		}
 	}
 
+}
+
+// TabStopCluster --------------------------------------------------------------------
+TabStopCluster::TabStopCluster(const QSharedPointer<PixelSet>& ps) {
+	mSet = ps;
+}
+
+void TabStopCluster::setLine(const Line & line) {
+	mLine = line;
+}
+
+Line TabStopCluster::line() const {
+	return mLine;
+}
+
+QSharedPointer<PixelSet> TabStopCluster::set() const {
+	return mSet;
+}
+
+void TabStopCluster::draw(QPainter & p) const {
+
+	mSet->draw(p);
+
+	QPen oPen = p.pen();
+	p.setPen(ColorManager::instance().colors()[0]);
+	
+	mLine.draw(p);
+	
+	p.setPen(oPen);
 }
 
 }

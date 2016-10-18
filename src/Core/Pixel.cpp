@@ -754,7 +754,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectRegion(const QVector<QShare
 	return edges;
 }
 
-QVector<QSharedPointer<PixelEdge>> PixelSet::connectTabStops(const QVector<QSharedPointer<Pixel>>& superPixels, double multiplier) {
+QVector<QSharedPointer<PixelEdge> > PixelSet::connectTabStops(const QVector<QSharedPointer<Pixel>>& superPixels, double multiplier) {
 
 	QVector<QSharedPointer<PixelEdge> > edges;
 
@@ -769,6 +769,13 @@ QVector<QSharedPointer<PixelEdge>> PixelSet::connectTabStops(const QVector<QShar
 		double tOr = px->stats()->orientation() - px->tabStop().orientation();
 		const Vector2D& pxc = px->center();
 
+		// tab's orientation vector
+		Vector2D orVec = px->stats()->orVec();
+		orVec.rotate(px->tabStop().orientation());
+
+		QList<double> dists;
+		QVector<QSharedPointer<PixelEdge> > cEdges;
+
 		for (const QSharedPointer<Pixel>& npx : superPixels) {
 
 			if (npx->id() == px->id())
@@ -777,10 +784,30 @@ QVector<QSharedPointer<PixelEdge>> PixelSet::connectTabStops(const QVector<QShar
 			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
 
 			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
-			if (Algorithms::instance().angleDist(tOr, cOr) < .1 &&  pxc.isNeighbor(npx->center(), cR))
-				edges << QSharedPointer<PixelEdge>::create(px, npx);
+			if (Algorithms::instance().angleDist(tOr, cOr) < .1 &&		// do we have the same orientation?
+				pxc.isNeighbor(npx->center(), cR)) {						// is the other pixel in a local environment
+				QSharedPointer<PixelEdge> edge = QSharedPointer<PixelEdge>::create(px, npx);
+			
+				double ea = orVec * edge->edge().vector();
+				dists << ea;
+				cEdges << edge;
+			}
 
 		}
+
+		if (cEdges.size() > 2) {
+			// only take the closest 10%
+			double q1 = Algorithms::statMoment(dists, 0.1);
+
+			for (int idx = 0; idx < dists.size(); idx++) {
+
+				if (dists[idx] <= q1)
+					edges << cEdges[idx];
+			}
+		}
+		else
+			edges << cEdges;
+
 	}
 
 	return edges;
@@ -1020,7 +1047,7 @@ PixelTabStop PixelTabStop::create(const QSharedPointer<Pixel>& pixel, const QVec
 		double minCC = Algorithms::instance().min(cce);
 		double minCW = Algorithms::instance().min(cwe);
 
-		double neighborRel = 0.5;
+		double neighborRel = 0.25;
 		if (minCC / minCW < neighborRel)
 			mode = PixelTabStop::type_right;
 		else if (minCW / minCC < neighborRel)
