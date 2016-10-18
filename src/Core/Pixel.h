@@ -286,7 +286,7 @@ public:
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
-	Polygon polygon();
+	Polygon polygon() const;
 	Rect boundingBox() const;
 	Line baseline(double offsetAngle = 0.0) const;	// TODO: change to 'fitLine'
 	Ellipse profileRect() const;					// TODO: remove!

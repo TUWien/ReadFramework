@@ -260,11 +260,13 @@ QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const Q
 			Line line = set->baseline(medAngle);	// TODO: robust line fitting (LMS)!
 			line.setThickness(4);
 
-			Vector2D lineVec = line.vector();
-			Vector2D tabVec(1, 0);
-			tabVec.rotate(medAngle);
+			// // TODO: the idea here is simple: tabstops must be orthogonal to text lines - this is not true in general
+			// so I thought now: what if we fit the line and see how many are 'robustly' fitting - if to few we have to reject!
+			//Vector2D lineVec = line.vector();
+			//Vector2D tabVec(1, 0);
+			//tabVec.rotate(medAngle);
 
-			double cosTheta = (lineVec * tabVec) / (lineVec.length() * tabVec.length());
+			//double cosTheta = (lineVec * tabVec) / (lineVec.length() * tabVec.length());
 
 			//// we only find 'orthogonal' tab lines - shouldn't we remove this constraint?
 			//if (abs(cosTheta) < 0.5) {

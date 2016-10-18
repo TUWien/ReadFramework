@@ -53,24 +53,57 @@ void Polygon::read(const QString & pointList) {
 }
 
 QString Polygon::write() const {
-	return Converter::instance().polyToString(mPoly);
+	return Converter::instance().polyToString(mPoly.toPolygon());
 }
 
 int Polygon::size() const {
 	return mPoly.size();
 }
 
-void Polygon::setPolygon(const QPolygon & polygon) {
+Polygon Polygon::fromCvPoints(const std::vector<cv::Point2d>& pts) {
+	
+	Polygon poly;
+
+	// convert to Qt
+	for (const cv::Point2d& pt : pts)
+		poly << Converter::cvPointToQt(pt);
+
+	return poly;
+}
+
+Polygon Polygon::fromCvPoints(const std::vector<cv::Point2f>& pts) {
+
+	Polygon poly;
+
+	// convert to Qt
+	for (const cv::Point2f& pt : pts)
+		poly << Converter::cvPointToQt(pt);
+
+	return poly;
+}
+
+void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
 
-QPolygon Polygon::polygon() const {
+void Polygon::draw(QPainter & p) const {
+	
+	QPen oPen = p.pen();
+	QPen pen = oPen;
+	pen.setWidth(3);
+	p.setPen(pen);
+	
+	p.drawPolygon(closedPolygon());
+	p.setPen(oPen);
+}
+
+QPolygonF Polygon::polygon() const {
 	return mPoly;
 }
 
-QPolygon Polygon::closedPolygon() const {
+QPolygonF Polygon::closedPolygon() const {
 	
-	QPolygon closed = mPoly;
+	QPolygonF closed = mPoly;
 	if (!mPoly.isEmpty())
 		closed.append(mPoly.first());
 
@@ -135,7 +168,7 @@ Line::Line(const Polygon & poly) {
 	if (poly.size() != 2)
 		qWarning() << "line initialized with illegal polygon, size: " << poly.size();
 	else
-		mLine = QLine(poly.polygon()[0], poly.polygon()[1]);
+		mLine = QLineF(poly.polygon()[0], poly.polygon()[1]);
 
 }
 
@@ -145,7 +178,7 @@ Line::Line(const cv::Point p1, const cv::Point p2, float thickness) {
 }
 
 Line::Line(const Vector2D & p1, const Vector2D & p2, float thickness) {
-	mLine = QLine(p1.toQPoint(), p2.toQPoint());
+	mLine = QLineF(p1.toQPointF(), p2.toQPointF());
 	mThickness = thickness;
 }
 
@@ -650,8 +683,12 @@ cv::Point Vector2D::toCvPoint() const {
 	return cv::Point(qRound(x()), qRound(y()));
 }
 
-cv::Point2d Vector2D::toCvPointF() const {
+cv::Point2d Vector2D::toCvPoint2d() const {
 	return cv::Point2d(x(), y());
+}
+
+cv::Point2f Vector2D::toCvPoint2f() const {
+	return cv::Point2f(x(), y());
 }
 
 cv::Size Vector2D::toCvSize() const {

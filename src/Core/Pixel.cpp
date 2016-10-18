@@ -578,10 +578,27 @@ QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
 	return mSet;
 }
 
-Polygon PixelSet::polygon() {
+/// <summary>
+/// Returns the convex hull of the PixelSet.
+/// </summary>
+/// <returns></returns>
+Polygon PixelSet::polygon() const {
 
-	qWarning() << "PixelSet::polygon() not implemented yet";
-	return Polygon();
+	std::vector<cv::Point2f> pts;
+
+	for (const QSharedPointer<Pixel>& px : mSet) {
+
+		cv::Point2f p = px->center().toCvPoint2f();
+		pts.push_back(p);
+	}
+
+	// compute convex hull
+	std::vector<cv::Point2f> cPts;
+	cv::convexHull(cv::Mat(pts), cPts, true);
+
+	Polygon poly = Polygon::fromCvPoints(cPts);
+
+	return poly;
 }
 
 Rect PixelSet::boundingBox() const {
@@ -693,7 +710,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectDelauney(const QVector<QSha
 
 	QVector<int> ids;
 	for (const QSharedPointer<Pixel>& b : superPixels)
-		ids << subdiv.insert(b->center().toCvPointF());
+		ids << subdiv.insert(b->center().toCvPoint2f());
 
 	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
 	QVector<QSharedPointer<PixelEdge> > edges;
@@ -866,7 +883,7 @@ void PixelSet::draw(QPainter& p) const {
 	for (auto px : mSet)
 		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
-	p.drawRect(boundingBox().toQRectF());
+	polygon().draw(p);
 }
 
 // PixelGraph --------------------------------------------------------------------

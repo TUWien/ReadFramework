@@ -96,7 +96,6 @@ namespace rdf {
 		//linetest.compute();
 		//Image::instance().save(binImg, "D:\\tmp\\test.tif");
 
-
 		cv::Mat mask = Algorithms::instance().estimateMask(inputG);
 		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
 

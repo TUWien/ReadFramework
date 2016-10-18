@@ -449,7 +449,7 @@ namespace rdf {
 	float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
 	{
 
-		cv::LineIterator it(mSrcImg, l.p1().toCvPointF(), l.p2().toCvPointF());
+		cv::LineIterator it(mSrcImg, l.p1().toCvPoint2f(), l.p2().toCvPoint2f());
 		float distance = 0;
 		float outsidePixel = 0;
 		float max = 0;
@@ -488,7 +488,7 @@ namespace rdf {
 		if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of horizontal lines if template and current Image contains horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
-				double yLineTemp = hT[i].p1().toCvPointF().y;
+				double yLineTemp = hT[i].p1().toCvPoint2d().y;
 				for (int j = 0; j < mHorLines.size(); j++) {
 					double diffYLine = yLineTemp - mHorLines[j].p1().y();
 					offY.push_back(qRound(diffYLine));

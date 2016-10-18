@@ -63,19 +63,27 @@ class DllCoreExport Polygon {
 public:
 	Polygon(const QPolygon& polygon = QPolygon());
 
+	friend void operator<<(Polygon& poly, const QPointF& pt) {
+		poly.mPoly << pt;
+	}
+
 	bool isEmpty() const;
 
 	void read(const QString& pointList);
 	QString write() const;
 
 	int size() const;
+	QPolygonF polygon() const;
+	QPolygonF closedPolygon() const;
 
-	void setPolygon(const QPolygon& polygon);
-	QPolygon polygon() const;
-	QPolygon closedPolygon() const;
+	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
+	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
+	void setPolygon(const QPolygonF& polygon);
+
+	void draw(QPainter& p) const;
 
 protected:
-	QPolygon mPoly;
+	QPolygonF mPoly;
 
 };
 
@@ -262,7 +270,8 @@ public:
 	QSizeF toQSizeF() const;
 
 	cv::Point toCvPoint() const;
-	cv::Point2d toCvPointF() const;
+	cv::Point2d toCvPoint2d() const;
+	cv::Point2f toCvPoint2f() const;
 	cv::Size toCvSize() const;
 
 	QString toString() const;

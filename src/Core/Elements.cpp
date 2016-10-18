@@ -341,8 +341,8 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 bool Region::operator==(const Region & r1) {
 
-	QPolygon p1 = r1.polygon().polygon();
-	QPolygon p2 = mPoly.polygon();
+	QPolygonF p1 = r1.polygon().polygon();
+	QPolygonF p2 = mPoly.polygon();
 
 	if (p1.isEmpty() || p2.isEmpty())
 		return false;
@@ -528,7 +528,7 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	if (config.drawText() && !mText.isEmpty()) {
 		
-		QPoint sp = mBaseLine.startPoint();
+		QPointF sp = mBaseLine.startPoint();
 
 		if (sp.isNull() && !mPoly.isEmpty()) {
 			sp = mPoly.polygon().first();
