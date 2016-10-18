@@ -288,8 +288,8 @@ public:
 
 	Polygon polygon();
 	Rect boundingBox() const;
-	Line baseline(double offsetAngle = 0.0) const;
-	Ellipse profileRect() const;
+	Line baseline(double offsetAngle = 0.0) const;	// TODO: change to 'fitLine'
+	Ellipse profileRect() const;					// TODO: remove!
 
 	void draw(QPainter& p) const;
 

@@ -242,7 +242,6 @@ QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const Q
 	
 	// parameters 
 	int minClusterSize = 4;
-	double tabLineAngleDist = 0.6;	// angle difference (in radians) between the tabline found and the median tab orientation
 
 	QVector<QSharedPointer<PixelEdge> > edges = PixelSet::connect(pixel, Rect(), PixelSet::connect_tab_stops);
 	QVector<QSharedPointer<PixelSet> > ps = PixelSet::fromEdges(edges);
@@ -257,23 +256,25 @@ QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const Q
 			double medAngle = medianOrientation(set);
 			updateTabStopCandidates(set, medAngle);		// removes 'illegal' candidates
 
-			Line line = set->baseline(medAngle);
+			// create tab stop line
+			Line line = set->baseline(medAngle);	// TODO: robust line fitting (LMS)!
 			line.setThickness(4);
 
 			Vector2D lineVec = line.vector();
-			lineVec = lineVec / lineVec.length();
-
 			Vector2D tabVec(1, 0);
 			tabVec.rotate(medAngle);
 
-			if (abs(lineVec*tabVec) < 0.5) {
+			double cosTheta = (lineVec * tabVec) / (lineVec.length() * tabVec.length());
+
+			//// we only find 'orthogonal' tab lines - shouldn't we remove this constraint?
+			//if (abs(cosTheta) < 0.5) {
 				
 				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(set));
 				tabStop->setLine(line);
 				tabStops << tabStop;
-			}
-			else
-				qDebug() << "tab stops rejected - wrong angle: " << abs(lineVec*tabVec);
+			//}
+			//else
+			//	qDebug() << "tab stops rejected - wrong angle: " << abs(cosTheta);
 		}
 	}
 

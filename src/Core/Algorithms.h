@@ -99,7 +99,7 @@ public:
 	/// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
 	/// <returns>The statistical moment.</returns>
 	template <typename numFmt>
-	static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
+	static double statMoment(const QList<numFmt>& valuesIn, double momentValue, int interpolated = 1) {
 
 		QList<numFmt> values = valuesIn;
 		qSort(values);
