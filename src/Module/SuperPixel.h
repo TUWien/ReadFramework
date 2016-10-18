@@ -137,6 +137,11 @@ public:
 	int numOrientations() const;
 	int histSize() const;
 
+	// changable parameters
+	void setNumOrientations(int numOr);
+	void setMaxScale(int maxScale);
+	void setMinScale(int minScale);
+
 protected:
 	int mMaxScale = 256;	// radius (in px) of the maximum scale
 	int mMinScale = 128;	// radius (in px) of the minimum scale

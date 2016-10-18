@@ -564,6 +564,16 @@ void PixelSet::add(const QSharedPointer<Pixel>& pixel) {
 	mSet << pixel;
 }
 
+void PixelSet::remove(const QSharedPointer<Pixel>& pixel) {
+	
+	int pIdx = mSet.indexOf(pixel);
+
+	if (pIdx != -1)
+		mSet.remove(pIdx);
+	else
+		qWarning() << "cannot remove a pixel which is not in the set:" << pixel->id();
+}
+
 QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
 	return mSet;
 }
@@ -600,6 +610,11 @@ Rect PixelSet::boundingBox() const {
 }
 
 Line PixelSet::baseline(double offsetAngle) const {
+
+	if (mSet.empty()) {
+		qWarning() << "cannot compute baseline if the set is empty...";
+		return Line();
+	}
 
 	std::vector<cv::Point> lowerProfile;
 
@@ -658,10 +673,13 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 	switch (mode) {
 	case connect_delauney: {
 		return connectDelauney(superPixels, rect);
-		break;
 	}
 	case connect_region: {
 		return connectRegion(superPixels);
+	}
+
+	case connect_tab_stops: {
+		return connectTabStops(superPixels);
 	}
 	}
 
@@ -670,6 +688,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 }
 
 QVector<QSharedPointer<PixelEdge> > PixelSet::connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
+	
 	// Create an instance of Subdiv2D
 	cv::Subdiv2D subdiv(rect.toCvRect());
 
@@ -699,6 +718,14 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectDelauney(const QVector<QSha
 	return edges;
 }
 
+/// <summary>
+/// Fully connected graph.
+/// Super pixels are connected with all other super pixels within a region 
+/// of radius lineSpacing() * multiplier.
+/// </summary>
+/// <param name="superPixels">The super pixels.</param>
+/// <param name="multiplier">Factor that is multiplied to the lineSpacing value for local neighborhood.</param>
+/// <returns>Connecting edges.</returns>
 QVector<QSharedPointer<PixelEdge> > PixelSet::connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier) {
 	
 	QVector<QSharedPointer<PixelEdge> > edges;
@@ -719,6 +746,38 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectRegion(const QVector<QShare
 				continue;
 
 			if (pxc.isNeighbor(npx->center(), cR))
+				edges << QSharedPointer<PixelEdge>::create(px, npx);
+
+		}
+	}
+
+	return edges;
+}
+
+QVector<QSharedPointer<PixelEdge>> PixelSet::connectTabStops(const QVector<QSharedPointer<Pixel>>& superPixels, double multiplier) {
+
+	QVector<QSharedPointer<PixelEdge> > edges;
+
+	for (const QSharedPointer<Pixel>& px : superPixels) {
+
+		if (!px->stats()) {
+			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
+			continue;
+		}
+
+		double cR = px->stats()->lineSpacing() * multiplier;
+		double tOr = px->stats()->orientation() - px->tabStop().orientation();
+		const Vector2D& pxc = px->center();
+
+		for (const QSharedPointer<Pixel>& npx : superPixels) {
+
+			if (npx->id() == px->id())
+				continue;
+
+			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
+
+			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
+			if (Algorithms::instance().angleDist(tOr, cOr) < .1 &&  pxc.isNeighbor(npx->center(), cR))
 				edges << QSharedPointer<PixelEdge>::create(px, npx);
 
 		}

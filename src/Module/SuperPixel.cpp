@@ -366,6 +366,18 @@ int LocalOrientationConfig::histSize() const {
 	return mHistSize;
 }
 
+void LocalOrientationConfig::setNumOrientations(int numOr) {
+	mNumOr = numOr;
+}
+
+void LocalOrientationConfig::setMaxScale(int maxScale) {
+	mMaxScale = maxScale;
+}
+
+void LocalOrientationConfig::setMinScale(int minScale) {
+	mMinScale = minScale;
+}
+
 void LocalOrientationConfig::load(const QSettings & settings) {
 
 	// add parameters

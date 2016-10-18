@@ -57,81 +57,6 @@ namespace rdf {
 
 // read defines
 
-
-/// <summary>
-/// Computes robust statistical moments (quantiles).
-/// </summary>
-/// <param name="valuesIn">The statistical set (samples).</param>
-/// <param name="momentValue">The statistical moment value (0.5 = median, 0.25 and 0.75 = quartiles).</param>
-/// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
-/// <returns>The statistical moment.</returns>
-template <typename numFmt>
-static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
-
-	QList<numFmt> values = valuesIn;
-	qSort(values);
-
-	size_t lSize = values.size();
-	double moment = -1;
-	unsigned int momIdx = cvCeil(lSize*momentValue);
-	unsigned int idx = 1;
-
-	// find the statistical moment
-	for (auto val : values) {
-
-		// skip
-		if (idx < momIdx) {
-			idx++;
-			continue;
-		}
-		if (lSize % 2 == 0 && momIdx < lSize && interpolated == 1)
-			// compute mean between this and the next element
-			moment = ((double)val + values[idx+1])*0.5;
-		else
-			moment = (double)val;
-		break;
-	}
-
-	return moment;
-}
-
-template<typename sFmt, typename mFmt>
-static void mulMaskIntern(cv::Mat src, const cv::Mat mask) {
-
-	sFmt* srcPtr = (sFmt*)src.data;
-	const mFmt* mPtr = (mFmt*)mask.data;
-
-	int srcStep = (int)src.step / sizeof(sFmt);
-	int mStep = (int)mask.step / sizeof(mFmt);
-
-	for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep, mPtr += mStep) {
-
-		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
-
-			if (mPtr[cIdx] == 0) srcPtr[cIdx] = 0;
-		}
-	}
-};
-
-template<typename sFmt>
-static void setBorderConstIntern(cv::Mat src, sFmt val) {
-
-	sFmt* srcPtr = (sFmt*)src.data;
-	sFmt* srcPtr2 = (sFmt*)src.ptr<sFmt*>(src.rows - 1);
-	int srcStep = (int)src.step / sizeof(sFmt);
-
-	for (int cIdx = 0; cIdx < src.cols; cIdx++) {
-		srcPtr[cIdx] = val;
-		srcPtr2[cIdx] = val;
-	}
-
-	srcPtr = (sFmt*)src.data;
-	for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep) {
-		srcPtr[0] = val;
-		srcPtr[src.cols - 1] = val;
-	}
-};
-
 /// <summary>
 /// Contains basic algorithms to manipulate images.
 /// </summary>
@@ -150,19 +75,96 @@ public:
 	cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV) const;
 	cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO) const;
 	void setBorderConst(cv::Mat &src, float val = 0.0f) const;
-	float statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1) const;
 	void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
 	void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
 	cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
 	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
 	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
 	double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2*CV_PI) const;
-	double angleDist(double angle1, double angle2) const;
+	double angleDist(double angle1, double angle2, double maxAngle = 2*CV_PI) const;
 	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
 	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	QPointF calcRotationSize(double angleRad, QPointF srcSize) const;
 	double min(const QVector<double>& vec) const;
 	double max(const QVector<double>& vec) const;
+
+	static double statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1);
+
+	// template functions --------------------------------------------------------------------
+	/// <summary>
+	/// Computes robust statistical moments (quantiles).
+	/// </summary>
+	/// <param name="valuesIn">The statistical set (samples).</param>
+	/// <param name="momentValue">The statistical moment value (0.5 = median, 0.25 and 0.75 = quartiles).</param>
+	/// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
+	/// <returns>The statistical moment.</returns>
+	template <typename numFmt>
+	static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
+
+		QList<numFmt> values = valuesIn;
+		qSort(values);
+
+		size_t lSize = values.size();
+		double moment = -1;
+		unsigned int momIdx = cvCeil(lSize*momentValue);
+		unsigned int idx = 1;
+
+		// find the statistical moment
+		for (auto val : values) {
+
+			// skip
+			if (idx < momIdx) {
+				idx++;
+				continue;
+			}
+			if (lSize % 2 == 0 && momIdx < lSize && interpolated == 1)
+				// compute mean between this and the next element
+				moment = ((double)val + values[idx+1])*0.5;
+			else
+				moment = (double)val;
+			break;
+		}
+
+		return moment;
+	}
+
+	template<typename sFmt, typename mFmt>
+	static void mulMaskIntern(cv::Mat src, const cv::Mat mask) {
+
+		sFmt* srcPtr = (sFmt*)src.data;
+		const mFmt* mPtr = (mFmt*)mask.data;
+
+		int srcStep = (int)src.step / sizeof(sFmt);
+		int mStep = (int)mask.step / sizeof(mFmt);
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep, mPtr += mStep) {
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+
+				if (mPtr[cIdx] == 0) srcPtr[cIdx] = 0;
+			}
+		}
+	};
+
+	template<typename sFmt>
+	static void setBorderConstIntern(cv::Mat src, sFmt val) {
+
+		sFmt* srcPtr = (sFmt*)src.data;
+		sFmt* srcPtr2 = (sFmt*)src.ptr<sFmt*>(src.rows - 1);
+		int srcStep = (int)src.step / sizeof(sFmt);
+
+		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+			srcPtr[cIdx] = val;
+			srcPtr2[cIdx] = val;
+		}
+
+		srcPtr = (sFmt*)src.data;
+		for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep) {
+			srcPtr[0] = val;
+			srcPtr[src.cols - 1] = val;
+		}
+	};
+
 
 private:
 	Algorithms();

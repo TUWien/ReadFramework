@@ -274,6 +274,7 @@ public:
 	enum ConnectionMode {
 		connect_delauney,
 		connect_region,
+		connect_tab_stops,
 
 		connect_end
 	};
@@ -281,6 +282,7 @@ public:
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
+	void remove(const QSharedPointer<Pixel>& pixel);
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
@@ -299,6 +301,7 @@ protected:
 
 	static QVector<QSharedPointer<PixelEdge> > connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
 	static QVector<QSharedPointer<PixelEdge> > connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
+	static QVector<QSharedPointer<PixelEdge> > connectTabStops(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 3.0);
 };
 
 class DllCoreExport PixelGraph : public BaseElement {

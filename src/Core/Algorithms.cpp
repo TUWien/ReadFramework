@@ -431,7 +431,7 @@ void Algorithms::setBorderConst(cv::Mat &src, float val) const {
 /// <param name="maxSamples">The maximum number of samples (speed up).</param>
 /// <param name="area">The mask's area (speed up).</param>
 /// <returns>The statistical moment.</returns>
-float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentValue, int maxSamples, int area) const {
+double Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentValue, int maxSamples, int area) {
 
 	// check input
 	if (src.type() != CV_32FC1) {
@@ -506,7 +506,7 @@ float Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentVal
 		}
 	}
 
-	return (float)rdf::statMoment(samples, momentValue);
+	return statMoment(samples, momentValue);
 }
 
 /// <summary>
@@ -550,15 +550,15 @@ void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 	if (!mask.empty()) {
 
 		if (src.depth() == CV_32F && mask.depth() == CV_32F)
-			rdf::mulMaskIntern<float, float>(src, mask);
+			mulMaskIntern<float, float>(src, mask);
 		else if (src.depth() == CV_32F && mask.depth() == CV_8U)
-			rdf::mulMaskIntern<float, unsigned char>(src, mask);
+			mulMaskIntern<float, unsigned char>(src, mask);
 		else if (src.depth() == CV_8U && mask.depth() == CV_32F)
-			rdf::mulMaskIntern<unsigned char, float>(src, mask);
+			mulMaskIntern<unsigned char, float>(src, mask);
 		else if (src.depth() == CV_8U && mask.depth() == CV_8U)
-			rdf::mulMaskIntern<unsigned char, unsigned char>(src, mask);
+			mulMaskIntern<unsigned char, unsigned char>(src, mask);
 		else if (src.depth() == CV_32S && mask.depth() == CV_8U)
-			rdf::mulMaskIntern<int, unsigned char>(src, mask);
+			mulMaskIntern<int, unsigned char>(src, mask);
 		else {
 			qDebug() << "The source image and the mask must be [CV_8U or CV_32F]";
 		}
@@ -844,14 +844,11 @@ double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) co
 /// <param name="angle1">The angle1.</param>
 /// <param name="angle2">The angle2.</param>
 /// <returns>The angular distance.</returns>
-double Algorithms::angleDist(double angle1, double angle2) const {
+double Algorithms::angleDist(double angle1, double angle2, double maxAngle) const {
 
-	angle1 = normAngleRad(angle1);
-	angle2 = normAngleRad(angle2);
+	double dist = normAngleRad(angle1 - angle2, 0, maxAngle);
 
-	double dist = normAngleRad(angle1 - angle2);
-
-	return std::min(dist, CV_PI*2.0 - dist);
+	return std::min(dist, maxAngle - dist);
 }
 
 /// <summary>
@@ -1000,8 +997,7 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 /// <param name="interpolation">The interpolation.</param>
 /// <param name="borderValue">The border value.</param>
 /// <returns>The rotated image.</returns>
-cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interpolation, cv::Scalar borderValue)
-{
+cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interpolation, cv::Scalar borderValue) {
 
 	// check inputs
 	if (src.empty()) {
@@ -1037,6 +1033,11 @@ cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interp
 	return rImg;
 }
 
+/// <summary>
+/// Returns the minimum of the vector or DBL_MAX if vec is empty.
+/// </summary>
+/// <param name="vec">A vector with double values.</param>
+/// <returns>the minimum</returns>
 double Algorithms::min(const QVector<double>& vec) const {
 
 	double mn = DBL_MAX;
@@ -1048,6 +1049,11 @@ double Algorithms::min(const QVector<double>& vec) const {
 	return mn;
 }
 
+/// <summary>
+/// Returns the maximum value of vec or -DBL_MAX if vec is empty.
+/// </summary>
+/// <param name="vec">A vector with double values.</param>
+/// <returns>the maximum</returns>
 double Algorithms::max(const QVector<double>& vec) const {
 
 	double mx = -DBL_MAX;

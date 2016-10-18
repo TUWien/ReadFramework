@@ -85,6 +85,7 @@ public:
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	QSharedPointer<PixelGraph> mGraph;
+	QVector<Line> mLines;
 
 	//QVector<QSharedPointer<PixelEdge> > mEdges;
 	QVector<QSharedPointer<PixelSet> > mTextBlocks;
@@ -95,6 +96,9 @@ private:
 	// TODO: remove (it's now in PixelSet)
 	QVector<QSharedPointer<PixelSet> > createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const;
 	QVector<QSharedPointer<Pixel> > findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const;
+	QVector<Line> findTabs(QVector<QSharedPointer<Pixel> >& pixel) const;
+	double medianOrientation(const QSharedPointer<PixelSet>& set) const;
+	void updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type& newType = PixelTabStop::type_none) const;
 };
 
 };
