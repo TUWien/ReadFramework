@@ -246,7 +246,7 @@ double Line::squaredLength() const {
 /// <returns>The line length.</returns>
 double Line::length() const {
 
-	return sqrt(squaredLength());
+	return vector().length();
 }
 
 /// <summary>
@@ -308,8 +308,7 @@ bool Line::isHorizontal(float mAngleTresh) const {
 
 }
 
-bool Line::isVertical(float mAngleTresh) const
-{
+bool Line::isVertical(float mAngleTresh) const {
 	double lineAngle = angle();
 	//lineAngle = o = blob.blobOrientation
 	//lineAngle = angle
@@ -444,15 +443,12 @@ double Line::minDistance(const Line& l) const {
 /// <returns>The distance of point p.</returns>
 double Line::distance(const Vector2D& p) const {
 
-	Vector2D normalVec = mLine.p2() - mLine.p1();
+	Vector2D nVec(mLine.p2() - mLine.p1());
+	nVec = nVec.normalVec();
 
-	double x = normalVec.x();
-	normalVec.setX(-normalVec.y());
-	normalVec.setY(x);
+	Vector2D linPt = p - Vector2D(mLine.p1());
 
-	Vector2D tmp = p - Vector2D(mLine.p2());
-
-	return (float)std::abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (DBL_EPSILON + normalVec.length()));
+	return abs((linPt * nVec))/nVec.length();
 }
 
 double Line::horizontalOverlap(const Line & l) const {
@@ -663,6 +659,10 @@ void Vector2D::setY(double y) {
 	mY = y;
 }
 
+Vector2D Vector2D::normalVec() const {
+	return Vector2D(-y(), x());
+}
+
 QPoint Vector2D::toQPoint() const {
 	return QPoint(qRound(x()), qRound(y()));
 }
@@ -688,7 +688,7 @@ cv::Point2d Vector2D::toCvPoint2d() const {
 }
 
 cv::Point2f Vector2D::toCvPoint2f() const {
-	return cv::Point2f(x(), y());
+	return cv::Point2f((float)x(), (float)y());
 }
 
 cv::Size Vector2D::toCvSize() const {
@@ -959,6 +959,11 @@ bool Rect::isProximate(const Rect & o, double eps) const {
 
 double Rect::area() const {
 	return width() * height();
+}
+
+void Rect::draw(QPainter & p) const {
+
+	p.drawRect(toQRectF());
 }
 
 // Ellipse --------------------------------------------------------------------

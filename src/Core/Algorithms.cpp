@@ -31,6 +31,7 @@
  *******************************************************************************************************/
 
 #include "Algorithms.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
@@ -1070,10 +1071,10 @@ double Algorithms::max(const QVector<double>& vec) const {
 /// <summary>
 /// Calculates the image size of the rotated image.
 /// </summary>
-/// <param name="angleRad">The angle in RAD.</param>
+/// <param name="angleRad">The angle in radians.</param>
 /// <param name="srcSize">Size of the source image.</param>
 /// <returns>The Size of the rotated image.</returns>
-QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize) const {
+QPointF Algorithms::calcRotationSize(double angleRad, const QPointF& srcSize) const {
 	QPointF nSl = srcSize;
 	QPointF nSr(srcSize.y(), srcSize.x());
 
@@ -1096,5 +1097,111 @@ QPointF Algorithms::calcRotationSize(double angleRad, QPointF srcSize) const {
 }
 
 
+
+// LineFitting --------------------------------------------------------------------
+LineFitting::LineFitting(const QVector<Vector2D>& pts) {
+	mPts = pts;
+}
+
+Line LineFitting::fitLineLMS() const {
+
+	if (mPts.size() <= mSetSize) {
+		qInfo() << "cannot fit line - the set is too small";
+		return Line();
+	}
+
+	int numFullSampling = qRound(mPts.size() * std::log(mPts.size()));	// is full sampling too expensive?
+
+	Line bestLine;
+	double minLMS = DBL_MAX;
+
+	// random sampling
+	if (mSetSize != 2 || mNumSets < numFullSampling) {
+
+		qDebug() << "random sampling: " << mNumSets << "# permuatations needed: " << numFullSampling;
+
+		for (int lIdx = 0; lIdx < mNumSets; lIdx++) {
+			
+			QVector<Vector2D> set;
+			sample(mPts, set, mSetSize);
+			Line line;
+
+			if (set.size() == 2) {
+				line = Line(set[0], set[1]);
+			}
+			else {
+				// TODO: cv least squares here
+			}
+
+			double mr = medianResiduals(mPts, line);
+
+			if (minLMS > mr) {
+				minLMS = mr;
+				bestLine = line;
+			}
+
+			if (minLMS < mEps) {
+				qDebug() << "epsilon reached: " << minLMS;
+				break;
+			}
+		}
+
+	}
+	// try all permutations
+	else {
+
+		for (int lIdx = 0; lIdx < mPts.size(); lIdx++) {
+			const Vector2D& vec = mPts[lIdx];
+
+			for (int rIdx = lIdx + 1; rIdx < mPts.size(); rIdx++) {
+				Line line(vec, mPts[rIdx]);
+
+				if (line.length() < mMinLength)
+					continue;
+
+				double mr = medianResiduals(mPts, line);
+
+				if (minLMS > mr) {
+					minLMS = mr;
+					bestLine = line;
+				}
+
+				if (minLMS < mEps) {
+					qDebug() << "epsilon reached: " << minLMS;
+					break;
+				}
+			}
+		}
+	}
+	
+	return bestLine;
+}
+
+void LineFitting::sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, int setSize) const {
+
+	if (setSize > pts.size())
+		qWarning() << "[LineFitting] the number of points [" << pts.size() << "] is smaller than the set size: " << setSize;
+
+	for (int idx = 0; idx < setSize; idx++) {
+		double r = Utils::rand();
+		int rIdx = qRound(r*(pts.size()-1));
+		set << pts[rIdx];
+	}
+
+}
+
+double LineFitting::medianResiduals(const QVector<Vector2D>& pts, const Line & line) const {
+
+
+	QList<double> squaredDists;
+
+	for (const Vector2D& pt : pts) {
+
+		double d = line.distance(pt);
+		squaredDists << d*d;
+	}
+
+	return Algorithms::statMoment(squaredDists, 0.5);
+}
 
 }

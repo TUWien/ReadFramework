@@ -286,9 +286,10 @@ public:
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
+	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
 	Polygon polygon() const;
 	Rect boundingBox() const;
-	Line baseline(double offsetAngle = 0.0) const;	// TODO: change to 'fitLine'
+	Line fitLine(double offsetAngle = 0.0) const;
 	Ellipse profileRect() const;					// TODO: remove!
 
 	void draw(QPainter& p) const;

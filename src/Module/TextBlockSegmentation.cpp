@@ -256,8 +256,10 @@ QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const Q
 			double medAngle = medianOrientation(set);
 			updateTabStopCandidates(set, medAngle);		// removes 'illegal' candidates
 
+
+
 			// create tab stop line
-			Line line = set->baseline(medAngle);	// TODO: robust line fitting (LMS)!
+			Line line = set->fitLine(medAngle);	// TODO: robust line fitting (LMS)!
 			line.setThickness(4);
 
 			// // TODO: the idea here is simple: tabstops must be orthogonal to text lines - this is not true in general

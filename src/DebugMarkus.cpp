@@ -194,7 +194,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//rImg = superPixel.drawSuperPixels(rImg);
 	rImg = textBlocks.draw(rImg);
 	//rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;
 }

@@ -84,7 +84,7 @@ public:
 	double angleDist(double angle1, double angle2, double maxAngle = 2*CV_PI) const;
 	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
 	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
-	QPointF calcRotationSize(double angleRad, QPointF srcSize) const;
+	QPointF calcRotationSize(double angleRad, const QPointF& srcSize) const;
 	double min(const QVector<double>& vec) const;
 	double max(const QVector<double>& vec) const;
 
@@ -169,6 +169,26 @@ public:
 private:
 	Algorithms();
 	Algorithms(const Algorithms&);
+};
+
+class DllCoreExport LineFitting {
+
+public:
+	LineFitting(const QVector<Vector2D>& pts);
+
+	Line fitLineLMS() const;
+
+protected:
+	// parameters:
+	int mNumSets = 1000;
+	int mSetSize = 2;		// if 2, lines are directly returned
+	double mEps = 0.1;
+	double mMinLength = 40;
+
+	QVector<Vector2D> mPts;
+
+	void sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, int setSize = 2) const;
+	double medianResiduals(const QVector<Vector2D>& pts, const Line& line) const;
 };
 
 };

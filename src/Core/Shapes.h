@@ -260,9 +260,11 @@ public:
 	};
 	
 	void setY(double y);
-	double y() const {
+	inline double y() const {
 		return mY;
 	};
+
+	Vector2D normalVec() const;
 
 	QPoint toQPoint() const;
 	QPointF toQPointF() const;
@@ -364,6 +366,8 @@ public:
 	bool contains(const Vector2D& pt) const;
 	bool isProximate(const Rect& o, double eps = 10.0) const;
 	double area() const;
+
+	void draw(QPainter& p) const;
 	
 
 protected:
