@@ -791,11 +791,21 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectTabStops(const QVector<QSha
 			if (npx->id() == px->id())
 				continue;
 
+			// directely reject
+			if (!pxc.isNeighbor(npx->center(), cR * 3))
+				continue;
+
+
 			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
 
+			// tabstop pixels must be 'aligned' w.r.t to the line orientation
+			Vector2D orVec(1.0, 0.0);
+			orVec.rotate(px->stats()->orientation());
+			Line line(pxc, npx->center());
+			bool isN = line.weightedLength(orVec) < cR;
+
 			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
-			if (Algorithms::instance().angleDist(tOr, cOr) < .1 &&		// do we have the same orientation?
-				pxc.isNeighbor(npx->center(), cR)) {						// is the other pixel in a local environment
+			if (isN && Algorithms::instance().angleDist(tOr, cOr) < .1) {	// do we have the same orientation?
 				
 				QSharedPointer<PixelEdge> edge = QSharedPointer<PixelEdge>::create(px, npx);
 			
@@ -809,7 +819,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectTabStops(const QVector<QSha
 
 		if (cEdges.size() > 2) {
 			// only take the closest 10%
-			double q1 = Algorithms::statMoment(dists, 0.1);
+			double q1 = Algorithms::statMoment(dists, 0.5);
 
 			for (int idx = 0; idx < dists.size(); idx++) {
 

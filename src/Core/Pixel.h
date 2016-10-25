@@ -302,7 +302,7 @@ protected:
 
 	static QVector<QSharedPointer<PixelEdge> > connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
 	static QVector<QSharedPointer<PixelEdge> > connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
-	static QVector<QSharedPointer<PixelEdge> > connectTabStops(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
+	static QVector<QSharedPointer<PixelEdge> > connectTabStops(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 1.0);
 };
 
 class DllCoreExport PixelGraph : public BaseElement {

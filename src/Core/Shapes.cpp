@@ -250,6 +250,20 @@ double Line::length() const {
 }
 
 /// <summary>
+/// Returns the orientation weighed length.
+/// Hence, if orVec is parallel to the line, the length is 0.
+/// If it is orthogonal, the line length is returned.
+/// </summary>
+/// <param name="orVec">An orientation vector.</param>
+/// <returns>The length weighed by the orientation</returns>
+double Line::weightedLength(const Vector2D & orVec) const {
+
+	Vector2D vec = orVec.normalVec();
+	vec /= orVec.length();	// normalize
+	return std::abs(vec * vector());
+}
+
+/// <summary>
 /// Returns the line angle.
 /// </summary>
 /// <returns>The line angle [-pi,+pi] in radians.</returns>

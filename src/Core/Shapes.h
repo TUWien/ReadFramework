@@ -126,6 +126,7 @@ public:
 	float thickness() const;
 	double squaredLength() const;
 	double length() const;
+	double weightedLength(const Vector2D& orVec) const;
 	double angle() const;
 	double minDistance(const Line& l) const;
 	double distance(const Vector2D& p) const;
