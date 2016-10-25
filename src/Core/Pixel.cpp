@@ -681,157 +681,24 @@ Ellipse PixelSet::profileRect() const {
 
 QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode) {
 
+	QSharedPointer<PixelConnector> connector;
+
 	switch (mode) {
 	case connect_delauney: {
-		return connectDelauney(superPixels, rect);
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(superPixels, rect));
+		break;
 	}
 	case connect_region: {
-		return connectRegion(superPixels);
-	}
-	case connect_tab_stops: {
-		return connectTabStops(superPixels);
+		connector = QSharedPointer<PixelConnector>(new RegionPixelConnector(superPixels));
+		break;
 	}
 	}
 
-	qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
-	return connectDelauney(superPixels, rect);
-}
-
-QVector<QSharedPointer<PixelEdge> > PixelSet::connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect) {
-	
-	// Create an instance of Subdiv2D
-	cv::Subdiv2D subdiv(rect.toCvRect());
-
-	QVector<int> ids;
-	for (const QSharedPointer<Pixel>& b : superPixels)
-		ids << subdiv.insert(b->center().toCvPoint2f());
-
-	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
-	QVector<QSharedPointer<PixelEdge> > edges;
-	for (int idx = 0; idx < (superPixels.size()-8)*3; idx++) {
-
-		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
-		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
-
-		// there are a few edges that lead to nowhere
-		if (orgVertex == -1 || dstVertex == -1) {
-			continue;
-		}
-
-		assert(orgVertex >= 0 && orgVertex < superPixels.size());
-		assert(dstVertex >= 0 && dstVertex < superPixels.size());
-
-		QSharedPointer<PixelEdge> pe(new PixelEdge(superPixels[orgVertex], superPixels[dstVertex]));
-		edges << pe;
+	if (!connector) {
+		qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(superPixels, rect));
 	}
-
-	return edges;
-}
-
-/// <summary>
-/// Fully connected graph.
-/// Super pixels are connected with all other super pixels within a region 
-/// of radius lineSpacing() * multiplier.
-/// </summary>
-/// <param name="superPixels">The super pixels.</param>
-/// <param name="multiplier">Factor that is multiplied to the lineSpacing value for local neighborhood.</param>
-/// <returns>Connecting edges.</returns>
-QVector<QSharedPointer<PixelEdge> > PixelSet::connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier) {
-	
-	QVector<QSharedPointer<PixelEdge> > edges;
-
-	for (const QSharedPointer<Pixel>& px : superPixels) {
-
-		if (!px->stats()) {
-			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
-			continue;
-		}
-
-		double cR = px->stats()->lineSpacing() * multiplier;
-		const Vector2D& pxc = px->center();
-
-		for (const QSharedPointer<Pixel>& npx : superPixels) {
-
-			if (npx->id() == px->id())
-				continue;
-
-			if (pxc.isNeighbor(npx->center(), cR))
-				edges << QSharedPointer<PixelEdge>::create(px, npx);
-
-		}
-	}
-
-	return edges;
-}
-
-QVector<QSharedPointer<PixelEdge> > PixelSet::connectTabStops(const QVector<QSharedPointer<Pixel>>& superPixels, double multiplier) {
-
-	QVector<QSharedPointer<PixelEdge> > edges;
-
-	for (const QSharedPointer<Pixel>& px : superPixels) {
-
-		if (!px->stats()) {
-			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
-			continue;
-		}
-
-		double cR = px->stats()->lineSpacing() * multiplier;
-		double tOr = px->stats()->orientation() - px->tabStop().orientation();
-		const Vector2D& pxc = px->center();
-
-		// tab's orientation vector
-		Vector2D orVec = px->stats()->orVec();
-		orVec.rotate(px->tabStop().orientation());
-
-		QList<double> dists;
-		QVector<QSharedPointer<PixelEdge> > cEdges;
-
-		for (const QSharedPointer<Pixel>& npx : superPixels) {
-
-			if (npx->id() == px->id())
-				continue;
-
-			// directely reject
-			if (!pxc.isNeighbor(npx->center(), cR * 3))
-				continue;
-
-			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
-
-			// tabstop pixels must be 'aligned' w.r.t to the line orientation
-			Vector2D orVec(1.0, 0.0);
-			orVec.rotate(px->stats()->orientation());
-			Line line(pxc, npx->center());
-			bool isN = line.weightedLength(orVec) < cR;
-
-			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
-			if (isN && Algorithms::instance().angleDist(tOr, cOr) < .1) {	// do we have the same orientation?
-				
-				QSharedPointer<PixelEdge> edge = QSharedPointer<PixelEdge>::create(px, npx);
-			
-				// normalize distance with tab orientation
-				double ea = orVec * edge->edge().vector();
-				dists << ea;
-				cEdges << edge;
-			}
-
-		}
-
-		if (cEdges.size() > 2) {
-			// only take the closest 10%
-			double q1 = Algorithms::statMoment(dists, 0.5);
-
-			for (int idx = 0; idx < dists.size(); idx++) {
-
-				if (dists[idx] <= q1)
-					edges << cEdges[idx];
-			}
-		}
-		else
-			edges << cEdges;
-
-	}
-
-	return edges;
+	return connector->connect();
 }
 
 QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges) {
@@ -1089,5 +956,178 @@ PixelTabStop::Type PixelTabStop::type() const {
 	return mType;
 }
 
+// PixelConnector --------------------------------------------------------------------
+PixelConnector::PixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) {
+	mPixels = pixels;
+}
+
+// DelauneyPixelConnector --------------------------------------------------------------------
+DelauneyPixelConnector::DelauneyPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels, const Rect & r) : PixelConnector(pixels) {
+	mRect = r;
+}
+
+QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect() const {
+	
+	// Create an instance of Subdiv2D
+	cv::Subdiv2D subdiv(mRect.toCvRect());
+
+	QVector<int> ids;
+	for (const QSharedPointer<Pixel>& b : mPixels)
+		ids << subdiv.insert(b->center().toCvPoint2f());
+
+	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
+	QVector<QSharedPointer<PixelEdge> > edges;
+	for (int idx = 0; idx < (mPixels.size()-8)*3; idx++) {
+
+		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
+		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
+
+		// there are a few edges that lead to nowhere
+		if (orgVertex == -1 || dstVertex == -1) {
+			continue;
+		}
+
+		assert(orgVertex >= 0 && orgVertex < superPixels.size());
+		assert(dstVertex >= 0 && dstVertex < superPixels.size());
+
+		QSharedPointer<PixelEdge> pe(new PixelEdge(mPixels[orgVertex], mPixels[dstVertex]));
+		edges << pe;
+	}
+
+	return edges;
+
+}
+
+void DelauneyPixelConnector::setRect(const Rect & rect) {
+	mRect = rect;
+}
+
+// RegionPixelConnector --------------------------------------------------------------------
+RegionPixelConnector::RegionPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) : PixelConnector(pixels) {
+}
+
+/// <summary>
+/// Fully connected graph.
+/// Super pixels are connected with all other super pixels within a region 
+/// of radius lineSpacing() * radiusFactor or radius.
+/// </summary>
+/// <returns>Connecting edges.</returns>
+QVector<QSharedPointer<PixelEdge>> RegionPixelConnector::connect() const {
+	
+	Timer dt;
+	QVector<QSharedPointer<PixelEdge> > edges;
+
+	for (const QSharedPointer<Pixel>& px : mPixels) {
+
+		if (!px->stats() && mRadius == 0.0) {
+			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
+			continue;
+		}
+
+		double cR = (mRadius != 0.0) ? mRadius : px->stats()->lineSpacing() * mMultiplier;
+		const Vector2D& pxc = px->center();
+
+		for (const QSharedPointer<Pixel>& npx : mPixels) {
+
+			if (npx->id() == px->id())
+				continue;
+
+			if (pxc.isNeighbor(npx->center(), cR))
+				edges << QSharedPointer<PixelEdge>::create(px, npx);
+		}
+	}
+	qDebug() << edges.size() << "edges connected in " << dt;
+
+	return edges;
+
+}
+
+void RegionPixelConnector::setRadius(double radius) {
+	mRadius = radius;
+}
+
+void RegionPixelConnector::setLineSpacingMultiplier(double multiplier) {
+	mMultiplier = multiplier;
+}
+
+// TabStopPixelConnector --------------------------------------------------------------------
+TabStopPixelConnector::TabStopPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) : PixelConnector(pixels) {
+}
+
+QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect() const {
+	
+	QVector<QSharedPointer<PixelEdge> > edges;
+
+	for (const QSharedPointer<Pixel>& px : mPixels) {
+
+		if (!px->stats()) {
+			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
+			continue;
+		}
+
+		double cR = px->stats()->lineSpacing() * mMultiplier;
+		double tOr = px->stats()->orientation() - px->tabStop().orientation();
+		const Vector2D& pxc = px->center();
+
+		// tab's orientation vector
+		Vector2D orVec = px->stats()->orVec();
+		orVec.rotate(px->tabStop().orientation());
+
+		QList<double> dists;
+		QVector<QSharedPointer<PixelEdge> > cEdges;
+
+		for (const QSharedPointer<Pixel>& npx : mPixels) {
+
+			if (npx->id() == px->id())
+				continue;
+
+			// directely reject
+			if (!pxc.isNeighbor(npx->center(), cR * 3))
+				continue;
+
+			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
+
+			// tabstop pixels must be 'aligned' w.r.t to the line orientation
+			Vector2D corVec(1.0, 0.0);
+			corVec.rotate(px->stats()->orientation());
+			Line line(pxc, npx->center());
+			bool isN = line.weightedLength(corVec) < cR;
+
+			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
+			if (isN && Algorithms::instance().angleDist(tOr, cOr) < .1) {	// do we have the same orientation?
+
+				QSharedPointer<PixelEdge> edge = QSharedPointer<PixelEdge>::create(px, npx);
+
+				// normalize distance with tab orientation
+				double ea = orVec * edge->edge().vector();
+				dists << ea;
+				cEdges << edge;
+			}
+
+		}
+
+		if (cEdges.size() > 2) {
+			// only take the closest 10%
+			double q1 = Algorithms::statMoment(dists, 0.5);
+
+			for (int idx = 0; idx < dists.size(); idx++) {
+
+				if (dists[idx] <= q1)
+					edges << cEdges[idx];
+			}
+		}
+		else
+			edges << cEdges;
+
+	}
+
+	return edges;
+
+}
+
+void TabStopPixelConnector::setLineSpacingMultiplier(double multiplier) {
+
+	mMultiplier = multiplier;
+}
 
 }

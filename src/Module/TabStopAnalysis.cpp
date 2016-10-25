@@ -175,7 +175,8 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 	// parameters 
 	int minClusterSize = 4;
 
-	QVector<QSharedPointer<PixelEdge> > edges = PixelSet::connect(pixel, Rect(), PixelSet::connect_tab_stops);
+	TabStopPixelConnector connector(pixel);
+	QVector<QSharedPointer<PixelEdge> > edges = connector.connect();
 	QVector<QSharedPointer<PixelSet> > ps = PixelSet::fromEdges(edges);
 
 	QVector<QSharedPointer<TabStopCluster> > tabStops;

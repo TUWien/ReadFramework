@@ -274,7 +274,6 @@ public:
 	enum ConnectionMode {
 		connect_delauney,
 		connect_region,
-		connect_tab_stops,
 
 		connect_end
 	};
@@ -299,10 +298,87 @@ public:
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
+};
 
-	static QVector<QSharedPointer<PixelEdge> > connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
-	static QVector<QSharedPointer<PixelEdge> > connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
-	static QVector<QSharedPointer<PixelEdge> > connectTabStops(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 1.0);
+/// <summary>
+/// Abstract class PixelConnector.
+/// This is the base class for all
+/// pixel connecting classes which
+/// implement different algorithms for
+/// connecting super pixels.
+/// </summary>
+class DllCoreExport PixelConnector {
+
+public:
+	PixelConnector(
+		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+
+	virtual QVector<QSharedPointer<PixelEdge> > connect() const = 0;
+
+protected:
+	QVector<QSharedPointer<Pixel> > mPixels;
+
+};
+
+/// <summary>
+/// Connects pixels using the Delauney triangulation.
+/// </summary>
+/// <seealso cref="PixelConnector" />
+class DllCoreExport DelauneyPixelConnector : public PixelConnector {
+
+public:
+	DelauneyPixelConnector(
+		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >(), 
+		const Rect& r = Rect());
+
+	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+
+	void setRect(const Rect& rect);
+
+protected:
+	Rect mRect;
+
+};
+
+/// <summary>
+/// Fully connected graph.
+/// Super pixels are connected with all other super pixels within a region.
+/// </summary>
+/// <seealso cref="PixelConnector" />
+class DllCoreExport RegionPixelConnector : public PixelConnector {
+
+public:
+	RegionPixelConnector(
+		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+
+	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+
+	void setRadius(double radius);
+	void setLineSpacingMultiplier(double multiplier);
+
+protected:
+	double mRadius = 0.0;
+	double mMultiplier = 2.0;
+
+};
+
+/// <summary>
+/// Connects tab stops.
+/// </summary>
+/// <seealso cref="PixelConnector" />
+class DllCoreExport TabStopPixelConnector : public PixelConnector {
+
+public:
+	TabStopPixelConnector(
+		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+
+	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+
+	void setLineSpacingMultiplier(double multiplier);
+
+protected:
+	double mMultiplier = 1.0;
+
 };
 
 class DllCoreExport PixelGraph : public BaseElement {

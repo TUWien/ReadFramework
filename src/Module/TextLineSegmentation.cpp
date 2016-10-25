@@ -71,7 +71,12 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	QVector<QSharedPointer<PixelEdge> > pEdges = PixelSet::connect(mSuperPixels, mImgRect);
+	RegionPixelConnector rpc(mSuperPixels);
+	rpc.setLineSpacingMultiplier(2.0);
+	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect();
+	//QVector<QSharedPointer<PixelEdge> > pEdges = PixelSet::connect(mSuperPixels, mImgRect, PixelSet::connect_region);
+
+	qDebug() << "# edges: " << pEdges.size();
 
 	for (const QSharedPointer<PixelEdge>& pe : pEdges)
 		mEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
@@ -174,6 +179,10 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	for (auto b : mEdges) {
 		b->draw(p);
 	}
+
+	// show the stop lines
+	Drawer::instance().setColor(ColorManager::instance().red(0.4));
+	p.setPen(Drawer::instance().pen());
 
 	for (auto l : mStopLines)
 		l.draw(p);
