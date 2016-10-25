@@ -2,7 +2,7 @@ var classrdf_1_1_pixel_graph =
 [
     [ "PixelGraph", "classrdf_1_1_pixel_graph.html#a63bc11f0e5f468baade39addcba23b6c", null ],
     [ "PixelGraph", "classrdf_1_1_pixel_graph.html#ab7b61d2fa88989d063359ad6ef0476a5", null ],
-    [ "connect", "classrdf_1_1_pixel_graph.html#aa4f7c1c8f942320ee2d8e80e5c0cb4f7", null ],
+    [ "connect", "classrdf_1_1_pixel_graph.html#a203163b95a3e43be1e08e3aab9eb6b53", null ],
     [ "draw", "classrdf_1_1_pixel_graph.html#a842e99543e250453faa7d1a395865205", null ],
     [ "edgeIndexes", "classrdf_1_1_pixel_graph.html#acaf7849b90439097dc6a43d842414e1f", null ],
     [ "edges", "classrdf_1_1_pixel_graph.html#a66aec429fbb0e4dfdaae82199ef9af3f", null ],

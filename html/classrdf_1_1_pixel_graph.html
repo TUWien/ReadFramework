@@ -139,8 +139,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4fbaf63565a295c252716d856ff6c946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a842e99543e250453faa7d1a395865205"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a842e99543e250453faa7d1a395865205">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a842e99543e250453faa7d1a395865205"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4f7c1c8f942320ee2d8e80e5c0cb4f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#aa4f7c1c8f942320ee2d8e80e5c0cb4f7">connect</a> (const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;rect, const <a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdf">PixelSet::ConnectionMode</a> &amp;mode=<a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfacaac44b36237b9e2f76b29dcb86a7b8e">PixelSet::connect_delauney</a>)</td></tr>
-<tr class="separator:aa4f7c1c8f942320ee2d8e80e5c0cb4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203163b95a3e43be1e08e3aab9eb6b53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#a203163b95a3e43be1e08e3aab9eb6b53">connect</a> (const <a class="el" href="classrdf_1_1_pixel_connector.html">PixelConnector</a> &amp;connector=<a class="el" href="classrdf_1_1_delauney_pixel_connector.html">DelauneyPixelConnector</a>())</td></tr>
+<tr class="separator:a203163b95a3e43be1e08e3aab9eb6b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a0d5bb31905b82da4feae34e691289"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_graph.html#ab8a0d5bb31905b82da4feae34e691289">set</a> () const </td></tr>
 <tr class="separator:ab8a0d5bb31905b82da4feae34e691289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66aec429fbb0e4dfdaae82199ef9af3f"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer<br class="typebreak"/>
@@ -217,26 +217,16 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa4f7c1c8f942320ee2d8e80e5c0cb4f7"></a>
+<a class="anchor" id="a203163b95a3e43be1e08e3aab9eb6b53"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void rdf::PixelGraph::connect </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classrdf_1_1_rect.html">Rect</a> &amp;&#160;</td>
-          <td class="paramname"><em>rect</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_connector.html">PixelConnector</a> &amp;&#160;</td>
+          <td class="paramname"><em>connector</em> = <code><a class="el" href="classrdf_1_1_delauney_pixel_connector.html">DelauneyPixelConnector</a>()</code></td><td>)</td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdf">PixelSet::ConnectionMode</a> &amp;&#160;</td>
-          <td class="paramname"><em>mode</em> = <code><a class="el" href="classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfacaac44b36237b9e2f76b29dcb86a7b8e">PixelSet::connect_delauney</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

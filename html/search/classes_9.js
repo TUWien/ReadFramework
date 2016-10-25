@@ -5,6 +5,7 @@ var searchData=
   ['layouttest',['LayoutTest',['../classrdf_1_1_layout_test.html',1,'rdf']]],
   ['line',['Line',['../classrdf_1_1_line.html',1,'rdf']]],
   ['lineedge',['LineEdge',['../classrdf_1_1_line_edge.html',1,'rdf']]],
+  ['linefitting',['LineFitting',['../classrdf_1_1_line_fitting.html',1,'rdf']]],
   ['linetrace',['LineTrace',['../classrdf_1_1_line_trace.html',1,'rdf']]],
   ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html',1,'rdf']]],
   ['linkedblocklist',['LinkedBlockList',['../class_linked_block_list.html',1,'']]],

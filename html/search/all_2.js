@@ -9,7 +9,7 @@ var searchData=
   ['baseimageelement_2ecpp',['BaseImageElement.cpp',['../_base_image_element_8cpp.html',1,'']]],
   ['baseimageelement_2eh',['BaseImageElement.h',['../_base_image_element_8h.html',1,'']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html',1,'rdf']]],
-  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_pixel_set.html#a03babcd14ce5c5a507a8f87949795606',1,'rdf::PixelSet::baseline()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
+  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
   ['basemodule_2ecpp',['BaseModule.cpp',['../_base_module_8cpp.html',1,'']]],
   ['basemodule_2eh',['BaseModule.h',['../_base_module_8h.html',1,'']]],
   ['basename',['baseName',['../classrdf_1_1_utils.html#a53379c74a413e2bfebc881cfa69202fb',1,'rdf::Utils']]],

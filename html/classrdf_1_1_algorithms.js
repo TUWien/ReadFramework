@@ -9,7 +9,7 @@ var classrdf_1_1_algorithms =
       [ "DISK", "classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a474d155e77a9eb896f3e990e3fe6a351", null ]
     ] ],
     [ "angleDist", "classrdf_1_1_algorithms.html#aca3bce848d3cfaa66aa9633c879fc3e4", null ],
-    [ "calcRotationSize", "classrdf_1_1_algorithms.html#a939afbf02fea9900332b0537fc6fd64c", null ],
+    [ "calcRotationSize", "classrdf_1_1_algorithms.html#a31582bde389e5cb7b9862d5ebb3c7f9c", null ],
     [ "computeHist", "classrdf_1_1_algorithms.html#a151df7095898865c591deab878403c78", null ],
     [ "convolveIntegralImage", "classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76", null ],
     [ "convolveSymmetric", "classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092", null ],

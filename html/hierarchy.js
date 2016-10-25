@@ -57,6 +57,7 @@ var hierarchy =
     [ "GCoptimization::LabelCostIter", "struct_g_coptimization_1_1_label_cost_iter.html", null ],
     [ "rdf::LayoutTest", "classrdf_1_1_layout_test.html", null ],
     [ "rdf::Line", "classrdf_1_1_line.html", null ],
+    [ "rdf::LineFitting", "classrdf_1_1_line_fitting.html", null ],
     [ "LinkedBlockList", "class_linked_block_list.html", null ],
     [ "rdf::Module", "classrdf_1_1_module.html", [
       [ "rdf::BaseBinarizationSu", "classrdf_1_1_base_binarization_su.html", [
@@ -71,7 +72,7 @@ var hierarchy =
       [ "rdf::LocalOrientation", "classrdf_1_1_local_orientation.html", null ],
       [ "rdf::SimpleBinarization", "classrdf_1_1_simple_binarization.html", null ],
       [ "rdf::SuperPixel", "classrdf_1_1_super_pixel.html", null ],
-      [ "rdf::TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", null ],
+      [ "rdf::TabStopAnalysis", "classrdf_1_1_tab_stop_analysis.html", null ],
       [ "rdf::TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", null ]
     ] ],
     [ "rdf::ModuleConfig", "classrdf_1_1_module_config.html", [
@@ -82,13 +83,18 @@ var hierarchy =
       [ "rdf::LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", null ],
       [ "rdf::SimpleBinarizationConfig", "classrdf_1_1_simple_binarization_config.html", null ],
       [ "rdf::SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", null ],
-      [ "rdf::TextBlockConfig", "classrdf_1_1_text_block_config.html", null ],
+      [ "rdf::TabStopConfig", "classrdf_1_1_tab_stop_config.html", null ],
       [ "rdf::TextLineConfig", "classrdf_1_1_text_line_config.html", null ]
     ] ],
     [ "rdf::MserContainer", "classrdf_1_1_mser_container.html", null ],
     [ "rdf::PageElement", "classrdf_1_1_page_element.html", null ],
     [ "rdf::PageXmlParser", "classrdf_1_1_page_xml_parser.html", null ],
     [ "rdf::Patch", "classrdf_1_1_patch.html", null ],
+    [ "rdf::PixelConnector", "classrdf_1_1_pixel_connector.html", [
+      [ "rdf::DelauneyPixelConnector", "classrdf_1_1_delauney_pixel_connector.html", null ],
+      [ "rdf::RegionPixelConnector", "classrdf_1_1_region_pixel_connector.html", null ],
+      [ "rdf::TabStopPixelConnector", "classrdf_1_1_tab_stop_pixel_connector.html", null ]
+    ] ],
     [ "rdf::Polygon", "classrdf_1_1_polygon.html", null ],
     [ "rdf::Rect", "classrdf_1_1_rect.html", null ],
     [ "rdf::Region", "classrdf_1_1_region.html", [

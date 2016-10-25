@@ -12,6 +12,7 @@ var classrdf_1_1_vector2_d =
     [ "isNeighbor", "classrdf_1_1_vector2_d.html#acc3daf696b9d8cd2034803d0a0e8ea67", null ],
     [ "isNull", "classrdf_1_1_vector2_d.html#a5db010a5e57592c9ac3678d9fca034f1", null ],
     [ "length", "classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9", null ],
+    [ "normalVec", "classrdf_1_1_vector2_d.html#a53f91b76db0436495f85b89fd6cbe16d", null ],
     [ "operator*=", "classrdf_1_1_vector2_d.html#a5c7449bd1bf4c1eaf2565e8684116940", null ],
     [ "operator+=", "classrdf_1_1_vector2_d.html#aafd1b4576b23057f913dac98e1222d81", null ],
     [ "operator+=", "classrdf_1_1_vector2_d.html#a5f03a3c0d804cfb02b3bada8ae0caeb6", null ],

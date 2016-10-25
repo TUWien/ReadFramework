@@ -2,6 +2,7 @@ var searchData=
 [
   ['weber',['WEBER',['../classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119ab5490c2edb8787424cf1285ce6071622',1,'rdf::ContrastEstimation']]],
   ['weight',['weight',['../classrdf_1_1_patch.html#ac701ad90d59ae97dfb5a4fb3b8683624',1,'rdf::Patch']]],
+  ['weightedlength',['weightedLength',['../classrdf_1_1_line.html#ac3693d8048fd6657d38eb1ff548ac73c',1,'rdf::Line']]],
   ['weightfunction',['weightFunction',['../classrdf_1_1_binarization_su_fgd_weight.html#af3ecb2042125d16aff9dc39e7e502d02',1,'rdf::BinarizationSuFgdWeight']]],
   ['what_5fsegment',['what_segment',['../class_graph.html#ac73a2f17861930048daf119eb5b12914',1,'Graph']]],
   ['whatlabel',['whatLabel',['../class_g_coptimization.html#afd9c56d148a74346bdd9a10edcac7350',1,'GCoptimization::whatLabel(SiteID site)'],['../class_g_coptimization.html#a004d5e1e6c680d643bd2299d66ea4559',1,'GCoptimization::whatLabel(SiteID start, SiteID count, LabelID *labeling)']]],

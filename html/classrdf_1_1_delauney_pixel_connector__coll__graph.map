@@ -1,0 +1,5 @@
+<map id="rdf::DelauneyPixelConnector" name="rdf::DelauneyPixelConnector">
+<area shape="rect" id="node2" href="$classrdf_1_1_pixel_connector.html" title="Abstract class PixelConnector. This is the base class for all pixel connecting classes which implemen..." alt="" coords="5,109,139,136"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="163,109,236,136"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="150,5,249,32"/>
+</map>

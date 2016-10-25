@@ -2,7 +2,8 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
 [
     [ "Algorithms.cpp", "_algorithms_8cpp.html", "_algorithms_8cpp" ],
     [ "Algorithms.h", "_algorithms_8h.html", [
-      [ "Algorithms", "classrdf_1_1_algorithms.html", "classrdf_1_1_algorithms" ]
+      [ "Algorithms", "classrdf_1_1_algorithms.html", "classrdf_1_1_algorithms" ],
+      [ "LineFitting", "classrdf_1_1_line_fitting.html", "classrdf_1_1_line_fitting" ]
     ] ],
     [ "BaseImageElement.cpp", "_base_image_element_8cpp.html", "_base_image_element_8cpp" ],
     [ "BaseImageElement.h", "_base_image_element_8h.html", "_base_image_element_8h" ],
@@ -42,6 +43,10 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
       [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
       [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],
       [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
+      [ "PixelConnector", "classrdf_1_1_pixel_connector.html", "classrdf_1_1_pixel_connector" ],
+      [ "DelauneyPixelConnector", "classrdf_1_1_delauney_pixel_connector.html", "classrdf_1_1_delauney_pixel_connector" ],
+      [ "RegionPixelConnector", "classrdf_1_1_region_pixel_connector.html", "classrdf_1_1_region_pixel_connector" ],
+      [ "TabStopPixelConnector", "classrdf_1_1_tab_stop_pixel_connector.html", "classrdf_1_1_tab_stop_pixel_connector" ],
       [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ]
     ] ],
     [ "Settings.cpp", "_settings_8cpp.html", null ],

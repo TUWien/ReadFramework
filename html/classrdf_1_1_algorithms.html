@@ -183,9 +183,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
 <tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
 <tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a939afbf02fea9900332b0537fc6fd64c"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a939afbf02fea9900332b0537fc6fd64c">calcRotationSize</a> (double angleRad, QPointF srcSize) const </td></tr>
-<tr class="memdesc:a939afbf02fea9900332b0537fc6fd64c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a939afbf02fea9900332b0537fc6fd64c">More...</a><br/></td></tr>
-<tr class="separator:a939afbf02fea9900332b0537fc6fd64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a31582bde389e5cb7b9862d5ebb3c7f9c">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize) const </td></tr>
+<tr class="memdesc:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a31582bde389e5cb7b9862d5ebb3c7f9c">More...</a><br/></td></tr>
+<tr class="separator:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a106c96fdb655c2b159dc0513087060c4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a106c96fdb655c2b159dc0513087060c4">min</a> (const QVector&lt; double &gt; &amp;vec) const </td></tr>
 <tr class="memdesc:a106c96fdb655c2b159dc0513087060c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum of the vector or DBL_MAX if vec is empty.  <a href="#a106c96fdb655c2b159dc0513087060c4">More...</a><br/></td></tr>
 <tr class="separator:a106c96fdb655c2b159dc0513087060c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,7 +293,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a939afbf02fea9900332b0537fc6fd64c"></a>
+<a class="anchor" id="a31582bde389e5cb7b9862d5ebb3c7f9c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -306,7 +306,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramtype">const QPointF &amp;&#160;</td>
           <td class="paramname"><em>srcSize</em>&#160;</td>
         </tr>
         <tr>
@@ -320,7 +320,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Calculates the image size of the rotated image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">angleRad</td><td>The angle in RAD.</td></tr>
+    <tr><td class="paramname">angleRad</td><td>The angle in radians.</td></tr>
     <tr><td class="paramname">srcSize</td><td>Size of the source image.</td></tr>
   </table>
   </dd>

@@ -149,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a33b954a52b2a9429922f57624aa30285"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a33b954a52b2a9429922f57624aa30285">length</a> () const </td></tr>
 <tr class="memdesc:a33b954a52b2a9429922f57624aa30285"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line length.  <a href="#a33b954a52b2a9429922f57624aa30285">More...</a><br/></td></tr>
 <tr class="separator:a33b954a52b2a9429922f57624aa30285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3693d8048fd6657d38eb1ff548ac73c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#ac3693d8048fd6657d38eb1ff548ac73c">weightedLength</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;orVec) const </td></tr>
+<tr class="memdesc:ac3693d8048fd6657d38eb1ff548ac73c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the orientation weighed length. Hence, if orVec is parallel to the line, the length is 0. If it is orthogonal, the line length is returned.  <a href="#ac3693d8048fd6657d38eb1ff548ac73c">More...</a><br/></td></tr>
+<tr class="separator:ac3693d8048fd6657d38eb1ff548ac73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54dd22cc7ab4ae4d2051dde5b027a61c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c">angle</a> () const </td></tr>
 <tr class="memdesc:a54dd22cc7ab4ae4d2051dde5b027a61c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line angle.  <a href="#a54dd22cc7ab4ae4d2051dde5b027a61c">More...</a><br/></td></tr>
 <tr class="separator:a54dd22cc7ab4ae4d2051dde5b027a61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +177,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af9f0c2adbd5f4fa4adabb1f492c52dcd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#af9f0c2adbd5f4fa4adabb1f492c52dcd">within</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;p) const </td></tr>
 <tr class="memdesc:af9f0c2adbd5f4fa4adabb1f492c52dcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculated if point p is within the current line instance.  <a href="#af9f0c2adbd5f4fa4adabb1f492c52dcd">More...</a><br/></td></tr>
 <tr class="separator:af9f0c2adbd5f4fa4adabb1f492c52dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f50355a82250dc8521a171014a9870a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_line.html">Line</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a9f50355a82250dc8521a171014a9870a">moved</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;mVec) const </td></tr>
+<tr class="memdesc:a9f50355a82250dc8521a171014a9870a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a line moved by the vector mVec.  <a href="#a9f50355a82250dc8521a171014a9870a">More...</a><br/></td></tr>
+<tr class="separator:a9f50355a82250dc8521a171014a9870a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab94099872c9434e57e473acfcaa6390"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#aab94099872c9434e57e473acfcaa6390">p1</a> () const </td></tr>
 <tr class="memdesc:aab94099872c9434e57e473acfcaa6390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the start point.  <a href="#aab94099872c9434e57e473acfcaa6390">More...</a><br/></td></tr>
 <tr class="separator:aab94099872c9434e57e473acfcaa6390"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,11 +191,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a30320b5cf7b6fa67594d5db3426e251c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a969900d8d673c46d95c1af51b42ce4fd"><td class="memItemLeft" align="right" valign="top">QPolygonF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a969900d8d673c46d95c1af51b42ce4fd">toPoly</a> () const </td></tr>
 <tr class="separator:a969900d8d673c46d95c1af51b42ce4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7862d5c1d0bd7136fbc65ad128eee0a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a7862d5c1d0bd7136fbc65ad128eee0a7">isHorizontal</a> (float mAngleTresh=0.5) const </td></tr>
-<tr class="memdesc:a7862d5c1d0bd7136fbc65ad128eee0a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the specified m angle tresh is horizontal.  <a href="#a7862d5c1d0bd7136fbc65ad128eee0a7">More...</a><br/></td></tr>
-<tr class="separator:a7862d5c1d0bd7136fbc65ad128eee0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac26947a698686df16ee376fe792b42d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#ac26947a698686df16ee376fe792b42d5">isVertical</a> (float mAngleTresh=0.5) const </td></tr>
-<tr class="separator:ac26947a698686df16ee376fe792b42d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fc4710dd7fc434132eeaaf48cc7ba29"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a7fc4710dd7fc434132eeaaf48cc7ba29">isHorizontal</a> (double mAngleTresh=0.5) const </td></tr>
+<tr class="memdesc:a7fc4710dd7fc434132eeaaf48cc7ba29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the specified m angle tresh is horizontal.  <a href="#a7fc4710dd7fc434132eeaaf48cc7ba29">More...</a><br/></td></tr>
+<tr class="separator:a7fc4710dd7fc434132eeaaf48cc7ba29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a2ccb1fef880bf150a147daa7b00adf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a3a2ccb1fef880bf150a147daa7b00adf">isVertical</a> (double mAngleTresh=0.5) const </td></tr>
+<tr class="separator:a3a2ccb1fef880bf150a147daa7b00adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a105c6241c9b192faa9fa5fb5efdebe42"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a105c6241c9b192faa9fa5fb5efdebe42">intersects</a> (const <a class="el" href="classrdf_1_1_line.html">Line</a> &amp;<a class="el" href="classrdf_1_1_line.html#a30320b5cf7b6fa67594d5db3426e251c">line</a>) const </td></tr>
+<tr class="separator:a105c6241c9b192faa9fa5fb5efdebe42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4162bfc36ffd6fc9f5a6b32eaee78988"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#a4162bfc36ffd6fc9f5a6b32eaee78988">intersection</a> (const <a class="el" href="classrdf_1_1_line.html">Line</a> &amp;<a class="el" href="classrdf_1_1_line.html#a30320b5cf7b6fa67594d5db3426e251c">line</a>) const </td></tr>
+<tr class="memdesc:a4162bfc36ffd6fc9f5a6b32eaee78988"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the intersection point of both lines. This function returns an empty vector if the lines do not intersect within the bounds  <a href="#a4162bfc36ffd6fc9f5a6b32eaee78988">More...</a><br/></td></tr>
+<tr class="separator:a4162bfc36ffd6fc9f5a6b32eaee78988"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7167784dbca03525dc87b90b5d41237"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_line.html#ac7167784dbca03525dc87b90b5d41237">vector</a> () const </td></tr>
 <tr class="memdesc:ac7167784dbca03525dc87b90b5d41237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line's orientation vector.  <a href="#ac7167784dbca03525dc87b90b5d41237">More...</a><br/></td></tr>
 <tr class="separator:ac7167784dbca03525dc87b90b5d41237"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -530,6 +541,47 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4162bfc36ffd6fc9f5a6b32eaee78988"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> rdf::Line::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_line.html">Line</a> &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the intersection point of both lines. This function returns an empty vector if the lines do not intersect within the bounds </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Another line.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The line intersection.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a105c6241c9b192faa9fa5fb5efdebe42"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::Line::intersects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_line.html">Line</a> &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a96b55e886aa3c832bf1c8ee5cb993773"></a>
 <div class="memitem">
 <div class="memproto">
@@ -548,14 +600,14 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7862d5c1d0bd7136fbc65ad128eee0a7"></a>
+<a class="anchor" id="a7fc4710dd7fc434132eeaaf48cc7ba29"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool rdf::Line::isHorizontal </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>mAngleTresh</em> = <code>0.5</code></td><td>)</td>
           <td> const</td>
         </tr>
@@ -573,14 +625,14 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac26947a698686df16ee376fe792b42d5"></a>
+<a class="anchor" id="a3a2ccb1fef880bf150a147daa7b00adf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool rdf::Line::isVertical </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>mAngleTresh</em> = <code>0.5</code></td><td>)</td>
           <td> const</td>
         </tr>
@@ -740,6 +792,31 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The minimum distance.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9f50355a82250dc8521a171014a9870a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_line.html">Line</a> rdf::Line::moved </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>mVec</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a line moved by the vector mVec. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mVec</td><td>Move vector.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -933,6 +1010,31 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac3693d8048fd6657d38eb1ff548ac73c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Line::weightedLength </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>orVec</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the orientation weighed length. Hence, if orVec is parallel to the line, the length is 0. If it is orthogonal, the line length is returned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orVec</td><td>An orientation vector.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The length weighed by the orientation</dd></dl>
 
 </div>
 </div>

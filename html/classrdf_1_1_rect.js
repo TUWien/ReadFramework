@@ -15,6 +15,7 @@ var classrdf_1_1_rect =
     [ "contains", "classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63", null ],
     [ "contains", "classrdf_1_1_rect.html#a1eb01237493d9910e9b45e80415d89a0", null ],
     [ "diagonal", "classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f", null ],
+    [ "draw", "classrdf_1_1_rect.html#a341b343918868995eff6269835ead967", null ],
     [ "expand", "classrdf_1_1_rect.html#a9904dddabfb50cec3c9a5234ec8bbbf6", null ],
     [ "height", "classrdf_1_1_rect.html#a45fd9cb736b030f2cbaeeb2c4ae9cab6", null ],
     [ "isNull", "classrdf_1_1_rect.html#a4d3ce91e4603f28b73be81d868b1526d", null ],

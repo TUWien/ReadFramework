@@ -43,11 +43,11 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
       [ "GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", "classrdf_1_1_graph_cut_orientation" ]
     ] ],
-    [ "TextBlockSegmentation.cpp", "_text_block_segmentation_8cpp.html", null ],
-    [ "TextBlockSegmentation.h", "_text_block_segmentation_8h.html", [
-      [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
+    [ "TabStopAnalysis.cpp", "_tab_stop_analysis_8cpp.html", null ],
+    [ "TabStopAnalysis.h", "_tab_stop_analysis_8h.html", [
+      [ "TabStopConfig", "classrdf_1_1_tab_stop_config.html", "classrdf_1_1_tab_stop_config" ],
       [ "TabStopCluster", "classrdf_1_1_tab_stop_cluster.html", "classrdf_1_1_tab_stop_cluster" ],
-      [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ]
+      [ "TabStopAnalysis", "classrdf_1_1_tab_stop_analysis.html", "classrdf_1_1_tab_stop_analysis" ]
     ] ],
     [ "TextLineSegmentation.cpp", "_text_line_segmentation_8cpp.html", null ],
     [ "TextLineSegmentation.h", "_text_line_segmentation_8h.html", [

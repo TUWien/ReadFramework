@@ -1,6 +1,7 @@
 var namespacerdf =
 [
     [ "Algorithms", "classrdf_1_1_algorithms.html", "classrdf_1_1_algorithms" ],
+    [ "LineFitting", "classrdf_1_1_line_fitting.html", "classrdf_1_1_line_fitting" ],
     [ "BaseElement", "classrdf_1_1_base_element.html", "classrdf_1_1_base_element" ],
     [ "Blob", "classrdf_1_1_blob.html", "classrdf_1_1_blob" ],
     [ "Blobs", "classrdf_1_1_blobs.html", "classrdf_1_1_blobs" ],
@@ -24,6 +25,10 @@ var namespacerdf =
     [ "PixelEdge", "classrdf_1_1_pixel_edge.html", "classrdf_1_1_pixel_edge" ],
     [ "LineEdge", "classrdf_1_1_line_edge.html", "classrdf_1_1_line_edge" ],
     [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
+    [ "PixelConnector", "classrdf_1_1_pixel_connector.html", "classrdf_1_1_pixel_connector" ],
+    [ "DelauneyPixelConnector", "classrdf_1_1_delauney_pixel_connector.html", "classrdf_1_1_delauney_pixel_connector" ],
+    [ "RegionPixelConnector", "classrdf_1_1_region_pixel_connector.html", "classrdf_1_1_region_pixel_connector" ],
+    [ "TabStopPixelConnector", "classrdf_1_1_tab_stop_pixel_connector.html", "classrdf_1_1_tab_stop_pixel_connector" ],
     [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ],
     [ "GenericSettings", "classrdf_1_1_generic_settings.html", "classrdf_1_1_generic_settings" ],
     [ "GlobalSettings", "classrdf_1_1_global_settings.html", "classrdf_1_1_global_settings" ],
@@ -68,9 +73,9 @@ var namespacerdf =
     [ "LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", "classrdf_1_1_local_orientation_config" ],
     [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
     [ "GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", "classrdf_1_1_graph_cut_orientation" ],
-    [ "TextBlockConfig", "classrdf_1_1_text_block_config.html", "classrdf_1_1_text_block_config" ],
+    [ "TabStopConfig", "classrdf_1_1_tab_stop_config.html", "classrdf_1_1_tab_stop_config" ],
     [ "TabStopCluster", "classrdf_1_1_tab_stop_cluster.html", "classrdf_1_1_tab_stop_cluster" ],
-    [ "TextBlockSegmentation", "classrdf_1_1_text_block_segmentation.html", "classrdf_1_1_text_block_segmentation" ],
+    [ "TabStopAnalysis", "classrdf_1_1_tab_stop_analysis.html", "classrdf_1_1_tab_stop_analysis" ],
     [ "TextLineConfig", "classrdf_1_1_text_line_config.html", "classrdf_1_1_text_line_config" ],
     [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ]
 ];

@@ -8,5 +8,6 @@ var searchData=
   ['dblock',['DBlock',['../class_d_block.html',1,'']]],
   ['dblock_3c_20nodeptr_20_3e',['DBlock&lt; nodeptr &gt;',['../class_d_block.html',1,'']]],
   ['debugconfig',['DebugConfig',['../classrdf_1_1_debug_config.html',1,'rdf']]],
+  ['delauneypixelconnector',['DelauneyPixelConnector',['../classrdf_1_1_delauney_pixel_connector.html',1,'rdf']]],
   ['drawer',['Drawer',['../classrdf_1_1_drawer.html',1,'rdf']]]
 ];

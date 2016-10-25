@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['sample',['sample',['../classrdf_1_1_line_fitting.html#ab5e5279c3cde90df7cda2e8466d81ed6',1,'rdf::LineFitting']]],
   ['save',['save',['../classrdf_1_1_region_type_config.html#a528b217c74bedebbae864c7f73f2eb36',1,'rdf::RegionTypeConfig::save()'],['../classrdf_1_1_image.html#a9e5bb484c4acfe4d6effc2c32e789663',1,'rdf::Image::save(const QImage &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_image.html#a34d4f8abe3999b342df35c0128004da6',1,'rdf::Image::save(const cv::Mat &amp;img, const QString &amp;savePath, int compression=-1) const '],['../classrdf_1_1_generic_settings.html#a165e5f7703f9210f36722c46f9f0e4aa',1,'rdf::GenericSettings::save()'],['../classrdf_1_1_global_settings.html#abafd9e775ffc60864b8a4c161c59436b',1,'rdf::GlobalSettings::save()'],['../classrdf_1_1_config.html#a023a6ffc321868c08a6bcb9d8cd21d7a',1,'rdf::Config::save()'],['../classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5',1,'rdf::ModuleConfig::save()'],['../classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675',1,'rdf::SimpleBinarizationConfig::save()'],['../classrdf_1_1_super_pixel_config.html#ad215c64ccec5fc0b7b01b8067a03b0b3',1,'rdf::SuperPixelConfig::save()'],['../classrdf_1_1_local_orientation_config.html#a10fafde54bbf6a040420f51f3ee9da5a',1,'rdf::LocalOrientationConfig::save()']]],
   ['savesettings',['saveSettings',['../classrdf_1_1_module_config.html#acdf8ca83534fc9b93543fea400ac0ebf',1,'rdf::ModuleConfig']]],
   ['scale',['scale',['../classrdf_1_1_pixel_stats.html#a9ab79d8b60edb1f3c2e4c814c9e9aa79',1,'rdf::PixelStats']]],
@@ -18,7 +19,7 @@ var searchData=
   ['set_5frcap',['set_rcap',['../class_graph.html#a963cd0b35c590984cc0dd82a57527a53',1,'Graph']]],
   ['set_5ftrcap',['set_trcap',['../class_graph.html#a1e70647d3bef8f7270048155f211fdec',1,'Graph']]],
   ['setallneighbors',['setAllNeighbors',['../class_g_coptimization_general_graph.html#ae17725c97f44f401ba6d9e31475eaf8d',1,'GCoptimizationGeneralGraph']]],
-  ['setangle',['setAngle',['../classrdf_1_1_ellipse.html#a5ecb056104a229c21a2c3d3c949e223d',1,'rdf::Ellipse::setAngle()'],['../classrdf_1_1_line_trace.html#a70aadcbd34761189576bd4e966f1a235',1,'rdf::LineTrace::setAngle()']]],
+  ['setangle',['setAngle',['../classrdf_1_1_ellipse.html#a5ecb056104a229c21a2c3d3c949e223d',1,'rdf::Ellipse::setAngle()'],['../classrdf_1_1_line_trace.html#a70aadcbd34761189576bd4e966f1a235',1,'rdf::LineTrace::setAngle()'],['../classrdf_1_1_tab_stop_cluster.html#a47c7e29e4cad8b2a92b1ae47ff9b5aca',1,'rdf::TabStopCluster::setAngle()']]],
   ['setarea',['setArea',['../classrdf_1_1_patch.html#accee4efad23797b820a77b7ad92ce025',1,'rdf::Patch']]],
   ['setaxis',['setAxis',['../classrdf_1_1_ellipse.html#a7edfca47826a603e7811bf7811662b74',1,'rdf::Ellipse']]],
   ['setbaseline',['setBaseLine',['../classrdf_1_1_text_line.html#a59e743491942833c65a3b25436885d00',1,'rdf::TextLine']]],
@@ -70,6 +71,7 @@ var searchData=
   ['setlabelorder',['setLabelOrder',['../class_g_coptimization.html#a823a1f1fd6f37cb0b5eb070435f6a2d2',1,'GCoptimization::setLabelOrder(bool isRandom)'],['../class_g_coptimization.html#a54f3796232c42f861744da9d2f78d4cf',1,'GCoptimization::setLabelOrder(const LabelID *order, LabelID size)']]],
   ['setlabelsubsetcost',['setLabelSubsetCost',['../class_g_coptimization.html#adc1b2d5150d961568def1f05ad2a5a83',1,'GCoptimization']]],
   ['setline',['setLine',['../classrdf_1_1_separator_region.html#ac3a1b428cb5c941c915cb6287bfafbca',1,'rdf::SeparatorRegion::setLine()'],['../classrdf_1_1_line.html#a86ac901a65ecf2755078c8d9340c2395',1,'rdf::Line::setLine()'],['../classrdf_1_1_tab_stop_cluster.html#aca8f91f576a013568a500617d566eb52',1,'rdf::TabStopCluster::setLine()']]],
+  ['setlinespacingmultiplier',['setLineSpacingMultiplier',['../classrdf_1_1_region_pixel_connector.html#ab47c9b86ea4e0a78dad56a11d3e1fb57',1,'rdf::RegionPixelConnector::setLineSpacingMultiplier()'],['../classrdf_1_1_tab_stop_pixel_connector.html#a64ac33c5dd9717b96e920b1176b367b4',1,'rdf::TabStopPixelConnector::setLineSpacingMultiplier()']]],
   ['setlum',['setLum',['../classrdf_1_1_basic_contrast.html#af77d84ec66869c55289c3581d941c963',1,'rdf::BasicContrast::setLum()'],['../classrdf_1_1_contrast_estimation.html#a4569f1d40ff6cf750c68b0f786654242',1,'rdf::ContrastEstimation::setLum()']]],
   ['setmask',['setMask',['../classrdf_1_1_form_features.html#a4ec39d7b6f425cfb62e206b141e5edef',1,'rdf::FormFeatures']]],
   ['setmaxanglediff',['setMaxAngleDiff',['../classrdf_1_1_line_trace_config.html#a880776a29fff0e5c947145bfdcd5a598',1,'rdf::LineTraceConfig']]],
@@ -97,6 +99,8 @@ var searchData=
   ['setpolygon',['setPolygon',['../classrdf_1_1_region.html#a9e64582aa1aa804388689fc6b348f399',1,'rdf::Region::setPolygon()'],['../classrdf_1_1_polygon.html#a55b7eb1fdc276fd315277d16f8f7f580',1,'rdf::Polygon::setPolygon()'],['../classrdf_1_1_base_line.html#a4bf59a8375e04fb245641974bfb85ff5',1,'rdf::BaseLine::setPolygon()']]],
   ['setposition',['setPosition',['../classrdf_1_1_patch.html#a7a2d45f4ffe51ef66ce5a0f958acedc9',1,'rdf::Patch']]],
   ['setprefiltering',['setPreFiltering',['../classrdf_1_1_base_binarization_su.html#a2e95895b91f9b616ac8ab8155ad14f0a',1,'rdf::BaseBinarizationSu']]],
+  ['setradius',['setRadius',['../classrdf_1_1_region_pixel_connector.html#ae00fd81f3025812a793637314e93f27d',1,'rdf::RegionPixelConnector']]],
+  ['setrect',['setRect',['../classrdf_1_1_delauney_pixel_connector.html#a0859dbd11e8705e6f42892bae905cdaf',1,'rdf::DelauneyPixelConnector']]],
   ['setripplearea',['setRippleArea',['../classrdf_1_1_line_trace_config.html#a93faa20d7007ce98c19b3e7dbddc247a',1,'rdf::LineTraceConfig']]],
   ['setripplelen',['setRippleLen',['../classrdf_1_1_line_trace_config.html#ac6b30ecd1796bb518ec07562f3c6bba9',1,'rdf::LineTraceConfig']]],
   ['setrootregion',['setRootRegion',['../classrdf_1_1_page_element.html#a5b32448e4f030c6feb881fcda9729977',1,'rdf::PageElement']]],
@@ -139,8 +143,8 @@ var searchData=
   ['sigma',['sigma',['../classrdf_1_1_base_skew_estimation_config.html#a7b5303caff3218f114e66d393999a4a8',1,'rdf::BaseSkewEstimationConfig']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html',1,'rdf']]],
-  ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d',1,'rdf::SimpleBinarizationConfig']]],
+  ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html',1,'rdf']]],
   ['sink',['SINK',['../class_graph.html#acf169ecfcbdb40fa5958e59a6daa6364a5a789c2410ba06db9cad42084c8471c9',1,'Graph']]],
   ['site',['site',['../struct_g_coptimization_1_1_sparse_data_cost.html#a6a33a44cb9e0bccc93a6ba714d49d6eb',1,'GCoptimization::SparseDataCost::site()'],['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a8e675fdad4c59ebdb376596c994eea0d',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;::site()'],['../class_g_coptimization_1_1_data_cost_fn_sparse_1_1iterator.html#a34c046a8ba60b03b2540b0d1c15fe05d',1,'GCoptimization::DataCostFnSparse::iterator::site()']]],
   ['siteid',['SiteID',['../class_g_coptimization.html#a0af6467e16632da05a0a9eb5f5bf3dcf',1,'GCoptimization']]],
@@ -182,7 +186,7 @@ var searchData=
   ['superpixel',['SuperPixel',['../classrdf_1_1_super_pixel.html',1,'rdf']]],
   ['superpixel_2ecpp',['SuperPixel.cpp',['../_super_pixel_8cpp.html',1,'']]],
   ['superpixel_2eh',['SuperPixel.h',['../_super_pixel_8h.html',1,'']]],
-  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html#aead8f86d63747293cd02a23304b00479',1,'rdf::SuperPixelConfig']]],
   ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html',1,'rdf']]],
+  ['superpixelconfig',['SuperPixelConfig',['../classrdf_1_1_super_pixel_config.html#aead8f86d63747293cd02a23304b00479',1,'rdf::SuperPixelConfig']]],
   ['swap',['swap',['../class_g_coptimization.html#a294ce1529de129e2575973c7b4320663',1,'GCoptimization']]]
 ];
