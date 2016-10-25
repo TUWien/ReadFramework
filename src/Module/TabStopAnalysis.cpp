@@ -73,7 +73,7 @@ bool TabStopAnalysis::compute() {
 		return false;
 
 	mGraph = QSharedPointer<PixelGraph>::create(mSuperPixels);
-	mGraph->connect(Rect(), PixelSet::connect_region);
+	mGraph->connect(RegionPixelConnector());
 
 	QVector<QSharedPointer<Pixel> > tabStops = findTabStopCandidates(mGraph);
 	mTabStops = findTabs(tabStops);
@@ -175,8 +175,8 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 	// parameters 
 	int minClusterSize = 4;
 
-	TabStopPixelConnector connector(pixel);
-	QVector<QSharedPointer<PixelEdge> > edges = connector.connect();
+	TabStopPixelConnector connector;
+	QVector<QSharedPointer<PixelEdge> > edges = connector.connect(pixel);
 	QVector<QSharedPointer<PixelSet> > ps = PixelSet::fromEdges(edges);
 
 	QVector<QSharedPointer<TabStopCluster> > tabStops;

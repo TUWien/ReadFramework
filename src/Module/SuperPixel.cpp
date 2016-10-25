@@ -660,9 +660,12 @@ bool GraphCutOrientation::compute() {
 	if (!checkInput())
 		return false;
 
+	DelauneyPixelConnector dpc;
+	dpc.setRect(mImgRect);
+
 	Timer dt;
 	PixelGraph graph(mSet);
-	graph.connect(mImgRect);
+	graph.connect(dpc);
 	graphCut(graph);
 	qInfo() << "[Graph Cut] computed in" << dt;
 

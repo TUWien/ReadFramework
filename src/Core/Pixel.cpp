@@ -679,26 +679,34 @@ Ellipse PixelSet::profileRect() const {
 	return el;
 }
 
+/// <summary>
+/// This is a convenience function that connects SuperPixels.
+/// It is recommended to use the connector classes respectively.
+/// </summary>
+/// <param name="superPixels">The super pixels.</param>
+/// <param name="rect">The bounding rect.</param>
+/// <param name="mode">The connection mode.</param>
+/// <returns></returns>
 QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode) {
 
 	QSharedPointer<PixelConnector> connector;
 
 	switch (mode) {
 	case connect_delauney: {
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(superPixels, rect));
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(rect));
 		break;
 	}
 	case connect_region: {
-		connector = QSharedPointer<PixelConnector>(new RegionPixelConnector(superPixels));
+		connector = QSharedPointer<PixelConnector>(new RegionPixelConnector());
 		break;
 	}
 	}
 
 	if (!connector) {
 		qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(superPixels, rect));
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(rect));
 	}
-	return connector->connect();
+	return connector->connect(superPixels);
 }
 
 QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges) {
@@ -781,7 +789,7 @@ void PixelGraph::draw(QPainter& p) const {
 
 }
 
-void PixelGraph::connect(const Rect & rect, const PixelSet::ConnectionMode& mode) {
+void PixelGraph::connect(const PixelConnector& connector) {
 
 	// nothing todo?
 	if (isEmpty())
@@ -789,7 +797,8 @@ void PixelGraph::connect(const Rect & rect, const PixelSet::ConnectionMode& mode
 
 	assert(mSet);
 	const QVector<QSharedPointer<Pixel> >& pixels = mSet->pixels();
-	mEdges = PixelSet::connect(pixels, rect, mode);
+
+	mEdges = connector.connect(pixels);
 
 	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	for (int idx = 0; idx < mEdges.size(); idx++) {
@@ -957,27 +966,26 @@ PixelTabStop::Type PixelTabStop::type() const {
 }
 
 // PixelConnector --------------------------------------------------------------------
-PixelConnector::PixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) {
-	mPixels = pixels;
+PixelConnector::PixelConnector() {
 }
 
 // DelauneyPixelConnector --------------------------------------------------------------------
-DelauneyPixelConnector::DelauneyPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels, const Rect & r) : PixelConnector(pixels) {
+DelauneyPixelConnector::DelauneyPixelConnector(const Rect & r) : PixelConnector() {
 	mRect = r;
 }
 
-QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect() const {
+QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
 	// Create an instance of Subdiv2D
 	cv::Subdiv2D subdiv(mRect.toCvRect());
 
 	QVector<int> ids;
-	for (const QSharedPointer<Pixel>& b : mPixels)
+	for (const QSharedPointer<Pixel>& b : pixels)
 		ids << subdiv.insert(b->center().toCvPoint2f());
 
 	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
 	QVector<QSharedPointer<PixelEdge> > edges;
-	for (int idx = 0; idx < (mPixels.size()-8)*3; idx++) {
+	for (int idx = 0; idx < (pixels.size()-8)*3; idx++) {
 
 		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
 		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
@@ -990,7 +998,7 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect() const {
 		assert(orgVertex >= 0 && orgVertex < superPixels.size());
 		assert(dstVertex >= 0 && dstVertex < superPixels.size());
 
-		QSharedPointer<PixelEdge> pe(new PixelEdge(mPixels[orgVertex], mPixels[dstVertex]));
+		QSharedPointer<PixelEdge> pe(new PixelEdge(pixels[orgVertex], pixels[dstVertex]));
 		edges << pe;
 	}
 
@@ -1003,7 +1011,8 @@ void DelauneyPixelConnector::setRect(const Rect & rect) {
 }
 
 // RegionPixelConnector --------------------------------------------------------------------
-RegionPixelConnector::RegionPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) : PixelConnector(pixels) {
+RegionPixelConnector::RegionPixelConnector(double multiplier) {
+	mMultiplier = multiplier;
 }
 
 /// <summary>
@@ -1012,12 +1021,12 @@ RegionPixelConnector::RegionPixelConnector(const QVector<QSharedPointer<Pixel>>&
 /// of radius lineSpacing() * radiusFactor or radius.
 /// </summary>
 /// <returns>Connecting edges.</returns>
-QVector<QSharedPointer<PixelEdge>> RegionPixelConnector::connect() const {
+QVector<QSharedPointer<PixelEdge>> RegionPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
 	Timer dt;
 	QVector<QSharedPointer<PixelEdge> > edges;
 
-	for (const QSharedPointer<Pixel>& px : mPixels) {
+	for (const QSharedPointer<Pixel>& px : pixels) {
 
 		if (!px->stats() && mRadius == 0.0) {
 			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
@@ -1027,7 +1036,7 @@ QVector<QSharedPointer<PixelEdge>> RegionPixelConnector::connect() const {
 		double cR = (mRadius != 0.0) ? mRadius : px->stats()->lineSpacing() * mMultiplier;
 		const Vector2D& pxc = px->center();
 
-		for (const QSharedPointer<Pixel>& npx : mPixels) {
+		for (const QSharedPointer<Pixel>& npx : pixels) {
 
 			if (npx->id() == px->id())
 				continue;
@@ -1051,14 +1060,14 @@ void RegionPixelConnector::setLineSpacingMultiplier(double multiplier) {
 }
 
 // TabStopPixelConnector --------------------------------------------------------------------
-TabStopPixelConnector::TabStopPixelConnector(const QVector<QSharedPointer<Pixel>>& pixels) : PixelConnector(pixels) {
+TabStopPixelConnector::TabStopPixelConnector() : PixelConnector() {
 }
 
-QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect() const {
+QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
 	QVector<QSharedPointer<PixelEdge> > edges;
 
-	for (const QSharedPointer<Pixel>& px : mPixels) {
+	for (const QSharedPointer<Pixel>& px : pixels) {
 
 		if (!px->stats()) {
 			qWarning() << "pixel stats are NULL where they should not be: " << px->id();
@@ -1076,7 +1085,7 @@ QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect() const {
 		QList<double> dists;
 		QVector<QSharedPointer<PixelEdge> > cEdges;
 
-		for (const QSharedPointer<Pixel>& npx : mPixels) {
+		for (const QSharedPointer<Pixel>& npx : pixels) {
 
 			if (npx->id() == px->id())
 				continue;

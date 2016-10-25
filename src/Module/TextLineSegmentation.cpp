@@ -71,10 +71,9 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	RegionPixelConnector rpc(mSuperPixels);
+	RegionPixelConnector rpc;
 	rpc.setLineSpacingMultiplier(2.0);
-	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect();
-	//QVector<QSharedPointer<PixelEdge> > pEdges = PixelSet::connect(mSuperPixels, mImgRect, PixelSet::connect_region);
+	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSuperPixels);
 
 	qDebug() << "# edges: " << pEdges.size();
 

@@ -310,13 +310,9 @@ protected:
 class DllCoreExport PixelConnector {
 
 public:
-	PixelConnector(
-		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+	PixelConnector();
 
-	virtual QVector<QSharedPointer<PixelEdge> > connect() const = 0;
-
-protected:
-	QVector<QSharedPointer<Pixel> > mPixels;
+	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const = 0;
 
 };
 
@@ -328,10 +324,9 @@ class DllCoreExport DelauneyPixelConnector : public PixelConnector {
 
 public:
 	DelauneyPixelConnector(
-		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >(), 
 		const Rect& r = Rect());
 
-	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const override;
 
 	void setRect(const Rect& rect);
 
@@ -348,10 +343,9 @@ protected:
 class DllCoreExport RegionPixelConnector : public PixelConnector {
 
 public:
-	RegionPixelConnector(
-		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+	RegionPixelConnector(double multiplier = 2.0);
 
-	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const override;
 
 	void setRadius(double radius);
 	void setLineSpacingMultiplier(double multiplier);
@@ -369,10 +363,9 @@ protected:
 class DllCoreExport TabStopPixelConnector : public PixelConnector {
 
 public:
-	TabStopPixelConnector(
-		const QVector<QSharedPointer<Pixel> >& pixels = QVector<QSharedPointer<Pixel> >());
+	TabStopPixelConnector();
 
-	virtual QVector<QSharedPointer<PixelEdge> > connect() const;
+	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const override;
 
 	void setLineSpacingMultiplier(double multiplier);
 
@@ -390,7 +383,7 @@ public:
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
-	void connect(const Rect& rect, const PixelSet::ConnectionMode& mode = PixelSet::connect_delauney);
+	void connect(const PixelConnector& connector = DelauneyPixelConnector());
 
 	QSharedPointer<PixelSet> set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;
