@@ -1103,6 +1103,12 @@ LineFitting::LineFitting(const QVector<Vector2D>& pts) {
 	mPts = pts;
 }
 
+/// <summary>
+/// Fits a line to the given set using the Least Median Squares method.
+/// In contrast to the official LMS, we extensively sample lines if 
+/// the combinatorial effort is less than num sets.
+/// </summary>
+/// <returns>The best fitting line.</returns>
 Line LineFitting::fitLineLMS() const {
 
 	if (mPts.size() <= mSetSize) {
@@ -1118,8 +1124,7 @@ Line LineFitting::fitLineLMS() const {
 	// random sampling
 	if (mSetSize != 2 || mNumSets < numFullSampling) {
 
-		qDebug() << "random sampling: " << mNumSets << "# permuatations needed: " << numFullSampling;
-
+		// generate random sets
 		for (int lIdx = 0; lIdx < mNumSets; lIdx++) {
 			
 			QVector<Vector2D> set;
@@ -1130,9 +1135,11 @@ Line LineFitting::fitLineLMS() const {
 				line = Line(set[0], set[1]);
 			}
 			else {
+				qWarning() << "least squares not implemented yet - mSetSize must be 2";
 				// TODO: cv least squares here
 			}
 
+			// compute distance of current set
 			double mr = medianResiduals(mPts, line);
 
 			if (minLMS > mr) {
@@ -1140,16 +1147,15 @@ Line LineFitting::fitLineLMS() const {
 				bestLine = line;
 			}
 
-			if (minLMS < mEps) {
-				qDebug() << "epsilon reached: " << minLMS;
+			if (minLMS < mEps)
 				break;
-			}
 		}
 
 	}
 	// try all permutations
 	else {
 
+		// compute all possible lines of the current set
 		for (int lIdx = 0; lIdx < mPts.size(); lIdx++) {
 			const Vector2D& vec = mPts[lIdx];
 
@@ -1166,10 +1172,8 @@ Line LineFitting::fitLineLMS() const {
 					bestLine = line;
 				}
 
-				if (minLMS < mEps) {
-					qDebug() << "epsilon reached: " << minLMS;
+				if (minLMS < mEps)
 					break;
-				}
 			}
 		}
 	}
@@ -1177,6 +1181,12 @@ Line LineFitting::fitLineLMS() const {
 	return bestLine;
 }
 
+/// <summary>
+/// Returns randomly sampled pts.
+/// </summary>
+/// <param name="pts">Input points.</param>
+/// <param name="set">A randomly sampled set of size setSize.</param>
+/// <param name="setSize">The set size returned.</param>
 void LineFitting::sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, int setSize) const {
 
 	if (setSize > pts.size())
@@ -1190,8 +1200,13 @@ void LineFitting::sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, i
 
 }
 
+/// <summary>
+/// Returns the median of the squared distances between pts and the line.
+/// </summary>
+/// <param name="pts">The point set.</param>
+/// <param name="line">The current fitting line.</param>
+/// <returns>The median squared distance.</returns>
 double LineFitting::medianResiduals(const QVector<Vector2D>& pts, const Line & line) const {
-
 
 	QList<double> squaredDists;
 

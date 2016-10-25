@@ -171,6 +171,9 @@ private:
 	Algorithms(const Algorithms&);
 };
 
+/// <summary>
+/// Implements robust line fitting algorithms.
+/// </summary>
 class DllCoreExport LineFitting {
 
 public:
@@ -180,10 +183,10 @@ public:
 
 protected:
 	// parameters:
-	int mNumSets = 1000;
+	int mNumSets = 1000;	// # random sets generated
 	int mSetSize = 2;		// if 2, lines are directly returned
-	double mEps = 0.1;
-	double mMinLength = 40;
+	double mEps = 0.1;		// if LMS is smaller than that, we break
+	double mMinLength = 2;	// minimum line length
 
 	QVector<Vector2D> mPts;
 
