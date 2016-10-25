@@ -47,7 +47,7 @@ namespace rdf {
 
 // TabStopConfig --------------------------------------------------------------------
 TabStopConfig::TabStopConfig() {
-	mModuleName = "Text Block";
+	mModuleName = "Tab Stop";
 }
 
 QString TabStopConfig::toString() const {
@@ -55,16 +55,14 @@ QString TabStopConfig::toString() const {
 }
 
 // TabStopAnalysis --------------------------------------------------------------------
-TabStopAnalysis::TabStopAnalysis(const cv::Mat& srcImg, 
-	const QVector<QSharedPointer<Pixel> >& superPixels) {
+TabStopAnalysis::TabStopAnalysis(const QVector<QSharedPointer<Pixel> >& superPixels) {
 	
-	mSrcImg = srcImg;
 	mSuperPixels = superPixels;
 	mConfig = QSharedPointer<TabStopConfig>::create();
 }
 
 bool TabStopAnalysis::isEmpty() const {
-	return mSrcImg.empty();
+	return mSuperPixels.empty();
 }
 
 bool TabStopAnalysis::compute() {
@@ -74,46 +72,19 @@ bool TabStopAnalysis::compute() {
 	if (!checkInput())
 		return false;
 
-	Rect r(0, 0, mSrcImg.cols, mSrcImg.rows);
 	mGraph = QSharedPointer<PixelGraph>::create(mSuperPixels);
-	mGraph->connect(r, PixelSet::connect_region);
+	mGraph->connect(Rect(), PixelSet::connect_region);
 
-	mSuperPixels = findTabStopCandidates(mGraph);
-	mTabStops = findTabs(mSuperPixels);
-	//mEdges = PixelSet::connect(mSuperPixels, r);
-	//mEdges = filterEdges(mEdges);
-	//
-	//mTextBlocks = createTextBlocks(mEdges);
+	QVector<QSharedPointer<Pixel> > tabStops = findTabStopCandidates(mGraph);
+	mTabStops = findTabs(tabStops);
 
-	mDebug << "I found" << mSuperPixels.size() << "tab stop candidates";
-	mDebug << "text blocks computed in" << dt;
+	mDebug << "I found" << tabStops.size() << "tab stop candidates in" << dt;
 
 	return true;
 }
 
 QSharedPointer<TabStopConfig> TabStopAnalysis::config() const {
 	return qSharedPointerDynamicCast<TabStopConfig>(mConfig);
-}
-
-QVector<QSharedPointer<PixelEdge> > TabStopAnalysis::filterEdges(const QVector<QSharedPointer<PixelEdge>>& pixelEdges, double factor) {
-	
-	double meanEdgeLength = 0;
-
-	for (auto pe : pixelEdges)
-		meanEdgeLength += pe->edgeWeight();
-	
-	meanEdgeLength /= pixelEdges.size();
-	double maxEdgeLength = meanEdgeLength * factor;
-
-	QVector<QSharedPointer<PixelEdge> > pixelEdgesClean;
-
-	for (auto pe : pixelEdges) {
-
-		if (pe->edgeWeight() < maxEdgeLength)
-			pixelEdgesClean << pe;
-	}
-
-	return pixelEdgesClean;
 }
 
 cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
@@ -123,35 +94,21 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::instance().mat2QPixmap(img);
 	
 	QPainter p(&pm);
-	QColor col = ColorManager::instance().darkGray();
-	Drawer::instance().setColor(col);
-	p.setPen(Drawer::instance().pen());
 
-	//for (auto b : mGraph->edges()) {
-	//	b->draw(p);
-	//}
+	//// uncomment to see rejected tabstops
+	//QColor col = ColorManager::instance().darkGray();
+	//Drawer::instance().setColor(col);
+	//p.setPen(Drawer::instance().pen());
 
-	//PixelGraph pg(mSuperPixels);
-	//pg.connect(Rect(0, 0, mSrcImg.cols, mSrcImg.rows));
-	//pg.draw(p);
-
-	//mGraph->draw(p);
-
-	p.setPen(ColorManager::instance().colors()[2]);
-	for (auto px : mSuperPixels)
-		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
+	//p.setPen(ColorManager::instance().colors()[2]);
+	//for (auto px : mSuperPixels)
+	//	if (px->tabStop().type() != PixelTabStop::type_none)
+	//		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
 	for (auto ts : mTabStops) {
 		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
 		p.setPen(Drawer::instance().pen());
 		ts->draw(p);
-	}
-
-	for (auto tb : mTextBlocks) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
-		p.setPen(Drawer::instance().pen());
-
-		tb->draw(p);
 	}
 
 	return Image::instance().qPixmap2Mat(pm);
@@ -161,58 +118,33 @@ QString TabStopAnalysis::toString() const {
 	return Module::toString();
 }
 
+QVector<QSharedPointer<TabStopCluster>> TabStopAnalysis::tabStopClusters() const {
+
+	return mTabStops;
+}
+
+QVector<Line> TabStopAnalysis::tabStopLines(double offset) const {
+	
+	QVector<Line> lines;
+
+	for (const QSharedPointer<TabStopCluster>& tc : mTabStops) {
+
+		Line line = tc->line();
+		if (offset != 0) {
+			Vector2D movVec(offset, 0);
+			movVec.rotate(tc->angle() + CV_PI);
+			line = line.moved(movVec);
+		}
+
+		lines << line;
+	}
+	
+	return lines;
+}
+
 bool TabStopAnalysis::checkInput() const {
 	
 	return !mSuperPixels.isEmpty();
-}
-
-QVector<QSharedPointer<PixelSet> > TabStopAnalysis::createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const {
-	
-	QVector<QSharedPointer<PixelSet> > sets;
-
-	for (const QSharedPointer<PixelEdge> e : edges) {
-
-		int fIdx = -1;
-		int sIdx = -1;
-
-		for (int idx = 0; idx < sets.size(); idx++) {
-
-			if (sets[idx]->contains(e->first()))
-				fIdx = idx;
-			if (sets[idx]->contains(e->second()))
-				sIdx = idx;
-
-			if (fIdx != -1 && sIdx != -1)
-				break;
-		}
-
-		// none is contained in a set
-		if (fIdx == -1 && sIdx == -1) {
-			QSharedPointer<PixelSet> ps(new PixelSet());
-			ps->add(e->first());
-			ps->add(e->second());
-			sets << ps;
-		}
-		// add first to the set of second
-		else if (fIdx == -1) {
-			sets[sIdx]->add(e->first());
-		}
-		// add second to the set of first
-		else if (sIdx == -1) {
-			sets[fIdx]->add(e->second());
-		}
-		// two different idx? - merge the sets
-		else if (fIdx != sIdx) {
-			sets[fIdx]->merge(*sets[sIdx]);
-			sets.remove(sIdx);
-		}
-		// else : nothing to do - they are both already added
-
-	}
-
-	qDebug() << "I found" << sets.size() << "text blocks";
-	
-	return sets;
 }
 
 QVector<QSharedPointer<Pixel> > TabStopAnalysis::findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const {
@@ -258,7 +190,7 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 
 			// create tab stop line
 			Line line = set->fitLine(medAngle);
-			line.setThickness(4);
+			//line.setThickness(4);
 
 			// // TODO: the idea here is simple: tabstops must be orthogonal to text lines - this is not true in general
 			// so I thought now: what if we fit the line and see how many are 'robustly' fitting - if to few we have to reject!
@@ -273,6 +205,7 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 				
 				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(set));
 				tabStop->setLine(line);
+				tabStop->setAngle(medAngle);
 				tabStops << tabStop;
 			//}
 			//else
@@ -337,13 +270,21 @@ QSharedPointer<PixelSet> TabStopCluster::set() const {
 	return mSet;
 }
 
+void TabStopCluster::setAngle(double angle) {
+	mMedAngle = angle;
+}
+
+double TabStopCluster::angle() const {
+	return mMedAngle;
+}
+
 void TabStopCluster::draw(QPainter & p) const {
 
-	mSet->draw(p);
+	//// uncomment to show tabstop cluster
+	//mSet->draw(p);
 
 	QPen oPen = p.pen();
 	p.setPen(ColorManager::instance().colors()[0]);
-	
 	mLine.draw(p);
 	
 	p.setPen(oPen);

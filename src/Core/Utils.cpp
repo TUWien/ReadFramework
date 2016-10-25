@@ -391,6 +391,7 @@ QString Timer::stringifyTime(int ct) const {
 	QString ds = QString("%1").arg(d, 2, 10, QChar('0'));		// zero padding e.g. 01
 	QString hs = QString("%1").arg(h, 2, 10, QChar('0'));		// zero padding e.g. 01;
 	QString mins = QString("%1").arg(min, 2, 10, QChar('0'));	// zero padding e.g. 01;
+	secs = QString("%1").arg(sec, 2, 10, QChar('0'));
 
 	if (ct < 3600000)
 		return mins + ":" + secs;

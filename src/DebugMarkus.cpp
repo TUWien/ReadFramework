@@ -145,6 +145,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);
 
 	Timer dt;
+
+	// find super pixels
 	rdf::SuperPixel superPixel(img);
 	
 	if (!superPixel.compute())
@@ -152,31 +154,27 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
+	// find local orientation per pixel
 	rdf::LocalOrientation lo(sp);
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
+	// smooth estimation
 	rdf::GraphCutOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
 	
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 
-	//// filter according to orientation
-	//QVector<QSharedPointer<Pixel> > spf;
-	//for (auto pixel : sp) {
-	//	if (pixel->stats()->orientation() == 0 || 
-	//		pixel->stats()->orientation() == CV_PI*0.5)
-	//		spf << pixel;
-	//}
-	//sp = spf;
-
-	rdf::TabStopAnalysis textBlocks(img, sp);
-	if (!textBlocks.compute())
+	// find tab stops
+	rdf::TabStopAnalysis tabStops(sp);
+	if (!tabStops.compute())
 		qWarning() << "could not compute text block segmentation!";
 
-	//rdf::TextLineSegmentation textLines(Rect(img), sp);
-	//if (!textLines.compute())
-	//	qWarning() << "could not compute text block segmentation!";
+	// find text lines
+	rdf::TextLineSegmentation textLines(Rect(img), sp);
+	textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
+	if (!textLines.compute())
+		qWarning() << "could not compute text block segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -192,8 +190,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	//// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);
-	rImg = textBlocks.draw(rImg);
-	//rImg = textLines.draw(rImg);
+	rImg = tabStops.draw(rImg);
+	rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "results written to" << maskPath;

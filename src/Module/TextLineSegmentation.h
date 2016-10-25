@@ -73,13 +73,19 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
+	void addLines(const QVector<Line>& lines);
+
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	QVector<QSharedPointer<LineEdge> > mEdges;
+	//QVector<QSharedPointer<LineEdge> > mDbgEdges;	// remove
+	QVector<Line> mStopLines;
+
 	Rect mImgRect;
 
 	bool checkInput() const override;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
+	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;
 	QVector<QSharedPointer<PixelSet> > toSets() const;
 
 	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;

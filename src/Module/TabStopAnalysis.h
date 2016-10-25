@@ -76,28 +76,32 @@ public:
 	Line line() const;
 	QSharedPointer<PixelSet> set() const;
 
+	void setAngle(double angle);
+	double angle() const;
+
 	void draw(QPainter& p) const;
 
 private:
 	QSharedPointer<PixelSet> mSet;
 	Line mLine;
-
+	double mMedAngle;
 };
 
 class DllModuleExport TabStopAnalysis : public Module {
 
 public:
-	TabStopAnalysis(const cv::Mat& srcImg = cv::Mat(), 
-		const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TabStopAnalysis(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
 
 	bool isEmpty() const override;
 	bool compute() override;
 	QSharedPointer<TabStopConfig> config() const;
 
-	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 2.5);
-
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
+
+	// getter
+	QVector<QSharedPointer<TabStopCluster> > tabStopClusters() const;
+	QVector<Line> tabStopLines(double offset = 0.0) const;
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
@@ -105,14 +109,7 @@ private:
 
 	QVector<QSharedPointer<TabStopCluster> > mTabStops;
 
-	//QVector<QSharedPointer<PixelEdge> > mEdges;
-	QVector<QSharedPointer<PixelSet> > mTextBlocks;
-	cv::Mat mSrcImg;
-
 	bool checkInput() const override;
-	
-	// TODO: remove (it's now in PixelSet)
-	QVector<QSharedPointer<PixelSet> > createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const;
 	
 	// find tabs
 	QVector<QSharedPointer<Pixel> > findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const;

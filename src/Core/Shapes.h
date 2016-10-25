@@ -136,6 +136,7 @@ public:
 	Line gapLine(const Line& l) const;
 	double diffAngle(const Line& l) const;
 	bool within(const Vector2D& p) const;
+	Line moved(const Vector2D& mVec) const;
 	
 	// getter
 	Vector2D p1() const;
@@ -143,9 +144,11 @@ public:
 	QLineF line() const;
 	QPolygonF toPoly() const;
 
-	bool isHorizontal(float mAngleTresh = 0.5) const;
-	bool isVertical(float mAngleTresh = 0.5) const;
+	bool isHorizontal(double mAngleTresh = 0.5) const;
+	bool isVertical(double mAngleTresh = 0.5) const;
+	bool intersects(const Line& line) const;
 
+	Vector2D intersection(const Line& line) const;
 	Vector2D vector() const;
 
 	void draw(QPainter& p) const;

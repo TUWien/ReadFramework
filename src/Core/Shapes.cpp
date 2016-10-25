@@ -298,54 +298,60 @@ Vector2D Line::p2() const {
 /// <returns>
 ///   <c>true</c> if the specified m angle tresh is horizontal; otherwise, <c>false</c>.
 /// </returns>
-bool Line::isHorizontal(float mAngleTresh) const {
+bool Line::isHorizontal(double mAngleTresh) const {
 	
 	double lineAngle = angle();
+	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0, CV_PI);
+	
+	double a = 0.0f;
+	double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
 
-	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0f, CV_PI);
-	//old version
-	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
-
-	//float diffangle = fabs(0.0f - angleNewLine);
-
-	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
-
-	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
-	float a = 0.0f;
-	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
-		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
-
-	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
 	else
 		return false;
 
 }
 
-bool Line::isVertical(float mAngleTresh) const {
+bool Line::isVertical(double mAngleTresh) const {
+	
 	double lineAngle = angle();
-	//lineAngle = o = blob.blobOrientation
-	//lineAngle = angle
+	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0, CV_PI);
+	
+	double a = CV_PI*0.5;
+	double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
 
-
-	double angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
-	//old version
-	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
-
-	//float diffangle = fabs((float)CV_PI*0.5f - (float)angleNewLine);
-
-	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
-
-	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
-	float a = (float)CV_PI*0.5f;
-	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
-		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
-
-	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
 	else
 		return false;
 
+}
+
+bool Line::intersects(const Line & line) const {
+
+	return mLine.intersect(line.line(), 0) == QLineF::BoundedIntersection;
+}
+
+/// <summary>
+/// Returns the intersection point of both lines.
+/// This function returns an empty vector if the lines 
+/// do not intersect within the bounds
+/// </summary>
+/// <param name="line">Another line.</param>
+/// <returns>The line intersection.</returns>
+Vector2D Line::intersection(const Line & line) const {
+
+	QPointF p;
+
+	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
+
+	if (it == QLineF::BoundedIntersection)
+		return Vector2D(p);
+
+	return Vector2D();
 }
 
 /// <summary>
@@ -490,6 +496,16 @@ bool Line::within(const Vector2D& p) const {
 	
 	return (tmp.x()*pe.x() + tmp.y()*pe.y()) * (tmp.x()*ps.x() + tmp.y()*ps.y()) < 0;
 
+}
+
+/// <summary>
+/// Returns a line moved by the vector mVec.
+/// </summary>
+/// <param name="mVec">Move vector.</param>
+/// <returns></returns>
+Line Line::moved(const Vector2D & mVec) const {
+
+	return Line(p1() + mVec, p2() + mVec);
 }
 
 bool Line::lessX1(const Line& l1, const Line& l2) {

@@ -78,6 +78,9 @@ bool TextLineSegmentation::compute() {
 
 	mEdges = filterEdges(mEdges);
 
+	if (!mStopLines.empty())
+		mEdges = filterEdges(mEdges, mStopLines);
+
 	mDebug << "computed in" << dt;
 
 	return true;
@@ -87,11 +90,11 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 	return qSharedPointerDynamicCast<TextLineConfig>(mConfig);
 }
 
-QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& pixelEdges, double factor) const {
+QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, double factor) const {
 
 	QVector<QSharedPointer<LineEdge> > pixelEdgesClean;
 
-	for (auto pe : pixelEdges) {
+	for (auto pe : edges) {
 
 		if (pe->edgeWeight() < factor)
 			pixelEdgesClean << pe;
@@ -100,7 +103,30 @@ QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVect
 	return pixelEdgesClean;
 }
 
-QVector<QSharedPointer<PixelSet>> TextLineSegmentation::toSets() const {
+QVector<QSharedPointer<LineEdge>> TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, const QVector<Line>& lines) const {
+
+	QVector<QSharedPointer<LineEdge> > pixelEdgesClean;
+
+	for (const QSharedPointer<LineEdge>& pe : edges) {
+
+		bool filter = false;
+		
+		// does the edge intersect with any 'stop' line?
+		for (const Line& line : lines) {
+			if (pe->edge().intersects(line)) {
+				filter = true;
+				break;
+			}
+		}
+
+		if (!filter)
+			pixelEdgesClean << pe;
+	}
+
+	return pixelEdgesClean;
+}
+
+QVector<QSharedPointer<PixelSet> > TextLineSegmentation::toSets() const {
 
 	// why do I have to do this?
 	QVector<QSharedPointer<PixelEdge> > pe;
@@ -112,8 +138,7 @@ QVector<QSharedPointer<PixelSet>> TextLineSegmentation::toSets() const {
 
 	for (auto s : allSets) {
 
-		//if (!s->baseline().isEmpty())
-		if (s->pixels().size() > 10)
+		if (s->pixels().size() > 3)
 			filteredSets << s;
 	}
 
@@ -142,14 +167,16 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	QPainter p(&pm);
 	
-	//// this block draws the edges
-	//QColor col = QColor(0, 60, 60);
-	//Drawer::instance().setColor(col);
-	//p.setPen(Drawer::instance().pen());
+	// this block draws the edges
+	Drawer::instance().setColor(ColorManager::instance().darkGray(0.4));
+	p.setPen(Drawer::instance().pen());
 
-	//for (auto b : mEdges) {
-	//	b->draw(p);
-	//}
+	for (auto b : mEdges) {
+		b->draw(p);
+	}
+
+	for (auto l : mStopLines)
+		l.draw(p);
 
 	auto sets = toSets();
 	
@@ -170,6 +197,10 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 QString TextLineSegmentation::toString() const {
 	return Module::toString();
+}
+
+void TextLineSegmentation::addLines(const QVector<Line>& lines) {
+	mStopLines << lines;
 }
 
 bool TextLineSegmentation::checkInput() const {
