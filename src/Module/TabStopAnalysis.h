@@ -54,10 +54,10 @@ namespace rdf {
 // read defines
 
 
-class DllModuleExport TextBlockConfig : public ModuleConfig {
+class DllModuleExport TabStopConfig : public ModuleConfig {
 
 public:
-	TextBlockConfig();
+	TabStopConfig();
 
 	virtual QString toString() const override;
 
@@ -84,15 +84,15 @@ private:
 
 };
 
-class DllModuleExport TextBlockSegmentation : public Module {
+class DllModuleExport TabStopAnalysis : public Module {
 
 public:
-	TextBlockSegmentation(const cv::Mat& srcImg = cv::Mat(), 
+	TabStopAnalysis(const cv::Mat& srcImg = cv::Mat(), 
 		const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
 
 	bool isEmpty() const override;
 	bool compute() override;
-	QSharedPointer<TextBlockConfig> config() const;
+	QSharedPointer<TabStopConfig> config() const;
 
 	QVector<QSharedPointer<PixelEdge> > filterEdges(const QVector<QSharedPointer<PixelEdge> >& pixelEdges, double factor = 2.5);
 

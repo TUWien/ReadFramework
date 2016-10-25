@@ -40,7 +40,7 @@
 #include "Settings.h"
 
 #include "SuperPixel.h"
-#include "TextBlockSegmentation.h"
+#include "TabStopAnalysis.h"
 #include "TextLineSegmentation.h"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -170,7 +170,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//}
 	//sp = spf;
 
-	rdf::TextBlockSegmentation textBlocks(img, sp);
+	rdf::TabStopAnalysis textBlocks(img, sp);
 	if (!textBlocks.compute())
 		qWarning() << "could not compute text block segmentation!";
 

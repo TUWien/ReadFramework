@@ -30,7 +30,7 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "TextBlockSegmentation.h"
+#include "TabStopAnalysis.h"
 
 #include "Image.h"
 #include "Drawer.h"
@@ -45,29 +45,29 @@
 
 namespace rdf {
 
-// TextBlockConfig --------------------------------------------------------------------
-TextBlockConfig::TextBlockConfig() {
+// TabStopConfig --------------------------------------------------------------------
+TabStopConfig::TabStopConfig() {
 	mModuleName = "Text Block";
 }
 
-QString TextBlockConfig::toString() const {
+QString TabStopConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-// TextBlockSegmentation --------------------------------------------------------------------
-TextBlockSegmentation::TextBlockSegmentation(const cv::Mat& srcImg, 
+// TabStopAnalysis --------------------------------------------------------------------
+TabStopAnalysis::TabStopAnalysis(const cv::Mat& srcImg, 
 	const QVector<QSharedPointer<Pixel> >& superPixels) {
 	
 	mSrcImg = srcImg;
 	mSuperPixels = superPixels;
-	mConfig = QSharedPointer<TextBlockConfig>::create();
+	mConfig = QSharedPointer<TabStopConfig>::create();
 }
 
-bool TextBlockSegmentation::isEmpty() const {
+bool TabStopAnalysis::isEmpty() const {
 	return mSrcImg.empty();
 }
 
-bool TextBlockSegmentation::compute() {
+bool TabStopAnalysis::compute() {
 
 	Timer dt;
 
@@ -91,11 +91,11 @@ bool TextBlockSegmentation::compute() {
 	return true;
 }
 
-QSharedPointer<TextBlockConfig> TextBlockSegmentation::config() const {
-	return qSharedPointerDynamicCast<TextBlockConfig>(mConfig);
+QSharedPointer<TabStopConfig> TabStopAnalysis::config() const {
+	return qSharedPointerDynamicCast<TabStopConfig>(mConfig);
 }
 
-QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVector<QSharedPointer<PixelEdge>>& pixelEdges, double factor) {
+QVector<QSharedPointer<PixelEdge> > TabStopAnalysis::filterEdges(const QVector<QSharedPointer<PixelEdge>>& pixelEdges, double factor) {
 	
 	double meanEdgeLength = 0;
 
@@ -116,7 +116,7 @@ QVector<QSharedPointer<PixelEdge> > TextBlockSegmentation::filterEdges(const QVe
 	return pixelEdgesClean;
 }
 
-cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
+cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	
 	// draw mser blobs
 	Timer dtf;
@@ -157,16 +157,16 @@ cv::Mat TextBlockSegmentation::draw(const cv::Mat& img) const {
 	return Image::instance().qPixmap2Mat(pm);
 }
 
-QString TextBlockSegmentation::toString() const {
+QString TabStopAnalysis::toString() const {
 	return Module::toString();
 }
 
-bool TextBlockSegmentation::checkInput() const {
+bool TabStopAnalysis::checkInput() const {
 	
 	return !mSuperPixels.isEmpty();
 }
 
-QVector<QSharedPointer<PixelSet> > TextBlockSegmentation::createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const {
+QVector<QSharedPointer<PixelSet> > TabStopAnalysis::createTextBlocks(const QVector<QSharedPointer<PixelEdge> >& edges) const {
 	
 	QVector<QSharedPointer<PixelSet> > sets;
 
@@ -215,7 +215,7 @@ QVector<QSharedPointer<PixelSet> > TextBlockSegmentation::createTextBlocks(const
 	return sets;
 }
 
-QVector<QSharedPointer<Pixel> > TextBlockSegmentation::findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const {
+QVector<QSharedPointer<Pixel> > TabStopAnalysis::findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const {
 
 	QVector<QSharedPointer<Pixel> > tabStops;
 	
@@ -238,7 +238,7 @@ QVector<QSharedPointer<Pixel> > TextBlockSegmentation::findTabStopCandidates(con
 	return tabStops;
 }
 
-QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const QVector<QSharedPointer<Pixel>>& pixel) const {
+QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector<QSharedPointer<Pixel>>& pixel) const {
 	
 	// parameters 
 	int minClusterSize = 4;
@@ -286,7 +286,7 @@ QVector<QSharedPointer<TabStopCluster> > TextBlockSegmentation::findTabs(const Q
 	return tabStops;
 }
 
-double TextBlockSegmentation::medianOrientation(const QSharedPointer<PixelSet>& set) const {
+double TabStopAnalysis::medianOrientation(const QSharedPointer<PixelSet>& set) const {
 
 
 	QList<double> angles;
@@ -303,7 +303,7 @@ double TextBlockSegmentation::medianOrientation(const QSharedPointer<PixelSet>& 
 	return Algorithms::statMoment(angles, 0.5);
 }
 
-void TextBlockSegmentation::updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type & newType) const {
+void TabStopAnalysis::updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type & newType) const {
 
 	for (const QSharedPointer<Pixel>& px : set->pixels()) {
 

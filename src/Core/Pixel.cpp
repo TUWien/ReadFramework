@@ -795,7 +795,6 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connectTabStops(const QVector<QSha
 			if (!pxc.isNeighbor(npx->center(), cR * 3))
 				continue;
 
-
 			double cOr = npx->stats()->orientation() - npx->tabStop().orientation();
 
 			// tabstop pixels must be 'aligned' w.r.t to the line orientation
