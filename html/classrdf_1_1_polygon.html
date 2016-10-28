@@ -119,8 +119,8 @@ $(document).ready(function(){initNavTree('classrdf_1_1_polygon.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3ced4a11988a6f54e3cbe779a49a69f9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#a3ced4a11988a6f54e3cbe779a49a69f9">Polygon</a> (const QPolygon &amp;<a class="el" href="classrdf_1_1_polygon.html#a34f7546f749983a4dae29eeb002bd68c">polygon</a>=QPolygon())</td></tr>
-<tr class="separator:a3ced4a11988a6f54e3cbe779a49a69f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b70b6a77725d6842e3f7fd7047ee47"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#a18b70b6a77725d6842e3f7fd7047ee47">Polygon</a> (const QPolygonF &amp;<a class="el" href="classrdf_1_1_polygon.html#a34f7546f749983a4dae29eeb002bd68c">polygon</a>=QPolygonF())</td></tr>
+<tr class="separator:a18b70b6a77725d6842e3f7fd7047ee47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a971c201fa86e15744805604e41e505"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#a1a971c201fa86e15744805604e41e505">isEmpty</a> () const </td></tr>
 <tr class="separator:a1a971c201fa86e15744805604e41e505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4335652867aca759c8d8a2d68a9e2b7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#a4335652867aca759c8d8a2d68a9e2b7d">read</a> (const QString &amp;pointList)</td></tr>
@@ -154,17 +154,19 @@ Protected Attributes</h2></td></tr>
 Friends</h2></td></tr>
 <tr class="memitem:afeec28ad84fab3317af437d7580bbe27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#afeec28ad84fab3317af437d7580bbe27">operator&lt;&lt;</a> (<a class="el" href="classrdf_1_1_polygon.html">Polygon</a> &amp;poly, const QPointF &amp;pt)</td></tr>
 <tr class="separator:afeec28ad84fab3317af437d7580bbe27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbbafd79789e6b7e765be02a81701f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_polygon.html#a7dbbafd79789e6b7e765be02a81701f5">operator&lt;&lt;</a> (<a class="el" href="classrdf_1_1_polygon.html">Polygon</a> &amp;poly, const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;pt)</td></tr>
+<tr class="separator:a7dbbafd79789e6b7e765be02a81701f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a3ced4a11988a6f54e3cbe779a49a69f9"></a>
+<a class="anchor" id="a18b70b6a77725d6842e3f7fd7047ee47"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">rdf::Polygon::Polygon </td>
           <td>(</td>
-          <td class="paramtype">const QPolygon &amp;&#160;</td>
-          <td class="paramname"><em>polygon</em> = <code>QPolygon()</code></td><td>)</td>
+          <td class="paramtype">const QPolygonF &amp;&#160;</td>
+          <td class="paramname"><em>polygon</em> = <code>QPolygonF()</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -362,6 +364,40 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QPointF &amp;&#160;</td>
+          <td class="paramname"><em>pt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7dbbafd79789e6b7e765be02a81701f5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a> &amp;&#160;</td>
+          <td class="paramname"><em>poly</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
           <td class="paramname"><em>pt</em>&#160;</td>
         </tr>
         <tr>

@@ -22,6 +22,7 @@ var classrdf_1_1_vector2_d =
     [ "rotate", "classrdf_1_1_vector2_d.html#a22a537b82fb9d48580cbb5165e3af40a", null ],
     [ "setX", "classrdf_1_1_vector2_d.html#af019c53c88351ab0a3a6de08245f016f", null ],
     [ "setY", "classrdf_1_1_vector2_d.html#a68b400a75e057a381ee591bec7ffaf25", null ],
+    [ "theta", "classrdf_1_1_vector2_d.html#a4665db705c133ae51cba1ea6d7f93fe5", null ],
     [ "toCvPoint", "classrdf_1_1_vector2_d.html#ab92a13cb71d33e5572b56b21af9dadd5", null ],
     [ "toCvPoint2d", "classrdf_1_1_vector2_d.html#a3cfcaefc3c8a66a205ed80c68e93cc38", null ],
     [ "toCvPoint2f", "classrdf_1_1_vector2_d.html#abe4565267d66032c4863db5322e5c6a2", null ],

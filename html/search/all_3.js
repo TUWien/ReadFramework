@@ -54,6 +54,7 @@ var searchData=
   ['contrastval',['contrastVal',['../classrdf_1_1_base_binarization_su.html#adec4e6a29c32487f2afe082c866b21b7',1,'rdf::BaseBinarizationSu::contrastVal()'],['../classrdf_1_1_binarization_su_adapted.html#af7e5b70815484b5871e9cb7c3f4a52c9',1,'rdf::BinarizationSuAdapted::contrastVal()']]],
   ['convertdata',['convertData',['../classrdf_1_1_pixel_stats.html#a455ff96916e0feb4816edc2aca0bdeb9',1,'rdf::PixelStats']]],
   ['converter',['Converter',['../classrdf_1_1_converter.html',1,'rdf']]],
+  ['convexhull',['convexHull',['../classrdf_1_1_pixel_set.html#a8dcf92a877bfda2801e92372bbca0611',1,'rdf::PixelSet']]],
   ['convolveintegralimage',['convolveIntegralImage',['../classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76',1,'rdf::Algorithms']]],
   ['convolvesymmetric',['convolveSymmetric',['../classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092',1,'rdf::Algorithms']]],
   ['copy',['Copy',['../class_graph.html#ad6acf70f852f6d03d455e8b7869d112d',1,'Graph']]],

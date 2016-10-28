@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_pixel_set.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrdf_1_1_pixel_set-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -156,10 +157,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c83da338c13aba8e23f819e77c50381"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a1c83da338c13aba8e23f819e77c50381">pixels</a> () const </td></tr>
 <tr class="separator:a1c83da338c13aba8e23f819e77c50381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a244539d40b36ed50cadc6dac5d0b69ae"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a244539d40b36ed50cadc6dac5d0b69ae">pointSet</a> (double offsetAngle=0.0) const </td></tr>
+<tr class="memdesc:a244539d40b36ed50cadc6dac5d0b69ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a point set. The points are sampled along the pixel's ellipses w.r.t the relative angle which is added to the text line orientation. If angle == DBL_MAX or pixel-&gt;stats() == NULL, the ellipse centers are sampled instead.  <a href="#a244539d40b36ed50cadc6dac5d0b69ae">More...</a><br/></td></tr>
 <tr class="separator:a244539d40b36ed50cadc6dac5d0b69ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a909dd72774d049bb6d6cc5f3f385a104"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a909dd72774d049bb6d6cc5f3f385a104">polygon</a> () const </td></tr>
-<tr class="memdesc:a909dd72774d049bb6d6cc5f3f385a104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the convex hull of the <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a>.  <a href="#a909dd72774d049bb6d6cc5f3f385a104">More...</a><br/></td></tr>
-<tr class="separator:a909dd72774d049bb6d6cc5f3f385a104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dcf92a877bfda2801e92372bbca0611"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a8dcf92a877bfda2801e92372bbca0611">convexHull</a> () const </td></tr>
+<tr class="separator:a8dcf92a877bfda2801e92372bbca0611"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52435de7253d8dcb6f16a4c87ee3cfdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a52435de7253d8dcb6f16a4c87ee3cfdf">boundingBox</a> () const </td></tr>
 <tr class="separator:a52435de7253d8dcb6f16a4c87ee3cfdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac56c3481044399420ed82e70be21cce8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_line.html">Line</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#ac56c3481044399420ed82e70be21cce8">fitLine</a> (double offsetAngle=0.0) const </td></tr>
@@ -168,6 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a53c191bc9991060cdc0325fd06e51b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96fd9913d3b5b1c435605d6adec90889"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a96fd9913d3b5b1c435605d6adec90889">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a96fd9913d3b5b1c435605d6adec90889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c1160b2a74e93382be2c7496cf27e6b"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_text_line.html">TextLine</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a0c1160b2a74e93382be2c7496cf27e6b">toTextLine</a> () const </td></tr>
+<tr class="separator:a0c1160b2a74e93382be2c7496cf27e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca">BaseElement</a> (const QString &amp;<a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">id</a>=QString())</td></tr>
 <tr class="memdesc:a34b6a09b0436365f198ce4d36b8039ca inherit pub_methods_classrdf_1_1_base_element"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class keeps an ID to keep track of transformed elements during a processing chain. You can e.g. generate <a class="el" href="classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis...">Pixel</a> elements from MserBlobs. After filtering, processing etc. you can map back to the (pixel accurate) <a class="el" href="classrdf_1_1_mser_blob.html">MserBlob</a> using this ID.  <a href="#a34b6a09b0436365f198ce4d36b8039ca">More...</a><br/></td></tr>
@@ -185,6 +188,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a56b7e064412c514d1c1fae1ff1cae809"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QSharedPointer<br class="typebreak"/>
 &lt; <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a56b7e064412c514d1c1fae1ff1cae809">fromEdges</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel_edge.html">PixelEdge</a> &gt; &gt; &amp;edges)</td></tr>
 <tr class="separator:a56b7e064412c514d1c1fae1ff1cae809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aaf5a8a6cd415c9090ef57e4574a9ce23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#aaf5a8a6cd415c9090ef57e4574a9ce23">polygon</a> (const QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt; &amp;pts) const </td></tr>
+<tr class="memdesc:aaf5a8a6cd415c9090ef57e4574a9ce23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a poly line along the points defined by angle. If maxAngleThr != -1, points are rejected if the cosine of their enclosing angle is smaller than maxAngleThr. e.g. maxAngleThr = 0 would allow polygon changes of up to 90°.  <a href="#aaf5a8a6cd415c9090ef57e4574a9ce23">More...</a><br/></td></tr>
+<tr class="separator:aaf5a8a6cd415c9090ef57e4574a9ce23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -346,6 +355,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8dcf92a877bfda2801e92372bbca0611"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a> rdf::PixelSet::convexHull </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a96fd9913d3b5b1c435605d6adec90889"></a>
 <div class="memitem">
 <div class="memproto">
@@ -447,21 +471,48 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns a point set. The points are sampled along the pixel's ellipses w.r.t the relative angle which is added to the text line orientation. If angle == DBL_MAX or pixel-&gt;stats() == NULL, the ellipse centers are sampled instead. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offsetAngle</td><td>The angle which is added to the pixel's local orientation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
 </div>
 </div>
-<a class="anchor" id="a909dd72774d049bb6d6cc5f3f385a104"></a>
+<a class="anchor" id="aaf5a8a6cd415c9090ef57e4574a9ce23"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classrdf_1_1_polygon.html">Polygon</a> rdf::PixelSet::polygon </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
+<p>Returns a poly line along the points defined by angle. If maxAngleThr != -1, points are rejected if the cosine of their enclosing angle is smaller than maxAngleThr. e.g. maxAngleThr = 0 would allow polygon changes of up to 90°. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>The angle for sampling the ellipses.</td></tr>
+    <tr><td class="paramname">maxAngleThr</td><td>The maximum angle thresh.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 <p>Returns the convex hull of the <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
@@ -492,6 +543,21 @@ Protected Attributes</h2></td></tr>
           <td class="paramtype">const QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>pixel</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0c1160b2a74e93382be2c7496cf27e6b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_text_line.html">TextLine</a> &gt; rdf::PixelSet::toTextLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">

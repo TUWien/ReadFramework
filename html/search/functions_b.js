@@ -10,7 +10,7 @@ var searchData=
   ['maxanglediffextern',['maxAngleDiffExtern',['../classrdf_1_1_line_trace_config.html#a30a2475ad8bbf994534097cf243a1b08',1,'rdf::LineTraceConfig']]],
   ['maxaspectratio',['maxAspectRatio',['../classrdf_1_1_line_trace_config.html#a470eadee6c1487dfc747f136e532cfc6',1,'rdf::LineTraceConfig']]],
   ['maxdistextern',['maxDistExtern',['../classrdf_1_1_line_trace_config.html#a003a3d8c643488e15f5ddc3c59374d2d',1,'rdf::LineTraceConfig']]],
-  ['maxflow',['maxFlow',['../classrd3_1_1_g_c_graph.html#a736c90a220db14ec93355a3fead7384f',1,'rd3::GCGraph::maxFlow()'],['../class_graph.html#a3e08e85ad9530ecaac1e4c966cd68b1d',1,'Graph::maxflow()']]],
+  ['maxflow',['maxflow',['../class_graph.html#a3e08e85ad9530ecaac1e4c966cd68b1d',1,'Graph::maxflow()'],['../classrd3_1_1_g_c_graph.html#a736c90a220db14ec93355a3fead7384f',1,'rd3::GCGraph::maxFlow()']]],
   ['maxgap',['maxGap',['../classrdf_1_1_line_trace_config.html#a5dc51590f1060c7f5f8b842749982e04',1,'rdf::LineTraceConfig']]],
   ['maxlen',['maxLen',['../classrdf_1_1_line_trace_config.html#a0b2db54bf8015a92a4c5e90748b74648',1,'rdf::LineTraceConfig']]],
   ['maxlendiff',['maxLenDiff',['../classrdf_1_1_line_trace_config.html#a788f34f70fe3b8fefe7604229138eec0',1,'rdf::LineTraceConfig']]],

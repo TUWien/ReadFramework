@@ -14,7 +14,7 @@ var searchData=
   ['ellipse',['Ellipse',['../classrdf_1_1_ellipse.html',1,'rdf']]],
   ['ellipse',['ellipse',['../classrdf_1_1_pixel.html#a558f594d7d175c16150f941c146f8cc7',1,'rdf::Pixel::ellipse()'],['../classrdf_1_1_ellipse.html#a62582ad6135dd11f580b7c798008635d',1,'rdf::Ellipse::Ellipse()'],['../classrdf_1_1_ellipse.html#a4fb8d9d8d85c417c8be091788525bfd1',1,'rdf::Ellipse::Ellipse(const Vector2D &amp;center, const Vector2D &amp;axis=Vector2D(), double angle=0.0)'],['../classrdf_1_1_ellipse.html#a3b828c43354dec1599fb20a67d0f202a',1,'rdf::Ellipse::Ellipse(const cv::RotatedRect &amp;rect)']]],
   ['end',['end',['../class_g_coptimization_1_1_data_cost_fn_sparse.html#a942578b7db163943ef07e19cc92ef9c0',1,'GCoptimization::DataCostFnSparse']]],
-  ['endpoint',['endPoint',['../classrdf_1_1_base_line.html#a7c658f7796568f2496b1c00516473373',1,'rdf::BaseLine']]],
+  ['endpoint',['endPoint',['../classrdf_1_1_base_line.html#aa51df8094e4c3584bcde691e02e2eed5',1,'rdf::BaseLine']]],
   ['energy',['Energy',['../class_energy.html',1,'Energy&lt; captype, tcaptype, flowtype &gt;'],['../class_energy.html#a20fea13ef9edc2d7f67d0e8a26024eda',1,'Energy::Energy()']]],
   ['energy_2eh',['energy.h',['../energy_8h.html',1,'']]],
   ['energyt',['EnergyT',['../class_g_coptimization.html#aa1b1a4d8ffae969fa2c73f032a07830e',1,'GCoptimization']]],

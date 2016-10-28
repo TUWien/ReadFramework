@@ -9,7 +9,7 @@ var searchData=
   ['baseimageelement_2ecpp',['BaseImageElement.cpp',['../_base_image_element_8cpp.html',1,'']]],
   ['baseimageelement_2eh',['BaseImageElement.h',['../_base_image_element_8h.html',1,'']]],
   ['baseline',['BaseLine',['../classrdf_1_1_base_line.html',1,'rdf']]],
-  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_base_line.html#a53768a35510cbd2e52f93612f54da676',1,'rdf::BaseLine::BaseLine()']]],
+  ['baseline',['baseLine',['../classrdf_1_1_text_line.html#a65290db3f5f8b4ccd307b655dfdcb61a',1,'rdf::TextLine::baseLine()'],['../classrdf_1_1_base_line.html#adc97ec67c5f78d7f7e4cd464f36fa53a',1,'rdf::BaseLine::BaseLine(const QPolygonF &amp;baseLine=QPolygonF())'],['../classrdf_1_1_base_line.html#a5309c856af310941b0a460e5f10fb2bd',1,'rdf::BaseLine::BaseLine(const Polygon &amp;baseLine)'],['../classrdf_1_1_base_line.html#ac819554f38652ad0a4837a173cf2b2ae',1,'rdf::BaseLine::BaseLine(const Line &amp;line)']]],
   ['basemodule_2ecpp',['BaseModule.cpp',['../_base_module_8cpp.html',1,'']]],
   ['basemodule_2eh',['BaseModule.h',['../_base_module_8h.html',1,'']]],
   ['basename',['baseName',['../classrdf_1_1_utils.html#a53379c74a413e2bfebc881cfa69202fb',1,'rdf::Utils']]],

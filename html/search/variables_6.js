@@ -39,7 +39,7 @@ var searchData=
   ['mangle',['mAngle',['../classrdf_1_1_ellipse.html#ac7c24d4e5ff2f380dc86701c5ed147ec',1,'rdf::Ellipse']]],
   ['marea',['mArea',['../classrdf_1_1_patch.html#a66219dedf0419b86e3616d1ddc029e68',1,'rdf::Patch']]],
   ['maxis',['mAxis',['../classrdf_1_1_ellipse.html#aa0750e94fdce57445805ebe59508b538',1,'rdf::Ellipse']]],
-  ['mbaseline',['mBaseLine',['../classrdf_1_1_text_line.html#a223b596aa2ee21b35194efcb54af928c',1,'rdf::TextLine::mBaseLine()'],['../classrdf_1_1_base_line.html#a1c770a632f92b5e8045d33f0841daba9',1,'rdf::BaseLine::mBaseLine()']]],
+  ['mbaseline',['mBaseLine',['../classrdf_1_1_text_line.html#a223b596aa2ee21b35194efcb54af928c',1,'rdf::TextLine::mBaseLine()'],['../classrdf_1_1_base_line.html#ae68cb064835de062ce963aba109df8ae',1,'rdf::BaseLine::mBaseLine()']]],
   ['mbbox',['mBBox',['../classrdf_1_1_mser_blob.html#a41bcecd9c748d7d1f6d7a6f84410bc62',1,'rdf::MserBlob::mBBox()'],['../classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9',1,'rdf::Pixel::mBBox()']]],
   ['mbincontrastimg',['mBinContrastImg',['../classrdf_1_1_binarization_su_adapted.html#af6f531b013aa721681519b4d5e9c877c',1,'rdf::BinarizationSuAdapted']]],
   ['mbrush',['mBrush',['../classrdf_1_1_region_type_config.html#aab1d26f0b1e03a543f2bd0fea3e9f75b',1,'rdf::RegionTypeConfig']]],

@@ -6,5 +6,6 @@ var classrdf_1_1_text_line_segmentation =
     [ "config", "classrdf_1_1_text_line_segmentation.html#a24d23b622cc744f074fe74cbd48efabf", null ],
     [ "draw", "classrdf_1_1_text_line_segmentation.html#acf6c32bf08a7ffe90fb0bdad469113e9", null ],
     [ "isEmpty", "classrdf_1_1_text_line_segmentation.html#a704a9bbd961ae77728b26a0efb863563", null ],
+    [ "textLines", "classrdf_1_1_text_line_segmentation.html#ae6bbf6eafdddf1cb8eb6ec8492e3ec58", null ],
     [ "toString", "classrdf_1_1_text_line_segmentation.html#ac5fe859799716de678f605ae558e70b0", null ]
 ];
