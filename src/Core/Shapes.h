@@ -57,56 +57,8 @@ namespace rdf {
 // read defines
 class Vector2D;
 class Rect;
-
-class DllCoreExport Polygon {
-
-public:
-	Polygon(const QPolygon& polygon = QPolygon());
-
-	friend void operator<<(Polygon& poly, const QPointF& pt) {
-		poly.mPoly << pt;
-	}
-
-	bool isEmpty() const;
-
-	void read(const QString& pointList);
-	QString write() const;
-
-	int size() const;
-	QPolygonF polygon() const;
-	QPolygonF closedPolygon() const;
-
-	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
-	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
-	void setPolygon(const QPolygonF& polygon);
-
-	void draw(QPainter& p) const;
-
-protected:
-	QPolygonF mPoly;
-
-};
-
-class DllCoreExport BaseLine {
-
-public:
-	BaseLine(const QPolygon& baseLine = QPolygon());
-
-	bool isEmpty() const;
-
-	void setPolygon(const QPolygon& baseLine);
-	QPolygon polygon() const;
-
-	void read(const QString& pointList);
-	QString write() const;
-
-	QPoint startPoint() const;
-	QPoint endPoint() const;
-
-protected:
-	QPolygon mBaseLine;
-};
-
+class Polygon;
+class Line;
 
 /// <summary>
 /// A basic line class including stroke width (thickness).
@@ -287,6 +239,7 @@ public:
 	double angle() const;
 	double length() const;
 	void rotate(double angle);
+	double theta(const Vector2D& o) const;
 
 	bool isNeighbor(const Vector2D& other, double radius) const;
 
@@ -425,6 +378,61 @@ protected:
 	Vector2D mCenter;
 	Vector2D mAxis;
 	double mAngle = 0.0;
+};
+
+class DllCoreExport BaseLine {
+
+public:
+	BaseLine(const QPolygonF& baseLine = QPolygonF());
+	BaseLine(const Polygon& baseLine);
+	BaseLine(const Line& line);
+
+	bool isEmpty() const;
+
+	void setPolygon(const QPolygonF& baseLine);
+	QPolygonF polygon() const;
+	QPolygon toPolygon() const;
+
+	void read(const QString& pointList);
+	QString write() const;
+
+	QPointF startPoint() const;
+	QPointF endPoint() const;
+
+protected:
+	QPolygonF mBaseLine;
+};
+
+class DllCoreExport Polygon {
+
+public:
+	Polygon(const QPolygonF& polygon = QPolygonF());
+
+	friend void operator<<(Polygon& poly, const QPointF& pt) {
+		poly.mPoly << pt;
+	}
+	friend void operator<<(Polygon& poly, const Vector2D& pt) {
+		poly.mPoly << pt.toQPointF();
+	}
+
+	bool isEmpty() const;
+
+	void read(const QString& pointList);
+	QString write() const;
+
+	int size() const;
+	QPolygonF polygon() const;
+	QPolygonF closedPolygon() const;
+
+	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
+	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
+	void setPolygon(const QPolygonF& polygon);
+
+	void draw(QPainter& p) const;
+
+protected:
+	QPolygonF mPoly;
+
 };
 
 };

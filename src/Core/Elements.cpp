@@ -469,7 +469,6 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 		writer.writeEndElement(); // </Region>
 }
 
-
 /// <summary>
 /// Returns a string with all important properties of the TextLine.
 /// </summary>
@@ -502,7 +501,7 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	if (config.drawBaseline() && !mBaseLine.isEmpty()) {
 		
-		QPolygon poly = mBaseLine.polygon();
+		QPolygonF poly = mBaseLine.polygon();
 		
 		QPainterPath path;
 		path.addPolygon(poly);

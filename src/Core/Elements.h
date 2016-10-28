@@ -60,6 +60,7 @@ namespace rdf {
 
 // read defines
 class RegionTypeConfig;
+class PixelSet;
 
 class DllCoreExport Region {
 

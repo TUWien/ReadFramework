@@ -211,6 +211,15 @@ void TextLineSegmentation::addLines(const QVector<Line>& lines) {
 	mStopLines << lines;
 }
 
+QVector<QSharedPointer<TextLine>> TextLineSegmentation::textLines() const {
+	
+	QVector<QSharedPointer<TextLine>> tls;
+	for (auto set : toSets())
+		tls << set->toTextLine();
+
+	return tls;
+}
+
 bool TextLineSegmentation::checkInput() const {
 
 	return !mSuperPixels.isEmpty();

@@ -74,6 +74,7 @@ public:
 	QString toString() const override;
 
 	void addLines(const QVector<Line>& lines);
+	QVector<QSharedPointer<TextLine> > textLines() const;
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;

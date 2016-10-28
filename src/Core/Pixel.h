@@ -56,6 +56,7 @@ namespace rdf {
 
 class Pixel;
 class PixelEdge;
+class TextLine;
 
 class DllCoreExport MserBlob : public BaseElement {
 
@@ -286,7 +287,8 @@ public:
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
-	Polygon polygon() const;
+	Polygon convexHull() const;
+	//Polygon polyLine(double angle, double maxCosThr = 0.9) const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
 	Ellipse profileRect() const;					// TODO: remove!
@@ -295,9 +297,12 @@ public:
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
+	QSharedPointer<TextLine> toTextLine() const;
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
+
+	Polygon polygon(const QVector<Vector2D>& pts) const;
 };
 
 /// <summary>

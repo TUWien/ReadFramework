@@ -46,6 +46,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QImage>
+#include <QFileInfo>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
@@ -194,7 +195,37 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
 	rdf::Image::instance().save(rImg, maskPath);
-	qDebug() << "results written to" << maskPath;
+	qDebug() << "debug image added" << maskPath;
+
+
+	// write XML -----------------------------------
+	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+	rdf::PageXmlParser parser;
+	parser.read(loadXmlPath);
+	auto pe = parser.page();
+	pe->setCreator(QString("CVL"));
+	pe->setImageSize(QSize(img.rows, img.cols));
+	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
+
+	// start writing content
+	auto ps = PixelSet::fromEdges(PixelSet::connect(sp, Rect(0, 0, img.cols, img.rows)));
+
+	if (!ps.empty()) {
+		QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
+		textRegion->setType(Region::type_text_region);
+		textRegion->setPolygon(ps[0]->convexHull());
+		
+		for (auto tl : textLines.textLines()) {
+			textRegion->addUniqueChild(tl);
+		}
+
+		pe->rootRegion()->addUniqueChild(textRegion);
+	}
+
+	parser.write(mConfig.xmlPath(), pe);
+	qDebug() << "results written to" << mConfig.xmlPath();
+
 }
 
 }

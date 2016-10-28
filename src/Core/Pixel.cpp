@@ -38,6 +38,7 @@
 #include "Utils.h"
 #include "Image.h"
 #include "Algorithms.h"
+#include "Elements.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -577,37 +578,121 @@ QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
 	return mSet;
 }
 
+/// <summary>
+/// Returns a point set.
+/// The points are sampled along the pixel's ellipses w.r.t
+/// the relative angle which is added to the text line orientation.
+/// If angle == DBL_MAX or pixel->stats() == NULL, the ellipse centers
+/// are sampled instead.
+/// </summary>
+/// <param name="offsetAngle">The angle which is added to the pixel's local orientation.</param>
+/// <returns></returns>
 QVector<Vector2D> PixelSet::pointSet(double offsetAngle) const {
 	
 	QVector<Vector2D> ptSet;
 
 	for (auto p : mSet) {
-		if (p->stats()) {
+		if (p->stats() && offsetAngle != DBL_MAX) {
 			double angle = p->stats()->orientation() + offsetAngle;
 			ptSet << p->ellipse().getPoint(angle);	// get ellipse point at the bottom
 		}
+		else
+			ptSet << p->ellipse().center();
 	}
 
 	return ptSet;
 }
 
+Polygon PixelSet::convexHull() const {
+	
+	QVector<Vector2D> pts = pointSet(0.0);
+	//pts << pointSet(CV_PI*0.5);
+	pts << pointSet(CV_PI);
+	//pts << pointSet(-CV_PI*0.5);
+	
+	return polygon(pts);
+}
+
+/// <summary>
+/// Returns a poly line along the points defined by angle.
+/// If maxAngleThr != -1, points are rejected if the cosine of their enclosing angle
+/// is smaller than maxAngleThr. e.g. maxAngleThr = 0 would allow polygon changes
+/// of up to 90°.
+/// </summary>
+/// <param name="angle">The angle for sampling the ellipses.</param>
+/// <param name="maxAngleThr">The maximum angle thresh.</param>
+/// <returns></returns>
+//Polygon PixelSet::polyLine(double, double) const {
+//	
+//	// TODO!
+//	//QVector<Vector2D> pts = pointSet(angle);
+//
+//	//QPolygonF poly = polygon(pts).polygon();
+//
+//	//QList<double> len;
+//	//Vector2D lp;
+//	//for (const QPointF& p : poly) {
+//
+//	//	if (!lp.isNull())
+//	//		len << Vector2D(lp - p).length();
+//
+//	//	lp = p;
+//	//}
+//
+//	//double maxLen = Algorithms::instance().statMoment(len, 0.9);
+//
+//	//Polygon cleanedPoly;
+//	//for (int idx = 0; idx < len.size(); idx++) {
+//	//	if (len[idx] < maxLen)
+//	//		cleanedPoly << poly[idx + 1];
+//	//}
+//
+//	//cleanedPoly = poly;
+//
+//	//qDebug() << "max length: " << maxLen;
+//	//Polygon poly;
+//	//Vector2D p1, p2;
+//	//for (const Vector2D& p0 : pts) {
+//
+//	//	bool isValid = true;
+//	//	if (!p1.isNull() && !p2.isNull()) {
+//
+//	//		Vector2D lVec = p1 - p2;
+//	//		Vector2D rVec = p0 - p1;
+//	//		double ct = rVec.theta(lVec);
+//	//		
+//	//		if (ct < maxCosThr) {
+//	//			isValid = false;
+//	//			qInfo() << "point dropped, angle: " << ct;
+//	//		} 
+//	//	}
+//
+//	//	if (isValid) {
+//	//		poly << p0;
+//	//		p2 = p1;
+//	//		p1 = p0;
+//	//		qDebug() << "pushing back: " << p0;
+//	//	}
+//	//}
+//
+//	return Polygon();
+//}
+
 /// <summary>
 /// Returns the convex hull of the PixelSet.
 /// </summary>
 /// <returns></returns>
-Polygon PixelSet::polygon() const {
+Polygon PixelSet::polygon(const QVector<Vector2D>& pts) const {
 
-	std::vector<cv::Point2f> pts;
-
-	for (const QSharedPointer<Pixel>& px : mSet) {
-
-		cv::Point2f p = px->center().toCvPoint2f();
-		pts.push_back(p);
+	// convert
+	std::vector<cv::Point2f> ptsCv;
+	for (const Vector2D& pt : pts) {
+		ptsCv.push_back(pt.toCvPoint2f());
 	}
 
 	// compute convex hull
 	std::vector<cv::Point2f> cPts;
-	cv::convexHull(cv::Mat(pts), cPts, true);
+	cv::convexHull(cv::Mat(ptsCv), cPts, true);
 
 	Polygon poly = Polygon::fromCvPoints(cPts);
 
@@ -756,12 +841,24 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 	return sets;
 }
 
+QSharedPointer<TextLine> PixelSet::toTextLine() const {
+
+	BaseLine bl(fitLine(0.0));
+
+	QSharedPointer<TextLine> textLine = QSharedPointer<TextLine>::create();
+	textLine->setBaseLine(bl);
+	textLine->setPolygon(convexHull());
+
+	return textLine;
+}
+
 void PixelSet::draw(QPainter& p) const {
 
-	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+	//for (auto px : mSet)
+	//	px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
-	polygon().draw(p);
+	//polyLine(0.0).draw(p);
+	convexHull().draw(p);
 }
 
 // PixelGraph --------------------------------------------------------------------

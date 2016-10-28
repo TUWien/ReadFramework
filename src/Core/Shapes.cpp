@@ -42,7 +42,7 @@
 
 namespace rdf {
 
-Polygon::Polygon(const QPolygon& polygon) {
+Polygon::Polygon(const QPolygonF& polygon) {
 	mPoly = polygon;
 }
 bool Polygon::isEmpty() const {
@@ -111,20 +111,35 @@ QPolygonF Polygon::closedPolygon() const {
 }
 
 // BaseLine --------------------------------------------------------------------
-BaseLine::BaseLine(const QPolygon & baseLine) {
+BaseLine::BaseLine(const QPolygonF & baseLine) {
 	mBaseLine = baseLine;
+}
+
+BaseLine::BaseLine(const Polygon & baseLine) {
+	mBaseLine = baseLine.polygon();
+}
+
+BaseLine::BaseLine(const Line & line) {
+	
+	QLineF ql = line.line();
+	mBaseLine << ql.p1();
+	mBaseLine << ql.p2();
 }
 
 bool BaseLine::isEmpty() const {
 	return mBaseLine.isEmpty();
 }
 
-void BaseLine::setPolygon(const QPolygon & baseLine) {
+void BaseLine::setPolygon(const QPolygonF & baseLine) {
 	mBaseLine = baseLine;
 }
 
-QPolygon BaseLine::polygon() const {
+QPolygonF BaseLine::polygon() const {
 	return mBaseLine;
+}
+
+QPolygon BaseLine::toPolygon() const {
+	return mBaseLine.toPolygon();
 }
 
 void BaseLine::read(const QString & pointList) {
@@ -132,10 +147,10 @@ void BaseLine::read(const QString & pointList) {
 }
 
 QString BaseLine::write() const {
-	return Converter::instance().polyToString(mBaseLine);
+	return Converter::instance().polyToString(toPolygon());
 }
 
-QPoint BaseLine::startPoint() const {
+QPointF BaseLine::startPoint() const {
 	
 	if (!mBaseLine.isEmpty())
 		return mBaseLine.first();
@@ -143,7 +158,7 @@ QPoint BaseLine::startPoint() const {
 	return QPoint();
 }
 
-QPoint BaseLine::endPoint() const {
+QPointF BaseLine::endPoint() const {
 
 	if (!mBaseLine.isEmpty())
 		return mBaseLine.last();
@@ -748,6 +763,23 @@ void Vector2D::rotate(double angle) {
 	double xTmp = mX;
 	mX =  xTmp * std::cos(angle) + mY * std::sin(angle);
 	mY = -xTmp * std::sin(angle) + mY * std::cos(angle);
+}
+
+/// <summary>
+/// Computes the length normalized dot product between the vector and o.
+/// </summary>
+/// <param name="o">Another vector.</param>
+/// <returns>The cosinus of theta, the angle between both vectors</returns>
+double Vector2D::theta(const Vector2D & o) const {
+	
+	double cosTheta = *this * o;
+	double denom = length() * o.length();
+	if (denom != 0.0)
+		cosTheta /= denom;
+	else
+		return 0.0;
+	
+	return cosTheta;
 }
 
 bool Vector2D::isNeighbor(const Vector2D & p1, double radius) const {
