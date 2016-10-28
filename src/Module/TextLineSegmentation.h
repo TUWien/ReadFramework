@@ -34,12 +34,19 @@
 
 #include "BaseModule.h"
 #include "Pixel.h"
+#include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 

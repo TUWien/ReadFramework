@@ -34,6 +34,7 @@
 
 #include "BaseModule.h"
 #include "Pixel.h"
+#include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -52,7 +53,6 @@
 namespace rdf {
 
 // read defines
-
 
 class DllModuleExport TabStopConfig : public ModuleConfig {
 

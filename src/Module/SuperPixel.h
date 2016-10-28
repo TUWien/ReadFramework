@@ -56,6 +56,7 @@
 namespace rdf {
 
 // read defines
+class PixelGraph;
 
 class DllModuleExport SuperPixelConfig : public ModuleConfig {
 

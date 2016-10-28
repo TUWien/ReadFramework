@@ -37,6 +37,8 @@
 #include "Drawer.h"
 #include "Utils.h"
 
+#include "PixelSet.h"
+
 #include "GCGraph.hpp"
 
 #pragma warning(push, 0)	// no warnings from includes
