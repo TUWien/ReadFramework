@@ -276,13 +276,13 @@ Ellipse PixelSet::profileRect() const {
 /// <param name="rect">The bounding rect.</param>
 /// <param name="mode">The connection mode.</param>
 /// <returns></returns>
-QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode) {
+QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode) {
 
 	QSharedPointer<PixelConnector> connector;
 
 	switch (mode) {
 	case connect_delauney: {
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(rect));
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector());
 		break;
 	}
 	case connect_region: {
@@ -293,7 +293,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 
 	if (!connector) {
 		qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector(rect));
+		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector());
 	}
 	return connector->connect(superPixels);
 }
@@ -358,8 +358,8 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 
 void PixelSet::draw(QPainter& p) const {
 
-	//for (auto px : mSet)
-	//	px->draw(p, 0.3, Pixel::draw_ellipse_only);
+	for (auto px : mSet)
+		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
 
 	//polyLine(0.0).draw(p);
 	convexHull().draw(p);
@@ -571,14 +571,16 @@ PixelConnector::PixelConnector() {
 }
 
 // DelauneyPixelConnector --------------------------------------------------------------------
-DelauneyPixelConnector::DelauneyPixelConnector(const Rect & r) : PixelConnector() {
-	mRect = r;
+DelauneyPixelConnector::DelauneyPixelConnector() : PixelConnector() {
 }
 
 QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
 	// Create an instance of Subdiv2D
-	cv::Subdiv2D subdiv(mRect.toCvRect());
+	PixelSet ps(pixels);
+	Rect rect = ps.boundingBox();
+
+	cv::Subdiv2D subdiv(rect.toCvRect());
 
 	QVector<int> ids;
 	for (const QSharedPointer<Pixel>& b : pixels)
@@ -596,8 +598,8 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 			continue;
 		}
 
-		assert(orgVertex >= 0 && orgVertex < superPixels.size());
-		assert(dstVertex >= 0 && dstVertex < superPixels.size());
+		assert(orgVertex >= 0 && orgVertex < pixels.size());
+		assert(dstVertex >= 0 && dstVertex < pixels.size());
 
 		QSharedPointer<PixelEdge> pe(new PixelEdge(pixels[orgVertex], pixels[dstVertex]));
 		edges << pe;
@@ -605,10 +607,6 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 
 	return edges;
 
-}
-
-void DelauneyPixelConnector::setRect(const Rect & rect) {
-	mRect = rect;
 }
 
 // RegionPixelConnector --------------------------------------------------------------------
@@ -738,6 +736,147 @@ QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect(const QVector<
 void TabStopPixelConnector::setLineSpacingMultiplier(double multiplier) {
 
 	mMultiplier = multiplier;
+}
+// DBScanPixelConnector --------------------------------------------------------------------
+DBScanPixelConnector::DBScanPixelConnector() {
+}
+
+QVector<QSharedPointer<PixelEdge>> DBScanPixelConnector::connect(const QVector<QSharedPointer<Pixel>>& pixels) const {
+	
+	DBScanPixel dbs(pixels);
+	dbs.compute();
+
+	return dbs.edges();
+}
+
+// DBScanPixel --------------------------------------------------------------------
+DBScanPixel::DBScanPixel(const QVector<QSharedPointer<Pixel>>& pixels) {
+	mPixels = pixels;
+}
+
+void DBScanPixel::compute() {
+
+	// cache
+	mDists = calcDists(mPixels);
+	mLabels = cv::Mat(1, mPixels.size(), CV_32S, cv::Scalar(not_visited));
+	mLabelPtr = mLabels.ptr<unsigned int>();
+
+	for (int pIdx = 0; pIdx < mPixels.size(); pIdx++) {
+		
+		if (mLabelPtr[pIdx] != not_visited)
+			continue;
+
+		mLabelPtr[pIdx] = visited;
+		
+		// epsilon depends on line spacing
+		double cEps = mPixels[pIdx]->stats() ? mPixels[pIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
+		QVector<int> neighbors = regionQuery(pIdx, cEps);
+		
+		if (neighbors.size() >= mMinPts) {
+			expandCluster(pIdx, mCLabel, neighbors, mEpsMultiplier, mMinPts);
+			mCLabel++;	// start a new cluster
+		}
+		else
+			mLabelPtr[pIdx] = noise;
+	}
+}
+
+void DBScanPixel::setEpsilonMultiplier(double eps) {
+	mEpsMultiplier = eps;
+}
+
+void DBScanPixel::setDistanceFunction(const PixelDistance::PixelDistanceFunction & distFnc) {
+	mDistFnc = distFnc;
+}
+
+QVector<PixelSet> DBScanPixel::sets() const {
+
+	QVector<PixelSet> sets(mCLabel-cluster0);
+
+	if (sets.empty())
+		return QVector<PixelSet>();
+
+	for (int cIdx = 0; cIdx < mLabels.cols; cIdx++) {
+
+		int setIdx = mLabelPtr[cIdx] - cluster0;
+
+		if (setIdx >= 0) {
+			assert(setIdx < sets.size());
+			sets[setIdx].add(mPixels[cIdx]);
+		}
+	}
+
+	return sets;
+}
+
+QVector<QSharedPointer<PixelEdge> > DBScanPixel::edges() const {
+
+	QVector<PixelSet> ps = sets();
+	QVector<QSharedPointer<PixelEdge> > edges;
+
+	for (const PixelSet& cs : ps) {
+		edges << PixelSet::connect(cs.pixels());
+	}
+
+	return edges;
+}
+
+void DBScanPixel::expandCluster(int pixelIndex, unsigned int clusterIndex, const QVector<int>& neighbors, double eps, int minPts) const {
+
+	assert(pixelIndex >= 0 && pixelIndex < mLabels.cols);
+	mLabelPtr[pixelIndex] = clusterIndex;
+
+	for (int nIdx : neighbors) {
+
+		assert(nIdx >= 0 && nIdx < mLabels.cols);
+
+		if (mLabelPtr[nIdx] == not_visited) {
+			mLabelPtr[nIdx] = visited;
+
+			double cEps = mPixels[nIdx]->stats() ? mPixels[nIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
+			QVector<int> nPts = regionQuery(nIdx, cEps);
+			if (nPts.size() >= minPts) {
+				expandCluster(nIdx, clusterIndex, nPts, eps, minPts);
+			}
+		}
+		if (mLabelPtr[nIdx] == visited)
+			mLabelPtr[nIdx] = clusterIndex;
+	}
+
+}
+
+QVector<int> DBScanPixel::regionQuery(int pixelIdx, double eps) const {
+
+	assert(pixelIdx >= 0 && pixelIdx < mDists.rows);
+
+	QVector<int> neighbors;
+	const float* dPtr = mDists.ptr<float>(pixelIdx);
+
+	for (int cIdx = 0; cIdx < mDists.cols; cIdx++) {
+
+		if (dPtr[cIdx] < eps)
+			neighbors << cIdx;
+
+	}
+
+	return neighbors;
+}
+
+cv::Mat DBScanPixel::calcDists(const QVector<QSharedPointer<Pixel>>& pixels) const {
+	
+	cv::Mat dists(mPixels.size(), mPixels.size(), CV_32FC1, cv::Scalar(0));
+
+	for (int rIdx = 0; rIdx < dists.rows; rIdx++) {
+
+		float* dPtr = dists.ptr<float>(rIdx);
+
+		for (int cIdx = rIdx + 1; cIdx < dists.cols; cIdx++) {
+			dPtr[cIdx] = (float)mDistFnc(pixels[rIdx], pixels[cIdx]);
+			dists.ptr<float>(cIdx)[rIdx] = dPtr[cIdx];	// reflect
+		}
+	}
+	
+	return dists;
 }
 
 }

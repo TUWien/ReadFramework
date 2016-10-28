@@ -227,7 +227,7 @@ bool Image::alphaChannelUsed(const QImage& img) {
 /// </summary>
 /// <param name="img">The source img.</param>
 /// <param name="name">The name that should be displayed in the command line.</param>
-void Image::imageInfo(const cv::Mat& img, const QString name = QString()) {
+void Image::imageInfo(const cv::Mat& img, const QString name) {
 
 	qDebug().noquote() << "image info: " << name;
 	QString info;

@@ -161,11 +161,11 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 		qWarning() << "could not compute local orientation";
 
 	// smooth estimation
-	rdf::GraphCutOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
+	rdf::GraphCutOrientation pse(sp);
 	
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
-
+	
 	//// find tab stops
 	//rdf::TabStopAnalysis tabStops(sp);
 	//if (!tabStops.compute())

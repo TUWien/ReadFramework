@@ -117,18 +117,15 @@ public:
 
 	void setOrientationIndex(int orIdx);
 	int orientationIndex() const;
+	int numOrientations() const;
 	double orientation() const;
 	Vector2D orVec() const;
-
+	
 	double scale() const;
-
-	int numOrientations() const;
-
 	int lineSpacingIndex() const;
 	double lineSpacing() const;
 
 	double minVal() const;
-
 	cv::Mat data(const DataIndex& dIdx = all_data);
 
 protected:
@@ -265,5 +262,15 @@ protected:
 	double statsWeight(const QSharedPointer<Pixel>& pixel) const;
 	double calcWeight() const;
 };
+
+// pixel distance functions
+
+namespace PixelDistance {
+	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+
+	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+}
+
 
 };

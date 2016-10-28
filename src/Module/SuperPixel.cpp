@@ -246,6 +246,19 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
+
+	//DBScanPixel dbs(mPixels);
+	//dbs.compute();
+	//QVector<PixelSet> sets = dbs.sets();
+	//qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
+
+	//for (auto s : sets) {
+	//	Drawer::instance().setColor(ColorManager::getRandomColor());
+	//	QPen pen = Drawer::instance().pen();
+	//	p.setPen(pen);
+	//	s.draw(p);
+	//}
+
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
 		Drawer::instance().setColor(ColorManager::getRandomColor());
 		QPen pen = Drawer::instance().pen();
@@ -648,9 +661,8 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 
 // GraphCutOrientation --------------------------------------------------------------------
-GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set, const Rect& imgRect) {
+GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set) {
 	mSet = set;
-	mImgRect = imgRect;
 }
 
 bool GraphCutOrientation::isEmpty() const {
@@ -663,7 +675,6 @@ bool GraphCutOrientation::compute() {
 		return false;
 
 	DelauneyPixelConnector dpc;
-	dpc.setRect(mImgRect);
 
 	Timer dt;
 	PixelGraph graph(mSet);
