@@ -106,7 +106,6 @@ $(document).ready(function(){initNavTree('classrdf_1_1_algorithms.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classrdf_1_1_algorithms-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -130,76 +129,71 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="separator:a62ea27720ef3bf555f5598b85aa41a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a0f4649e97afcce6ee3713a410c0634f1"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a0f4649e97afcce6ee3713a410c0634f1">dilateImage</a> (const cv::Mat &amp;bwImg, int seSize, <a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2">MorphShape</a> shape=<a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc">Algorithms::SQUARE</a>, int borderValue=0) const </td></tr>
-<tr class="memdesc:a0f4649e97afcce6ee3713a410c0634f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dilates the image bwImg with a given structuring element.  <a href="#a0f4649e97afcce6ee3713a410c0634f1">More...</a><br/></td></tr>
-<tr class="separator:a0f4649e97afcce6ee3713a410c0634f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a916b6b1df1b469031465011cd4fa5d3b"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a916b6b1df1b469031465011cd4fa5d3b">erodeImage</a> (const cv::Mat &amp;bwImg, int seSize, <a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2">MorphShape</a> shape=<a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc">Algorithms::SQUARE</a>, int borderValue=255) const </td></tr>
-<tr class="memdesc:a916b6b1df1b469031465011cd4fa5d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erodes the image bwimg with a given structuring element.  <a href="#a916b6b1df1b469031465011cd4fa5d3b">More...</a><br/></td></tr>
-<tr class="separator:a916b6b1df1b469031465011cd4fa5d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac56f5aefdd774d13b2797dfaf9c966da"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ac56f5aefdd774d13b2797dfaf9c966da">createStructuringElement</a> (int seSize, int shape) const </td></tr>
-<tr class="memdesc:ac56f5aefdd774d13b2797dfaf9c966da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the structuring element for morphological operations.  <a href="#ac56f5aefdd774d13b2797dfaf9c966da">More...</a><br/></td></tr>
-<tr class="separator:ac56f5aefdd774d13b2797dfaf9c966da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f173611190335896c6fa5d5beefe092"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a3f173611190335896c6fa5d5beefe092">convolveSymmetric</a> (const cv::Mat &amp;hist, const cv::Mat &amp;kernel) const </td></tr>
-<tr class="memdesc:a3f173611190335896c6fa5d5beefe092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convolves a histogram symmetrically. Symmetric convolution means that the convolution is flipped around at the histograms borders. This is specifically useful for orientation histograms (since 0° corresponds to 360°  <a href="#a3f173611190335896c6fa5d5beefe092">More...</a><br/></td></tr>
-<tr class="separator:a3f173611190335896c6fa5d5beefe092"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673736acbbddca56620c74642e8f617f"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a673736acbbddca56620c74642e8f617f">get1DGauss</a> (double sigma) const </td></tr>
-<tr class="memdesc:a673736acbbddca56620c74642e8f617f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a 1D Gaussian filter kernel. The kernel's size is adjusted to the standard deviation.  <a href="#a673736acbbddca56620c74642e8f617f">More...</a><br/></td></tr>
-<tr class="separator:a673736acbbddca56620c74642e8f617f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d4c29693ab0fcadff876ec369ddf696"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a9d4c29693ab0fcadff876ec369ddf696">threshOtsu</a> (const cv::Mat &amp;srcImg, int thType=CV_THRESH_BINARY_INV) const </td></tr>
-<tr class="memdesc:a9d4c29693ab0fcadff876ec369ddf696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold an image using Otsu as threshold.  <a href="#a9d4c29693ab0fcadff876ec369ddf696">More...</a><br/></td></tr>
-<tr class="separator:a9d4c29693ab0fcadff876ec369ddf696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad586965a6b5ec1b54dfd99b84f88e76"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aad586965a6b5ec1b54dfd99b84f88e76">convolveIntegralImage</a> (const cv::Mat &amp;src, const int kernelSizeX, const int kernelSizeY=0, <a class="el" href="classrdf_1_1_algorithms.html#a62ea27720ef3bf555f5598b85aa41a85">MorphBorder</a> norm=<a class="el" href="classrdf_1_1_algorithms.html#a62ea27720ef3bf555f5598b85aa41a85af1e8bb5b8b80673dd2f19871a32b3b3e">BORDER_ZERO</a>) const </td></tr>
-<tr class="memdesc:aad586965a6b5ec1b54dfd99b84f88e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convolves an integral image by means of box filters. This functions applies box filtering. It is specifically useful for the computation of image sums, mean filtering and standard deviation with big kernel sizes.  <a href="#aad586965a6b5ec1b54dfd99b84f88e76">More...</a><br/></td></tr>
-<tr class="separator:aad586965a6b5ec1b54dfd99b84f88e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f15da4a25f448c8172f93262e2e795d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a6f15da4a25f448c8172f93262e2e795d">setBorderConst</a> (cv::Mat &amp;src, float val=0.0f) const </td></tr>
-<tr class="memdesc:a6f15da4a25f448c8172f93262e2e795d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the border to a constant value (1 pixel width).  <a href="#a6f15da4a25f448c8172f93262e2e795d">More...</a><br/></td></tr>
-<tr class="separator:a6f15da4a25f448c8172f93262e2e795d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa04af29216ee45ce3c74c500aed2d645"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa04af29216ee45ce3c74c500aed2d645">invertImg</a> (cv::Mat &amp;srcImg, cv::Mat mask=cv::Mat())</td></tr>
-<tr class="memdesc:aa04af29216ee45ce3c74c500aed2d645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts the img.  <a href="#aa04af29216ee45ce3c74c500aed2d645">More...</a><br/></td></tr>
-<tr class="separator:aa04af29216ee45ce3c74c500aed2d645"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdf64f1a347d5c17c57d3356472e51c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0">mulMask</a> (cv::Mat &amp;src, cv::Mat mask=cv::Mat())</td></tr>
-<tr class="memdesc:afdf64f1a347d5c17c57d3356472e51c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a mask to the image.  <a href="#afdf64f1a347d5c17c57d3356472e51c0">More...</a><br/></td></tr>
-<tr class="separator:afdf64f1a347d5c17c57d3356472e51c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3893e2fff30680a83f8fcd8a97c8cfcf"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a3893e2fff30680a83f8fcd8a97c8cfcf">preFilterArea</a> (const cv::Mat &amp;img, int minArea, int maxArea=-1) const </td></tr>
-<tr class="memdesc:a3893e2fff30680a83f8fcd8a97c8cfcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prefilters an binary image according to the blob size. Should be done to remove small blobs and to reduce the runtime of cvFindContours.  <a href="#a3893e2fff30680a83f8fcd8a97c8cfcf">More...</a><br/></td></tr>
-<tr class="separator:a3893e2fff30680a83f8fcd8a97c8cfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a151df7095898865c591deab878403c78"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a151df7095898865c591deab878403c78">computeHist</a> (const cv::Mat img, const cv::Mat mask=cv::Mat()) const </td></tr>
-<tr class="memdesc:a151df7095898865c591deab878403c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the histogram of an image.  <a href="#a151df7095898865c591deab878403c78">More...</a><br/></td></tr>
-<tr class="separator:a151df7095898865c591deab878403c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06babedf8ef3f5a1b5838a4072351597"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a06babedf8ef3f5a1b5838a4072351597">getThreshOtsu</a> (const cv::Mat &amp;hist, const double otsuThresh=0) const </td></tr>
-<tr class="memdesc:a06babedf8ef3f5a1b5838a4072351597"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Otsu threshold based on a certain histogram.  <a href="#a06babedf8ef3f5a1b5838a4072351597">More...</a><br/></td></tr>
-<tr class="separator:a06babedf8ef3f5a1b5838a4072351597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a287e0c050f58d1e9a89a8a976e9c4a93">normAngleRad</a> (double angle, double startIvl=0.0, double endIvl=2 *CV_PI) const </td></tr>
-<tr class="memdesc:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized angle within startIvl and endIvl.  <a href="#a287e0c050f58d1e9a89a8a976e9c4a93">More...</a><br/></td></tr>
-<tr class="separator:a287e0c050f58d1e9a89a8a976e9c4a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aca3bce848d3cfaa66aa9633c879fc3e4">angleDist</a> (double angle1, double angle2, double maxAngle=2 *CV_PI) const </td></tr>
-<tr class="memdesc:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff))  <a href="#aca3bce848d3cfaa66aa9633c879fc3e4">More...</a><br/></td></tr>
-<tr class="separator:aca3bce848d3cfaa66aa9633c879fc3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a07c2d9ff5b5105399332dcb0ba3f3500">estimateMask</a> (const cv::Mat &amp;src, bool preFilter=true) const </td></tr>
-<tr class="memdesc:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the mask.  <a href="#a07c2d9ff5b5105399332dcb0ba3f3500">More...</a><br/></td></tr>
-<tr class="separator:a07c2d9ff5b5105399332dcb0ba3f3500"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
-<tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
-<tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a31582bde389e5cb7b9862d5ebb3c7f9c">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize) const </td></tr>
-<tr class="memdesc:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a31582bde389e5cb7b9862d5ebb3c7f9c">More...</a><br/></td></tr>
-<tr class="separator:a31582bde389e5cb7b9862d5ebb3c7f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a106c96fdb655c2b159dc0513087060c4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a106c96fdb655c2b159dc0513087060c4">min</a> (const QVector&lt; double &gt; &amp;vec) const </td></tr>
-<tr class="memdesc:a106c96fdb655c2b159dc0513087060c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum of the vector or DBL_MAX if vec is empty.  <a href="#a106c96fdb655c2b159dc0513087060c4">More...</a><br/></td></tr>
-<tr class="separator:a106c96fdb655c2b159dc0513087060c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ae67a0b0d9d7bdfeeb4ec199a4125bd1e">max</a> (const QVector&lt; double &gt; &amp;vec) const </td></tr>
-<tr class="memdesc:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value of vec or -DBL_MAX if vec is empty.  <a href="#ae67a0b0d9d7bdfeeb4ec199a4125bd1e">More...</a><br/></td></tr>
-<tr class="separator:ae67a0b0d9d7bdfeeb4ec199a4125bd1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a0aa6288c996ef6afda47af22adcbe778"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_algorithms.html">Algorithms</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a0aa6288c996ef6afda47af22adcbe778">instance</a> ()</td></tr>
-<tr class="separator:a0aa6288c996ef6afda47af22adcbe778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab291874a4db55d67aea77f38fb0ccf1f"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ab291874a4db55d67aea77f38fb0ccf1f">dilateImage</a> (const cv::Mat &amp;bwImg, int seSize, <a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2">MorphShape</a> shape=<a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc">Algorithms::SQUARE</a>, int borderValue=0)</td></tr>
+<tr class="memdesc:ab291874a4db55d67aea77f38fb0ccf1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dilates the image bwImg with a given structuring element.  <a href="#ab291874a4db55d67aea77f38fb0ccf1f">More...</a><br/></td></tr>
+<tr class="separator:ab291874a4db55d67aea77f38fb0ccf1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1aa9cb86e5b84e79967139a62fbc607"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ae1aa9cb86e5b84e79967139a62fbc607">erodeImage</a> (const cv::Mat &amp;bwImg, int seSize, <a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2">MorphShape</a> shape=<a class="el" href="classrdf_1_1_algorithms.html#ac5780591c54d3cec60b405c405b89ec2a56f5b9bc1facb13557a3eff00da300bc">Algorithms::SQUARE</a>, int borderValue=255)</td></tr>
+<tr class="memdesc:ae1aa9cb86e5b84e79967139a62fbc607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erodes the image bwimg with a given structuring element.  <a href="#ae1aa9cb86e5b84e79967139a62fbc607">More...</a><br/></td></tr>
+<tr class="separator:ae1aa9cb86e5b84e79967139a62fbc607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d9109105fa54ab1c2ab8db5a7c68e15"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a1d9109105fa54ab1c2ab8db5a7c68e15">createStructuringElement</a> (int seSize, int shape)</td></tr>
+<tr class="memdesc:a1d9109105fa54ab1c2ab8db5a7c68e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the structuring element for morphological operations.  <a href="#a1d9109105fa54ab1c2ab8db5a7c68e15">More...</a><br/></td></tr>
+<tr class="separator:a1d9109105fa54ab1c2ab8db5a7c68e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca6728f13018d2ed6d59434e786dc311"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aca6728f13018d2ed6d59434e786dc311">convolveSymmetric</a> (const cv::Mat &amp;hist, const cv::Mat &amp;kernel)</td></tr>
+<tr class="memdesc:aca6728f13018d2ed6d59434e786dc311"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convolves a histogram symmetrically. Symmetric convolution means that the convolution is flipped around at the histograms borders. This is specifically useful for orientation histograms (since 0° corresponds to 360°  <a href="#aca6728f13018d2ed6d59434e786dc311">More...</a><br/></td></tr>
+<tr class="separator:aca6728f13018d2ed6d59434e786dc311"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5061644fc23f4da30ca05397eae0d6f"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ac5061644fc23f4da30ca05397eae0d6f">get1DGauss</a> (double sigma)</td></tr>
+<tr class="memdesc:ac5061644fc23f4da30ca05397eae0d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a 1D Gaussian filter kernel. The kernel's size is adjusted to the standard deviation.  <a href="#ac5061644fc23f4da30ca05397eae0d6f">More...</a><br/></td></tr>
+<tr class="separator:ac5061644fc23f4da30ca05397eae0d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab19cf68133c3d512d10e12982ee8db47"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ab19cf68133c3d512d10e12982ee8db47">threshOtsu</a> (const cv::Mat &amp;srcImg, int thType=CV_THRESH_BINARY_INV)</td></tr>
+<tr class="memdesc:ab19cf68133c3d512d10e12982ee8db47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold an image using Otsu as threshold.  <a href="#ab19cf68133c3d512d10e12982ee8db47">More...</a><br/></td></tr>
+<tr class="separator:ab19cf68133c3d512d10e12982ee8db47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a236d32c930edab1a4edc5fcdc8b51971"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a236d32c930edab1a4edc5fcdc8b51971">convolveIntegralImage</a> (const cv::Mat &amp;src, const int kernelSizeX, const int kernelSizeY=0, <a class="el" href="classrdf_1_1_algorithms.html#a62ea27720ef3bf555f5598b85aa41a85">MorphBorder</a> norm=<a class="el" href="classrdf_1_1_algorithms.html#a62ea27720ef3bf555f5598b85aa41a85af1e8bb5b8b80673dd2f19871a32b3b3e">BORDER_ZERO</a>)</td></tr>
+<tr class="memdesc:a236d32c930edab1a4edc5fcdc8b51971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convolves an integral image by means of box filters. This functions applies box filtering. It is specifically useful for the computation of image sums, mean filtering and standard deviation with big kernel sizes.  <a href="#a236d32c930edab1a4edc5fcdc8b51971">More...</a><br/></td></tr>
+<tr class="separator:a236d32c930edab1a4edc5fcdc8b51971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea97ec9544e8f8414bb8ea8e449e884"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a7ea97ec9544e8f8414bb8ea8e449e884">setBorderConst</a> (cv::Mat &amp;src, float val=0.0f)</td></tr>
+<tr class="memdesc:a7ea97ec9544e8f8414bb8ea8e449e884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the border to a constant value (1 pixel width).  <a href="#a7ea97ec9544e8f8414bb8ea8e449e884">More...</a><br/></td></tr>
+<tr class="separator:a7ea97ec9544e8f8414bb8ea8e449e884"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa04af29216ee45ce3c74c500aed2d645"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa04af29216ee45ce3c74c500aed2d645">invertImg</a> (cv::Mat &amp;srcImg, cv::Mat mask=cv::Mat())</td></tr>
+<tr class="memdesc:aa04af29216ee45ce3c74c500aed2d645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts the img.  <a href="#aa04af29216ee45ce3c74c500aed2d645">More...</a><br/></td></tr>
+<tr class="separator:aa04af29216ee45ce3c74c500aed2d645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf64f1a347d5c17c57d3356472e51c0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#afdf64f1a347d5c17c57d3356472e51c0">mulMask</a> (cv::Mat &amp;src, cv::Mat mask=cv::Mat())</td></tr>
+<tr class="memdesc:afdf64f1a347d5c17c57d3356472e51c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a mask to the image.  <a href="#afdf64f1a347d5c17c57d3356472e51c0">More...</a><br/></td></tr>
+<tr class="separator:afdf64f1a347d5c17c57d3356472e51c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d1c5c223fee4f75c4761415e3d6c7e"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#af1d1c5c223fee4f75c4761415e3d6c7e">preFilterArea</a> (const cv::Mat &amp;img, int minArea, int maxArea=-1)</td></tr>
+<tr class="memdesc:af1d1c5c223fee4f75c4761415e3d6c7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prefilters an binary image according to the blob size. Should be done to remove small blobs and to reduce the runtime of cvFindContours.  <a href="#af1d1c5c223fee4f75c4761415e3d6c7e">More...</a><br/></td></tr>
+<tr class="separator:af1d1c5c223fee4f75c4761415e3d6c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae47b8605d101c3484a2e84e6f5715000"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ae47b8605d101c3484a2e84e6f5715000">computeHist</a> (const cv::Mat img, const cv::Mat mask=cv::Mat())</td></tr>
+<tr class="memdesc:ae47b8605d101c3484a2e84e6f5715000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the histogram of an image.  <a href="#ae47b8605d101c3484a2e84e6f5715000">More...</a><br/></td></tr>
+<tr class="separator:ae47b8605d101c3484a2e84e6f5715000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a465a76352edb9a87f12d10e002b3c3b7"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a465a76352edb9a87f12d10e002b3c3b7">getThreshOtsu</a> (const cv::Mat &amp;hist, const double otsuThresh=0)</td></tr>
+<tr class="memdesc:a465a76352edb9a87f12d10e002b3c3b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the Otsu threshold based on a certain histogram.  <a href="#a465a76352edb9a87f12d10e002b3c3b7">More...</a><br/></td></tr>
+<tr class="separator:a465a76352edb9a87f12d10e002b3c3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee91b31592b2993718600744ba2a24e4"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aee91b31592b2993718600744ba2a24e4">normAngleRad</a> (double angle, double startIvl=0.0, double endIvl=2 *CV_PI)</td></tr>
+<tr class="memdesc:aee91b31592b2993718600744ba2a24e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized angle within startIvl and endIvl.  <a href="#aee91b31592b2993718600744ba2a24e4">More...</a><br/></td></tr>
+<tr class="separator:aee91b31592b2993718600744ba2a24e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fbf8a18978253a57efdbb48f49f06ce"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a6fbf8a18978253a57efdbb48f49f06ce">angleDist</a> (double angle1, double angle2, double maxAngle=2 *CV_PI)</td></tr>
+<tr class="memdesc:a6fbf8a18978253a57efdbb48f49f06ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff))  <a href="#a6fbf8a18978253a57efdbb48f49f06ce">More...</a><br/></td></tr>
+<tr class="separator:a6fbf8a18978253a57efdbb48f49f06ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2466061f1fd271a575414548d6713f53"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2466061f1fd271a575414548d6713f53">estimateMask</a> (const cv::Mat &amp;src, bool preFilter=true)</td></tr>
+<tr class="memdesc:a2466061f1fd271a575414548d6713f53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the mask.  <a href="#a2466061f1fd271a575414548d6713f53">More...</a><br/></td></tr>
+<tr class="separator:a2466061f1fd271a575414548d6713f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
+<tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
+<tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac828d9184e38e9d91436bb1adc7a19d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1)</td></tr>
 <tr class="memdesc:aac828d9184e38e9d91436bb1adc7a19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#aac828d9184e38e9d91436bb1adc7a19d">More...</a><br/></td></tr>
 <tr class="separator:aac828d9184e38e9d91436bb1adc7a19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a710f995bf54fb37f8692bb86a06d75eb"><td class="memItemLeft" align="right" valign="top">static QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a710f995bf54fb37f8692bb86a06d75eb">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize)</td></tr>
+<tr class="memdesc:a710f995bf54fb37f8692bb86a06d75eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a710f995bf54fb37f8692bb86a06d75eb">More...</a><br/></td></tr>
+<tr class="separator:a710f995bf54fb37f8692bb86a06d75eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01dcd7b09b95264aa391e1950e53353"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aa01dcd7b09b95264aa391e1950e53353">min</a> (const QVector&lt; double &gt; &amp;vec)</td></tr>
+<tr class="memdesc:aa01dcd7b09b95264aa391e1950e53353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum of the vector or DBL_MAX if vec is empty.  <a href="#aa01dcd7b09b95264aa391e1950e53353">More...</a><br/></td></tr>
+<tr class="separator:aa01dcd7b09b95264aa391e1950e53353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e04dcdfc29867214d78553d6c941156"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2e04dcdfc29867214d78553d6c941156">max</a> (const QVector&lt; double &gt; &amp;vec)</td></tr>
+<tr class="memdesc:a2e04dcdfc29867214d78553d6c941156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value of vec or -DBL_MAX if vec is empty.  <a href="#a2e04dcdfc29867214d78553d6c941156">More...</a><br/></td></tr>
+<tr class="separator:a2e04dcdfc29867214d78553d6c941156"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40e195f1402e0574e06f1aa8b7c369f5"><td class="memTemplParams" colspan="2">template&lt;typename numFmt &gt; </td></tr>
 <tr class="memitem:a40e195f1402e0574e06f1aa8b7c369f5"><td class="memTemplItemLeft" align="right" valign="top">static double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a40e195f1402e0574e06f1aa8b7c369f5">statMoment</a> (const QList&lt; numFmt &gt; &amp;valuesIn, double momentValue, int interpolated=1)</td></tr>
 <tr class="memdesc:a40e195f1402e0574e06f1aa8b7c369f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments (quantiles).  <a href="#a40e195f1402e0574e06f1aa8b7c369f5">More...</a><br/></td></tr>
@@ -251,9 +245,12 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aca3bce848d3cfaa66aa9633c879fc3e4"></a>
+<a class="anchor" id="a6fbf8a18978253a57efdbb48f49f06ce"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double rdf::Algorithms::angleDist </td>
@@ -276,9 +273,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Computes the distance between two angles. Hence, min(angleDiff, CV_PI*2-(angleDiff)) </p>
@@ -293,9 +295,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a31582bde389e5cb7b9862d5ebb3c7f9c"></a>
+<a class="anchor" id="a710f995bf54fb37f8692bb86a06d75eb"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QPointF rdf::Algorithms::calcRotationSize </td>
@@ -312,9 +317,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Calculates the image size of the rotated image. </p>
@@ -329,9 +339,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a151df7095898865c591deab878403c78"></a>
+<a class="anchor" id="ae47b8605d101c3484a2e84e6f5715000"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::computeHist </td>
@@ -348,9 +361,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Computes the histogram of an image. </p>
@@ -365,9 +383,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aad586965a6b5ec1b54dfd99b84f88e76"></a>
+<a class="anchor" id="a236d32c930edab1a4edc5fcdc8b51971"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::convolveIntegralImage </td>
@@ -396,9 +417,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Convolves an integral image by means of box filters. This functions applies box filtering. It is specifically useful for the computation of image sums, mean filtering and standard deviation with big kernel sizes. </p>
@@ -415,9 +441,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3f173611190335896c6fa5d5beefe092"></a>
+<a class="anchor" id="aca6728f13018d2ed6d59434e786dc311"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::convolveSymmetric </td>
@@ -434,9 +463,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Convolves a histogram symmetrically. Symmetric convolution means that the convolution is flipped around at the histograms borders. This is specifically useful for orientation histograms (since 0° corresponds to 360° </p>
@@ -451,9 +485,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac56f5aefdd774d13b2797dfaf9c966da"></a>
+<a class="anchor" id="a1d9109105fa54ab1c2ab8db5a7c68e15"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::createStructuringElement </td>
@@ -470,9 +507,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Creates the structuring element for morphological operations. </p>
@@ -487,9 +529,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0f4649e97afcce6ee3713a410c0634f1"></a>
+<a class="anchor" id="ab291874a4db55d67aea77f38fb0ccf1f"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::dilateImage </td>
@@ -518,9 +563,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Dilates the image bwImg with a given structuring element. </p>
@@ -537,9 +587,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a916b6b1df1b469031465011cd4fa5d3b"></a>
+<a class="anchor" id="ae1aa9cb86e5b84e79967139a62fbc607"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::erodeImage </td>
@@ -568,9 +621,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Erodes the image bwimg with a given structuring element. </p>
@@ -587,9 +645,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a07c2d9ff5b5105399332dcb0ba3f3500"></a>
+<a class="anchor" id="a2466061f1fd271a575414548d6713f53"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::estimateMask </td>
@@ -606,9 +667,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Estimates the mask. </p>
@@ -622,18 +688,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a673736acbbddca56620c74642e8f617f"></a>
+<a class="anchor" id="ac5061644fc23f4da30ca05397eae0d6f"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::get1DGauss </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>sigma</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Computes a 1D Gaussian filter kernel. The kernel's size is adjusted to the standard deviation. </p>
@@ -647,9 +721,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a06babedf8ef3f5a1b5838a4072351597"></a>
+<a class="anchor" id="a465a76352edb9a87f12d10e002b3c3b7"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double rdf::Algorithms::getThreshOtsu </td>
@@ -666,9 +743,14 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Gets the Otsu threshold based on a certain histogram. </p>
@@ -683,32 +765,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0aa6288c996ef6afda47af22adcbe778"></a>
+<a class="anchor" id="aa04af29216ee45ce3c74c500aed2d645"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classrdf_1_1_algorithms.html">Algorithms</a> &amp; rdf::Algorithms::instance </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa04af29216ee45ce3c74c500aed2d645"></a>
-<div class="memitem">
-<div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void rdf::Algorithms::invertImg </td>
@@ -728,6 +790,11 @@ Static Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Inverts the img. </p>
@@ -741,18 +808,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae67a0b0d9d7bdfeeb4ec199a4125bd1e"></a>
+<a class="anchor" id="a2e04dcdfc29867214d78553d6c941156"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double rdf::Algorithms::max </td>
           <td>(</td>
           <td class="paramtype">const QVector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>vec</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the maximum value of vec or -DBL_MAX if vec is empty. </p>
@@ -766,18 +841,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a106c96fdb655c2b159dc0513087060c4"></a>
+<a class="anchor" id="aa01dcd7b09b95264aa391e1950e53353"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double rdf::Algorithms::min </td>
           <td>(</td>
           <td class="paramtype">const QVector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>vec</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the minimum of the vector or DBL_MAX if vec is empty. </p>
@@ -794,6 +877,9 @@ Static Public Member Functions</h2></td></tr>
 <a class="anchor" id="afdf64f1a347d5c17c57d3356472e51c0"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void rdf::Algorithms::mulMask </td>
@@ -813,6 +899,11 @@ Static Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Applies a mask to the image. </p>
@@ -862,9 +953,12 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a287e0c050f58d1e9a89a8a976e9c4a93"></a>
+<a class="anchor" id="aee91b31592b2993718600744ba2a24e4"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double rdf::Algorithms::normAngleRad </td>
@@ -887,9 +981,14 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Computes the normalized angle within startIvl and endIvl. </p>
@@ -905,9 +1004,12 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a3893e2fff30680a83f8fcd8a97c8cfcf"></a>
+<a class="anchor" id="af1d1c5c223fee4f75c4761415e3d6c7e"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::preFilterArea </td>
@@ -930,9 +1032,14 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Prefilters an binary image according to the blob size. Should be done to remove small blobs and to reduce the runtime of cvFindContours. </p>
@@ -951,6 +1058,9 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
 <a class="anchor" id="a66a9a52098cad58ba3bd4db9bd89fade"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::rotateImage </td>
@@ -982,6 +1092,11 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation </p>
@@ -998,9 +1113,12 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6f15da4a25f448c8172f93262e2e795d"></a>
+<a class="anchor" id="a7ea97ec9544e8f8414bb8ea8e449e884"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void rdf::Algorithms::setBorderConst </td>
@@ -1017,9 +1135,14 @@ template&lt;typename sFmt , typename mFmt &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Sets the border to a constant value (1 pixel width). </p>
@@ -1187,9 +1310,12 @@ template&lt;typename numFmt &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a9d4c29693ab0fcadff876ec369ddf696"></a>
+<a class="anchor" id="ab19cf68133c3d512d10e12982ee8db47"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::Algorithms::threshOtsu </td>
@@ -1206,9 +1332,14 @@ template&lt;typename numFmt &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Threshold an image using Otsu as threshold. </p>

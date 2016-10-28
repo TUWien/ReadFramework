@@ -32,6 +32,7 @@ var hierarchy =
     [ "GCoptimization::DataCostFunctor", "struct_g_coptimization_1_1_data_cost_functor.html", null ],
     [ "DBlock< Type >", "class_d_block.html", null ],
     [ "DBlock< nodeptr >", "class_d_block.html", null ],
+    [ "rdf::DBScanPixel", "classrdf_1_1_d_b_scan_pixel.html", null ],
     [ "rdf::DebugConfig", "classrdf_1_1_debug_config.html", null ],
     [ "rdf::Drawer", "classrdf_1_1_drawer.html", null ],
     [ "rdf::Ellipse", "classrdf_1_1_ellipse.html", null ],
@@ -91,6 +92,7 @@ var hierarchy =
     [ "rdf::PageXmlParser", "classrdf_1_1_page_xml_parser.html", null ],
     [ "rdf::Patch", "classrdf_1_1_patch.html", null ],
     [ "rdf::PixelConnector", "classrdf_1_1_pixel_connector.html", [
+      [ "rdf::DBScanPixelConnector", "classrdf_1_1_d_b_scan_pixel_connector.html", null ],
       [ "rdf::DelauneyPixelConnector", "classrdf_1_1_delauney_pixel_connector.html", null ],
       [ "rdf::RegionPixelConnector", "classrdf_1_1_region_pixel_connector.html", null ],
       [ "rdf::TabStopPixelConnector", "classrdf_1_1_tab_stop_pixel_connector.html", null ]

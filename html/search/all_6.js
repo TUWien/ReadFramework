@@ -1,6 +1,7 @@
 var searchData=
 [
   ['feasiblesites',['feasibleSites',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#ad0e1fb1e544346703e5944d210ae45b1',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
+  ['filter',['filter',['../classrdf_1_1_region.html#a974f4d9e1122645b1940cf39ca4b645d',1,'rdf::Region::filter()'],['../classrdf_1_1_region_manager.html#a1081d292795fe86281c2dc3f1988bad4',1,'rdf::RegionManager::filter()']]],
   ['filterangle',['filterAngle',['../classrdf_1_1_blob_manager.html#a299da7d35a6afc1a3df45a7ea61aa051',1,'rdf::BlobManager']]],
   ['filterarea',['filterArea',['../classrdf_1_1_blob_manager.html#a79b51e41d19ad5e9498c2ba86972cf5a',1,'rdf::BlobManager']]],
   ['filterlineangle',['filterLineAngle',['../classrdf_1_1_line_trace.html#aa0db4498043e6f4e5013f1db0842ffdf',1,'rdf::LineTrace']]],
@@ -23,8 +24,8 @@ var searchData=
   ['formanalysis_2eh',['FormAnalysis.h',['../_form_analysis_8h.html',1,'']]],
   ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html',1,'rdf']]],
   ['formfeatures',['FormFeatures',['../classrdf_1_1_form_features.html#ab848f428a204c0ece54602bf93ae39d8',1,'rdf::FormFeatures::FormFeatures()'],['../classrdf_1_1_form_features.html#a79eb61c36661a8aefbd6fd598cbe6c17',1,'rdf::FormFeatures::FormFeatures(const cv::Mat &amp;img, const cv::Mat &amp;mask=cv::Mat())']]],
-  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html#a78debda4ca3ea5281a3eaee298da67fb',1,'rdf::FormFeaturesConfig']]],
   ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html',1,'rdf']]],
+  ['formfeaturesconfig',['FormFeaturesConfig',['../classrdf_1_1_form_features_config.html#a78debda4ca3ea5281a3eaee298da67fb',1,'rdf::FormFeaturesConfig']]],
   ['formname',['formName',['../classrdf_1_1_form_features.html#a92c77578dff631a981cf042fcf5c7316',1,'rdf::FormFeatures']]],
   ['fromcvpoints',['fromCvPoints',['../classrdf_1_1_polygon.html#a8eb0976d6cc87c1776aa42e8f8bb1506',1,'rdf::Polygon::fromCvPoints(const std::vector&lt; cv::Point2d &gt; &amp;pts)'],['../classrdf_1_1_polygon.html#ad95b2221789187d3fd5a1585435efb10',1,'rdf::Polygon::fromCvPoints(const std::vector&lt; cv::Point2f &gt; &amp;pts)']]],
   ['fromdata',['fromData',['../classrdf_1_1_ellipse.html#a8c486e9ea7638ab5ba08b183934f5163',1,'rdf::Ellipse']]],

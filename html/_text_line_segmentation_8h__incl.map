@@ -1,6 +1,7 @@
 <map id="src/Module/TextLineSegmentation.h" name="src/Module/TextLineSegmentation.h">
-<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="24,80,128,107"/>
-<area shape="rect" id="node6" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="261,80,323,107"/>
-<area shape="rect" id="node7" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="604,155,680,181"/>
-<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="434,155,580,181"/>
+<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="85,155,189,181"/>
+<area shape="rect" id="node6" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="387,155,449,181"/>
+<area shape="rect" id="node13" href="$_pixel_set_8h.html" title="PixelSet.h" alt="" coords="449,80,531,107"/>
+<area shape="rect" id="node7" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="265,229,341,256"/>
+<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="417,229,564,256"/>
 </map>

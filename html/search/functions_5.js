@@ -1,6 +1,7 @@
 var searchData=
 [
   ['feasiblesites',['feasibleSites',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#ad0e1fb1e544346703e5944d210ae45b1',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
+  ['filter',['filter',['../classrdf_1_1_region.html#a974f4d9e1122645b1940cf39ca4b645d',1,'rdf::Region::filter()'],['../classrdf_1_1_region_manager.html#a1081d292795fe86281c2dc3f1988bad4',1,'rdf::RegionManager::filter()']]],
   ['filterangle',['filterAngle',['../classrdf_1_1_blob_manager.html#a299da7d35a6afc1a3df45a7ea61aa051',1,'rdf::BlobManager']]],
   ['filterarea',['filterArea',['../classrdf_1_1_blob_manager.html#a79b51e41d19ad5e9498c2ba86972cf5a',1,'rdf::BlobManager']]],
   ['filterlineangle',['filterLineAngle',['../classrdf_1_1_line_trace.html#aa0db4498043e6f4e5013f1db0842ffdf',1,'rdf::LineTrace']]],

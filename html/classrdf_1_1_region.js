@@ -17,7 +17,7 @@ var classrdf_1_1_region =
     [ "addUniqueChild", "classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396", null ],
     [ "children", "classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1", null ],
     [ "childrenToString", "classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e", null ],
-    [ "collectRegions", "classrdf_1_1_region.html#a37671bac653920715fbee407b9bfad42", null ],
+    [ "collectRegions", "classrdf_1_1_region.html#a39fb8fe27e3600fb413b908c214a9f85", null ],
     [ "custom", "classrdf_1_1_region.html#af4b0811283f97ffd938a8561bde3f40d", null ],
     [ "draw", "classrdf_1_1_region.html#a9d3df78447907bdb26e18abe36c5a9e1", null ],
     [ "id", "classrdf_1_1_region.html#a98259b56817f5bfebb276a3e6edef795", null ],

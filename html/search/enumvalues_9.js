@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rms',['RMS',['../classrdf_1_1_contrast_estimation.html#acf7f3d86b9c0682dceab39a40dfea119a9711cfe3e90fc6a0821711e32efdb3bf',1,'rdf::ContrastEstimation']]],
-  ['rogr',['ROGR',['../classrdf_1_1_focus_estimation.html#ac5dfff39bdedcd9fd91480cb8e4313feacc0d8eaaf1add31476ba26ec7d95d0bf',1,'rdf::FocusEstimation']]]
+  ['noise',['noise',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da4a11e3ebfec9d0bd1e6505c98cf0d5d2',1,'rdf::DBScanPixel']]],
+  ['not_5fvisited',['not_visited',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da1ba74791be64a026cbbac3ba702c7760',1,'rdf::DBScanPixel']]]
 ];

@@ -1,10 +1,12 @@
 <map id="src/Core/Pixel.h" name="src/Core/Pixel.h">
-<area shape="rect" id="node2" href="$_pixel_8cpp.html" title="src/Core/Pixel.cpp" alt="" coords="5,80,135,107"/>
-<area shape="rect" id="node3" href="$_super_pixel_8h.html" title="src/Module/SuperPixel.h" alt="" coords="639,80,803,107"/>
-<area shape="rect" id="node6" href="$_tab_stop_analysis_8h.html" title="src/Module/TabStopAnalysis.h" alt="" coords="160,80,359,107"/>
-<area shape="rect" id="node8" href="$_text_line_segmentation_8h.html" title="src/Module/TextLineSegmentation.h" alt="" coords="385,80,615,107"/>
-<area shape="rect" id="node4" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="297,155,447,181"/>
-<area shape="rect" id="node5" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="741,155,920,181"/>
-<area shape="rect" id="node7" href="$_tab_stop_analysis_8cpp.html" title="src/Module/TabStopAnalysis.cpp" alt="" coords="58,155,272,181"/>
-<area shape="rect" id="node9" href="$_text_line_segmentation_8cpp.html" title="src/Module/TextLineSegmentation.cpp" alt="" coords="472,155,717,181"/>
+<area shape="rect" id="node2" href="$_pixel_8cpp.html" title="src/Core/Pixel.cpp" alt="" coords="93,80,223,107"/>
+<area shape="rect" id="node3" href="$_pixel_set_8h.html" title="src/Core/PixelSet.h" alt="" coords="349,80,484,107"/>
+<area shape="rect" id="node4" href="$_pixel_set_8cpp.html" title="src/Core/PixelSet.cpp" alt="" coords="237,155,387,181"/>
+<area shape="rect" id="node6" href="$_tab_stop_analysis_8h.html" title="src/Module/TabStopAnalysis.h" alt="" coords="12,155,211,181"/>
+<area shape="rect" id="node9" href="$_text_line_segmentation_8h.html" title="src/Module/TextLineSegmentation.h" alt="" coords="666,155,896,181"/>
+<area shape="rect" id="node11" href="$_super_pixel_8h.html" title="src/Module/SuperPixel.h" alt="" coords="510,80,673,107"/>
+<area shape="rect" id="node5" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="412,155,591,181"/>
+<area shape="rect" id="node7" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="518,229,668,256"/>
+<area shape="rect" id="node8" href="$_tab_stop_analysis_8cpp.html" title="src/Module/TabStopAnalysis.cpp" alt="" coords="5,229,219,256"/>
+<area shape="rect" id="node10" href="$_text_line_segmentation_8cpp.html" title="src/Module/TextLineSegmentation.cpp" alt="" coords="693,229,939,256"/>
 </map>

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['label',['label',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a95616e545bbab04968dd38f53bc658d5',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
+  ['label',['Label',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303d',1,'rdf::DBScanPixel::Label()'],['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a95616e545bbab04968dd38f53bc658d5',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;::label()']]],
   ['labelcost',['LabelCost',['../struct_g_coptimization_1_1_label_cost.html',1,'GCoptimization']]],
   ['labelcostiter',['LabelCostIter',['../struct_g_coptimization_1_1_label_cost_iter.html',1,'GCoptimization']]],
   ['labelid',['LabelID',['../class_g_coptimization.html#a988a2a5579d0d5406966dd2a2bea3a98',1,'GCoptimization']]],

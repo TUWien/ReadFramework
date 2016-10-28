@@ -23,7 +23,7 @@ var searchData=
   ['thresh',['thresh',['../classrdf_1_1_simple_binarization_config.html#a2883e0c06ee4ec1b5c55eac33c8ae2db',1,'rdf::SimpleBinarizationConfig']]],
   ['threshlinelenration',['threshLineLenRation',['../classrdf_1_1_form_features_config.html#abfdca0b5e270b123750e7b7c6aa61a7e',1,'rdf::FormFeaturesConfig']]],
   ['thresholdval',['thresholdVal',['../classrdf_1_1_base_binarization_su.html#a3b21f8d1b66047bcd22675f7fb1fd51f',1,'rdf::BaseBinarizationSu::thresholdVal()'],['../classrdf_1_1_binarization_su_adapted.html#a386276e0a9503b44f9cccdb0d7ba7c60',1,'rdf::BinarizationSuAdapted::thresholdVal()']]],
-  ['threshotsu',['threshOtsu',['../classrdf_1_1_algorithms.html#a9d4c29693ab0fcadff876ec369ddf696',1,'rdf::Algorithms']]],
+  ['threshotsu',['threshOtsu',['../classrdf_1_1_algorithms.html#ab19cf68133c3d512d10e12982ee8db47',1,'rdf::Algorithms']]],
   ['timer',['Timer',['../classrdf_1_1_timer.html#aaec2291461028243690f232ac75f491c',1,'rdf::Timer']]],
   ['tobinarymask',['toBinaryMask',['../classrdf_1_1_mser_blob.html#aaccf8eb2f503f18cb8ab376b96c31e9c',1,'rdf::MserBlob']]],
   ['toblobs',['toBlobs',['../classrdf_1_1_mser_container.html#af9a4a664d210989e050a012fd5967a12',1,'rdf::MserContainer']]],

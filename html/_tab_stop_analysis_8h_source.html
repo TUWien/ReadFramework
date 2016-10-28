@@ -142,25 +142,25 @@ $(document).ready(function(){initNavTree('_tab_stop_analysis_8h_source.html','')
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_base_module_8h.html">BaseModule.h</a>&quot;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pixel_8h.html">Pixel.h</a>&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#pragma warning(push, 0)    // no warnings from includes</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor"></span><span class="comment">// Qt Includes</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#ifndef DllModuleExport</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef DLL_MODULE_EXPORT</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_EXPORT</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_IMPORT</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pixel_set_8h.html">PixelSet.h</a>&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#pragma warning(push, 0)    // no warnings from includes</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor"></span><span class="comment">// Qt Includes</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#ifndef DllModuleExport</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef DLL_MODULE_EXPORT</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_EXPORT</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define DllModuleExport Q_DECL_IMPORT</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">// Qt defines</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">namespace </span>rdf {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">// read defines</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">// Qt defines</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">namespace </span>rdf {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">// read defines</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
 <div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classrdf_1_1_tab_stop_config.html">   57</a></span>&#160;<span class="keyword">class </span><a class="code" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> <a class="code" href="classrdf_1_1_tab_stop_config.html">TabStopConfig</a> : <span class="keyword">public</span> <a class="code" href="classrdf_1_1_module_config.html">ModuleConfig</a> {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
@@ -228,14 +228,15 @@ $(document).ready(function(){initNavTree('_tab_stop_analysis_8h_source.html','')
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_module_config_html"><div class="ttname"><a href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></div><div class="ttdef"><b>Definition:</b> BaseModule.h:61</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_tab_stop_html_a0c4d6d81335fd871d41cd7591d9b8137"><div class="ttname"><a href="classrdf_1_1_pixel_tab_stop.html#a0c4d6d81335fd871d41cd7591d9b8137">rdf::PixelTabStop::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> Pixel.h:149</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_tab_stop_html_a0c4d6d81335fd871d41cd7591d9b8137"><div class="ttname"><a href="classrdf_1_1_pixel_tab_stop.html#a0c4d6d81335fd871d41cd7591d9b8137">rdf::PixelTabStop::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> Pixel.h:146</div></div>
 <div class="ttc" id="classrdf_1_1_tab_stop_config_html"><div class="ttname"><a href="classrdf_1_1_tab_stop_config.html">rdf::TabStopConfig</a></div><div class="ttdef"><b>Definition:</b> TabStopAnalysis.h:57</div></div>
 <div class="ttc" id="_pixel_8h_html"><div class="ttname"><a href="_pixel_8h.html">Pixel.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_tab_stop_cluster_html"><div class="ttname"><a href="classrdf_1_1_tab_stop_cluster.html">rdf::TabStopCluster</a></div><div class="ttdef"><b>Definition:</b> TabStopAnalysis.h:70</div></div>
 <div class="ttc" id="_base_module_8h_html"><div class="ttname"><a href="_base_module_8h.html">BaseModule.h</a></div></div>
 <div class="ttc" id="_base_module_8h_html_a2f33613fa0c4e51cecb5a3c020b5e66a"><div class="ttname"><a href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a></div><div class="ttdeci">#define DllModuleExport</div><div class="ttdef"><b>Definition:</b> BaseModule.h:48</div></div>
 <div class="ttc" id="classrdf_1_1_tab_stop_analysis_html"><div class="ttname"><a href="classrdf_1_1_tab_stop_analysis.html">rdf::TabStopAnalysis</a></div><div class="ttdef"><b>Definition:</b> TabStopAnalysis.h:90</div></div>
-<div class="ttc" id="classrdf_1_1_pixel_tab_stop_html_a0c4d6d81335fd871d41cd7591d9b8137a7e8bfadc74281e2d0539cf1cbd96ad2d"><div class="ttname"><a href="classrdf_1_1_pixel_tab_stop.html#a0c4d6d81335fd871d41cd7591d9b8137a7e8bfadc74281e2d0539cf1cbd96ad2d">rdf::PixelTabStop::type_none</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:150</div></div>
+<div class="ttc" id="classrdf_1_1_pixel_tab_stop_html_a0c4d6d81335fd871d41cd7591d9b8137a7e8bfadc74281e2d0539cf1cbd96ad2d"><div class="ttname"><a href="classrdf_1_1_pixel_tab_stop.html#a0c4d6d81335fd871d41cd7591d9b8137a7e8bfadc74281e2d0539cf1cbd96ad2d">rdf::PixelTabStop::type_none</a></div><div class="ttdef"><b>Definition:</b> Pixel.h:147</div></div>
+<div class="ttc" id="_pixel_set_8h_html"><div class="ttname"><a href="_pixel_set_8h.html">PixelSet.h</a></div></div>
 <div class="ttc" id="classrdf_1_1_line_html"><div class="ttname"><a href="classrdf_1_1_line.html">rdf::Line</a></div><div class="ttdoc">A basic line class including stroke width (thickness). </div><div class="ttdef"><b>Definition:</b> Shapes.h:66</div></div>
 <div class="ttc" id="classrdf_1_1_module_html"><div class="ttname"><a href="classrdf_1_1_module.html">rdf::Module</a></div><div class="ttdoc">This is the base class for all modules. It provides all functions which are implemented by the module...</div><div class="ttdef"><b>Definition:</b> BaseModule.h:94</div></div>
 </div><!-- fragment --></div><!-- contents -->
