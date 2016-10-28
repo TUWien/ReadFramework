@@ -381,7 +381,9 @@ void Line::draw(QPainter & p) const {
 
 	QPen pen = p.pen();
 	QPen penL = pen;
-	penL.setWidthF(mThickness);
+	
+	if (mThickness > 0)
+		penL.setWidthF(mThickness);
 	p.setPen(penL);
 
 	p.drawLine(mLine);

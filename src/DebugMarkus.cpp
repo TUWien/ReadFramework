@@ -166,16 +166,16 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 
-	// find tab stops
-	rdf::TabStopAnalysis tabStops(sp);
-	if (!tabStops.compute())
-		qWarning() << "could not compute text block segmentation!";
+	//// find tab stops
+	//rdf::TabStopAnalysis tabStops(sp);
+	//if (!tabStops.compute())
+	//	qWarning() << "could not compute text block segmentation!";
 
-	// find text lines
-	rdf::TextLineSegmentation textLines(Rect(img), sp);
-	textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
-	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+	//// find text lines
+	//rdf::TextLineSegmentation textLines(Rect(img), sp);
+	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
+	//if (!textLines.compute())
+	//	qWarning() << "could not compute text block segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -190,41 +190,41 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
+	rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
-	rImg = textLines.draw(rImg);
+	//rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
 	rdf::Image::instance().save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 
 
-	// write XML -----------------------------------
-	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+	//// write XML -----------------------------------
+	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 
-	rdf::PageXmlParser parser;
-	parser.read(loadXmlPath);
-	auto pe = parser.page();
-	pe->setCreator(QString("CVL"));
-	pe->setImageSize(QSize(img.rows, img.cols));
-	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
+	//rdf::PageXmlParser parser;
+	//parser.read(loadXmlPath);
+	//auto pe = parser.page();
+	//pe->setCreator(QString("CVL"));
+	//pe->setImageSize(QSize(img.rows, img.cols));
+	//pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
 
-	// start writing content
-	auto ps = PixelSet::fromEdges(PixelSet::connect(sp, Rect(0, 0, img.cols, img.rows)));
+	//// start writing content
+	//auto ps = PixelSet::fromEdges(PixelSet::connect(sp, Rect(0, 0, img.cols, img.rows)));
 
-	if (!ps.empty()) {
-		QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
-		textRegion->setType(Region::type_text_region);
-		textRegion->setPolygon(ps[0]->convexHull());
-		
-		for (auto tl : textLines.textLines()) {
-			textRegion->addUniqueChild(tl);
-		}
+	//if (!ps.empty()) {
+	//	QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
+	//	textRegion->setType(Region::type_text_region);
+	//	textRegion->setPolygon(ps[0]->convexHull());
+	//	
+	//	for (auto tl : textLines.textLines()) {
+	//		textRegion->addUniqueChild(tl);
+	//	}
 
-		pe->rootRegion()->addUniqueChild(textRegion);
-	}
+	//	pe->rootRegion()->addUniqueChild(textRegion);
+	//}
 
-	parser.write(mConfig.xmlPath(), pe);
-	qDebug() << "results written to" << mConfig.xmlPath();
+	//parser.write(mConfig.xmlPath(), pe);
+	//qDebug() << "results written to" << mConfig.xmlPath();
 
 }
 

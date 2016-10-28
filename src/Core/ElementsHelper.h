@@ -141,7 +141,6 @@ public:
 	QStringList typeNames() const;
 	bool isValidTypeName(const QString& typeName) const;
 
-
 	QSharedPointer<Region> createRegion(
 		const Region::Type& type) const;
 	QSharedPointer<RegionTypeConfig> getConfig(
@@ -164,6 +163,8 @@ public:
 	void selectRegions(
 		const QVector<QSharedPointer<Region>>& selRegions, 
 		QSharedPointer<Region> rootRegion = QSharedPointer<Region>()) const;
+
+	QVector<QSharedPointer<rdf::Region> > filter(const rdf::Region::Type& type) const;
 
 private:
 	RegionManager();

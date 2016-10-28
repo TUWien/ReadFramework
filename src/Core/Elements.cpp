@@ -227,6 +227,17 @@ QVector<QSharedPointer<Region> > Region::children() const {
 	return mChildren;
 }
 
+QVector<QSharedPointer<Region> > Region::filter(QSharedPointer<Region> root, const Region::Type& type) {
+
+	QVector<QSharedPointer<Region> > regions;
+
+	if (root)
+		root->collectRegions(regions, type);
+
+	return regions;
+
+}
+
 QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) {
 
 	QVector<QSharedPointer<Region> > regions;
@@ -237,13 +248,14 @@ QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) 
 	return regions;
 }
 
-void Region::collectRegions(QVector<QSharedPointer<Region> >& allRegions) const {
+void Region::collectRegions(QVector<QSharedPointer<Region> >& regions, const Region::Type& type) const {
 
 	for (auto c : children())
-		allRegions << c;
+		if (type == type_unknown || c->type() == type)
+			regions << c;
 
 	for (auto c : children())
-		c->collectRegions(allRegions);
+		c->collectRegions(regions, type);
 }
 
 /// <summary>

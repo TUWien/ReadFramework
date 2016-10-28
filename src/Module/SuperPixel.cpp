@@ -245,14 +245,14 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		Drawer::instance().setColor(ColorManager::instance().colors()[1]);// ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
 		QPen pen = Drawer::instance().pen();
 		pen.setWidth(2);
 		p.setPen(pen);
 
 		//// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->draw(p, 0.2, Pixel::draw_stats_only);
+		mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_only);
 		//qDebug() << mPixels[idx].ellipse();
 	}
 

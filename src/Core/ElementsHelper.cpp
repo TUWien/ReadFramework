@@ -197,6 +197,20 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 	return "";
 }
 
+// RegionManager --------------------------------------------------------------------
+RegionManager::RegionManager() {
+
+	mTypeNames = createTypeNames();
+	mTypeConfig = createConfig();
+}
+
+RegionManager& RegionManager::instance() {
+
+	static QSharedPointer<RegionManager> inst;
+	if (!inst)
+		inst = QSharedPointer<RegionManager>(new RegionManager());
+	return *inst;
+}
 
 QVector<QSharedPointer<RegionTypeConfig> > RegionManager::regionTypeConfig() const {
 	return mTypeConfig;
@@ -220,21 +234,6 @@ void RegionManager::selectRegions(const QVector<QSharedPointer<Region>>& selRegi
 	for (auto r : selRegions)
 		r->setSelected(true);
 
-}
-
-// RegionManager --------------------------------------------------------------------
-RegionManager::RegionManager() {
-
-	mTypeNames = createTypeNames();
-	mTypeConfig = createConfig();
-}
-
-RegionManager& RegionManager::instance() {
-
-	static QSharedPointer<RegionManager> inst;
-	if (!inst)
-		inst = QSharedPointer<RegionManager>(new RegionManager());
-	return *inst;
 }
 
 QVector<QSharedPointer<RegionTypeConfig> > RegionManager::createConfig() const {
@@ -307,7 +306,8 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 
 QSharedPointer<RegionTypeConfig> RegionManager::getConfig(
 	const QSharedPointer<Region>& r, 
-	const QVector<QSharedPointer<RegionTypeConfig>>& config) const {
+	const QVector<QSharedPointer<RegionTypeConfig> >& config) const {
+
 
 	const QVector<QSharedPointer<RegionTypeConfig> >& c = (config.isEmpty()) ? regionTypeConfig() : config;
 	
