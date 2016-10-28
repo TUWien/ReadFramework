@@ -214,7 +214,7 @@ namespace rdf {
 		binarizeImg.compute();
 		mBwImg = binarizeImg.binaryImage();
 		if (mPreFilter)
-			mBwImg = Algorithms::instance().preFilterArea(mBwImg, preFilterArea);
+			mBwImg = Algorithms::preFilterArea(mBwImg, preFilterArea);
 
 		return true;
 	}
@@ -245,13 +245,13 @@ namespace rdf {
 		cv::distanceTransform(lineTempl, distImg, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
 		//cv::distanceTransform(lineTempl, distImg, CV_DIST_L2, 3); //euclidean
 
-		//rdf::Image::instance().imageInfo(distImg, "distImg");
-		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\linetmpl.png");
+		//rdf::Image::imageInfo(distImg, "distImg");
+		//rdf::Image::save(lineTempl, "D:\\tmp\\linetmpl.png");
 		//lineTempl = 0;
 		//LineTrace::generateLineImage(mHorLines, mVerLines, lineTempl);
-		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\lineImg.png");
+		//rdf::Image::save(lineTempl, "D:\\tmp\\lineImg.png");
 		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
-		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
+		//rdf::Image::save(distImg, "D:\\tmp\\distImg.png");
 
 		double hLen = 0, hLenTemp = 0;
 		double vLen = 0, vLenTemp = 0;

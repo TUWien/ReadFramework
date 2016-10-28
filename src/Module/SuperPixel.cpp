@@ -243,11 +243,11 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 
 	// draw super pixels
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		QPen pen = Drawer::instance().pen();
 		pen.setWidth(2);
 		p.setPen(pen);
@@ -259,18 +259,18 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	}
 
 	qDebug() << "drawing takes" << dtf;
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
 	for (auto b : mBlobs) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		p.setPen(Drawer::instance().pen());
 
 		b->draw(p);
@@ -278,7 +278,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 
 	qDebug() << "drawing takes" << dtf;
 	
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 // SuperPixelConfig --------------------------------------------------------------------
@@ -596,12 +596,12 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	// debug - remove
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter painter(&pm);
 
 	Ellipse e(pixel->center(), Vector2D(radius, radius));
 	e.draw(painter, 0.3);
-	painter.setPen(ColorManager::instance().colors()[2]);
+	painter.setPen(ColorManager::colors()[2]);
 
 	const Vector2D& ec = pixel->center();
 	QVector<const Pixel*> neighbors;
@@ -616,7 +616,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	// draw the selected pixel in a different color
-	painter.setPen(ColorManager::instance().colors()[0]);
+	painter.setPen(ColorManager::colors()[0]);
 	pixel->draw(painter, 0.3, Pixel::draw_all);
 
 	// compute all orientations
@@ -635,7 +635,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		cv::Mat cRow = orHist.row(k);
 		computeOrHist(pixel.data(), neighbors, orVec, cRow, sp);
 
-		//qDebug().noquote() << Image::instance().printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
+		//qDebug().noquote() << Image::printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
 
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
@@ -643,7 +643,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		painter.drawText(r.bottomLeft().toQPoint(), QString::number(cAngle * DK_RAD2DEG));
 	}
 
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 

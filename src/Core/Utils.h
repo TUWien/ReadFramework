@@ -63,7 +63,7 @@ class DllCoreExport Utils {
 
 public:
 	static Utils& instance();
-
+	
 	void initFramework() const;
 	void registerVersion() const;
 	static double rand();
@@ -79,27 +79,19 @@ private:
 class DllCoreExport ColorManager {
 
 public:
-	static ColorManager& instance();
+	static QColor getRandomColor(int idx = -1);
+	static QVector<QColor> colors();
 
-	QColor getRandomColor(int idx = -1) const;
-	QVector<QColor> colors() const;
-
-	QColor darkGray(double alpha = 1.0) const;
-	QColor red(double alpha = 1.0) const;
-
-private:
-	ColorManager();
-	ColorManager(const ColorManager&);
+	static QColor darkGray(double alpha = 1.0);
+	static QColor red(double alpha = 1.0);
 };
 
 
 class DllCoreExport Converter {
 
 public:
-	static Converter& instance();
-
-	QPolygon stringToPoly(const QString& pointList) const;
-	QString polyToString(const QPolygon& poly) const;
+	static QPolygon stringToPoly(const QString& pointList);
+	static QString polyToString(const QPolygon& poly);
 
 	static QPointF cvPointToQt(const cv::Point& pt);
 	static cv::Point2d qPointToCv(const QPointF& pt);
@@ -107,10 +99,6 @@ public:
 	static QRectF cvRectToQt(const cv::Rect& r);
 	static cv::Rect2d qRectToCv(const QRectF& r);
 
-
-private:
-	Converter();
-	Converter(const Converter&);
 };
 
 
@@ -138,7 +126,6 @@ public:
 	void start();
 
 protected:
-
 	QTime mTimer;
 };
 

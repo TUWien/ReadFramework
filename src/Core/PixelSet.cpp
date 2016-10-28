@@ -143,7 +143,7 @@ Polygon PixelSet::convexHull() const {
 //	//	lp = p;
 //	//}
 //
-//	//double maxLen = Algorithms::instance().statMoment(len, 0.9);
+//	//double maxLen = Algorithms::statMoment(len, 0.9);
 //
 //	//Polygon cleanedPoly;
 //	//for (int idx = 0; idx < len.size(); idx++) {
@@ -253,7 +253,7 @@ Ellipse PixelSet::profileRect() const {
 
 	Line xLine = fitLine(CV_PI);
 
-	double angle = (bLine.angle() + Algorithms::instance().angleDist(xLine.angle(), bLine.angle())*0.5f);
+	double angle = (bLine.angle() + Algorithms::angleDist(xLine.angle(), bLine.angle())*0.5f);
 	
 	Vector2D blc = bLine.p1() + bLine.vector() * 0.5;
 	Vector2D xlc = xLine.p1() + xLine.vector() * 0.5;
@@ -380,11 +380,11 @@ bool PixelGraph::isEmpty() const {
 
 void PixelGraph::draw(QPainter& p) const {
 
-	p.setPen(ColorManager::instance().colors()[0]);
+	p.setPen(ColorManager::colors()[0]);
 	for (auto px : mSet->pixels())
 		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
-	p.setPen(ColorManager::instance().darkGray(.4));
+	p.setPen(ColorManager::darkGray(.4));
 	for (auto e : edges())
 		e->draw(p);
 
@@ -533,8 +533,8 @@ PixelTabStop PixelTabStop::create(const QSharedPointer<Pixel>& pixel, const QVec
 
 		//if (vEdgeCnt >= 1) {
 
-			double minCC = Algorithms::instance().min(cce);
-			double minCW = Algorithms::instance().min(cwe);
+			double minCC = Algorithms::min(cce);
+			double minCW = Algorithms::min(cwe);
 
 			if (minCC / minCW < neighborRel)
 				mode = PixelTabStop::type_right;
@@ -704,7 +704,7 @@ QVector<QSharedPointer<PixelEdge>> TabStopPixelConnector::connect(const QVector<
 			bool isN = line.weightedLength(corVec) < cR;
 
 			// are the tab-stop orientations the same?? and are both pixels within the the currently defined radius?
-			if (isN && Algorithms::instance().angleDist(tOr, cOr) < .1) {	// do we have the same orientation?
+			if (isN && Algorithms::angleDist(tOr, cOr) < .1) {	// do we have the same orientation?
 
 				QSharedPointer<PixelEdge> edge = QSharedPointer<PixelEdge>::create(px, npx);
 

@@ -46,20 +46,6 @@
 namespace rdf {
 
 // Image --------------------------------------------------------------------
-Image::Image() {
-}
-
-/// <summary>
-/// Returns the current instance, otherwise created.
-/// </summary>
-/// <returns>Reference to current Image class.</returns>
-Image& Image::instance() { 
-
-	static QSharedPointer<Image> inst;
-	if (!inst)
-		inst = QSharedPointer<Image>(new Image());
-	return *inst; 
-}
 
 /// <summary>
 /// Converts a QImage to a cv::Mat.
@@ -158,7 +144,7 @@ cv::Mat Image::qVector2Mat(const QVector<float>& data) {
 /// <param name="savePath">The save path.</param>
 /// <param name="compression">The compression.</param>
 /// <returns>True if the image was saved.</returns>
-bool Image::save(const QImage& img, const QString& savePath, int compression) const {
+bool Image::save(const QImage& img, const QString& savePath, int compression) {
 
 	bool saved = false;
 
@@ -196,12 +182,12 @@ bool Image::save(const QImage& img, const QString& savePath, int compression) co
 /// <param name="savePath">The save path.</param>
 /// <param name="compression">The compression.</param>
 /// <returns>True if the image was saved.</returns>
-bool Image::save(const cv::Mat& img, const QString& savePath, int compression) const {
+bool Image::save(const cv::Mat& img, const QString& savePath, int compression) {
 
 	bool saved = false;
 
-	QImage sImg = rdf::Image::instance().mat2QImage(img);
-	saved = rdf::Image::instance().save(sImg, savePath, compression);
+	QImage sImg = rdf::Image::mat2QImage(img);
+	saved = rdf::Image::save(sImg, savePath, compression);
 
 	return saved;
 }
@@ -212,12 +198,12 @@ bool Image::save(const cv::Mat& img, const QString& savePath, int compression) c
 /// </summary>
 /// <param name="img">The QImage img.</param>
 /// <returns>True if the alpha channel is used.</returns>
-bool Image::alphaChannelUsed(const QImage& img) const {
+bool Image::alphaChannelUsed(const QImage& img) {
 
 	if (img.format() != QImage::Format_ARGB32 && img.format() != QImage::Format_ARGB32_Premultiplied)
 		return false;
 
-	// number of used bytes per line
+	// number of bytes per line used
 	int bpl = (img.width() * img.depth() + 7) / 8;
 	int pad = img.bytesPerLine() - bpl;
 	const uchar* ptr = img.bits();
@@ -241,7 +227,7 @@ bool Image::alphaChannelUsed(const QImage& img) const {
 /// </summary>
 /// <param name="img">The source img.</param>
 /// <param name="name">The name that should be displayed in the command line.</param>
-void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const {
+void Image::imageInfo(const cv::Mat& img, const QString name = QString()) {
 
 	qDebug().noquote() << "image info: " << name;
 	QString info;
@@ -291,7 +277,7 @@ void Image::imageInfo(const cv::Mat& img, const QString name = QString()) const 
 /// <param name="img">The src img.</param>
 /// <param name="name">The variable name in Matlab.</param>
 /// <returns>A string containing the values of the image</returns>
-QString Image::printImage(const cv::Mat& img, const QString name) const {
+QString Image::printImage(const cv::Mat& img, const QString name) {
 	QString imgInfo;
 	if (img.depth() == CV_32FC1)
 		imgInfo = rdf::Image::printMat<float>(img, name);
@@ -329,7 +315,7 @@ cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
 
 	// make a nice default pen
 	if (cp == QPen()) {
-		cp = QPen(ColorManager::instance().colors()[0]);
+		cp = QPen(ColorManager::colors()[0]);
 	}
 
 	QPixmap pm(hist().cols, 100);
@@ -339,7 +325,7 @@ cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
 	p.setPen(cp);
 	draw(p);
 
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 void Histogram::draw(QPainter & p) {

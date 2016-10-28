@@ -91,27 +91,27 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	
 	QPainter p(&pm);
 
 	//// uncomment to see rejected tabstops
-	//QColor col = ColorManager::instance().darkGray();
+	//QColor col = ColorManager::darkGray();
 	//Drawer::instance().setColor(col);
 	//p.setPen(Drawer::instance().pen());
 
-	//p.setPen(ColorManager::instance().colors()[2]);
+	//p.setPen(ColorManager::colors()[2]);
 	//for (auto px : mSuperPixels)
 	//	if (px->tabStop().type() != PixelTabStop::type_none)
 	//		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
 	for (auto ts : mTabStops) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		p.setPen(Drawer::instance().pen());
 		ts->draw(p);
 	}
 
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 QString TabStopAnalysis::toString() const {
@@ -245,7 +245,7 @@ void TabStopAnalysis::updateTabStopCandidates(const QSharedPointer<PixelSet>& se
 			continue;
 
 		double pxa = px->stats()->orientation() - px->tabStop().orientation();
-		double d = Algorithms::instance().angleDist(pxa, orientation);
+		double d = Algorithms::angleDist(pxa, orientation);
 
 		if (d > 0.1) {
 			px->setTabStop(PixelTabStop(newType));
@@ -285,7 +285,7 @@ void TabStopCluster::draw(QPainter & p) const {
 	//mSet->draw(p);
 
 	QPen oPen = p.pen();
-	p.setPen(ColorManager::instance().colors()[0]);
+	p.setPen(ColorManager::colors()[0]);
 	mLine.draw(p);
 	
 	p.setPen(oPen);

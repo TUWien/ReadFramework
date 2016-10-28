@@ -248,7 +248,7 @@ namespace rdf {
 			cv::Scalar m = cv::mean(FM);
 			cv::Mat tmp;
 			FM.convertTo(tmp, CV_32F);
-			double r = (double)rdf::Algorithms::instance().statMomentMat(tmp, cv::Mat(), 0.98f);
+			double r = (double)rdf::Algorithms::statMomentMat(tmp, cv::Mat(), 0.98f);
 
 			//mVal = r > 0 ? m[0] / r : m[0];
 			mVal = m[0] / r;

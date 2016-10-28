@@ -167,12 +167,12 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
 	
 	// this block draws the edges
-	Drawer::instance().setColor(ColorManager::instance().darkGray(0.4));
+	Drawer::instance().setColor(ColorManager::darkGray(0.4));
 	p.setPen(Drawer::instance().pen());
 
 	for (auto b : mEdges) {
@@ -180,7 +180,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	}
 
 	// show the stop lines
-	Drawer::instance().setColor(ColorManager::instance().red(0.4));
+	Drawer::instance().setColor(ColorManager::red(0.4));
 	p.setPen(Drawer::instance().pen());
 
 	for (auto l : mStopLines)
@@ -189,7 +189,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	auto sets = toSets();
 	
 	for (auto set : sets) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		p.setPen(Drawer::instance().pen());
 		set->draw(p);
 
@@ -200,7 +200,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	mDebug << mEdges.size() << "edges drawn in" << dtf;
 
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 QString TextLineSegmentation::toString() const {

@@ -64,7 +64,7 @@ void XmlTest::parseXml() {
 
 	// test image loading
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	if (!imgCv.empty())
 		qInfo() << mConfig.imagePath() << "loaded...";
@@ -86,7 +86,7 @@ void XmlTest::linesToXml() {
 
 	// load image
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	// binarize
 	rdf::BinarizationSuAdapted binarizeImg(imgCv, cv::Mat());
@@ -133,7 +133,7 @@ void LayoutTest::testComponents() {
 
 	// load image
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	computeComponents(imgCv);
 
@@ -194,7 +194,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//rImg = tabStops.draw(rImg);
 	//rImg = textLines.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
-	rdf::Image::instance().save(rImg, maskPath);
+	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 
 

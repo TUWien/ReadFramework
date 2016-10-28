@@ -48,17 +48,6 @@
 namespace rdf {
 
 // Algorithms --------------------------------------------------------------------
-Algorithms::Algorithms() {
-}
-
-
-Algorithms& Algorithms::instance() {
-
-	static QSharedPointer<Algorithms> inst;
-	if (!inst)
-		inst = QSharedPointer<Algorithms>(new Algorithms());
-	return *inst;
-}
 
 /// <summary>
 /// Dilates the image bwImg with a given structuring element.
@@ -68,7 +57,7 @@ Algorithms& Algorithms::instance() {
 /// <param name="shape">The shape (either Square or Disk).</param>
 /// <param name="borderValue">The border value.</param>
 /// <returns>An dilated image (CV_8U or CV_32F).</returns>
-cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
+cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
@@ -100,7 +89,7 @@ cv::Mat Algorithms::dilateImage(const cv::Mat& bwImg, int seSize, MorphShape sha
 /// <param name="shape">The shape (either Square or Disk).</param>
 /// <param name="borderValue">The border value.</param>
 /// <returns>An eroded image (CV_8U or CV_32F).</returns>
-cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) const {
+cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape, int borderValue) {
 
 	// nothing to do in here
 	if (seSize < 3) return bwImg.clone();
@@ -135,7 +124,7 @@ cv::Mat Algorithms::erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shap
 /// <param name="seSize">Size of the structuring element.</param>
 /// <param name="shape">The shape (either Square or Disk).</param>
 /// <returns>A cvMat containing the structuring element (CV_8UC1).</returns>
-cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
+cv::Mat Algorithms::createStructuringElement(int seSize, int shape) {
 
 	cv::Mat se = cv::Mat(seSize, seSize, CV_8U);
 
@@ -177,7 +166,7 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) const {
 /// </summary>
 /// <param name="srcImg">The source img CV_8UC1 or CV_8UC3.</param>
 /// <returns>A binary image CV_8UC1</returns>
-cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) const {
+cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) {
 
 	if (srcImg.depth() !=  CV_8U) {
 		qWarning() << "8U is required";
@@ -205,7 +194,7 @@ cv::Mat Algorithms::threshOtsu(const cv::Mat& srcImg, int thType) const {
 /// <param name="hist">The histogram CV_32FC1.</param>
 /// <param name="kernel">The convolution kernel CV_32FC1.</param>
 /// <returns>The convolved Histogram CV_32FC1.</returns>
-cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) const {
+cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) {
 
 	if (hist.channels() > 1) {
 		qWarning() << "the histogram needs to have 1 channel";
@@ -259,7 +248,7 @@ cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel
 /// </summary>
 /// <param name="sigma">The standard deviation of the Gaussian.</param>
 /// <returns>The Gaussian kernel CV_32FC1</returns>
-cv::Mat Algorithms::get1DGauss(double sigma) const {
+cv::Mat Algorithms::get1DGauss(double sigma) {
 
 	// correct -> checked with matlab reference
 	int kernelsize = cvRound(cvCeil(sigma * 3) * 2) + 1;
@@ -294,7 +283,7 @@ cv::Mat Algorithms::get1DGauss(double sigma) const {
 /// <param name="kernelSizeY">The box filter's size.</param>
 /// <param name="norm">If BORDER_ZERO an image sum is computed, if BORDER_FLIP a mean filtering is applied.</param>
 /// <returns>The convolved image CV_32FC1.</returns>
-cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY, MorphBorder norm) const {
+cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY, MorphBorder norm) {
 
 	if (src.channels() > 1) {
 		qWarning() << "the image needs to have 1 channel";
@@ -407,7 +396,7 @@ cv::Mat Algorithms::convolveIntegralImage(const cv::Mat& src, const int kernelSi
 /// </summary>
 /// <param name="src">The source image CV_32F or CV_8U.</param>
 /// <param name="val">The border value.</param>
-void Algorithms::setBorderConst(cv::Mat &src, float val) const {
+void Algorithms::setBorderConst(cv::Mat &src, float val) {
 
 	// do nothing if the mask is empty
 	if (!src.empty()) {
@@ -574,7 +563,7 @@ void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 /// <param name="minArea">The blob size threshold in pixel.</param>
 /// <param name="maxArea">The maximum area.</param>
 /// <returns>A CV_8UC1 binary image with all blobs smaller than minArea removed.</returns>
-cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) const {
+cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) {
 
 	cv::Mat bwImgTmp = img.clone();
 	cv::Mat filteredImage = img.clone();
@@ -678,7 +667,7 @@ cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) 
 /// <param name="img">The source img CV_32FC1.</param>
 /// <param name="mask">The mask CV_8UC1 or CV_32FC1.</param>
 /// <returns>The histogram of the img as cv::mat CV_32FC1.</returns>
-cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
+cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) {
 	if (img.channels() > 1) {
 		qDebug() << "the image needs to have 1 channel";
 		return cv::Mat();
@@ -749,7 +738,7 @@ cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) const {
 /// <param name="hist">The histogram CV_32FC1.</param>
 /// <param name="otsuThresh">The otsu threshold - deprecated.</param>
 /// <returns>The computed threshold.</returns>
-double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) const {
+double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) {
 	if (hist.channels() > 1) {
 		qDebug() << "the histogram needs to have 1 channel";
 		return -1.0;
@@ -825,7 +814,7 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) c
 /// <param name="startIvl">The intervals lower bound.</param>
 /// <param name="endIvl">The intervals upper bound.</param>
 /// <returns>The angle within [startIvl endIvl].</returns>
-double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) const {
+double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) {
 	// this could be a bottleneck
 	if (abs(angle) > 1000)
 		return angle;
@@ -845,7 +834,7 @@ double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) co
 /// <param name="angle1">The angle1.</param>
 /// <param name="angle2">The angle2.</param>
 /// <returns>The angular distance.</returns>
-double Algorithms::angleDist(double angle1, double angle2, double maxAngle) const {
+double Algorithms::angleDist(double angle1, double angle2, double maxAngle) {
 
 	angle1 = normAngleRad(angle1);
 	angle2 = normAngleRad(angle2);
@@ -859,7 +848,7 @@ double Algorithms::angleDist(double angle1, double angle2, double maxAngle) cons
 /// </summary>
 /// <param name="src">The source image.</param>
 /// <returns>The estimated mask.</returns>
-cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
+cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) {
 
 	cv::Mat srcGray = src.clone();
 	cv::Mat mask;
@@ -876,13 +865,13 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 	}
 	//now we have a CV_32F srcGray image and a CV_8U mask
 
-	mask = Algorithms::instance().threshOtsu(mask, CV_THRESH_BINARY);
+	mask = Algorithms::threshOtsu(mask, CV_THRESH_BINARY);
 	if (preFilter)
-		mask = Algorithms::instance().preFilterArea(mask, 10);
-	//cv::Mat hist = Algorithms::instance().computeHist(srcGray);
-	//double thresh = Algorithms::instance().getThreshOtsu(hist);
+		mask = Algorithms::preFilterArea(mask, 10);
+	//cv::Mat hist = Algorithms::computeHist(srcGray);
+	//double thresh = Algorithms::getThreshOtsu(hist);
 
-	//Image::instance().save(mask, "D:\\tmp\\mask1.tif");
+	//Image::save(mask, "D:\\tmp\\mask1.tif");
 
 	// check the ratio of the border pixels if there is foreground
 	int borderPixelCount = 0;
@@ -907,8 +896,8 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 	cv::Mat smallZeroBorderMask = zeroBorderMask(cv::Rect(1, 1, mask.cols, mask.rows)); // copyTo needs reference
 	mask.copyTo(smallZeroBorderMask);
 
-	//Image::instance().save(zeroBorderMask, "D:\\tmp\\zeroBorderMask1.tif");
-	//Image::instance().save(smallZeroBorderMask, "D:\\tmp\\smallzeroBorderMask1.tif");
+	//Image::save(zeroBorderMask, "D:\\tmp\\zeroBorderMask1.tif");
+	//Image::save(smallZeroBorderMask, "D:\\tmp\\smallzeroBorderMask1.tif");
 
 	rdf::Blobs binBlobs;
 	binBlobs.setImage(zeroBorderMask);
@@ -926,7 +915,7 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 		cv::Scalar stdDevBorder;
 		meanStdDev(srcGray, meanBorder, stdDevBorder, border);
 
-		//Image::instance().save(border, "D:\\tmp\\border1.tif");
+		//Image::save(border, "D:\\tmp\\border1.tif");
 
 		// if the background is perfectly uniform, the std might get < 0.003
 		if (stdDevBorder[0] < 0.051) stdDevBorder[0] = 0.051;
@@ -934,10 +923,10 @@ cv::Mat Algorithms::estimateMask(const cv::Mat& src, bool preFilter) const {
 		zeroBorderMask.setTo(0);
 		bBlob.drawBlob(zeroBorderMask, 255, 0);
 
-		//Image::instance().save(zeroBorderMask, "D:\\tmp\\blob1.tif");
-		//Image::instance().save(srcGray, "D:\\tmp\\srcGray1.tif");
-		//Image::instance().imageInfo(srcGray, "srcGray");
-		//Image::instance().imageInfo(zeroBorderMask, "zeroBorderMask");
+		//Image::save(zeroBorderMask, "D:\\tmp\\blob1.tif");
+		//Image::save(srcGray, "D:\\tmp\\srcGray1.tif");
+		//Image::imageInfo(srcGray, "srcGray");
+		//Image::imageInfo(zeroBorderMask, "zeroBorderMask");
 		
 		//WARNING: original code just uses cv::FLOODFILL_MASK_ONLY only
 		//due to a bug in floodfill, see https://github.com/Itseez/opencv/issues/5123 ,
@@ -1041,7 +1030,7 @@ cv::Mat Algorithms::rotateImage(const cv::Mat & src, double angleRad, int interp
 /// </summary>
 /// <param name="vec">A vector with double values.</param>
 /// <returns>the minimum</returns>
-double Algorithms::min(const QVector<double>& vec) const {
+double Algorithms::min(const QVector<double>& vec) {
 
 	double mn = DBL_MAX;
 
@@ -1057,7 +1046,7 @@ double Algorithms::min(const QVector<double>& vec) const {
 /// </summary>
 /// <param name="vec">A vector with double values.</param>
 /// <returns>the maximum</returns>
-double Algorithms::max(const QVector<double>& vec) const {
+double Algorithms::max(const QVector<double>& vec) {
 
 	double mx = -DBL_MAX;
 
@@ -1074,7 +1063,7 @@ double Algorithms::max(const QVector<double>& vec) const {
 /// <param name="angleRad">The angle in radians.</param>
 /// <param name="srcSize">Size of the source image.</param>
 /// <returns>The Size of the rotated image.</returns>
-QPointF Algorithms::calcRotationSize(double angleRad, const QPointF& srcSize) const {
+QPointF Algorithms::calcRotationSize(double angleRad, const QPointF& srcSize) {
 	QPointF nSl = srcSize;
 	QPointF nSr(srcSize.y(), srcSize.x());
 

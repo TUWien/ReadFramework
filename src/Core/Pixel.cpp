@@ -376,11 +376,11 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 		//QColor c(255,33,33);
 
 		//if (s->scale() == 256)
-		//	c = ColorManager::instance().colors()[0];
+		//	c = ColorManager::colors()[0];
 		//else if (s->scale() == 128)
-		//	c = ColorManager::instance().colors()[1];
+		//	c = ColorManager::colors()[1];
 		//else if (s->scale() == 64)
-		//	c = ColorManager::instance().colors()[2];
+		//	c = ColorManager::colors()[2];
 
 		//QPen pen = p.pen();
 		//p.setPen(c);
@@ -401,7 +401,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 		vec.rotate(tabStop().orientation());
 
 		QPen oPen = p.pen();
-		p.setPen(ColorManager::instance().red());
+		p.setPen(ColorManager::red());
 		p.drawLine(Line(center(), center()+vec).line());
 		p.setPen(oPen);
 	}

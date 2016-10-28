@@ -49,11 +49,11 @@ bool Polygon::isEmpty() const {
 	return mPoly.isEmpty();
 }
 void Polygon::read(const QString & pointList) {
-	mPoly = Converter::instance().stringToPoly(pointList);
+	mPoly = Converter::stringToPoly(pointList);
 }
 
 QString Polygon::write() const {
-	return Converter::instance().polyToString(mPoly.toPolygon());
+	return Converter::polyToString(mPoly.toPolygon());
 }
 
 int Polygon::size() const {
@@ -143,11 +143,11 @@ QPolygon BaseLine::toPolygon() const {
 }
 
 void BaseLine::read(const QString & pointList) {
-	mBaseLine = Converter::instance().stringToPoly(pointList);
+	mBaseLine = Converter::stringToPoly(pointList);
 }
 
 QString BaseLine::write() const {
-	return Converter::instance().polyToString(toPolygon());
+	return Converter::polyToString(toPolygon());
 }
 
 QPointF BaseLine::startPoint() const {
@@ -316,11 +316,11 @@ Vector2D Line::p2() const {
 bool Line::isHorizontal(double mAngleTresh) const {
 	
 	double lineAngle = angle();
-	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0, CV_PI);
+	double angleNewLine = Algorithms::normAngleRad(lineAngle, 0.0, CV_PI);
 	
 	double a = 0.0f;
-	double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
-		, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
+	double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
 
 	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
@@ -332,11 +332,11 @@ bool Line::isHorizontal(double mAngleTresh) const {
 bool Line::isVertical(double mAngleTresh) const {
 	
 	double lineAngle = angle();
-	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0, CV_PI);
+	double angleNewLine = Algorithms::normAngleRad(lineAngle, 0.0, CV_PI);
 	
 	double a = CV_PI*0.5;
-	double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
-		, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
+	double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
 
 	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
@@ -616,9 +616,9 @@ double Line::diffAngle(const Line& l) const {
 	double angleLine, angleL;
 
 	//angleLine
-	angleLine = Algorithms::instance().normAngleRad(angle(), 0.0, CV_PI);
+	angleLine = Algorithms::normAngleRad(angle(), 0.0, CV_PI);
 	angleLine = angleLine > CV_PI*0.5 ? CV_PI - angleLine : angleLine;
-	angleL = Algorithms::instance().normAngleRad(l.angle(), 0.0, CV_PI);
+	angleL = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
 	angleL = angleL > CV_PI*0.5 ? CV_PI - angleL : angleL;
 	
 	return std::abs(angleLine - angleL);

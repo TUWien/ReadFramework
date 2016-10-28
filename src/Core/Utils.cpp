@@ -188,18 +188,12 @@ QString Utils::baseName(const QString & filePath) const {
 }
 
 // ColorManager --------------------------------------------------------------------
-ColorManager::ColorManager() {
-}
-
-ColorManager& ColorManager::instance() {
-
-	static QSharedPointer<ColorManager> inst;
-	if (!inst)
-		inst = QSharedPointer<ColorManager>(new ColorManager());
-	return *inst;
-}
-
-QColor ColorManager::getRandomColor(int idx) const {
+/// <summary>
+/// Returns a pleasent random color.
+/// </summary>
+/// <param name="idx">If idx != -1 a specific color is chosen from the palette.</param>
+/// <returns></returns>
+QColor ColorManager::getRandomColor(int idx) {
 
 	QVector<QColor> cols = colors();
 	int maxCols = cols.size();
@@ -219,7 +213,11 @@ QColor ColorManager::getRandomColor(int idx) const {
 	return col;
 }
 
-QVector<QColor> ColorManager::colors() const {
+/// <summary>
+/// Returns our color palette.
+/// </summary>
+/// <returns></returns>
+QVector<QColor> ColorManager::colors() {
 
 	static QVector<QColor> cols;
 
@@ -233,30 +231,40 @@ QVector<QColor> ColorManager::colors() const {
 	return cols;
 }
 
-QColor ColorManager::darkGray(double alpha) const {
+/// <summary>
+/// Returns a dark gray.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::darkGray(double alpha) {
 	return QColor(66, 66, 66, qRound(alpha*255));
 }
 
-QColor ColorManager::red(double alpha) const {
+/// <summary>
+/// Returns a dark red.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::red(double alpha) {
 	return QColor(200, 50, 50, qRound(alpha*255));
 }
 
 // Converter --------------------------------------------------------------------
-Converter::Converter() {
-}
 
-Converter& Converter::instance() {
-
-	static QSharedPointer<Converter> inst;
-	if (!inst)
-		inst = QSharedPointer<Converter>(new Converter());
-	return *inst;
-}
-
+/// <summary>
+/// Converts a cv::Rect to QRectF.
+/// </summary>
+/// <param name="r">The OpenCV rectangle.</param>
+/// <returns></returns>
 QRectF Converter::cvRectToQt(const cv::Rect & r) {
 	return QRectF(r.x, r.y, r.width, r.height);
 }
 
+/// <summary>
+/// Converts a QRectF to a cv::Rect.
+/// </summary>
+/// <param name="r">The Qt rectangle.</param>
+/// <returns></returns>
 cv::Rect2d Converter::qRectToCv(const QRectF & r) {
 	return cv::Rect2d(r.x(), r.y(), r.width(), r.height());
 }
@@ -267,7 +275,7 @@ cv::Rect2d Converter::qRectToCv(const QRectF & r) {
 /// </summary>
 /// <param name="pointList">A string containing the point list.</param>
 /// <returns>A QPolygon parsed from the point list.</returns>
-QPolygon Converter::stringToPoly(const QString& pointList) const {
+QPolygon Converter::stringToPoly(const QString& pointList) {
 
 	// we expect point pairs like that: <Coords points="1077,482 1167,482 1167,547 1077,547"/>
 	QStringList pairs = pointList.split(" ");
@@ -301,7 +309,7 @@ QPolygon Converter::stringToPoly(const QString& pointList) const {
 /// </summary>
 /// <param name="polygon">The polygon to convert.</param>
 /// <returns>A string representing the polygon.</returns>
-QString Converter::polyToString(const QPolygon& polygon) const {
+QString Converter::polyToString(const QPolygon& polygon) {
 
 	QString polyStr;
 
