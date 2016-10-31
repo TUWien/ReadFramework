@@ -271,11 +271,13 @@ protected:
 	cv::Mat mLineImg;									//the line image [0 255]
 	cv::Mat mMask;										//the mask image [0 255]
 
+	int mTabSize = 100000;
+	double mInv[100000];   /* table to keep computed inverse values */
 	QVector<rdf::Line> hLines;
 	QVector<rdf::Line> vLines;
 
 private:
-
+	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
 
 };
