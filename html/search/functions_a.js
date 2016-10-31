@@ -2,6 +2,7 @@ var searchData=
 [
   ['label',['label',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a95616e545bbab04968dd38f53bc658d5',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
   ['layouttest',['LayoutTest',['../classrdf_1_1_layout_test.html#a1f130b4dd326dc845f4e1da68228fcad',1,'rdf::LayoutTest']]],
+  ['layouttoxml',['layoutToXml',['../classrdf_1_1_layout_test.html#a337f4d58869b51bc000e8ee98a2282b4',1,'rdf::LayoutTest']]],
   ['left',['left',['../classrdf_1_1_rect.html#a89bc72017df7e6acd028017611fe10d5',1,'rdf::Rect']]],
   ['length',['length',['../classrdf_1_1_line.html#a33b954a52b2a9429922f57624aa30285',1,'rdf::Line::length()'],['../classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9',1,'rdf::Vector2D::length()']]],
   ['lessx1',['lessX1',['../classrdf_1_1_line.html#a7cdbcccc29f98540bbd8322d6bfb8554',1,'rdf::Line']]],

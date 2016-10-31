@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"functions_func_e.html":[2,3,1,4],
+"functions_func_f.html":[2,3,1,5],
 "functions_func_g.html":[2,3,1,6],
 "functions_func_h.html":[2,3,1,7],
 "functions_func_i.html":[2,3,1,8],
@@ -76,8 +78,8 @@ var NAVTREEINDEX6 =
 "namespacemembers.html":[1,1,0],
 "namespacemembers_func.html":[1,1,1],
 "namespacemembers_type.html":[1,1,2],
-"namespacerd3.html":[1,0,1],
 "namespacerd3.html":[2,0,1],
+"namespacerd3.html":[1,0,1],
 "namespacerdf.html":[1,0,2],
 "namespacerdf.html":[2,0,2],
 "namespacerdf_1_1_pixel_distance.html":[1,0,2,0],

@@ -24,6 +24,7 @@ var classrdf_1_1_rect =
     [ "move", "classrdf_1_1_rect.html#a604d03742d79f08927e4587f5551457f", null ],
     [ "right", "classrdf_1_1_rect.html#aa326492885bf7887c38194c04efdb8ce", null ],
     [ "setSize", "classrdf_1_1_rect.html#a85e72f6cc289c2faf34ab00e6f3eb511", null ],
+    [ "setTopLeft", "classrdf_1_1_rect.html#aa8cd555e87fc426b0c2945ccecdf1c7d", null ],
     [ "size", "classrdf_1_1_rect.html#a65ae17ca5ce041865eec2f955cee4084", null ],
     [ "toCvRect", "classrdf_1_1_rect.html#ab77c4743b24ec4e05f01dd0f1bfcccd8", null ],
     [ "top", "classrdf_1_1_rect.html#a67aa6de143e387a877070633085cde71", null ],

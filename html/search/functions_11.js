@@ -127,6 +127,7 @@ var searchData=
   ['setthr',['setThr',['../classrdf_1_1_base_skew_estimation_config.html#a3960e547847c34459d6cd90b37b5cdc4',1,'rdf::BaseSkewEstimationConfig']]],
   ['setthreshlinelenration',['setThreshLineLenRation',['../classrdf_1_1_form_features_config.html#a271e847dc862e656725c287d80cb9c96',1,'rdf::FormFeaturesConfig']]],
   ['settings',['settings',['../classrdf_1_1_config.html#aed7f10409b7fbf93f575f6a4188bdcc6',1,'rdf::Config']]],
+  ['settopleft',['setTopLeft',['../classrdf_1_1_rect.html#aa8cd555e87fc426b0c2945ccecdf1c7d',1,'rdf::Rect']]],
   ['settype',['setType',['../classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876',1,'rdf::Region']]],
   ['setupdatacostsexpansion',['setupDataCostsExpansion',['../class_g_coptimization.html#afcda91192bec29de1a2c78d811f5e41d',1,'GCoptimization']]],
   ['setupdatacostsswap',['setupDataCostsSwap',['../class_g_coptimization.html#a24001631b281fdcb3e88a06c5efe5b68',1,'GCoptimization']]],

@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_rect.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classrdf_1_1_rect-members.html">List of all members</a>  </div>
@@ -171,6 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a604d03742d79f08927e4587f5551457f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9904dddabfb50cec3c9a5234ec8bbbf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a9904dddabfb50cec3c9a5234ec8bbbf6">expand</a> (double v)</td></tr>
 <tr class="separator:a9904dddabfb50cec3c9a5234ec8bbbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8cd555e87fc426b0c2945ccecdf1c7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#aa8cd555e87fc426b0c2945ccecdf1c7d">setTopLeft</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;<a class="el" href="classrdf_1_1_rect.html#a28214a7c95f89754b665b8e5723024a2">topLeft</a>)</td></tr>
+<tr class="separator:aa8cd555e87fc426b0c2945ccecdf1c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85e72f6cc289c2faf34ab00e6f3eb511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a85e72f6cc289c2faf34ab00e6f3eb511">setSize</a> (const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;newSize)</td></tr>
 <tr class="separator:a85e72f6cc289c2faf34ab00e6f3eb511"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeeb75ebda0aaa6c8a4b5bba0c0b68f4"><td class="memItemLeft" align="right" valign="top">QRect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#aeeeb75ebda0aaa6c8a4b5bba0c0b68f4">toQRect</a> () const </td></tr>
@@ -190,6 +193,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aee2036137d167869c1a8baa8dd279c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a341b343918868995eff6269835ead967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a341b343918868995eff6269835ead967">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a341b343918868995eff6269835ead967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a8135a38c117d0354e1b0098c5bb074c6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_rect.html">Rect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_rect.html#a8135a38c117d0354e1b0098c5bb074c6">fromPoints</a> (const QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt; &amp;pts)</td></tr>
+<tr class="memdesc:a8135a38c117d0354e1b0098c5bb074c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a bounding rectangle that encloses all points.  <a href="#a8135a38c117d0354e1b0098c5bb074c6">More...</a><br/></td></tr>
+<tr class="separator:a8135a38c117d0354e1b0098c5bb074c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -506,6 +515,39 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8135a38c117d0354e1b0098c5bb074c6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_rect.html">Rect</a> rdf::Rect::fromPoints </td>
+          <td>(</td>
+          <td class="paramtype">const QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a bounding rectangle that encloses all points. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts</td><td>The point set.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a45fd9cb736b030f2cbaeeb2c4ae9cab6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -627,6 +669,22 @@ Friends</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
           <td class="paramname"><em>newSize</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa8cd555e87fc426b0c2945ccecdf1c7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Rect::setTopLeft </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>topLeft</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"classrdf_1_1_region_manager.html#a1081d292795fe86281c2dc3f1988bad4":[2,0,2,14,2],
+"classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0":[2,0,2,14,3],
 "classrdf_1_1_region_manager.html#a3507218cc3345c5b656071d31eb6f033":[2,0,2,14,1],
 "classrdf_1_1_region_manager.html#a374beb577982732b9ab5e31c977f5922":[2,0,2,14,9],
 "classrdf_1_1_region_manager.html#a51ebbd67f805a5f84724bf389e407467":[2,0,2,14,0],
@@ -243,11 +245,9 @@ var NAVTREEINDEX5 =
 "functions_enum.html":[2,3,4],
 "functions_eval.html":[2,3,5],
 "functions_f.html":[2,3,0,5],
-"functions_func.html":[2,3,1],
 "functions_func.html":[2,3,1,0],
+"functions_func.html":[2,3,1],
 "functions_func_b.html":[2,3,1,1],
 "functions_func_c.html":[2,3,1,2],
-"functions_func_d.html":[2,3,1,3],
-"functions_func_e.html":[2,3,1,4],
-"functions_func_f.html":[2,3,1,5]
+"functions_func_d.html":[2,3,1,3]
 };
