@@ -197,6 +197,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a2e67230e106489586817acbf36edc1a6"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2e67230e106489586817acbf36edc1a6">doubleEqual</a> (double a, double b)</td></tr>
 <tr class="memdesc:a2e67230e106489586817acbf36edc1a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The resulting rounding error after floating point computations depend on the specific operations done.The same number computed by different algorithms could present different rounding errors.For a useful comparison, an estimation of the relative rounding error should be considered and compared to a factor times EPS.The factor should be related to the cumulated rounding error in the chain of computation.Here, as a simplification, a fixed factor is used.  <a href="#a2e67230e106489586817acbf36edc1a6">More...</a><br/></td></tr>
 <tr class="separator:a2e67230e106489586817acbf36edc1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00b15f1e6a8a0063d06dc7dd79ca8bf9"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a00b15f1e6a8a0063d06dc7dd79ca8bf9">absAngleDiff</a> (double a, double b)</td></tr>
+<tr class="separator:a00b15f1e6a8a0063d06dc7dd79ca8bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f37d5d96074a9af4b8c17db07591554"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a8f37d5d96074a9af4b8c17db07591554">signedAngleDiff</a> (double a, double b)</td></tr>
+<tr class="separator:a8f37d5d96074a9af4b8c17db07591554"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a710f995bf54fb37f8692bb86a06d75eb"><td class="memItemLeft" align="right" valign="top">static QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a710f995bf54fb37f8692bb86a06d75eb">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize)</td></tr>
 <tr class="memdesc:a710f995bf54fb37f8692bb86a06d75eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a710f995bf54fb37f8692bb86a06d75eb">More...</a><br/></td></tr>
 <tr class="separator:a710f995bf54fb37f8692bb86a06d75eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,6 +261,40 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a00b15f1e6a8a0063d06dc7dd79ca8bf9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::absAngleDiff </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6fbf8a18978253a57efdbb48f49f06ce"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1341,6 +1379,40 @@ template&lt;typename sFmt &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8f37d5d96074a9af4b8c17db07591554"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::signedAngleDiff </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

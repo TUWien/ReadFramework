@@ -145,6 +145,7 @@ var searchData=
   ['sety',['setY',['../classrdf_1_1_vector2_d.html#a68b400a75e057a381ee591bec7ffaf25',1,'rdf::Vector2D']]],
   ['sigma',['sigma',['../classrdf_1_1_base_skew_estimation_config.html#a7b5303caff3218f114e66d393999a4a8',1,'rdf::BaseSkewEstimationConfig']]],
   ['sigmascale',['sigmaScale',['../classrdf_1_1_read_l_s_d_config.html#abe802fd79523b1929eaa7978784ee35d',1,'rdf::ReadLSDConfig']]],
+  ['signedanglediff',['signedAngleDiff',['../classrdf_1_1_algorithms.html#a8f37d5d96074a9af4b8c17db07591554',1,'rdf::Algorithms']]],
   ['simplebinarization',['SimpleBinarization',['../classrdf_1_1_simple_binarization.html#accff5ae9ee0cc90a4aae3266e2eb9335',1,'rdf::SimpleBinarization']]],
   ['simplebinarizationconfig',['SimpleBinarizationConfig',['../classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d',1,'rdf::SimpleBinarizationConfig']]],
   ['site',['site',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a8e675fdad4c59ebdb376596c994eea0d',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;::site()'],['../class_g_coptimization_1_1_data_cost_fn_sparse_1_1iterator.html#a34c046a8ba60b03b2540b0d1c15fe05d',1,'GCoptimization::DataCostFnSparse::iterator::site()']]],

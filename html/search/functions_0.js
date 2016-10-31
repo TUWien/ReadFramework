@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['absanglediff',['absAngleDiff',['../classrdf_1_1_algorithms.html#a00b15f1e6a8a0063d06dc7dd79ca8bf9',1,'rdf::Algorithms']]],
   ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet']]],
   ['add_5fconstant',['add_constant',['../class_energy.html#a8f9f4a82cb09a00f8975c2e2f5df8d76',1,'Energy']]],
   ['add_5fedge',['add_edge',['../class_graph.html#a11e1464f7a3a7b6b61da38684008f74a',1,'Graph']]],

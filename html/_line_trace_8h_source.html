@@ -378,10 +378,12 @@ $(document).ready(function(){initNavTree('_line_trace_8h_source.html','');});
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordtype">double</span> nfa(<span class="keywordtype">int</span> n, <span class="keywordtype">int</span> k, <span class="keywordtype">double</span> p, <span class="keywordtype">double</span> logNT);</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keywordtype">double</span> mAngle = std::numeric_limits&lt;double&gt;::infinity();        <span class="comment">//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;};</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordtype">int</span> isAligned(<span class="keywordtype">double</span> thetaTest, <span class="keywordtype">double</span> theta, <span class="keywordtype">double</span> prec);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordtype">int</span> isAligned(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keyword">const</span> cv::Mat &amp;img, <span class="keywordtype">double</span> theta, <span class="keywordtype">double</span> prec);</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;};</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;};</div>
 <div class="ttc" id="classrdf_1_1_line_trace_html_a32a98487798c1aec06dc39cf8133397f"><div class="ttname"><a href="classrdf_1_1_line_trace.html#a32a98487798c1aec06dc39cf8133397f">rdf::LineTrace::hLines</a></div><div class="ttdeci">QVector&lt; rdf::Line &gt; hLines</div><div class="ttdef"><b>Definition:</b> LineTrace.h:171</div></div>
 <div class="ttc" id="classrdf_1_1_line_trace_html_a1afa3b6df7c83e126ca68663c326517d"><div class="ttname"><a href="classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d">rdf::LineTrace::vLines</a></div><div class="ttdeci">QVector&lt; rdf::Line &gt; vLines</div><div class="ttdef"><b>Definition:</b> LineTrace.h:172</div></div>
 <div class="ttc" id="classrdf_1_1_line_trace_html_ab5c396aa8a62f6f96c38cd91c7f6741f"><div class="ttname"><a href="classrdf_1_1_line_trace.html#ab5c396aa8a62f6f96c38cd91c7f6741f">rdf::LineTrace::mSrcImg</a></div><div class="ttdeci">cv::Mat mSrcImg</div><div class="ttdef"><b>Definition:</b> LineTrace.h:167</div></div>
