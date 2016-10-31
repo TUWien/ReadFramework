@@ -185,6 +185,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aac828d9184e38e9d91436bb1adc7a19d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1)</td></tr>
 <tr class="memdesc:aac828d9184e38e9d91436bb1adc7a19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#aac828d9184e38e9d91436bb1adc7a19d">More...</a><br/></td></tr>
 <tr class="separator:aac828d9184e38e9d91436bb1adc7a19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2eac08e065d71eabeec3dd0e2b38d6ec">log_gamma_lanczos</a> (double x)</td></tr>
+<tr class="memdesc:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation. See http ://www.rskey.org/gamma.htm  <a href="#a2eac08e065d71eabeec3dd0e2b38d6ec">More...</a><br/></td></tr>
+<tr class="separator:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a710f995bf54fb37f8692bb86a06d75eb"><td class="memItemLeft" align="right" valign="top">static QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a710f995bf54fb37f8692bb86a06d75eb">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize)</td></tr>
 <tr class="memdesc:a710f995bf54fb37f8692bb86a06d75eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a710f995bf54fb37f8692bb86a06d75eb">More...</a><br/></td></tr>
 <tr class="separator:a710f995bf54fb37f8692bb86a06d75eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -805,6 +808,39 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a2eac08e065d71eabeec3dd0e2b38d6ec"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::log_gamma_lanczos </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation. See http ://www.rskey.org/gamma.htm </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Natural Algorithm</dd></dl>
 
 </div>
 </div>

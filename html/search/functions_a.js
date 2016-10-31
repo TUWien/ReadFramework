@@ -22,5 +22,6 @@ var searchData=
   ['loadtemplatedatabase',['loadTemplateDatabase',['../classrdf_1_1_form_features.html#ab6f6a9a3c69e87326692b284c5cfbde0',1,'rdf::FormFeatures']]],
   ['localorientation',['LocalOrientation',['../classrdf_1_1_local_orientation.html#a3e23d3d5b39c5211fe84835f9e0dcbd2',1,'rdf::LocalOrientation']]],
   ['localorientationconfig',['LocalOrientationConfig',['../classrdf_1_1_local_orientation_config.html#ab865429c7db4e1b54f0f1924303b931f',1,'rdf::LocalOrientationConfig']]],
+  ['log_5fgamma_5flanczos',['log_gamma_lanczos',['../classrdf_1_1_algorithms.html#a2eac08e065d71eabeec3dd0e2b38d6ec',1,'rdf::Algorithms']]],
   ['logeps',['logEps',['../classrdf_1_1_read_l_s_d_config.html#a3f65f0a40f806859e875150eecbdb174',1,'rdf::ReadLSDConfig']]]
 ];

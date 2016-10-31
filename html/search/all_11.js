@@ -20,7 +20,7 @@ var searchData=
   ['regionpixelconnector',['RegionPixelConnector',['../classrdf_1_1_region_pixel_connector.html',1,'rdf']]],
   ['regionquery',['regionQuery',['../classrdf_1_1_d_b_scan_pixel.html#a2ed5dcc25cf924ff8caddce0aa2187cc',1,'rdf::DBScanPixel']]],
   ['regionsat',['regionsAt',['../classrdf_1_1_region_manager.html#adb08d7cee5f305538f2109c41970eabc',1,'rdf::RegionManager']]],
-  ['regiontypeconfig',['regionTypeConfig',['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()'],['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()']]],
+  ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html#a739b41cedf586e40f25c6c7864d803e1',1,'rdf::RegionTypeConfig::RegionTypeConfig()'],['../classrdf_1_1_region_manager.html#aabb27f3443b1951c158a93edfdf4c8c5',1,'rdf::RegionManager::regionTypeConfig()']]],
   ['regiontypeconfig',['RegionTypeConfig',['../classrdf_1_1_region_type_config.html',1,'rdf']]],
   ['regionxmlhelper',['RegionXmlHelper',['../classrdf_1_1_region_xml_helper.html',1,'rdf']]],
   ['registerversion',['registerVersion',['../classrdf_1_1_utils.html#ade7ef305b08a8c414b71b15f7cd339a9',1,'rdf::Utils']]],
