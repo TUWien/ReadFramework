@@ -150,7 +150,7 @@ double MserBlob::overlapArea(const Rect& r) const {
 void MserBlob::draw(QPainter & p) {
 
 	QColor col = Drawer::instance().pen().color();
-	col.setAlpha(30);
+	col.setAlpha(60);
 	Drawer::instance().setColor(col);
 	Drawer::instance().drawPoints(p, mPts);
 

@@ -30,49 +30,79 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#pragma once
+#include "PageSegmentation.h"
 
-#include "DebugUtils.h"
+#include "Utils.h"
+#include "Image.h"
+#include "Drawer.h"
+#include "ImageProcessor.h"
+
+#include "SuperPixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
-#pragma warning(pop)
+#include <QDebug>
+#include <QPainter>
 
-// Qt/CV defines
-namespace cv {
-	class Mat;
-}
+#include <opencv2\imgproc\imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+
+#pragma warning(pop)
 
 namespace rdf {
 
-// read defines
+// PageSegmentationConfig --------------------------------------------------------------------
+PageSegmentationConfig::PageSegmentationConfig() : ModuleConfig("Page Segmentation") {
+}
 
-class XmlTest {
+QString PageSegmentationConfig::toString() const {
+	return ModuleConfig::toString();
+}
 
-public:
-	XmlTest(const DebugConfig& config = DebugConfig());
+int PageSegmentationConfig::maxSide() const {
+	return mMaxSide;
+}
 
-	void parseXml();
-	void linesToXml();
+// PageSegmentation --------------------------------------------------------------------
+PageSegmentation::PageSegmentation(const cv::Mat& img) {
 
-protected:
-	DebugConfig mConfig;
-};
+	mImg = img;
+	mConfig = QSharedPointer<PageSegmentationConfig>::create();
+}
 
-class LayoutTest {
+bool PageSegmentation::isEmpty() const {
+	return mImg.empty();
+}
+
+bool PageSegmentation::compute() {
+
+	// TODO: add page segmentation
+
+	qWarning() << "page segmentation not implemented yet...";
+	return true;
+}
+
+QSharedPointer<PageSegmentationConfig> PageSegmentation::config() const {
+	return qSharedPointerDynamicCast<PageSegmentationConfig>(mConfig);
+}
+
+cv::Mat PageSegmentation::draw(const cv::Mat& img) const {
+
+	// draw mser blobs
+	Timer dtf;
+	QPixmap pm = Image::mat2QPixmap(img);
+
+	QPainter p(&pm);
 	
-public:
-	LayoutTest(const DebugConfig& config = DebugConfig());
+	return Image::qPixmap2Mat(pm);
+}
 
-	void testComponents();
-	void layoutToXml() const;
+QString PageSegmentation::toString() const {
+	return Module::toString();
+}
 
-protected:
-	void computeComponents(const cv::Mat& src) const;
-	void pageSegmentation(const cv::Mat& src) const;
+bool PageSegmentation::checkInput() const {
 
-	DebugConfig mConfig;
-};
+	return !mImg.empty();
+}
 
-
-};
+}

@@ -42,6 +42,7 @@
 #include "SuperPixel.h"
 #include "TabStopAnalysis.h"
 #include "TextLineSegmentation.h"
+#include "PageSegmentation.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -135,7 +136,8 @@ void LayoutTest::testComponents() {
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::qImage2Mat(img);
 
-	computeComponents(imgCv);
+	pageSegmentation(imgCv);
+	//computeComponents(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -319,6 +321,43 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//parser.write(mConfig.xmlPath(), pe);
 	//qDebug() << "results written to" << mConfig.xmlPath();
 
+}
+
+void LayoutTest::pageSegmentation(const cv::Mat & src) const {
+
+	// TODOS
+	// - line spacing needs smoothing -> graphcut
+	// - DBScan is very sensitive to the line spacing
+
+	// Workflow:
+	// - implement noise/text etc classification on SuperPixel level
+	// - smooth labels using graphcut
+	// - perform everything else without noise pixels
+	// Training:
+	// - open mode (whole image only contains e.g. machine printed)
+	// - baseline mode -> overlap with superpixel
+
+	cv::Mat img = src.clone();
+	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);
+
+	Timer dt;
+
+	// find super pixels
+	rdf::PageSegmentation pageSeg(img);
+
+	if (!pageSeg.compute())
+		qWarning() << "could not compute page segmentation!";
+
+	qInfo() << "algorithm computation time" << dt;
+
+	// drawing
+	cv::Mat rImg = img.clone();
+
+	// save super pixel image
+	rImg = pageSeg.draw(rImg);
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-page-seg");
+	rdf::Image::save(rImg, maskPath);
+	qDebug() << "debug image added" << maskPath;
 }
 
 }

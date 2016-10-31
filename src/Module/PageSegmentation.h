@@ -32,47 +32,62 @@
 
 #pragma once
 
-#include "DebugUtils.h"
+#include "BaseModule.h"
+#include "SuperPixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+
 #pragma warning(pop)
 
-// Qt/CV defines
-namespace cv {
-	class Mat;
-}
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 
 namespace rdf {
 
 // read defines
 
-class XmlTest {
+class DllModuleExport PageSegmentationConfig : public ModuleConfig {
 
 public:
-	XmlTest(const DebugConfig& config = DebugConfig());
+	PageSegmentationConfig();
 
-	void parseXml();
-	void linesToXml();
-
-protected:
-	DebugConfig mConfig;
-};
-
-class LayoutTest {
+	virtual QString toString() const override;
 	
-public:
-	LayoutTest(const DebugConfig& config = DebugConfig());
-
-	void testComponents();
-	void layoutToXml() const;
+	int maxSide() const;
 
 protected:
-	void computeComponents(const cv::Mat& src) const;
-	void pageSegmentation(const cv::Mat& src) const;
 
-	DebugConfig mConfig;
+	int mMaxSide = 200;
+
+	//void load(const QSettings& settings) override;
+	//void save(QSettings& settings) const override;
 };
 
+class DllModuleExport PageSegmentation : public Module {
+
+public:
+	PageSegmentation(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	bool compute() override;
+	QSharedPointer<PageSegmentationConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+	QString toString() const override;
+
+private:
+	cv::Mat mImg;
+
+	QVector<QSharedPointer<MserBlob> > mBlobs;
+
+	bool checkInput() const override;
+};
 
 };
