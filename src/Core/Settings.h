@@ -77,6 +77,7 @@ public:
 	QString workingDir;
 	QString settingsFileName;
 	QString xmlSubDir;
+	QString superPixelClassifierPath;
 
 protected:
 	void defaultSettings() override;

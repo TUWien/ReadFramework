@@ -87,6 +87,10 @@ int main(int argc, char** argv) {
 	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filename."), "filename");
 	parser.addOption(settingOpt);
 
+	// settings classifier
+	QCommandLineOption classifierOpt(QStringList() << "c" << "classifier", QObject::tr("Classifier file path."), "filepath");
+	parser.addOption(classifierOpt);
+
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
 
@@ -113,6 +117,10 @@ int main(int argc, char** argv) {
 	// add xml path	
 	if (parser.isSet(xmlOpt))
 		dc.setXmlPath(parser.value(xmlOpt));
+
+	// add classifier path	
+	if (parser.isSet(classifierOpt))
+		dc.setClassifierPath(parser.value(classifierOpt));
 
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
@@ -141,8 +149,8 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			rdf::XmlTest test(dc);
-			test.parseXml();
+			//rdf::XmlTest test(dc);
+			//test.parseXml();
 			//test.linesToXml();
 
 			rdf::LayoutTest lt(dc);
@@ -191,6 +199,11 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result", "tif"));
 		qInfo() << dc.outputPath() << "added as output path";
 	}
+
+	if (dc.classifierPath().isEmpty()) {
+		dc.setClassifierPath("C:/temp/super-pixel-classifier.json");
+		qInfo() << dc.classifierPath() << "added as classifier path";
+	} 
 
 	// add your debug overwrites here...
 }

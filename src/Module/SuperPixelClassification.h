@@ -52,6 +52,99 @@
 namespace rdf {
 
 // read defines
+class Region;
+
+class DllModuleExport SuperPixelLabelerConfig : public ModuleConfig {
+
+public:
+	SuperPixelLabelerConfig();
+
+	virtual QString toString() const override;
+
+protected:
+
+	//void load(const QSettings& settings) override;
+	//void save(QSettings& settings) const override;
+};
+
+/// <summary>
+/// This class is used for mapping classes (e.g. handwriting, decoration)
+/// </summary>
+class DllModuleExport LabelLookup {
+
+public:
+	LabelLookup();
+	bool operator==(const LabelLookup& l1) const;
+	DllModuleExport friend QDataStream& operator<<(QDataStream& s, const LabelLookup& v);
+	DllModuleExport friend QDebug operator<< (QDebug d, const LabelLookup& v);
+
+	bool isNull() const;
+	bool contains(const QString& key) const;
+
+	QColor color() const;
+	int id() const;
+	QString name() const;
+
+	QString toString() const;
+
+	static LabelLookup fromString(const QString& str);
+	static QString jsonKey();
+	static int color2Id(const QColor& col);
+
+protected:
+
+	int mId = -1;
+	QString mName = "unknown";
+	QStringList mAlias;
+
+};
+
+class DllModuleExport LabelManager {
+
+public:
+	LabelManager();
+
+	bool isEmpty() const;
+	int size() const;
+	static LabelManager read(const QString& filePath);
+
+	void add(const LabelLookup& label);
+	bool contains(const LabelLookup& label) const;
+	bool containsId(const LabelLookup& label) const;
+
+	QString toString() const;
+
+	LabelLookup find(const QString& str) const;
+	LabelLookup find(const Region& r) const;
+
+protected:
+	QVector<LabelLookup> mLookups;
+};
+
+class DllModuleExport SuperPixelLabeler : public Module {
+
+public:
+	SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& blobs, const Rect& imgRect);
+
+	bool isEmpty() const override;
+	bool compute() override;
+	QSharedPointer<SuperPixelLabelerConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+	QString toString() const override;
+
+	void setRootRegion(const QSharedPointer<Region>& region);
+	void setLabelManager(const LabelManager& manager);
+	QImage createLabelImage(const Rect& imgRect) const;
+
+private:
+	QVector<QSharedPointer<MserBlob> > mBlobs;
+	QSharedPointer<Region> mGtRegion;
+	Rect mImgRect;
+	LabelManager mManager;
+
+	bool checkInput() const override;
+};
 
 class DllModuleExport SuperPixelClassificationConfig : public ModuleConfig {
 

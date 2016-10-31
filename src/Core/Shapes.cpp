@@ -106,12 +106,6 @@ void Polygon::draw(QPainter & p) const {
 	
 	p.drawPolygon(closedPolygon());
 	p.setPen(oPen);
-
-	QPen pe(ColorManager::darkGray());
-	pe.setWidth(4);
-	p.setPen(pe);
-	for (auto pt : closedPolygon())
-		p.drawPoint(pt);
 }
 
 QPolygonF Polygon::polygon() const {

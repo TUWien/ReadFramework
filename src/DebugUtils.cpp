@@ -33,6 +33,7 @@
 #include "DebugUtils.h"
 
 #include "PageParser.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -71,6 +72,18 @@ void DebugConfig::setOutputPath(const QString & path) {
 
 QString DebugConfig::outputPath() const {
 	return mOutputPath;
+}
+
+void DebugConfig::setClassifierPath(const QString & path) {
+	mClassifierPath = path;
+}
+
+QString DebugConfig::classifierPath() const {
+	
+	if (mClassifierPath.isEmpty())
+		return Config::instance().global().superPixelClassifierPath;
+
+	return mClassifierPath;
 }
 
 }

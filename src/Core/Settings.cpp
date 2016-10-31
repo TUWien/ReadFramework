@@ -56,6 +56,7 @@ void GlobalSettings::load(QSharedPointer<QSettings> settings) {
 	workingDir = settings->value("workingDir", workingDir).toString();
 	xmlSubDir = settings->value("xmlSubDir", xmlSubDir).toString();
 	settingsFileName = settings->value("settingsFileName", settingsFileName).toString();
+	superPixelClassifierPath = settings->value("superPixelClassifierPath", superPixelClassifierPath).toString();
 	// add loading here...
 
 	settings->endGroup();
@@ -73,6 +74,8 @@ void GlobalSettings::save(QSharedPointer<QSettings> settings, const GenericSetti
 		settings->setValue("xmlSubDir", xmlSubDir);
 	if (!force && settingsFileName != initS.settingsFileName)
 		settings->setValue("settingsFileName", settingsFileName);
+	if (!force && superPixelClassifierPath != initS.superPixelClassifierPath)
+		settings->setValue("superPixelClassifierPath", superPixelClassifierPath);
 
 	// add saving here...
 
@@ -84,6 +87,7 @@ void GlobalSettings::defaultSettings() {
 	workingDir = "";
 	xmlSubDir = "page";
 	settingsFileName = "rdf-settings.nfo";
+	settingsFileName = "super-pixel-classifier.json";
 }
 
 // Config --------------------------------------------------------------------

@@ -43,6 +43,7 @@
 #include "TabStopAnalysis.h"
 #include "TextLineSegmentation.h"
 #include "PageSegmentation.h"
+#include "SuperPixelClassification.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -130,13 +131,46 @@ void LayoutTest::testComponents() {
 
 	rdf::Timer dt;
 
-	qDebug() << "image path: " << mConfig.imagePath();
-
-	// load image
+	// test image loading
 	QImage img(mConfig.imagePath());
 	cv::Mat imgCv = Image::qImage2Mat(img);
 
-	pageSegmentation(imgCv);
+	if (!imgCv.empty())
+		qInfo() << mConfig.imagePath() << "loaded...";
+	else
+		qInfo() << mConfig.imagePath() << "NOT loaded...";
+
+	// parse xml
+	PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+
+	// test loading of label lookup
+	LabelManager lm = LabelManager::read(mConfig.classifierPath());
+	qInfo().noquote() << lm.toString();
+
+	QVector<QSharedPointer<MserBlob> > dummy;
+	SuperPixelLabeler spl(dummy, Rect(imgCv));
+	spl.setLabelManager(lm);
+
+	if (parser.page())
+		spl.setRootRegion(parser.page()->rootRegion());
+	
+
+	// drawing
+	cv::Mat rImg = imgCv.clone();
+
+	// save super pixel image
+	//rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = tabStops.draw(rImg);
+	rImg = spl.draw(rImg);
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	qDebug() << "image path: " << mConfig.imagePath();
+
+
+	//pageSegmentation(imgCv);
 	//computeComponents(imgCv);
 
 	qInfo() << "total computation time:" << dt;

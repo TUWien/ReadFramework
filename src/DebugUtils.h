@@ -57,10 +57,14 @@ public:
 	void setOutputPath(const QString& path);
 	QString outputPath() const;
 
+	void setClassifierPath(const QString& path);
+	QString classifierPath() const;
+
 protected:
 	QString mImagePath;
 	QString mXMLPath;
 	QString mOutputPath;
+	QString mClassifierPath;
 };
 
 };
