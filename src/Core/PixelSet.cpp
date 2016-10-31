@@ -359,7 +359,7 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 void PixelSet::draw(QPainter& p) const {
 
 	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
 	//polyLine(0.0).draw(p);
 	convexHull().draw(p);
@@ -576,17 +576,28 @@ DelauneyPixelConnector::DelauneyPixelConnector() : PixelConnector() {
 
 QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
+	Timer dt;
 	// Create an instance of Subdiv2D
-	PixelSet ps(pixels);
-	Rect rect = ps.boundingBox();
+	QVector<Vector2D> pts;
+	for (const QSharedPointer<Pixel>& px : pixels) {
+		assert(px);
+		pts << px->center();
+	}
+	Rect rect = Rect::fromPoints(pts);
+	rect.expand(2.0);
+
+	//qDebug() << "bounding rect found" << dt;
 
 	cv::Subdiv2D subdiv(rect.toCvRect());
 
 	QVector<int> ids;
-	for (const QSharedPointer<Pixel>& b : pixels)
-		ids << subdiv.insert(b->center().toCvPoint2f());
+	for (const QSharedPointer<Pixel>& b : pixels) {
+		Vector2D np = b->center();
+		ids << subdiv.insert(np.toCvPoint2f());
+	}
+	//qDebug() << "delauney triangulation (OpenCV)" << dt;
 
-	// that took me long... but this is how get can map the edges to our objects without an (expensive) lookup
+	// that took me long... but this is how we can map the edges to our objects without an (expensive) lookup
 	QVector<QSharedPointer<PixelEdge> > edges;
 	for (int idx = 0; idx < (pixels.size()-8)*3; idx++) {
 
@@ -604,6 +615,7 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		QSharedPointer<PixelEdge> pe(new PixelEdge(pixels[orgVertex], pixels[dstVertex]));
 		edges << pe;
 	}
+	//qDebug() << "converted to edges" << dt;
 
 	return edges;
 

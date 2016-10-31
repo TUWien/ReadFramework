@@ -958,6 +958,11 @@ Vector2D Rect::center() const {
 	return Vector2D(left()+width()/2.0, top()+height()/2.0);
 }
 
+void Rect::setTopLeft(const Vector2D & topLeft) {
+	mTopLeft = topLeft;
+	mIsNull = false;
+}
+
 void Rect::move(const Vector2D & vec) {
 	mTopLeft += vec;
 }
@@ -980,7 +985,7 @@ QRectF Rect::toQRectF() const {
 }
 
 cv::Rect Rect::toCvRect() const {
-	return cv::Rect(qRound(top()), qRound(left()), qRound(width()), qRound(height()));
+	return cv::Rect(qRound(left()), qRound(top()), qRound(width()), qRound(height()));
 }
 
 bool Rect::contains(const Rect & o) const {
@@ -1028,6 +1033,34 @@ double Rect::area() const {
 void Rect::draw(QPainter & p) const {
 
 	p.drawRect(toQRectF());
+}
+
+/// <summary>
+/// Returns a bounding rectangle that encloses all points.
+/// </summary>
+/// <param name="pts">The point set.</param>
+/// <returns></returns>
+Rect Rect::fromPoints(const QVector<Vector2D>& pts) {
+
+	double top = DBL_MAX, left = DBL_MAX;
+	double bottom = -DBL_MAX, right = -DBL_MAX;
+
+	for (const Vector2D& pt : pts) {
+
+		if (pt.isNull())
+			continue;
+
+		if (pt.y() < top)
+			top = pt.y();
+		if (pt.y() > bottom)
+			bottom = pt.y();
+		if (pt.x() < left)
+			left = pt.x();
+		if (pt.x() > right)
+			right = pt.x();
+	}
+
+	return Rect(left, top, right-left, bottom-top);
 }
 
 // Ellipse --------------------------------------------------------------------

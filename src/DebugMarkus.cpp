@@ -140,7 +140,100 @@ void LayoutTest::testComponents() {
 	qInfo() << "total computation time:" << dt;
 }
 
+void LayoutTest::layoutToXml() const {
+
+	QImage imgQt(mConfig.imagePath());
+	cv::Mat img = Image::qImage2Mat(imgQt);
+
+	Timer dt;
+
+	// find super pixels
+	rdf::SuperPixel superPixel(img);
+
+	if (!superPixel.compute())
+		qWarning() << "could not compute super pixel!";
+
+	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
+
+	// find local orientation per pixel
+	rdf::LocalOrientation lo(sp);
+	if (!lo.compute())
+		qWarning() << "could not compute local orientation";
+
+	// smooth estimation
+	rdf::GraphCutOrientation pse(sp);
+
+	if (!pse.compute())
+		qWarning() << "could not compute set orientation";
+
+	//// find tab stops
+	//rdf::TabStopAnalysis tabStops(sp);
+	//if (!tabStops.compute())
+	//	qWarning() << "could not compute text block segmentation!";
+
+	// find text lines
+	rdf::TextLineSegmentation textLines(Rect(img), sp);
+	
+	if (!textLines.compute())
+		qWarning() << "could not compute text block segmentation!";
+
+	qInfo() << "algorithm computation time" << dt;
+
+	// drawing
+	cv::Mat rImg = img.clone();
+
+	// save super pixel image
+	//rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = tabStops.draw(rImg);
+	rImg = textLines.draw(rImg);
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+
+	// write XML -----------------------------------
+	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+	rdf::PageXmlParser parser;
+	parser.read(loadXmlPath);
+	auto pe = parser.page();
+	pe->setCreator(QString("CVL"));
+	pe->setImageSize(QSize(img.rows, img.cols));
+	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
+
+	// start writing content
+	auto ps = PixelSet::fromEdges(PixelSet::connect(sp));
+
+	if (!ps.empty()) {
+		QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
+		textRegion->setType(Region::type_text_region);
+		textRegion->setPolygon(ps[0]->convexHull());
+		
+		for (auto tl : textLines.textLines()) {
+			textRegion->addUniqueChild(tl);
+		}
+
+		pe->rootRegion()->addUniqueChild(textRegion);
+	}
+
+	parser.write(mConfig.xmlPath(), pe);
+	qDebug() << "results written to" << mConfig.xmlPath();
+
+}
+
 void LayoutTest::computeComponents(const cv::Mat & src) const {
+
+	// TODOS
+	// - line spacing needs smoothing -> graphcut
+	// - DBScan is very sensitive to the line spacing
+	
+	// Workflow:
+	// - implement noise/text etc classification on SuperPixel level
+	// - smooth labels using graphcut
+	// - perform everything else without noise pixels
+	// Training:
+	// - open mode (whole image only contains e.g. machine printed)
+	// - baseline mode -> overlap with superpixel
 
 	cv::Mat img = src.clone();
 	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);

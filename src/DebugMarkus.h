@@ -65,6 +65,7 @@ public:
 	LayoutTest(const DebugConfig& config = DebugConfig());
 
 	void testComponents();
+	void layoutToXml() const;
 
 protected:
 	void computeComponents(const cv::Mat& src) const;
