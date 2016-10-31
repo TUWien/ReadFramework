@@ -91,6 +91,8 @@ public:
 	static double logGammaWindschitl(double x);
 	static double logGamma(double x);
 	static int doubleEqual(double a, double b);
+	static double absAngleDiff(double a, double b);
+	static double signedAngleDiff(double a, double b);
 
 
 	// convenience functions

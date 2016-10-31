@@ -609,6 +609,23 @@ int Algorithms::doubleEqual(double a, double b) {
 	return (abs_diff / abs_max) <= (100.0 * DBL_EPSILON);
 }
 
+double Algorithms::absAngleDiff(double a, double b) {
+
+	a -= b;
+	while (a <= -CV_PI) a += 2*CV_PI;
+	while (a >   CV_PI) a -= 2*CV_PI;
+	if (a < 0.0) a = -a;
+	return a;
+}
+
+double Algorithms::signedAngleDiff(double a, double b) {
+
+	a -= b;
+	while (a <= -CV_PI) a += 2*CV_PI;
+	while (a >   CV_PI) a -= 2*CV_PI;
+	return a;
+}
+
 /// <summary>
 /// Inverts the img.
 /// </summary>

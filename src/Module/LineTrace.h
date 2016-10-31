@@ -279,6 +279,8 @@ protected:
 private:
 	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
+	int isAligned(double thetaTest, double theta, double prec);
+	int isAligned(int x, int y, const cv::Mat &img, double theta, double prec);
 
 };
 

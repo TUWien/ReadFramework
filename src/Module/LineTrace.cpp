@@ -1032,6 +1032,47 @@ namespace rdf {
 		return -log10(bin_tail) - logNT;
 	}
 
+	int ReadLSD::isAligned(double thetaTest, double theta, double prec) {
+		/* check parameters */
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+
+		/* pixels whose level-line angle is not defined
+		are considered as NON-aligned */
+		if (thetaTest == -1024) return 0;  /* there is no need to call the function
+												 'double_equal' here because there is
+												 no risk of problems related to the
+												 comparison doubles, we are only
+												 interested in the exact NOTDEF value */
+
+												 /* it is assumed that 'theta' and 'a' are in the range [-pi,pi] */
+		theta -= thetaTest;
+		if (theta < 0.0) theta = -theta;
+		if (theta > 3.0/2.0*CV_PI)
+		{
+			theta -= 2*CV_PI;
+			if (theta < 0.0) theta = -theta;
+		}
+		return theta <= prec;
+	}
+
+	int ReadLSD::isAligned(int x, int y, const cv::Mat & img, double theta, double prec) {
+		double a;
+
+		/* check parameters */
+		if (img.empty())
+			mWarning << "isaligned: invalid image 'angles'.";
+
+		if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
+			mWarning << "isaligned: (x,y) out of the image.";
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+
+		/* angle at pixel (x,y) */
+		a = img.at<double>(y, x);
+		//a = angles->data[x + y * angles->xsize];
+
+		return isAligned(a, theta, prec);
+	}
+
 	ReadLSDConfig::ReadLSDConfig()	{
 		mModuleName = "ReadLSD";
 	}
