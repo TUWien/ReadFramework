@@ -173,33 +173,38 @@ public:
 	void operator+=(const Vector2D& vec) {
 		mX += vec.mX;
 		mY += vec.mY;
+		mIsNull = false;
 	}
 
 	void operator-=(const Vector2D& vec) {
 		mX -= vec.mX;
 		mY -= vec.mY;
+		mIsNull = false;
 	}
 
 	// scalar operators
 	void operator*=(const double& scalar) {
 		mX *= scalar;
 		mY *= scalar;
+		mIsNull = false;
 	};
 
 	void operator/=(const double& scalar) {
 		mX /= scalar;
 		mY /= scalar;
+		mIsNull = false;
 	};
 
 	void operator+=(const double& scalar) {
-	
 		mX += scalar;
 		mY += scalar;
+		mIsNull = false;
 	};
 
 	void operator-=(const double& scalar) {
 		mX -= scalar;
 		mY -= scalar;
+		mIsNull = false;
 	};
 
 	// static functions
@@ -311,6 +316,7 @@ public:
 	// setter
 	void move(const Vector2D& vec);
 	void expand(double v);
+	void setTopLeft(const Vector2D& topLeft);
 	void setSize(const Vector2D& newSize);
 
 	// conversions
@@ -326,6 +332,7 @@ public:
 
 	void draw(QPainter& p) const;
 	
+	static Rect fromPoints(const QVector<Vector2D>& pts);
 
 protected:
 	bool mIsNull = true;
