@@ -885,6 +885,29 @@ namespace rdf {
 
 	bool ReadLSD::compute()
 	{
+		double quant; //TODO: define as input
+
+		/* angle tolerance */
+		//double prec = CV_PI * config()->angleThr() / 180.0;
+		//double p = config()->angleThr() / 180.0;
+		//double rho = quant / sin(prec); /* gradient magnitude threshold */
+
+		cv::Mat scaledImg = mSrcImg;
+		if (config()->scale() != 1.0) {
+			//scale image
+			//TODO: in original source code a gaussian filter with
+			// config()->sigmaScale() is used
+			//cv::Size newSize = mSrcImg.size();
+			//newSize.width = (int)((float)newSize.width * config()->scale());
+			//newSize.height = (int)((float)newSize.height * config()->scale());
+			cv::resize(mSrcImg, scaledImg, cv::Size(), (double)config()->scale(), (double)config()->scale(), cv::INTER_LINEAR);
+		}
+
+		//TODO compute Gradients
+		//cv::Mat gradientImg = gradients(scaledImg);
+
+
+
 		return false;
 	}
 
