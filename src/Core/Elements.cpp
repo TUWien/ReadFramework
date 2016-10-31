@@ -303,7 +303,15 @@ bool Region::read(QXmlStreamReader & reader) {
 
 	// append children?!
 	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
-		mPoly.read(reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString());
+		
+		QString pts = reader.attributes().value(rm.tag(RegionXmlHelper::attr_points)).toString();
+		if (!pts.isEmpty()) {
+			mPoly.read(pts);
+		}
+		// fallback to old point coordinates
+		else {
+			readPoints(reader);
+		}
 	}
 	//else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords)) {
 
@@ -313,6 +321,50 @@ bool Region::read(QXmlStreamReader & reader) {
 
 	return true;
 }
+
+bool Region::readPoints(QXmlStreamReader & reader) {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+	QPolygonF poly;
+
+	while (!reader.atEnd()) {
+		reader.readNext();
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_point)) {
+			
+			// parse x
+			bool ok = false;
+			QString str = reader.attributes().value("x").toString();
+			int x = str.toInt(&ok);
+
+			if (!ok) {
+				qWarning() << "could not parse coordinate: " << str;
+				continue;
+			}
+
+			// parse y
+			str = reader.attributes().value("y").toString();
+			int y = str.toInt(&ok);
+
+			if (!ok) {
+				qWarning() << "could not parse coordinate: " << str;
+				continue;
+			}
+
+			poly << QPointF(x, y);
+		}
+
+		// are we done?
+		if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_coords))
+			break;
+
+	}
+
+	mPoly.setPolygon(poly);
+
+	return !poly.isEmpty();
+}
+
 
 /// <summary>
 /// Writes the Region to the XML stream.

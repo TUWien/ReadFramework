@@ -76,6 +76,7 @@ public:
 		type_separator,
 		type_image,
 		type_graphic,
+		type_chart,
 		type_noise,
 
 		type_end
@@ -128,6 +129,7 @@ protected:
 	QVector<QSharedPointer<Region> > mChildren;
 
 	void collectRegions(QVector<QSharedPointer<Region> >& allRegions, const Region::Type& type = type_unknown) const;
+	virtual bool readPoints(QXmlStreamReader& reader);
 };
 
 class DllCoreExport TextLine : public Region {

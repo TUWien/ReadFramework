@@ -146,7 +146,8 @@ void RegionTypeConfig::assignDefaultColor(const Region::Type & type) {
 	case Region::type_word:			col = QColor(96, 202, 255); break;
 	case Region::type_separator:	col = QColor(190, 22, 22);	break;
 	case Region::type_image:		col = QColor(255, 174, 0);	break;
-	case Region::type_graphic:		col = QColor(255, 108, 0);	break;
+	case Region::type_graphic:		col = QColor(100, 74, 0);	break;
+	case Region::type_chart:		col = QColor(0, 108, 255);	break;
 	case Region::type_noise:		col = QColor(204, 204, 204);break;
 	}
 
@@ -183,6 +184,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 
 	switch (tagId) {
 	case tag_coords:		return "Coords";
+	case tag_point:			return "Point";
 	case tag_text_equiv:	return "TextEquiv";
 	case tag_unicode:		return "Unicode";
 	case tag_plain_text:	return "PlainText";
@@ -260,6 +262,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_separator:	return "SeparatorRegion";
 	case Region::type_image:		return "ImageRegion";
 	case Region::type_graphic:		return "GraphicRegion";
+	case Region::type_chart:		return "ChartRegion";
 	case Region::type_noise:		return "NoiseRegion";
 	}
 
@@ -294,6 +297,7 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	case Region::type_word:
 		return QSharedPointer<TextLine>::create();
 	case Region::type_graphic:
+	case Region::type_chart:
 		return QSharedPointer<Region>::create();
 
 		// Add new types here...

@@ -109,6 +109,7 @@ public:
 
 	enum XmlTags {
 		tag_coords,
+		tag_point,
 		tag_text_equiv,
 		tag_unicode,
 		tag_plain_text,
