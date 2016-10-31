@@ -66,6 +66,8 @@ var namespacerdf =
     [ "ContrastEstimation", "classrdf_1_1_contrast_estimation.html", "classrdf_1_1_contrast_estimation" ],
     [ "FormFeaturesConfig", "classrdf_1_1_form_features_config.html", "classrdf_1_1_form_features_config" ],
     [ "FormFeatures", "classrdf_1_1_form_features.html", "classrdf_1_1_form_features" ],
+    [ "GradientVectorConfig", "classrdf_1_1_gradient_vector_config.html", "classrdf_1_1_gradient_vector_config" ],
+    [ "GradientVector", "classrdf_1_1_gradient_vector.html", "classrdf_1_1_gradient_vector" ],
     [ "LineTraceConfig", "classrdf_1_1_line_trace_config.html", "classrdf_1_1_line_trace_config" ],
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
     [ "ReadLSDConfig", "classrdf_1_1_read_l_s_d_config.html", "classrdf_1_1_read_l_s_d_config" ],

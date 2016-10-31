@@ -7,6 +7,8 @@ var searchData=
   ['gcoptimizationgridgraph',['GCoptimizationGridGraph',['../class_g_coptimization_grid_graph.html',1,'']]],
   ['genericsettings',['GenericSettings',['../classrdf_1_1_generic_settings.html',1,'rdf']]],
   ['globalsettings',['GlobalSettings',['../classrdf_1_1_global_settings.html',1,'rdf']]],
+  ['gradientvector',['GradientVector',['../classrdf_1_1_gradient_vector.html',1,'rdf']]],
+  ['gradientvectorconfig',['GradientVectorConfig',['../classrdf_1_1_gradient_vector_config.html',1,'rdf']]],
   ['graph',['Graph',['../class_graph.html',1,'']]],
   ['graphcutorientation',['GraphCutOrientation',['../classrdf_1_1_graph_cut_orientation.html',1,'rdf']]],
   ['greedyiter_3c_20gcoptimization_3a_3adatacostfnsparse_20_3e',['GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html',1,'GCoptimization']]]

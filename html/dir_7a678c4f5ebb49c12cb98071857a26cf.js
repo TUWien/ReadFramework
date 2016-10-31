@@ -24,6 +24,11 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "FormFeaturesConfig", "classrdf_1_1_form_features_config.html", "classrdf_1_1_form_features_config" ],
       [ "FormFeatures", "classrdf_1_1_form_features.html", "classrdf_1_1_form_features" ]
     ] ],
+    [ "GradientVector.cpp", "_gradient_vector_8cpp.html", null ],
+    [ "GradientVector.h", "_gradient_vector_8h.html", [
+      [ "GradientVectorConfig", "classrdf_1_1_gradient_vector_config.html", "classrdf_1_1_gradient_vector_config" ],
+      [ "GradientVector", "classrdf_1_1_gradient_vector.html", "classrdf_1_1_gradient_vector" ]
+    ] ],
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [
       [ "LineTraceConfig", "classrdf_1_1_line_trace_config.html", "classrdf_1_1_line_trace_config" ],
