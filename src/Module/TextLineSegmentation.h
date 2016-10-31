@@ -70,8 +70,7 @@ protected:
 class DllModuleExport TextLineSegmentation : public Module {
 
 public:
-	TextLineSegmentation(const Rect& imgRect,
-		const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TextLineSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -88,8 +87,6 @@ private:
 	QVector<QSharedPointer<LineEdge> > mEdges;
 	//QVector<QSharedPointer<LineEdge> > mDbgEdges;	// remove
 	QVector<Line> mStopLines;
-
-	Rect mImgRect;
 
 	bool checkInput() const override;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;

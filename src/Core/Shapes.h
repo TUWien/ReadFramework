@@ -433,6 +433,7 @@ public:
 
 	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
 	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
+	static Polygon fromCvPoints(const std::vector<cv::Point>& pts);
 	void setPolygon(const QPolygonF& polygon);
 
 	void draw(QPainter& p) const;

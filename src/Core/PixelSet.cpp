@@ -54,6 +54,11 @@ PixelSet::PixelSet(const QVector<QSharedPointer<Pixel> >& set) {
 	mSet = set;
 }
 
+QSharedPointer<Pixel> PixelSet::operator[](int idx) const {
+	assert(idx >= 0 && idx < size());
+	return mSet[idx];
+}
+
 bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {
 
 	return mSet.contains(pixel);
@@ -80,6 +85,10 @@ void PixelSet::remove(const QSharedPointer<Pixel>& pixel) {
 
 QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
 	return mSet;
+}
+
+int PixelSet::size() const {
+	return mSet.size();
 }
 
 /// <summary>
@@ -110,9 +119,9 @@ QVector<Vector2D> PixelSet::pointSet(double offsetAngle) const {
 Polygon PixelSet::convexHull() const {
 	
 	QVector<Vector2D> pts = pointSet(0.0);
-	//pts << pointSet(CV_PI*0.5);
+	pts << pointSet(CV_PI*0.5);
 	pts << pointSet(CV_PI);
-	//pts << pointSet(-CV_PI*0.5);
+	pts << pointSet(-CV_PI*0.5);
 	
 	return polygon(pts);
 }
@@ -189,14 +198,14 @@ Polygon PixelSet::convexHull() const {
 Polygon PixelSet::polygon(const QVector<Vector2D>& pts) const {
 
 	// convert
-	std::vector<cv::Point2f> ptsCv;
+	std::vector<cv::Point> ptsCv;
 	for (const Vector2D& pt : pts) {
-		ptsCv.push_back(pt.toCvPoint2f());
+		ptsCv.push_back(pt.toCvPoint());
 	}
 
 	// compute convex hull
-	std::vector<cv::Point2f> cPts;
-	cv::convexHull(cv::Mat(ptsCv), cPts, true);
+	std::vector<cv::Point> cPts;
+	cv::convexHull(ptsCv, cPts, true);
 
 	Polygon poly = Polygon::fromCvPoints(cPts);
 
@@ -266,6 +275,41 @@ Ellipse PixelSet::profileRect() const {
 	el.setAxis(Vector2D(std::max(bLine.length(), xLine.length()), centerLine.length()));
 
 	return el;
+}
+
+/// <summary>
+/// Computes the sets median orientation.
+/// </summary>
+/// <param name="statMoment">if != 0.5 a quartile other than the median is computed.</param>
+/// <returns>The set's median orientation.</returns>
+double PixelSet::orientation(double statMoment) const {
+	
+	QList<double> angles;
+	for (const QSharedPointer<Pixel>& px : pixels()) {
+
+		if (!px->stats()) {
+			qWarning() << "stats is NULL where it should not be...";
+			continue;
+		}
+		angles << px->stats()->orientation();
+	}
+
+	return Algorithms::statMoment(angles, statMoment);
+}
+
+double PixelSet::lineSpacing(double statMoment) const {
+
+	QList<double> spacings;
+	for (const QSharedPointer<Pixel>& px : pixels()) {
+
+		if (!px->stats()) {
+			qWarning() << "stats is NULL where it should not be...";
+			continue;
+		}
+		spacings << px->stats()->lineSpacing();
+	}
+
+	return Algorithms::statMoment(spacings, statMoment);
 }
 
 /// <summary>
@@ -584,8 +628,7 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		pts << px->center();
 	}
 	Rect rect = Rect::fromPoints(pts);
-	rect.expand(2.0);
-
+	rect.expand(2.0);	// needed for round from Rect to cvRect
 	//qDebug() << "bounding rect found" << dt;
 
 	cv::Subdiv2D subdiv(rect.toCvRect());
@@ -768,6 +811,8 @@ DBScanPixel::DBScanPixel(const QVector<QSharedPointer<Pixel>>& pixels) {
 
 void DBScanPixel::compute() {
 
+	mLineSpacing = mPixels.lineSpacing();
+
 	// cache
 	mDists = calcDists(mPixels);
 	mLabels = cv::Mat(1, mPixels.size(), CV_32S, cv::Scalar(not_visited));
@@ -781,7 +826,7 @@ void DBScanPixel::compute() {
 		mLabelPtr[pIdx] = visited;
 		
 		// epsilon depends on line spacing
-		double cEps = mPixels[pIdx]->stats() ? mPixels[pIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
+		double cEps = mLineSpacing*mEpsMultiplier;// mPixels[pIdx]->stats() ? mPixels[pIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
 		QVector<int> neighbors = regionQuery(pIdx, cEps);
 		
 		if (neighbors.size() >= mMinPts) {
@@ -845,7 +890,7 @@ void DBScanPixel::expandCluster(int pixelIndex, unsigned int clusterIndex, const
 		if (mLabelPtr[nIdx] == not_visited) {
 			mLabelPtr[nIdx] = visited;
 
-			double cEps = mPixels[nIdx]->stats() ? mPixels[nIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
+			double cEps = mLineSpacing*mEpsMultiplier;
 			QVector<int> nPts = regionQuery(nIdx, cEps);
 			if (nPts.size() >= minPts) {
 				expandCluster(nIdx, clusterIndex, nPts, eps, minPts);
@@ -874,7 +919,7 @@ QVector<int> DBScanPixel::regionQuery(int pixelIdx, double eps) const {
 	return neighbors;
 }
 
-cv::Mat DBScanPixel::calcDists(const QVector<QSharedPointer<Pixel>>& pixels) const {
+cv::Mat DBScanPixel::calcDists(const PixelSet& pixels) const {
 	
 	cv::Mat dists(mPixels.size(), mPixels.size(), CV_32FC1, cv::Scalar(0));
 

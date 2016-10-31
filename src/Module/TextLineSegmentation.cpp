@@ -53,10 +53,9 @@ QString TextLineConfig::toString() const {
 }
 
 // TextLineSegmentation --------------------------------------------------------------------
-TextLineSegmentation::TextLineSegmentation(const Rect& rect, const QVector<QSharedPointer<Pixel> >& superPixels) {
+TextLineSegmentation::TextLineSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels) {
 
 	mSuperPixels = superPixels;
-	mImgRect = rect;
 	mConfig = QSharedPointer<TextLineConfig>::create();
 }
 

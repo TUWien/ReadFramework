@@ -82,6 +82,17 @@ Polygon Polygon::fromCvPoints(const std::vector<cv::Point2f>& pts) {
 	return poly;
 }
 
+Polygon Polygon::fromCvPoints(const std::vector<cv::Point>& pts) {
+
+	Polygon poly;
+
+	// convert to Qt
+	for (const cv::Point& pt : pts)
+		poly << Converter::cvPointToQt(pt);
+
+	return poly;
+}
+
 void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
@@ -95,6 +106,12 @@ void Polygon::draw(QPainter & p) const {
 	
 	p.drawPolygon(closedPolygon());
 	p.setPen(oPen);
+
+	QPen pe(ColorManager::darkGray());
+	pe.setWidth(4);
+	p.setPen(pe);
+	for (auto pt : closedPolygon())
+		p.drawPoint(pt);
 }
 
 QPolygonF Polygon::polygon() const {
@@ -1288,7 +1305,13 @@ Vector2D Ellipse::getPoint(double angle) const {
 	double x = (a*b) / (std::sqrt(b*b + a*a * (tt*tt)));
 
 	double xa = x / a;
-	double y = std::sqrt(1.0-(xa*xa)) * b;
+	xa = xa*xa;
+	
+	// fix numerical issues
+	if (xa > 1.0)
+		xa = 1.0;
+
+	double y = std::sqrt(1.0-xa) * b;
 
 	Vector2D ptr(x, y);
 	Vector2D pt(1, 0);

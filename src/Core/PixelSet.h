@@ -61,52 +61,6 @@ class TextLine;
 class PixelSet;
 
 /// <summary>
-/// DBScan clustering for pixels.
-/// </summary>
-class DllCoreExport DBScanPixel {
-
-public:
-	DBScanPixel(const QVector<QSharedPointer<Pixel> >& pixels);
-
-	void compute();
-
-	void setEpsilonMultiplier(double eps);
-	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
-
-	QVector<PixelSet> sets() const;
-	QVector<QSharedPointer<PixelEdge> > edges() const;
-
-protected:
-	QVector<QSharedPointer<Pixel> > mPixels;		// input
-
-
-	enum Label {
-		not_visited = 0,
-		visited,
-		noise, 
-
-		cluster0
-	};
-
-	// cache
-	cv::Mat mDists;
-	cv::Mat mLabels;
-	unsigned int* mLabelPtr;
-
-	unsigned int mCLabel = cluster0;
-
-	// parameters
-	PixelDistance::PixelDistanceFunction mDistFnc = &PixelDistance::euclidean;
-	double mEpsMultiplier = 1.2;
-	int mMinPts = 3;
-
-	void expandCluster(int pixelIndex, unsigned int clusterIndex, const QVector<int>& neighbors, double eps, int minPts) const;
-	QVector<int> regionQuery(int pixelIdx, double eps) const;
-
-	cv::Mat calcDists(const QVector<QSharedPointer<Pixel> >& pixels) const;
-};
-
-/// <summary>
 /// Abstract class PixelConnector.
 /// This is the base class for all
 /// pixel connecting classes which
@@ -203,6 +157,8 @@ public:
 		connect_end
 	};
 
+	QSharedPointer<Pixel> operator[](int idx) const;
+
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
@@ -210,12 +166,16 @@ public:
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
+	int size() const;
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
 	Polygon convexHull() const;
 	//Polygon polyLine(double angle, double maxCosThr = 0.9) const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
 	Ellipse profileRect() const;					// TODO: remove!
+
+	double orientation(double statMoment = 0.5) const;
+	double lineSpacing(double statMoment = 0.5) const;
 
 	void draw(QPainter& p) const;
 
@@ -261,6 +221,53 @@ protected:
 	QMap<QString, int> mPixelLookup;			// maps pixel IDs to their current vector index
 	QMap<QString, QVector<int> > mPixelEdges;	// maps pixel IDs to their corresponding edge index
 
+};
+
+/// <summary>
+/// DBScan clustering for pixels.
+/// </summary>
+class DllCoreExport DBScanPixel {
+
+public:
+	DBScanPixel(const QVector<QSharedPointer<Pixel> >& pixels);
+
+	void compute();
+
+	void setEpsilonMultiplier(double eps);
+	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
+
+	QVector<PixelSet> sets() const;
+	QVector<QSharedPointer<PixelEdge> > edges() const;
+
+protected:
+	PixelSet mPixels;		// input
+
+
+	enum Label {
+		not_visited = 0,
+		visited,
+		noise, 
+
+		cluster0
+	};
+
+	// cache
+	cv::Mat mDists;
+	cv::Mat mLabels;
+	unsigned int* mLabelPtr;
+	double mLineSpacing = 0;
+
+	unsigned int mCLabel = cluster0;
+
+	// parameters
+	PixelDistance::PixelDistanceFunction mDistFnc = &PixelDistance::euclidean;
+	double mEpsMultiplier = 2.0;
+	int mMinPts = 3;
+
+	void expandCluster(int pixelIndex, unsigned int clusterIndex, const QVector<int>& neighbors, double eps, int minPts) const;
+	QVector<int> regionQuery(int pixelIdx, double eps) const;
+
+	cv::Mat calcDists(const PixelSet& pixels) const;
 };
 
 };

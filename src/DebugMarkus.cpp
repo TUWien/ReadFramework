@@ -172,7 +172,7 @@ void LayoutTest::layoutToXml() const {
 	//	qWarning() << "could not compute text block segmentation!";
 
 	// find text lines
-	rdf::TextLineSegmentation textLines(Rect(img), sp);
+	rdf::TextLineSegmentation textLines(sp);
 	
 	if (!textLines.compute())
 		qWarning() << "could not compute text block segmentation!";
@@ -265,7 +265,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//	qWarning() << "could not compute text block segmentation!";
 
 	//// find text lines
-	//rdf::TextLineSegmentation textLines(Rect(img), sp);
+	//rdf::TextLineSegmentation textLines(sp);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 	//if (!textLines.compute())
 	//	qWarning() << "could not compute text block segmentation!";
@@ -286,7 +286,7 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
 	//rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-dbScan");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 
