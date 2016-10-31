@@ -85,19 +85,17 @@ protected:
 class DllCoreExport Image {
 
 public:
-	static Image& instance();
+	static cv::Mat qImage2Mat(const QImage& img);
+	static QImage mat2QImage(const cv::Mat& img);
+	static cv::Mat qPixmap2Mat(const QPixmap& img);
+	static QPixmap mat2QPixmap(const cv::Mat& img);
+	static cv::Mat qVector2Mat(const QVector<float>& data);
 
-	cv::Mat qImage2Mat(const QImage& img);
-	QImage mat2QImage(const cv::Mat& img);
-	cv::Mat qPixmap2Mat(const QPixmap& img);
-	QPixmap mat2QPixmap(const cv::Mat& img);
-	cv::Mat qVector2Mat(const QVector<float>& data);
-
-	bool save(const QImage& img, const QString& savePath, int compression = -1) const;
-	bool save(const cv::Mat& img, const QString& savePath, int compression = -1) const;
-	bool alphaChannelUsed(const QImage& img) const;
-	void imageInfo(const cv::Mat& img, const QString name) const;
-	QString printImage(const cv::Mat& img, const QString name) const;
+	static bool save(const QImage& img, const QString& savePath, int compression = -1);
+	static bool save(const cv::Mat& img, const QString& savePath, int compression = -1);
+	static bool alphaChannelUsed(const QImage& img);
+	static void imageInfo(const cv::Mat& img, const QString name);
+	static QString printImage(const cv::Mat& img, const QString name);
 
 	/// <summary>
 	/// Prints the values of a cv::Mat to copy it to Matlab.
@@ -132,10 +130,6 @@ public:
 
 		return msg;
 	}
-
-private:
-	Image();
-	Image(const Image&);
 };
 
 };

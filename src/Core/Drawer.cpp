@@ -63,12 +63,12 @@ Drawer& Drawer::instance() {
 cv::Mat Drawer::drawPoints(const cv::Mat & img, const std::vector<cv::Point> & pts) const {
 
 	// convert image
-	QPixmap pm = QPixmap::fromImage(Image::instance().mat2QImage(img));
+	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
 	QPainter p(&pm);
 
 	drawPoints(p, pts);
 
-	return Image::instance().qImage2Mat(pm.toImage());
+	return Image::qImage2Mat(pm.toImage());
 }
 
 void Drawer::drawPoints(QPainter & p, const std::vector<cv::Point>& pts) const {
@@ -99,7 +99,7 @@ void Drawer::drawPoint(QPainter & p, const QPointF & pt) const {
 cv::Mat Drawer::drawRects(const cv::Mat & img, const std::vector<cv::Rect>& rects) const {
 	
 	// convert image
-	QPixmap pm = QPixmap::fromImage(Image::instance().mat2QImage(img));
+	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
 	QPainter p(&pm);
 
 	// convert points
@@ -110,7 +110,7 @@ cv::Mat Drawer::drawRects(const cv::Mat & img, const std::vector<cv::Rect>& rect
 
 	drawRects(p, qRects);
 
-	return Image::instance().qImage2Mat(pm.toImage());
+	return Image::qImage2Mat(pm.toImage());
 }
 
 void Drawer::drawRects(QPainter & p, const QVector<QRectF>& rects) const {

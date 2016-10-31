@@ -422,9 +422,9 @@ QVector<Blob> BlobManager::filterAngle(double angle, double maxAngleDiff, const 
 
 		o = blob.blobOrientation();
 
-		double a = Algorithms::instance().normAngleRad(angle, 0.0, CV_PI);
+		double a = Algorithms::normAngleRad(angle, 0.0, CV_PI);
 		a = a > CV_PI*0.5 ? CV_PI - a : a;
-		double angleNewLine = Algorithms::instance().normAngleRad(o, 0.0, CV_PI);
+		double angleNewLine = Algorithms::normAngleRad(o, 0.0, CV_PI);
 		angleNewLine = angleNewLine > CV_PI*0.5 ? CV_PI - angleNewLine : angleNewLine;
 
 		double diffangle = std::abs(a - angleNewLine);

@@ -214,7 +214,7 @@ namespace rdf {
 		binarizeImg.compute();
 		mBwImg = binarizeImg.binaryImage();
 		if (mPreFilter)
-			mBwImg = Algorithms::instance().preFilterArea(mBwImg, preFilterArea);
+			mBwImg = Algorithms::preFilterArea(mBwImg, preFilterArea);
 
 		return true;
 	}
@@ -245,13 +245,13 @@ namespace rdf {
 		cv::distanceTransform(lineTempl, distImg, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1); //cityblock
 		//cv::distanceTransform(lineTempl, distImg, CV_DIST_L2, 3); //euclidean
 
-		//rdf::Image::instance().imageInfo(distImg, "distImg");
-		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\linetmpl.png");
+		//rdf::Image::imageInfo(distImg, "distImg");
+		//rdf::Image::save(lineTempl, "D:\\tmp\\linetmpl.png");
 		//lineTempl = 0;
 		//LineTrace::generateLineImage(mHorLines, mVerLines, lineTempl);
-		//rdf::Image::instance().save(lineTempl, "D:\\tmp\\lineImg.png");
+		//rdf::Image::save(lineTempl, "D:\\tmp\\lineImg.png");
 		//normalize(distImg, distImg, 0.0, 1.0, cv::NORM_MINMAX);
-		//rdf::Image::instance().save(distImg, "D:\\tmp\\distImg.png");
+		//rdf::Image::save(distImg, "D:\\tmp\\distImg.png");
 
 		double hLen = 0, hLenTemp = 0;
 		double vLen = 0, vLenTemp = 0;
@@ -449,7 +449,7 @@ namespace rdf {
 	float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
 	{
 
-		cv::LineIterator it(mSrcImg, l.p1().toCvPointF(), l.p2().toCvPointF());
+		cv::LineIterator it(mSrcImg, l.p1().toCvPoint2f(), l.p2().toCvPoint2f());
 		float distance = 0;
 		float outsidePixel = 0;
 		float max = 0;
@@ -488,7 +488,7 @@ namespace rdf {
 		if (!hT.empty() && !mHorLines.empty()) {
 			//use Y difference of horizontal lines if template and current Image contains horizontal lines
 			for (int i = 0; i < hT.size(); i++) {
-				double yLineTemp = hT[i].p1().toCvPointF().y;
+				double yLineTemp = hT[i].p1().toCvPoint2d().y;
 				for (int j = 0; j < mHorLines.size(); j++) {
 					double diffYLine = yLineTemp - mHorLines[j].p1().y();
 					offY.push_back(qRound(diffYLine));

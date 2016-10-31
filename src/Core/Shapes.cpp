@@ -42,35 +42,68 @@
 
 namespace rdf {
 
-Polygon::Polygon(const QPolygon& polygon) {
+Polygon::Polygon(const QPolygonF& polygon) {
 	mPoly = polygon;
 }
 bool Polygon::isEmpty() const {
 	return mPoly.isEmpty();
 }
 void Polygon::read(const QString & pointList) {
-	mPoly = Converter::instance().stringToPoly(pointList);
+	mPoly = Converter::stringToPoly(pointList);
 }
 
 QString Polygon::write() const {
-	return Converter::instance().polyToString(mPoly);
+	return Converter::polyToString(mPoly.toPolygon());
 }
 
 int Polygon::size() const {
 	return mPoly.size();
 }
 
-void Polygon::setPolygon(const QPolygon & polygon) {
+Polygon Polygon::fromCvPoints(const std::vector<cv::Point2d>& pts) {
+	
+	Polygon poly;
+
+	// convert to Qt
+	for (const cv::Point2d& pt : pts)
+		poly << Converter::cvPointToQt(pt);
+
+	return poly;
+}
+
+Polygon Polygon::fromCvPoints(const std::vector<cv::Point2f>& pts) {
+
+	Polygon poly;
+
+	// convert to Qt
+	for (const cv::Point2f& pt : pts)
+		poly << Converter::cvPointToQt(pt);
+
+	return poly;
+}
+
+void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
 
-QPolygon Polygon::polygon() const {
+void Polygon::draw(QPainter & p) const {
+	
+	QPen oPen = p.pen();
+	QPen pen = oPen;
+	pen.setWidth(3);
+	p.setPen(pen);
+	
+	p.drawPolygon(closedPolygon());
+	p.setPen(oPen);
+}
+
+QPolygonF Polygon::polygon() const {
 	return mPoly;
 }
 
-QPolygon Polygon::closedPolygon() const {
+QPolygonF Polygon::closedPolygon() const {
 	
-	QPolygon closed = mPoly;
+	QPolygonF closed = mPoly;
 	if (!mPoly.isEmpty())
 		closed.append(mPoly.first());
 
@@ -78,31 +111,46 @@ QPolygon Polygon::closedPolygon() const {
 }
 
 // BaseLine --------------------------------------------------------------------
-BaseLine::BaseLine(const QPolygon & baseLine) {
+BaseLine::BaseLine(const QPolygonF & baseLine) {
 	mBaseLine = baseLine;
+}
+
+BaseLine::BaseLine(const Polygon & baseLine) {
+	mBaseLine = baseLine.polygon();
+}
+
+BaseLine::BaseLine(const Line & line) {
+	
+	QLineF ql = line.line();
+	mBaseLine << ql.p1();
+	mBaseLine << ql.p2();
 }
 
 bool BaseLine::isEmpty() const {
 	return mBaseLine.isEmpty();
 }
 
-void BaseLine::setPolygon(const QPolygon & baseLine) {
+void BaseLine::setPolygon(const QPolygonF & baseLine) {
 	mBaseLine = baseLine;
 }
 
-QPolygon BaseLine::polygon() const {
+QPolygonF BaseLine::polygon() const {
 	return mBaseLine;
 }
 
+QPolygon BaseLine::toPolygon() const {
+	return mBaseLine.toPolygon();
+}
+
 void BaseLine::read(const QString & pointList) {
-	mBaseLine = Converter::instance().stringToPoly(pointList);
+	mBaseLine = Converter::stringToPoly(pointList);
 }
 
 QString BaseLine::write() const {
-	return Converter::instance().polyToString(mBaseLine);
+	return Converter::polyToString(toPolygon());
 }
 
-QPoint BaseLine::startPoint() const {
+QPointF BaseLine::startPoint() const {
 	
 	if (!mBaseLine.isEmpty())
 		return mBaseLine.first();
@@ -110,7 +158,7 @@ QPoint BaseLine::startPoint() const {
 	return QPoint();
 }
 
-QPoint BaseLine::endPoint() const {
+QPointF BaseLine::endPoint() const {
 
 	if (!mBaseLine.isEmpty())
 		return mBaseLine.last();
@@ -135,7 +183,7 @@ Line::Line(const Polygon & poly) {
 	if (poly.size() != 2)
 		qWarning() << "line initialized with illegal polygon, size: " << poly.size();
 	else
-		mLine = QLine(poly.polygon()[0], poly.polygon()[1]);
+		mLine = QLineF(poly.polygon()[0], poly.polygon()[1]);
 
 }
 
@@ -145,7 +193,7 @@ Line::Line(const cv::Point p1, const cv::Point p2, float thickness) {
 }
 
 Line::Line(const Vector2D & p1, const Vector2D & p2, float thickness) {
-	mLine = QLine(p1.toQPoint(), p2.toQPoint());
+	mLine = QLineF(p1.toQPointF(), p2.toQPointF());
 	mThickness = thickness;
 }
 
@@ -213,7 +261,21 @@ double Line::squaredLength() const {
 /// <returns>The line length.</returns>
 double Line::length() const {
 
-	return sqrt(squaredLength());
+	return vector().length();
+}
+
+/// <summary>
+/// Returns the orientation weighed length.
+/// Hence, if orVec is parallel to the line, the length is 0.
+/// If it is orthogonal, the line length is returned.
+/// </summary>
+/// <param name="orVec">An orientation vector.</param>
+/// <returns>The length weighed by the orientation</returns>
+double Line::weightedLength(const Vector2D & orVec) const {
+
+	Vector2D vec = orVec.normalVec();
+	vec /= orVec.length();	// normalize
+	return std::abs(vec * vector());
 }
 
 /// <summary>
@@ -251,55 +313,60 @@ Vector2D Line::p2() const {
 /// <returns>
 ///   <c>true</c> if the specified m angle tresh is horizontal; otherwise, <c>false</c>.
 /// </returns>
-bool Line::isHorizontal(float mAngleTresh) const {
+bool Line::isHorizontal(double mAngleTresh) const {
 	
 	double lineAngle = angle();
+	double angleNewLine = Algorithms::normAngleRad(lineAngle, 0.0, CV_PI);
+	
+	double a = 0.0f;
+	double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
 
-	double angleNewLine = Algorithms::instance().normAngleRad(lineAngle, 0.0f, CV_PI);
-	//old version
-	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
-
-	//float diffangle = fabs(0.0f - angleNewLine);
-
-	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
-
-	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
-	float a = 0.0f;
-	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
-		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
-
-	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
 	else
 		return false;
 
 }
 
-bool Line::isVertical(float mAngleTresh) const
-{
+bool Line::isVertical(double mAngleTresh) const {
+	
 	double lineAngle = angle();
-	//lineAngle = o = blob.blobOrientation
-	//lineAngle = angle
+	double angleNewLine = Algorithms::normAngleRad(lineAngle, 0.0, CV_PI);
+	
+	double a = CV_PI*0.5;
+	double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+		, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
 
-
-	double angleNewLine = Algorithms::instance().normAngleRad((float)lineAngle, 0.0f, (float)CV_PI);
-	//old version
-	//angleNewLine = angleNewLine > (float)CV_PI*0.5f ? (float)CV_PI - angleNewLine : angleNewLine;
-
-	//float diffangle = fabs((float)CV_PI*0.5f - (float)angleNewLine);
-
-	//angleNewLine = angleNewLine > (float)CV_PI*0.25f ? (float)CV_PI*0.5f - angleNewLine : angleNewLine;
-
-	//diffangle = diffangle < fabs(0.0f - (float)angleNewLine) ? diffangle : fabs(0.0f - (float)angleNewLine);
-	float a = (float)CV_PI*0.5f;
-	float diffangle = (float)cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI))
-		, (float)CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, (float)CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, (float)CV_PI)));
-
-	if (diffangle <= mAngleTresh / 180.0f*(float)CV_PI)
+	if (diffangle <= mAngleTresh / 180.0*CV_PI)
 		return true;
 	else
 		return false;
 
+}
+
+bool Line::intersects(const Line & line) const {
+
+	return mLine.intersect(line.line(), 0) == QLineF::BoundedIntersection;
+}
+
+/// <summary>
+/// Returns the intersection point of both lines.
+/// This function returns an empty vector if the lines 
+/// do not intersect within the bounds
+/// </summary>
+/// <param name="line">Another line.</param>
+/// <returns>The line intersection.</returns>
+Vector2D Line::intersection(const Line & line) const {
+
+	QPointF p;
+
+	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
+
+	if (it == QLineF::BoundedIntersection)
+		return Vector2D(p);
+
+	return Vector2D();
 }
 
 /// <summary>
@@ -314,7 +381,9 @@ void Line::draw(QPainter & p) const {
 
 	QPen pen = p.pen();
 	QPen penL = pen;
-	penL.setWidthF(mThickness);
+	
+	if (mThickness > 0)
+		penL.setWidthF(mThickness);
 	p.setPen(penL);
 
 	p.drawLine(mLine);
@@ -411,15 +480,12 @@ double Line::minDistance(const Line& l) const {
 /// <returns>The distance of point p.</returns>
 double Line::distance(const Vector2D& p) const {
 
-	Vector2D normalVec = mLine.p2() - mLine.p1();
+	Vector2D nVec(mLine.p2() - mLine.p1());
+	nVec = nVec.normalVec();
 
-	double x = normalVec.x();
-	normalVec.setX(-normalVec.y());
-	normalVec.setY(x);
+	Vector2D linPt = p - Vector2D(mLine.p1());
 
-	Vector2D tmp = p - Vector2D(mLine.p2());
-
-	return (float)std::abs(normalVec.x()*tmp.x() + normalVec.y()*tmp.y() / (DBL_EPSILON + normalVec.length()));
+	return abs((linPt * nVec))/nVec.length();
 }
 
 double Line::horizontalOverlap(const Line & l) const {
@@ -447,6 +513,16 @@ bool Line::within(const Vector2D& p) const {
 	
 	return (tmp.x()*pe.x() + tmp.y()*pe.y()) * (tmp.x()*ps.x() + tmp.y()*ps.y()) < 0;
 
+}
+
+/// <summary>
+/// Returns a line moved by the vector mVec.
+/// </summary>
+/// <param name="mVec">Move vector.</param>
+/// <returns></returns>
+Line Line::moved(const Vector2D & mVec) const {
+
+	return Line(p1() + mVec, p2() + mVec);
 }
 
 bool Line::lessX1(const Line& l1, const Line& l2) {
@@ -540,9 +616,9 @@ double Line::diffAngle(const Line& l) const {
 	double angleLine, angleL;
 
 	//angleLine
-	angleLine = Algorithms::instance().normAngleRad(angle(), 0.0, CV_PI);
+	angleLine = Algorithms::normAngleRad(angle(), 0.0, CV_PI);
 	angleLine = angleLine > CV_PI*0.5 ? CV_PI - angleLine : angleLine;
-	angleL = Algorithms::instance().normAngleRad(l.angle(), 0.0, CV_PI);
+	angleL = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
 	angleL = angleL > CV_PI*0.5 ? CV_PI - angleL : angleL;
 	
 	return std::abs(angleLine - angleL);
@@ -630,6 +706,10 @@ void Vector2D::setY(double y) {
 	mY = y;
 }
 
+Vector2D Vector2D::normalVec() const {
+	return Vector2D(-y(), x());
+}
+
 QPoint Vector2D::toQPoint() const {
 	return QPoint(qRound(x()), qRound(y()));
 }
@@ -650,8 +730,12 @@ cv::Point Vector2D::toCvPoint() const {
 	return cv::Point(qRound(x()), qRound(y()));
 }
 
-cv::Point2d Vector2D::toCvPointF() const {
+cv::Point2d Vector2D::toCvPoint2d() const {
 	return cv::Point2d(x(), y());
+}
+
+cv::Point2f Vector2D::toCvPoint2f() const {
+	return cv::Point2f((float)x(), (float)y());
 }
 
 cv::Size Vector2D::toCvSize() const {
@@ -681,6 +765,23 @@ void Vector2D::rotate(double angle) {
 	double xTmp = mX;
 	mX =  xTmp * std::cos(angle) + mY * std::sin(angle);
 	mY = -xTmp * std::sin(angle) + mY * std::cos(angle);
+}
+
+/// <summary>
+/// Computes the length normalized dot product between the vector and o.
+/// </summary>
+/// <param name="o">Another vector.</param>
+/// <returns>The cosinus of theta, the angle between both vectors</returns>
+double Vector2D::theta(const Vector2D & o) const {
+	
+	double cosTheta = *this * o;
+	double denom = length() * o.length();
+	if (denom != 0.0)
+		cosTheta /= denom;
+	else
+		return 0.0;
+	
+	return cosTheta;
 }
 
 bool Vector2D::isNeighbor(const Vector2D & p1, double radius) const {
@@ -922,6 +1023,11 @@ bool Rect::isProximate(const Rect & o, double eps) const {
 
 double Rect::area() const {
 	return width() * height();
+}
+
+void Rect::draw(QPainter & p) const {
+
+	p.drawRect(toQRectF());
 }
 
 // Ellipse --------------------------------------------------------------------

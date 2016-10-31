@@ -37,6 +37,8 @@
 #include "Drawer.h"
 #include "Utils.h"
 
+#include "PixelSet.h"
+
 #include "GCGraph.hpp"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -241,34 +243,47 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 
 	// draw super pixels
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
+
+	//DBScanPixel dbs(mPixels);
+	//dbs.compute();
+	//QVector<PixelSet> sets = dbs.sets();
+	//qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
+
+	//for (auto s : sets) {
+	//	Drawer::instance().setColor(ColorManager::getRandomColor());
+	//	QPen pen = Drawer::instance().pen();
+	//	p.setPen(pen);
+	//	s.draw(p);
+	//}
+
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		Drawer::instance().setColor(ColorManager::instance().colors()[1]);// ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		QPen pen = Drawer::instance().pen();
 		pen.setWidth(2);
 		p.setPen(pen);
 
 		//// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->draw(p, 0.2, Pixel::draw_stats_only);
+		mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_only);
 		//qDebug() << mPixels[idx].ellipse();
 	}
 
 	qDebug() << "drawing takes" << dtf;
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
 	for (auto b : mBlobs) {
-		Drawer::instance().setColor(ColorManager::instance().getRandomColor());
+		Drawer::instance().setColor(ColorManager::getRandomColor());
 		p.setPen(Drawer::instance().pen());
 
 		b->draw(p);
@@ -276,7 +291,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 
 	qDebug() << "drawing takes" << dtf;
 	
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 // SuperPixelConfig --------------------------------------------------------------------
@@ -594,12 +609,12 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	// debug - remove
-	QPixmap pm = Image::instance().mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter painter(&pm);
 
 	Ellipse e(pixel->center(), Vector2D(radius, radius));
 	e.draw(painter, 0.3);
-	painter.setPen(ColorManager::instance().colors()[2]);
+	painter.setPen(ColorManager::colors()[2]);
 
 	const Vector2D& ec = pixel->center();
 	QVector<const Pixel*> neighbors;
@@ -614,7 +629,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	// draw the selected pixel in a different color
-	painter.setPen(ColorManager::instance().colors()[0]);
+	painter.setPen(ColorManager::colors()[0]);
 	pixel->draw(painter, 0.3, Pixel::draw_all);
 
 	// compute all orientations
@@ -633,7 +648,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		cv::Mat cRow = orHist.row(k);
 		computeOrHist(pixel.data(), neighbors, orVec, cRow, sp);
 
-		//qDebug().noquote() << Image::instance().printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
+		//qDebug().noquote() << Image::printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
 
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
@@ -641,14 +656,13 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		painter.drawText(r.bottomLeft().toQPoint(), QString::number(cAngle * DK_RAD2DEG));
 	}
 
-	return Image::instance().qPixmap2Mat(pm);
+	return Image::qPixmap2Mat(pm);
 }
 
 
 // GraphCutOrientation --------------------------------------------------------------------
-GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set, const Rect& imgRect) {
+GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set) {
 	mSet = set;
-	mImgRect = imgRect;
 }
 
 bool GraphCutOrientation::isEmpty() const {
@@ -660,9 +674,11 @@ bool GraphCutOrientation::compute() {
 	if (!checkInput())
 		return false;
 
+	DelauneyPixelConnector dpc;
+
 	Timer dt;
 	PixelGraph graph(mSet);
-	graph.connect(mImgRect);
+	graph.connect(dpc);
 	graphCut(graph);
 	qInfo() << "[Graph Cut] computed in" << dt;
 

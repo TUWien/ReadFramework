@@ -60,6 +60,7 @@ namespace rdf {
 
 // read defines
 class RegionTypeConfig;
+class PixelSet;
 
 class DllCoreExport Region {
 
@@ -103,7 +104,9 @@ public:
 	void removeChild(QSharedPointer<Region> child);
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
+
 	static QVector<QSharedPointer<Region> > allRegions(QSharedPointer<Region> root);
+	static QVector<QSharedPointer<Region> > filter(QSharedPointer<Region> root, const Region::Type& type);
 
 	virtual void draw(QPainter& p, const RegionTypeConfig& config) const;
 
@@ -124,7 +127,7 @@ protected:
 	Polygon mPoly;
 	QVector<QSharedPointer<Region> > mChildren;
 
-	void collectRegions(QVector<QSharedPointer<Region> >& allRegions) const;
+	void collectRegions(QVector<QSharedPointer<Region> >& allRegions, const Region::Type& type = type_unknown) const;
 };
 
 class DllCoreExport TextLine : public Region {

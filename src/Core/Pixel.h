@@ -56,6 +56,7 @@ namespace rdf {
 
 class Pixel;
 class PixelEdge;
+class TextLine;
 
 class DllCoreExport MserBlob : public BaseElement {
 
@@ -116,18 +117,15 @@ public:
 
 	void setOrientationIndex(int orIdx);
 	int orientationIndex() const;
+	int numOrientations() const;
 	double orientation() const;
 	Vector2D orVec() const;
-
+	
 	double scale() const;
-
-	int numOrientations() const;
-
 	int lineSpacingIndex() const;
 	double lineSpacing() const;
 
 	double minVal() const;
-
 	cv::Mat data(const DataIndex& dIdx = all_data);
 
 protected:
@@ -265,71 +263,14 @@ protected:
 	double calcWeight() const;
 };
 
-class DllCoreExport PixelSet : public BaseElement {
+// pixel distance functions
 
-public:
-	PixelSet();
-	PixelSet(const QVector<QSharedPointer<Pixel> >& set);
+namespace PixelDistance {
+	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
 
-	enum ConnectionMode {
-		connect_delauney,
-		connect_region,
-		connect_tab_stops,
+	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+}
 
-		connect_end
-	};
-
-	bool contains(const QSharedPointer<Pixel>& pixel) const;
-	void merge(const PixelSet& o);
-	void add(const QSharedPointer<Pixel>& pixel);
-	void remove(const QSharedPointer<Pixel>& pixel);
-
-	QVector<QSharedPointer<Pixel> > pixels() const;
-
-	Polygon polygon();
-	Rect boundingBox() const;
-	Line baseline(double offsetAngle = 0.0) const;
-	Ellipse profileRect() const;
-
-	void draw(QPainter& p) const;
-
-	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect, const ConnectionMode& mode = connect_delauney);
-	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
-
-protected:
-	QVector<QSharedPointer<Pixel> > mSet;
-
-	static QVector<QSharedPointer<PixelEdge> > connectDelauney(const QVector<QSharedPointer<Pixel> >& superPixels, const Rect& rect);
-	static QVector<QSharedPointer<PixelEdge> > connectRegion(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 2.0);
-	static QVector<QSharedPointer<PixelEdge> > connectTabStops(const QVector<QSharedPointer<Pixel> >& superPixels, double multiplier = 3.0);
-};
-
-class DllCoreExport PixelGraph : public BaseElement {
-
-public:
-	PixelGraph();
-	PixelGraph(const QVector<QSharedPointer<Pixel> >& set);
-
-	bool isEmpty() const;
-
-	void draw(QPainter& p) const;
-	void connect(const Rect& rect, const PixelSet::ConnectionMode& mode = PixelSet::connect_delauney);
-
-	QSharedPointer<PixelSet> set() const;
-	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;
-	QVector<QSharedPointer<PixelEdge> > edges(const QVector<int>& edgeIDs) const;
-	QVector<QSharedPointer<PixelEdge> > edges() const;
-
-	int pixelIndex(const QString & pixelID) const;
-	QVector<int> edgeIndexes(const QString & pixelID) const;
-
-protected:
-	QSharedPointer<PixelSet> mSet;
-	QVector<QSharedPointer<PixelEdge> > mEdges;
-	
-	QMap<QString, int> mPixelLookup;			// maps pixel IDs to their current vector index
-	QMap<QString, QVector<int> > mPixelEdges;	// maps pixel IDs to their corresponding edge index
-
-};
 
 };

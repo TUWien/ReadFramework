@@ -154,14 +154,14 @@ namespace rdf {
 
 		filter(hDSCCImg, vDSCCImg);
 
-		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
-		//Image::instance().save(vDSCCImg, "D:\\tmp\\vdscc.tif");
+		//Image::save(hDSCCImg, "D:\\tmp\\hdscc.tif");
+		//Image::save(vDSCCImg, "D:\\tmp\\vdscc.tif");
 		//return true;
 
 		mLineImg = cv::Mat(mSrcImg.rows, mSrcImg.cols, CV_8UC1);
 		cv::bitwise_or(hDSCCImg, vDSCCImg, mLineImg);
 
-		//Image::instance().save(mLineImg, "D:\\tmp\\mLineImg.tif");
+		//Image::save(mLineImg, "D:\\tmp\\mLineImg.tif");
 
 		//if (mDAngle != 361.0f) {
 		if (!std::isinf(mAngle)) {
@@ -173,8 +173,8 @@ namespace rdf {
 			vLines = filterLineAngle(tmp, (float)(mAngle+CV_PI*0.5f), config()->maxSlopeRotat());
 		}
 
-		//Image::instance().save(hDSCCImg, "D:\\tmp\\hdscc.tif");
-		//Image::instance().save(vDSCCImg, "D:\\tmp\\vdscc.tif");
+		//Image::save(hDSCCImg, "D:\\tmp\\hdscc.tif");
+		//Image::save(vDSCCImg, "D:\\tmp\\vdscc.tif");
 
 		QVector<rdf::Line> gapLines;
 		gapLines      = mergeLines(hLines);
@@ -421,11 +421,11 @@ namespace rdf {
 
 		for (auto l : lines) {
 			
-			double a = Algorithms::instance().normAngleRad(angle, 0.0, CV_PI);
-			double angleNewLine = Algorithms::instance().normAngleRad(l.angle(), 0.0, CV_PI);
+			double a = Algorithms::normAngleRad(angle, 0.0, CV_PI);
+			double angleNewLine = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
 
-			double diffangle = cv::min(fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI))
-				, CV_PI - fabs(Algorithms::instance().normAngleRad(a, 0, CV_PI) - Algorithms::instance().normAngleRad(angleNewLine, 0, CV_PI)));
+			double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+				, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
 
 			if (diffangle < angleDiff / 180.0*CV_PI)
 				resultLines.append(l);

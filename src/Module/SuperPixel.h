@@ -56,6 +56,7 @@
 namespace rdf {
 
 // read defines
+class PixelGraph;
 
 class DllModuleExport SuperPixelConfig : public ModuleConfig {
 
@@ -188,7 +189,7 @@ private:
 class DllModuleExport GraphCutOrientation : public Module {
 
 public:
-	GraphCutOrientation(const QVector<QSharedPointer<Pixel> >& set, const Rect& imgRect);
+	GraphCutOrientation(const QVector<QSharedPointer<Pixel> >& set);
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -205,7 +206,6 @@ private:
 
 	// input/output
 	QVector<QSharedPointer<Pixel> > mSet;
-	Rect mImgRect;
 	double mScaleFactor = 1000.0;	// TODO: think about that
 
 	bool checkInput() const override;

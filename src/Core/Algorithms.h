@@ -66,29 +66,30 @@ public:
 	enum MorphShape { SQUARE = 0, DISK };
 	enum MorphBorder { BORDER_ZERO = 0, BORDER_FLIP };
 
-	static Algorithms& instance();
-	cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 0) const;
-	cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 255) const;
-	cv::Mat createStructuringElement(int seSize, int shape) const;
-	cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) const;
-	cv::Mat get1DGauss(double sigma) const;
-	cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV) const;
-	cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO) const;
-	void setBorderConst(cv::Mat &src, float val = 0.0f) const;
-	void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
-	void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
-	cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1) const;
-	cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat()) const;
-	double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0) const;
-	double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2*CV_PI) const;
-	double angleDist(double angle1, double angle2, double maxAngle = 2*CV_PI) const;
-	cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true) const;
-	cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
-	QPointF calcRotationSize(double angleRad, QPointF srcSize) const;
-	double min(const QVector<double>& vec) const;
-	double max(const QVector<double>& vec) const;
-
+	// image processing
+	static cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 0);
+	static cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 255);
+	static cv::Mat createStructuringElement(int seSize, int shape);
+	static cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel);
+	static cv::Mat get1DGauss(double sigma);
+	static cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV);
+	static cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO);
+	static void setBorderConst(cv::Mat &src, float val = 0.0f);
+	static void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
+	static void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
+	static cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1);
+	static cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat());
+	static double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0);
+	static double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2*CV_PI);
+	static double angleDist(double angle1, double angle2, double maxAngle = 2*CV_PI);
+	static cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true);
+	static cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	static double statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1);
+
+	// convenience functions
+	static QPointF calcRotationSize(double angleRad, const QPointF& srcSize);
+	static double min(const QVector<double>& vec);
+	static double max(const QVector<double>& vec);
 
 	// template functions --------------------------------------------------------------------
 	/// <summary>
@@ -99,7 +100,7 @@ public:
 	/// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
 	/// <returns>The statistical moment.</returns>
 	template <typename numFmt>
-	static double statMoment(const QList<numFmt>& valuesIn, float momentValue, int interpolated = 1) {
+	static double statMoment(const QList<numFmt>& valuesIn, double momentValue, int interpolated = 1) {
 
 		QList<numFmt> values = valuesIn;
 		qSort(values);
@@ -165,10 +166,29 @@ public:
 		}
 	};
 
+};
 
-private:
-	Algorithms();
-	Algorithms(const Algorithms&);
+/// <summary>
+/// Implements robust line fitting algorithms.
+/// </summary>
+class DllCoreExport LineFitting {
+
+public:
+	LineFitting(const QVector<Vector2D>& pts);
+
+	Line fitLineLMS() const;
+
+protected:
+	// parameters:
+	int mNumSets = 1000;	// # random sets generated
+	int mSetSize = 2;		// if 2, lines are directly returned
+	double mEps = 0.1;		// if LMS is smaller than that, we break
+	double mMinLength = 2;	// minimum line length
+
+	QVector<Vector2D> mPts;
+
+	void sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, int setSize = 2) const;
+	double medianResiduals(const QVector<Vector2D>& pts, const Line& line) const;
 };
 
 };

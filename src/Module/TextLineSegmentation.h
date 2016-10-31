@@ -34,12 +34,19 @@
 
 #include "BaseModule.h"
 #include "Pixel.h"
+#include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
@@ -73,13 +80,20 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
+	void addLines(const QVector<Line>& lines);
+	QVector<QSharedPointer<TextLine> > textLines() const;
+
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	QVector<QSharedPointer<LineEdge> > mEdges;
+	//QVector<QSharedPointer<LineEdge> > mDbgEdges;	// remove
+	QVector<Line> mStopLines;
+
 	Rect mImgRect;
 
 	bool checkInput() const override;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
+	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;
 	QVector<QSharedPointer<PixelSet> > toSets() const;
 
 	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;

@@ -227,6 +227,17 @@ QVector<QSharedPointer<Region> > Region::children() const {
 	return mChildren;
 }
 
+QVector<QSharedPointer<Region> > Region::filter(QSharedPointer<Region> root, const Region::Type& type) {
+
+	QVector<QSharedPointer<Region> > regions;
+
+	if (root)
+		root->collectRegions(regions, type);
+
+	return regions;
+
+}
+
 QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) {
 
 	QVector<QSharedPointer<Region> > regions;
@@ -237,13 +248,14 @@ QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) 
 	return regions;
 }
 
-void Region::collectRegions(QVector<QSharedPointer<Region> >& allRegions) const {
+void Region::collectRegions(QVector<QSharedPointer<Region> >& regions, const Region::Type& type) const {
 
 	for (auto c : children())
-		allRegions << c;
+		if (type == type_unknown || c->type() == type)
+			regions << c;
 
 	for (auto c : children())
-		c->collectRegions(allRegions);
+		c->collectRegions(regions, type);
 }
 
 /// <summary>
@@ -341,8 +353,8 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 bool Region::operator==(const Region & r1) {
 
-	QPolygon p1 = r1.polygon().polygon();
-	QPolygon p2 = mPoly.polygon();
+	QPolygonF p1 = r1.polygon().polygon();
+	QPolygonF p2 = mPoly.polygon();
 
 	if (p1.isEmpty() || p2.isEmpty())
 		return false;
@@ -469,7 +481,6 @@ void TextLine::write(QXmlStreamWriter & writer, bool withChildren, bool close) c
 		writer.writeEndElement(); // </Region>
 }
 
-
 /// <summary>
 /// Returns a string with all important properties of the TextLine.
 /// </summary>
@@ -502,7 +513,7 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	if (config.drawBaseline() && !mBaseLine.isEmpty()) {
 		
-		QPolygon poly = mBaseLine.polygon();
+		QPolygonF poly = mBaseLine.polygon();
 		
 		QPainterPath path;
 		path.addPolygon(poly);
@@ -528,7 +539,7 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	if (config.drawText() && !mText.isEmpty()) {
 		
-		QPoint sp = mBaseLine.startPoint();
+		QPointF sp = mBaseLine.startPoint();
 
 		if (sp.isNull() && !mPoly.isEmpty()) {
 			sp = mPoly.polygon().first();

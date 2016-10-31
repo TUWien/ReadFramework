@@ -40,12 +40,13 @@
 #include "Settings.h"
 
 #include "SuperPixel.h"
-#include "TextBlockSegmentation.h"
+#include "TabStopAnalysis.h"
 #include "TextLineSegmentation.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QImage>
+#include <QFileInfo>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
@@ -63,7 +64,7 @@ void XmlTest::parseXml() {
 
 	// test image loading
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	if (!imgCv.empty())
 		qInfo() << mConfig.imagePath() << "loaded...";
@@ -85,7 +86,7 @@ void XmlTest::linesToXml() {
 
 	// load image
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	// binarize
 	rdf::BinarizationSuAdapted binarizeImg(imgCv, cv::Mat());
@@ -132,7 +133,7 @@ void LayoutTest::testComponents() {
 
 	// load image
 	QImage img(mConfig.imagePath());
-	cv::Mat imgCv = Image::instance().qImage2Mat(img);
+	cv::Mat imgCv = Image::qImage2Mat(img);
 
 	computeComponents(imgCv);
 
@@ -145,6 +146,8 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//cv::resize(src, img, cv::Size(), 0.25, 0.25, CV_INTER_AREA);
 
 	Timer dt;
+
+	// find super pixels
 	rdf::SuperPixel superPixel(img);
 	
 	if (!superPixel.compute())
@@ -152,29 +155,25 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 
 	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
 
+	// find local orientation per pixel
 	rdf::LocalOrientation lo(sp);
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
-	rdf::GraphCutOrientation pse(sp, Rect(Vector2D(), Vector2D(img.size())));
+	// smooth estimation
+	rdf::GraphCutOrientation pse(sp);
 	
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
+	
+	//// find tab stops
+	//rdf::TabStopAnalysis tabStops(sp);
+	//if (!tabStops.compute())
+	//	qWarning() << "could not compute text block segmentation!";
 
-	//// filter according to orientation
-	//QVector<QSharedPointer<Pixel> > spf;
-	//for (auto pixel : sp) {
-	//	if (pixel->stats()->orientation() == 0 || 
-	//		pixel->stats()->orientation() == CV_PI*0.5)
-	//		spf << pixel;
-	//}
-	//sp = spf;
-
-	rdf::TextBlockSegmentation textBlocks(img, sp);
-	if (!textBlocks.compute())
-		qWarning() << "could not compute text block segmentation!";
-
+	//// find text lines
 	//rdf::TextLineSegmentation textLines(Rect(img), sp);
+	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 	//if (!textLines.compute())
 	//	qWarning() << "could not compute text block segmentation!";
 
@@ -191,12 +190,42 @@ void LayoutTest::computeComponents(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
-	rImg = textBlocks.draw(rImg);
+	rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = tabStops.draw(rImg);
 	//rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-superPixel");
-	rdf::Image::instance().save(rImg, maskPath);
-	qDebug() << "results written to" << maskPath;
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tabStops");
+	rdf::Image::save(rImg, maskPath);
+	qDebug() << "debug image added" << maskPath;
+
+
+	//// write XML -----------------------------------
+	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+	//rdf::PageXmlParser parser;
+	//parser.read(loadXmlPath);
+	//auto pe = parser.page();
+	//pe->setCreator(QString("CVL"));
+	//pe->setImageSize(QSize(img.rows, img.cols));
+	//pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
+
+	//// start writing content
+	//auto ps = PixelSet::fromEdges(PixelSet::connect(sp, Rect(0, 0, img.cols, img.rows)));
+
+	//if (!ps.empty()) {
+	//	QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
+	//	textRegion->setType(Region::type_text_region);
+	//	textRegion->setPolygon(ps[0]->convexHull());
+	//	
+	//	for (auto tl : textLines.textLines()) {
+	//		textRegion->addUniqueChild(tl);
+	//	}
+
+	//	pe->rootRegion()->addUniqueChild(textRegion);
+	//}
+
+	//parser.write(mConfig.xmlPath(), pe);
+	//qDebug() << "results written to" << mConfig.xmlPath();
+
 }
 
 }

@@ -66,7 +66,7 @@ namespace rdf {
 		rdf::Timer dt;
 		QImage img;
 		img.load(mConfig.imagePath());
-		cv::Mat inputImg = rdf::Image::instance().qImage2Mat(img);
+		cv::Mat inputImg = rdf::Image::qImage2Mat(img);
 
 		qDebug() << "image converted...";
 		if (inputImg.empty()) {
@@ -76,7 +76,7 @@ namespace rdf {
 
 		
 		//test Otsu
-		//cv::Mat binImg = rdf::Algorithms::instance().threshOtsu(inputImg);
+		//cv::Mat binImg = rdf::Algorithms::threshOtsu(inputImg);
 		//flip image
 		//inputImg = inputImg.t();
 		//flip(inputImg, inputImg, 0);
@@ -94,13 +94,12 @@ namespace rdf {
 		//cv::Mat binImg = testBin.binaryImage();
 		//rdf::LineTrace linetest(binImg);
 		//linetest.compute();
-		//Image::instance().save(binImg, "D:\\tmp\\test.tif");
+		//Image::save(binImg, "D:\\tmp\\test.tif");
 
+		cv::Mat mask = Algorithms::estimateMask(inputG);
+		//Image::save(mask, "D:\\tmp\\mask.tif");
 
-		cv::Mat mask = Algorithms::instance().estimateMask(inputG);
-		//Image::instance().save(mask, "D:\\tmp\\mask.tif");
-
-		//Image::instance().imageInfo(inputImg, "input");
+		//Image::imageInfo(inputImg, "input");
 
 
 	
@@ -109,10 +108,10 @@ namespace rdf {
 		QString templPath = "D:\\projects\\READ\\formTest\\5117-087-0010.jpg";
 		imgTemplate.load(templPath);
 		qDebug() << templPath << "loaded template";
-		cv::Mat imgTempl = rdf::Image::instance().qImage2Mat(imgTemplate);
+		cv::Mat imgTempl = rdf::Image::qImage2Mat(imgTemplate);
 		cv::Mat imgTemplG;
 		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTemplG, CV_RGB2GRAY);
-		cv::Mat maskTempl = rdf::Algorithms::instance().estimateMask(imgTemplG);
+		cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
 		FormFeatures formTempl(imgTemplG);
 		formTempl.compute();
 
@@ -133,7 +132,7 @@ namespace rdf {
 		
 		////cv::Mat lImg = linetest.lineImage();
 		////cv::Mat synLine = linetest.generatedLineImage();
-		////Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+		////Image::save(synLine, "D:\\tmp\\synLine.tif");
 
 
 		//rdf::BaseSkewEstimation skewTest;
@@ -155,7 +154,7 @@ namespace rdf {
 
 		//}
 
-		//cv::Mat rotatedImage = rdf::Algorithms::instance().rotateImage(inputImg, skewAngle);
+		//cv::Mat rotatedImage = rdf::Algorithms::rotateImage(inputImg, skewAngle);
 
 		////int nSamples = 20;
 		////cv::RNG rng;
@@ -166,7 +165,7 @@ namespace rdf {
 
 		////cv::Mat randRows(nSamples, 1, CV_32FC1);
 		////rng.fill(randRows, cv::RNG::UNIFORM, lBound, uBound);
-		////qDebug() << Image::instance().printImage(randRows, "test");
+		////qDebug() << Image::printImage(randRows, "test");
 
 		////cv::Mat tmp = inputImg.clone();
 		////cv::bilateralFilter(inputImg, tmp, 5, 90, 90);
@@ -175,15 +174,15 @@ namespace rdf {
 		////cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7,7));
 		////cv::erode(inputImg, tmp, kernel);
 		////cv::dilate(tmp, tmp, kernel);
-		////Image::instance().save(inputImg, "D:\\tmp\\filterImg.tif");
+		////Image::save(inputImg, "D:\\tmp\\filterImg.tif");
 
 		////rdf::BinarizationSuAdapted testBin(inputImg);
 		////testBin.compute();
 		////cv::Mat binImg = testBin.binaryImage();
 
-		////Image::instance().save(binImg, "D:\\tmp\\binImg.tif");
+		////Image::save(binImg, "D:\\tmp\\binImg.tif");
 
-		//////binImg = Algorithms::instance().preFilterArea(binImg, 10);
+		//////binImg = Algorithms::preFilterArea(binImg, 10);
 
 		////rdf::LineTrace linetest(binImg);
 		////linetest.setMinLenSecondRun(40);
@@ -194,7 +193,7 @@ namespace rdf {
 		////cv::Mat lImg = linetest.lineImage();
 
 		////cv::Mat synLine = linetest.generatedLineImage();
-		////Image::instance().save(synLine, "D:\\tmp\\synLine.tif");
+		////Image::save(synLine, "D:\\tmp\\synLine.tif");
 
 
 
@@ -219,17 +218,17 @@ namespace rdf {
 		////testBin.compute();
 		////cv::Mat binImg = testBin.binaryImage();
 
-		////rdf::Image::instance().imageInfo(binImg, "binImg");
+		////rdf::Image::imageInfo(binImg, "binImg");
 		////qDebug() << testBin << " in " << dt;
 		
-		QImage resultImg = rdf::Image::instance().mat2QImage(detLineImg);
+		QImage resultImg = rdf::Image::mat2QImage(detLineImg);
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();
 
 			//binImgQt = binImgQt.convertToFormat(QImage::Format_RGB888);
 			//binImgQt.save(mConfig.outputPath());
-			rdf::Image::instance().save(resultImg, mConfig.outputPath());
+			rdf::Image::save(resultImg, mConfig.outputPath());
 			
 		} else {
 			qDebug() << "no save path";

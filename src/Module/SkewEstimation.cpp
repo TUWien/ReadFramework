@@ -105,25 +105,25 @@ namespace rdf {
 		//delta = qRound(mSrcImg.cols / 1430.0*20.0); //check (nomacs plugin version)
 		//mMinLineLength = qRound(mSrcImg.cols / 1430.0 * 20.0); //check
 		
-		//Image::instance().imageInfo(mSrcImg, "horSep");
+		//Image::imageInfo(mSrcImg, "horSep");
 		//half again to be consistent with original implementation
 		int halfW = w / 2;
 		int halfH = h / 2;
 
-		//Image::instance().imageInfo(mSrcImg, "srcImg");
+		//Image::imageInfo(mSrcImg, "srcImg");
 
 		cv::Mat horSep = separability(skewImg, halfW, halfH, mMask);
 		cv::Mat verSep = separability(skewImg.t(), halfW, halfH, mMask);
 		verSep = verSep.t();
 
-		//Image::instance().imageInfo(horSep, "horSep");
-		//Image::instance().imageInfo(verSep, "verSep");
+		//Image::imageInfo(horSep, "horSep");
+		//Image::imageInfo(verSep, "verSep");
 
 		//cv::Mat sepHV;
 		//cv::normalize(horSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
-		//Image::instance().save(sepHV, "D:\\tmp\\horSep.png");
+		//Image::save(sepHV, "D:\\tmp\\horSep.png");
 		//cv::normalize(verSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
-		//Image::instance().save(sepHV, "D:\\tmp\\verSep.png");
+		//Image::save(sepHV, "D:\\tmp\\verSep.png");
 		
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
@@ -133,8 +133,8 @@ namespace rdf {
 		thr = mFixedThr ? config()->thr() : config()->thr() * max;
 		cv::Mat edgeVer = edgeMap(verSep, thr, VERTICAL, mMask);
 
-		//Image::instance().save(edgeHor, "D:\\tmp\\edgeHorF.png");
-		//Image::instance().save(edgeVer, "D:\\tmp\\edgeVerF.png");
+		//Image::save(edgeHor, "D:\\tmp\\edgeHorF.png");
+		//Image::save(edgeVer, "D:\\tmp\\edgeVerF.png");
 
 		mSelectedLines.clear();
 		mSelectedLineTypes.clear();
@@ -153,7 +153,7 @@ namespace rdf {
 		//	cv::line(inputImg, cv::Point((int)line.x(), (int)line.y()), cv::Point((int)line.z(), (int)line.w()), cv::Scalar(255, 255, 255), 3);
 
 		//}
-		//Image::instance().save(inputImg, "D:\\tmp\\lines.png");
+		//Image::save(inputImg, "D:\\tmp\\lines.png");
 		////debug: print lines
 
 
@@ -213,9 +213,9 @@ namespace rdf {
 
 		cv::Mat meanImg, stdImg;
 
-		meanImg = Algorithms::instance().convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
+		meanImg = Algorithms::convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
 		//meanImg /= (float)(w*h);  //not needed since BORDER_FLIP (=mean filtering)
-		stdImg = Algorithms::instance().convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
+		stdImg = Algorithms::convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
 		//stdImg /= (float)(w*h);	//not needed since BORDER_FLIP (=mean filtering)
 		stdImg = stdImg - meanImg.mul(meanImg); // = sigma^2
 
