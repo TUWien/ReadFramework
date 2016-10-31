@@ -185,9 +185,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aac828d9184e38e9d91436bb1adc7a19d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1)</td></tr>
 <tr class="memdesc:aac828d9184e38e9d91436bb1adc7a19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#aac828d9184e38e9d91436bb1adc7a19d">More...</a><br/></td></tr>
 <tr class="separator:aac828d9184e38e9d91436bb1adc7a19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2eac08e065d71eabeec3dd0e2b38d6ec">log_gamma_lanczos</a> (double x)</td></tr>
-<tr class="memdesc:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation. See http ://www.rskey.org/gamma.htm  <a href="#a2eac08e065d71eabeec3dd0e2b38d6ec">More...</a><br/></td></tr>
-<tr class="separator:a2eac08e065d71eabeec3dd0e2b38d6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ac2c7a0e40a6a3b9c37a10fd3155d2ba3">logGammaLanczos</a> (double x)</td></tr>
+<tr class="memdesc:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation. See http ://www.rskey.org/gamma.htm  <a href="#ac2c7a0e40a6a3b9c37a10fd3155d2ba3">More...</a><br/></td></tr>
+<tr class="separator:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0723a261ec9bc5c2e257430f68b3725c"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a0723a261ec9bc5c2e257430f68b3725c">logGammaWindschitl</a> (double x)</td></tr>
+<tr class="memdesc:a0723a261ec9bc5c2e257430f68b3725c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method.  <a href="#a0723a261ec9bc5c2e257430f68b3725c">More...</a><br/></td></tr>
+<tr class="separator:a0723a261ec9bc5c2e257430f68b3725c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f098b6f2a837af192aa95df50b5f2cb"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a1f098b6f2a837af192aa95df50b5f2cb">logGamma</a> (double x)</td></tr>
+<tr class="memdesc:a1f098b6f2a837af192aa95df50b5f2cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x.When x&gt;15 use log_gamma_windschitl(), otherwise use log_gamma_lanczos().  <a href="#a1f098b6f2a837af192aa95df50b5f2cb">More...</a><br/></td></tr>
+<tr class="separator:a1f098b6f2a837af192aa95df50b5f2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e67230e106489586817acbf36edc1a6"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a2e67230e106489586817acbf36edc1a6">doubleEqual</a> (double a, double b)</td></tr>
+<tr class="memdesc:a2e67230e106489586817acbf36edc1a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The resulting rounding error after floating point computations depend on the specific operations done.The same number computed by different algorithms could present different rounding errors.For a useful comparison, an estimation of the relative rounding error should be considered and compared to a factor times EPS.The factor should be related to the cumulated rounding error in the chain of computation.Here, as a simplification, a fixed factor is used.  <a href="#a2e67230e106489586817acbf36edc1a6">More...</a><br/></td></tr>
+<tr class="separator:a2e67230e106489586817acbf36edc1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a710f995bf54fb37f8692bb86a06d75eb"><td class="memItemLeft" align="right" valign="top">static QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a710f995bf54fb37f8692bb86a06d75eb">calcRotationSize</a> (double angleRad, const QPointF &amp;srcSize)</td></tr>
 <tr class="memdesc:a710f995bf54fb37f8692bb86a06d75eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the image size of the rotated image.  <a href="#a710f995bf54fb37f8692bb86a06d75eb">More...</a><br/></td></tr>
 <tr class="separator:a710f995bf54fb37f8692bb86a06d75eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -590,6 +599,50 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2e67230e106489586817acbf36edc1a6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rdf::Algorithms::doubleEqual </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The resulting rounding error after floating point computations depend on the specific operations done.The same number computed by different algorithms could present different rounding errors.For a useful comparison, an estimation of the relative rounding error should be considered and compared to a factor times EPS.The factor should be related to the cumulated rounding error in the chain of computation.Here, as a simplification, a fixed factor is used. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Input a</td></tr>
+    <tr><td class="paramname">b</td><td>Input b</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>equal if relative error &lt;= factor x eps</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ae1aa9cb86e5b84e79967139a62fbc607"></a>
 <div class="memitem">
 <div class="memproto">
@@ -811,7 +864,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2eac08e065d71eabeec3dd0e2b38d6ec"></a>
+<a class="anchor" id="a1f098b6f2a837af192aa95df50b5f2cb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -819,7 +872,40 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double rdf::Algorithms::log_gamma_lanczos </td>
+          <td class="memname">double rdf::Algorithms::logGamma </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the natural logarithm of the absolute value of the gamma function of x.When x&gt;15 use log_gamma_windschitl(), otherwise use log_gamma_lanczos(). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The Input x.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Natural Logarithm</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac2c7a0e40a6a3b9c37a10fd3155d2ba3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::logGammaLanczos </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
@@ -841,6 +927,39 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Natural Algorithm</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0723a261ec9bc5c2e257430f68b3725c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::Algorithms::logGammaWindschitl </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Input Value x</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Natural Log using Windschitl</dd></dl>
 
 </div>
 </div>

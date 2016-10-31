@@ -29,8 +29,8 @@ var searchData=
   ['linetrace',['LineTrace',['../classrdf_1_1_line_trace.html',1,'rdf']]],
   ['linetrace_2ecpp',['LineTrace.cpp',['../_line_trace_8cpp.html',1,'']]],
   ['linetrace_2eh',['LineTrace.h',['../_line_trace_8h.html',1,'']]],
-  ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html#a644d9e948e1080d50a103494ecf6fdba',1,'rdf::LineTraceConfig']]],
   ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html',1,'rdf']]],
+  ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html#a644d9e948e1080d50a103494ecf6fdba',1,'rdf::LineTraceConfig']]],
   ['linkedblocklist',['LinkedBlockList',['../class_linked_block_list.html',1,'LinkedBlockList'],['../class_linked_block_list.html#a16c5096bee0e6b55ae4c03b53abc8fac',1,'LinkedBlockList::LinkedBlockList()']]],
   ['linkedblocklist_2ecpp',['LinkedBlockList.cpp',['../_linked_block_list_8cpp.html',1,'']]],
   ['linkedblocklist_2eh',['LinkedBlockList.h',['../_linked_block_list_8h.html',1,'']]],
@@ -38,10 +38,12 @@ var searchData=
   ['load',['load',['../classrdf_1_1_region_type_config.html#a3d16be5bebe30c78f83df9fedd4eaea6',1,'rdf::RegionTypeConfig::load()'],['../classrdf_1_1_generic_settings.html#a988daf67befbee022897c9b6f48dc746',1,'rdf::GenericSettings::load()'],['../classrdf_1_1_global_settings.html#aaeeb34e5876b8c5fab307e4ed89020fb',1,'rdf::GlobalSettings::load()'],['../classrdf_1_1_config.html#a0bd579fa01f31f98787caefc7ad50c4d',1,'rdf::Config::load()'],['../classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409',1,'rdf::ModuleConfig::load()'],['../classrdf_1_1_simple_binarization_config.html#a45955c54fb2c51c254abde12a8e77946',1,'rdf::SimpleBinarizationConfig::load()'],['../classrdf_1_1_super_pixel_config.html#ac4cfac755d1d8dcf4ca51e4bddfbea6a',1,'rdf::SuperPixelConfig::load()'],['../classrdf_1_1_local_orientation_config.html#a03a77e2b28907a65d4937b81de4a2b13',1,'rdf::LocalOrientationConfig::load()']]],
   ['loadsettings',['loadSettings',['../classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947',1,'rdf::ModuleConfig']]],
   ['loadtemplatedatabase',['loadTemplateDatabase',['../classrdf_1_1_form_features.html#ab6f6a9a3c69e87326692b284c5cfbde0',1,'rdf::FormFeatures']]],
-  ['localorientation',['LocalOrientation',['../classrdf_1_1_local_orientation.html#a3e23d3d5b39c5211fe84835f9e0dcbd2',1,'rdf::LocalOrientation']]],
   ['localorientation',['LocalOrientation',['../classrdf_1_1_local_orientation.html',1,'rdf']]],
-  ['localorientationconfig',['LocalOrientationConfig',['../classrdf_1_1_local_orientation_config.html',1,'rdf']]],
+  ['localorientation',['LocalOrientation',['../classrdf_1_1_local_orientation.html#a3e23d3d5b39c5211fe84835f9e0dcbd2',1,'rdf::LocalOrientation']]],
   ['localorientationconfig',['LocalOrientationConfig',['../classrdf_1_1_local_orientation_config.html#ab865429c7db4e1b54f0f1924303b931f',1,'rdf::LocalOrientationConfig']]],
-  ['log_5fgamma_5flanczos',['log_gamma_lanczos',['../classrdf_1_1_algorithms.html#a2eac08e065d71eabeec3dd0e2b38d6ec',1,'rdf::Algorithms']]],
-  ['logeps',['logEps',['../classrdf_1_1_read_l_s_d_config.html#a3f65f0a40f806859e875150eecbdb174',1,'rdf::ReadLSDConfig']]]
+  ['localorientationconfig',['LocalOrientationConfig',['../classrdf_1_1_local_orientation_config.html',1,'rdf']]],
+  ['logeps',['logEps',['../classrdf_1_1_read_l_s_d_config.html#a3f65f0a40f806859e875150eecbdb174',1,'rdf::ReadLSDConfig']]],
+  ['loggamma',['logGamma',['../classrdf_1_1_algorithms.html#a1f098b6f2a837af192aa95df50b5f2cb',1,'rdf::Algorithms']]],
+  ['loggammalanczos',['logGammaLanczos',['../classrdf_1_1_algorithms.html#ac2c7a0e40a6a3b9c37a10fd3155d2ba3',1,'rdf::Algorithms']]],
+  ['loggammawindschitl',['logGammaWindschitl',['../classrdf_1_1_algorithms.html#a0723a261ec9bc5c2e257430f68b3725c',1,'rdf::Algorithms']]]
 ];
