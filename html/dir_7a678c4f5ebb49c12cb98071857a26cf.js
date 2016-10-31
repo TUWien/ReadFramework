@@ -27,7 +27,9 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "LineTrace.cpp", "_line_trace_8cpp.html", null ],
     [ "LineTrace.h", "_line_trace_8h.html", [
       [ "LineTraceConfig", "classrdf_1_1_line_trace_config.html", "classrdf_1_1_line_trace_config" ],
-      [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ]
+      [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
+      [ "ReadLSDConfig", "classrdf_1_1_read_l_s_d_config.html", "classrdf_1_1_read_l_s_d_config" ],
+      [ "ReadLSD", "classrdf_1_1_read_l_s_d.html", "classrdf_1_1_read_l_s_d" ]
     ] ],
     [ "SkewEstimation.cpp", "_skew_estimation_8cpp.html", null ],
     [ "SkewEstimation.h", "_skew_estimation_8h.html", [

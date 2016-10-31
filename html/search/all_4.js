@@ -40,6 +40,7 @@ var searchData=
   ['deleteblobs',['deleteBlobs',['../classrdf_1_1_blobs.html#a0a0df08d5f2186ddd03d9658ff41f110',1,'rdf::Blobs']]],
   ['deletefunctor',['deleteFunctor',['../class_g_coptimization.html#a090731f3cec3cbb90784fed2097cbe5b',1,'GCoptimization']]],
   ['delta',['delta',['../classrdf_1_1_base_skew_estimation_config.html#aaaaa4282445ab191085ab1fa366e166b',1,'rdf::BaseSkewEstimationConfig']]],
+  ['density',['density',['../classrdf_1_1_read_l_s_d_config.html#afb1fe3342bb8b36ed092aab3a56c16f3',1,'rdf::ReadLSDConfig']]],
   ['diagonal',['diagonal',['../classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f',1,'rdf::Rect']]],
   ['diffangle',['diffAngle',['../classrdf_1_1_line.html#a9aca17fa9cb616a464f12752c5b3f1cd',1,'rdf::Line']]],
   ['dilateimage',['dilateImage',['../classrdf_1_1_algorithms.html#ab291874a4db55d67aea77f38fb0ccf1f',1,'rdf::Algorithms']]],

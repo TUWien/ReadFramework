@@ -68,6 +68,8 @@ var namespacerdf =
     [ "FormFeatures", "classrdf_1_1_form_features.html", "classrdf_1_1_form_features" ],
     [ "LineTraceConfig", "classrdf_1_1_line_trace_config.html", "classrdf_1_1_line_trace_config" ],
     [ "LineTrace", "classrdf_1_1_line_trace.html", "classrdf_1_1_line_trace" ],
+    [ "ReadLSDConfig", "classrdf_1_1_read_l_s_d_config.html", "classrdf_1_1_read_l_s_d_config" ],
+    [ "ReadLSD", "classrdf_1_1_read_l_s_d.html", "classrdf_1_1_read_l_s_d" ],
     [ "BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", "classrdf_1_1_base_skew_estimation_config" ],
     [ "BaseSkewEstimation", "classrdf_1_1_base_skew_estimation.html", "classrdf_1_1_base_skew_estimation" ],
     [ "SuperPixelConfig", "classrdf_1_1_super_pixel_config.html", "classrdf_1_1_super_pixel_config" ],

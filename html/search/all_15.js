@@ -12,6 +12,6 @@ var searchData=
   ['vertical',['VERTICAL',['../classrdf_1_1_base_skew_estimation.html#a35363114968830bbf92a089760e06997af847d1ca53fcb96592612a071cc15e02',1,'rdf::BaseSkewEstimation']]],
   ['verticaloverlap',['verticalOverlap',['../classrdf_1_1_line.html#a1684a9d813ac02e017df92c07b806627',1,'rdf::Line']]],
   ['visited',['visited',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da40e9587a33e6672b70f5463f43afd78d',1,'rdf::DBScanPixel']]],
-  ['vlines',['vLines',['../classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d',1,'rdf::LineTrace']]],
+  ['vlines',['vLines',['../classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d',1,'rdf::LineTrace::vLines()'],['../classrdf_1_1_read_l_s_d.html#ab5a10847476c5719455c471e9da1cbdc',1,'rdf::ReadLSD::vLines()']]],
   ['vtxt',['vtxT',['../classrd3_1_1_g_c_graph.html#a8ef016dc7804096842730dde2a1fc339',1,'rd3::GCGraph']]]
 ];

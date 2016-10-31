@@ -5,10 +5,11 @@
 <area shape="rect" id="node7" href="$classrdf_1_1_graph_cut_orientation.html" title="rdf::GraphCutOrientation" alt="" coords="147,157,311,184"/>
 <area shape="rect" id="node8" href="$classrdf_1_1_line_trace.html" title="Detects Lines in a binary image. The result is a binary image containing all line elements (pixel acc..." alt="" coords="178,208,281,235"/>
 <area shape="rect" id="node9" href="$classrdf_1_1_local_orientation.html" title="rdf::LocalOrientation" alt="" coords="160,259,299,285"/>
-<area shape="rect" id="node10" href="$classrdf_1_1_simple_binarization.html" title="A simple binarization module using a defined threshold. " alt="" coords="153,309,306,336"/>
-<area shape="rect" id="node11" href="$classrdf_1_1_super_pixel.html" title="rdf::SuperPixel" alt="" coords="175,360,283,387"/>
-<area shape="rect" id="node12" href="$classrdf_1_1_tab_stop_analysis.html" title="rdf::TabStopAnalysis" alt="" coords="157,411,301,437"/>
-<area shape="rect" id="node13" href="$classrdf_1_1_text_line_segmentation.html" title="rdf::TextLineSegmentation" alt="" coords="142,461,317,488"/>
+<area shape="rect" id="node10" href="$classrdf_1_1_read_l_s_d.html" title="rdf::ReadLSD" alt="" coords="178,309,281,336"/>
+<area shape="rect" id="node11" href="$classrdf_1_1_simple_binarization.html" title="A simple binarization module using a defined threshold. " alt="" coords="153,360,306,387"/>
+<area shape="rect" id="node12" href="$classrdf_1_1_super_pixel.html" title="rdf::SuperPixel" alt="" coords="175,411,283,437"/>
+<area shape="rect" id="node13" href="$classrdf_1_1_tab_stop_analysis.html" title="rdf::TabStopAnalysis" alt="" coords="157,461,301,488"/>
+<area shape="rect" id="node14" href="$classrdf_1_1_text_line_segmentation.html" title="rdf::TextLineSegmentation" alt="" coords="142,512,317,539"/>
 <area shape="rect" id="node3" href="$classrdf_1_1_binarization_su_adapted.html" title="The class binarize a grayvalue image. The segmentation algorithm is based on &quot;Binarization of Histori..." alt="" coords="366,5,543,32"/>
 <area shape="rect" id="node4" href="$classrdf_1_1_binarization_su_fgd_weight.html" title="The class binarize a rgb color image. To make the algorithm robust against noise, the foreground is e..." alt="" coords="592,5,784,32"/>
 </map>

@@ -30,6 +30,7 @@ var searchData=
   ['alphachannelused',['alphaChannelUsed',['../classrdf_1_1_image.html#aa3ea371065a56d6e8ca37bb65295add8',1,'rdf::Image']]],
   ['angle',['angle',['../classrdf_1_1_pixel.html#a707eebe6c883a435b00210931f951f97',1,'rdf::Pixel::angle()'],['../classrdf_1_1_line.html#a54dd22cc7ab4ae4d2051dde5b027a61c',1,'rdf::Line::angle()'],['../classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a',1,'rdf::Vector2D::angle()'],['../classrdf_1_1_ellipse.html#a54576d14cd33382560a98e8a5e9572ad',1,'rdf::Ellipse::angle()'],['../classrdf_1_1_tab_stop_cluster.html#a7a2a1a341196e5bfe9493f0f05823ada',1,'rdf::TabStopCluster::angle()']]],
   ['angledist',['angleDist',['../classrdf_1_1_algorithms.html#a6fbf8a18978253a57efdbb48f49f06ce',1,'rdf::Algorithms']]],
+  ['anglethr',['angleThr',['../classrdf_1_1_read_l_s_d_config.html#a21424eea30907a90008f3d607e303dbc',1,'rdf::ReadLSDConfig']]],
   ['angleweighted',['angleWeighted',['../namespacerdf_1_1_pixel_distance.html#aa96e519b46ad7a3613876e022505a2d6',1,'rdf::PixelDistance']]],
   ['append',['append',['../classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204',1,'rdf::MserContainer']]],
   ['applydebugsettings',['applyDebugSettings',['../main_8cpp.html#aa24e7b49b7682c20114e2ebe999825fb',1,'main.cpp']]],
