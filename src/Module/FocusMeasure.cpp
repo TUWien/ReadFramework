@@ -332,7 +332,7 @@ namespace rdf {
 		double f;
 		mFmPatches.clear();
 
-		rdf::Image::instance().imageInfo(fImg, "fImg ");
+		//rdf::Image::instance().imageInfo(fImg, "fImg ");
 
 		for (int row = 0; row < fImg.rows; row += (mWindowSize+mSplitSize)) {
 			for (int col = 0; col < fImg.cols; col += (mWindowSize+mSplitSize)) {
@@ -415,7 +415,7 @@ namespace rdf {
 		cv::threshold(binImg, binImg, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 		binImg.convertTo(binImg, CV_64F);
 
-		rdf::Image::instance().imageInfo(binImg, "binImg ");
+		//rdf::Image::instance().imageInfo(binImg, "binImg ");
 
 		return compute(fm, binImg, binary);
 	}
