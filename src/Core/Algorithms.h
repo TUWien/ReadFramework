@@ -85,6 +85,9 @@ public:
 	static cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true);
 	static cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	static double statMomentMat(const cv::Mat src, cv::Mat mask = cv::Mat(), float momentValue = 0.5f, int maxSamples = 10000, int area = -1);
+	//Computes the natural logarithm of the absolute value of	the gamma function of x using the Lanczos approximation.
+	static double log_gamma_lanczos(double x);
+
 
 	// convenience functions
 	static QPointF calcRotationSize(double angleRad, const QPointF& srcSize);

@@ -866,4 +866,125 @@ namespace rdf {
 		settings.setValue("maxAngleDiffExtern", mMaxAngleDiffExtern);
 	}
 
+	ReadLSD::ReadLSD(const cv::Mat & img, const cv::Mat & mask)
+	{
+		mSrcImg = img;
+		mMask = mask;
+
+		if (mMask.empty()) {
+			mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
+		}
+
+		mConfig = QSharedPointer<ReadLSDConfig>::create();
+	}
+
+	bool ReadLSD::isEmpty() const
+	{
+		return mSrcImg.empty();
+	}
+
+	bool ReadLSD::compute()
+	{
+		return false;
+	}
+
+	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{
+		return qSharedPointerDynamicCast<ReadLSDConfig>(mConfig);
+	}
+
+	QString ReadLSD::toString() const {
+		return QString();
+	}
+
+	bool ReadLSD::checkInput() const {
+
+		if (mSrcImg.empty()) return false;
+
+		return true;
+	}
+
+	ReadLSDConfig::ReadLSDConfig()	{
+		mModuleName = "ReadLSD";
+	}
+
+	float ReadLSDConfig::scale() const {
+		return mScale;
+	}
+
+	void ReadLSDConfig::setScale(float s) {
+		mScale = s;
+	}
+
+	float ReadLSDConfig::sigmaScale() const {
+		return mSigmaScale;
+	}
+
+	void ReadLSDConfig::setSigmaScale(float s) {
+		mSigmaScale = s;
+	}
+
+	float ReadLSDConfig::angleThr() const {
+		return mAngleThr;
+	}
+
+	void ReadLSDConfig::setAngleThr(float a) {
+		mAngleThr = a;
+	}
+
+	float ReadLSDConfig::logEps() const {
+		return mLogEps;
+	}
+
+	void ReadLSDConfig::setLogeps(float l) {
+		mLogEps = l;
+	}
+
+	float ReadLSDConfig::density() const {
+		return mDensityThr;
+	}
+
+	void ReadLSDConfig::setDensity(float d) {
+		mDensityThr = d;
+	}
+
+	int ReadLSDConfig::bins() const	{
+		return mNBins;
+	}
+
+	void ReadLSDConfig::setBins(int b)	{
+		mNBins = b;
+	}
+
+	QString ReadLSDConfig::toString() const	{
+
+		QString msg;
+		msg += "  scale: " + QString::number(mScale);
+		msg += "  sigmaScale: " + QString::number(mSigmaScale);
+		msg += "  angleThr: " + QString::number(mAngleThr);
+		msg += "  logEps: " + QString::number(mLogEps);
+		msg += "  densityThr: " + QString::number(mDensityThr);
+		msg += "  nBins: " + QString::number(mNBins);
+
+		return msg;
+	}
+
+	void ReadLSDConfig::load(const QSettings & settings) {
+		mScale = settings.value("scale", mScale).toFloat();
+		mSigmaScale = settings.value("sigmaScale", mSigmaScale).toFloat();
+		mAngleThr = settings.value("angleThr", mAngleThr).toFloat();
+		mLogEps = settings.value("logEps", mLogEps).toFloat();
+		mDensityThr = settings.value("densityThr", mDensityThr).toFloat();
+		mNBins = settings.value("nBins", mNBins).toInt();
+
+	}
+
+	void ReadLSDConfig::save(QSettings & settings) const {
+		settings.setValue("scale", mScale);
+		settings.setValue("sigmaScale", mSigmaScale);
+		settings.setValue("angleThr", mAngleThr);
+		settings.setValue("logEps", mLogEps);
+		settings.setValue("densityThr", mDensityThr);
+		settings.setValue("nBins", mNBins);
+	}
+
 }

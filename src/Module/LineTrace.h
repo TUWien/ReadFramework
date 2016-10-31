@@ -188,4 +188,96 @@ private:
 	void drawGapLines(cv::Mat& img, QVector<rdf::Line> lines);
 };
 
+
+
+class DllModuleExport ReadLSDConfig : public ModuleConfig {
+
+public:
+	ReadLSDConfig();
+
+	float scale() const;
+	void setScale(float s);
+
+	float sigmaScale() const;
+	void setSigmaScale(float s);
+
+	float angleThr() const;
+	void setAngleThr(float a);
+
+	float logEps() const;
+	void setLogeps(float l);
+
+	float density() const;
+	void setDensity(float d);
+
+	int bins() const;
+	void setBins(int b);
+
+
+	QString toString() const override;
+
+private:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	float mScale = 0.8f;		// When different from 1.0, LSD will scale the input image
+								//by 'scale' factor by Gaussian filtering, before detecting	line segments.
+								//Example: if scale = 0.8, the input image will be subsampled
+								//to 80 % of its size, before the line segment detector
+								//is applied.	Suggested value : 0.8
+	float mSigmaScale = 0.6f;	//When scale != 1.0, the sigma of the Gaussian filter is :
+								//sigma = sigma_scale / scale, if scale <  1.0
+								//sigma = sigma_scale, if scale >= 1.0
+								//Suggested value : 0.6
+	float mAngleThr = 22.5f;		// Gradient angle tolerance in the region growing  algorithm, in degrees.
+								//Suggested value : 22.5
+	float mLogEps = 0.0f; 		//Detection threshold, accept if - log10(NFA) > log_eps.
+								//	The larger the value, the more strict the detector is,
+								//	and will result in less detections.
+								//	(Note that the 'minus sign' makes that this
+								//		behavior is opposite to the one of NFA.)
+								//	The value - log10(NFA) is equivalent but more
+								//	intuitive than NFA :
+								//--1.0 gives an average of 10 false detections on noise
+								//	- 0.0 gives an average of 1 false detections on noise
+								//	- 1.0 gives an average of 0.1 false detections on nose
+								//	- 2.0 gives an average of 0.01 false detections on noise
+								//	.
+								//	Suggested value : 0.0
+	float mDensityThr = 0.7f;	//Minimal proportion of 'supporting' points in a rectangle.	Suggested value : 0.7
+	int mNBins = 1024;			//Number of bins used in the pseudo-ordering of gradient modulus. Suggested value : 1024
+
+
+};
+
+
+class DllModuleExport ReadLSD : public Module {
+
+public:
+	ReadLSD(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
+
+	bool isEmpty() const override;
+	virtual bool compute() override;
+
+	QSharedPointer<ReadLSDConfig> config() const;
+
+	//void setMaxAspectRatio(float ratio);
+	virtual QString toString() const override;
+
+protected:
+	bool checkInput() const override;
+
+	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
+	cv::Mat mLineImg;									//the line image [0 255]
+	cv::Mat mMask;										//the mask image [0 255]
+
+	QVector<rdf::Line> hLines;
+	QVector<rdf::Line> vLines;
+
+private:
+
+	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
+
+};
+
 };

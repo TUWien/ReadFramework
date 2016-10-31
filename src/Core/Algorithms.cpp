@@ -499,6 +499,48 @@ double Algorithms::statMomentMat(const cv::Mat src, cv::Mat mask, float momentVa
 	return statMoment(samples, momentValue);
 }
 
+
+/// <summary>
+/// Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation.
+/// See http ://www.rskey.org/gamma.htm
+/// </summary>
+/// <param name="x">Input value</param>
+/// <returns>Natural Algorithm</returns>
+double Algorithms::log_gamma_lanczos(double x) {
+	/*    The formula used is
+    @f[
+      \Gamma(x) = \frac{ \sum_{n=0}^{N} q_n x^n }{ \Pi_{n=0}^{N} (x+n) }
+                  (x+5.5)^{x+0.5} e^{-(x+5.5)}
+    @f]
+    so
+    @f[
+      \log\Gamma(x) = \log\left( \sum_{n=0}^{N} q_n x^n \right)
+                      + (x+0.5) \log(x+5.5) - (x+5.5) - \sum_{n=0}^{N} \log(x+n)
+    @f]
+    and
+      q0 = 75122.6331530,
+      q1 = 80916.6278952,
+      q2 = 36308.2951477,
+      q3 = 8687.24529705,
+      q4 = 1168.92649479,
+      q5 = 83.8676043424,
+      q6 = 2.50662827511.
+ */
+	static double q[7] = { 75122.6331530, 80916.6278952, 36308.2951477,
+		8687.24529705, 1168.92649479, 83.8676043424,
+		2.50662827511 };
+	double a = (x + 0.5) * log(x + 5.5) - (x + 5.5);
+	double b = 0.0;
+	int n;
+
+	for (n = 0; n<7; n++)
+	{
+		a -= log(x + (double)n);
+		b += q[n] * pow(x, (double)n);
+	}
+	return a + log(b);
+}
+
 /// <summary>
 /// Inverts the img.
 /// </summary>
