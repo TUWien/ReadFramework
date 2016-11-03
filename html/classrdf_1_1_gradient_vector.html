@@ -135,10 +135,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ade41be216d01edab43743c68a646c35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd78786490851f60569069489891a55f"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#afd78786490851f60569069489891a55f">getDebugGaussImg</a> ()</td></tr>
 <tr class="separator:afd78786490851f60569069489891a55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9af29ac328ae41ad8113b2452e0c2138"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a9af29ac328ae41ad8113b2452e0c2138">getMagImg</a> (bool normGrad=true)</td></tr>
-<tr class="separator:a9af29ac328ae41ad8113b2452e0c2138"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8805ec5efdc05bdbc0d6dffa89c9719"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#af8805ec5efdc05bdbc0d6dffa89c9719">getMagImg</a> ()</td></tr>
+<tr class="separator:af8805ec5efdc05bdbc0d6dffa89c9719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a456b9178be8655fd55da47d25704e8a9"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a456b9178be8655fd55da47d25704e8a9">getRadImg</a> ()</td></tr>
 <tr class="separator:a456b9178be8655fd55da47d25704e8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1713194e18fadf32120e0c940c70688"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#af1713194e18fadf32120e0c940c70688">setAnchor</a> (cv::Point a)</td></tr>
+<tr class="separator:af1713194e18fadf32120e0c940c70688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f78a19fa2b76eeecd993506e5310bf8"><td class="memItemLeft" align="right" valign="top">cv::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a9f78a19fa2b76eeecd993506e5310bf8">getAnchor</a> () const </td></tr>
+<tr class="separator:a9f78a19fa2b76eeecd993506e5310bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4a37efd068cf3410be8e254b60d8cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#aea4a37efd068cf3410be8e254b60d8cf">setDxKernel</a> (const cv::Mat &amp;m)</td></tr>
+<tr class="separator:aea4a37efd068cf3410be8e254b60d8cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14c3f30093b10f1b2919d9d84f53841e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a14c3f30093b10f1b2919d9d84f53841e">setDyKernel</a> (const cv::Mat &amp;m)</td></tr>
+<tr class="separator:a14c3f30093b10f1b2919d9d84f53841e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40abcc7b2eede64dfb8787fc397227b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a40abcc7b2eede64dfb8787fc397227b3">isEmpty</a> () const override</td></tr>
 <tr class="memdesc:a40abcc7b2eede64dfb8787fc397227b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed.  <a href="#a40abcc7b2eede64dfb8787fc397227b3">More...</a><br/></td></tr>
 <tr class="separator:a40abcc7b2eede64dfb8787fc397227b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +175,12 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae86bc4ee76b4f2ad164e79e2ae0b8ba5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#ae86bc4ee76b4f2ad164e79e2ae0b8ba5">checkInput</a> () const override</td></tr>
 <tr class="separator:ae86bc4ee76b4f2ad164e79e2ae0b8ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ccc33109e5fc8be8c5d68e83ec85f37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a9ccc33109e5fc8be8c5d68e83ec85f37">computeGradients</a> ()</td></tr>
+<tr class="separator:a9ccc33109e5fc8be8c5d68e83ec85f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2baf20c4bbab56e4f86358a8d36d491"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#ad2baf20c4bbab56e4f86358a8d36d491">computeGradMag</a> (bool norm)</td></tr>
+<tr class="separator:ad2baf20c4bbab56e4f86358a8d36d491"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52468931f02d447af6b135a4746baa78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_gradient_vector.html#a52468931f02d447af6b135a4746baa78">computeGradAngle</a> ()</td></tr>
+<tr class="separator:a52468931f02d447af6b135a4746baa78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a47fcd4dd3706329cfec2a9b1e712de73">debugName</a> () const </td></tr>
 <tr class="separator:a47fcd4dd3706329cfec2a9b1e712de73 inherit pro_methods_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,12 +273,97 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a52468931f02d447af6b135a4746baa78"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::computeGradAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9ccc33109e5fc8be8c5d68e83ec85f37"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::computeGradients </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad2baf20c4bbab56e4f86358a8d36d491"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::computeGradMag </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>norm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab0be2bcf0f9336beda015588e0d9ca6c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_gradient_vector_config.html">GradientVectorConfig</a> &gt; rdf::GradientVector::config </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9f78a19fa2b76eeecd993506e5310bf8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Point rdf::GradientVector::getAnchor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -289,15 +388,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9af29ac328ae41ad8113b2452e0c2138"></a>
+<a class="anchor" id="af8805ec5efdc05bdbc0d6dffa89c9719"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::GradientVector::getMagImg </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>normGrad</em> = <code>true</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -345,6 +443,54 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the module was initialized.</dd></dl>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#a85ba7a0e15f79287047b6fe58399078f">rdf::Module</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af1713194e18fadf32120e0c940c70688"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::setAnchor </td>
+          <td>(</td>
+          <td class="paramtype">cv::Point&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aea4a37efd068cf3410be8e254b60d8cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::setDxKernel </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a14c3f30093b10f1b2919d9d84f53841e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::GradientVector::setDyKernel </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
