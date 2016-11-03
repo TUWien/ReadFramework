@@ -63,6 +63,9 @@ class DllModuleExport GradientVectorConfig : public ModuleConfig {
 		double sigma() const;
 		void setSigma(double s);
 
+		bool normGrad() const;
+		void setNormGrad(bool n);
+
 		QString toString() const override;
 
 	private:
@@ -70,6 +73,7 @@ class DllModuleExport GradientVectorConfig : public ModuleConfig {
 		void save(QSettings& settings) const override;
 
 		double mSigma = 1.75;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 5 deg)
+		bool mNormGrad = true;
 };
 
 class DllModuleExport GradientVector : public Module {
@@ -79,8 +83,14 @@ public:
 	GradientVector(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
 	cv::Mat getDebugGaussImg();
-	cv::Mat getMagImg(bool normGrad = true);
+	cv::Mat getMagImg();
 	cv::Mat getRadImg();
+
+	void setAnchor(cv::Point a);
+	cv::Point getAnchor() const;
+
+	void setDxKernel(const cv::Mat& m);
+	void setDyKernel(const cv::Mat& m);
 
 	bool isEmpty() const override;
 	virtual bool compute() override;
@@ -91,6 +101,9 @@ public:
 
 protected:
 	bool checkInput() const override;
+	void computeGradients();
+	void computeGradMag(bool norm);
+	void computeGradAngle();
 
 
 private:
@@ -105,7 +118,11 @@ private:
 	cv::Mat mDyImg;			// y derivative image
 	cv::Mat mMagImg;			// gradient magnitude image
 	cv::Mat mRadImg;			// orientation image (in radians)
-
+	
+	cv::Point mAnchor = cv::Point(-1, -1);
+	cv::Mat mDxKernel;
+	cv::Mat mDyKernel;
+	
 	/**
 	 * Returns the smoothed image.
 	 * @return a blurred 2D image 32F (the Gaussian derivative
