@@ -11,6 +11,7 @@ var classrdf_1_1_line_segment =
     [ "setCenter", "classrdf_1_1_line_segment.html#a6336082e48243521e5e8475808c825ea", null ],
     [ "setLength", "classrdf_1_1_line_segment.html#ab0f5496b01275ba81698af6dc36b41dd", null ],
     [ "setLine", "classrdf_1_1_line_segment.html#a18e98d96562f38fec9e0bcecc281cd31", null ],
+    [ "setLine", "classrdf_1_1_line_segment.html#ae12957201d9cd0154a9de81197dc3785", null ],
     [ "setOrientation", "classrdf_1_1_line_segment.html#ab49bd3224a2a42c2d14ddc1cb8265439", null ],
     [ "setP", "classrdf_1_1_line_segment.html#a3672662f6924ea54ee38b9f153ed29ca", null ],
     [ "setPrec", "classrdf_1_1_line_segment.html#aa5d08621fb9c6ba0e057ec562cb43d3f", null ],
