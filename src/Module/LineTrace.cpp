@@ -956,8 +956,18 @@ namespace rdf {
 			double angle = regionGrow(x, y, region, regionIdx, rho, prec);
 			qDebug() << "new angle is: " << angle;
 
+			if (region.size() < minRegSize) {
+				region.clear();
+				//do not use region, but it is labelled in mRegionImg
+				regionIdx++;
+				continue;
+			}
+
+			/* construct rectangular approximation for the region */
+			region2Rect(region, mMagImg, angle, prec, p);
 
 			regionIdx++;
+			region.clear();
 		}
 
 
@@ -1000,6 +1010,173 @@ namespace rdf {
 		}
 
 		return angle;
+	}
+
+	void ReadLSD::region2Rect(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double p)	{
+
+		double x, y, dx, dy, l, w, theta, weight, sum, l_min, l_max, w_min, w_max;
+		int i;
+
+		if (region.isEmpty()) {
+			mWarning << "empty region in region2rect";
+			return;
+		}
+		if (region.size() == 1) {
+			mWarning << "region in region2rect contains only 1 pixel";
+			return;
+		}
+		/* center of the region:
+
+		It is computed as the weighted sum of the coordinates
+		of all the pixels in the region. The norm of the gradient
+		is used as the weight of a pixel. The sum is as follows:
+		cx = \sum_i G(i).x_i
+		cy = \sum_i G(i).y_i
+		where G(i) is the norm of the gradient of pixel i
+		and x_i,y_i are its coordinates.
+		*/
+		x = y = sum = 0.0;
+		
+		for (i = 0; i < region.size(); i++) {
+			weight = magImg.at<double>(region[i].y, region[i].x);
+			x += (double)region[i].x*weight;
+			y += (double)region[i].y*weight;
+			sum += weight;
+		}
+		if (sum <= 0.0) {
+			mWarning << "region2rect: weights sum equal to zero.";
+			return;
+		}
+		x /= sum;
+		y /= sum;
+		theta = getTheta(region, magImg, angle, prec, x, y);
+
+		/* length and width:
+
+		'l' and 'w' are computed as the distance from the center of the
+		region to pixel i, projected along the rectangle axis (dx,dy) and
+		to the orthogonal axis (-dy,dx), respectively.
+
+		The length of the rectangle goes from l_min to l_max, where l_min
+		and l_max are the minimum and maximum values of l in the region.
+		Analogously, the width is selected from w_min to w_max, where
+		w_min and w_max are the minimum and maximum of w for the pixels
+		in the region.
+		*/
+		dx = cos(theta);
+		dy = sin(theta);
+		l_min = l_max = w_min = w_max = 0.0;
+		for (i = 0; i<region.size(); i++)
+		{
+			l = ((double)region[i].x - x) * dx + ((double)region[i].y - y) * dy;
+			w = -((double)region[i].x - x) * dy + ((double)region[i].y - y) * dx;
+
+			if (l > l_max) l_max = l;
+			if (l < l_min) l_min = l;
+			if (w > w_max) w_max = w;
+			if (w < w_min) w_min = w;
+		}
+
+		/* store values of final rectangle*/
+		//rec->x1 = x + l_min * dx;
+		//rec->y1 = y + l_min * dy;
+		//rec->x2 = x + l_max * dx;
+		//rec->y2 = y + l_max * dy;
+		//rec->width = w_max - w_min;
+		//rec->x = x;
+		//rec->y = y;
+		//rec->theta = theta;
+		//rec->dx = dx;
+		//rec->dy = dy;
+		//rec->prec = prec;
+		//rec->p = p;
+
+		/* we impose a minimal width of one pixel
+
+		A sharp horizontal or vertical step would produce a perfectly
+		horizontal or vertical region. The width computed would be
+		zero. But that corresponds to a one pixels width transition in
+		the image.
+		*/
+		//if (rec->width < 1.0) rec->width = 1.0
+
+	}
+
+	double ReadLSD::getTheta(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double x, double y)	{
+		double lambda, theta, weight;
+		double Ixx = 0.0;
+		double Iyy = 0.0;
+		double Ixy = 0.0;
+		int i;
+
+		/* check parameters */
+		if (region.size() <= 1) {
+			mWarning << "invalid Region";
+			return std::numeric_limits<double>::infinity();
+		}
+
+		if (prec < 0.0) {
+			mWarning << ("get_theta: 'prec' must be positive.");
+			return std::numeric_limits<double>::infinity();
+		}
+
+		/* compute inertia matrix */
+		for (i = 0; i<region.size(); i++) {
+			weight = magImg.at<double>((int)y, (int)x);
+			Ixx += ((double)region[i].y - y) * ((double)region[i].y - y) * weight;
+			Iyy += ((double)region[i].x - x) * ((double)region[i].x - x) * weight;
+			Ixy -= ((double)region[i].x - x) * ((double)region[i].y - y) * weight;
+		}
+		if (doubleEqual(Ixx, 0.0) && doubleEqual(Iyy, 0.0) && doubleEqual(Ixy, 0.0)) {
+			mWarning << "get_theta: null inertia matrix.";
+			return std::numeric_limits<double>::infinity();
+		}
+
+		/* compute smallest eigenvalue */
+		lambda = 0.5 * (Ixx + Iyy - sqrt((Ixx - Iyy)*(Ixx - Iyy) + 4.0*Ixy*Ixy));
+
+		/* compute angle */
+		theta = fabs(Ixx)>fabs(Iyy) ? atan2(lambda - Ixx, Ixy) : atan2(Ixy, lambda - Iyy);
+
+		/* The previous procedure doesn't cares about orientation,
+		so it could be wrong by 180 degrees. Here is corrected if necessary. */
+		if (rdf::Algorithms::absAngleDiff(theta, angle) > prec) theta += M_PI;
+
+		return theta;
+	}
+
+	/** Compare doubles by relative error.
+
+	The resulting rounding error after floating point computations
+	depend on the specific operations done. The same number computed by
+	different algorithms could present different rounding errors. For a
+	useful comparison, an estimation of the relative rounding error
+	should be considered and compared to a factor times EPS. The factor
+	should be related to the cumulated rounding error in the chain of
+	computation. Here, as a simplification, a fixed factor is used.
+	*/
+	bool ReadLSD::doubleEqual(double a, double b) {
+
+		double abs_diff, aa, bb, abs_max;
+		double relativeErrorFactor = 100;
+
+		/* trivial case */
+		if (a == b) return true;
+
+		abs_diff = fabs(a - b);
+		aa = fabs(a);
+		bb = fabs(b);
+		abs_max = aa > bb ? aa : bb;
+
+		/* DBL_MIN is the smallest normalized number, thus, the smallest
+		number whose relative error is bounded by DBL_EPSILON. For
+		smaller numbers, the same quantization steps as for DBL_MIN
+		are used. Then, for smaller numbers, a meaningful "relative"
+		error should be computed by dividing the difference by DBL_MIN. */
+		if (abs_max < DBL_MIN) abs_max = DBL_MIN;
+
+		/* equal if relative error <= factor x eps */
+		return (abs_diff / abs_max) <= (relativeErrorFactor * DBL_EPSILON);
 	}
 
 
