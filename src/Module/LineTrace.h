@@ -286,10 +286,9 @@ protected:
 private:
 	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
-	double prec = 0;
-	bool isAligned(double thetaTest, double theta);
-	bool isAligned(int x, int y, const cv::Mat& img, double theta);
-	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx, double thr);
+	bool isAligned(double thetaTest, double theta, double prec);
+	//bool isAligned(int x, int y, const cv::Mat& img, double theta);
+	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx, double thr, double prec);
 
 };
 

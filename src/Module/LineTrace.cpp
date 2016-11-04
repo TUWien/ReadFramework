@@ -887,7 +887,8 @@ namespace rdf {
 	bool ReadLSD::compute()
 	{
 		/* angle tolerance */
-		prec = CV_PI * config()->angleThr() / 180.0;
+		double prec = CV_PI * config()->angleThr() / 180.0;
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 		double p = config()->angleThr() / 180.0;
 		double rho = config()->quant() / sin(prec); /* gradient magnitude threshold */
 		double logNT = 0;
@@ -952,7 +953,7 @@ namespace rdf {
 			int y = ptrIdx[colIdx] / mMagImg.cols;
 			int x = ptrIdx[colIdx] % mMagImg.cols;
 
-			double angle = regionGrow(x, y, region, regionIdx, rho);
+			double angle = regionGrow(x, y, region, regionIdx, rho, prec);
 			qDebug() << "new angle is: " << angle;
 
 
@@ -966,7 +967,7 @@ namespace rdf {
 		return false;
 	}
 
-	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr)
+	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr, double prec)
 	{
 		region.push_back(cv::Point(x, y));
 		double angle = mRadImg.at<double>(y, x);
@@ -983,9 +984,10 @@ namespace rdf {
 				for (int yy = yt - 1; yy <= yt + 1; yy++) {
 					double regIdx = mRegionImg.at<double>(yy, xx);
 					double magnitude = mMagImg.at<double>(yy, xx);
+					double cmpAngle = mRadImg.at<double>(yy, xx);
 
 					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows &&
-						regIdx == 0 && isAligned(xx,yy,mRadImg,angle) && magnitude < thr) {
+						regIdx == 0 && isAligned(cmpAngle,angle, prec) && magnitude < thr) {
 
 						mRegionImg.at<double>(yy, xx) = (double)regionIdx;
 						region.push_back(cv::Point(xx, yy));
@@ -1145,9 +1147,7 @@ namespace rdf {
 		return -log10(bin_tail) - logNT;
 	}
 
-	bool ReadLSD::isAligned(double thetaTest, double theta) {
-		/* check parameters */
-		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+	bool ReadLSD::isAligned(double thetaTest, double theta, double prec) {
 
 		/* pixels whose level-line angle is not defined
 		are considered as NON-aligned */
@@ -1168,23 +1168,23 @@ namespace rdf {
 		return theta <= prec;
 	}
 
-	bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
-		double a;
+	//bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
+	//	double a;
 
-		/* check parameters */
-		if (img.empty())
-			mWarning << "isaligned: invalid image 'angles'.";
+	//	/* check parameters */
+	//	if (img.empty())
+	//		mWarning << "isaligned: invalid image 'angles'.";
 
-		if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
-			mWarning << "isaligned: (x,y) out of the image.";
-		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+	//	if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
+	//		mWarning << "isaligned: (x,y) out of the image.";
+	//	if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 
-		/* angle at pixel (x,y) */
-		a = img.at<double>(y, x);
-		//a = angles->data[x + y * angles->xsize];
+	//	/* angle at pixel (x,y) */
+	//	a = img.at<double>(y, x);
+	//	//a = angles->data[x + y * angles->xsize];
 
-		return isAligned(a, theta);
-	}
+	//	return isAligned(a, theta);
+	//}
 
 
 	ReadLSDConfig::ReadLSDConfig()	{
