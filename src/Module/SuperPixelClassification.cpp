@@ -44,6 +44,7 @@
 #include <QDebug>
 #include <QPainter>
 
+#include <opencv2\features2d.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -103,5 +104,89 @@ bool SuperPixelClassification::checkInput() const {
 	return !mImg.empty();
 }
 
+// SuperPixelFeatureConfig --------------------------------------------------------------------
+SuperPixelFeatureConfig::SuperPixelFeatureConfig() :  ModuleConfig("Super Pixel Feature") {
+}
+
+QString SuperPixelFeatureConfig::toString() const{
+	return ModuleConfig::toString();
+}
+
+// SuperPixelFeature --------------------------------------------------------------------
+SuperPixelFeature::SuperPixelFeature(const cv::Mat & img, const PixelSet & set) {
+	mImg = img;
+	mSet = set;
+	mConfig = QSharedPointer<SuperPixelFeatureConfig>::create();
+}
+
+bool SuperPixelFeature::isEmpty() const {
+	return mImg.empty();
+}
+
+bool SuperPixelFeature::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+	cv::Mat cImg;
+	cImg = IP::grayscale(mImg);
+
+	assert(cImg.type() == CV_8UC1);
+
+	std::vector<cv::KeyPoint> keypoints;
+	for (const QSharedPointer<const Pixel>& px : mSet.pixels()) {
+		assert(px);
+		keypoints.push_back(px->toKeyPoint());
+	}
+
+	cv::Ptr<cv::ORB> features = cv::ORB::create();
+	features->compute(cImg, keypoints, mDescriptors);
+
+	mInfo << mDescriptors.rows << "features computed in" << dt;
+
+	return true;
+}
+
+QSharedPointer<SuperPixelFeatureConfig> SuperPixelFeature::config() const {
+	return qSharedPointerDynamicCast<SuperPixelFeatureConfig>(mConfig);
+}
+
+cv::Mat SuperPixelFeature::draw(const cv::Mat & img) const {
+	
+	qDebug() << "not implemented...";
+
+	cv::Mat avg;
+	cv::reduce(mDescriptors, avg, 0, CV_REDUCE_SUM, CV_32FC1);
+
+	// draw mser blobs
+	Timer dtf;
+	QPixmap pm = Image::mat2QPixmap(img);
+
+	QPainter p(&pm);
+
+	// draw labeled pixels
+	mSet.draw(p);
+
+	Drawer::instance().setColor(ColorManager::getColor(0, 0.3));
+	p.setPen(Drawer::instance().pen());
+
+	Histogram hist(avg);
+	hist.draw(p, Rect(10, 10, mDescriptors.cols*3, 100));
+
+	return Image::qPixmap2Mat(pm);//Image::qImage2Mat(createLabelImage(Rect(img)));
+
+}
+
+QString SuperPixelFeature::toString() const {
+	
+	QString str;
+	str += config()->name() + " no info to display";
+	return str;
+}
+
+bool SuperPixelFeature::checkInput() const {
+	return !mImg.empty();
+}
 
 }

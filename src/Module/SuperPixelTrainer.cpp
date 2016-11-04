@@ -156,6 +156,10 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 	return img;
 }
 
+PixelSet SuperPixelLabeler::set() const {
+	return mSet;
+}
+
 bool SuperPixelLabeler::checkInput() const {
 
 	return !mBlobs.empty();
@@ -172,8 +176,6 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 		cv::Mat labelBBox = labelImg(r.toCvRect());
 		cv::Mat mask = cb->toBinaryMask();
 
-		Image::save(mask, "C:/temp/mask.png");
-
 		// find the blob's label
 		QColor col = IP::statMomentColor(labelBBox, mask);
 		int id = LabelLookup::color2Id(col);
@@ -184,10 +186,6 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 		QSharedPointer<Pixel> px = cb->toPixel();
 		px->setLabel(label);
 		set.add(px);
-
-		//if (label.trueLabel().id() != LabelLookup::label_unknown)
-		//	qDebug() << "I found" << label.trueLabel();
-
 	}
 	
 	return set;

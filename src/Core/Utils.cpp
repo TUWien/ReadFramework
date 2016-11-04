@@ -193,7 +193,7 @@ QString Utils::baseName(const QString & filePath) const {
 /// </summary>
 /// <param name="idx">If idx != -1 a specific color is chosen from the palette.</param>
 /// <returns></returns>
-QColor ColorManager::getColor(int idx) {
+QColor ColorManager::getColor(int idx, double alpha) {
 
 	QVector<QColor> cols = colors();
 	int maxCols = cols.size();
@@ -209,6 +209,8 @@ QColor ColorManager::getColor(int idx) {
 		col = col.darker();
 	else if (idx > cols.size())
 		col = col.lighter();
+
+	col.setAlpha(qRound(alpha * 255));
 
 	return col;
 }
@@ -229,6 +231,15 @@ QVector<QColor> ColorManager::colors() {
 	}
 
 	return cols;
+}
+
+/// <summary>
+/// Returns a light gray.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::lightGray(double alpha) {
+	return QColor(200, 200, 200, qRound(alpha*255));
 }
 
 /// <summary>

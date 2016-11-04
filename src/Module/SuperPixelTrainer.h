@@ -106,6 +106,8 @@ public:
 	void setLabelManager(const LabelManager& manager);
 	QImage createLabelImage(const Rect& imgRect) const;
 
+	PixelSet set() const;
+
 private:
 	QVector<QSharedPointer<MserBlob> > mBlobs;
 	QSharedPointer<Region> mGtRegion;

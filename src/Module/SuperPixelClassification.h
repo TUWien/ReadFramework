@@ -51,6 +51,42 @@
 
 namespace rdf {
 
+class DllModuleExport SuperPixelFeatureConfig : public ModuleConfig {
+
+public:
+	SuperPixelFeatureConfig();
+
+	virtual QString toString() const override;
+
+protected:
+
+	//void load(const QSettings& settings) override;
+	//void save(QSettings& settings) const override;
+};
+
+class DllModuleExport SuperPixelFeature : public Module {
+
+public:
+	SuperPixelFeature(const cv::Mat& img, const PixelSet& set);
+
+	bool isEmpty() const override;
+	bool compute() override;
+	QSharedPointer<SuperPixelFeatureConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+	QString toString() const override;
+
+private:
+	cv::Mat mImg;
+	PixelSet mSet;
+
+	// output
+	cv::Mat mDescriptors;
+
+	bool checkInput() const override;
+};
+
+
 class DllModuleExport SuperPixelClassificationConfig : public ModuleConfig {
 
 public:
@@ -82,7 +118,6 @@ public:
 
 private:
 	cv::Mat mImg;
-
 	PixelSet mSet;
 
 	bool checkInput() const override;

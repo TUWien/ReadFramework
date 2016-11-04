@@ -258,6 +258,10 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 	if (!spl.compute())
 		qCritical() << "could not compute SuperPixel labeling!";
 
+	SuperPixelFeature spf(src, spl.set());
+	if (!spf.compute())
+		qCritical() << "could not compute SuperPixel features!";
+
 	// drawing
 	cv::Mat rImg = src.clone();
 
@@ -265,6 +269,7 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 	//rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
 	rImg = spl.draw(rImg);
+	rImg = spf.draw(rImg);
 	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;

@@ -35,13 +35,13 @@
 #include "Shapes.h"
 #include "BaseImageElement.h"
 #include "Utils.h"
+#include "PixelLabel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 #include <QSharedPointer>
 #include <QVector>
 #include <QMap>
-#include <QColor>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -58,6 +58,7 @@ namespace rdf {
 
 class Pixel;
 class PixelEdge;
+class PixelLabel;
 class TextLine;
 
 class DllCoreExport MserBlob : public BaseElement {
@@ -141,70 +142,6 @@ protected:
 	void convertData(const cv::Mat& orHist, const cv::Mat& sparsity);
 };
 
-/// <summary>
-/// This class is used for mapping classes (e.g. handwriting, decoration)
-/// </summary>
-class DllCoreExport LabelLookup {
-
-public:
-
-	enum DefaultLabels {
-		label_background = 0,
-		label_ignore,
-		label_unknown,	// unknown is not -1 because we only have unsigned bytes for labels
-
-		label_end
-	};
-
-	LabelLookup(int id = label_unknown, const QString& mName = QString());
-	bool operator== (const LabelLookup& l1) const;
-	DllCoreExport friend QDataStream& operator<< (QDataStream& s, const LabelLookup& v);
-	DllCoreExport friend QDebug operator<< (QDebug d, const LabelLookup& v);
-
-	bool isNull() const;
-	bool contains(const QString& key) const;
-
-	int id() const;
-	QString name() const;
-	QColor color() const;
-	QColor visColor() const;
-
-	QString toString() const;
-
-	static LabelLookup fromString(const QString& str);
-	static LabelLookup fromJson(const QJsonObject& jo);
-	static QString jsonKey();
-	static int color2Id(const QColor& col);
-
-	// create default labels
-	static LabelLookup ignoreLabel();
-	static LabelLookup unknownLabel();
-	static LabelLookup backgroundLabel();
-
-protected:
-
-	int mId = label_unknown;
-	QString mName = "unknown";
-	QStringList mAlias;
-	QColor mVisColor = ColorManager::darkGray();
-};
-
-class DllCoreExport PixelLabel : public BaseElement {
-
-public:
-	PixelLabel(const QString& id = QString());
-
-	void setLabel(const LabelLookup& label);
-	LabelLookup label() const;
-
-	void setTrueLabel(const LabelLookup& label);
-	LabelLookup trueLabel() const;
-
-protected:
-	LabelLookup mTrueLabel = LabelLookup::label_unknown;
-	LabelLookup mLabel = LabelLookup::label_unknown;
-};
-
 class DllCoreExport PixelTabStop : public BaseElement {
 
 public:
@@ -265,6 +202,8 @@ public:
 
 	void setLabel(const PixelLabel& label);
 	PixelLabel label() const;
+
+	cv::KeyPoint toKeyPoint() const;
 
 	enum DrawFlag {
 		draw_ellipse_only = 0,

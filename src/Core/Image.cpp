@@ -330,32 +330,44 @@ cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
 
 void Histogram::draw(QPainter & p) {
 
-	int ph = p.device()->height();
-
-	double mVal = max()-min();
-
-	float* hPtr = mHist.ptr<float>();
-	for (int idx = 0; idx < mHist.cols; idx++) {
-		
-		QPoint p1(idx, ph);
-		QPoint p2(idx, ph - qRound((double)hPtr[idx] / mVal * ph));
-		p.drawLine(p1, p2);
-	}
+	Rect r(0, 0, p.device()->width(), p.device()->height());
+	draw(p, r);
 }
 
 void Histogram::draw(QPainter & p, const Rect& r) {
 
-	int ph = qRound(r.height());
+	if (mHist.empty())
+		return;
 
-	double mVal = max()-min();
+	QBrush oB = p.brush();
+	QPen oP = p.pen();
+	p.setBrush(oP.color());
+	p.setPen(Qt::NoPen);
+
+	double mVal = max();
+	double binWidth = r.width() / mHist.cols;
+	double gap = (binWidth >= 2) ? 1.0 : 0.0;
 
 	float* hPtr = mHist.ptr<float>();
 	for (int idx = 0; idx < mHist.cols; idx++) {
 
-		QPointF p1(idx + r.left(), ph + r.bottom());
-		QPointF p2(idx + r.left(), ph + r.bottom() - qRound((double)hPtr[idx] / mVal * ph));
-		p.drawLine(p1, p2);
+		double x = idx*binWidth + r.left();
+		QPointF p1(x, r.bottom() - qRound((double)hPtr[idx] / mVal * r.height()));
+		QPointF p2(x + binWidth-gap, r.bottom());
+
+		QRectF cr(p1, p2);
+		p.drawRect(cr);
 	}
+	
+	// reset painter
+	p.setPen(oP);
+	p.setBrush(oB);
+
+	//Line l(r.topLeft(), r.topRight());
+	//l.draw(p);
+
+	//l = Line(r.bottomLeft(), r.bottomRight());
+	//l.draw(p);
 }
 
 cv::Mat Histogram::hist() const {
