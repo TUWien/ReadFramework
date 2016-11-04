@@ -191,7 +191,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
 		//dc.setImagePath("D:/read/test/synthetic-test-c.png");
 
-		dc.setImagePath("\\\\carl\\Read01\\databases\\prima-2009\\prima-2009-cvl\\00000158.tif");
+		dc.setImagePath("D:/read/test/sp-classification/00000158.tif");
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 

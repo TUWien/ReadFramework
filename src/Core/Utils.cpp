@@ -193,7 +193,7 @@ QString Utils::baseName(const QString & filePath) const {
 /// </summary>
 /// <param name="idx">If idx != -1 a specific color is chosen from the palette.</param>
 /// <returns></returns>
-QColor ColorManager::getRandomColor(int idx) {
+QColor ColorManager::getColor(int idx) {
 
 	QVector<QColor> cols = colors();
 	int maxCols = cols.size();

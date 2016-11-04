@@ -188,7 +188,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	auto sets = toSets();
 	
 	for (auto set : sets) {
-		Drawer::instance().setColor(ColorManager::getRandomColor());
+		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
 		set->draw(p);
 

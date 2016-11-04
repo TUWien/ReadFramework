@@ -79,7 +79,7 @@ private:
 class DllCoreExport ColorManager {
 
 public:
-	static QColor getRandomColor(int idx = -1);
+	static QColor getColor(int idx = -1);
 	static QVector<QColor> colors();
 
 	static QColor darkGray(double alpha = 1.0);

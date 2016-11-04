@@ -675,6 +675,11 @@ Vector2D::Vector2D(const cv::Point & p) {
 	mY = p.y;
 }
 
+Vector2D::Vector2D(const cv::Size & s) {
+	mX = s.width;
+	mY = s.height;
+}
+
 Vector2D Vector2D::max(const Vector2D & v1, const Vector2D & v2) {
 	return Vector2D(qMax(v1.x(), v2.x()), qMax(v1.y(), v2.y()));
 }
@@ -1039,6 +1044,22 @@ bool Rect::isProximate(const Rect & o, double eps) const {
 
 double Rect::area() const {
 	return width() * height();
+}
+
+Rect Rect::clipped(const Vector2D & size) const {
+
+	Rect c(*this);
+
+	if (left() < 0)
+		c.mTopLeft.setX(0);
+	if (top() < 0)
+		c.mTopLeft.setY(0);
+	if (right() > size.x())
+		c.mSize.setX(qMax(size.x()-left(), 0.0));
+	if (bottom() > size.y())
+		c.mSize.setY(qMax(size.y()-top(), 0.0));
+
+	return c;
 }
 
 void Rect::draw(QPainter & p) const {

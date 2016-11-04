@@ -126,6 +126,7 @@ public:
 	Vector2D(const QSize& s);
 	Vector2D(const QSizeF& s);
 	Vector2D(const cv::Point& v);
+	Vector2D(const cv::Size& s);
 
 	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const Vector2D& v);
 	DllCoreExport friend QDebug operator<< (QDebug d, const Vector2D &v);
@@ -329,6 +330,7 @@ public:
 	bool contains(const Vector2D& pt) const;
 	bool isProximate(const Rect& o, double eps = 10.0) const;
 	double area() const;
+	Rect clipped(const Vector2D& size) const;
 
 	void draw(QPainter& p) const;
 	

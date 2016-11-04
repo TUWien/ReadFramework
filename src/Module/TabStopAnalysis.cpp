@@ -106,7 +106,7 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	//		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
 	for (auto ts : mTabStops) {
-		Drawer::instance().setColor(ColorManager::getRandomColor());
+		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
 		ts->draw(p);
 	}

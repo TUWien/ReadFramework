@@ -44,6 +44,9 @@
 #include <QColor>
 #include <QDebug>
 #include <QPainter>
+#include <QJsonObject>		// needed for LabelLookup
+#include <QJsonDocument>	// needed for LabelLookup
+#include <QJsonArray>		// needed for LabelLookup
 
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
@@ -279,6 +282,174 @@ cv::Mat PixelStats::data(const DataIndex& dIdx) {
 	return mData.row(dIdx);
 }
 
+// LabelLookup --------------------------------------------------------------------
+LabelLookup::LabelLookup(int id, const QString& name) {
+
+	mId = id;
+
+	if (!name.isEmpty())
+		mName = name;
+}
+
+bool LabelLookup::operator==(const LabelLookup & l1) const {
+	return id() == l1.id() && name() == l1.name();
+}
+
+bool LabelLookup::isNull() const {
+	return id() == -1;
+}
+
+bool LabelLookup::contains(const QString& key) const {
+
+	if (mName == key)
+		return true;
+
+	return mAlias.contains(key);
+}
+
+QColor LabelLookup::color() const {
+	QColor c(id() << 8);	// << 8 away from alpha (RGBA)
+	return c;
+}
+
+QColor LabelLookup::visColor() const {
+	return mVisColor;
+}
+
+int LabelLookup::color2Id(const QColor & col) {
+	int ci = col.rgba();
+	return ci >> 8 & 0xFFFF;
+}
+
+LabelLookup LabelLookup::ignoreLabel() {
+	return LabelLookup(label_ignore, QObject::tr("Ignore"));
+}
+
+LabelLookup LabelLookup::unknownLabel() {
+	return LabelLookup(label_unknown, QObject::tr("Unknown"));
+}
+
+LabelLookup LabelLookup::backgroundLabel() {
+	return LabelLookup(label_background, QObject::tr("Background"));
+}
+
+int LabelLookup::id() const {
+	return mId;
+}
+
+QString LabelLookup::name() const {
+	return mName;
+}
+
+QString LabelLookup::toString() const {
+
+	QString str;
+	str += QString::number(id()) + ", " + name() + ", ";
+
+	for (const QString& a : mAlias)
+		str += a + ", ";
+
+	return str;
+}
+
+QDataStream& operator<<(QDataStream& s, const LabelLookup& ll) {
+
+	s << ll.toString();
+	return s;
+}
+
+QDebug operator<<(QDebug d, const LabelLookup& ll) {
+
+	d << qPrintable(ll.toString());
+	return d;
+}
+
+LabelLookup LabelLookup::fromString(const QString & str) {
+
+	// expecting a string like:
+	// #ID, #Name, #Alias1, #Alias2, ..., #AliasN
+	QStringList list = str.split(",");
+
+	if (list.size() < 2) {
+		qWarning() << "illegal label string: " << str;
+		qInfo() << "I expected: ID, Name, Alias1, ..., AliasN";
+		return LabelLookup();
+	}
+
+	LabelLookup ll;
+
+	// parse ID
+	bool ok = false;
+	ll.mId = list[0].toInt(&ok);
+
+	if (!ok) {
+		qWarning() << "first entry must be an int, but it is: " << list[0];
+		return LabelLookup();
+	}
+
+	// parse name
+	ll.mName = list[1];
+
+	for (int idx = 2; idx < list.size(); idx++) {
+		ll.mAlias << list[idx];
+	}
+
+	return ll;
+}
+
+LabelLookup LabelLookup::fromJson(const QJsonObject & jo) {
+
+	//"Label": {
+	//	"id": 5,
+	//	"name": "image",
+	//	"alias": ["ImageRegion", "ChartRegion", "GraphicRegion"],
+	//	"color": "#990066", 
+	//},
+	LabelLookup ll;
+	ll.mId = jo.value("id").toInt(label_unknown);
+	ll.mName = jo.value("name").toString();
+	ll.mVisColor.setNamedColor(jo.value("color").toString());
+
+	for (const QJsonValue& jv : jo.value("alias").toArray()) {
+		const QString alias = jv.toString();
+		if (!alias.isEmpty())
+			ll.mAlias << alias;
+	}
+
+	// print warning
+	if (ll.id() == label_unknown) {
+		QJsonDocument jd(jo);
+		qCritical().noquote() << "could not parse" << jd.toJson();
+		return LabelLookup::unknownLabel();
+	}
+
+	return ll;
+}
+
+QString LabelLookup::jsonKey() {
+	return QString("TUWienLabelLookup");
+}
+
+// PixelLabel --------------------------------------------------------------------
+PixelLabel::PixelLabel(const QString & id) : BaseElement(id) {
+}
+
+void PixelLabel::setLabel(const LabelLookup & label) {
+	mLabel = label;
+}
+
+LabelLookup PixelLabel::label() const {
+	return mLabel;
+}
+
+void PixelLabel::setTrueLabel(const LabelLookup & label) {
+	mTrueLabel = label;
+}
+
+LabelLookup PixelLabel::trueLabel() const {
+	return mTrueLabel;
+}
+
 // Pixel --------------------------------------------------------------------
 Pixel::Pixel() {
 
@@ -360,27 +531,32 @@ PixelTabStop Pixel::tabStop() const {
 	return mTabStop;
 }
 
+void Pixel::setLabel(const PixelLabel & label) {
+	mLabel = label;
+}
+
+PixelLabel Pixel::label() const {
+	return mLabel;
+}
+
 void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	
+	QPen oldPen = p.pen();
+
 	if (df == draw_all) {
-		QPen pen = p.pen();
-		p.setPen(QColor(255, 33, 33));
+		p.setPen(ColorManager::red());
 		p.drawText(center().toQPoint(), id());
-		p.setPen(pen);
+		p.setPen(oldPen);
+	}
+
+	// easy cheasy visualization for now
+	if (!label().trueLabel().isNull()) {
+		p.setPen(label().trueLabel().visColor());
 	}
 
 	if (stats() && (df != draw_ellipse_only)) {
 
 		auto s = stats();
-
-		//QColor c(255,33,33);
-
-		//if (s->scale() == 256)
-		//	c = ColorManager::colors()[0];
-		//else if (s->scale() == 128)
-		//	c = ColorManager::colors()[1];
-		//else if (s->scale() == 64)
-		//	c = ColorManager::colors()[2];
 
 		//QPen pen = p.pen();
 		//p.setPen(c);
@@ -418,6 +594,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	if (!stats() || df != draw_stats_only)
 		mEllipse.draw(p, alpha);
 
+	p.setPen(oldPen);
 }
 
 PixelEdge::PixelEdge() {

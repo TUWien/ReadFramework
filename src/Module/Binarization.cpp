@@ -33,6 +33,7 @@
 #include "Binarization.h"
 #include "Algorithms.h"
 #include "Image.h"
+#include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -714,7 +715,7 @@ cv::Scalar BinarizationSuFgdWeight::computeConfidence() const {
 		//Mat tmp = mContrastImg.clone();
 		cv::normalize(mContrastImg, mContrastImg, 1, 0, cv::NORM_MINMAX, -1, mBinContrastImg);
 		if (n > 2000)
-			m[0] = rdf::Algorithms::statMomentMat(mContrastImg, mBinContrastImg, 0.5f, 5000);
+			m[0] = rdf::IP::statMomentMat(mContrastImg, mBinContrastImg, 0.5f, 5000);
 		else
 			m[0] = 0.0f;
 	}

@@ -291,14 +291,16 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 
 	switch (type) {
 	case Region::type_separator:
-		return QSharedPointer<SeparatorRegion>::create();
+		return QSharedPointer<SeparatorRegion>::create(type);
 	case Region::type_text_region:
 	case Region::type_text_line:
 	case Region::type_word:
-		return QSharedPointer<TextLine>::create();
+		return QSharedPointer<TextLine>::create(type);
+	case Region::type_image:
 	case Region::type_graphic:
 	case Region::type_chart:
-		return QSharedPointer<Region>::create();
+	case Region::type_noise:
+		return QSharedPointer<Region>::create(type);
 
 		// Add new types here...
 	default:

@@ -51,41 +51,73 @@
 
 namespace rdf {
 
-class DllModuleExport SuperPixelClassificationConfig : public ModuleConfig {
+// read defines
+class Region;
+
+class DllModuleExport SuperPixelLabelerConfig : public ModuleConfig {
 
 public:
-	SuperPixelClassificationConfig();
+	SuperPixelLabelerConfig();
 
 	virtual QString toString() const override;
-	
-	int maxSide() const;
 
 protected:
-
-	int mMaxSide = 200;
 
 	//void load(const QSettings& settings) override;
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport SuperPixelClassification : public Module {
+class DllModuleExport LabelManager {
 
 public:
-	SuperPixelClassification(const cv::Mat& img, const PixelSet& set);
+	LabelManager();
+
+	bool isEmpty() const;
+	int size() const;
+	static LabelManager read(const QString& filePath);
+
+	void add(const LabelLookup& label);
+	bool contains(const LabelLookup& label) const;
+	bool containsId(const LabelLookup& label) const;
+
+	QString toString() const;
+
+	LabelLookup find(const QString& str) const;
+	LabelLookup find(const Region& r) const;
+	LabelLookup find(int id) const;
+
+protected:
+	QVector<LabelLookup> mLookups;
+};
+
+class DllModuleExport SuperPixelLabeler : public Module {
+
+public:
+	SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& blobs, const Rect& imgRect);
 
 	bool isEmpty() const override;
 	bool compute() override;
-	QSharedPointer<SuperPixelClassificationConfig> config() const;
+	QSharedPointer<SuperPixelLabelerConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-private:
-	cv::Mat mImg;
+	void setRootRegion(const QSharedPointer<Region>& region);
+	void setLabelManager(const LabelManager& manager);
+	QImage createLabelImage(const Rect& imgRect) const;
 
+private:
+	QVector<QSharedPointer<MserBlob> > mBlobs;
+	QSharedPointer<Region> mGtRegion;
+	Rect mImgRect;
+	LabelManager mManager;
+
+	// results
 	PixelSet mSet;
 
 	bool checkInput() const override;
+	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
+	
 };
 
 };

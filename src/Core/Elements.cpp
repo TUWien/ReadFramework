@@ -48,8 +48,9 @@ namespace rdf {
 /// The Region is the base class for all Region elements that 
 /// are contained in the extended PAGE XML.
 /// </summary>
-Region::Region() {
+Region::Region(const Type& type) {
 	mId = QUuid::createUuid().toString();
+	mType = type;
 }
 
 /// <summary>
@@ -422,8 +423,11 @@ bool Region::operator==(const Region & r1) {
 /// Initializes a new instance of the <see cref="TextLine"/> class.
 /// This class represents Text lines (Region::type_text_line).
 /// </summary>
-TextLine::TextLine() : Region() {
-	mType = Region::type_text_line;
+TextLine::TextLine(const Type& type) : Region(type) {
+	
+	// default to text line
+	if (mType == type_unknown)
+		mType = Region::type_text_line;
 }
 
 /// <summary>
@@ -783,8 +787,10 @@ QDateTime PageElement::dateModified() const {
 
 
 
-SeparatorRegion::SeparatorRegion() : Region() {
-	mType = type_separator;
+SeparatorRegion::SeparatorRegion(const Type& type) : Region(type) {
+	
+	if (mType == type_unknown)
+		mType = type_separator;
 }
 
 void SeparatorRegion::setLine(const Line & line) {

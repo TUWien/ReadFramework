@@ -44,6 +44,7 @@
 #include "TextLineSegmentation.h"
 #include "PageSegmentation.h"
 #include "SuperPixelClassification.h"
+#include "SuperPixelTrainer.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -129,7 +130,7 @@ LayoutTest::LayoutTest(const DebugConfig & config) {
 
 void LayoutTest::testComponents() {
 
-	rdf::Timer dt;
+	Timer dt;
 
 	// test image loading
 	QImage img(mConfig.imagePath());
@@ -140,38 +141,9 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	// parse xml
-	PageXmlParser parser;
-	parser.read(mConfig.xmlPath());
-
-	// test loading of label lookup
-	LabelManager lm = LabelManager::read(mConfig.classifierPath());
-	qInfo().noquote() << lm.toString();
-
-	QVector<QSharedPointer<MserBlob> > dummy;
-	SuperPixelLabeler spl(dummy, Rect(imgCv));
-	spl.setLabelManager(lm);
-
-	if (parser.page())
-		spl.setRootRegion(parser.page()->rootRegion());
-	
-
-	// drawing
-	cv::Mat rImg = imgCv.clone();
-
-	// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
-	//rImg = tabStops.draw(rImg);
-	rImg = spl.draw(rImg);
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
-	rdf::Image::save(rImg, dstPath);
-	qDebug() << "debug image saved: " << dstPath;
-
-	qDebug() << "image path: " << mConfig.imagePath();
-
-
+	testTrainer(imgCv);
 	//pageSegmentation(imgCv);
-	//computeComponents(imgCv);
+	//testLayout(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -257,7 +229,51 @@ void LayoutTest::layoutToXml() const {
 
 }
 
-void LayoutTest::computeComponents(const cv::Mat & src) const {
+void LayoutTest::testTrainer(const cv::Mat & src) const {
+	
+	rdf::Timer dt;
+
+	// parse xml
+	PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+
+	// test loading of label lookup
+	LabelManager lm = LabelManager::read(mConfig.classifierPath());
+	qInfo().noquote() << lm.toString();
+
+	// compute super pixels
+	SuperPixel sp(src);
+
+	if (!sp.compute())
+		qCritical() << "could not compute super pixels!";
+
+	// feed the label lookup
+	SuperPixelLabeler spl(sp.getMserBlobs(), Rect(src));
+	spl.setLabelManager(lm);
+
+	// set the ground truth
+	if (parser.page())
+		spl.setRootRegion(parser.page()->rootRegion());
+
+	if (!spl.compute())
+		qCritical() << "could not compute SuperPixel labeling!";
+
+	// drawing
+	cv::Mat rImg = src.clone();
+
+	// save super pixel image
+	//rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = tabStops.draw(rImg);
+	rImg = spl.draw(rImg);
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	qDebug() << "image path: " << mConfig.imagePath();
+
+}
+
+void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// TODOS
 	// - line spacing needs smoothing -> graphcut

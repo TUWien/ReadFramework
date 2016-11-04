@@ -31,8 +31,12 @@
  *******************************************************************************************************/
 
 #include "ImageProcessor.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
+#include <QColor>
+#include <QDebug>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
@@ -127,6 +131,122 @@ void IP::draw(const std::vector<cv::Point>& pts, cv::Mat & img, unsigned char va
 
 		img.at<unsigned char>(p) = val;
 	}
+}
+
+/// <summary>
+/// Computes robust statistical moments of an image.
+/// The quantiles of an image (or median) are computed.
+/// </summary>
+/// <param name="src">The source image CV_32FC1.</param>
+/// <param name="mask">The mask CV_32FC1 or CV_8UC1.</param>
+/// <param name="momentValue">The moment (e.g. 0.5 for median, 0.25 or 0.75 for quartiles).</param>
+/// <param name="maxSamples">The maximum number of samples (speed up).</param>
+/// <param name="area">The mask's area (speed up).</param>
+/// <returns>The statistical moment.</returns>
+double IP::statMomentMat(const cv::Mat& src, const cv::Mat& mask, double momentValue, int maxSamples, int area) {
+
+	// check input
+	if (src.type() != CV_32FC1) {
+		qWarning() << "Mat must be CV_32FC1";
+		return -1;
+	}
+
+	if (!mask.empty()) {
+		if (src.rows != mask.rows || src.cols != mask.cols) {
+			qWarning() << "Matrix dimension mismatch";
+			return -1;
+		}
+
+		if (mask.depth() != CV_32F && mask.depth() != CV_8U) {
+			qWarning() << "The mask obtained is neither of type CV_32F nor CV_8U";
+			return -1;
+		}
+	}
+
+	// init output list
+	QList<float> samples = QList<float>();
+
+	// assign the step size
+	if (mask.empty()) {
+		int step = cvRound((src.cols*src.rows) / (float)maxSamples);
+		if (step <= 0) step = 1;
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx += step) {
+
+			const float* srcPtr = src.ptr<float>(rIdx);
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx += step) {
+				samples.push_back(srcPtr[cIdx]);
+			}
+		}
+	}
+	else {
+
+		if (area == -1)
+			area = countNonZero(mask);
+
+		int step = cvRound((float)area / (float)maxSamples);
+		int cStep = 0;
+
+		const void *maskPtr;
+
+		if (step <= 0) step = 1;
+
+		for (int rIdx = 0; rIdx < src.rows; rIdx++) {
+
+			const float* srcPtr = src.ptr<float>(rIdx);
+			if (mask.depth() == CV_32F)
+				maskPtr = mask.ptr<float>(rIdx);
+			else
+				maskPtr = mask.ptr<uchar>(rIdx);
+			//maskPtr = (mask.depth() == CV_32F) ? mask.ptr<float>(rIdx) : maskPtr = mask.ptr<uchar>(rIdx);
+
+			for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+
+				// skip mask pixel
+				if (mask.depth() == CV_32FC1 && ((float*)maskPtr)[cIdx] != 0.0f ||
+					mask.depth() == CV_8U && ((uchar*)maskPtr)[cIdx] != 0) {
+
+					if (cStep >= step) {
+						samples.push_back(srcPtr[cIdx]);
+						cStep = 0;
+					}
+					else
+						cStep++;
+				}
+			}
+		}
+	}
+
+	return Algorithms::statMoment(samples, momentValue);
+}
+
+/// <summary>
+/// C.
+/// </summary>
+/// <param name="src">The source.</param>
+/// <returns></returns>
+QColor IP::statMomentColor(const cv::Mat & src, const cv::Mat& mask, double momentValue) {
+
+	assert(src.type() == CV_8UC3 || src.type() == CV_8UC4);
+
+	cv::Mat srcF;
+	src.convertTo(srcF, CV_32F);
+
+	std::vector<cv::Mat> channels;
+	cv::split(srcF, channels);
+
+	assert(channels.size() == 3 || channels.size() == 4);
+
+	QColor col;
+	col.setRed(qRound(statMomentMat(channels[0], mask, momentValue)));
+	col.setGreen(qRound(statMomentMat(channels[1], mask, momentValue)));
+	col.setBlue(qRound(statMomentMat(channels[2], mask, momentValue)));
+
+	if (channels.size() == 4)
+		col.setAlpha(qRound(statMomentMat(channels[3], mask, momentValue)));
+
+	return col;
 }
 
 }

@@ -253,14 +253,14 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
 
 	for (auto s : sets) {
-		Drawer::instance().setColor(ColorManager::getRandomColor());
+		Drawer::instance().setColor(ColorManager::getColor());
 		QPen pen = Drawer::instance().pen();
 		p.setPen(pen);
 		s.draw(p);
 	}
 
 	//for (int idx = 0; idx < mBlobs.size(); idx++) {
-	//	Drawer::instance().setColor(ColorManager::getRandomColor());
+	//	Drawer::instance().setColor(ColorManager::getColor());
 	//	QPen pen = Drawer::instance().pen();
 	//	pen.setWidth(2);
 	//	p.setPen(pen);
@@ -283,7 +283,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 	for (auto b : mBlobs) {
-		Drawer::instance().setColor(ColorManager::getRandomColor());
+		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
 
 		b->draw(p);

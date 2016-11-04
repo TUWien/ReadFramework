@@ -65,8 +65,6 @@ class PixelSet;
 class DllCoreExport Region {
 
 public:
-	Region();
-
 	enum Type {
 		type_unknown = 0,
 		type_root,
@@ -81,6 +79,8 @@ public:
 
 		type_end
 	};
+
+	Region(const Type& type = Type::type_unknown);
 
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
@@ -135,7 +135,7 @@ protected:
 class DllCoreExport TextLine : public Region {
 
 public:
-	TextLine();
+	TextLine(const Type& type = Type::type_unknown);
 
 	void setBaseLine(const BaseLine& baseLine);
 	BaseLine baseLine() const;
@@ -160,7 +160,7 @@ protected:
 class DllCoreExport SeparatorRegion : public Region {
 
 public:
-	SeparatorRegion();
+	SeparatorRegion(const Type& type = Type::type_unknown);
 
 	void setLine(const Line& line);
 	Line line() const;

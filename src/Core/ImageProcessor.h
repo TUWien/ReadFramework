@@ -58,7 +58,9 @@ public:
 
 	static cv::Mat computeHist(const cv::Mat& data, int width, int numElements = -1, double* maxBin = 0);
 	static void draw(const std::vector<cv::Point>& pts, cv::Mat& img, unsigned char val = 255);
-
+	
+	static double statMomentMat(const cv::Mat& src, const cv::Mat& mask = cv::Mat(), double momentValue = 0.5, int maxSamples = 10000, int area = -1);
+	static QColor statMomentColor(const cv::Mat& src, const cv::Mat& mask = cv::Mat(), double momentValue = 0.5);
 };
 
 };
