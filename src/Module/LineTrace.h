@@ -213,6 +213,9 @@ public:
 	int bins() const;
 	void setBins(int b);
 
+	double quant() const;
+	void setQuant(double q);
+
 
 	QString toString() const override;
 
@@ -220,7 +223,7 @@ private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	double mScale = 0.8f;		// When different from 1.0, LSD will scale the input image
+	double mScale = 1.0f;		// When different from 1.0, LSD will scale the input image
 								//by 'scale' factor by Gaussian filtering, before detecting	line segments.
 								//Example: if scale = 0.8, the input image will be subsampled
 								//to 80 % of its size, before the line segment detector
@@ -246,6 +249,7 @@ private:
 								//	Suggested value : 0.0
 	double mDensityThr = 0.7f;	//Minimal proportion of 'supporting' points in a rectangle.	Suggested value : 0.7
 	int mNBins = 1024;			//Number of bins used in the pseudo-ordering of gradient modulus. Suggested value : 1024
+	double mQuant = 1.0f;
 
 
 };
@@ -283,9 +287,9 @@ private:
 	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
 	double prec = 0;
-	int isAligned(double thetaTest, double theta);
-	int isAligned(int x, int y, const cv::Mat &img, double theta);
-	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx);
+	bool isAligned(double thetaTest, double theta);
+	bool isAligned(int x, int y, const cv::Mat& img, double theta);
+	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx, double thr);
 
 };
 

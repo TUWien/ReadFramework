@@ -886,12 +886,10 @@ namespace rdf {
 
 	bool ReadLSD::compute()
 	{
-		double quant; //TODO: define as input
-
 		/* angle tolerance */
 		prec = CV_PI * config()->angleThr() / 180.0;
 		double p = config()->angleThr() / 180.0;
-		double rho = quant / sin(prec); /* gradient magnitude threshold */
+		double rho = config()->quant() / sin(prec); /* gradient magnitude threshold */
 		double logNT = 0;
 		int minRegSize = 0;
 
@@ -954,7 +952,8 @@ namespace rdf {
 			int y = ptrIdx[colIdx] / mMagImg.cols;
 			int x = ptrIdx[colIdx] % mMagImg.cols;
 
-			double angle = regionGrow(x, y, region, regionIdx);
+			double angle = regionGrow(x, y, region, regionIdx, rho);
+			qDebug() << "new angle is: " << angle;
 
 
 			regionIdx++;
@@ -967,10 +966,10 @@ namespace rdf {
 		return false;
 	}
 
-	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx)
+	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr)
 	{
 		region.push_back(cv::Point(x, y));
-		double angle = mMagImg.at<double>(y, x);
+		double angle = mRadImg.at<double>(y, x);
 
 		for (int regSizeIdx = 0; regSizeIdx < region.size(); regSizeIdx++) {
 
@@ -983,9 +982,10 @@ namespace rdf {
 			for (int xx = xt - 1; xx <= xt + 1; xx++ ) {
 				for (int yy = yt - 1; yy <= yt + 1; yy++) {
 					double regIdx = mRegionImg.at<double>(yy, xx);
+					double magnitude = mMagImg.at<double>(yy, xx);
 
 					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows &&
-						regIdx == 0 && isAligned(xx,yy,mMagImg,angle)) {
+						regIdx == 0 && isAligned(xx,yy,mRadImg,angle) && magnitude < thr) {
 
 						mRegionImg.at<double>(yy, xx) = (double)regionIdx;
 						region.push_back(cv::Point(xx, yy));
@@ -993,16 +993,9 @@ namespace rdf {
 						sumdy += sin(mMagImg.at<double>(yy, xx));
 						angle = atan2(sumdy, sumdx);
 					}
-
 				}
 			}
-
-
 		}
-
-
-
-
 
 		return angle;
 	}
@@ -1152,17 +1145,17 @@ namespace rdf {
 		return -log10(bin_tail) - logNT;
 	}
 
-	int ReadLSD::isAligned(double thetaTest, double theta) {
+	bool ReadLSD::isAligned(double thetaTest, double theta) {
 		/* check parameters */
 		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 
 		/* pixels whose level-line angle is not defined
 		are considered as NON-aligned */
-		if (thetaTest == -1024) return 0;  /* there is no need to call the function
-												 'double_equal' here because there is
-												 no risk of problems related to the
-												 comparison doubles, we are only
-												 interested in the exact NOTDEF value */
+		//if (thetaTest == -1024) return 0;  /* there is no need to call the function
+		//										 'double_equal' here because there is
+		//										 no risk of problems related to the
+		//										 comparison doubles, we are only
+		//										 interested in the exact NOTDEF value */
 
 												 /* it is assumed that 'theta' and 'a' are in the range [-pi,pi] */
 		theta -= thetaTest;
@@ -1175,7 +1168,7 @@ namespace rdf {
 		return theta <= prec;
 	}
 
-	int ReadLSD::isAligned(int x, int y, const cv::Mat & img, double theta) {
+	bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
 		double a;
 
 		/* check parameters */
@@ -1246,6 +1239,14 @@ namespace rdf {
 		mNBins = b;
 	}
 
+	double ReadLSDConfig::quant() const	{
+		return mQuant;
+	}
+
+	void ReadLSDConfig::setQuant(double q)	{
+		mQuant = q;
+	}
+
 	QString ReadLSDConfig::toString() const	{
 
 		QString msg;
@@ -1255,6 +1256,7 @@ namespace rdf {
 		msg += "  logEps: " + QString::number(mLogEps);
 		msg += "  densityThr: " + QString::number(mDensityThr);
 		msg += "  nBins: " + QString::number(mNBins);
+		msg += "  quant: " + QString::number(mQuant);
 
 		return msg;
 	}
@@ -1266,6 +1268,7 @@ namespace rdf {
 		mLogEps = settings.value("logEps", mLogEps).toDouble();
 		mDensityThr = settings.value("densityThr", mDensityThr).toDouble();
 		mNBins = settings.value("nBins", mNBins).toInt();
+		mQuant = settings.value("quant", mQuant).toDouble();
 
 	}
 
@@ -1276,6 +1279,7 @@ namespace rdf {
 		settings.setValue("logEps", mLogEps);
 		settings.setValue("densityThr", mDensityThr);
 		settings.setValue("nBins", mNBins);
+		settings.setValue("quant", mQuant);
 	}
 
 }
