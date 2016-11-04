@@ -263,6 +263,7 @@ public:
 
 	Line line() const;
 	void setLine(double x1, double y1, double x2, double y2, double width);
+	void setLine(Line l);
 	Vector2D center() const;
 	void setCenter(double x, double y);
 	double theta() const;

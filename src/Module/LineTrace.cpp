@@ -937,9 +937,11 @@ namespace rdf {
 		
 		cv::Mat idxMat;
 		cv::Mat rM = mMagImg.reshape(1, 1);
-		//if this is too slow use histogram binning as proposed in
+		//replace this with sparse mats compared
 		//the original version of LSD implementation
 		cv::sortIdx(rM, idxMat, CV_SORT_EVERY_ROW + CV_SORT_DESCENDING);
+
+
 
 		
 		mRegionImg = cv::Mat(scaledImg.size(), CV_64FC1);
@@ -966,15 +968,27 @@ namespace rdf {
 			/* construct rectangular approximation for the region */
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
+			//TODO refinement of region
+			//TODO improvement
+
+			if (config()->scale() != 1.0) {
+				rdf::Line tmpLine = tmp.line();
+				tmpLine = rdf::Line(tmpLine.p1() / config()->scale(), tmpLine.p2() / config()->scale(), tmpLine.thickness() / (float)config()->scale());
+				tmp.setLine(tmpLine);
+			}
+
+			mLineSegments.push_back(tmp);
+
 			regionIdx++;
 			region.clear();
 		}
 
+		//TODO
+		//lineSegmentGrower
 
+		
 
-
-
-		return false;
+		return true;
 	}
 
 	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr, double prec)
@@ -1231,6 +1245,50 @@ namespace rdf {
 		/* equal if relative error <= factor x eps */
 		return (abs_diff / abs_max) <= (relativeErrorFactor * DBL_EPSILON);
 	}
+
+	//bool ReadLSD::refine(LineSegment & l, QVector<cv::Point>& region, const cv::Mat & magImg, const cv::Mat & radImg, double densityThr) {
+
+	//	double angle, ang_d, mean_angle, tau, density, xc, yc, ang_c, sum, s_sum;
+	//	int i, n;
+
+	//	if (region.size() >= 1) {
+	//		mWarning << "illegal region size in refine";
+	//		return false;
+	//	}
+
+	//	density = (double)region.size() / (l.line().length() * l.line().thickness());
+	//	if (density <= densityThr) {
+	//		return true;
+	//	}
+
+	//	xc = region[0].x;
+	//	yc = region[0].y;
+
+	//	ang_c = radImg.at<double>(yc, xc);
+	//	sum = s_sum = 0.0;
+	//	n = 0;
+	//	for (i = 1; i<region.size(); i++)
+	//	{
+	//		used->data[region[i].x + region[i].y * used->xsize] = NOTUSED;
+
+	//		if (dist(xc, yc, (double)reg[i].x, (double)reg[i].y) < rec->width)
+	//		{
+	//			angle = angles->data[reg[i].x + reg[i].y * angles->xsize];
+	//			ang_d = angle_diff_signed(angle, ang_c);
+	//			sum += ang_d;
+	//			s_sum += ang_d * ang_d;
+	//			++n;
+	//		}
+	//	}
+	//	mean_angle = sum / (double)n;
+	//	tau = 2.0 * sqrt((s_sum - 2.0 * mean_angle * sum) / (double)n
+	//		+ mean_angle*mean_angle); /* 2 * standard deviation */
+
+
+
+
+	//	return false;
+	//}
 
 
 	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{

@@ -1322,6 +1322,10 @@ void LineSegment::setLine(double x1, double y1, double x2, double y2, double wid
 	mLine.setLine(QLineF((float)x1, (float)y1, (float)x2, (float)y2), (float)width);
 }
 
+void LineSegment::setLine(Line l) {
+	mLine = l;
+}
+
 Vector2D LineSegment::center() const {
 	return mCenter;
 }

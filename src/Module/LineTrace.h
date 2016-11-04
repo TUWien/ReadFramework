@@ -293,6 +293,7 @@ private:
 	rdf::LineSegment region2Rect(QVector<cv::Point> &region, const cv::Mat& magImg, double angle, double prec, double p);
 	double getTheta(QVector<cv::Point> &region, const cv::Mat& magImg, double angle, double prec, double x, double y);
 	bool doubleEqual(double a, double b);
+	//bool refine(LineSegment& l, QVector<cv::Point> &region, const cv::Mat& magImg, const cv::Mat& radImg, double densityThr);
 
 };
 
