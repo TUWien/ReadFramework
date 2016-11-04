@@ -122,7 +122,7 @@ private:
 	cv::Mat mDyImg;			// y derivative image
 	cv::Mat mMagImg;			// gradient magnitude image
 	cv::Mat mRadImg;			// orientation image (in radians)
-	
+
 	cv::Point mAnchor = cv::Point(-1, -1);
 	cv::Mat mDxKernel;
 	cv::Mat mDyKernel;

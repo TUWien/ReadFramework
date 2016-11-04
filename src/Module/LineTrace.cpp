@@ -964,7 +964,7 @@ namespace rdf {
 			}
 
 			/* construct rectangular approximation for the region */
-			region2Rect(region, mMagImg, angle, prec, p);
+			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
 			regionIdx++;
 			region.clear();
@@ -1012,18 +1012,18 @@ namespace rdf {
 		return angle;
 	}
 
-	void ReadLSD::region2Rect(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double p)	{
+	rdf::LineSegment ReadLSD::region2Rect(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double p)	{
 
 		double x, y, dx, dy, l, w, theta, weight, sum, l_min, l_max, w_min, w_max;
 		int i;
 
 		if (region.isEmpty()) {
 			mWarning << "empty region in region2rect";
-			return;
+			return LineSegment();
 		}
 		if (region.size() == 1) {
 			mWarning << "region in region2rect contains only 1 pixel";
-			return;
+			return LineSegment();
 		}
 		/* center of the region:
 
@@ -1045,7 +1045,7 @@ namespace rdf {
 		}
 		if (sum <= 0.0) {
 			mWarning << "region2rect: weights sum equal to zero.";
-			return;
+			return LineSegment();
 		}
 		x /= sum;
 		y /= sum;
@@ -1078,30 +1078,83 @@ namespace rdf {
 		}
 
 		/* store values of final rectangle*/
-		//rec->x1 = x + l_min * dx;
-		//rec->y1 = y + l_min * dy;
-		//rec->x2 = x + l_max * dx;
-		//rec->y2 = y + l_max * dy;
-		//rec->width = w_max - w_min;
-		//rec->x = x;
-		//rec->y = y;
-		//rec->theta = theta;
-		//rec->dx = dx;
-		//rec->dy = dy;
-		//rec->prec = prec;
-		//rec->p = p;
-
+		double width = w_max - w_min;
 		/* we impose a minimal width of one pixel
-
 		A sharp horizontal or vertical step would produce a perfectly
 		horizontal or vertical region. The width computed would be
 		zero. But that corresponds to a one pixels width transition in
 		the image.
 		*/
-		//if (rec->width < 1.0) rec->width = 1.0
+		width = width < 1.0 ? 1.0 : width;
+		
+		rdf::LineSegment newSegment;
+		newSegment.setLine(x + l_min * dx, y + l_min * dy, x + l_max * dx, y + l_max * dy, width);
+		newSegment.setCenter(x, y);
+		newSegment.setTheta(theta);
+		newSegment.setOrientation(dx, dy);
+		newSegment.setPrec(prec);
+		newSegment.setP(p);
 
+		return newSegment;
 	}
 
+	/*----------------------------------------------------------------------------*/
+	/** Compute region's angle as the principal inertia axis of the region.
+
+	The following is the region inertia matrix A:
+	@f[
+
+	A = \left(\begin{array}{cc}
+	Ixx & Ixy \\
+	Ixy & Iyy \\
+	\end{array}\right)
+
+	@f]
+	where
+
+	Ixx =   sum_i G(i).(y_i - cx)^2
+
+	Iyy =   sum_i G(i).(x_i - cy)^2
+
+	Ixy = - sum_i G(i).(x_i - cx).(y_i - cy)
+
+	and
+	- G(i) is the gradient norm at pixel i, used as pixel's weight.
+	- x_i and y_i are the coordinates of pixel i.
+	- cx and cy are the coordinates of the center of th region.
+
+	lambda1 and lambda2 are the eigenvalues of matrix A,
+	with lambda1 >= lambda2. They are found by solving the
+	characteristic polynomial:
+
+	det( lambda I - A) = 0
+
+	that gives:
+
+	lambda1 = ( Ixx + Iyy + sqrt( (Ixx-Iyy)^2 + 4.0*Ixy*Ixy) ) / 2
+
+	lambda2 = ( Ixx + Iyy - sqrt( (Ixx-Iyy)^2 + 4.0*Ixy*Ixy) ) / 2
+
+	To get the line segment direction we want to get the angle the
+	eigenvector associated to the smallest eigenvalue. We have
+	to solve for a,b in:
+
+	a.Ixx + b.Ixy = a.lambda2
+
+	a.Ixy + b.Iyy = b.lambda2
+
+	We want the angle theta = atan(b/a). It can be computed with
+	any of the two equations:
+
+	theta = atan( (lambda2-Ixx) / Ixy )
+
+	or
+
+	theta = atan( Ixy / (lambda2-Iyy) )
+
+	When |Ixx| > |Iyy| we use the first, otherwise the second (just to
+	get better numeric precision).
+	*/
 	double ReadLSD::getTheta(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double x, double y)	{
 		double lambda, theta, weight;
 		double Ixx = 0.0;

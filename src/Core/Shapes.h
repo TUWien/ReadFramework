@@ -116,6 +116,7 @@ protected:
 	cv::Mat toMat(const Line& l) const;
 };
 
+
 class DllCoreExport Vector2D {
 
 public:
@@ -253,6 +254,37 @@ protected:
 
 	double mX = 0;
 	double mY = 0;
+};
+
+class DllCoreExport LineSegment {
+public:
+	LineSegment();
+	LineSegment(Line l, Vector2D c, double th, Vector2D lo, double pr, double pt, double len);
+
+	Line line() const;
+	void setLine(double x1, double y1, double x2, double y2, double width);
+	Vector2D center() const;
+	void setCenter(double x, double y);
+	double theta() const;
+	void setTheta(double t);
+	Vector2D lineOrientation() const;
+	void setOrientation(double dx, double dy);
+	double prec() const;
+	void setPrec(double p);
+	double p() const;
+	void setP(double p);
+	double length() const;
+	void setLength(double l);
+
+
+protected:
+	Line mLine;
+	Vector2D mCenter;
+	double mTheta = 0;
+	Vector2D mLineOrient;
+	double mPrec = 0;
+	double mP = 0;
+	double mLength = 0;
 };
 
 class DllCoreExport Triangle {

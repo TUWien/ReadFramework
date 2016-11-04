@@ -1301,4 +1301,75 @@ Vector2D Ellipse::getPoint(double angle) const {
 	return pt;
 }
 
+LineSegment::LineSegment() {
+}
+
+LineSegment::LineSegment(Line l, Vector2D c, double th, Vector2D lo, double pr, double p, double len) {
+	mLine = l;
+	mCenter = c;
+	mTheta = th;
+	mLineOrient = lo;
+	mPrec = pr;
+	mP = p;
+	mLength = len;
+}
+
+Line LineSegment::line() const {
+	return mLine;
+}
+
+void LineSegment::setLine(double x1, double y1, double x2, double y2, double width) {
+	mLine.setLine(QLineF((float)x1, (float)y1, (float)x2, (float)y2), (float)width);
+}
+
+Vector2D LineSegment::center() const {
+	return mCenter;
+}
+
+void LineSegment::setCenter(double x, double y) {
+	mCenter.setX(x);
+	mCenter.setY(y);
+}
+
+double LineSegment::theta() const {
+	return mTheta;
+}
+
+void LineSegment::setTheta(double t) {
+	mTheta = t;
+}
+
+Vector2D LineSegment::lineOrientation() const {
+	return mLineOrient;
+}
+
+void LineSegment::setOrientation(double dx, double dy) {
+	mLineOrient.setX(dx);
+	mLineOrient.setY(dy);
+}
+
+double LineSegment::prec() const {
+	return mPrec;
+}
+
+void LineSegment::setPrec(double p){
+	mPrec = p;
+}
+
+double LineSegment::p() const {
+	return mP;
+}
+
+void LineSegment::setP(double p) {
+	mP = p;
+}
+
+double LineSegment::length() const {
+	return mLength;
+}
+
+void LineSegment::setLength(double l) {
+	mLength = l;
+}
+
 }
