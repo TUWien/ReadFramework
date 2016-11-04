@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['magimg',['magImg',['../classrdf_1_1_gradient_vector.html#aa74e5cae1fe2b25a51ed1e813ac3c688',1,'rdf::GradientVector']]],
   ['main',['main',['../main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main.cpp']]],
   ['majoraxis',['majorAxis',['../classrdf_1_1_ellipse.html#a16278b3a754c1e8e321e3bd46a6e9c74',1,'rdf::Ellipse']]],
   ['mark_5fnode',['mark_node',['../class_graph.html#a4416a1275b95a7c98b334498697a0587',1,'Graph']]],
@@ -17,6 +18,7 @@ var searchData=
   ['maxscale',['maxScale',['../classrdf_1_1_local_orientation_config.html#a2390feabaeb099afd997bfa607b3c6c3',1,'rdf::LocalOrientationConfig']]],
   ['maxslopediff',['maxSlopeDiff',['../classrdf_1_1_line_trace_config.html#a33c87207edfded18cecae06dc15e0f0e',1,'rdf::LineTraceConfig']]],
   ['maxsloperotat',['maxSlopeRotat',['../classrdf_1_1_line_trace_config.html#ac7fdc5b085519a46ccefdf6749274100',1,'rdf::LineTraceConfig']]],
+  ['maxval',['maxVal',['../classrdf_1_1_gradient_vector.html#a5c5f1b04538c120dd8355b7763bca814',1,'rdf::GradientVector']]],
   ['medianresiduals',['medianResiduals',['../classrdf_1_1_line_fitting.html#ac39d36e049cb9409cf7760b7b7e48523',1,'rdf::LineFitting']]],
   ['merge',['merge',['../classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054',1,'rdf::PixelSet::merge()'],['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line::merge()']]],
   ['min',['min',['../classrdf_1_1_algorithms.html#aa01dcd7b09b95264aa391e1950e53353',1,'rdf::Algorithms::min()'],['../classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55',1,'rdf::Histogram::min()'],['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
@@ -27,7 +29,7 @@ var searchData=
   ['minlinelength',['minLineLength',['../classrdf_1_1_base_skew_estimation_config.html#a618e5c158b07d21335a3e32005a37762',1,'rdf::BaseSkewEstimationConfig']]],
   ['minoraxis',['minorAxis',['../classrdf_1_1_ellipse.html#adce797c47d3116d9186821d568097142',1,'rdf::Ellipse']]],
   ['minscale',['minScale',['../classrdf_1_1_local_orientation_config.html#ab95bb52ab2566b070f0e2d5e4a86deb8',1,'rdf::LocalOrientationConfig']]],
-  ['minval',['minVal',['../classrdf_1_1_pixel_stats.html#a529c44295f52118c07b4de7d13406fbf',1,'rdf::PixelStats']]],
+  ['minval',['minVal',['../classrdf_1_1_pixel_stats.html#a529c44295f52118c07b4de7d13406fbf',1,'rdf::PixelStats::minVal()'],['../classrdf_1_1_gradient_vector.html#ae7d84c8855c0512feae094b19d36786f',1,'rdf::GradientVector::minVal()']]],
   ['minwidth',['minWidth',['../classrdf_1_1_line_trace_config.html#a2c0389ba860da02abef6ac52947fff97',1,'rdf::LineTraceConfig']]],
   ['module',['Module',['../classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99',1,'rdf::Module']]],
   ['moduleconfig',['ModuleConfig',['../classrdf_1_1_module_config.html#ae65377987b0c184c7c127b8de6492f06',1,'rdf::ModuleConfig']]],

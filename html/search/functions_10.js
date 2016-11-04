@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['radimg',['radImg',['../classrdf_1_1_gradient_vector.html#a30bc6d5037185415b0d1fd716a63d814',1,'rdf::GradientVector']]],
   ['rand',['rand',['../classrdf_1_1_utils.html#af133a2a28a611eb7c7df293e9741d484',1,'rdf::Utils']]],
   ['read',['read',['../classrdf_1_1_region.html#a9be7a3a131e767f3e24ef01e4c8418fd',1,'rdf::Region::read()'],['../classrdf_1_1_text_line.html#af1b776b6782d79aa3da96191d2ea1582',1,'rdf::TextLine::read()'],['../classrdf_1_1_page_xml_parser.html#aee0cbb62b5f041bb470a7939a8dc3e77',1,'rdf::PageXmlParser::read()'],['../classrdf_1_1_base_line.html#a5c2b4d416e0848f99a426ff936a7a81f',1,'rdf::BaseLine::read()'],['../classrdf_1_1_polygon.html#a4335652867aca759c8d8a2d68a9e2b7d',1,'rdf::Polygon::read()']]],
   ['readlsd',['ReadLSD',['../classrdf_1_1_read_l_s_d.html#ad5f6d9e75400ac43f9337f501e76bf88',1,'rdf::ReadLSD']]],

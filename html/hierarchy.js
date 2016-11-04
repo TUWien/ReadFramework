@@ -59,6 +59,7 @@ var hierarchy =
     [ "rdf::LayoutTest", "classrdf_1_1_layout_test.html", null ],
     [ "rdf::Line", "classrdf_1_1_line.html", null ],
     [ "rdf::LineFitting", "classrdf_1_1_line_fitting.html", null ],
+    [ "rdf::LineSegment", "classrdf_1_1_line_segment.html", null ],
     [ "LinkedBlockList", "class_linked_block_list.html", null ],
     [ "rdf::Module", "classrdf_1_1_module.html", [
       [ "rdf::BaseBinarizationSu", "classrdf_1_1_base_binarization_su.html", [

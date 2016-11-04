@@ -17,7 +17,7 @@ var searchData=
   ['textlineconfig',['TextLineConfig',['../classrdf_1_1_text_line_config.html#afe6af7c5e848d7c7e7fb1bef7f840f5b',1,'rdf::TextLineConfig']]],
   ['textlines',['textLines',['../classrdf_1_1_text_line_segmentation.html#ae6bbf6eafdddf1cb8eb6ec8492e3ec58',1,'rdf::TextLineSegmentation']]],
   ['textlinesegmentation',['TextLineSegmentation',['../classrdf_1_1_text_line_segmentation.html#a156b6dd14aac53d7ac4a96d53e346dc4',1,'rdf::TextLineSegmentation']]],
-  ['theta',['theta',['../classrdf_1_1_vector2_d.html#a4665db705c133ae51cba1ea6d7f93fe5',1,'rdf::Vector2D']]],
+  ['theta',['theta',['../classrdf_1_1_vector2_d.html#a4665db705c133ae51cba1ea6d7f93fe5',1,'rdf::Vector2D::theta()'],['../classrdf_1_1_line_segment.html#a9f68751bdc76d0662ab8d7dfb552d0cd',1,'rdf::LineSegment::theta()']]],
   ['thickness',['thickness',['../classrdf_1_1_line.html#aafb351d4d9d078a4b535338ab827287e',1,'rdf::Line']]],
   ['thr',['thr',['../classrdf_1_1_base_skew_estimation_config.html#af5f98a5ffae8faa5b9b645a982a76ef3',1,'rdf::BaseSkewEstimationConfig']]],
   ['thresh',['thresh',['../classrdf_1_1_simple_binarization_config.html#a2883e0c06ee4ec1b5c55eac33c8ae2db',1,'rdf::SimpleBinarizationConfig']]],

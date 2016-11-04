@@ -1,6 +1,7 @@
 var searchData=
 [
   ['pixeldistance',['PixelDistance',['../namespacerdf_1_1_pixel_distance.html',1,'rdf']]],
+  ['radimg',['radImg',['../classrdf_1_1_gradient_vector.html#a30bc6d5037185415b0d1fd716a63d814',1,'rdf::GradientVector']]],
   ['rand',['rand',['../classrdf_1_1_utils.html#af133a2a28a611eb7c7df293e9741d484',1,'rdf::Utils']]],
   ['rd3',['rd3',['../namespacerd3.html',1,'']]],
   ['rdf',['rdf',['../namespacerdf.html',1,'']]],

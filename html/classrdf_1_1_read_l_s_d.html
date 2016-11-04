@@ -171,6 +171,12 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a7c263eef6ef3257d5534f30c89e8e7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea95a5b73f092b396a4b7a9174d520d2"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#aea95a5b73f092b396a4b7a9174d520d2">mLineImg</a></td></tr>
 <tr class="separator:aea95a5b73f092b396a4b7a9174d520d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa26a04f816d4dd89a7277fc6ca130f93"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#aa26a04f816d4dd89a7277fc6ca130f93">mRegionImg</a></td></tr>
+<tr class="separator:aa26a04f816d4dd89a7277fc6ca130f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa48f8fafd63fcc318f023fd14e73f078"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#aa48f8fafd63fcc318f023fd14e73f078">mMagImg</a></td></tr>
+<tr class="separator:aa48f8fafd63fcc318f023fd14e73f078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed55071c2c1d82ed7941ec6b5f93ae1"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#a3ed55071c2c1d82ed7941ec6b5f93ae1">mRadImg</a></td></tr>
+<tr class="separator:a3ed55071c2c1d82ed7941ec6b5f93ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fbd6c666ba1888033677e0cb2d0991c"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#a9fbd6c666ba1888033677e0cb2d0991c">mMask</a></td></tr>
 <tr class="separator:a9fbd6c666ba1888033677e0cb2d0991c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada7b41c9fe5c3384e3040beb664060c9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#ada7b41c9fe5c3384e3040beb664060c9">mTabSize</a> = 100000</td></tr>
@@ -181,6 +187,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a22eda48be8f63a9301e48148164fe1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5a10847476c5719455c471e9da1cbdc"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line.html">rdf::Line</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#ab5a10847476c5719455c471e9da1cbdc">vLines</a></td></tr>
 <tr class="separator:ab5a10847476c5719455c471e9da1cbdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace33d69524808184110bc7ec8ca57773"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line_segment.html">rdf::LineSegment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#ace33d69524808184110bc7ec8ca57773">mLineSegments</a></td></tr>
+<tr class="separator:ace33d69524808184110bc7ec8ca57773"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:ab95cf35f9dff6adbc42e37284d6a2e6c inherit pro_attribs_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_module_config.html">ModuleConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#ab95cf35f9dff6adbc42e37284d6a2e6c">mConfig</a></td></tr>
 <tr class="separator:ab95cf35f9dff6adbc42e37284d6a2e6c inherit pro_attribs_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -399,6 +407,46 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ace33d69524808184110bc7ec8ca57773"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;<a class="el" href="classrdf_1_1_line_segment.html">rdf::LineSegment</a>&gt; rdf::ReadLSD::mLineSegments</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa48f8fafd63fcc318f023fd14e73f078"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::ReadLSD::mMagImg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9fbd6c666ba1888033677e0cb2d0991c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -408,6 +456,46 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">cv::Mat rdf::ReadLSD::mMask</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3ed55071c2c1d82ed7941ec6b5f93ae1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::ReadLSD::mRadImg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa26a04f816d4dd89a7277fc6ca130f93"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::ReadLSD::mRegionImg</td>
         </tr>
       </table>
   </td>
