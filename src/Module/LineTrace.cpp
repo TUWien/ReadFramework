@@ -32,6 +32,7 @@
 
 #include "LineTrace.h"
 #include "Image.h"
+#include "GradientVector.h"
 #include "Blobs.h"
 #include "Algorithms.h"
 
@@ -888,28 +889,124 @@ namespace rdf {
 		double quant; //TODO: define as input
 
 		/* angle tolerance */
-		//double prec = CV_PI * config()->angleThr() / 180.0;
-		//double p = config()->angleThr() / 180.0;
-		//double rho = quant / sin(prec); /* gradient magnitude threshold */
+		prec = CV_PI * config()->angleThr() / 180.0;
+		double p = config()->angleThr() / 180.0;
+		double rho = quant / sin(prec); /* gradient magnitude threshold */
+		double logNT = 0;
+		int minRegSize = 0;
 
 		cv::Mat scaledImg = mSrcImg;
+		//scale image if necessary
 		if (config()->scale() != 1.0) {
 			//scale image
-			//TODO: in original source code a gaussian filter with
-			// config()->sigmaScale() is used
-			//cv::Size newSize = mSrcImg.size();
-			//newSize.width = (int)((float)newSize.width * config()->scale());
-			//newSize.height = (int)((float)newSize.height * config()->scale());
+			//TODO: in original source code a gaussian filter with config()->sigmaScale()
+			//and a sampling of the original image is used:
+			//cv::GaussianBlur(mSrcImg, scaledImg, cv::Size(0,0), config()->sigmaScale(), config()->sigmaScale());
+			//cv::resize(scaledImg, scaledImg, cv::Size(), (double)config()->scale(), (double)config()->scale(), cv::INTER_NEAREST;
+			
+			//here cv::resize is used with bilinear interpolation
 			cv::resize(mSrcImg, scaledImg, cv::Size(), (double)config()->scale(), (double)config()->scale(), cv::INTER_LINEAR);
 		}
 
-		//TODO compute Gradients
-		//cv::Mat gradientImg = gradients(scaledImg);
+		//compute Gradients
+		GradientVector gr(scaledImg);
+		if (!gr.compute()) {
+			mWarning << "could not compute gradients in ReadLSD compute...";
+			return false;
+		}
+		mMagImg = gr.magImg();
+		mRadImg = gr.radImg();
+
+		/* Number of Tests - NT
+
+		The theoretical number of tests is Np.(XY)^(5/2)
+		where X and Y are number of columns and rows of the image.
+		Np corresponds to the number of angle precisions considered.
+		As the procedure 'rect_improve' tests 5 times to halve the
+		angle precision, and 5 more times after improving other factors,
+		11 different precision values are potentially tested. Thus,
+		the number of tests is
+		11 * (X*Y)^(5/2)
+		whose logarithm value is
+		log10(11) + 5/2 * (log10(X) + log10(Y)).
+		*/
+		logNT = 5.0 * (log10((double)scaledImg.cols) + log10((double)scaledImg.rows)) / 2.0
+			+ log10(11.0);
+		minRegSize = (int)(-logNT / log10(p)); /* minimal number of points in region
+												 that can give a meaningful event*/
+		
+		
+		cv::Mat idxMat;
+		cv::Mat rM = mMagImg.reshape(1, 1);
+		//if this is too slow use histogram binning as proposed in
+		//the original version of LSD implementation
+		cv::sortIdx(rM, idxMat, CV_SORT_EVERY_ROW + CV_SORT_DESCENDING);
+
+		
+		mRegionImg = cv::Mat(scaledImg.size(), CV_64FC1);
+		mRegionImg.setTo(0);
+		QVector<cv::Point> region;
+		int regionIdx = 1;
+
+		int *ptrIdx = idxMat.ptr<int>(0);
+		for (int colIdx = 0; colIdx < rM.cols; colIdx++) {
+
+			int y = ptrIdx[colIdx] / mMagImg.cols;
+			int x = ptrIdx[colIdx] % mMagImg.cols;
+
+			double angle = regionGrow(x, y, region, regionIdx);
+
+
+			regionIdx++;
+		}
+
+
 
 
 
 		return false;
 	}
+
+	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx)
+	{
+		region.push_back(cv::Point(x, y));
+		double angle = mMagImg.at<double>(y, x);
+
+		for (int regSizeIdx = 0; regSizeIdx < region.size(); regSizeIdx++) {
+
+			int xt = region[regSizeIdx].x;
+			int yt = region[regSizeIdx].y;
+			mRegionImg.at<double>(yt, xt) = regionIdx;
+			double sumdx = cos(angle);
+			double sumdy = sin(angle);
+
+			for (int xx = xt - 1; xx <= xt + 1; xx++ ) {
+				for (int yy = yt - 1; yy <= yt + 1; yy++) {
+					double regIdx = mRegionImg.at<double>(yy, xx);
+
+					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows &&
+						regIdx == 0 && isAligned(xx,yy,mMagImg,angle)) {
+
+						mRegionImg.at<double>(yy, xx) = (double)regionIdx;
+						region.push_back(cv::Point(xx, yy));
+						sumdx += cos(mMagImg.at<double>(yy, xx));
+						sumdy += sin(mMagImg.at<double>(yy, xx));
+						angle = atan2(sumdy, sumdx);
+					}
+
+				}
+			}
+
+
+		}
+
+
+
+
+
+		return angle;
+	}
+
 
 	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{
 		return qSharedPointerDynamicCast<ReadLSDConfig>(mConfig);
@@ -1055,7 +1152,7 @@ namespace rdf {
 		return -log10(bin_tail) - logNT;
 	}
 
-	int ReadLSD::isAligned(double thetaTest, double theta, double prec) {
+	int ReadLSD::isAligned(double thetaTest, double theta) {
 		/* check parameters */
 		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 
@@ -1078,7 +1175,7 @@ namespace rdf {
 		return theta <= prec;
 	}
 
-	int ReadLSD::isAligned(int x, int y, const cv::Mat & img, double theta, double prec) {
+	int ReadLSD::isAligned(int x, int y, const cv::Mat & img, double theta) {
 		double a;
 
 		/* check parameters */
@@ -1093,50 +1190,51 @@ namespace rdf {
 		a = img.at<double>(y, x);
 		//a = angles->data[x + y * angles->xsize];
 
-		return isAligned(a, theta, prec);
+		return isAligned(a, theta);
 	}
+
 
 	ReadLSDConfig::ReadLSDConfig()	{
 		mModuleName = "ReadLSD";
 	}
 
-	float ReadLSDConfig::scale() const {
+	double ReadLSDConfig::scale() const {
 		return mScale;
 	}
 
-	void ReadLSDConfig::setScale(float s) {
+	void ReadLSDConfig::setScale(double s) {
 		mScale = s;
 	}
 
-	float ReadLSDConfig::sigmaScale() const {
+	double ReadLSDConfig::sigmaScale() const {
 		return mSigmaScale;
 	}
 
-	void ReadLSDConfig::setSigmaScale(float s) {
+	void ReadLSDConfig::setSigmaScale(double s) {
 		mSigmaScale = s;
 	}
 
-	float ReadLSDConfig::angleThr() const {
+	double ReadLSDConfig::angleThr() const {
 		return mAngleThr;
 	}
 
-	void ReadLSDConfig::setAngleThr(float a) {
+	void ReadLSDConfig::setAngleThr(double a) {
 		mAngleThr = a;
 	}
 
-	float ReadLSDConfig::logEps() const {
+	double ReadLSDConfig::logEps() const {
 		return mLogEps;
 	}
 
-	void ReadLSDConfig::setLogeps(float l) {
+	void ReadLSDConfig::setLogeps(double l) {
 		mLogEps = l;
 	}
 
-	float ReadLSDConfig::density() const {
+	double ReadLSDConfig::density() const {
 		return mDensityThr;
 	}
 
-	void ReadLSDConfig::setDensity(float d) {
+	void ReadLSDConfig::setDensity(double d) {
 		mDensityThr = d;
 	}
 
@@ -1162,11 +1260,11 @@ namespace rdf {
 	}
 
 	void ReadLSDConfig::load(const QSettings & settings) {
-		mScale = settings.value("scale", mScale).toFloat();
-		mSigmaScale = settings.value("sigmaScale", mSigmaScale).toFloat();
-		mAngleThr = settings.value("angleThr", mAngleThr).toFloat();
-		mLogEps = settings.value("logEps", mLogEps).toFloat();
-		mDensityThr = settings.value("densityThr", mDensityThr).toFloat();
+		mScale = settings.value("scale", mScale).toDouble();
+		mSigmaScale = settings.value("sigmaScale", mSigmaScale).toDouble();
+		mAngleThr = settings.value("angleThr", mAngleThr).toDouble();
+		mLogEps = settings.value("logEps", mLogEps).toDouble();
+		mDensityThr = settings.value("densityThr", mDensityThr).toDouble();
 		mNBins = settings.value("nBins", mNBins).toInt();
 
 	}

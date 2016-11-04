@@ -195,20 +195,20 @@ class DllModuleExport ReadLSDConfig : public ModuleConfig {
 public:
 	ReadLSDConfig();
 
-	float scale() const;
-	void setScale(float s);
+	double scale() const;
+	void setScale(double s);
 
-	float sigmaScale() const;
-	void setSigmaScale(float s);
+	double sigmaScale() const;
+	void setSigmaScale(double s);
 
-	float angleThr() const;
-	void setAngleThr(float a);
+	double angleThr() const;
+	void setAngleThr(double a);
 
-	float logEps() const;
-	void setLogeps(float l);
+	double logEps() const;
+	void setLogeps(double l);
 
-	float density() const;
-	void setDensity(float d);
+	double density() const;
+	void setDensity(double d);
 
 	int bins() const;
 	void setBins(int b);
@@ -220,18 +220,18 @@ private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	float mScale = 0.8f;		// When different from 1.0, LSD will scale the input image
+	double mScale = 0.8f;		// When different from 1.0, LSD will scale the input image
 								//by 'scale' factor by Gaussian filtering, before detecting	line segments.
 								//Example: if scale = 0.8, the input image will be subsampled
 								//to 80 % of its size, before the line segment detector
 								//is applied.	Suggested value : 0.8
-	float mSigmaScale = 0.6f;	//When scale != 1.0, the sigma of the Gaussian filter is :
+	double mSigmaScale = 0.6f;	//When scale != 1.0, the sigma of the Gaussian filter is :
 								//sigma = sigma_scale / scale, if scale <  1.0
 								//sigma = sigma_scale, if scale >= 1.0
 								//Suggested value : 0.6
-	float mAngleThr = 22.5f;		// Gradient angle tolerance in the region growing  algorithm, in degrees.
+	double mAngleThr = 22.5f;	// Gradient angle tolerance in the region growing  algorithm, in degrees.
 								//Suggested value : 22.5
-	float mLogEps = 0.0f; 		//Detection threshold, accept if - log10(NFA) > log_eps.
+	double mLogEps = 0.0f; 		//Detection threshold, accept if - log10(NFA) > log_eps.
 								//	The larger the value, the more strict the detector is,
 								//	and will result in less detections.
 								//	(Note that the 'minus sign' makes that this
@@ -244,7 +244,7 @@ private:
 								//	- 2.0 gives an average of 0.01 false detections on noise
 								//	.
 								//	Suggested value : 0.0
-	float mDensityThr = 0.7f;	//Minimal proportion of 'supporting' points in a rectangle.	Suggested value : 0.7
+	double mDensityThr = 0.7f;	//Minimal proportion of 'supporting' points in a rectangle.	Suggested value : 0.7
 	int mNBins = 1024;			//Number of bins used in the pseudo-ordering of gradient modulus. Suggested value : 1024
 
 
@@ -269,8 +269,11 @@ protected:
 
 	cv::Mat mSrcImg;									//the input image  either 3 channel or 1 channel [0 255]
 	cv::Mat mLineImg;									//the line image [0 255]
+	cv::Mat mRegionImg;
+	cv::Mat mMagImg;
+	cv::Mat mRadImg;
 	cv::Mat mMask;										//the mask image [0 255]
-
+	
 	int mTabSize = 100000;
 	double mInv[100000];   /* table to keep computed inverse values */
 	QVector<rdf::Line> hLines;
@@ -279,8 +282,10 @@ protected:
 private:
 	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
-	int isAligned(double thetaTest, double theta, double prec);
-	int isAligned(int x, int y, const cv::Mat &img, double theta, double prec);
+	double prec = 0;
+	int isAligned(double thetaTest, double theta);
+	int isAligned(int x, int y, const cv::Mat &img, double theta);
+	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx);
 
 };
 

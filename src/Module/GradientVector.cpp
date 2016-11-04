@@ -99,15 +99,15 @@ namespace rdf {
 		mConfig = QSharedPointer<GradientVectorConfig>::create();
 	}
 
-	cv::Mat GradientVector::getDebugGaussImg()	{
+	cv::Mat GradientVector::debugGaussImg()	{
 		return mGaussImg;
 	}
 
-	cv::Mat GradientVector::getMagImg() 	{
+	cv::Mat GradientVector::magImg() 	{
 		return mMagImg;
 	}
 
-	cv::Mat GradientVector::getRadImg()	{
+	cv::Mat GradientVector::radImg()	{
 		return mRadImg;
 	}
 
@@ -115,7 +115,7 @@ namespace rdf {
 		mAnchor = a;
 	}
 
-	cv::Point GradientVector::getAnchor() const	{
+	cv::Point GradientVector::anchor() const	{
 		return mAnchor;
 	}
 
@@ -125,6 +125,14 @@ namespace rdf {
 
 	void GradientVector::setDyKernel(const cv::Mat & m)	{
 		mDyKernel = m;
+	}
+
+	double GradientVector::minVal() const	{
+		return mMinVal;
+	}
+
+	double GradientVector::maxVal() const	{
+		return mMaxVal;
 	}
 
 	bool GradientVector::isEmpty() const	{
@@ -213,11 +221,10 @@ namespace rdf {
 			//	//else
 			//	//	maskEr = mask;
 			maskEr = rdf::Algorithms::erodeImage(mMask, (int)(config()->sigma()*12.0f));
-			mDxImg = mDxImg.mul(mDxImg);
-			mDyImg = mDyImg.mul(mDyImg);
-
-			//	//DkIP::mulMask(dxImg, maskEr);
-			//	//DkIP::mulMask(dyImg, maskEr);
+			//mDxImg = mDxImg.mul(mDxImg);
+			//mDyImg = mDyImg.mul(mDyImg);
+			rdf::Algorithms::mulMask(mDxImg, maskEr);
+			rdf::Algorithms::mulMask(mDyImg, maskEr);
 		}
 	}
 

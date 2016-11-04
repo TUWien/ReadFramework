@@ -82,15 +82,19 @@ class DllModuleExport GradientVector : public Module {
 public:
 	GradientVector(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-	cv::Mat getDebugGaussImg();
-	cv::Mat getMagImg();
-	cv::Mat getRadImg();
+	cv::Mat debugGaussImg();
+	cv::Mat magImg();
+	cv::Mat radImg();
 
 	void setAnchor(cv::Point a);
-	cv::Point getAnchor() const;
+	cv::Point anchor() const;
 
 	void setDxKernel(const cv::Mat& m);
 	void setDyKernel(const cv::Mat& m);
+
+	double minVal() const;
+	double maxVal() const;
+
 
 	bool isEmpty() const override;
 	virtual bool compute() override;
