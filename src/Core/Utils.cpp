@@ -40,6 +40,8 @@
 #include <QDir>
 #include <QTime>
 #include <QColor>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include <opencv2/core/core.hpp>
 #pragma warning(pop)
@@ -185,6 +187,55 @@ QString Utils::baseName(const QString & filePath) const {
 	}
 
 	return filePath.left(sI-1);	// -1 to remove the point
+}
+
+QJsonValue Utils::readJson(const QString & filePath, const QString & key) {
+	
+	QJsonValue jv;
+
+	QFile file(filePath);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		QFileInfo fi(filePath);
+
+		if (!fi.exists())
+			qCritical() << filePath << "does not exist...";
+		else
+			qCritical() << "cannot open" << filePath;
+
+		return jv;
+	}
+
+	// read the file
+	QByteArray ba = file.readAll();
+	QJsonDocument doc = QJsonDocument::fromJson(ba);
+	if (doc.isNull() || doc.isEmpty()) {
+		qCritical() << "cannot parse NULL document: " << filePath;
+		return jv;
+	}
+
+	return doc.object().value(key);
+}
+
+void Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
+
+	QFile file(filePath);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QFileInfo fi(filePath);
+
+		if (!fi.exists())
+			qCritical() << "cannot open or write to" << filePath;
+
+		return;
+	}
+
+	QJsonDocument doc(jo);
+	int64 nb = file.write(doc.toJson());
+
+	if (nb == -1)
+		qCritical() << "could not write data to" << filePath;
+	else
+		qDebug() << nb << "bytes written to" << filePath;
+
 }
 
 // ColorManager --------------------------------------------------------------------

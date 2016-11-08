@@ -368,6 +368,12 @@ PixelLabel Pixel::label() const {
 	return mLabel;
 }
 
+bool operator==(const QSharedPointer<const Pixel>& px, const cv::KeyPoint & kp) {
+
+	double angle = px->stats() ? px->stats()->orientation() : px->ellipse().angle();
+	return px->ellipse().center().toCvPoint2f() == kp.pt && px->ellipse().majorAxis() == kp.size && kp.angle == angle;
+}
+
 cv::KeyPoint Pixel::toKeyPoint() const {
 
 	double angle = stats() ? stats()->orientation() : mEllipse.angle();

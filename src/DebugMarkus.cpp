@@ -241,6 +241,9 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 	LabelManager lm = LabelManager::read(mConfig.classifierPath());
 	qInfo().noquote() << lm.toString();
 
+
+	cv::Mat josef(10,10,CV_32FC1, cv::Scalar(1.23));
+	
 	// compute super pixels
 	SuperPixel sp(src);
 
@@ -261,6 +264,20 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 	SuperPixelFeature spf(src, spl.set());
 	if (!spf.compute())
 		qCritical() << "could not compute SuperPixel features!";
+
+	FeatureCollectionManager fcm(spf.features(), spf.set());
+	fcm.write("C:\\temp\\features.json");
+
+
+	FeatureCollectionManager testFcm = FeatureCollectionManager::read("C:\\temp\\features.json");
+
+	for (int idx = 0; idx < testFcm.collection().size(); idx++) {
+
+		if (testFcm.collection()[idx].label() != fcm.collection()[idx].label())
+			qWarning() << "wrong labels!" << testFcm.collection()[idx].label() << "vs" << fcm.collection()[idx].label();
+		else
+			qInfo() << testFcm.collection()[idx].label() << "is fine...";
+	}
 
 	// drawing
 	cv::Mat rImg = src.clone();

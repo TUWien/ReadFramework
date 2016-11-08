@@ -59,7 +59,7 @@ class Pixel;
 /// <summary>
 /// This class is used for mapping classes (e.g. handwriting, decoration)
 /// </summary>
-class DllCoreExport LabelLookup {
+class DllCoreExport LabelInfo {
 
 public:
 
@@ -71,10 +71,11 @@ public:
 		label_end
 	};
 
-	LabelLookup(int id = label_unknown, const QString& mName = QString());
-	bool operator== (const LabelLookup& l1) const;
-	DllCoreExport friend QDataStream& operator<< (QDataStream& s, const LabelLookup& v);
-	DllCoreExport friend QDebug operator<< (QDebug d, const LabelLookup& v);
+	LabelInfo(int id = label_unknown, const QString& mName = QString());
+	bool operator== (const LabelInfo& l1) const;
+	bool operator!= (const LabelInfo& l1) const;
+	DllCoreExport friend QDataStream& operator<< (QDataStream& s, const LabelInfo& v);
+	DllCoreExport friend QDebug operator<< (QDebug d, const LabelInfo& v);
 
 	bool isNull() const;
 	bool contains(const QString& key) const;
@@ -86,15 +87,17 @@ public:
 
 	QString toString() const;
 
-	static LabelLookup fromString(const QString& str);
-	static LabelLookup fromJson(const QJsonObject& jo);
+	static LabelInfo fromString(const QString& str);
+
+	void toJson(QJsonObject& jo) const;
+	static LabelInfo fromJson(const QJsonObject& jo);
 	static QString jsonKey();
 	static int color2Id(const QColor& col);
 
 	// create default labels
-	static LabelLookup ignoreLabel();
-	static LabelLookup unknownLabel();
-	static LabelLookup backgroundLabel();
+	static LabelInfo ignoreLabel();
+	static LabelInfo unknownLabel();
+	static LabelInfo backgroundLabel();
 
 protected:
 
@@ -109,15 +112,15 @@ class DllCoreExport PixelLabel : public BaseElement {
 public:
 	PixelLabel(const QString& id = QString());
 
-	void setLabel(const LabelLookup& label);
-	LabelLookup label() const;
+	void setLabel(const LabelInfo& label);
+	LabelInfo label() const;
 
-	void setTrueLabel(const LabelLookup& label);
-	LabelLookup trueLabel() const;
+	void setTrueLabel(const LabelInfo& label);
+	LabelInfo trueLabel() const;
 
 protected:
-	LabelLookup mTrueLabel = LabelLookup::label_unknown;
-	LabelLookup mLabel = LabelLookup::label_unknown;
+	LabelInfo mTrueLabel = LabelInfo::label_unknown;
+	LabelInfo mLabel = LabelInfo::label_unknown;
 };
 
 };

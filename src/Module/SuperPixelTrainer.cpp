@@ -130,7 +130,7 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 		mWarning << "label manager is empty...";
 
 	QImage img(imgRect.size().toQSize(), QImage::Format_RGB888);
-	img.fill(LabelLookup::backgroundLabel().color());
+	img.fill(LabelInfo::backgroundLabel().color());
 
 	auto allRegions = Region::allRegions(mGtRegion);
 
@@ -140,11 +140,11 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 		if (!region)
 			continue;
 
-		LabelLookup ll = mManager.find(*region);
+		LabelInfo ll = mManager.find(*region);
 
 		if (ll.isNull()) { 
 			qDebug() << "could not find region: " << region->type();
-			ll = LabelLookup::ignoreLabel();
+			ll = LabelInfo::ignoreLabel();
 		}
 		
 		QColor labelC = ll.color();
@@ -178,7 +178,7 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 
 		// find the blob's label
 		QColor col = IP::statMomentColor(labelBBox, mask);
-		int id = LabelLookup::color2Id(col);
+		int id = LabelInfo::color2Id(col);
 
 		// assign ground truth & convert to pixel
 		PixelLabel label;
@@ -193,9 +193,9 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 
 // LabelManager --------------------------------------------------------------------
 LabelManager::LabelManager() {
-	add(LabelLookup::backgroundLabel());
-	add(LabelLookup::ignoreLabel());
-	add(LabelLookup::unknownLabel());
+	add(LabelInfo::backgroundLabel());
+	add(LabelInfo::ignoreLabel());
+	add(LabelInfo::unknownLabel());
 }
 
 bool LabelManager::isEmpty() const {
@@ -210,41 +210,21 @@ LabelManager LabelManager::read(const QString & filePath) {
 	
 	LabelManager manager;
 
-	QFile file(filePath);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		QFileInfo fi(filePath);
-
-		if (!fi.exists())
-			qCritical() << filePath << "does not exist...";
-		else
-			qCritical() << "cannot open" << filePath;
-		
-		return manager;
-	}
-
-	// read the file
-	QByteArray ba = file.readAll();
-	QJsonDocument doc = QJsonDocument::fromJson(ba);
-	if (doc.isNull() || doc.isEmpty()) {
-		qCritical() << "cannot parse NULL document: " << filePath;
-		return manager;
-	}
-
 	// parse the lookups
-	QJsonArray labels = doc.object().value(LabelLookup::jsonKey()).toArray();
+	QJsonArray labels = Utils::readJson(filePath,LabelInfo::jsonKey()).toArray();
 	if (labels.isEmpty()) {
-		qCritical() << "cannot locate" << LabelLookup::jsonKey();
+		qCritical() << "cannot locate" << LabelInfo::jsonKey();
 		return manager;
 	}
 
 	// parse labels
 	for (const QJsonValue& cLabel : labels)
-		manager.add(LabelLookup::fromJson(cLabel.toObject()));
+		manager.add(LabelInfo::fromJson(cLabel.toObject().value("Class").toObject()));
 	
 	return manager;
 }
 
-void LabelManager::add(const LabelLookup & label) {
+void LabelManager::add(const LabelInfo & label) {
 
 	if (contains(label)) {
 		qInfo() << label << "already exists - ignoring...";
@@ -258,9 +238,9 @@ void LabelManager::add(const LabelLookup & label) {
 	mLookups << label;
 }
 
-bool LabelManager::contains(const LabelLookup & label) const {
+bool LabelManager::contains(const LabelInfo & label) const {
 
-	for (const LabelLookup ll : mLookups) {
+	for (const LabelInfo ll : mLookups) {
 		if (label == ll)
 			return true;
 	}
@@ -268,9 +248,9 @@ bool LabelManager::contains(const LabelLookup & label) const {
 	return false;
 }
 
-bool LabelManager::containsId(const LabelLookup & label) const {
+bool LabelManager::containsId(const LabelInfo & label) const {
 
-	for (const LabelLookup ll : mLookups) {
+	for (const LabelInfo ll : mLookups) {
 		if (label.id() == ll.id())
 			return true;
 	}
@@ -288,41 +268,156 @@ QString LabelManager::toString() const {
 	return str;
 }
 
-LabelLookup LabelManager::find(const QString & str) const {
+LabelInfo LabelManager::find(const QString & str) const {
 	
 	// try to directly find the entry
-	for (const LabelLookup ll : mLookups) {
+	for (const LabelInfo ll : mLookups) {
 		
 		if (ll.name() == str)
 			return ll;
 	}
 
-	for (const LabelLookup ll : mLookups) {
+	for (const LabelInfo ll : mLookups) {
 
 		if (ll.contains(str))
 			return ll;
 	}
 
-	return LabelLookup();
+	return LabelInfo();
 }
 
-LabelLookup LabelManager::find(const Region & r) const {
+LabelInfo LabelManager::find(const Region & r) const {
 
 	QString name = RegionManager::instance().typeName(r.type());
 	return find(name);
 }
 
-LabelLookup LabelManager::find(int id) const {
+LabelInfo LabelManager::find(int id) const {
 	
 	// try to directly find the entry
-	for (const LabelLookup ll : mLookups) {
+	for (const LabelInfo ll : mLookups) {
 
 		if (ll.id() == id)
 			return ll;
 	}
 
-	return LabelLookup();
+	return LabelInfo();
 }
 
+
+// FeatureCollection --------------------------------------------------------------------
+FeatureCollection::FeatureCollection(const cv::Mat & descriptors, const LabelInfo & label) {
+	mDesc = descriptors;
+	mLabel = label;
+}
+
+QJsonObject FeatureCollection::toJson() const {
+
+	QJsonObject jo;
+	mLabel.toJson(jo);
+	jo.insert("descriptors", Image::matToJson(mDesc));
+
+	return jo;
+}
+
+FeatureCollection FeatureCollection::read(QJsonObject & jo) {
+
+	FeatureCollection fc;
+	fc.mLabel = LabelInfo::fromJson(jo.value("Class").toObject());
+	fc.mDesc = Image::jsonToMat(jo.value("descriptors").toObject());
+
+	return fc;
+}
+
+/// <summary>
+/// Splits the descriptors according to their trueLabels.
+/// </summary>
+/// <param name="descriptors">The descriptors.</param>
+/// <param name="set">The pixel set. NOTE: set & descriptors must be synced descriptors.rows == set.size()</param>
+/// <returns></returns>
+QVector<FeatureCollection> FeatureCollection::split(const cv::Mat & descriptors, const PixelSet & set) {
+	
+	assert(descriptors.rows == set.size());
+	QVector<FeatureCollection> collections;
+
+	for (int idx = 0; idx < set.size(); idx++) {
+
+		const QSharedPointer<Pixel> px = set.pixels()[idx];
+		const LabelInfo& cLabel = px->label().trueLabel();
+		bool isNew = true;
+		
+		for (FeatureCollection& fc : collections) {
+			if (fc.label() == cLabel) {
+				fc.append(descriptors.row(idx));
+				isNew = false;
+			}
+		}
+
+		if (isNew) {
+			collections.append(FeatureCollection(descriptors.row(idx), cLabel));
+		}
+	}
+
+	return collections;
+}
+
+QString FeatureCollection::jsonKey() {
+	return "FeatureCollection";
+}
+
+void FeatureCollection::append(const cv::Mat & descriptor) {
+	mDesc.push_back(descriptor);
+}
+
+LabelInfo FeatureCollection::label() const {
+	return mLabel;
+}
+
+// FeatureCollectionManager --------------------------------------------------------------------
+FeatureCollectionManager::FeatureCollectionManager(const cv::Mat & descriptors, const PixelSet & set) {
+	
+	mCollection = FeatureCollection::split(descriptors, set);
+}
+
+void FeatureCollectionManager::write(const QString & filePath) const {
+
+	QJsonArray ja;
+
+	for (const FeatureCollection& fc : mCollection)
+		ja << fc.toJson();
+	
+	QJsonObject jo;
+	jo.insert(FeatureCollection::jsonKey(), ja);
+
+	Utils::writeJson(filePath, jo);
+}
+
+FeatureCollectionManager FeatureCollectionManager::read(const QString & filePath) {
+
+	FeatureCollectionManager manager;
+
+	// parse the feature collections
+	QJsonArray labels = Utils::readJson(filePath, FeatureCollection::jsonKey()).toArray();
+	if (labels.isEmpty()) {
+		qCritical() << "cannot locate" << FeatureCollection::jsonKey();
+		return manager;
+	}
+
+	// parse labels
+	for (const QJsonValue& cLabel : labels) {
+		QJsonObject co = cLabel.toObject();
+		manager.add(FeatureCollection::read(co));
+	}
+
+	return manager;
+}
+
+void FeatureCollectionManager::add(const FeatureCollection & collection) {
+	mCollection << collection;
+}
+
+QVector<FeatureCollection> FeatureCollectionManager::collection() const {
+	return mCollection;
+}
 
 }

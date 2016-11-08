@@ -140,8 +140,46 @@ bool SuperPixelFeature::compute() {
 		keypoints.push_back(px->toKeyPoint());
 	}
 
+	mInfo << "# keypoints before ORB" << keypoints.size();
+
+
+	std::vector<cv::KeyPoint> kptsIn(keypoints.begin(), keypoints.end());
+
 	cv::Ptr<cv::ORB> features = cv::ORB::create();
 	features->compute(cImg, keypoints, mDescriptors);
+
+	QVector<cv::KeyPoint> kptsOut = QVector<cv::KeyPoint>::fromStdVector(keypoints);
+
+
+	for (int idx = 0; idx < kptsIn.size(); idx++) {
+		
+		int kIdx = kptsOut.indexOf(kptsIn[idx]);
+
+		if (kIdx == -1)
+			mSet.remove(mSet.pixels()[idx]);
+	}
+
+	//qDebug() << "in vs. out" << kptsIn.size() << "o" << keypoints.size();
+
+	//for (const QSharedPointer<Pixel>& px : mSet.pixels()) {
+
+	//	bool exists = false;
+
+	//	for (const cv::KeyPoint& kp : keypoints) {
+
+	//		if (px == kp) {
+	//			exists = true;
+	//			break;
+	//		}
+	//	}
+
+	//	if (!exists)
+	//		mSet.remove(px);
+	//}
+
+	mInfo << "# keypoints after ORB" << keypoints.size() << "set size" << mSet.size();
+
+	//mSet.remove();
 
 	mInfo << mDescriptors.rows << "features computed in" << dt;
 
@@ -183,6 +221,14 @@ QString SuperPixelFeature::toString() const {
 	QString str;
 	str += config()->name() + " no info to display";
 	return str;
+}
+
+cv::Mat SuperPixelFeature::features() const {
+	return mDescriptors;
+}
+
+PixelSet SuperPixelFeature::set() const {
+	return mSet;
 }
 
 bool SuperPixelFeature::checkInput() const {

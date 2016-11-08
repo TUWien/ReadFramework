@@ -76,18 +76,53 @@ public:
 	int size() const;
 	static LabelManager read(const QString& filePath);
 
-	void add(const LabelLookup& label);
-	bool contains(const LabelLookup& label) const;
-	bool containsId(const LabelLookup& label) const;
+	void add(const LabelInfo& label);
+	bool contains(const LabelInfo& label) const;
+	bool containsId(const LabelInfo& label) const;
 
 	QString toString() const;
 
-	LabelLookup find(const QString& str) const;
-	LabelLookup find(const Region& r) const;
-	LabelLookup find(int id) const;
+	LabelInfo find(const QString& str) const;
+	LabelInfo find(const Region& r) const;
+	LabelInfo find(int id) const;
 
 protected:
-	QVector<LabelLookup> mLookups;
+	QVector<LabelInfo> mLookups;
+};
+
+class DllModuleExport FeatureCollection {
+
+public:
+	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
+
+	QJsonObject toJson() const;
+	static FeatureCollection read(QJsonObject& jo);
+
+	void append(const cv::Mat& descriptor);
+	LabelInfo label() const;
+
+	static QVector<FeatureCollection> split(const cv::Mat& descriptors, const PixelSet& set);
+	static QString jsonKey();
+
+protected:
+	cv::Mat mDesc;
+	LabelInfo mLabel;
+};
+
+class DllModuleExport FeatureCollectionManager {
+
+public:
+	FeatureCollectionManager(const cv::Mat& descriptors = cv::Mat(), const PixelSet& set = PixelSet());
+
+	void write(const QString& filePath) const;
+	static FeatureCollectionManager read(const QString& filePath);
+	void add(const FeatureCollection& collection);
+
+	QVector<FeatureCollection> collection() const;
+
+protected:
+	QVector<FeatureCollection> mCollection;
+
 };
 
 class DllModuleExport SuperPixelLabeler : public Module {

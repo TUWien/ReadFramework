@@ -33,17 +33,17 @@
 #include "PixelLabel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QJsonObject>		// needed for LabelLookup
-#include <QJsonDocument>	// needed for LabelLookup
-#include <QJsonArray>		// needed for LabelLookup
+#include <QJsonObject>		// needed for LabelInfo
+#include <QJsonDocument>	// needed for LabelInfo
+#include <QJsonArray>		// needed for LabelInfo
 
 #include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
 
-// LabelLookup --------------------------------------------------------------------
-LabelLookup::LabelLookup(int id, const QString& name) {
+// LabelInfo --------------------------------------------------------------------
+LabelInfo::LabelInfo(int id, const QString& name) {
 
 	mId = id;
 
@@ -51,15 +51,19 @@ LabelLookup::LabelLookup(int id, const QString& name) {
 		mName = name;
 }
 
-bool LabelLookup::operator==(const LabelLookup & l1) const {
+bool LabelInfo::operator==(const LabelInfo & l1) const {
 	return id() == l1.id() && name() == l1.name();
 }
 
-bool LabelLookup::isNull() const {
+bool LabelInfo::operator!=(const LabelInfo & l1) const {
+	return !(*this == l1);
+}
+
+bool LabelInfo::isNull() const {
 	return id() == -1;
 }
 
-bool LabelLookup::contains(const QString& key) const {
+bool LabelInfo::contains(const QString& key) const {
 
 	if (mName == key)
 		return true;
@@ -67,49 +71,49 @@ bool LabelLookup::contains(const QString& key) const {
 	return mAlias.contains(key);
 }
 
-QColor LabelLookup::color() const {
+QColor LabelInfo::color() const {
 	QColor c(id() << 8);	// << 8 away from alpha (RGBA)
 	return c;
 }
 
-QColor LabelLookup::visColor() const {
+QColor LabelInfo::visColor() const {
 	return mVisColor;
 }
 
-int LabelLookup::color2Id(const QColor & col) {
+int LabelInfo::color2Id(const QColor & col) {
 	int ci = col.rgba();
 	return ci >> 8 & 0xFFFF;
 }
 
-LabelLookup LabelLookup::ignoreLabel() {
-	LabelLookup ll(label_ignore, QObject::tr("Ignore"));
+LabelInfo LabelInfo::ignoreLabel() {
+	LabelInfo ll(label_ignore, QObject::tr("Ignore"));
 	ll.mVisColor = ColorManager::darkGray(0.4);
 	return ll;
 }
 
-LabelLookup LabelLookup::unknownLabel() {
-	LabelLookup ll(label_unknown, QObject::tr("Unknown"));
+LabelInfo LabelInfo::unknownLabel() {
+	LabelInfo ll(label_unknown, QObject::tr("Unknown"));
 	ll.mVisColor = ColorManager::red();
 
 	return ll;
 }
 
-LabelLookup LabelLookup::backgroundLabel() {
-	LabelLookup ll(label_background, QObject::tr("Background"));
+LabelInfo LabelInfo::backgroundLabel() {
+	LabelInfo ll(label_background, QObject::tr("Background"));
 	ll.mVisColor = QColor(0, 0, 0);
 
 	return ll;
 }
 
-int LabelLookup::id() const {
+int LabelInfo::id() const {
 	return mId;
 }
 
-QString LabelLookup::name() const {
+QString LabelInfo::name() const {
 	return mName;
 }
 
-QString LabelLookup::toString() const {
+QString LabelInfo::toString() const {
 
 	QString str;
 	str += QString::number(id()) + ", " + name() + ", ";
@@ -120,19 +124,19 @@ QString LabelLookup::toString() const {
 	return str;
 }
 
-QDataStream& operator<<(QDataStream& s, const LabelLookup& ll) {
+QDataStream& operator<<(QDataStream& s, const LabelInfo& ll) {
 
 	s << ll.toString();
 	return s;
 }
 
-QDebug operator<<(QDebug d, const LabelLookup& ll) {
+QDebug operator<<(QDebug d, const LabelInfo& ll) {
 
 	d << qPrintable(ll.toString());
 	return d;
 }
 
-LabelLookup LabelLookup::fromString(const QString & str) {
+LabelInfo LabelInfo::fromString(const QString & str) {
 
 	// expecting a string like:
 	// #ID, #Name, #Alias1, #Alias2, ..., #AliasN
@@ -141,10 +145,10 @@ LabelLookup LabelLookup::fromString(const QString & str) {
 	if (list.size() < 2) {
 		qWarning() << "illegal label string: " << str;
 		qInfo() << "I expected: ID, Name, Alias1, ..., AliasN";
-		return LabelLookup();
+		return LabelInfo();
 	}
 
-	LabelLookup ll;
+	LabelInfo ll;
 
 	// parse ID
 	bool ok = false;
@@ -152,7 +156,7 @@ LabelLookup LabelLookup::fromString(const QString & str) {
 
 	if (!ok) {
 		qWarning() << "first entry must be an int, but it is: " << list[0];
-		return LabelLookup();
+		return LabelInfo();
 	}
 
 	// parse name
@@ -165,15 +169,16 @@ LabelLookup LabelLookup::fromString(const QString & str) {
 	return ll;
 }
 
-LabelLookup LabelLookup::fromJson(const QJsonObject & jo) {
+LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 
-	//"Label": {
+	//"Class": {
 	//	"id": 5,
 	//	"name": "image",
 	//	"alias": ["ImageRegion", "ChartRegion", "GraphicRegion"],
 	//	"color": "#990066", 
 	//},
-	LabelLookup ll;
+
+	LabelInfo ll;
 	ll.mId = jo.value("id").toInt(label_unknown);
 	ll.mName = jo.value("name").toString();
 	ll.mVisColor.setNamedColor(jo.value("color").toString());
@@ -188,13 +193,29 @@ LabelLookup LabelLookup::fromJson(const QJsonObject & jo) {
 	if (ll.id() == label_unknown) {
 		QJsonDocument jd(jo);
 		qCritical().noquote() << "could not parse" << jd.toJson();
-		return LabelLookup::unknownLabel();
+		return LabelInfo::unknownLabel();
 	}
 
 	return ll;
 }
 
-QString LabelLookup::jsonKey() {
+void LabelInfo::toJson(QJsonObject & jo) const {
+
+	QJsonObject joc;
+	joc.insert("id", QJsonValue(mId));
+	joc.insert("name", QJsonValue(mName));
+	joc.insert("color", QJsonValue(mVisColor.name()));
+
+	QJsonArray ja;
+	for (const QString& a : mAlias)
+		ja.append(a);
+
+	joc.insert("alias", ja);
+
+	jo.insert("Class", joc);
+}
+
+QString LabelInfo::jsonKey() {
 	return QString("TUWienLabelLookup");
 }
 
@@ -202,19 +223,19 @@ QString LabelLookup::jsonKey() {
 PixelLabel::PixelLabel(const QString & id) : BaseElement(id) {
 }
 
-void PixelLabel::setLabel(const LabelLookup & label) {
+void PixelLabel::setLabel(const LabelInfo & label) {
 	mLabel = label;
 }
 
-LabelLookup PixelLabel::label() const {
+LabelInfo PixelLabel::label() const {
 	return mLabel;
 }
 
-void PixelLabel::setTrueLabel(const LabelLookup & label) {
+void PixelLabel::setTrueLabel(const LabelInfo & label) {
 	mTrueLabel = label;
 }
 
-LabelLookup PixelLabel::trueLabel() const {
+LabelInfo PixelLabel::trueLabel() const {
 	return mTrueLabel;
 }
 

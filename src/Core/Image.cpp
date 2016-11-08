@@ -294,6 +294,43 @@ QString Image::printImage(const cv::Mat& img, const QString name) {
 	return imgInfo;
 }
 
+QJsonObject Image::matToJson(const cv::Mat & img) {
+
+	QJsonObject jo;
+	jo.insert("rows", img.rows);
+	jo.insert("cols", img.cols);
+	jo.insert("type", img.type());
+
+	const QByteArray& ba(img.ptr<const char>());
+	QString db64 = ba.toBase64();
+	jo.insert("data", db64);
+
+	return jo;
+}
+
+cv::Mat Image::jsonToMat(const QJsonObject & jo) {
+
+	int rows = jo.value("rows").toInt(-1);
+	int cols = jo.value("cols").toInt(-1);
+	int type = jo.value("type").toInt(-1);
+
+	if (rows == -1 || cols == -1 || type == -1) {
+		qWarning() << "cannot read mat from Json";
+		return cv::Mat();
+	}
+
+	// decode data
+	QString dataStr = jo.value("data").toString();
+	QByteArray ba = QByteArray::fromBase64(QByteArray((char*)dataStr.data()));
+
+	cv::Mat img(rows, cols, type);
+	char* ip = img.ptr<char>();
+	ip = ba.data();
+	img = img.clone();	// then we definitely own the data
+
+	return img;
+}
+
 // Histogram --------------------------------------------------------------------
 Histogram::Histogram(const cv::Mat & values) {
 	assert(values.depth() == CV_32FC1 && values.rows == 1);

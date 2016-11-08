@@ -180,6 +180,8 @@ public:
 	Pixel();
 	Pixel(const Ellipse& ellipse, const Rect& bbox, const QString& id = QString());
 
+	friend DllCoreExport bool operator==(const QSharedPointer<const Pixel>& px, const cv::KeyPoint& kp);
+
 	bool isNull() const;
 
 	inline Vector2D center() const {

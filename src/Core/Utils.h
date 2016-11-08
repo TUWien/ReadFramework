@@ -55,6 +55,7 @@
 
 // Qt defines
 class QSettings;
+class QJsonValueRef;
 
 namespace rdf {	
 
@@ -70,6 +71,9 @@ public:
 
 	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;
 	QString baseName(const QString& filePath) const;
+
+	static QJsonValue readJson(const QString& filePath, const QString& key);
+	static void writeJson(const QString& filePath, const QJsonObject& jo);
 
 private:
 	Utils();
@@ -101,7 +105,6 @@ public:
 	static cv::Rect2d qRectToCv(const QRectF& r);
 
 };
-
 
 /**
 * A small class which measures the time.
