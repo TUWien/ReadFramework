@@ -23,7 +23,6 @@ var classrdf_1_1_pixel =
     [ "stats", "classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb", null ],
     [ "tabStop", "classrdf_1_1_pixel.html#a7bee729b97c5191b567381a4c8132f5d", null ],
     [ "toKeyPoint", "classrdf_1_1_pixel.html#a77a0b44e5398e251cfe7bcc819009461", null ],
-    [ "operator==", "classrdf_1_1_pixel.html#ad21fd502fa4801d4d290abc1d32db045", null ],
     [ "mBBox", "classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9", null ],
     [ "mEllipse", "classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f", null ],
     [ "mIsNull", "classrdf_1_1_pixel.html#a44c6fc1cbc8339509fb03c883efbaece", null ],

@@ -155,25 +155,31 @@ $(document).ready(function(){initNavTree('_image_processor_8h_source.html','');}
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">// Qt defines</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">namespace </span>rdf {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">// read defines</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classrdf_1_1_i_p.html">   53</a></span>&#160;<span class="keyword">class </span><a class="code" href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_i_p.html">IP</a> {    <span class="comment">// basically a namespace for now</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">namespace </span>cv {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// compare operator for keypoints</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <span class="keywordtype">bool</span> <a class="code" href="namespacecv.html#ad309ca3819a36c9f40b48acdf0895c16">operator==</a>(<span class="keyword">const</span> cv::KeyPoint&amp; kpl, <span class="keyword">const</span> cv::KeyPoint&amp; kpr);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">static</span> cv::Mat invert(<span class="keyword">const</span> cv::Mat&amp; src);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">static</span> cv::Mat grayscale(<span class="keyword">const</span> cv::Mat&amp; src);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">static</span> cv::Mat computeHist(<span class="keyword">const</span> cv::Mat&amp; data, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> numElements = -1, <span class="keywordtype">double</span>* maxBin = 0);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> draw(<span class="keyword">const</span> std::vector&lt;cv::Point&gt;&amp; pts, cv::Mat&amp; img, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> val = 255);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> statMomentMat(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat(), <span class="keywordtype">double</span> momentValue = 0.5, <span class="keywordtype">int</span> maxSamples = 10000, <span class="keywordtype">int</span> area = -1);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">static</span> QColor statMomentColor(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat(), <span class="keywordtype">double</span> momentValue = 0.5);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">namespace </span>rdf {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">// read defines</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classrdf_1_1_i_p.html">   58</a></span>&#160;<span class="keyword">class </span><a class="code" href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> <a class="code" href="classrdf_1_1_i_p.html">IP</a> {    <span class="comment">// basically a namespace for now</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">static</span> cv::Mat invert(<span class="keyword">const</span> cv::Mat&amp; src);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">static</span> cv::Mat grayscale(<span class="keyword">const</span> cv::Mat&amp; src);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">static</span> cv::Mat computeHist(<span class="keyword">const</span> cv::Mat&amp; data, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> numElements = -1, <span class="keywordtype">double</span>* maxBin = 0);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> draw(<span class="keyword">const</span> std::vector&lt;cv::Point&gt;&amp; pts, cv::Mat&amp; img, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> val = 255);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> statMomentMat(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat(), <span class="keywordtype">double</span> momentValue = 0.5, <span class="keywordtype">int</span> maxSamples = 10000, <span class="keywordtype">int</span> area = -1);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> QColor statMomentColor(<span class="keyword">const</span> cv::Mat&amp; src, <span class="keyword">const</span> cv::Mat&amp; mask = cv::Mat(), <span class="keywordtype">double</span> momentValue = 0.5);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
 <div class="ttc" id="_image_processor_8h_html_a4a1a538b0d0ec23ed64f80bedabc90b3"><div class="ttname"><a href="_image_processor_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a></div><div class="ttdeci">#define DllCoreExport</div><div class="ttdef"><b>Definition:</b> ImageProcessor.h:44</div></div>
-<div class="ttc" id="classrdf_1_1_i_p_html"><div class="ttname"><a href="classrdf_1_1_i_p.html">rdf::IP</a></div><div class="ttdef"><b>Definition:</b> ImageProcessor.h:53</div></div>
+<div class="ttc" id="namespacecv_html_ad309ca3819a36c9f40b48acdf0895c16"><div class="ttname"><a href="namespacecv.html#ad309ca3819a36c9f40b48acdf0895c16">cv::operator==</a></div><div class="ttdeci">bool operator==(const cv::KeyPoint &amp;kpl, const cv::KeyPoint &amp;kpr)</div><div class="ttdef"><b>Definition:</b> ImageProcessor.cpp:45</div></div>
+<div class="ttc" id="classrdf_1_1_i_p_html"><div class="ttname"><a href="classrdf_1_1_i_p.html">rdf::IP</a></div><div class="ttdef"><b>Definition:</b> ImageProcessor.h:58</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -30,7 +30,7 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     ] ],
     [ "Image.cpp", "_image_8cpp.html", null ],
     [ "Image.h", "_image_8h.html", "_image_8h" ],
-    [ "ImageProcessor.cpp", "_image_processor_8cpp.html", null ],
+    [ "ImageProcessor.cpp", "_image_processor_8cpp.html", "_image_processor_8cpp" ],
     [ "ImageProcessor.h", "_image_processor_8h.html", "_image_processor_8h" ],
     [ "PageParser.cpp", "_page_parser_8cpp.html", null ],
     [ "PageParser.h", "_page_parser_8h.html", "_page_parser_8h" ],

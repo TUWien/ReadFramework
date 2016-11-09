@@ -20,7 +20,7 @@ var searchData=
   ['bins',['bins',['../classrdf_1_1_read_l_s_d_config.html#aefaaa6394d09516fc56741318d6e0c2b',1,'rdf::ReadLSDConfig']]],
   ['blob',['Blob',['../classrdf_1_1_blob.html#a524cc4f4349f4e41faceb1df4dcaed5f',1,'rdf::Blob::Blob()'],['../classrdf_1_1_blob.html#af1e9cf46848b6a6b0118dba3e7c8c32e',1,'rdf::Blob::Blob(const QVector&lt; cv::Point &gt; &amp;outerC, const QVector&lt; QVector&lt; cv::Point &gt; &gt; &amp;innerC)']]],
   ['bloborientation',['blobOrientation',['../classrdf_1_1_blob.html#a98b9ac417405ae6b3604e731e3bde347',1,'rdf::Blob']]],
-  ['blobs',['Blobs',['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()'],['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const ']]],
+  ['blobs',['blobs',['../classrdf_1_1_blobs.html#a8183d142818c38d1c87642b9ccf635c9',1,'rdf::Blobs::blobs() const '],['../classrdf_1_1_blobs.html#a61b37b2bf6607c07968fb55166d4613c',1,'rdf::Blobs::Blobs()']]],
   ['block',['Block',['../class_block.html#a78d1da3ae14f946fca749ba7a0cb7548',1,'Block']]],
   ['bottom',['bottom',['../classrdf_1_1_rect.html#acb999b56599ee23d188bf25a10a22e72',1,'rdf::Rect']]],
   ['bottomleft',['bottomLeft',['../classrdf_1_1_rect.html#a8613dea770761f945cf45aa9e2ecfc7f',1,'rdf::Rect']]],
