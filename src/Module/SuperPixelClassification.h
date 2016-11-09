@@ -49,10 +49,6 @@
 
 // Qt defines
 
-bool operator==(const cv::KeyPoint& kpl, const cv::KeyPoint& kpr) {
-	return kpl.pt == kpr.pt && kpl.size == kpr.size && kpl.angle == kpr.angle;
-}
-
 namespace rdf {
 
 class DllModuleExport SuperPixelFeatureConfig : public ModuleConfig {

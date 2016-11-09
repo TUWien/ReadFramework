@@ -47,6 +47,11 @@
 
 // Qt defines
 
+namespace cv {
+	// compare operator for keypoints
+	DllCoreExport bool operator==(const cv::KeyPoint& kpl, const cv::KeyPoint& kpr);
+}
+
 namespace rdf {
 
 // read defines

@@ -63,8 +63,46 @@ namespace rdf {
 SuperPixelLabelerConfig::SuperPixelLabelerConfig() : ModuleConfig("Super Pixel Trainer") {
 }
 
+QString SuperPixelLabelerConfig::featureFilePath() const {
+	return mFeatureFilePath;
+}
+
+QString SuperPixelLabelerConfig::labelConfigFilePath() const {
+	return mLabelConfigFilePath;
+}
+
+int SuperPixelLabelerConfig::maxNumFeaturesPerImage() const {
+	return mMaxNumFeaturesPerImage;
+}
+
+int SuperPixelLabelerConfig::minNumFeaturesPerClass() const {
+	return mMinNumFeaturesPerClass;
+}
+
+int SuperPixelLabelerConfig::maxNumFeaturesPerClass() const {
+	return mMaxNumFeaturesPerClass;
+}
+
 QString SuperPixelLabelerConfig::toString() const {
 	return ModuleConfig::toString();
+}
+
+void SuperPixelLabelerConfig::load(const QSettings & settings) {
+	
+	mFeatureFilePath = settings.value("featureFilePath", mFeatureFilePath).toString();
+	mLabelConfigFilePath = settings.value("labelConfigFilePath", mLabelConfigFilePath).toString();
+	mMaxNumFeaturesPerImage = settings.value("maxNumFeaturesPerImage", mMaxNumFeaturesPerImage).toInt();
+	mMinNumFeaturesPerClass = settings.value("minNumFeaturesPerClass", mMinNumFeaturesPerClass).toInt();
+	mMaxNumFeaturesPerClass = settings.value("maxNumFeaturesPerClass", mMaxNumFeaturesPerClass).toInt();
+}
+
+void SuperPixelLabelerConfig::save(QSettings & settings) const {
+
+	settings.setValue("featureFilePath", mFeatureFilePath);
+	settings.setValue("labelConfigFilePath", mLabelConfigFilePath);
+	settings.setValue("maxNumFeaturesPerImage", mMaxNumFeaturesPerImage);
+	settings.setValue("minNumFeaturesPerClass", mMinNumFeaturesPerClass);
+	settings.setValue("maxNumFeaturesPerClass", mMaxNumFeaturesPerClass);
 }
 
 // SuperPixelLabeler --------------------------------------------------------------------

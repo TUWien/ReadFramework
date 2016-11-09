@@ -59,12 +59,24 @@ class DllModuleExport SuperPixelLabelerConfig : public ModuleConfig {
 public:
 	SuperPixelLabelerConfig();
 
+	QString featureFilePath() const;
+	QString labelConfigFilePath() const;
+	int maxNumFeaturesPerImage() const;
+	int minNumFeaturesPerClass() const;
+	int maxNumFeaturesPerClass() const;
+
 	virtual QString toString() const override;
 
 protected:
 
-	//void load(const QSettings& settings) override;
-	//void save(QSettings& settings) const override;
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	QString mFeatureFilePath;
+	QString mLabelConfigFilePath;
+	int mMaxNumFeaturesPerImage = 10000;	// 1e4
+	int mMinNumFeaturesPerClass = 1000000;	// 1e6
+	int mMaxNumFeaturesPerClass = 10000;	// 1e4;
 };
 
 class DllModuleExport LabelManager {

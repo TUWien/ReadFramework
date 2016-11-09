@@ -241,9 +241,6 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 	LabelManager lm = LabelManager::read(mConfig.classifierPath());
 	qInfo().noquote() << lm.toString();
 
-
-	cv::Mat josef(10,10,CV_32FC1, cv::Scalar(1.23));
-	
 	// compute super pixels
 	SuperPixel sp(src);
 

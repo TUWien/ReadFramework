@@ -41,6 +41,12 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
+namespace cv {
+	bool operator==(const cv::KeyPoint& kpl, const cv::KeyPoint& kpr) {
+		return kpl.pt == kpr.pt && kpl.size == kpr.size && kpl.angle == kpr.angle;
+	}
+}
+
 namespace rdf {
 
 cv::Mat IP::invert(const cv::Mat & src) {
