@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['backgroundlabel',['backgroundLabel',['../classrdf_1_1_label_info.html#ad1d74e0c97fd8affce85d02d8f6db046',1,'rdf::LabelInfo']]],
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html#aab215a591d0aa492646d0e488b896b09',1,'rdf::BaseBinarizationSu']]],
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html#a033a57638775862b6965aa735ce2ad9a',1,'rdf::BaseBinarizationSuConfig']]],
   ['baseelement',['BaseElement',['../classrdf_1_1_base_element.html#a34b6a09b0436365f198ce4d36b8039ca',1,'rdf::BaseElement']]],

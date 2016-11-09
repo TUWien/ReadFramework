@@ -7,7 +7,7 @@ var classrdf_1_1_d_b_scan_pixel =
       [ "cluster0", "classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da92fd49b0b840b1a2b745781325d3086f", null ]
     ] ],
     [ "DBScanPixel", "classrdf_1_1_d_b_scan_pixel.html#ab2060a65e8fdab1c07096d75c56772fc", null ],
-    [ "calcDists", "classrdf_1_1_d_b_scan_pixel.html#aece79cba3a722cb6a447215a214d33b8", null ],
+    [ "calcDists", "classrdf_1_1_d_b_scan_pixel.html#a4aebb87873cee8084b42bf84b1fe9dc5", null ],
     [ "compute", "classrdf_1_1_d_b_scan_pixel.html#a39286846e546d409ad0163836d963769", null ],
     [ "edges", "classrdf_1_1_d_b_scan_pixel.html#a26dc94e064efe1530ff31003aa536c50", null ],
     [ "expandCluster", "classrdf_1_1_d_b_scan_pixel.html#aa1c2bfb293b3fd4ea69fdad417ac37b2", null ],
@@ -21,6 +21,7 @@ var classrdf_1_1_d_b_scan_pixel =
     [ "mEpsMultiplier", "classrdf_1_1_d_b_scan_pixel.html#a5e0120b7923a86b8e9ce2a34a4ca1785", null ],
     [ "mLabelPtr", "classrdf_1_1_d_b_scan_pixel.html#ae667dca7ef220e67ff5f507e148cb515", null ],
     [ "mLabels", "classrdf_1_1_d_b_scan_pixel.html#aa43eee4dba52cbf760995952083083dd", null ],
+    [ "mLineSpacing", "classrdf_1_1_d_b_scan_pixel.html#aca733e4ad12193eff5c0e66d9a55d14d", null ],
     [ "mMinPts", "classrdf_1_1_d_b_scan_pixel.html#a663560044a7a60318bd3be8334b15649", null ],
-    [ "mPixels", "classrdf_1_1_d_b_scan_pixel.html#a008e2fefb2a31ce5d7b5c879774bb3b2", null ]
+    [ "mPixels", "classrdf_1_1_d_b_scan_pixel.html#a6178dcb610bd07e91d1cd644dc5847e4", null ]
 ];

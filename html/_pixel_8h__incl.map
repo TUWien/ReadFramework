@@ -1,4 +1,6 @@
 <map id="src/Core/Pixel.h" name="src/Core/Pixel.h">
-<area shape="rect" id="node2" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="107,80,183,107"/>
-<area shape="rect" id="node6" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="217,80,364,107"/>
+<area shape="rect" id="node2" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="131,80,207,107"/>
+<area shape="rect" id="node6" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="513,155,660,181"/>
+<area shape="rect" id="node8" href="$_utils_8h.html" title="Utils.h" alt="" coords="378,155,437,181"/>
+<area shape="rect" id="node12" href="$_pixel_label_8h.html" title="PixelLabel.h" alt="" coords="564,80,657,107"/>
 </map>

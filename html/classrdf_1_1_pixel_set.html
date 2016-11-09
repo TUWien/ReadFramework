@@ -149,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ef571f5251049d1a4c0f794092f4d58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61de886a44695745dee27fe6a8637b9a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a61de886a44695745dee27fe6a8637b9a">PixelSet</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;set)</td></tr>
 <tr class="separator:a61de886a44695745dee27fe6a8637b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb9b500d74f64dd8ac74073deb48e08f"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#aeb9b500d74f64dd8ac74073deb48e08f">operator[]</a> (int idx) const </td></tr>
+<tr class="separator:aeb9b500d74f64dd8ac74073deb48e08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab36a3e5c335bd21f3e994320b2c45e5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#ab36a3e5c335bd21f3e994320b2c45e5d">contains</a> (const QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;pixel) const </td></tr>
 <tr class="separator:ab36a3e5c335bd21f3e994320b2c45e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafb224051a020f6525e8d016bf622054"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054">merge</a> (const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;o)</td></tr>
@@ -159,6 +161,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8c3d287617b4a2a9432fdc8dec6c5c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c83da338c13aba8e23f819e77c50381"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a1c83da338c13aba8e23f819e77c50381">pixels</a> () const </td></tr>
 <tr class="separator:a1c83da338c13aba8e23f819e77c50381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac241fb98db706303f3bc33c41b79f110"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#ac241fb98db706303f3bc33c41b79f110">size</a> () const </td></tr>
+<tr class="separator:ac241fb98db706303f3bc33c41b79f110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a244539d40b36ed50cadc6dac5d0b69ae"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_vector2_d.html">Vector2D</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a244539d40b36ed50cadc6dac5d0b69ae">pointSet</a> (double offsetAngle=0.0) const </td></tr>
 <tr class="memdesc:a244539d40b36ed50cadc6dac5d0b69ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a point set. The points are sampled along the pixel's ellipses w.r.t the relative angle which is added to the text line orientation. If angle == DBL_MAX or pixel-&gt;stats() == NULL, the ellipse centers are sampled instead.  <a href="#a244539d40b36ed50cadc6dac5d0b69ae">More...</a><br/></td></tr>
 <tr class="separator:a244539d40b36ed50cadc6dac5d0b69ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +174,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac56c3481044399420ed82e70be21cce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53c191bc9991060cdc0325fd06e51b61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_ellipse.html">Ellipse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a53c191bc9991060cdc0325fd06e51b61">profileRect</a> () const </td></tr>
 <tr class="separator:a53c191bc9991060cdc0325fd06e51b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32e12ae05173ce9e5c2e9a03430c1c6e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a32e12ae05173ce9e5c2e9a03430c1c6e">orientation</a> (double statMoment=0.5) const </td></tr>
+<tr class="memdesc:a32e12ae05173ce9e5c2e9a03430c1c6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the sets median orientation.  <a href="#a32e12ae05173ce9e5c2e9a03430c1c6e">More...</a><br/></td></tr>
+<tr class="separator:a32e12ae05173ce9e5c2e9a03430c1c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d742e9b5bbdc5e785aa5fa5e352c34"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#af0d742e9b5bbdc5e785aa5fa5e352c34">lineSpacing</a> (double statMoment=0.5) const </td></tr>
+<tr class="separator:af0d742e9b5bbdc5e785aa5fa5e352c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96fd9913d3b5b1c435605d6adec90889"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a96fd9913d3b5b1c435605d6adec90889">draw</a> (QPainter &amp;p) const </td></tr>
 <tr class="separator:a96fd9913d3b5b1c435605d6adec90889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c1160b2a74e93382be2c7496cf27e6b"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_text_line.html">TextLine</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_set.html#a0c1160b2a74e93382be2c7496cf27e6b">toTextLine</a> () const </td></tr>
@@ -426,6 +435,22 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af0d742e9b5bbdc5e785aa5fa5e352c34"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::PixelSet::lineSpacing </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>statMoment</em> = <code>0.5</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aafb224051a020f6525e8d016bf622054"></a>
 <div class="memitem">
 <div class="memproto">
@@ -439,6 +464,47 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeb9b500d74f64dd8ac74073deb48e08f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; rdf::PixelSet::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a32e12ae05173ce9e5c2e9a03430c1c6e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::PixelSet::orientation </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>statMoment</em> = <code>0.5</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the sets median orientation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">statMoment</td><td>if != 0.5 a quartile other than the median is computed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The set's median orientation.</dd></dl>
 
 </div>
 </div>
@@ -543,6 +609,21 @@ Protected Attributes</h2></td></tr>
           <td class="paramtype">const QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>pixel</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac241fb98db706303f3bc33c41b79f110"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rdf::PixelSet::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">

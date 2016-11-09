@@ -1,3 +1,18 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classrdf_1_1_patch.html" title="rdf::Patch" alt="" coords="6,5,85,32"/>
+<area shape="rect" id="node1" href="$classrdf_1_1_module_config.html" title="rdf::ModuleConfig" alt="" coords="5,360,131,387"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_binarization_su_config.html" title="rdf::BaseBinarizationSuConfig" alt="" coords="184,5,381,32"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_base_skew_estimation_config.html" title="rdf::BaseSkewEstimationConfig" alt="" coords="179,56,387,83"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_form_features_config.html" title="rdf::FormFeaturesConfig" alt="" coords="201,107,365,133"/>
+<area shape="rect" id="node5" href="$classrdf_1_1_gradient_vector_config.html" title="rdf::GradientVectorConfig" alt="" coords="197,157,368,184"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_line_trace_config.html" title="rdf::LineTraceConfig" alt="" coords="213,208,353,235"/>
+<area shape="rect" id="node7" href="$classrdf_1_1_local_orientation_config.html" title="rdf::LocalOrientationConfig" alt="" coords="194,259,371,285"/>
+<area shape="rect" id="node8" href="$classrdf_1_1_page_segmentation_config.html" title="rdf::PageSegmentationConfig" alt="" coords="186,309,379,336"/>
+<area shape="rect" id="node9" href="$classrdf_1_1_read_l_s_d_config.html" title="rdf::ReadLSDConfig" alt="" coords="213,360,353,387"/>
+<area shape="rect" id="node10" href="$classrdf_1_1_simple_binarization_config.html" title="rdf::SimpleBinarizationConfig" alt="" coords="187,411,378,437"/>
+<area shape="rect" id="node11" href="$classrdf_1_1_super_pixel_classification_config.html" title="rdf::SuperPixelClassification\lConfig" alt="" coords="189,462,376,503"/>
+<area shape="rect" id="node12" href="$classrdf_1_1_super_pixel_config.html" title="rdf::SuperPixelConfig" alt="" coords="209,528,356,555"/>
+<area shape="rect" id="node13" href="$classrdf_1_1_super_pixel_feature_config.html" title="rdf::SuperPixelFeatureConfig" alt="" coords="187,579,378,605"/>
+<area shape="rect" id="node14" href="$classrdf_1_1_super_pixel_labeler_config.html" title="rdf::SuperPixelLabelerConfig" alt="" coords="189,629,377,656"/>
+<area shape="rect" id="node15" href="$classrdf_1_1_tab_stop_config.html" title="rdf::TabStopConfig" alt="" coords="217,680,349,707"/>
+<area shape="rect" id="node16" href="$classrdf_1_1_text_line_config.html" title="rdf::TextLineConfig" alt="" coords="216,731,349,757"/>
 </map>

@@ -96,6 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_func_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_func_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_func_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_func_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_m.html#index_m"><span>m</span></a></li>
@@ -196,11 +197,13 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 : <a class="el" href="classrdf_1_1_base_skew_estimation.html#ae2be109c5e949340fe99b532c1bfdf2a">rdf::BaseSkewEstimation</a>
 </li>
 <li>SeparatorRegion()
-: <a class="el" href="classrdf_1_1_separator_region.html#adf00f80d2b67a55afe66097cef906fcb">rdf::SeparatorRegion</a>
+: <a class="el" href="classrdf_1_1_separator_region.html#a7a8176de70929ac5d2af6a77f0294c36">rdf::SeparatorRegion</a>
 </li>
 <li>set()
 : <a class="el" href="class_g_coptimization_1_1_data_cost_fn_sparse.html#a0a068df322b4ccc931f90cc336bbebc7">GCoptimization::DataCostFnSparse</a>
 , <a class="el" href="classrdf_1_1_pixel_graph.html#ab8a0d5bb31905b82da4feae34e691289">rdf::PixelGraph</a>
+, <a class="el" href="classrdf_1_1_super_pixel_feature.html#ab13a463c445ab3599b6136caace4fe27">rdf::SuperPixelFeature</a>
+, <a class="el" href="classrdf_1_1_super_pixel_labeler.html#af441aee6423b5b1f5504a81e0bbd0c40">rdf::SuperPixelLabeler</a>
 , <a class="el" href="classrdf_1_1_tab_stop_cluster.html#a868ed61fc4b73ec095a81fa6bcc2ece7">rdf::TabStopCluster</a>
 </li>
 <li>set_rcap()
@@ -256,6 +259,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>setChildren()
 : <a class="el" href="classrdf_1_1_region.html#a674fd43577cea523e4ff3fca899c2a88">rdf::Region</a>
+</li>
+<li>setClassifierPath()
+: <a class="el" href="classrdf_1_1_debug_config.html#a485299ed89b4ade3c323696ab1e2cfa7">rdf::DebugConfig</a>
 </li>
 <li>setColor()
 : <a class="el" href="classrdf_1_1_drawer.html#aed523d7d21ce66e878820a4edfe25f58">rdf::Drawer</a>
@@ -385,9 +391,14 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>setLabel()
 : <a class="el" href="class_g_coptimization.html#a2f56ce08151c42dca90935a8ffa3322b">GCoptimization</a>
+, <a class="el" href="classrdf_1_1_pixel.html#a1b40d6514decf37eb8579c0272ccbe9f">rdf::Pixel</a>
+, <a class="el" href="classrdf_1_1_pixel_label.html#aa6ad3f26397709b4de8606f0f4fa8094">rdf::PixelLabel</a>
 </li>
 <li>setLabelCost()
 : <a class="el" href="class_g_coptimization.html#a883395b5fce31e73b096ecaa1b509e3a">GCoptimization</a>
+</li>
+<li>setLabelManager()
+: <a class="el" href="classrdf_1_1_super_pixel_labeler.html#a6828a4f46e365a7ee1658bc0ae5b2a90">rdf::SuperPixelLabeler</a>
 </li>
 <li>setLabelOrder()
 : <a class="el" href="class_g_coptimization.html#a823a1f1fd6f37cb0b5eb070435f6a2d2">GCoptimization</a>
@@ -522,6 +533,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>setRootRegion()
 : <a class="el" href="classrdf_1_1_page_element.html#a5b32448e4f030c6feb881fcda9729977">rdf::PageElement</a>
+, <a class="el" href="classrdf_1_1_super_pixel_labeler.html#aa2613775227e519d5d4dd9826880e793">rdf::SuperPixelLabeler</a>
 </li>
 <li>sets()
 : <a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a960dae774ca10121bd298f6523fc64af">rdf::DBScanPixel</a>
@@ -589,6 +601,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>setTopLeft()
 : <a class="el" href="classrdf_1_1_rect.html#aa8cd555e87fc426b0c2945ccecdf1c7d">rdf::Rect</a>
+</li>
+<li>setTrueLabel()
+: <a class="el" href="classrdf_1_1_pixel_label.html#a0a832a63e07920b43771c8fc1b7f6596">rdf::PixelLabel</a>
 </li>
 <li>setType()
 : <a class="el" href="classrdf_1_1_region.html#af796d5e4f3272d76c065665f415d3876">rdf::Region</a>
@@ -661,8 +676,10 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>size()
 : <a class="el" href="classrdf_1_1_blobs.html#a147cc00e55e60c65f1558f400bfc9ae3">rdf::Blobs</a>
+, <a class="el" href="classrdf_1_1_label_manager.html#a1a3f987fa321611814ce6b11dd49d9f6">rdf::LabelManager</a>
 , <a class="el" href="classrdf_1_1_mser_container.html#a3d3a4acb166cdb788bff4fdd185dbb4b">rdf::MserContainer</a>
 , <a class="el" href="classrdf_1_1_pixel.html#a44a54d556906a5e0d0b5b8d8780fae2b">rdf::Pixel</a>
+, <a class="el" href="classrdf_1_1_pixel_set.html#ac241fb98db706303f3bc33c41b79f110">rdf::PixelSet</a>
 , <a class="el" href="classrdf_1_1_polygon.html#a1601e85b95d22360d57f05da0a61676b">rdf::Polygon</a>
 , <a class="el" href="classrdf_1_1_rect.html#a65ae17ca5ce041865eec2f955cee4084">rdf::Rect</a>
 </li>
@@ -687,6 +704,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 <li>specializeSmoothCostFunctor()
 : <a class="el" href="class_g_coptimization.html#af44cd36ecd29fa8c4c1a210f23d2bea0">GCoptimization</a>
 </li>
+<li>split()
+: <a class="el" href="classrdf_1_1_feature_collection.html#a3638981f75e8cb7ae66b46fa5adb2562">rdf::FeatureCollection</a>
+</li>
 <li>squaredLength()
 : <a class="el" href="classrdf_1_1_line.html#a3a9435029979cbf29ce26cf2b7f92a62">rdf::Line</a>
 </li>
@@ -700,8 +720,11 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 <li>statMoment()
 : <a class="el" href="classrdf_1_1_algorithms.html#a40e195f1402e0574e06f1aa8b7c369f5">rdf::Algorithms</a>
 </li>
+<li>statMomentColor()
+: <a class="el" href="classrdf_1_1_i_p.html#ae94e50c6d8708dfb9c0c55cc18fbffed">rdf::IP</a>
+</li>
 <li>statMomentMat()
-: <a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">rdf::Algorithms</a>
+: <a class="el" href="classrdf_1_1_i_p.html#a4b1aff664d87a0cb48fc5d438362113f">rdf::IP</a>
 </li>
 <li>stats()
 : <a class="el" href="classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb">rdf::Pixel</a>
@@ -721,8 +744,26 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 <li>SuperPixel()
 : <a class="el" href="classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4">rdf::SuperPixel</a>
 </li>
+<li>SuperPixelClassification()
+: <a class="el" href="classrdf_1_1_super_pixel_classification.html#abea958cfdf80d6e3a6f0e723bbc86796">rdf::SuperPixelClassification</a>
+</li>
+<li>SuperPixelClassificationConfig()
+: <a class="el" href="classrdf_1_1_super_pixel_classification_config.html#a847c72eea9ed4085a9a8167e3d289dcd">rdf::SuperPixelClassificationConfig</a>
+</li>
 <li>SuperPixelConfig()
 : <a class="el" href="classrdf_1_1_super_pixel_config.html#aead8f86d63747293cd02a23304b00479">rdf::SuperPixelConfig</a>
+</li>
+<li>SuperPixelFeature()
+: <a class="el" href="classrdf_1_1_super_pixel_feature.html#a198cc80c276e63015ff4a6b78b87ff3c">rdf::SuperPixelFeature</a>
+</li>
+<li>SuperPixelFeatureConfig()
+: <a class="el" href="classrdf_1_1_super_pixel_feature_config.html#a221e2b6874ac0c359e845d183badbdd1">rdf::SuperPixelFeatureConfig</a>
+</li>
+<li>SuperPixelLabeler()
+: <a class="el" href="classrdf_1_1_super_pixel_labeler.html#a4a4836251fc366101f4511ccf5c6f9eb">rdf::SuperPixelLabeler</a>
+</li>
+<li>SuperPixelLabelerConfig()
+: <a class="el" href="classrdf_1_1_super_pixel_labeler_config.html#a38432bfdfd6a6482b3d4ef4e3af9b592">rdf::SuperPixelLabelerConfig</a>
 </li>
 <li>swap()
 : <a class="el" href="class_g_coptimization.html#a294ce1529de129e2575973c7b4320663">GCoptimization</a>

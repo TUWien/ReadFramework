@@ -1,6 +1,6 @@
 var classrdf_1_1_text_line_segmentation =
 [
-    [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html#a156b6dd14aac53d7ac4a96d53e346dc4", null ],
+    [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html#ad8c62d01264ff3c7f22df92270120c53", null ],
     [ "addLines", "classrdf_1_1_text_line_segmentation.html#a7f54d9d2b8a2ef37e25d73bf2bc33354", null ],
     [ "compute", "classrdf_1_1_text_line_segmentation.html#a1c3170d49801b1d940911064d3121966", null ],
     [ "config", "classrdf_1_1_text_line_segmentation.html#a24d23b622cc744f074fe74cbd48efabf", null ],

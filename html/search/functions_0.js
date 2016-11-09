@@ -1,7 +1,7 @@
 var searchData=
 [
   ['absanglediff',['absAngleDiff',['../classrdf_1_1_algorithms.html#a00b15f1e6a8a0063d06dc7dd79ca8bf9',1,'rdf::Algorithms']]],
-  ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet']]],
+  ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet::add()'],['../classrdf_1_1_label_manager.html#a58cfdb545c539efabf0787e1671698bf',1,'rdf::LabelManager::add()'],['../classrdf_1_1_feature_collection_manager.html#a3cd7e91f6d55a34c6cf35e7c2dfd7896',1,'rdf::FeatureCollectionManager::add()']]],
   ['add_5fconstant',['add_constant',['../class_energy.html#a8f9f4a82cb09a00f8975c2e2f5df8d76',1,'Energy']]],
   ['add_5fedge',['add_edge',['../class_graph.html#a11e1464f7a3a7b6b61da38684008f74a',1,'Graph']]],
   ['add_5fnode',['add_node',['../class_graph.html#a7a00b3b8101ad2b749364893a1dd951f',1,'Graph']]],
@@ -29,7 +29,7 @@ var searchData=
   ['angledist',['angleDist',['../classrdf_1_1_algorithms.html#a6fbf8a18978253a57efdbb48f49f06ce',1,'rdf::Algorithms']]],
   ['anglethr',['angleThr',['../classrdf_1_1_read_l_s_d_config.html#a39316e778f069c84e395070e5b4c412f',1,'rdf::ReadLSDConfig']]],
   ['angleweighted',['angleWeighted',['../namespacerdf_1_1_pixel_distance.html#aa96e519b46ad7a3613876e022505a2d6',1,'rdf::PixelDistance']]],
-  ['append',['append',['../classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204',1,'rdf::MserContainer']]],
+  ['append',['append',['../classrdf_1_1_mser_container.html#a37730e180ef46d4908a39b0c6757c204',1,'rdf::MserContainer::append()'],['../classrdf_1_1_feature_collection.html#a2a8d12cbfabc8e653b6dc116c499bffa',1,'rdf::FeatureCollection::append()']]],
   ['applydebugsettings',['applyDebugSettings',['../main_8cpp.html#aa24e7b49b7682c20114e2ebe999825fb',1,'main.cpp']]],
   ['applynewlabeling',['applyNewLabeling',['../class_g_coptimization.html#a9f7aa44b1feddde883086af22e7b1b2f',1,'GCoptimization']]],
   ['area',['area',['../classrdf_1_1_mser_blob.html#a9b474acfcb0a5b7a3ade2dd80be7405c',1,'rdf::MserBlob::area()'],['../classrdf_1_1_rect.html#aee2036137d167869c1a8baa8dd279c24',1,'rdf::Rect::area()'],['../classrdf_1_1_patch.html#a221e27175020312fc49ae77cb1d27cf1',1,'rdf::Patch::area()']]],

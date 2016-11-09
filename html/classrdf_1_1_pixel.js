@@ -16,13 +16,18 @@ var classrdf_1_1_pixel =
     [ "draw", "classrdf_1_1_pixel.html#a388a7eb29cba0de8b0360b2ecc0c7f2d", null ],
     [ "ellipse", "classrdf_1_1_pixel.html#a558f594d7d175c16150f941c146f8cc7", null ],
     [ "isNull", "classrdf_1_1_pixel.html#a63c79053e9ff2f9e2b4398946f1d0f1e", null ],
+    [ "label", "classrdf_1_1_pixel.html#aea9eddf6407e017906b0ec4254edaf4e", null ],
+    [ "setLabel", "classrdf_1_1_pixel.html#a1b40d6514decf37eb8579c0272ccbe9f", null ],
     [ "setTabStop", "classrdf_1_1_pixel.html#a2dc906543979d06f22f115728e0f0116", null ],
     [ "size", "classrdf_1_1_pixel.html#a44a54d556906a5e0d0b5b8d8780fae2b", null ],
     [ "stats", "classrdf_1_1_pixel.html#aecd067430336c429abf72a5a4d43a8eb", null ],
     [ "tabStop", "classrdf_1_1_pixel.html#a7bee729b97c5191b567381a4c8132f5d", null ],
+    [ "toKeyPoint", "classrdf_1_1_pixel.html#a77a0b44e5398e251cfe7bcc819009461", null ],
+    [ "operator==", "classrdf_1_1_pixel.html#ad21fd502fa4801d4d290abc1d32db045", null ],
     [ "mBBox", "classrdf_1_1_pixel.html#a85be4842ba067c992f9d3916b39159c9", null ],
     [ "mEllipse", "classrdf_1_1_pixel.html#af34fcf41eba325cf4a7ded7773f2e64f", null ],
     [ "mIsNull", "classrdf_1_1_pixel.html#a44c6fc1cbc8339509fb03c883efbaece", null ],
+    [ "mLabel", "classrdf_1_1_pixel.html#ab78b07f3894380e26d2aa7ba0c673165", null ],
     [ "mStats", "classrdf_1_1_pixel.html#ae416d11ac12407d2bd5ae7015ba6b6e8", null ],
     [ "mTabStop", "classrdf_1_1_pixel.html#a6b308859cb62af888c0e7e6f64dcb34f", null ]
 ];

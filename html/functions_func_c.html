@@ -96,6 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_func_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_func_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_func_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_func_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_m.html#index_m"><span>m</span></a></li>
@@ -148,7 +149,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
 <li>calcDists()
-: <a class="el" href="classrdf_1_1_d_b_scan_pixel.html#aece79cba3a722cb6a447215a214d33b8">rdf::DBScanPixel</a>
+: <a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a4aebb87873cee8084b42bf84b1fe9dc5">rdf::DBScanPixel</a>
 </li>
 <li>calcFilterParams()
 : <a class="el" href="classrdf_1_1_base_binarization_su.html#af605529a2e0b817d5046eff073b923cb">rdf::BaseBinarizationSu</a>
@@ -187,11 +188,26 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 <li>childrenToString()
 : <a class="el" href="classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e">rdf::Region</a>
 </li>
+<li>classifierPath()
+: <a class="el" href="classrdf_1_1_debug_config.html#aa97ecd5db6b724431b5c38c39a6a790e">rdf::DebugConfig</a>
+</li>
+<li>clipped()
+: <a class="el" href="classrdf_1_1_rect.html#a0f2d9fc2c8a54a3300654cc7b8f40d5e">rdf::Rect</a>
+</li>
 <li>closedPolygon()
 : <a class="el" href="classrdf_1_1_polygon.html#a36407adf0803d3bac41ac90a8fbf2aa7">rdf::Polygon</a>
 </li>
+<li>collection()
+: <a class="el" href="classrdf_1_1_feature_collection_manager.html#a41c315179e561ee696a886673e0cd3b6">rdf::FeatureCollectionManager</a>
+</li>
 <li>collectRegions()
 : <a class="el" href="classrdf_1_1_region.html#a39fb8fe27e3600fb413b908c214a9f85">rdf::Region</a>
+</li>
+<li>color()
+: <a class="el" href="classrdf_1_1_label_info.html#a430631bb11d1db64c8b8412578383b59">rdf::LabelInfo</a>
+</li>
+<li>color2Id()
+: <a class="el" href="classrdf_1_1_label_info.html#adf2efc6d6eae48c7784a2d24e07fdc0d">rdf::LabelInfo</a>
 </li>
 <li>colors()
 : <a class="el" href="classrdf_1_1_color_manager.html#a1d08a4d9b59d6a019889cc94384504a4">rdf::ColorManager</a>
@@ -231,9 +247,13 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_line_trace.html#a8d80dd15e02bfe3e62283573cc93411f">rdf::LineTrace</a>
 , <a class="el" href="classrdf_1_1_local_orientation.html#ac82af8826ea8a526d17b55e1f4a95e2d">rdf::LocalOrientation</a>
 , <a class="el" href="classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c">rdf::Module</a>
+, <a class="el" href="classrdf_1_1_page_segmentation.html#a0cc90b0c2e8804623cf0228826b3b24f">rdf::PageSegmentation</a>
 , <a class="el" href="classrdf_1_1_read_l_s_d.html#ab6548717c2117e6b3b0fb1b9f90793fb">rdf::ReadLSD</a>
 , <a class="el" href="classrdf_1_1_simple_binarization.html#a61bbcc56936c2bd9e001d828068964f8">rdf::SimpleBinarization</a>
 , <a class="el" href="classrdf_1_1_super_pixel.html#abde4e8ba437892e2940dcc7814581af2">rdf::SuperPixel</a>
+, <a class="el" href="classrdf_1_1_super_pixel_classification.html#acf398663bbf2d26dc2a3d66ce35aba0a">rdf::SuperPixelClassification</a>
+, <a class="el" href="classrdf_1_1_super_pixel_feature.html#a1425f5225b4737f7a541955a98c9fcd1">rdf::SuperPixelFeature</a>
+, <a class="el" href="classrdf_1_1_super_pixel_labeler.html#a3796af249279145df8e46faf3e370984">rdf::SuperPixelLabeler</a>
 , <a class="el" href="classrdf_1_1_tab_stop_analysis.html#a9844657c2aca361dd5fa69cc0d6589d9">rdf::TabStopAnalysis</a>
 , <a class="el" href="classrdf_1_1_text_line_segmentation.html#a1c3170d49801b1d940911064d3121966">rdf::TextLineSegmentation</a>
 </li>
@@ -245,9 +265,6 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 </li>
 <li>computeBREN()
 : <a class="el" href="classrdf_1_1_basic_f_m.html#a4be37c37c4261cc89acda3c2f3bf881a">rdf::BasicFM</a>
-</li>
-<li>computeComponents()
-: <a class="el" href="classrdf_1_1_layout_test.html#a5dac13d16183153856c10b3a6c8e73b8">rdf::LayoutTest</a>
 </li>
 <li>computeConfidence()
 : <a class="el" href="classrdf_1_1_binarization_su_fgd_weight.html#adeca95053f388b0913f5a38fec94949a">rdf::BinarizationSuFgdWeight</a>
@@ -324,9 +341,13 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_line_trace.html#a41c71dac962be530023a30080dac9210">rdf::LineTrace</a>
 , <a class="el" href="classrdf_1_1_local_orientation.html#af6826fa544c13e6b2b6741a170b3aa9a">rdf::LocalOrientation</a>
 , <a class="el" href="classrdf_1_1_module.html#a595e4fdddaa72758e867bb97746adb21">rdf::Module</a>
+, <a class="el" href="classrdf_1_1_page_segmentation.html#a6c201410e61560ff40bbb9ef4da1a0b6">rdf::PageSegmentation</a>
 , <a class="el" href="classrdf_1_1_read_l_s_d.html#a857aa33cf9487fc1f1fa1150bc2e65b5">rdf::ReadLSD</a>
 , <a class="el" href="classrdf_1_1_simple_binarization.html#a85ee70adbececb9cd04876e13238d909">rdf::SimpleBinarization</a>
 , <a class="el" href="classrdf_1_1_super_pixel.html#a10f069498293b47975c5f7a6489388df">rdf::SuperPixel</a>
+, <a class="el" href="classrdf_1_1_super_pixel_classification.html#a976725a533f3fd168be25ed2d712264d">rdf::SuperPixelClassification</a>
+, <a class="el" href="classrdf_1_1_super_pixel_feature.html#a8924e005031122f3d257204b565f1448">rdf::SuperPixelFeature</a>
+, <a class="el" href="classrdf_1_1_super_pixel_labeler.html#a77d74b528a973d48a228016b106c1b45">rdf::SuperPixelLabeler</a>
 , <a class="el" href="classrdf_1_1_tab_stop_analysis.html#a0b0a230d5888e4896c7e45b5255dd32e">rdf::TabStopAnalysis</a>
 , <a class="el" href="classrdf_1_1_text_line_segmentation.html#a24d23b622cc744f074fe74cbd48efabf">rdf::TextLineSegmentation</a>
 </li>
@@ -340,11 +361,16 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 , <a class="el" href="classrdf_1_1_tab_stop_pixel_connector.html#a4500b729401c052a2a3176ff2032e6c2">rdf::TabStopPixelConnector</a>
 </li>
 <li>contains()
-: <a class="el" href="classrdf_1_1_pixel_set.html#ab36a3e5c335bd21f3e994320b2c45e5d">rdf::PixelSet</a>
-, <a class="el" href="classrdf_1_1_rect.html#a1eb01237493d9910e9b45e80415d89a0">rdf::Rect</a>
+: <a class="el" href="classrdf_1_1_label_info.html#a0fd2242bb19ddc5dbe7a7dca71371f88">rdf::LabelInfo</a>
+, <a class="el" href="classrdf_1_1_label_manager.html#af76aa983786529b39af92a6988c450ec">rdf::LabelManager</a>
+, <a class="el" href="classrdf_1_1_pixel_set.html#ab36a3e5c335bd21f3e994320b2c45e5d">rdf::PixelSet</a>
+, <a class="el" href="classrdf_1_1_rect.html#a890b495aeca3e437c54f4590da16fa63">rdf::Rect</a>
+</li>
+<li>containsId()
+: <a class="el" href="classrdf_1_1_label_manager.html#a367d2504bbb4a4ecbab4cd33cabc962f">rdf::LabelManager</a>
 </li>
 <li>ContrastEstimation()
-: <a class="el" href="classrdf_1_1_contrast_estimation.html#a4a4167d540b5edb1f651d4b3f16f126d">rdf::ContrastEstimation</a>
+: <a class="el" href="classrdf_1_1_contrast_estimation.html#a470441409ce5796f1fc1852c5231bca8">rdf::ContrastEstimation</a>
 </li>
 <li>contrastVal()
 : <a class="el" href="classrdf_1_1_base_binarization_su.html#adec4e6a29c32487f2afe082c866b21b7">rdf::BaseBinarizationSu</a>
@@ -377,6 +403,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html','');});
 </li>
 <li>createFilePath()
 : <a class="el" href="classrdf_1_1_utils.html#a38ab3c111bc36a67cdf094a3186bfc91">rdf::Utils</a>
+</li>
+<li>createLabelImage()
+: <a class="el" href="classrdf_1_1_super_pixel_labeler.html#abb49a4fb88746d22829f2bd155aa43cd">rdf::SuperPixelLabeler</a>
 </li>
 <li>createRegion()
 : <a class="el" href="classrdf_1_1_region_manager.html#a51ebbd67f805a5f84724bf389e407467">rdf::RegionManager</a>

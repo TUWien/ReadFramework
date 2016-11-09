@@ -3,6 +3,7 @@
 <area shape="rect" id="node3" href="$_page_parser_8cpp.html" title="src/Core/PageParser.cpp" alt="" coords="225,80,393,107"/>
 <area shape="rect" id="node4" href="$_settings_8cpp.html" title="src/Core/Settings.cpp" alt="" coords="419,80,567,107"/>
 <area shape="rect" id="node5" href="$_debug_markus_8cpp.html" title="src/DebugMarkus.cpp" alt="" coords="593,80,743,107"/>
-<area shape="rect" id="node6" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="767,80,864,107"/>
-<area shape="rect" id="node7" href="$_base_module_8cpp.html" title="src/Module/BaseModule.cpp" alt="" coords="889,80,1076,107"/>
+<area shape="rect" id="node6" href="$_debug_utils_8cpp.html" title="src/DebugUtils.cpp" alt="" coords="767,80,901,107"/>
+<area shape="rect" id="node7" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="926,80,1023,107"/>
+<area shape="rect" id="node8" href="$_base_module_8cpp.html" title="src/Module/BaseModule.cpp" alt="" coords="1048,80,1235,107"/>
 </map>

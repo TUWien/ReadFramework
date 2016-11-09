@@ -36,6 +36,11 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "ReadLSDConfig", "classrdf_1_1_read_l_s_d_config.html", "classrdf_1_1_read_l_s_d_config" ],
       [ "ReadLSD", "classrdf_1_1_read_l_s_d.html", "classrdf_1_1_read_l_s_d" ]
     ] ],
+    [ "PageSegmentation.cpp", "_page_segmentation_8cpp.html", null ],
+    [ "PageSegmentation.h", "_page_segmentation_8h.html", [
+      [ "PageSegmentationConfig", "classrdf_1_1_page_segmentation_config.html", "classrdf_1_1_page_segmentation_config" ],
+      [ "PageSegmentation", "classrdf_1_1_page_segmentation.html", "classrdf_1_1_page_segmentation" ]
+    ] ],
     [ "SkewEstimation.cpp", "_skew_estimation_8cpp.html", null ],
     [ "SkewEstimation.h", "_skew_estimation_8h.html", [
       [ "BaseSkewEstimationConfig", "classrdf_1_1_base_skew_estimation_config.html", "classrdf_1_1_base_skew_estimation_config" ],
@@ -49,6 +54,16 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "LocalOrientationConfig", "classrdf_1_1_local_orientation_config.html", "classrdf_1_1_local_orientation_config" ],
       [ "LocalOrientation", "classrdf_1_1_local_orientation.html", "classrdf_1_1_local_orientation" ],
       [ "GraphCutOrientation", "classrdf_1_1_graph_cut_orientation.html", "classrdf_1_1_graph_cut_orientation" ]
+    ] ],
+    [ "SuperPixelClassification.cpp", "_super_pixel_classification_8cpp.html", null ],
+    [ "SuperPixelClassification.h", "_super_pixel_classification_8h.html", "_super_pixel_classification_8h" ],
+    [ "SuperPixelTrainer.cpp", "_super_pixel_trainer_8cpp.html", null ],
+    [ "SuperPixelTrainer.h", "_super_pixel_trainer_8h.html", [
+      [ "SuperPixelLabelerConfig", "classrdf_1_1_super_pixel_labeler_config.html", "classrdf_1_1_super_pixel_labeler_config" ],
+      [ "LabelManager", "classrdf_1_1_label_manager.html", "classrdf_1_1_label_manager" ],
+      [ "FeatureCollection", "classrdf_1_1_feature_collection.html", "classrdf_1_1_feature_collection" ],
+      [ "FeatureCollectionManager", "classrdf_1_1_feature_collection_manager.html", "classrdf_1_1_feature_collection_manager" ],
+      [ "SuperPixelLabeler", "classrdf_1_1_super_pixel_labeler.html", "classrdf_1_1_super_pixel_labeler" ]
     ] ],
     [ "TabStopAnalysis.cpp", "_tab_stop_analysis_8cpp.html", null ],
     [ "TabStopAnalysis.h", "_tab_stop_analysis_8h.html", [

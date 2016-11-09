@@ -2,6 +2,8 @@ var searchData=
 [
   ['labelcost',['LabelCost',['../struct_g_coptimization_1_1_label_cost.html',1,'GCoptimization']]],
   ['labelcostiter',['LabelCostIter',['../struct_g_coptimization_1_1_label_cost_iter.html',1,'GCoptimization']]],
+  ['labelinfo',['LabelInfo',['../classrdf_1_1_label_info.html',1,'rdf']]],
+  ['labelmanager',['LabelManager',['../classrdf_1_1_label_manager.html',1,'rdf']]],
   ['layouttest',['LayoutTest',['../classrdf_1_1_layout_test.html',1,'rdf']]],
   ['line',['Line',['../classrdf_1_1_line.html',1,'rdf']]],
   ['lineedge',['LineEdge',['../classrdf_1_1_line_edge.html',1,'rdf']]],

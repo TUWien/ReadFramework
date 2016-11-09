@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['kmax',['kMax',['../classrdf_1_1_base_skew_estimation_config.html#a58b1c3106cf88e037129d1a30eb25ce7',1,'rdf::BaseSkewEstimationConfig']]]
+  ['jsonkey',['jsonKey',['../classrdf_1_1_label_info.html#ae333ba5b527eaa74a570dd7be39ae3ed',1,'rdf::LabelInfo::jsonKey()'],['../classrdf_1_1_feature_collection.html#a3aa2ac5cc8ba032d7ebfe8536b4a63b6',1,'rdf::FeatureCollection::jsonKey()']]],
+  ['jsontomat',['jsonToMat',['../classrdf_1_1_image.html#af8393ee1ecdbbdf393ac8dbb0f0b2e7f',1,'rdf::Image']]]
 ];

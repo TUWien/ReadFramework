@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_pixel.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classrdf_1_1_pixel-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">rdf::Pixel Class Reference</div>  </div>
@@ -130,7 +131,7 @@ Collaboration diagram for rdf::Pixel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classrdf_1_1_pixel__coll__graph.png" border="0" usemap="#rdf_1_1_pixel_coll__map" alt="Collaboration graph"/></div>
 <map name="rdf_1_1_pixel_coll__map" id="rdf_1_1_pixel_coll__map">
-<area shape="rect" id="node2" href="classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,5,128,32"/><area shape="rect" id="node3" href="classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="56,109,179,136"/><area shape="rect" id="node4" href="classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="203,109,276,136"/><area shape="rect" id="node5" href="classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="199,5,299,32"/><area shape="rect" id="node6" href="classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="301,109,384,136"/></map>
+<area shape="rect" id="node2" href="classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="25,5,147,32"/><area shape="rect" id="node3" href="classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="25,109,147,136"/><area shape="rect" id="node7" href="classrdf_1_1_pixel_label.html" title="rdf::PixelLabel" alt="" coords="172,109,277,136"/><area shape="rect" id="node4" href="classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="301,109,374,136"/><area shape="rect" id="node5" href="classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="343,5,442,32"/><area shape="rect" id="node6" href="classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="399,109,482,136"/><area shape="rect" id="node8" href="classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) " alt="" coords="175,5,274,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -173,6 +174,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7bee729b97c5191b567381a4c8132f5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_pixel_tab_stop.html">PixelTabStop</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a7bee729b97c5191b567381a4c8132f5d">tabStop</a> () const </td></tr>
 <tr class="memdesc:a7bee729b97c5191b567381a4c8132f5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns tab stop statistics or NULL if tab stops are not computed. <a class="el" href="classrdf_1_1_pixel_tab_stop.html">PixelTabStop</a> stores if the <a class="el" href="classrdf_1_1_pixel.html" title="This class represents a single instance of super pixels which are needed for the layout analysis...">Pixel</a> is a tab stop (left/right) candidate or not.  <a href="#a7bee729b97c5191b567381a4c8132f5d">More...</a><br/></td></tr>
 <tr class="separator:a7bee729b97c5191b567381a4c8132f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b40d6514decf37eb8579c0272ccbe9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a1b40d6514decf37eb8579c0272ccbe9f">setLabel</a> (const <a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a> &amp;<a class="el" href="classrdf_1_1_pixel.html#aea9eddf6407e017906b0ec4254edaf4e">label</a>)</td></tr>
+<tr class="separator:a1b40d6514decf37eb8579c0272ccbe9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea9eddf6407e017906b0ec4254edaf4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#aea9eddf6407e017906b0ec4254edaf4e">label</a> () const </td></tr>
+<tr class="separator:aea9eddf6407e017906b0ec4254edaf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77a0b44e5398e251cfe7bcc819009461"><td class="memItemLeft" align="right" valign="top">cv::KeyPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a77a0b44e5398e251cfe7bcc819009461">toKeyPoint</a> () const </td></tr>
+<tr class="separator:a77a0b44e5398e251cfe7bcc819009461"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388a7eb29cba0de8b0360b2ecc0c7f2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a388a7eb29cba0de8b0360b2ecc0c7f2d">draw</a> (QPainter &amp;p, double alpha=0.3, const <a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1">DrawFlag</a> &amp;df=<a class="el" href="classrdf_1_1_pixel.html#ade29eb367427a211924ce40c012c0fc1ad08688c7ff55031de53ff9ee58d6ffaf">draw_stats_only</a>) const </td></tr>
 <tr class="separator:a388a7eb29cba0de8b0360b2ecc0c7f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
@@ -196,9 +203,16 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:ae416d11ac12407d2bd5ae7015ba6b6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b308859cb62af888c0e7e6f64dcb34f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_pixel_tab_stop.html">PixelTabStop</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#a6b308859cb62af888c0e7e6f64dcb34f">mTabStop</a></td></tr>
 <tr class="separator:a6b308859cb62af888c0e7e6f64dcb34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab78b07f3894380e26d2aa7ba0c673165"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#ab78b07f3894380e26d2aa7ba0c673165">mLabel</a></td></tr>
+<tr class="separator:ab78b07f3894380e26d2aa7ba0c673165"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classrdf_1_1_base_element"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_base_element')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_base_element.html">rdf::BaseElement</a></td></tr>
 <tr class="memitem:a20f4d76a5e4cc5ef2384c065d6b519d3 inherit pro_attribs_classrdf_1_1_base_element"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_base_element.html#a20f4d76a5e4cc5ef2384c065d6b519d3">mId</a></td></tr>
 <tr class="separator:a20f4d76a5e4cc5ef2384c065d6b519d3 inherit pro_attribs_classrdf_1_1_base_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ad21fd502fa4801d4d290abc1d32db045"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel.html#ad21fd502fa4801d4d290abc1d32db045">operator==</a> (const QSharedPointer&lt; const <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;px, const cv::KeyPoint &amp;kp)</td></tr>
+<tr class="separator:ad21fd502fa4801d4d290abc1d32db045"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represents a single instance of super pixels which are needed for the layout analysis. </p>
@@ -416,6 +430,37 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aea9eddf6407e017906b0ec4254edaf4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a> rdf::Pixel::label </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1b40d6514decf37eb8579c0272ccbe9f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::Pixel::setLabel </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a> &amp;&#160;</td>
+          <td class="paramname"><em>label</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2dc906543979d06f22f115728e0f0116"></a>
 <div class="memitem">
 <div class="memproto">
@@ -481,6 +526,56 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a77a0b44e5398e251cfe7bcc819009461"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::KeyPoint rdf::Pixel::toKeyPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="ad21fd502fa4801d4d290abc1d32db045"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_utils_8h.html#a4a1a538b0d0ec23ed64f80bedabc90b3">DllCoreExport</a> bool operator== </td>
+          <td>(</td>
+          <td class="paramtype">const QSharedPointer&lt; const <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>px</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::KeyPoint &amp;&#160;</td>
+          <td class="paramname"><em>kp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a85be4842ba067c992f9d3916b39159c9"></a>
 <div class="memitem">
@@ -531,6 +626,26 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool rdf::Pixel::mIsNull = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab78b07f3894380e26d2aa7ba0c673165"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a> rdf::Pixel::mLabel</td>
         </tr>
       </table>
   </td>

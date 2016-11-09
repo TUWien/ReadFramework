@@ -116,12 +116,15 @@ $(document).ready(function(){initNavTree('classrdf_1_1_color_manager.html','');}
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:addb925ff0bb6244aa72de4b3e3b26476"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_color_manager.html#addb925ff0bb6244aa72de4b3e3b26476">getRandomColor</a> (int idx=-1)</td></tr>
-<tr class="memdesc:addb925ff0bb6244aa72de4b3e3b26476"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pleasent random color.  <a href="#addb925ff0bb6244aa72de4b3e3b26476">More...</a><br/></td></tr>
-<tr class="separator:addb925ff0bb6244aa72de4b3e3b26476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a335ec492e1c2ebd3743654b8faa0c06c"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_color_manager.html#a335ec492e1c2ebd3743654b8faa0c06c">getColor</a> (int idx=-1, double alpha=1.0)</td></tr>
+<tr class="memdesc:a335ec492e1c2ebd3743654b8faa0c06c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pleasent random color.  <a href="#a335ec492e1c2ebd3743654b8faa0c06c">More...</a><br/></td></tr>
+<tr class="separator:a335ec492e1c2ebd3743654b8faa0c06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d08a4d9b59d6a019889cc94384504a4"><td class="memItemLeft" align="right" valign="top">static QVector&lt; QColor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_color_manager.html#a1d08a4d9b59d6a019889cc94384504a4">colors</a> ()</td></tr>
 <tr class="memdesc:a1d08a4d9b59d6a019889cc94384504a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns our color palette.  <a href="#a1d08a4d9b59d6a019889cc94384504a4">More...</a><br/></td></tr>
 <tr class="separator:a1d08a4d9b59d6a019889cc94384504a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4caf6ada3a8f78ac60809087d258a7bc"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_color_manager.html#a4caf6ada3a8f78ac60809087d258a7bc">lightGray</a> (double alpha=1.0)</td></tr>
+<tr class="memdesc:a4caf6ada3a8f78ac60809087d258a7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a light gray.  <a href="#a4caf6ada3a8f78ac60809087d258a7bc">More...</a><br/></td></tr>
+<tr class="separator:a4caf6ada3a8f78ac60809087d258a7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb8dc4ff66443dbd6e87f2976e0efc45"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_color_manager.html#acb8dc4ff66443dbd6e87f2976e0efc45">darkGray</a> (double alpha=1.0)</td></tr>
 <tr class="memdesc:acb8dc4ff66443dbd6e87f2976e0efc45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a dark gray.  <a href="#acb8dc4ff66443dbd6e87f2976e0efc45">More...</a><br/></td></tr>
 <tr class="separator:acb8dc4ff66443dbd6e87f2976e0efc45"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,7 +192,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="addb925ff0bb6244aa72de4b3e3b26476"></a>
+<a class="anchor" id="a335ec492e1c2ebd3743654b8faa0c06c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -197,11 +200,21 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QColor rdf::ColorManager::getRandomColor </td>
+          <td class="memname">QColor rdf::ColorManager::getColor </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>idx</em> = <code>-1</code></td><td>)</td>
+          <td class="paramname"><em>idx</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>1.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -215,6 +228,39 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">idx</td><td>If idx != -1 a specific color is chosen from the palette.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4caf6ada3a8f78ac60809087d258a7bc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor rdf::ColorManager::lightGray </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>1.0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a light gray. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alpha</td><td>Optional alpha [0 1].</td></tr>
   </table>
   </dd>
 </dl>

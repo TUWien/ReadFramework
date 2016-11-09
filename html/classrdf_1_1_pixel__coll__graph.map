@@ -1,7 +1,9 @@
 <map id="rdf::Pixel" name="rdf::Pixel">
-<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,5,128,32"/>
-<area shape="rect" id="node3" href="$classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="56,109,179,136"/>
-<area shape="rect" id="node4" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="203,109,276,136"/>
-<area shape="rect" id="node5" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="199,5,299,32"/>
-<area shape="rect" id="node6" href="$classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="301,109,384,136"/>
+<area shape="rect" id="node2" href="$classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="25,5,147,32"/>
+<area shape="rect" id="node3" href="$classrdf_1_1_pixel_tab_stop.html" title="rdf::PixelTabStop" alt="" coords="25,109,147,136"/>
+<area shape="rect" id="node7" href="$classrdf_1_1_pixel_label.html" title="rdf::PixelLabel" alt="" coords="172,109,277,136"/>
+<area shape="rect" id="node4" href="$classrdf_1_1_rect.html" title="rdf::Rect" alt="" coords="301,109,374,136"/>
+<area shape="rect" id="node5" href="$classrdf_1_1_vector2_d.html" title="rdf::Vector2D" alt="" coords="343,5,442,32"/>
+<area shape="rect" id="node6" href="$classrdf_1_1_ellipse.html" title="rdf::Ellipse" alt="" coords="399,109,482,136"/>
+<area shape="rect" id="node8" href="$classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) " alt="" coords="175,5,274,32"/>
 </map>

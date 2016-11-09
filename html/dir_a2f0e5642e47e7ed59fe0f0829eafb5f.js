@@ -34,18 +34,23 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "ImageProcessor.h", "_image_processor_8h.html", "_image_processor_8h" ],
     [ "PageParser.cpp", "_page_parser_8cpp.html", null ],
     [ "PageParser.h", "_page_parser_8h.html", "_page_parser_8h" ],
-    [ "Pixel.cpp", "_pixel_8cpp.html", null ],
+    [ "Pixel.cpp", "_pixel_8cpp.html", "_pixel_8cpp" ],
     [ "Pixel.h", "_pixel_8h.html", "_pixel_8h" ],
+    [ "PixelLabel.cpp", "_pixel_label_8cpp.html", "_pixel_label_8cpp" ],
+    [ "PixelLabel.h", "_pixel_label_8h.html", [
+      [ "LabelInfo", "classrdf_1_1_label_info.html", "classrdf_1_1_label_info" ],
+      [ "PixelLabel", "classrdf_1_1_pixel_label.html", "classrdf_1_1_pixel_label" ]
+    ] ],
     [ "PixelSet.cpp", "_pixel_set_8cpp.html", null ],
     [ "PixelSet.h", "_pixel_set_8h.html", [
-      [ "DBScanPixel", "classrdf_1_1_d_b_scan_pixel.html", "classrdf_1_1_d_b_scan_pixel" ],
       [ "PixelConnector", "classrdf_1_1_pixel_connector.html", "classrdf_1_1_pixel_connector" ],
       [ "DelauneyPixelConnector", "classrdf_1_1_delauney_pixel_connector.html", "classrdf_1_1_delauney_pixel_connector" ],
       [ "RegionPixelConnector", "classrdf_1_1_region_pixel_connector.html", "classrdf_1_1_region_pixel_connector" ],
       [ "TabStopPixelConnector", "classrdf_1_1_tab_stop_pixel_connector.html", "classrdf_1_1_tab_stop_pixel_connector" ],
       [ "DBScanPixelConnector", "classrdf_1_1_d_b_scan_pixel_connector.html", "classrdf_1_1_d_b_scan_pixel_connector" ],
       [ "PixelSet", "classrdf_1_1_pixel_set.html", "classrdf_1_1_pixel_set" ],
-      [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ]
+      [ "PixelGraph", "classrdf_1_1_pixel_graph.html", "classrdf_1_1_pixel_graph" ],
+      [ "DBScanPixel", "classrdf_1_1_d_b_scan_pixel.html", "classrdf_1_1_d_b_scan_pixel" ]
     ] ],
     [ "Settings.cpp", "_settings_8cpp.html", null ],
     [ "Settings.h", "_settings_8h.html", "_settings_8h" ],

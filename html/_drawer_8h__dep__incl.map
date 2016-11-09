@@ -1,7 +1,10 @@
 <map id="src/Core/Drawer.h" name="src/Core/Drawer.h">
 <area shape="rect" id="node2" href="$_drawer_8cpp.html" title="src/Core/Drawer.cpp" alt="" coords="5,80,147,107"/>
 <area shape="rect" id="node3" href="$_pixel_8cpp.html" title="src/Core/Pixel.cpp" alt="" coords="171,80,300,107"/>
-<area shape="rect" id="node4" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="325,80,504,107"/>
-<area shape="rect" id="node5" href="$_tab_stop_analysis_8cpp.html" title="src/Module/TabStopAnalysis.cpp" alt="" coords="529,80,743,107"/>
-<area shape="rect" id="node6" href="$_text_line_segmentation_8cpp.html" title="src/Module/TextLineSegmentation.cpp" alt="" coords="768,80,1013,107"/>
+<area shape="rect" id="node4" href="$_page_segmentation_8cpp.html" title="src/Module/PageSegmentation.cpp" alt="" coords="325,80,549,107"/>
+<area shape="rect" id="node5" href="$_super_pixel_8cpp.html" title="src/Module/SuperPixel.cpp" alt="" coords="575,80,753,107"/>
+<area shape="rect" id="node6" href="$_super_pixel_classification_8cpp.html" title="src/Module/SuperPixelClassification.cpp" alt="" coords="778,80,1035,107"/>
+<area shape="rect" id="node7" href="$_super_pixel_trainer_8cpp.html" title="src/Module/SuperPixelTrainer.cpp" alt="" coords="1060,80,1279,107"/>
+<area shape="rect" id="node8" href="$_tab_stop_analysis_8cpp.html" title="src/Module/TabStopAnalysis.cpp" alt="" coords="1303,80,1517,107"/>
+<area shape="rect" id="node9" href="$_text_line_segmentation_8cpp.html" title="src/Module/TextLineSegmentation.cpp" alt="" coords="1543,80,1788,107"/>
 </map>

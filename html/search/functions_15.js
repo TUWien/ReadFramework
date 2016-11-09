@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['weight',['weight',['../classrdf_1_1_patch.html#ac701ad90d59ae97dfb5a4fb3b8683624',1,'rdf::Patch']]],
-  ['weightedlength',['weightedLength',['../classrdf_1_1_line.html#ac3693d8048fd6657d38eb1ff548ac73c',1,'rdf::Line']]],
-  ['weightfunction',['weightFunction',['../classrdf_1_1_binarization_su_fgd_weight.html#af3ecb2042125d16aff9dc39e7e502d02',1,'rdf::BinarizationSuFgdWeight']]],
-  ['what_5fsegment',['what_segment',['../class_graph.html#ac73a2f17861930048daf119eb5b12914',1,'Graph']]],
-  ['whatlabel',['whatLabel',['../class_g_coptimization.html#afd9c56d148a74346bdd9a10edcac7350',1,'GCoptimization::whatLabel(SiteID site)'],['../class_g_coptimization.html#a004d5e1e6c680d643bd2299d66ea4559',1,'GCoptimization::whatLabel(SiteID start, SiteID count, LabelID *labeling)']]],
-  ['width',['width',['../classrdf_1_1_rect.html#afcedbe5c1f54a7e5e55186fa6f68dc5f',1,'rdf::Rect::width()'],['../classrdf_1_1_patch.html#a8dfb072cc7a82df177e55b7c5c73d1be',1,'rdf::Patch::width()'],['../classrdf_1_1_base_skew_estimation_config.html#afdf979e0afb6f88f6a98347bd10ae11f',1,'rdf::BaseSkewEstimationConfig::width()']]],
-  ['windowsize',['windowSize',['../classrdf_1_1_basic_f_m.html#a9673ab79a0a5a90f0adfd56b85bb6d0b',1,'rdf::BasicFM::windowSize()'],['../classrdf_1_1_basic_contrast.html#a10a89c760b0e4805bf741fdb13e1cb46',1,'rdf::BasicContrast::windowSize()'],['../classrdf_1_1_focus_estimation.html#a7582c8514175c93937722e8d0c9f69a8',1,'rdf::FocusEstimation::windowSize()'],['../classrdf_1_1_contrast_estimation.html#a22c1418e53ac536ab74d67479608233b',1,'rdf::ContrastEstimation::windowSize()']]],
-  ['within',['within',['../classrdf_1_1_line.html#af9f0c2adbd5f4fa4adabb1f492c52dcd',1,'rdf::Line']]],
-  ['write',['write',['../classrdf_1_1_region.html#acfbde63ca27c6cc13d5eedf241097890',1,'rdf::Region::write()'],['../classrdf_1_1_text_line.html#aa856ebdbb0d4240aef32321a352fd37d',1,'rdf::TextLine::write()'],['../classrdf_1_1_page_xml_parser.html#aace3f3ec7292c42fb1f7178c000dd920',1,'rdf::PageXmlParser::write()'],['../classrdf_1_1_base_line.html#af45930bd68e8895cebf7d7d8f9646769',1,'rdf::BaseLine::write()'],['../classrdf_1_1_polygon.html#aff7b0b18d1a188c4af02be1a57c4dbbf',1,'rdf::Polygon::write()']]],
-  ['writechildren',['writeChildren',['../classrdf_1_1_region.html#a33b1b20e571b300ae1788b807fbfad28',1,'rdf::Region']]],
-  ['writemetadata',['writeMetaData',['../classrdf_1_1_page_xml_parser.html#a06ec6de2b9c6b9838a555a5a413a5ba1',1,'rdf::PageXmlParser']]],
-  ['writepageelement',['writePageElement',['../classrdf_1_1_page_xml_parser.html#a9abefe468a0f87621d41752e92f8179d',1,'rdf::PageXmlParser']]]
+  ['val',['val',['../classrdf_1_1_basic_f_m.html#a3ee9e1bcf2133a29e1518f47c341574a',1,'rdf::BasicFM::val()'],['../classrdf_1_1_basic_contrast.html#aa4f8660bfc31e39eb17162bac93f61f9',1,'rdf::BasicContrast::val()']]],
+  ['vector',['vector',['../classrdf_1_1_line.html#ac7167784dbca03525dc87b90b5d41237',1,'rdf::Line']]],
+  ['vector2d',['Vector2D',['../classrdf_1_1_vector2_d.html#a0b7ec9484fc2cca62edbca40f3aa0d01',1,'rdf::Vector2D::Vector2D()'],['../classrdf_1_1_vector2_d.html#a76b062272d86fc3b4bc460a67cf2130b',1,'rdf::Vector2D::Vector2D(double x, double y)'],['../classrdf_1_1_vector2_d.html#a6ccea9b6b7fb973fac0b647113a1c0da',1,'rdf::Vector2D::Vector2D(const QPoint &amp;p)'],['../classrdf_1_1_vector2_d.html#a8827fb48309454f3613cb2ae2cb62dd3',1,'rdf::Vector2D::Vector2D(const QPointF &amp;p)'],['../classrdf_1_1_vector2_d.html#a89ee2b35ee86c885cec2dc11f632f57e',1,'rdf::Vector2D::Vector2D(const QSize &amp;s)'],['../classrdf_1_1_vector2_d.html#aea51da9bad49b149b7bf8158e1f16688',1,'rdf::Vector2D::Vector2D(const QSizeF &amp;s)'],['../classrdf_1_1_vector2_d.html#a4ec5c40d55ba6b4983ce0a91712f80a7',1,'rdf::Vector2D::Vector2D(const cv::Point &amp;v)'],['../classrdf_1_1_vector2_d.html#a7b5a2284234674eaf897a10356d78d71',1,'rdf::Vector2D::Vector2D(const cv::Size &amp;s)']]],
+  ['verlines',['verLines',['../classrdf_1_1_form_features.html#a7f9cceb13b2afd30bef5306e9a161e42',1,'rdf::FormFeatures']]],
+  ['verlinesmatched',['verLinesMatched',['../classrdf_1_1_form_features.html#a26674d806205a62abaec7333c38f120a',1,'rdf::FormFeatures']]],
+  ['verticaloverlap',['verticalOverlap',['../classrdf_1_1_line.html#a1684a9d813ac02e017df92c07b806627',1,'rdf::Line']]],
+  ['viscolor',['visColor',['../classrdf_1_1_label_info.html#aafa69421cbf3fdc720f0a74b53fb7087',1,'rdf::LabelInfo']]],
+  ['vtxt',['vtxT',['../classrd3_1_1_g_c_graph.html#a8ef016dc7804096842730dde2a1fc339',1,'rd3::GCGraph']]]
 ];

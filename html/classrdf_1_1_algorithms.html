@@ -182,9 +182,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#a66a9a52098cad58ba3bd4db9bd89fade">rotateImage</a> (const cv::Mat &amp;src, double angleRad, int interpolation=cv::INTER_CUBIC, cv::Scalar borderValue=cv::Scalar(0))</td></tr>
 <tr class="memdesc:a66a9a52098cad58ba3bd4db9bd89fade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates an image according to the angle obtained. The new image bounds are minimized with respect to the angle obtained. positive angle values mean counterclockwise rotation  <a href="#a66a9a52098cad58ba3bd4db9bd89fade">More...</a><br/></td></tr>
 <tr class="separator:a66a9a52098cad58ba3bd4db9bd89fade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac828d9184e38e9d91436bb1adc7a19d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#aac828d9184e38e9d91436bb1adc7a19d">statMomentMat</a> (const cv::Mat src, cv::Mat mask=cv::Mat(), float momentValue=0.5f, int maxSamples=10000, int area=-1)</td></tr>
-<tr class="memdesc:aac828d9184e38e9d91436bb1adc7a19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#aac828d9184e38e9d91436bb1adc7a19d">More...</a><br/></td></tr>
-<tr class="separator:aac828d9184e38e9d91436bb1adc7a19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_algorithms.html#ac2c7a0e40a6a3b9c37a10fd3155d2ba3">logGammaLanczos</a> (double x)</td></tr>
 <tr class="memdesc:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the natural logarithm of the absolute value of the gamma function of x using the Lanczos approximation. See http ://www.rskey.org/gamma.htm  <a href="#ac2c7a0e40a6a3b9c37a10fd3155d2ba3">More...</a><br/></td></tr>
 <tr class="separator:ac2c7a0e40a6a3b9c37a10fd3155d2ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1465,71 +1462,6 @@ template&lt;typename numFmt &gt; </div>
     <tr><td class="paramname">valuesIn</td><td>The statistical set (samples).</td></tr>
     <tr><td class="paramname">momentValue</td><td>The statistical moment value (0.5 = median, 0.25 and 0.75 = quartiles).</td></tr>
     <tr><td class="paramname">interpolated</td><td>A flag if the value should be interpolated if the length of the list is even.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The statistical moment.</dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aac828d9184e38e9d91436bb1adc7a19d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double rdf::Algorithms::statMomentMat </td>
-          <td>(</td>
-          <td class="paramtype">const cv::Mat&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">cv::Mat&#160;</td>
-          <td class="paramname"><em>mask</em> = <code>cv::Mat()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>momentValue</em> = <code>0.5f</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxSamples</em> = <code>10000</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>area</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes robust statistical moments of an image. The quantiles of an image (or median) are computed. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">src</td><td>The source image CV_32FC1.</td></tr>
-    <tr><td class="paramname">mask</td><td>The mask CV_32FC1 or CV_8UC1.</td></tr>
-    <tr><td class="paramname">momentValue</td><td>The moment (e.g. 0.5 for median, 0.25 or 0.75 for quartiles).</td></tr>
-    <tr><td class="paramname">maxSamples</td><td>The maximum number of samples (speed up).</td></tr>
-    <tr><td class="paramname">area</td><td>The mask's area (speed up).</td></tr>
   </table>
   </dd>
 </dl>

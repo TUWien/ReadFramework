@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['backgroundlabel',['backgroundLabel',['../classrdf_1_1_label_info.html#ad1d74e0c97fd8affce85d02d8f6db046',1,'rdf::LabelInfo']]],
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html',1,'rdf']]],
   ['basebinarizationsu',['BaseBinarizationSu',['../classrdf_1_1_base_binarization_su.html#aab215a591d0aa492646d0e488b896b09',1,'rdf::BaseBinarizationSu']]],
   ['basebinarizationsuconfig',['BaseBinarizationSuConfig',['../classrdf_1_1_base_binarization_su_config.html',1,'rdf']]],
@@ -13,8 +14,8 @@ var searchData=
   ['basemodule_2ecpp',['BaseModule.cpp',['../_base_module_8cpp.html',1,'']]],
   ['basemodule_2eh',['BaseModule.h',['../_base_module_8h.html',1,'']]],
   ['basename',['baseName',['../classrdf_1_1_utils.html#a53379c74a413e2bfebc881cfa69202fb',1,'rdf::Utils']]],
-  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html',1,'rdf']]],
   ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html#ad9894e5f9a0114b1c9dd274d336bdcc2',1,'rdf::BaseSkewEstimation']]],
+  ['baseskewestimation',['BaseSkewEstimation',['../classrdf_1_1_base_skew_estimation.html',1,'rdf']]],
   ['baseskewestimationconfig',['BaseSkewEstimationConfig',['../classrdf_1_1_base_skew_estimation_config.html#ab43f1c78f082f07b31cc525bb451c584',1,'rdf::BaseSkewEstimationConfig']]],
   ['baseskewestimationconfig',['BaseSkewEstimationConfig',['../classrdf_1_1_base_skew_estimation_config.html',1,'rdf']]],
   ['basiccontrast',['BasicContrast',['../classrdf_1_1_basic_contrast.html#a324ddce418943eaa2f5aa030fc58ea5e',1,'rdf::BasicContrast::BasicContrast()'],['../classrdf_1_1_basic_contrast.html#ae77a82f95ca411ee01203a9efe286a86',1,'rdf::BasicContrast::BasicContrast(const cv::Mat &amp;img)']]],
@@ -25,8 +26,8 @@ var searchData=
   ['begin',['begin',['../class_g_coptimization_1_1_data_cost_fn_sparse.html#a415b9c740898133df56b89fa163432bf',1,'GCoptimization::DataCostFnSparse']]],
   ['binarization_2ecpp',['Binarization.cpp',['../_binarization_8cpp.html',1,'']]],
   ['binarization_2eh',['Binarization.h',['../_binarization_8h.html',1,'']]],
-  ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa',1,'rdf::BinarizationSuAdapted']]],
   ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html',1,'rdf']]],
+  ['binarizationsuadapted',['BinarizationSuAdapted',['../classrdf_1_1_binarization_su_adapted.html#a0688b9b7b1e159ce40bd73e3963e70fa',1,'rdf::BinarizationSuAdapted']]],
   ['binarizationsufgdweight',['BinarizationSuFgdWeight',['../classrdf_1_1_binarization_su_fgd_weight.html#ab3af93b360e3aae9ec3875fb20dc0fca',1,'rdf::BinarizationSuFgdWeight']]],
   ['binarizationsufgdweight',['BinarizationSuFgdWeight',['../classrdf_1_1_binarization_su_fgd_weight.html',1,'rdf']]],
   ['binarizationtest',['BinarizationTest',['../classrdf_1_1_binarization_test.html#a8f1ad72deae51b99cf8d4cb8e6c7770f',1,'rdf::BinarizationTest']]],

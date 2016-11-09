@@ -126,6 +126,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a471e360b0d3e2764d26b1fbb666f41a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaa69fe6c671de44078c1a2aef465869"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_i_p.html#afaa69fe6c671de44078c1a2aef465869">draw</a> (const std::vector&lt; cv::Point &gt; &amp;pts, cv::Mat &amp;img, unsigned char val=255)</td></tr>
 <tr class="separator:afaa69fe6c671de44078c1a2aef465869"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b1aff664d87a0cb48fc5d438362113f"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_i_p.html#a4b1aff664d87a0cb48fc5d438362113f">statMomentMat</a> (const cv::Mat &amp;src, const cv::Mat &amp;mask=cv::Mat(), double momentValue=0.5, int maxSamples=10000, int area=-1)</td></tr>
+<tr class="memdesc:a4b1aff664d87a0cb48fc5d438362113f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes robust statistical moments of an image. The quantiles of an image (or median) are computed.  <a href="#a4b1aff664d87a0cb48fc5d438362113f">More...</a><br/></td></tr>
+<tr class="separator:a4b1aff664d87a0cb48fc5d438362113f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae94e50c6d8708dfb9c0c55cc18fbffed"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_i_p.html#ae94e50c6d8708dfb9c0c55cc18fbffed">statMomentColor</a> (const cv::Mat &amp;src, const cv::Mat &amp;mask=cv::Mat(), double momentValue=0.5)</td></tr>
+<tr class="memdesc:ae94e50c6d8708dfb9c0c55cc18fbffed"><td class="mdescLeft">&#160;</td><td class="mdescRight">C.  <a href="#ae94e50c6d8708dfb9c0c55cc18fbffed">More...</a><br/></td></tr>
+<tr class="separator:ae94e50c6d8708dfb9c0c55cc18fbffed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a471e360b0d3e2764d26b1fbb666f41a7"></a>
@@ -280,6 +286,120 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae94e50c6d8708dfb9c0c55cc18fbffed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor rdf::IP::statMomentColor </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>mask</em> = <code>cv::Mat()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>momentValue</em> = <code>0.5</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>C. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The source.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4b1aff664d87a0cb48fc5d438362113f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::IP::statMomentMat </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>mask</em> = <code>cv::Mat()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>momentValue</em> = <code>0.5</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxSamples</em> = <code>10000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>area</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes robust statistical moments of an image. The quantiles of an image (or median) are computed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The source image CV_32FC1.</td></tr>
+    <tr><td class="paramname">mask</td><td>The mask CV_32FC1 or CV_8UC1.</td></tr>
+    <tr><td class="paramname">momentValue</td><td>The moment (e.g. 0.5 for median, 0.25 or 0.75 for quartiles).</td></tr>
+    <tr><td class="paramname">maxSamples</td><td>The maximum number of samples (speed up).</td></tr>
+    <tr><td class="paramname">area</td><td>The mask's area (speed up).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The statistical moment.</dd></dl>
 
 </div>
 </div>

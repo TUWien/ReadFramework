@@ -96,6 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_h.html#index_h"><span>h</span></a></li>
       <li class="current"><a href="functions_func_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_func_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_func_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_func_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_m.html#index_m"><span>m</span></a></li>
@@ -149,7 +150,11 @@ $(document).ready(function(){initNavTree('functions_func_i.html','');});
 <h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>id()
 : <a class="el" href="classrdf_1_1_base_element.html#a8f60ad1aaa08dcafdfa6eb7fd7eb1aae">rdf::BaseElement</a>
+, <a class="el" href="classrdf_1_1_label_info.html#a51a1e7a54c5ed88a9829b2586fa85ae7">rdf::LabelInfo</a>
 , <a class="el" href="classrdf_1_1_region.html#a98259b56817f5bfebb276a3e6edef795">rdf::Region</a>
+</li>
+<li>ignoreLabel()
+: <a class="el" href="classrdf_1_1_label_info.html#aebcf366f75378906eea11f1dc77819a4">rdf::LabelInfo</a>
 </li>
 <li>imageFileName()
 : <a class="el" href="classrdf_1_1_page_element.html#ab6f7aec5a3c4eba651b483a79b987b67">rdf::PageElement</a>
@@ -205,17 +210,22 @@ $(document).ready(function(){initNavTree('functions_func_i.html','');});
 , <a class="el" href="classrdf_1_1_form_features.html#ae5c1ed90f5f5a3a315a994e6bf5fa575">rdf::FormFeatures</a>
 , <a class="el" href="classrdf_1_1_gradient_vector.html#a40abcc7b2eede64dfb8787fc397227b3">rdf::GradientVector</a>
 , <a class="el" href="classrdf_1_1_graph_cut_orientation.html#a4eb97fec251c4d6f263a2b131523c2a3">rdf::GraphCutOrientation</a>
+, <a class="el" href="classrdf_1_1_label_manager.html#af51fbdc20745c04477edfa6c8b46409a">rdf::LabelManager</a>
 , <a class="el" href="classrdf_1_1_line.html#a96b55e886aa3c832bf1c8ee5cb993773">rdf::Line</a>
 , <a class="el" href="classrdf_1_1_line_trace.html#a6e107d3c1293b73e781aac548f39e3ea">rdf::LineTrace</a>
 , <a class="el" href="classrdf_1_1_local_orientation.html#a834ffb0cfb482854520bc31e0bf9ab00">rdf::LocalOrientation</a>
 , <a class="el" href="classrdf_1_1_module.html#a85ba7a0e15f79287047b6fe58399078f">rdf::Module</a>
 , <a class="el" href="classrdf_1_1_page_element.html#a17a054e69ce39b91e41520fae9b16408">rdf::PageElement</a>
+, <a class="el" href="classrdf_1_1_page_segmentation.html#a629c83da9745bd466d29ca22b017e3d2">rdf::PageSegmentation</a>
 , <a class="el" href="classrdf_1_1_pixel_graph.html#a4fbaf63565a295c252716d856ff6c946">rdf::PixelGraph</a>
 , <a class="el" href="classrdf_1_1_pixel_stats.html#aabff888077bea016dfef906751f08b47">rdf::PixelStats</a>
 , <a class="el" href="classrdf_1_1_polygon.html#a1a971c201fa86e15744805604e41e505">rdf::Polygon</a>
 , <a class="el" href="classrdf_1_1_read_l_s_d.html#a21fe05e0cb378be301050525d6d114af">rdf::ReadLSD</a>
 , <a class="el" href="classrdf_1_1_simple_binarization.html#a8ddc72de1cc14129ee4ad0f4f6a2f17e">rdf::SimpleBinarization</a>
 , <a class="el" href="classrdf_1_1_super_pixel.html#a5a7ecf8772f9cd9236663c3bec53de49">rdf::SuperPixel</a>
+, <a class="el" href="classrdf_1_1_super_pixel_classification.html#afc77f659d3db94648d6b1a64e00cc888">rdf::SuperPixelClassification</a>
+, <a class="el" href="classrdf_1_1_super_pixel_feature.html#af9f90cf2f510e38a7e88765a7dcbf6e6">rdf::SuperPixelFeature</a>
+, <a class="el" href="classrdf_1_1_super_pixel_labeler.html#a49d2feb02e1d3a9ba61c5374ca801386">rdf::SuperPixelLabeler</a>
 , <a class="el" href="classrdf_1_1_tab_stop_analysis.html#ad27261fb6e9d57867921b8f0cad403bc">rdf::TabStopAnalysis</a>
 , <a class="el" href="classrdf_1_1_text_line_segmentation.html#a704a9bbd961ae77728b26a0efb863563">rdf::TextLineSegmentation</a>
 </li>
@@ -227,6 +237,7 @@ $(document).ready(function(){initNavTree('functions_func_i.html','');});
 </li>
 <li>isNull()
 : <a class="el" href="classrdf_1_1_ellipse.html#af09586b7027758255a20d92475bfc4c0">rdf::Ellipse</a>
+, <a class="el" href="classrdf_1_1_label_info.html#a6613ca840a78933c8ee6347d1ee8eb05">rdf::LabelInfo</a>
 , <a class="el" href="classrdf_1_1_mser_blob.html#a04381b9cf90221c2134c4d2bffe60f29">rdf::MserBlob</a>
 , <a class="el" href="classrdf_1_1_pixel.html#a63c79053e9ff2f9e2b4398946f1d0f1e">rdf::Pixel</a>
 , <a class="el" href="classrdf_1_1_pixel_edge.html#a45382f3199d554479ab8ab8ef6d9146a">rdf::PixelEdge</a>

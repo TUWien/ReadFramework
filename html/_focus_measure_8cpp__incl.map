@@ -1,9 +1,10 @@
 <map id="src/Module/FocusMeasure.cpp" name="src/Module/FocusMeasure.cpp">
-<area shape="rect" id="node2" href="$_focus_measure_8h.html" title="FocusMeasure.h" alt="" coords="17,80,135,107"/>
-<area shape="rect" id="node7" href="$_algorithms_8h.html" title="Algorithms.h" alt="" coords="461,80,555,107"/>
-<area shape="rect" id="node16" href="$_utils_8h.html" title="Utils.h" alt="" coords="273,80,333,107"/>
-<area shape="rect" id="node18" href="$_image_8h.html" title="Image.h" alt="" coords="1254,155,1323,181"/>
-<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="24,155,129,181"/>
-<area shape="rect" id="node9" href="$_blobs_8h.html" title="Blobs.h" alt="" coords="729,155,795,181"/>
-<area shape="rect" id="node10" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="837,229,913,256"/>
+<area shape="rect" id="node2" href="$_focus_measure_8h.html" title="FocusMeasure.h" alt="" coords="242,80,360,107"/>
+<area shape="rect" id="node7" href="$_algorithms_8h.html" title="Algorithms.h" alt="" coords="910,80,1004,107"/>
+<area shape="rect" id="node16" href="$_utils_8h.html" title="Utils.h" alt="" coords="738,80,797,107"/>
+<area shape="rect" id="node18" href="$_image_8h.html" title="Image.h" alt="" coords="527,155,596,181"/>
+<area shape="rect" id="node23" href="$_image_processor_8h.html" title="ImageProcessor.h" alt="" coords="5,155,133,181"/>
+<area shape="rect" id="node3" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="158,155,263,181"/>
+<area shape="rect" id="node9" href="$_blobs_8h.html" title="Blobs.h" alt="" coords="1061,155,1128,181"/>
+<area shape="rect" id="node10" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="997,229,1073,256"/>
 </map>

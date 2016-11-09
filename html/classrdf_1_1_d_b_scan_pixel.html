@@ -119,6 +119,13 @@ $(document).ready(function(){initNavTree('classrdf_1_1_d_b_scan_pixel.html','');
  <a href="classrdf_1_1_d_b_scan_pixel.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_pixel_set_8h_source.html">PixelSet.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for rdf::DBScanPixel:</div>
+<div class="dyncontent">
+<div class="center"><img src="classrdf_1_1_d_b_scan_pixel__coll__graph.png" border="0" usemap="#rdf_1_1_d_b_scan_pixel_coll__map" alt="Collaboration graph"/></div>
+<map name="rdf_1_1_d_b_scan_pixel_coll__map" id="rdf_1_1_d_b_scan_pixel_coll__map">
+<area shape="rect" id="node2" href="classrdf_1_1_pixel_set.html" title="PixelSet stores and manipulates pixel collections. " alt="" coords="19,83,113,109"/><area shape="rect" id="node3" href="classrdf_1_1_base_element.html" title="rdf::BaseElement" alt="" coords="5,5,128,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -151,24 +158,26 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:aa1c2bfb293b3fd4ea69fdad417ac37b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ed5dcc25cf924ff8caddce0aa2187cc"><td class="memItemLeft" align="right" valign="top">QVector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a2ed5dcc25cf924ff8caddce0aa2187cc">regionQuery</a> (int pixelIdx, double eps) const </td></tr>
 <tr class="separator:a2ed5dcc25cf924ff8caddce0aa2187cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aece79cba3a722cb6a447215a214d33b8"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#aece79cba3a722cb6a447215a214d33b8">calcDists</a> (const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;pixels) const </td></tr>
-<tr class="separator:aece79cba3a722cb6a447215a214d33b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aebb87873cee8084b42bf84b1fe9dc5"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a4aebb87873cee8084b42bf84b1fe9dc5">calcDists</a> (const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;pixels) const </td></tr>
+<tr class="separator:a4aebb87873cee8084b42bf84b1fe9dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a008e2fefb2a31ce5d7b5c879774bb3b2"><td class="memItemLeft" align="right" valign="top">QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a008e2fefb2a31ce5d7b5c879774bb3b2">mPixels</a></td></tr>
-<tr class="separator:a008e2fefb2a31ce5d7b5c879774bb3b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6178dcb610bd07e91d1cd644dc5847e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a6178dcb610bd07e91d1cd644dc5847e4">mPixels</a></td></tr>
+<tr class="separator:a6178dcb610bd07e91d1cd644dc5847e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5612adf300a2bae32abaf59a518f7a0"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#ab5612adf300a2bae32abaf59a518f7a0">mDists</a></td></tr>
 <tr class="separator:ab5612adf300a2bae32abaf59a518f7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa43eee4dba52cbf760995952083083dd"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#aa43eee4dba52cbf760995952083083dd">mLabels</a></td></tr>
 <tr class="separator:aa43eee4dba52cbf760995952083083dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae667dca7ef220e67ff5f507e148cb515"><td class="memItemLeft" align="right" valign="top">unsigned int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#ae667dca7ef220e67ff5f507e148cb515">mLabelPtr</a></td></tr>
 <tr class="separator:ae667dca7ef220e67ff5f507e148cb515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca733e4ad12193eff5c0e66d9a55d14d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#aca733e4ad12193eff5c0e66d9a55d14d">mLineSpacing</a> = 0</td></tr>
+<tr class="separator:aca733e4ad12193eff5c0e66d9a55d14d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a837e833744effc077ae39b273b9fc4be"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a837e833744effc077ae39b273b9fc4be">mCLabel</a> = <a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da92fd49b0b840b1a2b745781325d3086f">cluster0</a></td></tr>
 <tr class="separator:a837e833744effc077ae39b273b9fc4be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89f5307535af44b73eafdfa660bbe6d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerdf_1_1_pixel_distance.html#aa9242eabcf2409c04efb74405300c106">PixelDistance::PixelDistanceFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a89f5307535af44b73eafdfa660bbe6d6">mDistFnc</a> = &amp;<a class="el" href="namespacerdf_1_1_pixel_distance.html#ac47a1438b3b134d660c460c861ae24d0">PixelDistance::euclidean</a></td></tr>
 <tr class="separator:a89f5307535af44b73eafdfa660bbe6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0120b7923a86b8e9ce2a34a4ca1785"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a5e0120b7923a86b8e9ce2a34a4ca1785">mEpsMultiplier</a> = 1.2</td></tr>
+<tr class="memitem:a5e0120b7923a86b8e9ce2a34a4ca1785"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a5e0120b7923a86b8e9ce2a34a4ca1785">mEpsMultiplier</a> = 2.0</td></tr>
 <tr class="separator:a5e0120b7923a86b8e9ce2a34a4ca1785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a663560044a7a60318bd3be8334b15649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_d_b_scan_pixel.html#a663560044a7a60318bd3be8334b15649">mMinPts</a> = 3</td></tr>
 <tr class="separator:a663560044a7a60318bd3be8334b15649"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,7 +233,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aece79cba3a722cb6a447215a214d33b8"></a>
+<a class="anchor" id="a4aebb87873cee8084b42bf84b1fe9dc5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -234,7 +243,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">cv::Mat rdf::DBScanPixel::calcDists </td>
           <td>(</td>
-          <td class="paramtype">const QVector&lt; QSharedPointer&lt; <a class="el" href="classrdf_1_1_pixel.html">Pixel</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;&#160;</td>
           <td class="paramname"><em>pixels</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -480,7 +489,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double rdf::DBScanPixel::mEpsMultiplier = 1.2</td>
+          <td class="memname">double rdf::DBScanPixel::mEpsMultiplier = 2.0</td>
         </tr>
       </table>
   </td>
@@ -532,6 +541,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aca733e4ad12193eff5c0e66d9a55d14d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double rdf::DBScanPixel::mLineSpacing = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a663560044a7a60318bd3be8334b15649"></a>
 <div class="memitem">
 <div class="memproto">
@@ -552,7 +581,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a008e2fefb2a31ce5d7b5c879774bb3b2"></a>
+<a class="anchor" id="a6178dcb610bd07e91d1cd644dc5847e4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -560,7 +589,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QVector&lt;QSharedPointer&lt;<a class="el" href="classrdf_1_1_pixel.html">Pixel</a>&gt; &gt; rdf::DBScanPixel::mPixels</td>
+          <td class="memname"><a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> rdf::DBScanPixel::mPixels</td>
         </tr>
       </table>
   </td>

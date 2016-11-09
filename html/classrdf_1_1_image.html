@@ -146,6 +146,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8df6b58a77cb3c4a2bcb95946c42589"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_image.html#ad8df6b58a77cb3c4a2bcb95946c42589">printImage</a> (const cv::Mat &amp;img, const QString name)</td></tr>
 <tr class="memdesc:ad8df6b58a77cb3c4a2bcb95946c42589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the image as a string formatted according Matlab.  <a href="#ad8df6b58a77cb3c4a2bcb95946c42589">More...</a><br/></td></tr>
 <tr class="separator:ad8df6b58a77cb3c4a2bcb95946c42589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95569dfcbfe0f66b09ca184a95525d47"><td class="memItemLeft" align="right" valign="top">static QJsonObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_image.html#a95569dfcbfe0f66b09ca184a95525d47">matToJson</a> (const cv::Mat &amp;img)</td></tr>
+<tr class="separator:a95569dfcbfe0f66b09ca184a95525d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8393ee1ecdbbdf393ac8dbb0f0b2e7f"><td class="memItemLeft" align="right" valign="top">static cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_image.html#af8393ee1ecdbbdf393ac8dbb0f0b2e7f">jsonToMat</a> (const QJsonObject &amp;jo)</td></tr>
+<tr class="separator:af8393ee1ecdbbdf393ac8dbb0f0b2e7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eb134f357bbf204f8a63129772ce9fd"><td class="memTemplParams" colspan="2">template&lt;typename numFmt &gt; </td></tr>
 <tr class="memitem:a0eb134f357bbf204f8a63129772ce9fd"><td class="memTemplItemLeft" align="right" valign="top">static QString&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrdf_1_1_image.html#a0eb134f357bbf204f8a63129772ce9fd">printMat</a> (const cv::Mat &amp;src, const QString varName)</td></tr>
 <tr class="memdesc:a0eb134f357bbf204f8a63129772ce9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the values of a cv::Mat to copy it to Matlab.  <a href="#a0eb134f357bbf204f8a63129772ce9fd">More...</a><br/></td></tr>
@@ -230,6 +234,30 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af8393ee1ecdbbdf393ac8dbb0f0b2e7f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::Image::jsonToMat </td>
+          <td>(</td>
+          <td class="paramtype">const QJsonObject &amp;&#160;</td>
+          <td class="paramname"><em>jo</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1766746d75d3b91bc084de2a83a385d2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -272,6 +300,30 @@ Static Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QPixmap rdf::Image::mat2QPixmap </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>img</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95569dfcbfe0f66b09ca184a95525d47"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QJsonObject rdf::Image::matToJson </td>
           <td>(</td>
           <td class="paramtype">const cv::Mat &amp;&#160;</td>
           <td class="paramname"><em>img</em></td><td>)</td>
