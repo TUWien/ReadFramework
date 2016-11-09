@@ -87,7 +87,7 @@ void GlobalSettings::defaultSettings() {
 	workingDir = "";
 	xmlSubDir = "page";
 	settingsFileName = "rdf-settings.nfo";
-	settingsFileName = "super-pixel-classifier.json";
+	superPixelClassifierPath = "super-pixel-classifier.json";
 }
 
 // Config --------------------------------------------------------------------
@@ -135,6 +135,10 @@ void Config::setSettingsFile(const QString& fileName) {
 		mGlobal.settingsFileName = fileName;
 	}
 
+}
+
+QString Config::settingsFilePath() const {
+	return createSettingsFilePath();
 }
 
 QString Config::createSettingsFilePath(const QString& fileName) const {

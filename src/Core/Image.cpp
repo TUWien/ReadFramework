@@ -301,7 +301,7 @@ QJsonObject Image::matToJson(const cv::Mat & img) {
 	jo.insert("cols", img.cols);
 	jo.insert("type", img.type());
 
-	const QByteArray& ba(img.ptr<const char>());
+	QByteArray ba(img.ptr<const char>(), img.rows*img.cols*(int)img.elemSize());
 	QString db64 = ba.toBase64();
 	jo.insert("data", db64);
 

@@ -148,39 +148,23 @@ bool SuperPixelFeature::compute() {
 	cv::Ptr<cv::ORB> features = cv::ORB::create();
 	features->compute(cImg, keypoints, mDescriptors);
 
+	// sync keypoints
 	QVector<cv::KeyPoint> kptsOut = QVector<cv::KeyPoint>::fromStdVector(keypoints);
 
-
+	QList<int> removeIdx;
 	for (int idx = 0; idx < kptsIn.size(); idx++) {
 		
-		int kIdx = kptsOut.indexOf(kptsIn[idx]);
 
+		int kIdx = kptsOut.indexOf(kptsIn[idx]);
 		if (kIdx == -1)
-			mSet.remove(mSet.pixels()[idx]);
+			removeIdx << idx;
 	}
 
-	//qDebug() << "in vs. out" << kptsIn.size() << "o" << keypoints.size();
-
-	//for (const QSharedPointer<Pixel>& px : mSet.pixels()) {
-
-	//	bool exists = false;
-
-	//	for (const cv::KeyPoint& kp : keypoints) {
-
-	//		if (px == kp) {
-	//			exists = true;
-	//			break;
-	//		}
-	//	}
-
-	//	if (!exists)
-	//		mSet.remove(px);
-	//}
+	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
+	for (int ri : removeIdx) 
+		mSet.remove(mSet.pixels()[ri]);
 
 	mInfo << "# keypoints after ORB" << keypoints.size() << "set size" << mSet.size();
-
-	//mSet.remove();
-
 	mInfo << mDescriptors.rows << "features computed in" << dt;
 
 	return true;

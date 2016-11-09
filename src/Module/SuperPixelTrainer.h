@@ -106,12 +106,16 @@ class DllModuleExport FeatureCollection {
 
 public:
 	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
+	friend DllModuleExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
 
 	QJsonObject toJson() const;
 	static FeatureCollection read(QJsonObject& jo);
 
 	void append(const cv::Mat& descriptor);
 	LabelInfo label() const;
+	void setDescriptors(const cv::Mat& desc);
+	cv::Mat descriptors() const;
+	int numDescriptors() const;
 
 	static QVector<FeatureCollection> split(const cv::Mat& descriptors, const PixelSet& set);
 	static QString jsonKey();
@@ -128,9 +132,15 @@ public:
 
 	void write(const QString& filePath) const;
 	static FeatureCollectionManager read(const QString& filePath);
+	
 	void add(const FeatureCollection& collection);
+	void merge(const FeatureCollectionManager& other);
+	void normalize(int minFeaturesPerClass, int maxFeaturesPerClass);
 
 	QVector<FeatureCollection> collection() const;
+
+
+	QString toString() const;
 
 protected:
 	QVector<FeatureCollection> mCollection;

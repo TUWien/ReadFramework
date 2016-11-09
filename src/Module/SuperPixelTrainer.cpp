@@ -349,6 +349,11 @@ FeatureCollection::FeatureCollection(const cv::Mat & descriptors, const LabelInf
 	mLabel = label;
 }
 
+bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr) {
+
+	return fcl.label() == fcr.label();
+}
+
 QJsonObject FeatureCollection::toJson() const {
 
 	QJsonObject jo;
@@ -411,6 +416,18 @@ LabelInfo FeatureCollection::label() const {
 	return mLabel;
 }
 
+void FeatureCollection::setDescriptors(const cv::Mat & desc) {
+	mDesc = desc;
+}
+
+cv::Mat FeatureCollection::descriptors() const {
+	return mDesc;
+}
+
+int FeatureCollection::numDescriptors() const {
+	return mDesc.rows;
+}
+
 // FeatureCollectionManager --------------------------------------------------------------------
 FeatureCollectionManager::FeatureCollectionManager(const cv::Mat & descriptors, const PixelSet & set) {
 	
@@ -456,6 +473,59 @@ void FeatureCollectionManager::add(const FeatureCollection & collection) {
 
 QVector<FeatureCollection> FeatureCollectionManager::collection() const {
 	return mCollection;
+}
+
+/// <summary>
+/// Merges two collection managers (e.g. from two images).
+/// If the same labels exist, features will be appended.
+/// </summary>
+/// <param name="other">The other manager.</param>
+void FeatureCollectionManager::merge(const FeatureCollectionManager & other) {
+
+	for (const FeatureCollection& col : other.collection()) {
+
+		int idx = mCollection.indexOf(col);
+
+		// append features, if the collection exists already
+		if (idx != -1)
+			mCollection[idx].append(col.descriptors());
+		else
+			add(col);
+
+	}
+}
+
+void FeatureCollectionManager::normalize(int minFeaturesPerClass, int maxFeaturesPerClass) {
+
+	QVector<int> removeIdx;
+	for (int idx = 0; idx < mCollection.size(); idx++) {
+
+		int nd = mCollection[idx].numDescriptors();
+		if (nd < minFeaturesPerClass) {
+			removeIdx << idx;
+		}
+		else if (nd > maxFeaturesPerClass) {
+			cv::Mat desc = mCollection[idx].descriptors();
+			cv::resize(desc, desc, cv::Size(desc.cols, maxFeaturesPerClass), 0.0, 0.0, CV_INTER_NN);
+			mCollection[idx].setDescriptors(desc);
+			qInfo() << mCollection[idx].label().name() << nd << "->" << desc.rows << "features";
+		}
+	}
+
+	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
+	for (int ri : removeIdx) {
+		qInfo() << mCollection[ri].label().name() << "removed since it has too few features: " << mCollection[ri].numDescriptors();
+		mCollection.remove(ri);
+	}
+}
+
+QString FeatureCollectionManager::toString() const {
+
+	QString str = "Feature Collection Manager ---------------------\n";
+	for (auto fc : mCollection)
+		str += fc.label().name() + " " + QString::number(fc.descriptors().rows) + " features | ";
+
+	return str;
 }
 
 }

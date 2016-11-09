@@ -96,6 +96,7 @@ public:
 
 	bool isPortable() const;
 	void setSettingsFile(const QString& fileName);
+	QString settingsFilePath() const;
 
 private:
 	Config();

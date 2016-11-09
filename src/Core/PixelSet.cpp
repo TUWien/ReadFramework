@@ -203,6 +203,9 @@ Polygon PixelSet::polygon(const QVector<Vector2D>& pts) const {
 		ptsCv.push_back(pt.toCvPoint());
 	}
 
+	if (pts.empty())
+		return Polygon();
+
 	// compute convex hull
 	std::vector<cv::Point> cPts;
 	cv::convexHull(ptsCv, cPts, true);

@@ -263,10 +263,10 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 		qCritical() << "could not compute SuperPixel features!";
 
 	FeatureCollectionManager fcm(spf.features(), spf.set());
-	fcm.write("C:\\temp\\features.json");
+	fcm.write(spl.config()->featureFilePath());
 
 
-	FeatureCollectionManager testFcm = FeatureCollectionManager::read("C:\\temp\\features.json");
+	FeatureCollectionManager testFcm = FeatureCollectionManager::read(spl.config()->featureFilePath());
 
 	for (int idx = 0; idx < testFcm.collection().size(); idx++) {
 
