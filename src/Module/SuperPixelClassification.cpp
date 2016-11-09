@@ -44,7 +44,7 @@
 #include <QDebug>
 #include <QPainter>
 
-#include <opencv2\features2d.hpp>
+#include <opencv2/features2d/features2d.hpp>
 #pragma warning(pop)
 
 namespace rdf {
