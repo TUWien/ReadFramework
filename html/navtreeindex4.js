@@ -1,5 +1,14 @@
 var NAVTREEINDEX4 =
 {
+"classrdf_1_1_local_orientation.html#ad9277c4f87b894c50995a6d148a3b101":[2,0,2,83,4],
+"classrdf_1_1_local_orientation.html#af6826fa544c13e6b2b6741a170b3aa9a":[2,0,2,83,2],
+"classrdf_1_1_local_orientation.html#af8caad6b46c4cd523e9ebd86e5f2be2e":[2,0,2,83,6],
+"classrdf_1_1_local_orientation_config.html":[2,0,2,82],
+"classrdf_1_1_local_orientation_config.html#a03a77e2b28907a65d4937b81de4a2b13":[2,0,2,82,2],
+"classrdf_1_1_local_orientation_config.html#a10fafde54bbf6a040420f51f3ee9da5a":[2,0,2,82,6],
+"classrdf_1_1_local_orientation_config.html#a18e555ff362161fb2534f17a9ae95767":[2,0,2,82,5],
+"classrdf_1_1_local_orientation_config.html#a2390feabaeb099afd997bfa607b3c6c3":[2,0,2,82,3],
+"classrdf_1_1_local_orientation_config.html#a26817f28992a2cfbf64a9bfb757987e8":[2,0,2,82,7],
 "classrdf_1_1_local_orientation_config.html#a3fad1cda2765bb8ad374189da7932144":[2,0,2,82,14],
 "classrdf_1_1_local_orientation_config.html#a594b5d4d1d078c811094d306f2c62dc3":[2,0,2,82,13],
 "classrdf_1_1_local_orientation_config.html#a63256d1438baf5ce6f0175eac9ff6078":[2,0,2,82,15],
@@ -240,14 +249,5 @@ var NAVTREEINDEX4 =
 "classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfa920fec1ccdc6f34e6e3e63c69580b2ed":[2,0,2,32,0,2],
 "classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfac52d1e728e0389e3dd64ee976265b0e2":[2,0,2,32,0,1],
 "classrdf_1_1_pixel_set.html#adcbb914f0748e362e67b33e5ef790bdfacaac44b36237b9e2f76b29dcb86a7b8e":[2,0,2,32,0,0],
-"classrdf_1_1_pixel_set.html#aeb9b500d74f64dd8ac74073deb48e08f":[2,0,2,32,11],
-"classrdf_1_1_pixel_set.html#af0d742e9b5bbdc5e785aa5fa5e352c34":[2,0,2,32,9],
-"classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1":[2,0,2,32,20],
-"classrdf_1_1_pixel_stats.html":[2,0,2,20],
-"classrdf_1_1_pixel_stats.html#a08c69cbccc3e3382e20432bca87ee6dd":[2,0,2,20,6],
-"classrdf_1_1_pixel_stats.html#a455ff96916e0feb4816edc2aca0bdeb9":[2,0,2,20,2],
-"classrdf_1_1_pixel_stats.html#a4837f5039a63e78732666700accb4904":[2,0,2,20,15],
-"classrdf_1_1_pixel_stats.html#a529c44295f52118c07b4de7d13406fbf":[2,0,2,20,7],
-"classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc":[2,0,2,20,0],
-"classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76":[2,0,2,20,0,3]
+"classrdf_1_1_pixel_set.html#aeb9b500d74f64dd8ac74073deb48e08f":[2,0,2,32,11]
 };

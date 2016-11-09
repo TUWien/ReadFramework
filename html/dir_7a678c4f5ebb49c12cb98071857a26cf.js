@@ -62,7 +62,7 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
       [ "SuperPixelClassificationConfig", "classrdf_1_1_super_pixel_classification_config.html", "classrdf_1_1_super_pixel_classification_config" ],
       [ "SuperPixelClassification", "classrdf_1_1_super_pixel_classification.html", "classrdf_1_1_super_pixel_classification" ]
     ] ],
-    [ "SuperPixelTrainer.cpp", "_super_pixel_trainer_8cpp.html", null ],
+    [ "SuperPixelTrainer.cpp", "_super_pixel_trainer_8cpp.html", "_super_pixel_trainer_8cpp" ],
     [ "SuperPixelTrainer.h", "_super_pixel_trainer_8h.html", [
       [ "SuperPixelLabelerConfig", "classrdf_1_1_super_pixel_labeler_config.html", "classrdf_1_1_super_pixel_labeler_config" ],
       [ "LabelManager", "classrdf_1_1_label_manager.html", "classrdf_1_1_label_manager" ],

@@ -6,7 +6,7 @@ var searchData=
   ['p2',['p2',['../classrdf_1_1_line.html#ae78cf1f12ec02b09ccba99dac5f10578',1,'rdf::Line::p2()'],['../classrdf_1_1_triangle.html#ab3e660a54936eafa39d399d179f57ced',1,'rdf::Triangle::p2()']]],
   ['page',['page',['../classrdf_1_1_page_xml_parser.html#ab819f5bcf6a7e5c6959af23325d4ab96',1,'rdf::PageXmlParser']]],
   ['pageelement',['PageElement',['../classrdf_1_1_page_element.html#ad8f0d4fa7e5cc0614b6abd1869e56a5f',1,'rdf::PageElement']]],
-  ['pagesegmentation',['PageSegmentation',['../classrdf_1_1_page_segmentation.html#a7527c84ef1fb5f14d92b989df4749b90',1,'rdf::PageSegmentation::PageSegmentation()'],['../classrdf_1_1_layout_test.html#ac9b73ec8f4e0fd9d093fcb2a65d67007',1,'rdf::LayoutTest::pageSegmentation()']]],
+  ['pagesegmentation',['pageSegmentation',['../classrdf_1_1_layout_test.html#ac9b73ec8f4e0fd9d093fcb2a65d67007',1,'rdf::LayoutTest::pageSegmentation()'],['../classrdf_1_1_page_segmentation.html#a7527c84ef1fb5f14d92b989df4749b90',1,'rdf::PageSegmentation::PageSegmentation()']]],
   ['pagesegmentationconfig',['PageSegmentationConfig',['../classrdf_1_1_page_segmentation_config.html#a4d194f80510d9a96ba6fc9adefe39781',1,'rdf::PageSegmentationConfig']]],
   ['pagexmlparser',['PageXmlParser',['../classrdf_1_1_page_xml_parser.html#a2752073547167adcf9f3d37c43cf5baa',1,'rdf::PageXmlParser']]],
   ['parse',['parse',['../classrdf_1_1_page_xml_parser.html#a625617138f7bb7235cf6ddb1d6dc472b',1,'rdf::PageXmlParser']]],

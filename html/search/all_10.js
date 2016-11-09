@@ -10,7 +10,7 @@ var searchData=
   ['pageparser_2ecpp',['PageParser.cpp',['../_page_parser_8cpp.html',1,'']]],
   ['pageparser_2eh',['PageParser.h',['../_page_parser_8h.html',1,'']]],
   ['pagesegmentation',['PageSegmentation',['../classrdf_1_1_page_segmentation.html',1,'rdf']]],
-  ['pagesegmentation',['PageSegmentation',['../classrdf_1_1_page_segmentation.html#a7527c84ef1fb5f14d92b989df4749b90',1,'rdf::PageSegmentation::PageSegmentation()'],['../classrdf_1_1_layout_test.html#ac9b73ec8f4e0fd9d093fcb2a65d67007',1,'rdf::LayoutTest::pageSegmentation()']]],
+  ['pagesegmentation',['pageSegmentation',['../classrdf_1_1_layout_test.html#ac9b73ec8f4e0fd9d093fcb2a65d67007',1,'rdf::LayoutTest::pageSegmentation()'],['../classrdf_1_1_page_segmentation.html#a7527c84ef1fb5f14d92b989df4749b90',1,'rdf::PageSegmentation::PageSegmentation()']]],
   ['pagesegmentation_2ecpp',['PageSegmentation.cpp',['../_page_segmentation_8cpp.html',1,'']]],
   ['pagesegmentation_2eh',['PageSegmentation.h',['../_page_segmentation_8h.html',1,'']]],
   ['pagesegmentationconfig',['PageSegmentationConfig',['../classrdf_1_1_page_segmentation_config.html#a4d194f80510d9a96ba6fc9adefe39781',1,'rdf::PageSegmentationConfig']]],

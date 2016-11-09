@@ -21,6 +21,7 @@ var searchData=
   ['deletefunctor',['deleteFunctor',['../class_g_coptimization.html#a090731f3cec3cbb90784fed2097cbe5b',1,'GCoptimization']]],
   ['delta',['delta',['../classrdf_1_1_base_skew_estimation_config.html#aaaaa4282445ab191085ab1fa366e166b',1,'rdf::BaseSkewEstimationConfig']]],
   ['density',['density',['../classrdf_1_1_read_l_s_d_config.html#ae733fb426f6b71e3d0d6956667085d87',1,'rdf::ReadLSDConfig']]],
+  ['descriptors',['descriptors',['../classrdf_1_1_feature_collection.html#aeddefb4f0faf7ba64052e2ce8d6860b9',1,'rdf::FeatureCollection']]],
   ['diagonal',['diagonal',['../classrdf_1_1_rect.html#a782ef217d69e62e4b6c838f6f559337f',1,'rdf::Rect']]],
   ['diffangle',['diffAngle',['../classrdf_1_1_line.html#a9aca17fa9cb616a464f12752c5b3f1cd',1,'rdf::Line']]],
   ['dilateimage',['dilateImage',['../classrdf_1_1_algorithms.html#ab291874a4db55d67aea77f38fb0ccf1f',1,'rdf::Algorithms']]],

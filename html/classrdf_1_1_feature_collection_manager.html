@@ -124,8 +124,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a61a140cf855aab62c13c7207f106c12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cd7e91f6d55a34c6cf35e7c2dfd7896"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a3cd7e91f6d55a34c6cf35e7c2dfd7896">add</a> (const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;<a class="el" href="classrdf_1_1_feature_collection_manager.html#a41c315179e561ee696a886673e0cd3b6">collection</a>)</td></tr>
 <tr class="separator:a3cd7e91f6d55a34c6cf35e7c2dfd7896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae045d2853dfe00dd4706e199472ff7e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#ae045d2853dfe00dd4706e199472ff7e5">merge</a> (const <a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a> &amp;other)</td></tr>
+<tr class="memdesc:ae045d2853dfe00dd4706e199472ff7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges two collection managers (e.g. from two images). If the same labels exist, features will be appended.  <a href="#ae045d2853dfe00dd4706e199472ff7e5">More...</a><br/></td></tr>
+<tr class="separator:ae045d2853dfe00dd4706e199472ff7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71da3a223fa76f48da7f8f85da44198e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a71da3a223fa76f48da7f8f85da44198e">normalize</a> (int minFeaturesPerClass, int maxFeaturesPerClass)</td></tr>
+<tr class="separator:a71da3a223fa76f48da7f8f85da44198e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41c315179e561ee696a886673e0cd3b6"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a41c315179e561ee696a886673e0cd3b6">collection</a> () const </td></tr>
 <tr class="separator:a41c315179e561ee696a886673e0cd3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1cefae1ac5a0e551c3c191c9f99bd1d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#ad1cefae1ac5a0e551c3c191c9f99bd1d">toString</a> () const </td></tr>
+<tr class="separator:ad1cefae1ac5a0e551c3c191c9f99bd1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -196,6 +203,56 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae045d2853dfe00dd4706e199472ff7e5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FeatureCollectionManager::merge </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Merges two collection managers (e.g. from two images). If the same labels exist, features will be appended. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other manager.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a71da3a223fa76f48da7f8f85da44198e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FeatureCollectionManager::normalize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>minFeaturesPerClass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxFeaturesPerClass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a97a55de5fc7c40e29444108b12ff0b1d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -216,6 +273,21 @@ Protected Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad1cefae1ac5a0e551c3c191c9f99bd1d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString rdf::FeatureCollectionManager::toString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

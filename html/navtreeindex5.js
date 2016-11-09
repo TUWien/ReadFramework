@@ -1,5 +1,14 @@
 var NAVTREEINDEX5 =
 {
+"classrdf_1_1_pixel_set.html#af0d742e9b5bbdc5e785aa5fa5e352c34":[2,0,2,32,9],
+"classrdf_1_1_pixel_set.html#afa283c2f78317d3c97e2d6753f8bc4b1":[2,0,2,32,20],
+"classrdf_1_1_pixel_stats.html":[2,0,2,20],
+"classrdf_1_1_pixel_stats.html#a08c69cbccc3e3382e20432bca87ee6dd":[2,0,2,20,6],
+"classrdf_1_1_pixel_stats.html#a455ff96916e0feb4816edc2aca0bdeb9":[2,0,2,20,2],
+"classrdf_1_1_pixel_stats.html#a4837f5039a63e78732666700accb4904":[2,0,2,20,15],
+"classrdf_1_1_pixel_stats.html#a529c44295f52118c07b4de7d13406fbf":[2,0,2,20,7],
+"classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfc":[2,0,2,20,0],
+"classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca1ef6b00364087cd30cc3c53d6ccafc76":[2,0,2,20,0,3],
 "classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca426f16b8b2d73f9d5186bcd22b1aade0":[2,0,2,20,0,1],
 "classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca4a1e8cdf79e2c5549cb8751d1981a7ba":[2,0,2,20,0,4],
 "classrdf_1_1_pixel_stats.html#a55d7066c4a51077b0f5ec96f82293dfca8ea00d95a58fc1fc8bd3d1fdf5ec4cc3":[2,0,2,20,0,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX5 =
 "classrdf_1_1_simple_binarization_config.html":[2,0,2,56],
 "classrdf_1_1_simple_binarization_config.html#a0a8b49a2ffcce1e403b85c2e5ec10404":[2,0,2,56,5],
 "classrdf_1_1_simple_binarization_config.html#a2883e0c06ee4ec1b5c55eac33c8ae2db":[2,0,2,56,3],
-"classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675":[2,0,2,56,2],
-"classrdf_1_1_simple_binarization_config.html#a45955c54fb2c51c254abde12a8e77946":[2,0,2,56,1],
-"classrdf_1_1_simple_binarization_config.html#a4625e7b162d0541b490677442ae963d2":[2,0,2,56,4],
-"classrdf_1_1_simple_binarization_config.html#ad8d0af0c4ac8e16fe812477585210a4d":[2,0,2,56,0],
-"classrdf_1_1_super_pixel.html":[2,0,2,81],
-"classrdf_1_1_super_pixel.html#a08561e0c32939189a7d5347064b371b2":[2,0,2,81,4],
-"classrdf_1_1_super_pixel.html#a10b33c5252a9c98acae50639f1488de4":[2,0,2,81,0],
-"classrdf_1_1_super_pixel.html#a10f069498293b47975c5f7a6489388df":[2,0,2,81,2],
-"classrdf_1_1_super_pixel.html#a1d7de2d53970d8c4d8536e98005511c7":[2,0,2,81,3],
-"classrdf_1_1_super_pixel.html#a5a7ecf8772f9cd9236663c3bec53de49":[2,0,2,81,7]
+"classrdf_1_1_simple_binarization_config.html#a422496ed551bc5ec275cb1170e5a9675":[2,0,2,56,2]
 };

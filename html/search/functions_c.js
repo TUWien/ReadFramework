@@ -24,7 +24,7 @@ var searchData=
   ['maxsloperotat',['maxSlopeRotat',['../classrdf_1_1_line_trace_config.html#ac7fdc5b085519a46ccefdf6749274100',1,'rdf::LineTraceConfig']]],
   ['maxval',['maxVal',['../classrdf_1_1_gradient_vector.html#a5c5f1b04538c120dd8355b7763bca814',1,'rdf::GradientVector']]],
   ['medianresiduals',['medianResiduals',['../classrdf_1_1_line_fitting.html#ac39d36e049cb9409cf7760b7b7e48523',1,'rdf::LineFitting']]],
-  ['merge',['merge',['../classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054',1,'rdf::PixelSet::merge()'],['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line::merge()']]],
+  ['merge',['merge',['../classrdf_1_1_pixel_set.html#aafb224051a020f6525e8d016bf622054',1,'rdf::PixelSet::merge()'],['../classrdf_1_1_line.html#a615e6989175253a85e13bfa2be3b6e8a',1,'rdf::Line::merge()'],['../classrdf_1_1_feature_collection_manager.html#ae045d2853dfe00dd4706e199472ff7e5',1,'rdf::FeatureCollectionManager::merge()']]],
   ['min',['min',['../classrdf_1_1_algorithms.html#aa01dcd7b09b95264aa391e1950e53353',1,'rdf::Algorithms::min()'],['../classrdf_1_1_histogram.html#a9e3e7b095468fb7f9470701f5a6b5b55',1,'rdf::Histogram::min()'],['../classrdf_1_1_vector2_d.html#abfe9c09372c63caba7dc738c75b93392',1,'rdf::Vector2D::min(const Vector2D &amp;v1, const Vector2D &amp;v2)'],['../classrdf_1_1_vector2_d.html#a1329bbf927aa54981fc0b3ca93156a0d',1,'rdf::Vector2D::min()']]],
   ['minarea',['minArea',['../classrdf_1_1_line_trace_config.html#a6404667bfba7e6408ea3a9bdaceaa973',1,'rdf::LineTraceConfig']]],
   ['mindistance',['minDistance',['../classrdf_1_1_line.html#a6bea333a5f2f1818dfbf997c6b0b60a5',1,'rdf::Line']]],

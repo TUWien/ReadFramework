@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_feature_collection.html',
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classrdf_1_1_feature_collection-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">rdf::FeatureCollection Class Reference</div>  </div>
@@ -125,7 +126,7 @@ Collaboration diagram for rdf::FeatureCollection:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a314a5f5f08d0cbe45586f21088b83651"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a314a5f5f08d0cbe45586f21088b83651">FeatureCollection</a> (const cv::Mat &amp;descriptors=cv::Mat(), const <a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a> &amp;<a class="el" href="classrdf_1_1_feature_collection.html#a6a1ee0cef194a1b8220714dec7a7f1f0">label</a>=<a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a>())</td></tr>
+<tr class="memitem:a314a5f5f08d0cbe45586f21088b83651"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a314a5f5f08d0cbe45586f21088b83651">FeatureCollection</a> (const cv::Mat &amp;<a class="el" href="classrdf_1_1_feature_collection.html#aeddefb4f0faf7ba64052e2ce8d6860b9">descriptors</a>=cv::Mat(), const <a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a> &amp;<a class="el" href="classrdf_1_1_feature_collection.html#a6a1ee0cef194a1b8220714dec7a7f1f0">label</a>=<a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a>())</td></tr>
 <tr class="separator:a314a5f5f08d0cbe45586f21088b83651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb90adf5d9d8e4adc8815224f093ecdb"><td class="memItemLeft" align="right" valign="top">QJsonObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#abb90adf5d9d8e4adc8815224f093ecdb">toJson</a> () const </td></tr>
 <tr class="separator:abb90adf5d9d8e4adc8815224f093ecdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,12 +134,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2a8d12cbfabc8e653b6dc116c499bffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a1ee0cef194a1b8220714dec7a7f1f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a6a1ee0cef194a1b8220714dec7a7f1f0">label</a> () const </td></tr>
 <tr class="separator:a6a1ee0cef194a1b8220714dec7a7f1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07fff4c2fd3c1f697c44b8cdcbe71488"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a07fff4c2fd3c1f697c44b8cdcbe71488">setDescriptors</a> (const cv::Mat &amp;desc)</td></tr>
+<tr class="separator:a07fff4c2fd3c1f697c44b8cdcbe71488"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeddefb4f0faf7ba64052e2ce8d6860b9"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#aeddefb4f0faf7ba64052e2ce8d6860b9">descriptors</a> () const </td></tr>
+<tr class="separator:aeddefb4f0faf7ba64052e2ce8d6860b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc2a6aca1c675a025659512fda9906c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#aedc2a6aca1c675a025659512fda9906c">numDescriptors</a> () const </td></tr>
+<tr class="separator:aedc2a6aca1c675a025659512fda9906c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a00a4c8a4c09a9ccc0e40aa632072ed92"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a00a4c8a4c09a9ccc0e40aa632072ed92">read</a> (QJsonObject &amp;jo)</td></tr>
 <tr class="separator:a00a4c8a4c09a9ccc0e40aa632072ed92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3638981f75e8cb7ae66b46fa5adb2562"><td class="memItemLeft" align="right" valign="top">static QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a3638981f75e8cb7ae66b46fa5adb2562">split</a> (const cv::Mat &amp;descriptors, const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;set)</td></tr>
+<tr class="memitem:a3638981f75e8cb7ae66b46fa5adb2562"><td class="memItemLeft" align="right" valign="top">static QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a3638981f75e8cb7ae66b46fa5adb2562">split</a> (const cv::Mat &amp;<a class="el" href="classrdf_1_1_feature_collection.html#aeddefb4f0faf7ba64052e2ce8d6860b9">descriptors</a>, const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;set)</td></tr>
 <tr class="memdesc:a3638981f75e8cb7ae66b46fa5adb2562"><td class="mdescLeft">&#160;</td><td class="mdescRight">Splits the descriptors according to their trueLabels.  <a href="#a3638981f75e8cb7ae66b46fa5adb2562">More...</a><br/></td></tr>
 <tr class="separator:a3638981f75e8cb7ae66b46fa5adb2562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3aa2ac5cc8ba032d7ebfe8536b4a63b6"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#a3aa2ac5cc8ba032d7ebfe8536b4a63b6">jsonKey</a> ()</td></tr>
@@ -150,6 +157,11 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a7c25bae9059befa41691f5552060fadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5566ea8e2766bcc0b2224d38fa676f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#ac5566ea8e2766bcc0b2224d38fa676f3">mLabel</a></td></tr>
 <tr class="separator:ac5566ea8e2766bcc0b2224d38fa676f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aadcefa476e8ae2679eabe3e663611bb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html#aadcefa476e8ae2679eabe3e663611bb2">operator==</a> (const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;fcl, const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;fcr)</td></tr>
+<tr class="separator:aadcefa476e8ae2679eabe3e663611bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a314a5f5f08d0cbe45586f21088b83651"></a>
@@ -195,6 +207,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aeddefb4f0faf7ba64052e2ce8d6860b9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::FeatureCollection::descriptors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a3aa2ac5cc8ba032d7ebfe8536b4a63b6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -233,6 +260,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aedc2a6aca1c675a025659512fda9906c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rdf::FeatureCollection::numDescriptors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a00a4c8a4c09a9ccc0e40aa632072ed92"></a>
 <div class="memitem">
 <div class="memproto">
@@ -253,6 +295,22 @@ Protected Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a07fff4c2fd3c1f697c44b8cdcbe71488"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::FeatureCollection::setDescriptors </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -312,6 +370,41 @@ Protected Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="aadcefa476e8ae2679eabe3e663611bb2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_base_module_8h.html#a2f33613fa0c4e51cecb5a3c020b5e66a">DllModuleExport</a> bool operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;&#160;</td>
+          <td class="paramname"><em>fcl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;&#160;</td>
+          <td class="paramname"><em>fcr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

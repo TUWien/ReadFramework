@@ -147,6 +147,7 @@ var NAVTREEINDEX0 =
 "_super_pixel_classification_8h.html":[3,0,0,3,19],
 "_super_pixel_classification_8h_source.html":[3,0,0,3,19],
 "_super_pixel_trainer_8cpp.html":[3,0,0,3,20],
+"_super_pixel_trainer_8cpp.html#aaab49f07c9d7dcb6d002f454238c59e4":[3,0,0,3,20,0],
 "_super_pixel_trainer_8h.html":[3,0,0,3,21],
 "_super_pixel_trainer_8h_source.html":[3,0,0,3,21],
 "_tab_stop_analysis_8cpp.html":[3,0,0,3,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "class_g_coptimization.html#a7a02198da1800f3f9f5320bcd7678554":[2,0,7,40],
 "class_g_coptimization.html#a7a9fa19c0acd73c66f48733ec76bebdd":[2,0,7,96],
 "class_g_coptimization.html#a7b216cca83169f6b09457ea77a589d5f":[2,0,7,27],
-"class_g_coptimization.html#a808e066c3dac8ae5dbc3fd48261d82f2":[2,0,7,89],
-"class_g_coptimization.html#a823a1f1fd6f37cb0b5eb070435f6a2d2":[2,0,7,53]
+"class_g_coptimization.html#a808e066c3dac8ae5dbc3fd48261d82f2":[2,0,7,89]
 };
