@@ -417,7 +417,7 @@ void Algorithms::setBorderConst(cv::Mat &src, float val) {
 /// </summary>
 /// <param name="x">Input value</param>
 /// <returns>Natural Algorithm</returns>
-double Algorithms::log_gamma_lanczos(double x) {
+double Algorithms::logGammaLanczos(double x) {
 	/*    The formula used is
     @f[
       \Gamma(x) = \frac{ \sum_{n=0}^{N} q_n x^n }{ \Pi_{n=0}^{N} (x+n) }
@@ -450,6 +450,91 @@ double Algorithms::log_gamma_lanczos(double x) {
 		b += q[n] * pow(x, (double)n);
 	}
 	return a + log(b);
+}
+
+
+/// <summary>
+/// Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method.
+/// </summary>
+/// <param name="x">Input Value x</param>
+/// <returns>Natural Log using Windschitl</returns>
+double Algorithms::logGammaWindschitl(double x)
+{
+	/*
+	    See http://www.rskey.org/gamma.htm
+
+    The formula used is
+    @f[
+        \Gamma(x) = \sqrt{\frac{2\pi}{x}} \left( \frac{x}{e}
+                    \sqrt{ x\sinh(1/x) + \frac{1}{810x^6} } \right)^x
+    @f]
+    so
+    @f[
+        \log\Gamma(x) = 0.5\log(2\pi) + (x-0.5)\log(x) - x
+                      + 0.5x\log\left( x\sinh(1/x) + \frac{1}{810x^6} \right).
+    @f]
+    This formula is a good approximation when x > 15.
+ */
+	return 0.918938533204673 + (x - 0.5)*log(x) - x
+		+ 0.5*x*log(x*sinh(1 / x) + 1 / (810.0*pow(x, 6.0)));
+}
+
+/// <summary>
+/// Computes the natural logarithm of the absolute value of the gamma function of x.When x>15 use log_gamma_windschitl(), otherwise use log_gamma_lanczos().
+/// </summary>
+/// <param name="x">The Input x.</param>
+/// <returns>Natural Logarithm</returns>
+double Algorithms::logGamma(double x)
+{
+	return x > 15.0 ? logGammaWindschitl(x) : logGammaLanczos(x);
+}
+
+/// <summary>
+///     The resulting rounding error after floating point computations depend on the specific operations done.The same number computed by
+///		different algorithms could present different rounding errors.For a useful comparison, an estimation of the relative rounding error
+///		should be considered and compared to a factor times EPS.The factor should be related to the cumulated rounding error in the chain of
+///		computation.Here, as a simplification, a fixed factor is used. 
+/// </summary>
+/// <param name="a">Input a</param>
+/// <param name="b">Input b</param>
+/// <returns>equal if relative error <= factor x eps</returns>
+int Algorithms::doubleEqual(double a, double b) {
+	double abs_diff, aa, bb, abs_max;
+
+	/* trivial case */
+	if (a == b) return 1;
+
+	abs_diff = fabs(a - b);
+	aa = fabs(a);
+	bb = fabs(b);
+	abs_max = aa > bb ? aa : bb;
+
+	/* DBL_MIN is the smallest normalized number, thus, the smallest
+	number whose relative error is bounded by DBL_EPSILON. For
+	smaller numbers, the same quantization steps as for DBL_MIN
+	are used. Then, for smaller numbers, a meaningful "relative"
+	error should be computed by dividing the difference by DBL_MIN. */
+	if (abs_max < DBL_MIN) abs_max = DBL_MIN;
+
+	/* equal if relative error <= factor x eps */
+	return (abs_diff / abs_max) <= (100.0 * DBL_EPSILON);
+}
+
+double Algorithms::absAngleDiff(double a, double b) {
+
+	a -= b;
+	while (a <= -CV_PI) a += 2*CV_PI;
+	while (a >   CV_PI) a -= 2*CV_PI;
+	if (a < 0.0) a = -a;
+	return a;
+}
+
+double Algorithms::signedAngleDiff(double a, double b) {
+
+	a -= b;
+	while (a <= -CV_PI) a += 2*CV_PI;
+	while (a >   CV_PI) a -= 2*CV_PI;
+	return a;
 }
 
 /// <summary>

@@ -32,6 +32,7 @@
 
 #include "LineTrace.h"
 #include "Image.h"
+#include "GradientVector.h"
 #include "Blobs.h"
 #include "Algorithms.h"
 
@@ -885,8 +886,410 @@ namespace rdf {
 
 	bool ReadLSD::compute()
 	{
-		return false;
+		/* angle tolerance */
+		double prec = CV_PI * config()->angleThr() / 180.0;
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+		double p = config()->angleThr() / 180.0;
+		double rho = config()->quant() / sin(prec); /* gradient magnitude threshold */
+		double logNT = 0;
+		int minRegSize = 0;
+
+		cv::Mat scaledImg = mSrcImg;
+		//scale image if necessary
+		if (config()->scale() != 1.0) {
+			//scale image
+			//TODO: in original source code a gaussian filter with config()->sigmaScale()
+			//and a sampling of the original image is used:
+			//cv::GaussianBlur(mSrcImg, scaledImg, cv::Size(0,0), config()->sigmaScale(), config()->sigmaScale());
+			//cv::resize(scaledImg, scaledImg, cv::Size(), (double)config()->scale(), (double)config()->scale(), cv::INTER_NEAREST;
+			
+			//here cv::resize is used with bilinear interpolation
+			cv::resize(mSrcImg, scaledImg, cv::Size(), (double)config()->scale(), (double)config()->scale(), cv::INTER_LINEAR);
+		}
+
+		//compute Gradients
+		GradientVector gr(scaledImg);
+		if (!gr.compute()) {
+			mWarning << "could not compute gradients in ReadLSD compute...";
+			return false;
+		}
+		mMagImg = gr.magImg();
+		mRadImg = gr.radImg();
+
+		/* Number of Tests - NT
+
+		The theoretical number of tests is Np.(XY)^(5/2)
+		where X and Y are number of columns and rows of the image.
+		Np corresponds to the number of angle precisions considered.
+		As the procedure 'rect_improve' tests 5 times to halve the
+		angle precision, and 5 more times after improving other factors,
+		11 different precision values are potentially tested. Thus,
+		the number of tests is
+		11 * (X*Y)^(5/2)
+		whose logarithm value is
+		log10(11) + 5/2 * (log10(X) + log10(Y)).
+		*/
+		logNT = 5.0 * (log10((double)scaledImg.cols) + log10((double)scaledImg.rows)) / 2.0
+			+ log10(11.0);
+		minRegSize = (int)(-logNT / log10(p)); /* minimal number of points in region
+												 that can give a meaningful event*/
+		
+		
+		cv::Mat idxMat;
+		cv::Mat rM = mMagImg.reshape(1, 1);
+		//replace this with sparse mats compared
+		//the original version of LSD implementation
+		cv::sortIdx(rM, idxMat, CV_SORT_EVERY_ROW + CV_SORT_DESCENDING);
+
+
+
+		
+		mRegionImg = cv::Mat(scaledImg.size(), CV_64FC1);
+		mRegionImg.setTo(0);
+		QVector<cv::Point> region;
+		int regionIdx = 1;
+
+		int *ptrIdx = idxMat.ptr<int>(0);
+		for (int colIdx = 0; colIdx < rM.cols; colIdx++) {
+
+			int y = ptrIdx[colIdx] / mMagImg.cols;
+			int x = ptrIdx[colIdx] % mMagImg.cols;
+
+			double angle = regionGrow(x, y, region, regionIdx, rho, prec);
+			qDebug() << "new angle is: " << angle;
+
+			if (region.size() < minRegSize) {
+				region.clear();
+				//do not use region, but it is labelled in mRegionImg
+				regionIdx++;
+				continue;
+			}
+
+			/* construct rectangular approximation for the region */
+			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
+
+			//TODO refinement of region
+			//TODO improvement
+
+			if (config()->scale() != 1.0) {
+				rdf::Line tmpLine = tmp.line();
+				tmpLine = rdf::Line(tmpLine.p1() / config()->scale(), tmpLine.p2() / config()->scale(), tmpLine.thickness() / (float)config()->scale());
+				tmp.setLine(tmpLine);
+			}
+
+			mLineSegments.push_back(tmp);
+
+			regionIdx++;
+			region.clear();
+		}
+
+		//TODO
+		//lineSegmentGrower
+
+		
+
+		return true;
 	}
+
+	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr, double prec)
+	{
+		region.push_back(cv::Point(x, y));
+		double angle = mRadImg.at<double>(y, x);
+
+		for (int regSizeIdx = 0; regSizeIdx < region.size(); regSizeIdx++) {
+
+			int xt = region[regSizeIdx].x;
+			int yt = region[regSizeIdx].y;
+			mRegionImg.at<double>(yt, xt) = regionIdx;
+			double sumdx = cos(angle);
+			double sumdy = sin(angle);
+
+			for (int xx = xt - 1; xx <= xt + 1; xx++ ) {
+				for (int yy = yt - 1; yy <= yt + 1; yy++) {
+					double regIdx = mRegionImg.at<double>(yy, xx);
+					double magnitude = mMagImg.at<double>(yy, xx);
+					double cmpAngle = mRadImg.at<double>(yy, xx);
+
+					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows &&
+						regIdx == 0 && isAligned(cmpAngle,angle, prec) && magnitude < thr) {
+
+						mRegionImg.at<double>(yy, xx) = (double)regionIdx;
+						region.push_back(cv::Point(xx, yy));
+						sumdx += cos(mMagImg.at<double>(yy, xx));
+						sumdy += sin(mMagImg.at<double>(yy, xx));
+						angle = atan2(sumdy, sumdx);
+					}
+				}
+			}
+		}
+
+		return angle;
+	}
+
+	rdf::LineSegment ReadLSD::region2Rect(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double p)	{
+
+		double x, y, dx, dy, l, w, theta, weight, sum, l_min, l_max, w_min, w_max;
+		int i;
+
+		if (region.isEmpty()) {
+			mWarning << "empty region in region2rect";
+			return LineSegment();
+		}
+		if (region.size() == 1) {
+			mWarning << "region in region2rect contains only 1 pixel";
+			return LineSegment();
+		}
+		/* center of the region:
+
+		It is computed as the weighted sum of the coordinates
+		of all the pixels in the region. The norm of the gradient
+		is used as the weight of a pixel. The sum is as follows:
+		cx = \sum_i G(i).x_i
+		cy = \sum_i G(i).y_i
+		where G(i) is the norm of the gradient of pixel i
+		and x_i,y_i are its coordinates.
+		*/
+		x = y = sum = 0.0;
+		
+		for (i = 0; i < region.size(); i++) {
+			weight = magImg.at<double>(region[i].y, region[i].x);
+			x += (double)region[i].x*weight;
+			y += (double)region[i].y*weight;
+			sum += weight;
+		}
+		if (sum <= 0.0) {
+			mWarning << "region2rect: weights sum equal to zero.";
+			return LineSegment();
+		}
+		x /= sum;
+		y /= sum;
+		theta = getTheta(region, magImg, angle, prec, x, y);
+
+		/* length and width:
+
+		'l' and 'w' are computed as the distance from the center of the
+		region to pixel i, projected along the rectangle axis (dx,dy) and
+		to the orthogonal axis (-dy,dx), respectively.
+
+		The length of the rectangle goes from l_min to l_max, where l_min
+		and l_max are the minimum and maximum values of l in the region.
+		Analogously, the width is selected from w_min to w_max, where
+		w_min and w_max are the minimum and maximum of w for the pixels
+		in the region.
+		*/
+		dx = cos(theta);
+		dy = sin(theta);
+		l_min = l_max = w_min = w_max = 0.0;
+		for (i = 0; i<region.size(); i++)
+		{
+			l = ((double)region[i].x - x) * dx + ((double)region[i].y - y) * dy;
+			w = -((double)region[i].x - x) * dy + ((double)region[i].y - y) * dx;
+
+			if (l > l_max) l_max = l;
+			if (l < l_min) l_min = l;
+			if (w > w_max) w_max = w;
+			if (w < w_min) w_min = w;
+		}
+
+		/* store values of final rectangle*/
+		double width = w_max - w_min;
+		/* we impose a minimal width of one pixel
+		A sharp horizontal or vertical step would produce a perfectly
+		horizontal or vertical region. The width computed would be
+		zero. But that corresponds to a one pixels width transition in
+		the image.
+		*/
+		width = width < 1.0 ? 1.0 : width;
+		
+		rdf::LineSegment newSegment;
+		newSegment.setLine(x + l_min * dx, y + l_min * dy, x + l_max * dx, y + l_max * dy, width);
+		newSegment.setCenter(x, y);
+		newSegment.setTheta(theta);
+		newSegment.setOrientation(dx, dy);
+		newSegment.setPrec(prec);
+		newSegment.setP(p);
+
+		return newSegment;
+	}
+
+	/*----------------------------------------------------------------------------*/
+	/** Compute region's angle as the principal inertia axis of the region.
+
+	The following is the region inertia matrix A:
+	@f[
+
+	A = \left(\begin{array}{cc}
+	Ixx & Ixy \\
+	Ixy & Iyy \\
+	\end{array}\right)
+
+	@f]
+	where
+
+	Ixx =   sum_i G(i).(y_i - cx)^2
+
+	Iyy =   sum_i G(i).(x_i - cy)^2
+
+	Ixy = - sum_i G(i).(x_i - cx).(y_i - cy)
+
+	and
+	- G(i) is the gradient norm at pixel i, used as pixel's weight.
+	- x_i and y_i are the coordinates of pixel i.
+	- cx and cy are the coordinates of the center of th region.
+
+	lambda1 and lambda2 are the eigenvalues of matrix A,
+	with lambda1 >= lambda2. They are found by solving the
+	characteristic polynomial:
+
+	det( lambda I - A) = 0
+
+	that gives:
+
+	lambda1 = ( Ixx + Iyy + sqrt( (Ixx-Iyy)^2 + 4.0*Ixy*Ixy) ) / 2
+
+	lambda2 = ( Ixx + Iyy - sqrt( (Ixx-Iyy)^2 + 4.0*Ixy*Ixy) ) / 2
+
+	To get the line segment direction we want to get the angle the
+	eigenvector associated to the smallest eigenvalue. We have
+	to solve for a,b in:
+
+	a.Ixx + b.Ixy = a.lambda2
+
+	a.Ixy + b.Iyy = b.lambda2
+
+	We want the angle theta = atan(b/a). It can be computed with
+	any of the two equations:
+
+	theta = atan( (lambda2-Ixx) / Ixy )
+
+	or
+
+	theta = atan( Ixy / (lambda2-Iyy) )
+
+	When |Ixx| > |Iyy| we use the first, otherwise the second (just to
+	get better numeric precision).
+	*/
+	double ReadLSD::getTheta(QVector<cv::Point>& region, const cv::Mat & magImg, double angle, double prec, double x, double y)	{
+		double lambda, theta, weight;
+		double Ixx = 0.0;
+		double Iyy = 0.0;
+		double Ixy = 0.0;
+		int i;
+
+		/* check parameters */
+		if (region.size() <= 1) {
+			mWarning << "invalid Region";
+			return std::numeric_limits<double>::infinity();
+		}
+
+		if (prec < 0.0) {
+			mWarning << ("get_theta: 'prec' must be positive.");
+			return std::numeric_limits<double>::infinity();
+		}
+
+		/* compute inertia matrix */
+		for (i = 0; i<region.size(); i++) {
+			weight = magImg.at<double>((int)y, (int)x);
+			Ixx += ((double)region[i].y - y) * ((double)region[i].y - y) * weight;
+			Iyy += ((double)region[i].x - x) * ((double)region[i].x - x) * weight;
+			Ixy -= ((double)region[i].x - x) * ((double)region[i].y - y) * weight;
+		}
+		if (doubleEqual(Ixx, 0.0) && doubleEqual(Iyy, 0.0) && doubleEqual(Ixy, 0.0)) {
+			mWarning << "get_theta: null inertia matrix.";
+			return std::numeric_limits<double>::infinity();
+		}
+
+		/* compute smallest eigenvalue */
+		lambda = 0.5 * (Ixx + Iyy - sqrt((Ixx - Iyy)*(Ixx - Iyy) + 4.0*Ixy*Ixy));
+
+		/* compute angle */
+		theta = fabs(Ixx)>fabs(Iyy) ? atan2(lambda - Ixx, Ixy) : atan2(Ixy, lambda - Iyy);
+
+		/* The previous procedure doesn't cares about orientation,
+		so it could be wrong by 180 degrees. Here is corrected if necessary. */
+		if (rdf::Algorithms::absAngleDiff(theta, angle) > prec) theta += M_PI;
+
+		return theta;
+	}
+
+	/** Compare doubles by relative error.
+
+	The resulting rounding error after floating point computations
+	depend on the specific operations done. The same number computed by
+	different algorithms could present different rounding errors. For a
+	useful comparison, an estimation of the relative rounding error
+	should be considered and compared to a factor times EPS. The factor
+	should be related to the cumulated rounding error in the chain of
+	computation. Here, as a simplification, a fixed factor is used.
+	*/
+	bool ReadLSD::doubleEqual(double a, double b) {
+
+		double abs_diff, aa, bb, abs_max;
+		double relativeErrorFactor = 100;
+
+		/* trivial case */
+		if (a == b) return true;
+
+		abs_diff = fabs(a - b);
+		aa = fabs(a);
+		bb = fabs(b);
+		abs_max = aa > bb ? aa : bb;
+
+		/* DBL_MIN is the smallest normalized number, thus, the smallest
+		number whose relative error is bounded by DBL_EPSILON. For
+		smaller numbers, the same quantization steps as for DBL_MIN
+		are used. Then, for smaller numbers, a meaningful "relative"
+		error should be computed by dividing the difference by DBL_MIN. */
+		if (abs_max < DBL_MIN) abs_max = DBL_MIN;
+
+		/* equal if relative error <= factor x eps */
+		return (abs_diff / abs_max) <= (relativeErrorFactor * DBL_EPSILON);
+	}
+
+	//bool ReadLSD::refine(LineSegment & l, QVector<cv::Point>& region, const cv::Mat & magImg, const cv::Mat & radImg, double densityThr) {
+
+	//	double angle, ang_d, mean_angle, tau, density, xc, yc, ang_c, sum, s_sum;
+	//	int i, n;
+
+	//	if (region.size() >= 1) {
+	//		mWarning << "illegal region size in refine";
+	//		return false;
+	//	}
+
+	//	density = (double)region.size() / (l.line().length() * l.line().thickness());
+	//	if (density <= densityThr) {
+	//		return true;
+	//	}
+
+	//	xc = region[0].x;
+	//	yc = region[0].y;
+
+	//	ang_c = radImg.at<double>(yc, xc);
+	//	sum = s_sum = 0.0;
+	//	n = 0;
+	//	for (i = 1; i<region.size(); i++)
+	//	{
+	//		used->data[region[i].x + region[i].y * used->xsize] = NOTUSED;
+
+	//		if (dist(xc, yc, (double)reg[i].x, (double)reg[i].y) < rec->width)
+	//		{
+	//			angle = angles->data[reg[i].x + reg[i].y * angles->xsize];
+	//			ang_d = angle_diff_signed(angle, ang_c);
+	//			sum += ang_d;
+	//			s_sum += ang_d * ang_d;
+	//			++n;
+	//		}
+	//	}
+	//	mean_angle = sum / (double)n;
+	//	tau = 2.0 * sqrt((s_sum - 2.0 * mean_angle * sum) / (double)n
+	//		+ mean_angle*mean_angle); /* 2 * standard deviation */
+
+
+
+
+	//	return false;
+	//}
+
 
 	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{
 		return qSharedPointerDynamicCast<ReadLSDConfig>(mConfig);
@@ -903,47 +1306,216 @@ namespace rdf {
 		return true;
 	}
 
+
+	/** Computes -log10(NFA).
+
+	NFA stands for Number of False Alarms:
+	@f[
+	\mathrm{NFA} = NT \cdot B(n,k,p)
+	@f]
+
+	- NT       - number of tests
+	- B(n,k,p) - tail of binomial distribution with parameters n,k and p:
+	@f[
+	B(n,k,p) = \sum_{j=k}^n
+	\left(\begin{array}{c}n\\j\end{array}\right)
+	p^{j} (1-p)^{n-j}
+	@f]
+
+	The value -log10(NFA) is equivalent but more intuitive than NFA:
+	- -1 corresponds to 10 mean false alarms
+	-  0 corresponds to 1 mean false alarm
+	-  1 corresponds to 0.1 mean false alarms
+	-  2 corresponds to 0.01 mean false alarms
+	-  ...
+
+	Used this way, the bigger the value, better the detection,
+	and a logarithmic scale is used.
+
+	@param n,k,p binomial parameters.
+	@param logNT logarithm of Number of Tests
+
+	The computation is based in the gamma function by the following
+	relation:
+	@f[
+	\left(\begin{array}{c}n\\k\end{array}\right)
+	= \frac{ \Gamma(n+1) }{ \Gamma(k+1) \cdot \Gamma(n-k+1) }.
+	@f]
+	We use efficient algorithms to compute the logarithm of
+	the gamma function.
+
+	To make the computation faster, not all the sum is computed, part
+	of the terms are neglected based on a bound to the error obtained
+	(an error of 10% in the result is accepted).
+	*/
+	double ReadLSD::nfa(int n, int k, double p, double logNT) {
+		
+		double tolerance = 0.1;       /* an error of 10% in the result is accepted */
+		double log1term, term, bin_term, mult_term, bin_tail, err, p_term;
+		int i;
+
+		/* check parameters */
+		if (n < 0 || k<0 || k>n || p <= 0.0 || p >= 1.0) {
+			mWarning << "nfa: wrong n, k or p values";
+		}
+
+		/* trivial cases */
+		if (n == 0 || k == 0) return -logNT;
+		if (n == k) return -logNT - (double)n * log10(p);
+
+		/* probability term */
+		p_term = p / (1.0 - p);
+
+		/* compute the first term of the series */
+		/*
+		binomial_tail(n,k,p) = sum_{i=k}^n bincoef(n,i) * p^i * (1-p)^{n-i}
+		where bincoef(n,i) are the binomial coefficients.
+		But
+		bincoef(n,k) = gamma(n+1) / ( gamma(k+1) * gamma(n-k+1) ).
+		We use this to compute the first term. Actually the log of it.
+		*/
+		log1term = Algorithms::logGamma((double)n + 1.0) - Algorithms::logGamma((double)k + 1.0)
+			- Algorithms::logGamma((double)(n - k) + 1.0)
+			+ (double)k * log(p) + (double)(n - k) * log(1.0 - p);
+		term = exp(log1term);
+
+		/* in some cases no more computations are needed */
+		if (Algorithms::doubleEqual(term, 0.0))              /* the first term is almost zero */
+		{
+			if ((double)k > (double)n * p)     /* at begin or end of the tail?  */
+				return -log1term / M_LN10 - logNT;  /* end: use just the first term  */
+			else
+				return -logNT;                      /* begin: the tail is roughly 1  */
+		}
+
+		/* compute more terms if needed */
+		bin_tail = term;
+		for (i = k + 1; i <= n; i++)
+		{
+			/*
+			As
+			term_i = bincoef(n,i) * p^i * (1-p)^(n-i)
+			and
+			bincoef(n,i)/bincoef(n,i-1) = n-1+1 / i,
+			then,
+			term_i / term_i-1 = (n-i+1)/i * p/(1-p)
+			and
+			term_i = term_i-1 * (n-i+1)/i * p/(1-p).
+			1/i is stored in a table as they are computed,
+			because divisions are expensive.
+			p/(1-p) is computed only once and stored in 'p_term'.
+			*/
+			bin_term = (double)(n - i + 1) * (i<mTabSize ?
+				(mInv[i] != 0.0 ? mInv[i] : (mInv[i] = 1.0 / (double)i)) :
+				1.0 / (double)i);
+
+			mult_term = bin_term * p_term;
+			term *= mult_term;
+			bin_tail += term;
+			if (bin_term<1.0)
+			{
+				/* When bin_term<1 then mult_term_j<mult_term_i for j>i.
+				Then, the error on the binomial tail when truncated at
+				the i term can be bounded by a geometric series of form
+				term_i * sum mult_term_i^j.                            */
+				err = term * ((1.0 - pow(mult_term, (double)(n - i + 1))) /
+					(1.0 - mult_term) - 1.0);
+
+				/* One wants an error at most of tolerance*final_result, or:
+				tolerance * abs(-log10(bin_tail)-logNT).
+				Now, the error that can be accepted on bin_tail is
+				given by tolerance*final_result divided by the derivative
+				of -log10(x) when x=bin_tail. that is:
+				tolerance * abs(-log10(bin_tail)-logNT) / (1/bin_tail)
+				Finally, we truncate the tail if the error is less than:
+				tolerance * abs(-log10(bin_tail)-logNT) * bin_tail        */
+				if (err < tolerance * fabs(-log10(bin_tail) - logNT) * bin_tail) break;
+			}
+		}
+		return -log10(bin_tail) - logNT;
+	}
+
+	bool ReadLSD::isAligned(double thetaTest, double theta, double prec) {
+
+		/* pixels whose level-line angle is not defined
+		are considered as NON-aligned */
+		//if (thetaTest == -1024) return 0;  /* there is no need to call the function
+		//										 'double_equal' here because there is
+		//										 no risk of problems related to the
+		//										 comparison doubles, we are only
+		//										 interested in the exact NOTDEF value */
+
+												 /* it is assumed that 'theta' and 'a' are in the range [-pi,pi] */
+		theta -= thetaTest;
+		if (theta < 0.0) theta = -theta;
+		if (theta > 3.0/2.0*CV_PI)
+		{
+			theta -= 2*CV_PI;
+			if (theta < 0.0) theta = -theta;
+		}
+		return theta <= prec;
+	}
+
+	//bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
+	//	double a;
+
+	//	/* check parameters */
+	//	if (img.empty())
+	//		mWarning << "isaligned: invalid image 'angles'.";
+
+	//	if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
+	//		mWarning << "isaligned: (x,y) out of the image.";
+	//	if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+
+	//	/* angle at pixel (x,y) */
+	//	a = img.at<double>(y, x);
+	//	//a = angles->data[x + y * angles->xsize];
+
+	//	return isAligned(a, theta);
+	//}
+
+
 	ReadLSDConfig::ReadLSDConfig()	{
 		mModuleName = "ReadLSD";
 	}
 
-	float ReadLSDConfig::scale() const {
+	double ReadLSDConfig::scale() const {
 		return mScale;
 	}
 
-	void ReadLSDConfig::setScale(float s) {
+	void ReadLSDConfig::setScale(double s) {
 		mScale = s;
 	}
 
-	float ReadLSDConfig::sigmaScale() const {
+	double ReadLSDConfig::sigmaScale() const {
 		return mSigmaScale;
 	}
 
-	void ReadLSDConfig::setSigmaScale(float s) {
+	void ReadLSDConfig::setSigmaScale(double s) {
 		mSigmaScale = s;
 	}
 
-	float ReadLSDConfig::angleThr() const {
+	double ReadLSDConfig::angleThr() const {
 		return mAngleThr;
 	}
 
-	void ReadLSDConfig::setAngleThr(float a) {
+	void ReadLSDConfig::setAngleThr(double a) {
 		mAngleThr = a;
 	}
 
-	float ReadLSDConfig::logEps() const {
+	double ReadLSDConfig::logEps() const {
 		return mLogEps;
 	}
 
-	void ReadLSDConfig::setLogeps(float l) {
+	void ReadLSDConfig::setLogeps(double l) {
 		mLogEps = l;
 	}
 
-	float ReadLSDConfig::density() const {
+	double ReadLSDConfig::density() const {
 		return mDensityThr;
 	}
 
-	void ReadLSDConfig::setDensity(float d) {
+	void ReadLSDConfig::setDensity(double d) {
 		mDensityThr = d;
 	}
 
@@ -955,6 +1527,14 @@ namespace rdf {
 		mNBins = b;
 	}
 
+	double ReadLSDConfig::quant() const	{
+		return mQuant;
+	}
+
+	void ReadLSDConfig::setQuant(double q)	{
+		mQuant = q;
+	}
+
 	QString ReadLSDConfig::toString() const	{
 
 		QString msg;
@@ -964,17 +1544,19 @@ namespace rdf {
 		msg += "  logEps: " + QString::number(mLogEps);
 		msg += "  densityThr: " + QString::number(mDensityThr);
 		msg += "  nBins: " + QString::number(mNBins);
+		msg += "  quant: " + QString::number(mQuant);
 
 		return msg;
 	}
 
 	void ReadLSDConfig::load(const QSettings & settings) {
-		mScale = settings.value("scale", mScale).toFloat();
-		mSigmaScale = settings.value("sigmaScale", mSigmaScale).toFloat();
-		mAngleThr = settings.value("angleThr", mAngleThr).toFloat();
-		mLogEps = settings.value("logEps", mLogEps).toFloat();
-		mDensityThr = settings.value("densityThr", mDensityThr).toFloat();
+		mScale = settings.value("scale", mScale).toDouble();
+		mSigmaScale = settings.value("sigmaScale", mSigmaScale).toDouble();
+		mAngleThr = settings.value("angleThr", mAngleThr).toDouble();
+		mLogEps = settings.value("logEps", mLogEps).toDouble();
+		mDensityThr = settings.value("densityThr", mDensityThr).toDouble();
 		mNBins = settings.value("nBins", mNBins).toInt();
+		mQuant = settings.value("quant", mQuant).toDouble();
 
 	}
 
@@ -985,6 +1567,7 @@ namespace rdf {
 		settings.setValue("logEps", mLogEps);
 		settings.setValue("densityThr", mDensityThr);
 		settings.setValue("nBins", mNBins);
+		settings.setValue("quant", mQuant);
 	}
 
 }

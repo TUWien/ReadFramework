@@ -85,7 +85,13 @@ public:
 	static cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true);
 	static cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	//Computes the natural logarithm of the absolute value of	the gamma function of x using the Lanczos approximation.
-	static double log_gamma_lanczos(double x);
+	static double logGammaLanczos(double x);
+	//Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method.
+	static double logGammaWindschitl(double x);
+	static double logGamma(double x);
+	static int doubleEqual(double a, double b);
+	static double absAngleDiff(double a, double b);
+	static double signedAngleDiff(double a, double b);
 
 
 	// convenience functions
