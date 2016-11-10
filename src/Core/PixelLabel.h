@@ -38,6 +38,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
 #include <QStringList>
+#include <QVector>
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -55,6 +56,7 @@ namespace rdf {
 
 // read defines
 class Pixel;
+class Region;
 
 /// <summary>
 /// This class is used for mapping classes (e.g. handwriting, decoration)
@@ -105,6 +107,38 @@ protected:
 	QString mName = "unknown";
 	QStringList mAlias;
 	QColor mVisColor = ColorManager::darkGray();
+};
+
+/// <summary>
+/// This class manages all labels loaded.
+/// It can be used to compare LabelInfo
+/// objects, and load them.
+/// </summary>
+class DllCoreExport LabelManager {
+
+public:
+	LabelManager();
+
+	bool isEmpty() const;
+	int size() const;
+	static LabelManager read(const QString& filePath);
+	static LabelManager fromJson(const QJsonObject& jo);
+	void toJson(QJsonObject& jo) const;
+
+	void add(const LabelInfo& label);
+	bool contains(const LabelInfo& label) const;
+	bool containsId(const LabelInfo& label) const;
+
+	QString toString() const;
+
+	LabelInfo find(const QString& str) const;
+	LabelInfo find(const Region& r) const;
+	LabelInfo find(int id) const;
+
+	static QString jsonKey();
+
+protected:
+	QVector<LabelInfo> mLookups;
 };
 
 class DllCoreExport PixelLabel : public BaseElement {

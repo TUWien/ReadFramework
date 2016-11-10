@@ -43,8 +43,10 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QPainter>
+#include <QJsonObject>
 
 #include <opencv2/features2d/features2d.hpp>
+#include <opencv2/ml/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -234,6 +236,51 @@ void SuperPixelFeature::syncSuperPixels(const std::vector<cv::KeyPoint>& keyPoin
 	for (int ri : removeIdx) 
 		mSet.remove(mSet.pixels()[ri]);
 
+}
+
+SuperPixelModel::SuperPixelModel(const LabelManager & labelManager, const cv::Ptr<cv::ml::StatModel>& model) {
+	mModel = model;
+	mManager = labelManager;
+}
+
+bool SuperPixelModel::isEmpty() const {
+	return !mModel || mManager.isEmpty();
+}
+
+cv::Ptr<cv::ml::StatModel> SuperPixelModel::model() const {
+	return mModel;
+}
+
+SuperPixelModel SuperPixelModel::read(const QString & filePath) {
+
+	SuperPixelModel sm;
+
+	QJsonObject jo = Utils::readJson(filePath);
+	sm.mManager = LabelManager::fromJson(jo);
+	sm.mModel = SuperPixelModel::readRTreesModel(jo);
+
+	return sm;
+}
+
+cv::Ptr<cv::ml::RTrees> SuperPixelModel::readRTreesModel(QJsonObject & jo) {
+
+	// decode data
+	QByteArray ba = jo.value("SuperPixelTrainer").toVariant().toByteArray();
+	ba = QByteArray::fromBase64(ba);
+
+	cv::String dataStr(ba.data(), ba.length());
+
+	cv::FileStorage fs(dataStr, cv::FileStorage::READ | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
+	//fs.release();
+	cv::FileNode root = fs.root();
+
+	if (root.empty()) {
+		qCritical().noquote() << "cannot read model from: " << ba;
+		return cv::Ptr<cv::ml::RTrees>();
+	}
+
+	cv::Ptr<cv::ml::RTrees> model = cv::Algorithm::read<cv::ml::RTrees>(root);
+	return model;
 }
 
 }

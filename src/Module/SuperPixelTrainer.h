@@ -62,37 +62,6 @@ namespace rdf {
 class Region;
 
 /// <summary>
-/// This class manages all labels loaded.
-/// It can be used to compare LabelInfo
-/// objects, and load them.
-/// </summary>
-class DllModuleExport LabelManager {
-
-public:
-	LabelManager();
-
-	bool isEmpty() const;
-	int size() const;
-	static LabelManager read(const QString& filePath);
-	void toJson(QJsonObject& jo) const;
-
-	void add(const LabelInfo& label);
-	bool contains(const LabelInfo& label) const;
-	bool containsId(const LabelInfo& label) const;
-
-	QString toString() const;
-
-	LabelInfo find(const QString& str) const;
-	LabelInfo find(const Region& r) const;
-	LabelInfo find(int id) const;
-
-	static QString jsonKey();
-
-protected:
-	QVector<LabelInfo> mLookups;
-};
-
-/// <summary>
 /// FeatureCollection maps one LabelInfo to its features.
 /// In addition it handles the I/O using Json.
 /// </summary>
@@ -258,13 +227,14 @@ public:
 	// no read function -> see SuperPixelClassifier
 	bool write(const QString& filePath) const;
 	void toJson(QJsonObject& jo) const;
+	cv::Ptr<cv::ml::RTrees> model() const;
 
 private:
 	
 	FeatureCollectionManager mFeatureManager;
 
 	// results
-	cv::Ptr<cv::ml::RTrees> mTrainer;
+	cv::Ptr<cv::ml::RTrees> mModel;
 
 	bool checkInput() const override;
 };

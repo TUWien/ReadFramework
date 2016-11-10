@@ -47,6 +47,13 @@
 #endif
 #endif
 
+namespace cv {
+	namespace ml {
+		class StatModel;
+		class RTrees;
+	}
+}
+
 // Qt defines
 
 namespace rdf {
@@ -93,9 +100,19 @@ private:
 class DllModuleExport SuperPixelModel {
 
 public:
-	SuperPixelModel();
+	SuperPixelModel(const LabelManager& labelManager = LabelManager(), const cv::Ptr<cv::ml::StatModel>& model = cv::Ptr<cv::ml::StatModel>());
 
+	bool isEmpty() const;
 
+	cv::Ptr<cv::ml::StatModel> model() const;
+
+	static SuperPixelModel read(const QString& filePath);
+
+protected:
+	cv::Ptr<cv::ml::StatModel> mModel;
+	LabelManager mManager;
+
+	static cv::Ptr<cv::ml::RTrees> readRTreesModel(QJsonObject& jo);
 };
 
 

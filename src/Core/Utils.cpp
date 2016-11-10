@@ -189,10 +189,8 @@ QString Utils::baseName(const QString & filePath) const {
 	return filePath.left(sI-1);	// -1 to remove the point
 }
 
-QJsonValue Utils::readJson(const QString & filePath, const QString & key) {
+QJsonObject Utils::readJson(const QString & filePath) {
 	
-	QJsonValue jv;
-
 	QFile file(filePath);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		QFileInfo fi(filePath);
@@ -202,7 +200,7 @@ QJsonValue Utils::readJson(const QString & filePath, const QString & key) {
 		else
 			qCritical() << "cannot open" << filePath;
 
-		return jv;
+		return QJsonObject();
 	}
 
 	// read the file
@@ -210,13 +208,10 @@ QJsonValue Utils::readJson(const QString & filePath, const QString & key) {
 	QJsonDocument doc = QJsonDocument::fromJson(ba);
 	if (doc.isNull() || doc.isEmpty()) {
 		qCritical() << "cannot parse NULL document: " << filePath;
-		return jv;
+		return QJsonObject();
 	}
 
-	if (!key.isEmpty())
-		return doc.object().value(key);
-	else
-		return doc.object();
+	return doc.object();
 }
 
 int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {

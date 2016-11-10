@@ -230,137 +230,6 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 	return set;
 }
 
-// LabelManager --------------------------------------------------------------------
-LabelManager::LabelManager() {
-	add(LabelInfo::backgroundLabel());
-	add(LabelInfo::ignoreLabel());
-	add(LabelInfo::unknownLabel());
-}
-
-bool LabelManager::isEmpty() const {
-	return mLookups.empty();
-}
-
-int LabelManager::size() const {
-	return mLookups.size();
-}
-
-LabelManager LabelManager::read(const QString & filePath) {
-	
-	LabelManager manager;
-
-	// parse the lookups
-	QJsonArray labels = Utils::readJson(filePath, LabelManager::jsonKey()).toArray();
-	if (labels.isEmpty()) {
-		qCritical() << "cannot locate" << LabelManager::jsonKey();
-		return manager;
-	}
-
-	// parse labels
-	for (const QJsonValue& cLabel : labels)
-		manager.add(LabelInfo::fromJson(cLabel.toObject().value("Class").toObject()));
-	
-	return manager;
-}
-
-void LabelManager::toJson(QJsonObject& jo) const {
-
-	QJsonArray ja;
-
-	for (const LabelInfo& fc : mLookups) {
-		QJsonObject cJo;
-		fc.toJson(cJo);
-		ja << cJo;
-	}
-
-	jo.insert(FeatureCollection::jsonKey(), ja);
-}
-
-void LabelManager::add(const LabelInfo & label) {
-
-	if (contains(label)) {
-		qInfo() << label << "already exists - ignoring...";
-		return;
-	}
-	else if (containsId(label)) {
-		qCritical() << label.id() << "already exists - rejecting" << label;
-		return;
-	}
-
-	mLookups << label;
-}
-
-bool LabelManager::contains(const LabelInfo & label) const {
-
-	for (const LabelInfo ll : mLookups) {
-		if (label == ll)
-			return true;
-	}
-
-	return false;
-}
-
-bool LabelManager::containsId(const LabelInfo & label) const {
-
-	for (const LabelInfo ll : mLookups) {
-		if (label.id() == ll.id())
-			return true;
-	}
-
-	return false;
-}
-
-QString LabelManager::toString() const {
-	
-	QString str = "Label Manager ---------------------------\n";
-	for (auto s : mLookups)
-		str += s.toString() + "\n";
-	str += "\n";
-	
-	return str;
-}
-
-LabelInfo LabelManager::find(const QString & str) const {
-	
-	// try to directly find the entry
-	for (const LabelInfo ll : mLookups) {
-		
-		if (ll.name() == str)
-			return ll;
-	}
-
-	for (const LabelInfo ll : mLookups) {
-
-		if (ll.contains(str))
-			return ll;
-	}
-
-	return LabelInfo();
-}
-
-LabelInfo LabelManager::find(const Region & r) const {
-
-	QString name = RegionManager::instance().typeName(r.type());
-	return find(name);
-}
-
-LabelInfo LabelManager::find(int id) const {
-	
-	// try to directly find the entry
-	for (const LabelInfo ll : mLookups) {
-
-		if (ll.id() == id)
-			return ll;
-	}
-
-	return LabelInfo();
-}
-
-QString LabelManager::jsonKey() {
-	return "Labels";
-}
-
-
 // FeatureCollection --------------------------------------------------------------------
 FeatureCollection::FeatureCollection(const cv::Mat & descriptors, const LabelInfo & label) {
 	mDesc = descriptors;
@@ -474,7 +343,7 @@ FeatureCollectionManager FeatureCollectionManager::read(const QString & filePath
 	FeatureCollectionManager manager;
 
 	// parse the feature collections
-	QJsonArray labels = Utils::readJson(filePath, FeatureCollection::jsonKey()).toArray();
+	QJsonArray labels = Utils::readJson(filePath).value(FeatureCollection::jsonKey()).toArray();
 	if (labels.isEmpty()) {
 		qCritical() << "cannot locate" << FeatureCollection::jsonKey();
 		return manager;
@@ -676,15 +545,15 @@ bool SuperPixelTrainer::compute() {
 
 	Timer dt;
 	
-	mTrainer = cv::ml::RTrees::create();
+	mModel = cv::ml::RTrees::create();
 
 	if (mFeatureManager.numFeatures() == 0) {
 		qCritical() << "Cannot train random trees if no feature vectors are provided";
 		return false;
 	}
 
-	mTrainer->train(mFeatureManager.toCvTrainData(100));
-	mTrainer->save("C:/temp/rt.yml");
+	mModel->train(mFeatureManager.toCvTrainData(100));
+	mModel->save("C:/temp/rt.yml");
 
 	mInfo << "trained in" << dt;
 
@@ -713,7 +582,7 @@ QString SuperPixelTrainer::toString() const {
 
 bool SuperPixelTrainer::write(const QString & filePath) const {
 
-	if (!mTrainer->isTrained())
+	if (!mModel->isTrained())
 		qWarning() << "writing trainer that is NOT trained!";
 
 	// write all label data
@@ -731,14 +600,18 @@ bool SuperPixelTrainer::write(const QString & filePath) const {
 
 void SuperPixelTrainer::toJson(QJsonObject& jo) const {
 
-	cv::FileStorage fs(".yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_YAML);
-	mTrainer->write(fs);
+	cv::FileStorage fs(".xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
+	mModel->write(fs);
 	std::string data = fs.releaseAndGetString();
 
 	QByteArray ba(data.c_str(), (int)data.length());
 	QString ba64Str = ba.toBase64();
 	
 	jo.insert(name(), ba64Str);
+}
+
+cv::Ptr<cv::ml::RTrees> SuperPixelTrainer::model() const {
+	return mModel;
 }
 
 bool SuperPixelTrainer::checkInput() const {

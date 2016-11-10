@@ -55,6 +55,7 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/ml/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -315,6 +316,7 @@ void LayoutTest::testTrainer() {
 	//else
 	//	qInfo() << "json to mat is just fine...";
 
+	
 	Timer dt;
 	FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.classifierPath());
 
@@ -324,6 +326,23 @@ void LayoutTest::testTrainer() {
 		qCritical() << "could not train data...";
 
 	spt.write("D:/read/configs/model.json");
+	
+	
+	SuperPixelModel model = SuperPixelModel::read("D:/read/configs/model.json");
+
+	auto f = model.model();
+	if (f->isTrained())
+		qDebug() << "fine for now...";
+	//cv::Ptr<cv::ml::RTrees> rt = dynamic_cast<cv::ml::RTrees*>(model.model());
+	//cv::Ptr<cv::ml::RTrees> rtt = spt.model();
+	//
+	//if (rt->isTrained() != rtt->isTrained())
+	//	qCritical() << "is trained is different...";
+	//else if (rt->getActiveVarCount() != rtt->getActiveVarCount())
+	//	qCritical() << "var count is different...";
+	//else
+	//	qInfo() << "congrats, I/O for models is working...";
+
 	//fcm.write("D:/read/configs/features-release-save.json");
 
 

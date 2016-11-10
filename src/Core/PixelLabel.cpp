@@ -32,6 +32,9 @@
 
 #include "PixelLabel.h"
 
+#include "Elements.h"
+#include "ElementsHelper.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QJsonObject>		// needed for LabelInfo
 #include <QJsonDocument>	// needed for LabelInfo
@@ -217,6 +220,141 @@ void LabelInfo::toJson(QJsonObject & jo) const {
 
 QString LabelInfo::jsonKey() {
 	return QString("Class");
+}
+
+// LabelManager --------------------------------------------------------------------
+LabelManager::LabelManager() {
+	add(LabelInfo::backgroundLabel());
+	add(LabelInfo::ignoreLabel());
+	add(LabelInfo::unknownLabel());
+}
+
+bool LabelManager::isEmpty() const {
+	return mLookups.empty();
+}
+
+int LabelManager::size() const {
+	return mLookups.size();
+}
+
+LabelManager LabelManager::read(const QString & filePath) {
+
+	return fromJson(Utils::readJson(filePath));
+}
+
+LabelManager LabelManager::fromJson(const QJsonObject & jo) {
+
+	LabelManager manager;
+
+	// parse the lookups
+	QJsonArray labels = jo.value(LabelManager::jsonKey()).toArray();
+	if (labels.isEmpty()) {
+		qCritical() << "cannot locate" << LabelManager::jsonKey();
+		return manager;
+	}
+
+	// parse labels
+	for (const QJsonValue& cLabel : labels)
+		manager.add(LabelInfo::fromJson(cLabel.toObject().value("Class").toObject()));
+
+	return manager;
+}
+
+void LabelManager::toJson(QJsonObject& jo) const {
+
+	QJsonArray ja;
+
+	for (const LabelInfo& fc : mLookups) {
+		QJsonObject cJo;
+		fc.toJson(cJo);
+		ja << cJo;
+	}
+
+	jo.insert(jsonKey(), ja);
+}
+
+void LabelManager::add(const LabelInfo & label) {
+
+	if (contains(label)) {
+		qInfo() << label << "already exists - ignoring...";
+		return;
+	}
+	else if (containsId(label)) {
+		qCritical() << label.id() << "already exists - rejecting" << label;
+		return;
+	}
+
+	mLookups << label;
+}
+
+bool LabelManager::contains(const LabelInfo & label) const {
+
+	for (const LabelInfo ll : mLookups) {
+		if (label == ll)
+			return true;
+	}
+
+	return false;
+}
+
+bool LabelManager::containsId(const LabelInfo & label) const {
+
+	for (const LabelInfo ll : mLookups) {
+		if (label.id() == ll.id())
+			return true;
+	}
+
+	return false;
+}
+
+QString LabelManager::toString() const {
+
+	QString str = "Label Manager ---------------------------\n";
+	for (auto s : mLookups)
+		str += s.toString() + "\n";
+	str += "\n";
+
+	return str;
+}
+
+LabelInfo LabelManager::find(const QString & str) const {
+
+	// try to directly find the entry
+	for (const LabelInfo ll : mLookups) {
+
+		if (ll.name() == str)
+			return ll;
+	}
+
+	for (const LabelInfo ll : mLookups) {
+
+		if (ll.contains(str))
+			return ll;
+	}
+
+	return LabelInfo();
+}
+
+LabelInfo LabelManager::find(const Region & r) const {
+
+	QString name = RegionManager::instance().typeName(r.type());
+	return find(name);
+}
+
+LabelInfo LabelManager::find(int id) const {
+
+	// try to directly find the entry
+	for (const LabelInfo ll : mLookups) {
+
+		if (ll.id() == id)
+			return ll;
+	}
+
+	return LabelInfo();
+}
+
+QString LabelManager::jsonKey() {
+	return "Labels";
 }
 
 // PixelLabel --------------------------------------------------------------------
