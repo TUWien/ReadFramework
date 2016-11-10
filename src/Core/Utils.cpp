@@ -213,10 +213,13 @@ QJsonValue Utils::readJson(const QString & filePath, const QString & key) {
 		return jv;
 	}
 
-	return doc.object().value(key);
+	if (!key.isEmpty())
+		return doc.object().value(key);
+	else
+		return doc.object();
 }
 
-void Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
+int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 
 	QFile file(filePath);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -225,7 +228,7 @@ void Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 		if (!fi.exists())
 			qCritical() << "cannot open or write to" << filePath;
 
-		return;
+		return 0;
 	}
 
 	QJsonDocument doc(jo);
@@ -236,6 +239,7 @@ void Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 	else
 		qDebug() << nb << "bytes written to" << filePath;
 
+	return 0;
 }
 
 // ColorManager --------------------------------------------------------------------

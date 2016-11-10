@@ -278,6 +278,7 @@ void Image::imageInfo(const cv::Mat& img, const QString name) {
 /// <param name="name">The variable name in Matlab.</param>
 /// <returns>A string containing the values of the image</returns>
 QString Image::printImage(const cv::Mat& img, const QString name) {
+	
 	QString imgInfo;
 	if (img.depth() == CV_32FC1)
 		imgInfo = rdf::Image::printMat<float>(img, name);
@@ -294,14 +295,20 @@ QString Image::printImage(const cv::Mat& img, const QString name) {
 	return imgInfo;
 }
 
-QJsonObject Image::matToJson(const cv::Mat & img) {
+QJsonObject Image::matToJson(const cv::Mat & img, bool compress) {
 
 	QJsonObject jo;
 	jo.insert("rows", img.rows);
 	jo.insert("cols", img.cols);
 	jo.insert("type", img.type());
+	jo.insert("compressed", compress);
 
 	QByteArray ba(img.ptr<const char>(), img.rows*img.cols*(int)img.elemSize());
+	
+	// compress the data?
+	if (compress)
+		ba = qCompress(ba);
+
 	QString db64 = ba.toBase64();
 	jo.insert("data", db64);
 
@@ -313,6 +320,7 @@ cv::Mat Image::jsonToMat(const QJsonObject & jo) {
 	int rows = jo.value("rows").toInt(-1);
 	int cols = jo.value("cols").toInt(-1);
 	int type = jo.value("type").toInt(-1);
+	bool compressed = jo.value("compressed").toBool(false);
 
 	if (rows == -1 || cols == -1 || type == -1) {
 		qWarning() << "cannot read mat from Json";
@@ -320,12 +328,18 @@ cv::Mat Image::jsonToMat(const QJsonObject & jo) {
 	}
 
 	// decode data
-	QString dataStr = jo.value("data").toString();
-	QByteArray ba = QByteArray::fromBase64(QByteArray((char*)dataStr.data()));
+	QByteArray ba = jo.value("data").toVariant().toByteArray();
+	ba = QByteArray::fromBase64(ba);
+	
+	if (compressed)
+		ba = qUncompress(ba);
 
-	cv::Mat img(rows, cols, type);
-	char* ip = img.ptr<char>();
-	ip = ba.data();
+	if (ba.length() != rows*cols*cv::Mat(1, 1, type).elemSize()) {
+		qCritical() << "illegal buffer length when decoding cv::Mat from json";
+		return cv::Mat();
+	}
+
+	cv::Mat img(rows, cols, type, ba.data());
 	img = img.clone();	// then we definitely own the data
 
 	return img;

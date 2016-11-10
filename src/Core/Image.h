@@ -96,7 +96,7 @@ public:
 	static bool alphaChannelUsed(const QImage& img);
 	static void imageInfo(const cv::Mat& img, const QString name);
 	static QString printImage(const cv::Mat& img, const QString name);
-	static QJsonObject matToJson(const cv::Mat& img);
+	static QJsonObject matToJson(const cv::Mat& img, bool compress = true);
 	static cv::Mat jsonToMat(const QJsonObject& jo);
 
 	/// <summary>

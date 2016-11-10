@@ -47,6 +47,13 @@
 #endif
 #endif
 
+namespace cv {
+	namespace ml {
+		class TrainData;
+		class RTrees;
+	}
+}
+
 // Qt defines
 
 namespace rdf {
@@ -54,6 +61,106 @@ namespace rdf {
 // read defines
 class Region;
 
+/// <summary>
+/// This class manages all labels loaded.
+/// It can be used to compare LabelInfo
+/// objects, and load them.
+/// </summary>
+class DllModuleExport LabelManager {
+
+public:
+	LabelManager();
+
+	bool isEmpty() const;
+	int size() const;
+	static LabelManager read(const QString& filePath);
+	void toJson(QJsonObject& jo) const;
+
+	void add(const LabelInfo& label);
+	bool contains(const LabelInfo& label) const;
+	bool containsId(const LabelInfo& label) const;
+
+	QString toString() const;
+
+	LabelInfo find(const QString& str) const;
+	LabelInfo find(const Region& r) const;
+	LabelInfo find(int id) const;
+
+	static QString jsonKey();
+
+protected:
+	QVector<LabelInfo> mLookups;
+};
+
+/// <summary>
+/// FeatureCollection maps one LabelInfo to its features.
+/// In addition it handles the I/O using Json.
+/// </summary>
+class DllModuleExport FeatureCollection {
+
+public:
+	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
+	friend DllModuleExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
+
+	QJsonObject toJson() const;
+	static FeatureCollection read(QJsonObject& jo);
+
+	void append(const cv::Mat& descriptor);
+	LabelInfo label() const;
+	void setDescriptors(const cv::Mat& desc);
+	cv::Mat descriptors() const;
+	int numDescriptors() const;
+
+	static QVector<FeatureCollection> split(const cv::Mat& descriptors, const PixelSet& set);
+	static QString jsonKey();
+
+protected:
+	cv::Mat mDesc;
+	LabelInfo mLabel;
+};
+
+/// <summary>
+/// Manages FeatureCollections.
+/// Hence, each label (e.g. printed text) is stored
+/// here along with it's features retrieved from
+/// groundtruthed images.
+/// </summary>
+class DllModuleExport FeatureCollectionManager {
+
+public:
+	FeatureCollectionManager(const cv::Mat& descriptors = cv::Mat(), const PixelSet& set = PixelSet());
+
+	bool isEmpty() const;
+
+	void write(const QString& filePath) const;
+	static FeatureCollectionManager read(const QString& filePath);
+	
+	void add(const FeatureCollection& collection);
+	void merge(const FeatureCollectionManager& other);
+	void normalize(int minFeaturesPerClass, int maxFeaturesPerClass);
+
+	QVector<FeatureCollection> collection() const;
+
+	int numFeatures() const;
+
+	QString toString() const;
+	cv::Ptr<cv::ml::TrainData> toCvTrainData(int maxSamples = -1) const;
+	LabelManager toLabelManager() const;
+
+protected:
+	QVector<FeatureCollection> mCollection;
+
+	cv::Mat allFeatures() const;
+	cv::Mat allLabels() const;
+};
+
+/// <summary>
+/// This class configures the feature collection process.
+/// It controls I/O paths for feature labels and feature
+/// cache files and the normalization process through the
+/// read settings file.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
 class DllModuleExport SuperPixelLabelerConfig : public ModuleConfig {
 
 public:
@@ -79,74 +186,12 @@ protected:
 	int mMaxNumFeaturesPerClass = 10000;	// 1e4;
 };
 
-class DllModuleExport LabelManager {
-
-public:
-	LabelManager();
-
-	bool isEmpty() const;
-	int size() const;
-	static LabelManager read(const QString& filePath);
-
-	void add(const LabelInfo& label);
-	bool contains(const LabelInfo& label) const;
-	bool containsId(const LabelInfo& label) const;
-
-	QString toString() const;
-
-	LabelInfo find(const QString& str) const;
-	LabelInfo find(const Region& r) const;
-	LabelInfo find(int id) const;
-
-protected:
-	QVector<LabelInfo> mLookups;
-};
-
-class DllModuleExport FeatureCollection {
-
-public:
-	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
-	friend DllModuleExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
-
-	QJsonObject toJson() const;
-	static FeatureCollection read(QJsonObject& jo);
-
-	void append(const cv::Mat& descriptor);
-	LabelInfo label() const;
-	void setDescriptors(const cv::Mat& desc);
-	cv::Mat descriptors() const;
-	int numDescriptors() const;
-
-	static QVector<FeatureCollection> split(const cv::Mat& descriptors, const PixelSet& set);
-	static QString jsonKey();
-
-protected:
-	cv::Mat mDesc;
-	LabelInfo mLabel;
-};
-
-class DllModuleExport FeatureCollectionManager {
-
-public:
-	FeatureCollectionManager(const cv::Mat& descriptors = cv::Mat(), const PixelSet& set = PixelSet());
-
-	void write(const QString& filePath) const;
-	static FeatureCollectionManager read(const QString& filePath);
-	
-	void add(const FeatureCollection& collection);
-	void merge(const FeatureCollectionManager& other);
-	void normalize(int minFeaturesPerClass, int maxFeaturesPerClass);
-
-	QVector<FeatureCollection> collection() const;
-
-
-	QString toString() const;
-
-protected:
-	QVector<FeatureCollection> mCollection;
-
-};
-
+/// <summary>
+/// Converts GT information to label images.
+/// This class is used to assign a GT label
+/// to each SuperPixel computed in an image.
+/// </summary>
+/// <seealso cref="Module" />
 class DllModuleExport SuperPixelLabeler : public Module {
 
 public:
@@ -177,6 +222,51 @@ private:
 	bool checkInput() const override;
 	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
 	
+};
+
+class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {
+
+public:
+	SuperPixelTrainerConfig();
+
+	virtual QString toString() const override;
+
+protected:
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+/// <summary>
+/// Converts GT information to label images.
+/// This class is used to assign a GT label
+/// to each SuperPixel computed in an image.
+/// </summary>
+/// <seealso cref="Module" />
+class DllModuleExport SuperPixelTrainer : public Module {
+
+public:
+	SuperPixelTrainer(const FeatureCollectionManager& fcm);
+
+	bool isEmpty() const override;
+	bool compute() override;
+	QSharedPointer<SuperPixelTrainerConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+	QString toString() const override;
+
+	// no read function -> see SuperPixelClassifier
+	bool write(const QString& filePath) const;
+	void toJson(QJsonObject& jo) const;
+
+private:
+	
+	FeatureCollectionManager mFeatureManager;
+
+	// results
+	cv::Ptr<cv::ml::RTrees> mTrainer;
+
+	bool checkInput() const override;
 };
 
 };

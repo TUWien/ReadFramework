@@ -54,6 +54,7 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
+#include <opencv2/ml/ml.hpp>
 
 #pragma warning(pop)
 
@@ -249,9 +250,9 @@ LabelManager LabelManager::read(const QString & filePath) {
 	LabelManager manager;
 
 	// parse the lookups
-	QJsonArray labels = Utils::readJson(filePath,LabelInfo::jsonKey()).toArray();
+	QJsonArray labels = Utils::readJson(filePath, LabelManager::jsonKey()).toArray();
 	if (labels.isEmpty()) {
-		qCritical() << "cannot locate" << LabelInfo::jsonKey();
+		qCritical() << "cannot locate" << LabelManager::jsonKey();
 		return manager;
 	}
 
@@ -260,6 +261,19 @@ LabelManager LabelManager::read(const QString & filePath) {
 		manager.add(LabelInfo::fromJson(cLabel.toObject().value("Class").toObject()));
 	
 	return manager;
+}
+
+void LabelManager::toJson(QJsonObject& jo) const {
+
+	QJsonArray ja;
+
+	for (const LabelInfo& fc : mLookups) {
+		QJsonObject cJo;
+		fc.toJson(cJo);
+		ja << cJo;
+	}
+
+	jo.insert(FeatureCollection::jsonKey(), ja);
 }
 
 void LabelManager::add(const LabelInfo & label) {
@@ -340,6 +354,10 @@ LabelInfo LabelManager::find(int id) const {
 	}
 
 	return LabelInfo();
+}
+
+QString LabelManager::jsonKey() {
+	return "Labels";
 }
 
 
@@ -434,6 +452,10 @@ FeatureCollectionManager::FeatureCollectionManager(const cv::Mat & descriptors, 
 	mCollection = FeatureCollection::split(descriptors, set);
 }
 
+bool FeatureCollectionManager::isEmpty() const {
+	return mCollection.isEmpty();
+}
+
 void FeatureCollectionManager::write(const QString & filePath) const {
 
 	QJsonArray ja;
@@ -473,6 +495,15 @@ void FeatureCollectionManager::add(const FeatureCollection & collection) {
 
 QVector<FeatureCollection> FeatureCollectionManager::collection() const {
 	return mCollection;
+}
+
+int FeatureCollectionManager::numFeatures() const {
+
+	int nf = 0;
+	for (const FeatureCollection& fc : mCollection)
+		nf += fc.numDescriptors();
+
+	return nf;
 }
 
 /// <summary>
@@ -526,6 +557,192 @@ QString FeatureCollectionManager::toString() const {
 		str += fc.label().name() + " " + QString::number(fc.descriptors().rows) + " features | ";
 
 	return str;
+}
+
+cv::Ptr<cv::ml::TrainData> FeatureCollectionManager::toCvTrainData(int maxSamples) const {
+
+	assert(numFeatures() > 0);
+	cv::Mat features = allFeatures();
+	cv::Mat labels = allLabels();
+
+	if (features.rows > maxSamples) {
+		cv::resize(features, features, cv::Size(features.cols, maxSamples), 0.0, 0.0, CV_INTER_NN);
+		cv::resize(labels, labels, cv::Size(labels.cols, maxSamples), 0.0, 0.0, CV_INTER_NN);
+	}
+
+	assert(features.rows == labels.rows);
+
+	cv::Ptr<cv::ml::TrainData> td = cv::ml::TrainData::create(features, cv::ml::ROW_SAMPLE, labels);
+	return td;
+}
+
+LabelManager FeatureCollectionManager::toLabelManager() const {
+
+	LabelManager lm;
+
+	for (const FeatureCollection& fc : mCollection)
+		lm.add(fc.label());
+
+	return lm;
+}
+
+/// <summary>
+/// Merges all features for training.
+/// </summary>
+/// <returns></returns>
+cv::Mat FeatureCollectionManager::allFeatures() const {
+
+	cv::Mat features;
+
+	for (const FeatureCollection& fc : mCollection) {
+		
+		if (features.empty())
+			features = fc.descriptors();
+		else {
+			assert(fc.descriptors().cols == features.cols);
+			features.push_back(fc.descriptors());
+		}
+	}
+
+	double maxV, minV;
+	cv::minMaxLoc(features, &minV, &maxV);
+
+	// normalize
+	if (minV != maxV) {
+		double dr = 1.0 / (maxV - minV);
+		features.convertTo(features, CV_32FC1, dr, -dr * minV);
+	}
+	else {
+		qWarning() << "I seem to get weird values here: ";
+		features.convertTo(features, CV_32FC1);
+		Image::imageInfo(features, "features");
+	}
+
+	return features;
+}
+
+/// <summary>
+/// Returns the labels in a OpenCV compilant format.
+/// </summary>
+/// <returns></returns>
+cv::Mat FeatureCollectionManager::allLabels() const {
+
+	cv::Mat labels;
+
+	for (const FeatureCollection& fc : mCollection) {
+
+		cv::Mat cLabels(fc.descriptors().rows, 1, CV_32SC1, cv::Scalar(fc.label().id()));
+
+		if (labels.empty())
+			labels = cLabels;
+		else
+			labels.push_back(cLabels);
+	}
+
+	return labels;
+}
+
+// SuperPixelTrainerConfig --------------------------------------------------------------------
+SuperPixelTrainerConfig::SuperPixelTrainerConfig() : ModuleConfig("SuperPixelTrainer") {
+}
+
+QString SuperPixelTrainerConfig::toString() const {
+	return ModuleConfig::toString();
+}
+
+void SuperPixelTrainerConfig::load(const QSettings &) {
+	// TODO: add load/save here
+}
+
+void SuperPixelTrainerConfig::save(QSettings &) const {
+	// TODO: add load/save here
+}
+
+// SuperPixelTrainer --------------------------------------------------------------------
+SuperPixelTrainer::SuperPixelTrainer(const FeatureCollectionManager & fcm) {
+	mFeatureManager = fcm;
+	mConfig = QSharedPointer<SuperPixelTrainerConfig>::create();
+
+}
+
+bool SuperPixelTrainer::isEmpty() const {
+	return mFeatureManager.isEmpty();
+}
+
+bool SuperPixelTrainer::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+	
+	mTrainer = cv::ml::RTrees::create();
+
+	if (mFeatureManager.numFeatures() == 0) {
+		qCritical() << "Cannot train random trees if no feature vectors are provided";
+		return false;
+	}
+
+	mTrainer->train(mFeatureManager.toCvTrainData(100));
+	mTrainer->save("C:/temp/rt.yml");
+
+	mInfo << "trained in" << dt;
+
+	return true;
+}
+
+QSharedPointer<SuperPixelTrainerConfig> SuperPixelTrainer::config() const {
+	return qSharedPointerDynamicCast<SuperPixelTrainerConfig>(Module::config());
+}
+
+cv::Mat SuperPixelTrainer::draw(const cv::Mat & img) const {
+
+	// draw mser blobs
+	Timer dtf;
+	QPixmap pm = Image::mat2QPixmap(img);
+
+	QPainter p(&pm);
+	// TODO: draw something
+
+	return Image::qPixmap2Mat(pm);
+}
+
+QString SuperPixelTrainer::toString() const {
+	return config()->toString();
+}
+
+bool SuperPixelTrainer::write(const QString & filePath) const {
+
+	if (!mTrainer->isTrained())
+		qWarning() << "writing trainer that is NOT trained!";
+
+	// write all label data
+	QJsonObject jo;
+	LabelManager lm = mFeatureManager.toLabelManager();
+	lm.toJson(jo);
+	
+	// write RTrees classifier
+	toJson(jo);
+
+	int64 bw = Utils::writeJson(filePath, jo);
+
+	return bw > 0;	// if we wrote more than 0 bytes, it's ok
+}
+
+void SuperPixelTrainer::toJson(QJsonObject& jo) const {
+
+	cv::FileStorage fs(".yml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_YAML);
+	mTrainer->write(fs);
+	std::string data = fs.releaseAndGetString();
+
+	QByteArray ba(data.c_str(), (int)data.length());
+	QString ba64Str = ba.toBase64();
+	
+	jo.insert(name(), ba64Str);
+}
+
+bool SuperPixelTrainer::checkInput() const {
+	return !isEmpty();
 }
 
 }

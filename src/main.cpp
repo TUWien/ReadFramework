@@ -201,7 +201,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.classifierPath().isEmpty()) {
-		dc.setClassifierPath("C:/temp/super-pixel-classifier.json");
+		dc.setClassifierPath("D:/read/configs/features-release.json");
 		qInfo() << dc.classifierPath() << "added as classifier path";
 	} 
 

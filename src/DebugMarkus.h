@@ -68,7 +68,9 @@ public:
 	void layoutToXml() const;
 
 protected:
-	void testTrainer(const cv::Mat& src) const;
+	void testFeatureCollector(const cv::Mat& src) const;
+	void testTrainer();
+
 	void testLayout(const cv::Mat& src) const;
 	void pageSegmentation(const cv::Mat& src) const;
 

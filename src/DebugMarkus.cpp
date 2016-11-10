@@ -50,6 +50,9 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
+
+#include <QJsonObject>
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
@@ -141,7 +144,8 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	testTrainer(imgCv);
+	testTrainer();
+	//testFeatureCollector(imgCv);
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
 
@@ -229,7 +233,7 @@ void LayoutTest::layoutToXml() const {
 
 }
 
-void LayoutTest::testTrainer(const cv::Mat & src) const {
+void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	
 	rdf::Timer dt;
 
@@ -264,8 +268,7 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 
 	FeatureCollectionManager fcm(spf.features(), spf.set());
 	fcm.write(spl.config()->featureFilePath());
-
-
+	
 	FeatureCollectionManager testFcm = FeatureCollectionManager::read(spl.config()->featureFilePath());
 
 	for (int idx = 0; idx < testFcm.collection().size(); idx++) {
@@ -290,6 +293,41 @@ void LayoutTest::testTrainer(const cv::Mat & src) const {
 
 	qDebug() << "image path: " << mConfig.imagePath();
 
+}
+
+void LayoutTest::testTrainer() {
+
+	//cv::Mat testM(10, 10, CV_8UC1);
+	//
+	//for (int rIdx = 0; rIdx < testM.rows; rIdx++) {
+	//	unsigned char* ptr = testM.ptr<unsigned char>(rIdx);
+	//	for (int cIdx = 0; cIdx < testM.cols; cIdx++) {
+	//		ptr[cIdx] = cIdx*rIdx+cIdx;
+	//	}
+	//}
+	//
+	//QJsonObject jo = Image::matToJson(testM);
+	//cv::Mat t2 = Image::jsonToMat(jo);
+
+	//cv::Scalar s = cv::sum(cv::abs(testM - t2));
+	//if (s[0] != 0)
+	//	qWarning() << "inconsistent json2Mat I/O";
+	//else
+	//	qInfo() << "json to mat is just fine...";
+
+	Timer dt;
+	FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.classifierPath());
+
+	SuperPixelTrainer spt(fcm);
+
+	if (!spt.compute())
+		qCritical() << "could not train data...";
+
+	spt.write("D:/read/configs/model.json");
+	//fcm.write("D:/read/configs/features-release-save.json");
+
+
+	qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;
 }
 
 void LayoutTest::testLayout(const cv::Mat & src) const {

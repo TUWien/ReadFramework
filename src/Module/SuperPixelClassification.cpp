@@ -50,41 +50,41 @@
 namespace rdf {
 
 
-// SuperPixelClassificationConfig --------------------------------------------------------------------
-SuperPixelClassificationConfig::SuperPixelClassificationConfig() : ModuleConfig("Super Pixel Classification") {
+// SuperPixelClassifierConfig --------------------------------------------------------------------
+SuperPixelClassifierConfig::SuperPixelClassifierConfig() : ModuleConfig("Super Pixel Classification") {
 }
 
-QString SuperPixelClassificationConfig::toString() const {
+QString SuperPixelClassifierConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-int SuperPixelClassificationConfig::maxSide() const {
+int SuperPixelClassifierConfig::maxSide() const {
 	return mMaxSide;
 }
 
-// SuperPixelClassification --------------------------------------------------------------------
-SuperPixelClassification::SuperPixelClassification(const cv::Mat& img, const PixelSet& set) {
+// SuperPixelClassifier --------------------------------------------------------------------
+SuperPixelClassifier::SuperPixelClassifier(const cv::Mat& img, const PixelSet& set) {
 
 	mImg = img;
 	mSet = set;
-	mConfig = QSharedPointer<SuperPixelClassificationConfig>::create();
+	mConfig = QSharedPointer<SuperPixelClassifierConfig>::create();
 }
 
-bool SuperPixelClassification::isEmpty() const {
+bool SuperPixelClassifier::isEmpty() const {
 	return mImg.empty();
 }
 
-bool SuperPixelClassification::compute() {
+bool SuperPixelClassifier::compute() {
 
 	mWarning << "not implemented yet";
 	return true;
 }
 
-QSharedPointer<SuperPixelClassificationConfig> SuperPixelClassification::config() const {
-	return qSharedPointerDynamicCast<SuperPixelClassificationConfig>(mConfig);
+QSharedPointer<SuperPixelClassifierConfig> SuperPixelClassifier::config() const {
+	return qSharedPointerDynamicCast<SuperPixelClassifierConfig>(mConfig);
 }
 
-cv::Mat SuperPixelClassification::draw(const cv::Mat& img) const {
+cv::Mat SuperPixelClassifier::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
 	Timer dtf;
@@ -95,11 +95,11 @@ cv::Mat SuperPixelClassification::draw(const cv::Mat& img) const {
 	return Image::qPixmap2Mat(pm);
 }
 
-QString SuperPixelClassification::toString() const {
+QString SuperPixelClassifier::toString() const {
 	return Module::toString();
 }
 
-bool SuperPixelClassification::checkInput() const {
+bool SuperPixelClassifier::checkInput() const {
 
 	return !mImg.empty();
 }
@@ -148,23 +148,9 @@ bool SuperPixelFeature::compute() {
 	cv::Ptr<cv::ORB> features = cv::ORB::create();
 	features->compute(cImg, keypoints, mDescriptors);
 
-	// sync keypoints
-	QVector<cv::KeyPoint> kptsOut = QVector<cv::KeyPoint>::fromStdVector(keypoints);
+	// remove SuperPixels that were removed during feature creation
+	syncSuperPixels(kptsIn, keypoints);
 
-	QList<int> removeIdx;
-	for (int idx = 0; idx < kptsIn.size(); idx++) {
-		
-
-		int kIdx = kptsOut.indexOf(kptsIn[idx]);
-		if (kIdx == -1)
-			removeIdx << idx;
-	}
-
-	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
-	for (int ri : removeIdx) 
-		mSet.remove(mSet.pixels()[ri]);
-
-	mInfo << "# keypoints after ORB" << keypoints.size() << "set size" << mSet.size();
 	mInfo << mDescriptors.rows << "features computed in" << dt;
 
 	return true;
@@ -217,6 +203,37 @@ PixelSet SuperPixelFeature::set() const {
 
 bool SuperPixelFeature::checkInput() const {
 	return !mImg.empty();
+}
+
+/// <summary>
+/// Synchronizes the super pixels with the features.
+/// This function removes SuperPixels from the PixelSet.
+/// This is needed since OpenCV removes keypoints that could
+/// not be computed. Using this function guarantees that the
+/// ith SuperPixel corresponds with the ith row of the feature
+/// matrix. NOTE: if we use descriptors such as SIFT which
+/// _add_ KeyPoints we're again out-of-sync.
+/// </summary>
+/// <param name="keyPointsOld">The key points before feature computation.</param>
+/// <param name="keyPointsNew">The key points after feature computation (less than keyPointsOld).</param>
+void SuperPixelFeature::syncSuperPixels(const std::vector<cv::KeyPoint>& keyPointsOld, const std::vector<cv::KeyPoint>& keyPointsNew) {
+
+	// sync keypoints
+	QVector<cv::KeyPoint> kptsOut = QVector<cv::KeyPoint>::fromStdVector(keyPointsNew);
+
+	QList<int> removeIdx;
+	for (int idx = 0; idx < keyPointsOld.size(); idx++) {
+
+
+		int kIdx = kptsOut.indexOf(keyPointsOld[idx]);
+		if (kIdx == -1)
+			removeIdx << idx;
+	}
+
+	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
+	for (int ri : removeIdx) 
+		mSet.remove(mSet.pixels()[ri]);
+
 }
 
 }

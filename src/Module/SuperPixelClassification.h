@@ -87,13 +87,22 @@ private:
 	cv::Mat mDescriptors;
 
 	bool checkInput() const override;
+	void syncSuperPixels(const std::vector<cv::KeyPoint>& keyPointsOld, const std::vector<cv::KeyPoint>& keyPointsNew);
+};
+
+class DllModuleExport SuperPixelModel {
+
+public:
+	SuperPixelModel();
+
+
 };
 
 
-class DllModuleExport SuperPixelClassificationConfig : public ModuleConfig {
+class DllModuleExport SuperPixelClassifierConfig : public ModuleConfig {
 
 public:
-	SuperPixelClassificationConfig();
+	SuperPixelClassifierConfig();
 
 	virtual QString toString() const override;
 	
@@ -107,17 +116,19 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport SuperPixelClassification : public Module {
+class DllModuleExport SuperPixelClassifier : public Module {
 
 public:
-	SuperPixelClassification(const cv::Mat& img, const PixelSet& set);
+	SuperPixelClassifier(const cv::Mat& img, const PixelSet& set);
 
 	bool isEmpty() const override;
 	bool compute() override;
-	QSharedPointer<SuperPixelClassificationConfig> config() const;
+	QSharedPointer<SuperPixelClassifierConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
+
+	void read();
 
 private:
 	cv::Mat mImg;

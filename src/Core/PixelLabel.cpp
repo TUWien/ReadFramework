@@ -212,11 +212,11 @@ void LabelInfo::toJson(QJsonObject & jo) const {
 
 	joc.insert("alias", ja);
 
-	jo.insert("Class", joc);
+	jo.insert(jsonKey(), joc);
 }
 
 QString LabelInfo::jsonKey() {
-	return QString("TUWienLabelLookup");
+	return QString("Class");
 }
 
 // PixelLabel --------------------------------------------------------------------

@@ -35,7 +35,7 @@ macro(RDF_FIND_OPENCV)
 	unset(OpenCV_LIBRARY_DIRS CACHE)
 	unset(OpenCV_DIR)
  
-	set(RDF_REQUIRED_OPENCV_PACKAGES core imgproc stitching imgcodecs flann features2d calib3d)
+	set(RDF_REQUIRED_OPENCV_PACKAGES core ml imgproc flann features2d)
 	set(RDF_OPTIONAL_OPENCV_PACKAGES xfeatures2d)
 	find_package(OpenCV REQUIRED ${RDF_REQUIRED_OPENCV_PACKAGES})# OPTIONAL_COMPONENTS ${RDF_OPTIONAL_OPENCV_PACKAGES}) 
 	find_package(OpenCV QUIET OPTIONAL_COMPONENTS ${RDF_OPTIONAL_OPENCV_PACKAGES}) 
