@@ -1435,8 +1435,10 @@ namespace rdf {
 
 			if ((tmp.line().thickness() - delta) >= 0.5) {
 
-				rdf::Vector2D p1 = tmp.line().p1() + tmp.lineOrientation()*delta_2;
-				rdf::Vector2D p2 = tmp.line().p2() + tmp.lineOrientation()*delta_2;
+				rdf::Vector2D fac(-tmp.lineOrientation().y()*delta_2, tmp.lineOrientation().x()*delta_2);
+
+				rdf::Vector2D p1 = tmp.line().p1() + fac;
+				rdf::Vector2D p2 = tmp.line().p2() + fac;
 				tmp.setLine(rdf::Line(p1, p2));
 				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
 
@@ -1455,8 +1457,10 @@ namespace rdf {
 
 			if ((tmp.line().thickness() - delta) >= 0.5) {
 
-				rdf::Vector2D p1 = tmp.line().p1() + tmp.lineOrientation()*delta_2;
-				rdf::Vector2D p2 = tmp.line().p2() + tmp.lineOrientation()*delta_2;
+				rdf::Vector2D fac(-tmp.lineOrientation().y()*delta_2, tmp.lineOrientation().x()*delta_2);
+
+				rdf::Vector2D p1 = tmp.line().p1() + fac;
+				rdf::Vector2D p2 = tmp.line().p2() + fac;
 				tmp.setLine(rdf::Line(p1, p2));
 				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
 
