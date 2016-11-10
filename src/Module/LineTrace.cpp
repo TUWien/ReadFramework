@@ -968,11 +968,25 @@ namespace rdf {
 			/* construct rectangular approximation for the region */
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
-			//TODO refinement of region
+			/* Check if the rectangle exceeds the minimal density of
+			region points. If not, try to improve the region.
+			The rectangle will be rejected if the final one does
+			not fulfill the minimal density condition.
+			This is an addition to the original LSD algorithm published in
+			"LSD: A Fast Line Segment Detector with a False Detection Control"
+			by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
+			The original algorithm is obtained with density_th = 0.0.
+			*/
 			if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
 				continue;
 			}
+			
+			
 			//TODO improvement
+			/* compute NFA value */
+			double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
+			if (logNfa <= config()->logEps()) continue;
+
 
 			if (config()->scale() != 1.0) {
 				rdf::Line tmpLine = tmp.line();
@@ -1369,6 +1383,135 @@ namespace rdf {
 		return true;
 	}
 
+	/** Try some rectangles variations to improve NFA value. Only if the
+	rectangle is not meaningful (i.e., log_nfa <= log_eps). 	*/
+	double ReadLSD::rectImprove(rdf::LineSegment& l, cv::Mat& radImg, double logNT, double logEps)	{
+
+		double logNfa, logNfaNew;
+		double delta = 0.5;
+		double delta_2 = delta / 2.0;
+		int n;
+
+		logNfa = rectNfa(l, radImg,  logNT);
+		
+		if (logNfa > logEps)
+			return logNfa;
+
+		/* try finer precisions */
+		rdf::LineSegment tmp = l;
+
+		for (n = 0; n < 5; n++) {
+			tmp.setP(tmp.p() / 2.0);
+			tmp.setPrec(tmp.prec() * CV_PI);
+
+			logNfaNew = rectNfa(tmp, radImg, logNT);
+			if (logNfaNew > logNfa) {
+				logNfa = logNfaNew;
+				l = tmp;
+			}
+		}
+
+		if (logNfa > logEps) return logNfa;
+		
+		/* try to reduce width */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+
+		if (logNfa > logEps) return logNfa;
+
+		/* try to reduce one side of the rectangle */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				rdf::Vector2D p1 = tmp.line().p1() + tmp.lineOrientation()*delta_2;
+				rdf::Vector2D p2 = tmp.line().p2() + tmp.lineOrientation()*delta_2;
+				tmp.setLine(rdf::Line(p1, p2));
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+		if (logNfa > logEps) return logNfa;
+
+		/* try to reduce the other side of the rectangle */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				rdf::Vector2D p1 = tmp.line().p1() + tmp.lineOrientation()*delta_2;
+				rdf::Vector2D p2 = tmp.line().p2() + tmp.lineOrientation()*delta_2;
+				tmp.setLine(rdf::Line(p1, p2));
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+		if (logNfa > logEps) return logNfa;
+
+		/* try even finer precisions */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				
+				tmp.setP(tmp.p() / 2.0);
+				tmp.setPrec(tmp.prec() * CV_PI);
+				
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+
+		return logNfa;
+	}
+
+	double ReadLSD::rectNfa(rdf::LineSegment & l, cv::Mat & radImg, double logNT) 	{
+
+
+		int x, y;
+		int pts = 0;
+		int alg = 0;
+
+		//TODO create rectangle iterator..
+		x = 0;
+		y = 0;
+		for (int i = 0; i < 100; i++) {
+
+			pts++;
+			if (isAligned(x, y, radImg, l.theta(), l.prec())) {
+				alg++;
+			}
+
+		}
+
+		return nfa(pts, alg, l.p(), logNT);
+	}
+
 
 	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{
 		return qSharedPointerDynamicCast<ReadLSDConfig>(mConfig);
@@ -1535,23 +1678,22 @@ namespace rdf {
 		return theta <= prec;
 	}
 
-	//bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
-	//	double a;
+	bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta, double prec) {
+		double a;
 
-	//	/* check parameters */
-	//	if (img.empty())
-	//		mWarning << "isaligned: invalid image 'angles'.";
+		/* check parameters */
+		if (img.empty())
+			mWarning << "isaligned: invalid image 'angles'.";
 
-	//	if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
-	//		mWarning << "isaligned: (x,y) out of the image.";
-	//	if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+		if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
+			mWarning << "isaligned: (x,y) out of the image.";
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 
-	//	/* angle at pixel (x,y) */
-	//	a = img.at<double>(y, x);
-	//	//a = angles->data[x + y * angles->xsize];
-
-	//	return isAligned(a, theta);
-	//}
+		/* angle at pixel (x,y) */
+		a = img.at<double>(y, x);
+		
+		return isAligned(a, theta, prec);
+	}
 
 
 	ReadLSDConfig::ReadLSDConfig()	{
