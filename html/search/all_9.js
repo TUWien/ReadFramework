@@ -20,6 +20,8 @@ var searchData=
   ['innercontours',['innerContours',['../classrdf_1_1_blob.html#adf57b4fc94d974545d749830cca2f350',1,'rdf::Blob']]],
   ['insourcesegment',['inSourceSegment',['../classrd3_1_1_g_c_graph.html#ac68620913cf500b52767f95025c70cbb',1,'rd3::GCGraph']]],
   ['instance',['instance',['../classrdf_1_1_blob_manager.html#a5bbc71e3b7ee15209d68271f468b656a',1,'rdf::BlobManager::instance()'],['../classrdf_1_1_drawer.html#ac0a528e32d1d8896643e5583185d66b7',1,'rdf::Drawer::instance()'],['../classrdf_1_1_region_xml_helper.html#a94c3e8864a4105fa6211f3622aa83155',1,'rdf::RegionXmlHelper::instance()'],['../classrdf_1_1_region_manager.html#ae3513ee06e511b3586fab7cb680625f7',1,'rdf::RegionManager::instance()'],['../classrdf_1_1_config.html#a8faaa2d69b9c3d7ae43b4b5ddc5af402',1,'rdf::Config::instance()'],['../classrdf_1_1_utils.html#abfbc03f27fcbab98a52410d93205b70f',1,'rdf::Utils::instance()']]],
+  ['interhigh',['interHigh',['../classrdf_1_1_line_segment.html#ab799e18bf1568bc998ba757ae22b5468',1,'rdf::LineSegment']]],
+  ['interlow',['interLow',['../classrdf_1_1_line_segment.html#a1a1e42252627b9600cb00c0965034f9f',1,'rdf::LineSegment']]],
   ['intersection',['intersection',['../classrdf_1_1_line.html#a4162bfc36ffd6fc9f5a6b32eaee78988',1,'rdf::Line']]],
   ['intersects',['intersects',['../classrdf_1_1_line.html#a105c6241c9b192faa9fa5fb5efdebe42',1,'rdf::Line']]],
   ['invert',['invert',['../classrdf_1_1_i_p.html#a09865771f0f289804abe0cc374654433',1,'rdf::IP']]],

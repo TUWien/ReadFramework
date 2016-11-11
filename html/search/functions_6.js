@@ -25,6 +25,7 @@ var searchData=
   ['getcolor',['getColor',['../classrdf_1_1_color_manager.html#a335ec492e1c2ebd3743654b8faa0c06c',1,'rdf::ColorManager']]],
   ['getconfig',['getConfig',['../classrdf_1_1_region_manager.html#a18e2052ed10858c0e87a05410f455ef0',1,'rdf::RegionManager']]],
   ['gethlines',['getHLines',['../classrdf_1_1_line_trace.html#acc9509becd555aaef7da22fef8709637',1,'rdf::LineTrace']]],
+  ['getiterpt',['getIterPt',['../classrdf_1_1_line_segment.html#ae0cdeec81f349ca0b80a4667ea2881ed',1,'rdf::LineSegment']]],
   ['getlines',['getLines',['../classrdf_1_1_line_trace.html#aaa2586bb273c9ee9c03689e5d3b91cbb',1,'rdf::LineTrace']]],
   ['getmatchedlineimg',['getMatchedLineImg',['../classrdf_1_1_form_features.html#ac36271e8b961bdbd0532f5ebe80e1528',1,'rdf::FormFeatures']]],
   ['getmserblobs',['getMserBlobs',['../classrdf_1_1_super_pixel.html#a787277c0ee8035c57f155e5d18c3d590',1,'rdf::SuperPixel']]],

@@ -14,5 +14,7 @@ var searchData=
   ['viscolor',['visColor',['../classrdf_1_1_label_info.html#aafa69421cbf3fdc720f0a74b53fb7087',1,'rdf::LabelInfo']]],
   ['visited',['visited',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da40e9587a33e6672b70f5463f43afd78d',1,'rdf::DBScanPixel']]],
   ['vlines',['vLines',['../classrdf_1_1_line_trace.html#a1afa3b6df7c83e126ca68663c326517d',1,'rdf::LineTrace::vLines()'],['../classrdf_1_1_read_l_s_d.html#ab5a10847476c5719455c471e9da1cbdc',1,'rdf::ReadLSD::vLines()']]],
-  ['vtxt',['vtxT',['../classrd3_1_1_g_c_graph.html#a8ef016dc7804096842730dde2a1fc339',1,'rd3::GCGraph']]]
+  ['vtxt',['vtxT',['../classrd3_1_1_g_c_graph.html#a8ef016dc7804096842730dde2a1fc339',1,'rd3::GCGraph']]],
+  ['vx',['vx',['../classrdf_1_1_line_segment.html#a6490729d04bae78e949006c6c06be29e',1,'rdf::LineSegment']]],
+  ['vy',['vy',['../classrdf_1_1_line_segment.html#a27440b9f7e768dd4b6c8a8681ee6de2b',1,'rdf::LineSegment']]]
 ];
