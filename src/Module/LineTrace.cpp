@@ -1503,7 +1503,7 @@ namespace rdf {
 		for (pt = l.rectIterIni(); !l.rectIterEnd(); pt = l.rectIterInc()) {
 			if (pt.x() >= 0 && pt.y() >= 0 && pt.x() < radImg.cols && pt.y() < radImg.rows) {
 				pts++;
-				if (isAligned(pt.x(), pt.y(), radImg, l.theta(), l.prec())) {
+				if (isAligned((int)pt.x(), (int)pt.y(), radImg, l.theta(), l.prec())) {
 					alg++;
 				}
 			}
