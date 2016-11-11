@@ -1495,22 +1495,18 @@ namespace rdf {
 	}
 
 	double ReadLSD::rectNfa(rdf::LineSegment & l, cv::Mat & radImg, double logNT) 	{
-
-
-		int x, y;
 		int pts = 0;
 		int alg = 0;
 
-		//TODO create rectangle iterator..
-		x = 0;
-		y = 0;
-		for (int i = 0; i < 100; i++) {
-
-			pts++;
-			if (isAligned(x, y, radImg, l.theta(), l.prec())) {
-				alg++;
+		//rectangle iterator...
+		rdf::Vector2D pt;
+		for (pt = l.rectIterIni(); !l.rectIterEnd(); pt = l.rectIterInc()) {
+			if (pt.x() >= 0 && pt.y() >= 0 && pt.x() < radImg.cols && pt.y() < radImg.rows) {
+				pts++;
+				if (isAligned(pt.x(), pt.y(), radImg, l.theta(), l.prec())) {
+					alg++;
+				}
 			}
-
 		}
 
 		return nfa(pts, alg, l.p(), logNT);

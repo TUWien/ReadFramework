@@ -1414,4 +1414,199 @@ void LineSegment::setLength(double l) {
 	mLength = l;
 }
 
+Vector2D LineSegment::rectIterIni() {
+	double vxTmp[4], vyTmp[4];	/* used for iterator */
+	int n, offset;
+
+	/* build list of rectangle corners ordered
+	in a circular way around the rectangle */
+	vx[0] = mLine.p1().x() - mLineOrient.y() * mLine.thickness() / 2.0;
+	vy[0] = mLine.p1().y() + mLineOrient.x() * mLine.thickness() / 2.0;
+	vx[1] = mLine.p2().x() - mLineOrient.y() * mLine.thickness() / 2.0;
+	vy[1] = mLine.p2().y() + mLineOrient.x() * mLine.thickness() / 2.0;
+	vx[2] = mLine.p2().x() + mLineOrient.y() * mLine.thickness() / 2.0;
+	vy[2] = mLine.p2().y() - mLineOrient.x() * mLine.thickness() / 2.0;
+	vx[3] = mLine.p1().x() + mLineOrient.y() * mLine.thickness() / 2.0;
+	vy[3] = mLine.p1().y() - mLineOrient.x() * mLine.thickness() / 2.0;
+
+	/* compute rotation of index of corners needed so that the first
+	point has the smaller x.
+
+	if one side is vertical, thus two corners have the same smaller x
+	value, the one with the largest y value is selected as the first.
+	*/
+	if (mLine.p1().x() <mLine.p2().x() && mLine.p1().y() <= mLine.p2().y()) offset = 0;
+	else if (mLine.p1().x() >= mLine.p2().x() && mLine.p1().y() < mLine.p2().y()) offset = 1;
+	else if (mLine.p1().x() >mLine.p2().x() && mLine.p1().y() >= mLine.p2().y()) offset = 2;
+	else offset = 3;
+	
+	/* apply rotation of index. */
+	/* apply rotation of index. */
+	for (n = 0; n<4; n++)	{
+		vxTmp[n] = vx[(offset + n) % 4];
+		vyTmp[n] = vy[(offset + n) % 4];
+	}
+	//copy back
+	for (n = 0; n < 4; n++) {
+		vx[n] = vxTmp[n];
+		vy[n] = vyTmp[n];
+	}
+
+	/* Set an initial condition.
+
+	The values are set to values that will cause 'ri_inc' (that will
+	be called immediately) to initialize correctly the first 'column'
+	and compute the limits 'ys' and 'ye'.
+
+	'y' is set to the integer value of vy[0], the starting corner.
+
+	'ys' and 'ye' are set to very small values, so 'ri_inc' will
+	notice that it needs to start a new 'column'.
+
+	The smallest integer coordinate inside of the rectangle is
+	'ceil(vx[0])'. The current 'x' value is set to that value minus
+	one, so 'ri_inc' (that will increase x by one) will advance to
+	the first 'column'.
+	*/
+	mX = (int)ceil(vx[0]) - 1;
+	mY = (int)ceil(vy[0]);
+	mYs = mYe = -DBL_MAX;
+
+	return rectIterInc();
+}
+
+Vector2D LineSegment::rectIterInc() {
+
+	/* if not at end of exploration,
+	increase y value for next pixel in the 'column' */
+	if (rectIterEnd()) mY++;
+
+	/* if the end of the current 'column' is reached,
+	and it is not the end of exploration,
+	advance to the next 'column' */
+	while ((double)(mY) > mYe && !rectIterEnd())
+	{
+		/* increase x, next 'column' */
+		mX++;
+
+		/* if end of exploration, return */
+		if (rectIterEnd()) return getIterPt();
+		//if (rectIterEnd()) return Vector2D(-1,-1);
+
+		/* update lower y limit (start) for the new 'column'.
+
+		We need to interpolate the y value that corresponds to the
+		lower side of the rectangle. The first thing is to decide if
+		the corresponding side is
+
+		vx[0],vy[0] to vx[3],vy[3] or
+		vx[3],vy[3] to vx[2],vy[2]
+
+		Then, the side is interpolated for the x value of the
+		'column'. But, if the side is vertical (as it could happen if
+		the rectangle is vertical and we are dealing with the first
+		or last 'columns') then we pick the lower value of the side
+		by using 'inter_low'.
+		*/
+		if ((double)mX < vx[3])
+			mYs = interLow((double)mX, vx[0], vy[0], vx[3], vy[3]);
+		else
+			mYs = interLow((double)mX, vx[3], vy[3], vx[2], vy[2]);
+
+		/* update upper y limit (end) for the new 'column'.
+
+		We need to interpolate the y value that corresponds to the
+		upper side of the rectangle. The first thing is to decide if
+		the corresponding side is
+
+		vx[0],vy[0] to vx[1],vy[1] or
+		vx[1],vy[1] to vx[2],vy[2]
+
+		Then, the side is interpolated for the x value of the
+		'column'. But, if the side is vertical (as it could happen if
+		the rectangle is vertical and we are dealing with the first
+		or last 'columns') then we pick the lower value of the side
+		by using 'inter_low'.
+		*/
+		if ((double)mX < vx[1])
+			mYe = interHigh((double)mX, vx[0], vy[0], vx[1], vy[1]);
+		else
+			mYe = interHigh((double)mX, vx[1], vy[1], vx[2], vy[2]);
+
+		/* new y */
+		mY = (int)ceil(mYs);
+	}
+	
+	return getIterPt();
+}
+
+bool LineSegment::rectIterEnd() {
+	/* if the current x value is larger than the largest
+	x value in the rectangle (vx[2]), we know the full
+	exploration of the rectangle is finished. */
+	return (double)(mX) > vx[2];
+}
+
+Vector2D LineSegment::getIterPt()
+{
+	return Vector2D(mX,mY);
+}
+
+bool LineSegment::doubleEqual(double a, double b) {
+	double abs_diff, aa, bb, abs_max;
+	double relativeErrorFactor = 100;
+
+	/* trivial case */
+	if (a == b) return true;
+
+	abs_diff = fabs(a - b);
+	aa = fabs(a);
+	bb = fabs(b);
+	abs_max = aa > bb ? aa : bb;
+
+	/* DBL_MIN is the smallest normalized number, thus, the smallest
+	number whose relative error is bounded by DBL_EPSILON. For
+	smaller numbers, the same quantization steps as for DBL_MIN
+	are used. Then, for smaller numbers, a meaningful "relative"
+	error should be computed by dividing the difference by DBL_MIN. */
+	if (abs_max < DBL_MIN) abs_max = DBL_MIN;
+
+	/* equal if relative error <= factor x eps */
+	return (abs_diff / abs_max) <= (relativeErrorFactor * DBL_EPSILON);
+}
+
+/** Interpolate y value corresponding to 'x' value given, in
+the line 'x1,y1' to 'x2,y2'; if 'x1=x2' return the smaller
+of 'y1' and 'y2'.
+
+The following restrictions are required:
+- x1 <= x2
+- x1 <= x
+- x  <= x2
+*/
+double LineSegment::interLow(double x, double x1, double y1, double x2, double y2) {
+
+	/* interpolation */
+	if (doubleEqual(x1, x2) && y1<y2) return y1;
+	if (doubleEqual(x1, x2) && y1>y2) return y2;
+	return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
+
+}
+
+/** Interpolate y value corresponding to 'x' value given, in
+the line 'x1,y1' to 'x2,y2'; if 'x1=x2' return the larger
+of 'y1' and 'y2'.
+
+The following restrictions are required:
+- x1 <= x2
+- x1 <= x
+- x  <= x2
+*/
+double LineSegment::interHigh(double x, double x1, double y1, double x2, double y2) {
+	/* interpolation */
+	if (doubleEqual(x1, x2) && y1<y2) return y2;
+	if (doubleEqual(x1, x2) && y1>y2) return y1;
+	return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
+}
+
 }
