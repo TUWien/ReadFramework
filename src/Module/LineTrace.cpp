@@ -1002,8 +1002,7 @@ namespace rdf {
 
 		//TODO
 		//lineSegmentGrower
-
-		
+	
 
 		return true;
 	}
