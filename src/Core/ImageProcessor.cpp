@@ -32,6 +32,7 @@
 
 #include "ImageProcessor.h"
 #include "Algorithms.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -253,6 +254,23 @@ QColor IP::statMomentColor(const cv::Mat & src, const cv::Mat& mask, double mome
 		col.setAlpha(qRound(statMomentMat(channels[3], mask, momentValue)));
 
 	return col;
+}
+
+void IP::normalize(cv::Mat & src) {
+
+	double maxV, minV;
+	cv::minMaxLoc(src, &minV, &maxV);
+
+	// normalize
+	if (minV != maxV) {
+		double dr = 1.0 / (maxV - minV);
+		src.convertTo(src, CV_32F, dr, -dr * minV);
+	}
+	else {
+		qWarning() << "[IP::normalize] I seem to get weird values here: ";
+		src.convertTo(src, CV_32F);
+		Image::imageInfo(src, "src");
+	}
 }
 
 }

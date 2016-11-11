@@ -66,6 +66,8 @@ public:
 	
 	static double statMomentMat(const cv::Mat& src, const cv::Mat& mask = cv::Mat(), double momentValue = 0.5, int maxSamples = 10000, int area = -1);
 	static QColor statMomentColor(const cv::Mat& src, const cv::Mat& mask = cv::Mat(), double momentValue = 0.5);
+
+	static void normalize(cv::Mat& src);
 };
 
 };

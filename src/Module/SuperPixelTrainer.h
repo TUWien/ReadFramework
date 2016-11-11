@@ -226,8 +226,7 @@ public:
 
 	// no read function -> see SuperPixelClassifier
 	bool write(const QString& filePath) const;
-	void toJson(QJsonObject& jo) const;
-	cv::Ptr<cv::ml::RTrees> model() const;
+	QSharedPointer<SuperPixelModel> model() const;
 
 private:
 	

@@ -49,8 +49,16 @@
 #endif
 #endif
 
+namespace cv {
+	namespace ml {
+		class StatModel;
+		class RTrees;
+	}
+}
+
 // Qt defines
 class QJsonObject;
+class QPainter;
 
 namespace rdf {
 
@@ -66,9 +74,9 @@ class DllCoreExport LabelInfo {
 public:
 
 	enum DefaultLabels {
-		label_background = 0,
+		label_unknown = 0,	// unknown is not -1 because we only have unsigned bytes for labels
+		label_background,
 		label_ignore,
-		label_unknown,	// unknown is not -1 because we only have unsigned bytes for labels
 
 		label_end
 	};
@@ -137,6 +145,8 @@ public:
 
 	static QString jsonKey();
 
+	void draw(QPainter& p) const;
+
 protected:
 	QVector<LabelInfo> mLookups;
 };
@@ -155,6 +165,29 @@ public:
 protected:
 	LabelInfo mTrueLabel = LabelInfo::label_unknown;
 	LabelInfo mLabel = LabelInfo::label_unknown;
+};
+
+class DllCoreExport SuperPixelModel {
+
+public:
+	SuperPixelModel(const LabelManager& labelManager = LabelManager(), const cv::Ptr<cv::ml::StatModel>& model = cv::Ptr<cv::ml::StatModel>());
+
+	bool isEmpty() const;
+
+	cv::Ptr<cv::ml::StatModel> model() const;
+	LabelManager manager() const;
+
+	QVector<PixelLabel> classify(const cv::Mat& features) const;
+
+	bool write(const QString& filePath) const;
+	static QSharedPointer<SuperPixelModel> read(const QString& filePath);
+
+protected:
+	cv::Ptr<cv::ml::StatModel> mModel;
+	LabelManager mManager;
+
+	static cv::Ptr<cv::ml::RTrees> readRTreesModel(QJsonObject& jo);
+	void toJson(QJsonObject& jo) const;
 };
 
 };

@@ -396,6 +396,9 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	if (!label().trueLabel().isNull()) {
 		p.setPen(label().trueLabel().visColor());
 	}
+	else if (!label().label().isNull()) {
+		p.setPen(label().label().visColor());
+	}
 
 	if (stats() && (df != draw_ellipse_only)) {
 

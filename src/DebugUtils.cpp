@@ -86,4 +86,12 @@ QString DebugConfig::classifierPath() const {
 	return mClassifierPath;
 }
 
+void DebugConfig::setFeatureCachePath(const QString & path) {
+	mFeatureCachePath = path;
+}
+
+QString DebugConfig::featureCachePath() const {
+	return mFeatureCachePath;
+}
+
 }

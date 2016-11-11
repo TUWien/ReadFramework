@@ -78,7 +78,45 @@ bool SuperPixelClassifier::isEmpty() const {
 
 bool SuperPixelClassifier::compute() {
 
-	mWarning << "not implemented yet";
+
+	if (!mModel || !mModel->model() || !mModel->model()->isTrained()) {
+		mWarning << "cannot classify - model is empty";
+		return false;
+	}
+
+	Timer dt;
+
+	// compute features
+	SuperPixelFeature spf(mImg, mSet);
+
+	if (!spf.compute()) {
+		mWarning << "SuperPixel features could not be computed";
+		return false;
+	}
+
+	// sync the set
+	cv::Mat features = spf.features();
+	mSet = spf.set();
+
+	if (features.rows != mSet.size()) {
+		qCritical() << "PixelSet is out-of-sync with # of features, aborting classification";
+		return false;
+	}
+
+	// classify
+	QVector<PixelLabel> labels = mModel->classify(features);
+	QVector<QSharedPointer<Pixel> > pixels = mSet.pixels();
+	assert(labels.size() == mSet.size());
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+		
+		pixels[idx]->setLabel(labels[idx]);
+		//sp->setLabel();
+	}
+
+
+	mInfo << mSet.size() << "pixels classified in" << dt;
+
 	return true;
 }
 
@@ -93,12 +131,20 @@ cv::Mat SuperPixelClassifier::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
+	mSet.draw(p);
 	
+	// draw legend
+	mModel->manager().draw(p);
+
 	return Image::qPixmap2Mat(pm);
 }
 
 QString SuperPixelClassifier::toString() const {
 	return Module::toString();
+}
+
+void SuperPixelClassifier::setModel(const QSharedPointer<SuperPixelModel>& model) {
+	mModel = model;
 }
 
 bool SuperPixelClassifier::checkInput() const {
@@ -236,51 +282,6 @@ void SuperPixelFeature::syncSuperPixels(const std::vector<cv::KeyPoint>& keyPoin
 	for (int ri : removeIdx) 
 		mSet.remove(mSet.pixels()[ri]);
 
-}
-
-SuperPixelModel::SuperPixelModel(const LabelManager & labelManager, const cv::Ptr<cv::ml::StatModel>& model) {
-	mModel = model;
-	mManager = labelManager;
-}
-
-bool SuperPixelModel::isEmpty() const {
-	return !mModel || mManager.isEmpty();
-}
-
-cv::Ptr<cv::ml::StatModel> SuperPixelModel::model() const {
-	return mModel;
-}
-
-SuperPixelModel SuperPixelModel::read(const QString & filePath) {
-
-	SuperPixelModel sm;
-
-	QJsonObject jo = Utils::readJson(filePath);
-	sm.mManager = LabelManager::fromJson(jo);
-	sm.mModel = SuperPixelModel::readRTreesModel(jo);
-
-	return sm;
-}
-
-cv::Ptr<cv::ml::RTrees> SuperPixelModel::readRTreesModel(QJsonObject & jo) {
-
-	// decode data
-	QByteArray ba = jo.value("SuperPixelTrainer").toVariant().toByteArray();
-	ba = QByteArray::fromBase64(ba);
-
-	cv::String dataStr(ba.data(), ba.length());
-
-	cv::FileStorage fs(dataStr, cv::FileStorage::READ | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
-	//fs.release();
-	cv::FileNode root = fs.root();
-
-	if (root.empty()) {
-		qCritical().noquote() << "cannot read model from: " << ba;
-		return cv::Ptr<cv::ml::RTrees>();
-	}
-
-	cv::Ptr<cv::ml::RTrees> model = cv::Algorithm::read<cv::ml::RTrees>(root);
-	return model;
 }
 
 }

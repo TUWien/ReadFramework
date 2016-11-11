@@ -434,9 +434,11 @@ cv::Ptr<cv::ml::TrainData> FeatureCollectionManager::toCvTrainData(int maxSample
 	cv::Mat features = allFeatures();
 	cv::Mat labels = allLabels();
 
-	if (features.rows > maxSamples) {
+	if (maxSamples != -1 && features.rows > maxSamples) {
+		int nFeatures = features.rows;
 		cv::resize(features, features, cv::Size(features.cols, maxSamples), 0.0, 0.0, CV_INTER_NN);
 		cv::resize(labels, labels, cv::Size(labels.cols, maxSamples), 0.0, 0.0, CV_INTER_NN);
+		qInfo() << nFeatures << "features reduced to" << features.rows;
 	}
 
 	assert(features.rows == labels.rows);
@@ -465,6 +467,10 @@ cv::Mat FeatureCollectionManager::allFeatures() const {
 
 	for (const FeatureCollection& fc : mCollection) {
 		
+		// ignore unknown
+		if (fc.label().id() == LabelInfo::label_unknown)
+			continue;
+
 		if (features.empty())
 			features = fc.descriptors();
 		else {
@@ -500,7 +506,12 @@ cv::Mat FeatureCollectionManager::allLabels() const {
 
 	for (const FeatureCollection& fc : mCollection) {
 
-		cv::Mat cLabels(fc.descriptors().rows, 1, CV_32SC1, cv::Scalar(fc.label().id()));
+		// ignore unknown
+		if (fc.label().id() == LabelInfo::label_unknown)
+			continue;
+
+		cv::Mat cLabels(fc.descriptors().rows, 1, CV_32SC1);
+		cLabels.setTo(fc.label().id());
 
 		if (labels.empty())
 			labels = cLabels;
@@ -552,7 +563,7 @@ bool SuperPixelTrainer::compute() {
 		return false;
 	}
 
-	mModel->train(mFeatureManager.toCvTrainData(100));
+	mModel->train(mFeatureManager.toCvTrainData());
 	mModel->save("C:/temp/rt.yml");
 
 	mInfo << "trained in" << dt;
@@ -585,33 +596,13 @@ bool SuperPixelTrainer::write(const QString & filePath) const {
 	if (!mModel->isTrained())
 		qWarning() << "writing trainer that is NOT trained!";
 
-	// write all label data
-	QJsonObject jo;
-	LabelManager lm = mFeatureManager.toLabelManager();
-	lm.toJson(jo);
-	
-	// write RTrees classifier
-	toJson(jo);
-
-	int64 bw = Utils::writeJson(filePath, jo);
-
-	return bw > 0;	// if we wrote more than 0 bytes, it's ok
+	return model()->write(filePath);
 }
 
-void SuperPixelTrainer::toJson(QJsonObject& jo) const {
-
-	cv::FileStorage fs(".xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
-	mModel->write(fs);
-	std::string data = fs.releaseAndGetString();
-
-	QByteArray ba(data.c_str(), (int)data.length());
-	QString ba64Str = ba.toBase64();
+QSharedPointer<SuperPixelModel> SuperPixelTrainer::model() const {
 	
-	jo.insert(name(), ba64Str);
-}
-
-cv::Ptr<cv::ml::RTrees> SuperPixelTrainer::model() const {
-	return mModel;
+	QSharedPointer<SuperPixelModel> sm(new SuperPixelModel(mFeatureManager.toLabelManager(), mModel));
+	return sm;
 }
 
 bool SuperPixelTrainer::checkInput() const {

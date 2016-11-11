@@ -32,6 +32,7 @@
 
 #include "PixelLabel.h"
 
+#include "ImageProcessor.h"
 #include "Elements.h"
 #include "ElementsHelper.h"
 
@@ -39,8 +40,11 @@
 #include <QJsonObject>		// needed for LabelInfo
 #include <QJsonDocument>	// needed for LabelInfo
 #include <QJsonArray>		// needed for LabelInfo
+#include <QPainter>
 
 #include <QDebug>
+
+#include <opencv2/ml/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -63,7 +67,7 @@ bool LabelInfo::operator!=(const LabelInfo & l1) const {
 }
 
 bool LabelInfo::isNull() const {
-	return id() == -1;
+	return id() == -1 || id() == label_unknown;
 }
 
 bool LabelInfo::contains(const QString& key) const {
@@ -265,9 +269,12 @@ void LabelManager::toJson(QJsonObject& jo) const {
 	QJsonArray ja;
 
 	for (const LabelInfo& fc : mLookups) {
-		QJsonObject cJo;
-		fc.toJson(cJo);
-		ja << cJo;
+		
+		if (fc.id() != LabelInfo::label_unknown) {
+			QJsonObject cJo;
+			fc.toJson(cJo);
+			ja << cJo;
+		}
 	}
 
 	jo.insert(jsonKey(), ja);
@@ -276,7 +283,10 @@ void LabelManager::toJson(QJsonObject& jo) const {
 void LabelManager::add(const LabelInfo & label) {
 
 	if (contains(label)) {
-		qInfo() << label << "already exists - ignoring...";
+		
+		// tell the user if it's not a default label
+		if (label.id() < LabelInfo::label_end)
+			qInfo() << label << "already exists - ignoring...";
 		return;
 	}
 	else if (containsId(label)) {
@@ -357,6 +367,26 @@ QString LabelManager::jsonKey() {
 	return "Labels";
 }
 
+void LabelManager::draw(QPainter & p) const {
+
+	QPen oldPen = p.pen();
+	Rect r(10, 10, 20, 20);
+
+	for (const LabelInfo& li : mLookups) {
+		
+		p.setPen(li.visColor());
+		p.setBrush(li.visColor());
+		p.drawRect(r.toQRect());
+
+		// draw label
+		Vector2D tp = r.bottomRight();
+		tp += Vector2D(10, -5);
+		p.drawText(tp.toQPoint(), li.name());
+		r.move(Vector2D(0, 30));
+	}
+	p.setPen(oldPen);
+}
+
 // PixelLabel --------------------------------------------------------------------
 PixelLabel::PixelLabel(const QString & id) : BaseElement(id) {
 }
@@ -375,6 +405,127 @@ void PixelLabel::setTrueLabel(const LabelInfo & label) {
 
 LabelInfo PixelLabel::trueLabel() const {
 	return mTrueLabel;
+}
+
+// SuperPixelModel --------------------------------------------------------------------
+SuperPixelModel::SuperPixelModel(const LabelManager & labelManager, const cv::Ptr<cv::ml::StatModel>& model) {
+	mModel = model;
+	mManager = labelManager;
+}
+
+bool SuperPixelModel::isEmpty() const {
+	return !mModel || mManager.isEmpty();
+}
+
+cv::Ptr<cv::ml::StatModel> SuperPixelModel::model() const {
+	return mModel;
+}
+
+LabelManager SuperPixelModel::manager() const {
+	return mManager;
+}
+
+QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
+
+	Timer dt;
+
+	cv::Mat cFeatures = features;
+	IP::normalize(cFeatures);
+
+	QVector<PixelLabel> labelInfos;
+
+	for (int rIdx = 0; rIdx < cFeatures.rows; rIdx++) {
+		
+		const cv::Mat& cr = cFeatures.row(rIdx);
+		int labelId = qRound(mModel->predict(cr));
+		LabelInfo label = mManager.find(labelId);
+		assert(label.id() != LabelInfo::label_unknown);
+		
+		//qDebug() << label;
+		//qDebug() << "id: " << labelId;
+
+		PixelLabel pLabel;
+		pLabel.setLabel(label);
+		labelInfos << pLabel;
+	}
+	
+	qInfo() << cFeatures.rows << "features predicted in" << dt;
+
+	return labelInfos;
+}
+
+bool SuperPixelModel::write(const QString & filePath) const {
+
+	if (!mModel->isTrained())
+		qWarning() << "writing trainer that is NOT trained!";
+
+	// write all label data
+	QJsonObject jo;
+	mManager.toJson(jo);
+
+	// write RTrees classifier
+	toJson(jo);
+
+	int64 bw = Utils::writeJson(filePath, jo);
+
+	return bw > 0;	// if we wrote more than 0 bytes, it's ok
+}
+
+void SuperPixelModel::toJson(QJsonObject& jo) const {
+
+	cv::FileStorage fs(".xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
+	mModel->write(fs);
+	fs << "format" << 3;	// fixes bug #4402
+	std::string data = fs.releaseAndGetString();
+
+	QByteArray ba(data.c_str(), (int)data.length());
+	QString ba64Str = ba.toBase64();
+
+	jo.insert("SuperPixelModel", ba64Str);
+}
+
+QSharedPointer<SuperPixelModel> SuperPixelModel::read(const QString & filePath) {
+
+	Timer dt;
+	QSharedPointer<SuperPixelModel> sm = QSharedPointer<SuperPixelModel>::create();
+
+	QJsonObject jo = Utils::readJson(filePath);
+	sm->mManager = LabelManager::fromJson(jo);
+	sm->mModel = SuperPixelModel::readRTreesModel(jo);
+
+	if (!sm->mManager.isEmpty() && sm->mModel) {
+		qInfo() << "var count:" << sm->model()->getVarCount() << "is classifier" << sm->model()->isClassifier();
+		qInfo() << "SuperPixel classifier loaded from" << filePath << "in" << dt;
+	}
+	else
+		qCritical() << "Could not load model from" << filePath;
+
+	return sm;
+}
+
+cv::Ptr<cv::ml::RTrees> SuperPixelModel::readRTreesModel(QJsonObject & jo) {
+
+	// decode data
+	QByteArray ba = jo.value("SuperPixelModel").toVariant().toByteArray();
+	ba = QByteArray::fromBase64(ba);
+
+	if (!ba.length()) {
+		qCritical().noquote() << "cannot read model";
+		return cv::Ptr<cv::ml::RTrees>();
+	}
+
+	// read model from memory
+	cv::String dataStr(ba.data(), ba.length());
+	cv::FileStorage fs(dataStr, cv::FileStorage::READ | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
+	cv::FileNode root = fs.root();
+
+	if (root.empty()) {
+		qCritical().noquote() << "cannot read model from: " << ba;
+		return cv::Ptr<cv::ml::RTrees>();
+	}
+
+	cv::Ptr<cv::ml::RTrees> model = cv::Algorithm::read<cv::ml::RTrees>(root);
+	return model;
 }
 
 }

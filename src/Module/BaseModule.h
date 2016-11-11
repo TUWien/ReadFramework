@@ -54,9 +54,10 @@ class QSettings;
 
 namespace rdf {
 
-#define mDebug		qDebug().noquote() << debugName()
-#define mWarning	qWarning().noquote() << debugName()
-#define mInfo		qInfo().noquote() << debugName()
+#define mDebug		qDebug().noquote()		<< debugName()
+#define mInfo		qInfo().noquote()		<< debugName()
+#define mWarning	qWarning().noquote()	<< debugName()
+#define mCritical	qCritical().noquote()	<< debugName()
 
 class DllModuleExport ModuleConfig {
 

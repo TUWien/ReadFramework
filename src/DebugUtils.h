@@ -60,11 +60,15 @@ public:
 	void setClassifierPath(const QString& path);
 	QString classifierPath() const;
 
+	void setFeatureCachePath(const QString& path);
+	QString featureCachePath() const;
+
 protected:
 	QString mImagePath;
 	QString mXMLPath;
 	QString mOutputPath;
 	QString mClassifierPath;
+	QString mFeatureCachePath;
 };
 
 };

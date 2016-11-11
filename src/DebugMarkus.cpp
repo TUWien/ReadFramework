@@ -145,10 +145,10 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	testTrainer();
 	//testFeatureCollector(imgCv);
+	//testTrainer();
 	//pageSegmentation(imgCv);
-	//testLayout(imgCv);
+	testLayout(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -243,7 +243,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	parser.read(mConfig.xmlPath());
 
 	// test loading of label lookup
-	LabelManager lm = LabelManager::read(mConfig.classifierPath());
+	LabelManager lm = LabelManager::read(mConfig.featureCachePath());
 	qInfo().noquote() << lm.toString();
 
 	// compute super pixels
@@ -318,35 +318,24 @@ void LayoutTest::testTrainer() {
 
 	
 	Timer dt;
-	FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.classifierPath());
+	FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
 
+	// train classifier
 	SuperPixelTrainer spt(fcm);
 
 	if (!spt.compute())
 		qCritical() << "could not train data...";
 
-	spt.write("D:/read/configs/model.json");
+	spt.write(mConfig.classifierPath());
 	
-	
-	SuperPixelModel model = SuperPixelModel::read("D:/read/configs/model.json");
+	// read back the model
+	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
 
-	auto f = model.model();
+	auto f = model->model();
 	if (f->isTrained())
-		qDebug() << "fine for now...";
-	//cv::Ptr<cv::ml::RTrees> rt = dynamic_cast<cv::ml::RTrees*>(model.model());
-	//cv::Ptr<cv::ml::RTrees> rtt = spt.model();
-	//
-	//if (rt->isTrained() != rtt->isTrained())
-	//	qCritical() << "is trained is different...";
-	//else if (rt->getActiveVarCount() != rtt->getActiveVarCount())
-	//	qCritical() << "var count is different...";
-	//else
-	//	qInfo() << "congrats, I/O for models is working...";
-
-	//fcm.write("D:/read/configs/features-release-save.json");
-
-
-	qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;
+		qDebug() << "the classifier I loaded is trained...";
+	
+	//qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;
 }
 
 void LayoutTest::testLayout(const cv::Mat & src) const {
@@ -387,6 +376,24 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 	
+	// pixel labeling
+	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
+	//FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
+
+	//// train classifier
+	//SuperPixelTrainer spt(fcm);
+
+	//if (!spt.compute())
+	//	qCritical() << "could not train data...";
+
+	//auto model = spt.model();
+
+	SuperPixelClassifier spc(src, sp);
+	spc.setModel(model);
+
+	if (!spc.compute())
+		qWarning() << "could not classify SuperPixels";
+
 	//// find tab stops
 	//rdf::TabStopAnalysis tabStops(sp);
 	//if (!tabStops.compute())
@@ -411,10 +418,11 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
 	//rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-dbScan");
+	rImg = spc.draw(rImg);
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-classified");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 

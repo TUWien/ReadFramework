@@ -47,13 +47,6 @@
 #endif
 #endif
 
-namespace cv {
-	namespace ml {
-		class StatModel;
-		class RTrees;
-	}
-}
-
 // Qt defines
 
 namespace rdf {
@@ -97,25 +90,6 @@ private:
 	void syncSuperPixels(const std::vector<cv::KeyPoint>& keyPointsOld, const std::vector<cv::KeyPoint>& keyPointsNew);
 };
 
-class DllModuleExport SuperPixelModel {
-
-public:
-	SuperPixelModel(const LabelManager& labelManager = LabelManager(), const cv::Ptr<cv::ml::StatModel>& model = cv::Ptr<cv::ml::StatModel>());
-
-	bool isEmpty() const;
-
-	cv::Ptr<cv::ml::StatModel> model() const;
-
-	static SuperPixelModel read(const QString& filePath);
-
-protected:
-	cv::Ptr<cv::ml::StatModel> mModel;
-	LabelManager mManager;
-
-	static cv::Ptr<cv::ml::RTrees> readRTreesModel(QJsonObject& jo);
-};
-
-
 class DllModuleExport SuperPixelClassifierConfig : public ModuleConfig {
 
 public:
@@ -145,11 +119,12 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-	void read();
+	void setModel(const QSharedPointer<SuperPixelModel>& model);
 
 private:
 	cv::Mat mImg;
 	PixelSet mSet;
+	QSharedPointer<SuperPixelModel> mModel;
 
 	bool checkInput() const override;
 };
