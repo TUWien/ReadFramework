@@ -288,12 +288,15 @@ private:
 	double nfa(int n, int k, double p, double logNT);
 	double mAngle = std::numeric_limits<double>::infinity();		//filter parameter: angle of the snippet determined by the skew estimation (default: 0.0f)
 	bool isAligned(double thetaTest, double theta, double prec);
-	//bool isAligned(int x, int y, const cv::Mat& img, double theta);
-	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx, double thr, double prec);
+	bool isAligned(int x, int y, const cv::Mat& img, double theta, double prec);
+	double regionGrow(int x, int y, QVector<cv::Point> &region, int regionIdx, double thr, double prec); //thr is magnitude threshold
 	rdf::LineSegment region2Rect(QVector<cv::Point> &region, const cv::Mat& magImg, double angle, double prec, double p);
 	double getTheta(QVector<cv::Point> &region, const cv::Mat& magImg, double angle, double prec, double x, double y);
 	bool doubleEqual(double a, double b);
-	//bool refine(LineSegment& l, QVector<cv::Point> &region, const cv::Mat& magImg, const cv::Mat& radImg, double densityThr);
+	bool refine(LineSegment& l, QVector<cv::Point> &region, const cv::Mat& magImg, const cv::Mat& radImg, double densityThr, double thr, double prec, double p); //thr is magnitude threshold
+	bool reduceRegionRadius(LineSegment& l, QVector<cv::Point> &region, const cv::Mat& magImg, double prec, double p, double densityThr);
+	double rectImprove(rdf::LineSegment& l, cv::Mat& radImg, double logNT, double logEps);
+	double rectNfa(rdf::LineSegment& l, cv::Mat& radImg, double logNT);
 
 };
 

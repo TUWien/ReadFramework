@@ -277,16 +277,25 @@ public:
 	void setP(double p);
 	double length() const;
 	void setLength(double l);
-
+	Vector2D rectIterIni();
+	Vector2D rectIterInc();
+	bool rectIterEnd();
+	Vector2D getIterPt();
+	bool doubleEqual(double a, double b);
+	double interLow(double x, double x1, double y1, double x2, double y2);
+	double interHigh(double x, double x1, double y1, double x2, double y2);
 
 protected:
-	Line mLine;
-	Vector2D mCenter;
-	double mTheta = 0;
-	Vector2D mLineOrient;
-	double mPrec = 0;
-	double mP = 0;
+	Line mLine;				/* first and second point of the line segment and the width (thickness) */
+	Vector2D mCenter;		/* center of the rectangle */
+	double mTheta = 0;		/* angle */
+	Vector2D mLineOrient;	/* (dx,dy) is vector oriented as the line segment */
+	double mPrec = 0;		/* tolerance angle */
+	double mP = 0;			 /* probability of a point with angle within 'prec' */
 	double mLength = 0;
+
+	double vx[4], vy[4];	/* used for iterator */
+	double mX, mY, mYs, mYe;
 };
 
 class DllCoreExport Triangle {

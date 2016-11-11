@@ -968,8 +968,25 @@ namespace rdf {
 			/* construct rectangular approximation for the region */
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
-			//TODO refinement of region
+			/* Check if the rectangle exceeds the minimal density of
+			region points. If not, try to improve the region.
+			The rectangle will be rejected if the final one does
+			not fulfill the minimal density condition.
+			This is an addition to the original LSD algorithm published in
+			"LSD: A Fast Line Segment Detector with a False Detection Control"
+			by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
+			The original algorithm is obtained with density_th = 0.0.
+			*/
+			if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
+				continue;
+			}
+			
+			
 			//TODO improvement
+			/* compute NFA value */
+			double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
+			if (logNfa <= config()->logEps()) continue;
+
 
 			if (config()->scale() != 1.0) {
 				rdf::Line tmpLine = tmp.line();
@@ -985,8 +1002,7 @@ namespace rdf {
 
 		//TODO
 		//lineSegmentGrower
-
-		
+	
 
 		return true;
 	}
@@ -1246,49 +1262,254 @@ namespace rdf {
 		return (abs_diff / abs_max) <= (relativeErrorFactor * DBL_EPSILON);
 	}
 
-	//bool ReadLSD::refine(LineSegment & l, QVector<cv::Point>& region, const cv::Mat & magImg, const cv::Mat & radImg, double densityThr) {
+	bool ReadLSD::refine(LineSegment & l, QVector<cv::Point>& region, const cv::Mat & magImg, const cv::Mat & radImg, double densityThr, double thr, double prec, double p) {
 
-	//	double angle, ang_d, mean_angle, tau, density, xc, yc, ang_c, sum, s_sum;
-	//	int i, n;
+		double angle, ang_d, mean_angle, tau, density, ang_c, sum, s_sum;
+		int i, n;
+		double idx = 0;
 
-	//	if (region.size() >= 1) {
-	//		mWarning << "illegal region size in refine";
-	//		return false;
-	//	}
+		if (region.size() >= 1) {
+			mWarning << "illegal region size in refine";
+			return false;
+		}
 
-	//	density = (double)region.size() / (l.line().length() * l.line().thickness());
-	//	if (density <= densityThr) {
-	//		return true;
-	//	}
+		/* if the density criterion is satisfied there is nothing to do */
+		density = (double)region.size() / (l.line().length() * l.line().thickness());
+		if (density >= densityThr) {
+			return true;
+		}
 
-	//	xc = region[0].x;
-	//	yc = region[0].y;
+		/*------ First try: reduce angle tolerance ------*/
 
-	//	ang_c = radImg.at<double>(yc, xc);
-	//	sum = s_sum = 0.0;
-	//	n = 0;
-	//	for (i = 1; i<region.size(); i++)
-	//	{
-	//		used->data[region[i].x + region[i].y * used->xsize] = NOTUSED;
+		/* compute the new mean angle and tolerance */
+		Vector2D sC(region[0].x, region[0].y);
+		idx = mRegionImg.at<double>(region[0].y, region[0].x);
+		//xc = region[0].x;
+		//yc = region[0].y;
 
-	//		if (dist(xc, yc, (double)reg[i].x, (double)reg[i].y) < rec->width)
-	//		{
-	//			angle = angles->data[reg[i].x + reg[i].y * angles->xsize];
-	//			ang_d = angle_diff_signed(angle, ang_c);
-	//			sum += ang_d;
-	//			s_sum += ang_d * ang_d;
-	//			++n;
-	//		}
-	//	}
-	//	mean_angle = sum / (double)n;
-	//	tau = 2.0 * sqrt((s_sum - 2.0 * mean_angle * sum) / (double)n
-	//		+ mean_angle*mean_angle); /* 2 * standard deviation */
+		ang_c = radImg.at<double>((int)sC.y(), (int)sC.x());
+		sum = s_sum = 0.0;
+		n = 0;
+		for (i = 1; i<region.size(); i++) {
+			//why label as not used again?
+			//used->data[region[i].x + region[i].y * used->xsize] = NOTUSED;
+			mRegionImg.at<double>(region[i].y, region[i].x) = 0;
+			
+			Vector2D vecTmp(region[i].x, region[i].y);
+			
+			if (sqrt((sC.x() - vecTmp.x())*(sC.x() - vecTmp.x()) + (sC.y() - vecTmp.y())*(sC.y() - vecTmp.y())) < l.line().thickness()) {
+				angle = radImg.at<double>(region[i].y, region[i].x);
+				ang_d = rdf::Algorithms::signedAngleDiff(angle, ang_c);
+				sum += ang_d;
+				s_sum += ang_d * ang_d;
+				++n;
+			}
+
+		}
+		mean_angle = sum / (double)n;
+		tau = 2.0 * sqrt((s_sum - 2.0 * mean_angle * sum) / (double)n
+			+ mean_angle*mean_angle); /* 2 * standard deviation */
+
+		//thr = magnitude threshold
+		region.clear();
+		/* find a new region from the same starting point and new angle tolerance */
+		double a = regionGrow((int)sC.x(), (int)sC.y(), region, (int)idx, thr, tau);
+		l.setTheta(a);
+
+		/* if the region is too small, reject */
+		if (region.size() <= 2) 
+			return false;
+
+		/* re-compute region points density */
+		density = (double)region.size() / (l.line().length() * l.line().thickness());
+		
+		/*------ Second try: reduce region radius ------*/
+		if (density < densityThr) {
+			return reduceRegionRadius(l, region, magImg, prec, p, densityThr);
+		}
+
+		/* if this point is reached, the density criterion is satisfied */
+		return true;
+	}
+
+	bool ReadLSD::reduceRegionRadius(LineSegment & l, QVector<cv::Point>& region, const cv::Mat & magImg, double prec, double p, double densityThr)	{
+		
+		double density, rad1, rad2, rad;
+		int i;
+
+		/* compute region points density */
+		density = (double)region.size() / (l.line().length() * l.line().thickness());
+
+		/* if the density criterion is satisfied there is nothing to do */
+		if (density >= densityThr) return true;
+
+		/* compute region's radius */
+		Vector2D sC(region[0].x, region[0].y);
+
+		rad1 = sqrt((sC.x() - l.line().p1().x())*(sC.x() - l.line().p1().x()) + (sC.y() - l.line().p1().y())*(sC.y() - l.line().p1().y()));
+		rad2 = sqrt((sC.x() - l.line().p2().x())*(sC.x() - l.line().p2().x()) + (sC.y() - l.line().p2().y())*(sC.y() - l.line().p2().y()));
+		rad = rad1 > rad2 ? rad1 : rad2;
+
+		/* while the density criterion is not satisfied, remove farther pixels */
+		while (density < densityThr) {
+			rad *= 0.75f;	/* reduce region's radius to 75% of its value */
+
+			/* remove points from the region and update 'used' map */
+			for (i = 0; i < region.size(); i++) {
+
+				Vector2D vecTmp(region[i].x, region[i].y);
+
+				if (sqrt((sC.x() - vecTmp.x())*(sC.x() - vecTmp.x()) + (sC.y() - vecTmp.y())*(sC.y() - vecTmp.y())) > rad) {
+					/* point not kept, mark it as NOTUSED */
+					mRegionImg.at<double>(region[i].y, region[i].x) = 0;
+					region.erase(&region[i]);
+				}
+
+				/* reject if the region is too small.
+				2 is the minimal region size for 'region2rect' to work. */
+				if (region.size() < 2) return false;
 
 
+				/* re-compute rectangle */
+				l = region2Rect(region, magImg, l.theta(), prec, p);
 
+				/* re-compute region points density */
+				density = (double)region.size() / (l.line().length() * l.line().thickness());
+			}
+		}
 
-	//	return false;
-	//}
+		/* if this point is reached, the density criterion is satisfied */
+		return true;
+	}
+
+	/** Try some rectangles variations to improve NFA value. Only if the
+	rectangle is not meaningful (i.e., log_nfa <= log_eps). 	*/
+	double ReadLSD::rectImprove(rdf::LineSegment& l, cv::Mat& radImg, double logNT, double logEps)	{
+
+		double logNfa, logNfaNew;
+		double delta = 0.5;
+		double delta_2 = delta / 2.0;
+		int n;
+
+		logNfa = rectNfa(l, radImg,  logNT);
+		
+		if (logNfa > logEps)
+			return logNfa;
+
+		/* try finer precisions */
+		rdf::LineSegment tmp = l;
+
+		for (n = 0; n < 5; n++) {
+			tmp.setP(tmp.p() / 2.0);
+			tmp.setPrec(tmp.prec() * CV_PI);
+
+			logNfaNew = rectNfa(tmp, radImg, logNT);
+			if (logNfaNew > logNfa) {
+				logNfa = logNfaNew;
+				l = tmp;
+			}
+		}
+
+		if (logNfa > logEps) return logNfa;
+		
+		/* try to reduce width */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+
+		if (logNfa > logEps) return logNfa;
+
+		/* try to reduce one side of the rectangle */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				rdf::Vector2D fac(-tmp.lineOrientation().y()*delta_2, tmp.lineOrientation().x()*delta_2);
+
+				rdf::Vector2D p1 = tmp.line().p1() + fac;
+				rdf::Vector2D p2 = tmp.line().p2() + fac;
+				tmp.setLine(rdf::Line(p1, p2));
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+		if (logNfa > logEps) return logNfa;
+
+		/* try to reduce the other side of the rectangle */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				rdf::Vector2D fac(-tmp.lineOrientation().y()*delta_2, tmp.lineOrientation().x()*delta_2);
+
+				rdf::Vector2D p1 = tmp.line().p1() + fac;
+				rdf::Vector2D p2 = tmp.line().p2() + fac;
+				tmp.setLine(rdf::Line(p1, p2));
+				tmp.line().setThickness(tmp.line().thickness() - (float)delta);
+
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+		if (logNfa > logEps) return logNfa;
+
+		/* try even finer precisions */
+		tmp = l;
+		for (n = 0; n < 5; n++) {
+
+			if ((tmp.line().thickness() - delta) >= 0.5) {
+
+				
+				tmp.setP(tmp.p() / 2.0);
+				tmp.setPrec(tmp.prec() * CV_PI);
+				
+				logNfaNew = rectNfa(tmp, radImg, logNT);
+				if (logNfaNew > logNfa) {
+					logNfa = logNfaNew;
+					l = tmp;
+				}
+			}
+		}
+
+		return logNfa;
+	}
+
+	double ReadLSD::rectNfa(rdf::LineSegment & l, cv::Mat & radImg, double logNT) 	{
+		int pts = 0;
+		int alg = 0;
+
+		//rectangle iterator...
+		rdf::Vector2D pt;
+		for (pt = l.rectIterIni(); !l.rectIterEnd(); pt = l.rectIterInc()) {
+			if (pt.x() >= 0 && pt.y() >= 0 && pt.x() < radImg.cols && pt.y() < radImg.rows) {
+				pts++;
+				if (isAligned((int)pt.x(), (int)pt.y(), radImg, l.theta(), l.prec())) {
+					alg++;
+				}
+			}
+		}
+
+		return nfa(pts, alg, l.p(), logNT);
+	}
 
 
 	QSharedPointer<ReadLSDConfig> ReadLSD::config() const	{
@@ -1456,23 +1677,22 @@ namespace rdf {
 		return theta <= prec;
 	}
 
-	//bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta) {
-	//	double a;
+	bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta, double prec) {
+		double a;
 
-	//	/* check parameters */
-	//	if (img.empty())
-	//		mWarning << "isaligned: invalid image 'angles'.";
+		/* check parameters */
+		if (img.empty())
+			mWarning << "isaligned: invalid image 'angles'.";
 
-	//	if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
-	//		mWarning << "isaligned: (x,y) out of the image.";
-	//	if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+		if (x < 0 || y < 0 || x >= (int)img.cols || y >= (int)img.rows)
+			mWarning << "isaligned: (x,y) out of the image.";
+		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
 
-	//	/* angle at pixel (x,y) */
-	//	a = img.at<double>(y, x);
-	//	//a = angles->data[x + y * angles->xsize];
-
-	//	return isAligned(a, theta);
-	//}
+		/* angle at pixel (x,y) */
+		a = img.at<double>(y, x);
+		
+		return isAligned(a, theta, prec);
+	}
 
 
 	ReadLSDConfig::ReadLSDConfig()	{
