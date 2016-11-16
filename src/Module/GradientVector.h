@@ -85,6 +85,7 @@ public:
 	cv::Mat debugGaussImg();
 	cv::Mat magImg();
 	cv::Mat radImg();
+	cv::Mat mask();
 
 	void setAnchor(cv::Point a);
 	cv::Point anchor() const;

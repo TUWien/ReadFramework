@@ -91,10 +91,8 @@ namespace rdf {
 
 		if (mMask.empty()) {
 			mMask = cv::Mat(mSrcImg.size(), CV_8UC1, cv::Scalar(255));
+			//rdf::Image::imageInfo(mMask, "mMask");
 		}
-		double diffData[] = { 1, 0, -1 };
-		mDxKernel = cv::Mat(1, 3, CV_64F, &diffData);
-		mDyKernel = cv::Mat(3, 1, CV_64F, &diffData);
 
 		mConfig = QSharedPointer<GradientVectorConfig>::create();
 	}
@@ -109,6 +107,10 @@ namespace rdf {
 
 	cv::Mat GradientVector::radImg()	{
 		return mRadImg;
+	}
+
+	cv::Mat GradientVector::mask()	{
+		return mMask;
 	}
 
 	void GradientVector::setAnchor(cv::Point a)	{
@@ -180,37 +182,56 @@ namespace rdf {
 
 	void GradientVector::computeGradients()	{
 
+		//commented -> max and min after gauss
 		// get the minimum & maximum for de-normalization
 		minMaxLoc(mSrcImg, &mMinVal, &mMaxVal, 0, 0, mMask);
 
 		// compute gaussian image
 		if (mGaussImg.empty() && config()->sigma() > 1 / 6.0f) {
 
-			if (mSrcImg.depth() != CV_8U)
+			if (mSrcImg.depth() == CV_8U)
 				mSrcImg.convertTo(mGaussImg, CV_64F, 1 / 255.0);
 			else if (mSrcImg.depth() == CV_32F) {
 				mSrcImg.convertTo(mGaussImg, CV_64F, 1);
 			}
 			else
-				mGaussImg = mGaussImg.clone();
+				mGaussImg = mSrcImg.clone();
 
 			cv::normalize(mGaussImg, mGaussImg, 1, 0, cv::NORM_MINMAX);
 
 			int kSize = cvRound(cvCeil(config()->sigma() * 3) * 2 + 1);
 			GaussianBlur(mGaussImg, mGaussImg, cvSize(kSize, kSize), config()->sigma());
-		}
-		else if (mSrcImg.depth() == CV_8U)
+		} else if (mSrcImg.depth() == CV_8U) {
 			mSrcImg.convertTo(mGaussImg, CV_64F, 1 / 255.0);
-		else if (mSrcImg.depth() == CV_32F)
+			cv::normalize(mGaussImg, mGaussImg, 1, 0, cv::NORM_MINMAX);
+		} else if (mSrcImg.depth() == CV_32F) {
 			mSrcImg.convertTo(mGaussImg, CV_64F, 1);
-		else
+			cv::normalize(mGaussImg, mGaussImg, 1, 0, cv::NORM_MINMAX);
+		} else {
 			mGaussImg = mSrcImg.clone();
+			cv::normalize(mGaussImg, mGaussImg, 1, 0, cv::NORM_MINMAX);
+		}
+
+		//rdf::Image::imageInfo(mGaussImg, "mGaussImg");
 
 		//double diffData[] = { 1, 0, -1 };
 		//cv::Mat dxKernel = cv::Mat(1, 3, CV_64F, &diffData);
 		//cv::Mat dyKernel = cv::Mat(3, 1, CV_64F, &diffData);
+		double diffData[] = { 1, 0, -1 };
+		if (mDxKernel.empty())
+			mDxKernel = cv::Mat(1, 3, CV_64F, &diffData);
+		if (mDyKernel.empty())
+			mDyKernel = cv::Mat(3, 1, CV_64F, &diffData);
+
 		filter2D(mGaussImg, mDxImg, -1, mDxKernel, mAnchor);	// -1: dst.depth == src.depth
 		filter2D(mGaussImg, mDyImg, -1, mDyKernel, mAnchor);
+
+		
+		//rdf::Image::imageInfo(mDxKernel, "mDxKernel");
+		//rdf::Image::imageInfo(mDyKernel, "mDyKernel");
+
+		//rdf::Image::imageInfo(mDxImg, "mDxImg");
+		//rdf::Image::imageInfo(mDyImg, "mDyImg");
 
 		////TODO: implement old mask functions?
 		// remove borders if the mask was assigned
@@ -220,11 +241,12 @@ namespace rdf {
 			//	//	maskEr = DkIP::fastErodeImage(mask, cvRound(sigma*12.0f));
 			//	//else
 			//	//	maskEr = mask;
-			maskEr = rdf::Algorithms::erodeImage(mMask, (int)(config()->sigma()*12.0f));
+			maskEr = rdf::Algorithms::erodeImage(mMask, (int)(config()->sigma()*12.0f),rdf::Algorithms::SQUARE, 0);
 			//mDxImg = mDxImg.mul(mDxImg);
 			//mDyImg = mDyImg.mul(mDyImg);
 			rdf::Algorithms::mulMask(mDxImg, maskEr);
 			rdf::Algorithms::mulMask(mDyImg, maskEr);
+			mMask = maskEr;
 		}
 	}
 
@@ -235,6 +257,9 @@ namespace rdf {
 			mDxImg = mDxImg*(double)(mMaxVal - mMinVal);
 			mDyImg = mDyImg*(double)(mMaxVal - mMinVal);
 		}
+
+		//rdf::Image::imageInfo(mDxImg, "mDxImg");
+		//rdf::Image::imageInfo(mDyImg, "mDyImg");
 
 		// compute gradient magnitude
 		mMagImg = cv::Mat(mDxImg.size(), mDxImg.type());
@@ -262,6 +287,10 @@ namespace rdf {
 		}
 
 		cv::sqrt(mMagImg, mMagImg);
+		
+		//cv::normalize(mDxImg, mDxImg, 255, 0, cv::NORM_MINMAX);
+		//mDxImg.convertTo(mDxImg, CV_8U);
+		//Image::save(mDxImg, "D:\\tmp\\dbg.png");
 	}
 
 	void GradientVector::computeGradAngle()  {

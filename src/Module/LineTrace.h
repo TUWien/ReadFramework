@@ -262,7 +262,8 @@ public:
 
 	bool isEmpty() const override;
 	virtual bool compute() override;
-
+	cv::Mat magImg() const;
+	cv::Mat radImg() const;
 	QSharedPointer<ReadLSDConfig> config() const;
 
 	//void setMaxAspectRatio(float ratio);

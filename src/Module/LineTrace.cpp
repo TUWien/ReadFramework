@@ -916,6 +916,8 @@ namespace rdf {
 		mMagImg = gr.magImg();
 		mRadImg = gr.radImg();
 
+		return true;
+
 		/* Number of Tests - NT
 
 		The theoretical number of tests is Np.(XY)^(5/2)
@@ -1005,6 +1007,14 @@ namespace rdf {
 	
 
 		return true;
+	}
+
+	cv::Mat ReadLSD::magImg() const {
+		return mMagImg;
+	}
+
+	cv::Mat ReadLSD::radImg() const	{
+		return mRadImg;
 	}
 
 	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr, double prec)

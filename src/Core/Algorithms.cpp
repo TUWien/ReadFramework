@@ -577,7 +577,9 @@ void Algorithms::mulMask(cv::Mat& src, cv::Mat mask) {
 	// do nothing if the mask is empty
 	if (!mask.empty()) {
 
-		if (src.depth() == CV_32F && mask.depth() == CV_32F)
+		if (src.depth() == CV_64F && mask.depth() == CV_8U)
+			mulMaskIntern<double, unsigned char>(src, mask);
+		else if (src.depth() == CV_32F && mask.depth() == CV_32F)
 			mulMaskIntern<float, float>(src, mask);
 		else if (src.depth() == CV_32F && mask.depth() == CV_8U)
 			mulMaskIntern<float, unsigned char>(src, mask);

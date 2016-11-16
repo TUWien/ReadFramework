@@ -88,21 +88,27 @@ namespace rdf {
 		//std::vector<cv::Vec4i> hierarchy;
 		//cv::findContours(inputImg, contours, hierarchy, cv::RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
-		//rdf::BaseBinarizationSu testBin(inputImg);
-		//testBin.setPreFiltering(false);
-		//testBin.compute();
-		//cv::Mat binImg = testBin.binaryImage();
-		//rdf::LineTrace linetest(binImg);
-		//linetest.compute();
-		//Image::save(binImg, "D:\\tmp\\test.tif");
+
 
 		cv::Mat mask = Algorithms::estimateMask(inputG);
 		//Image::save(mask, "D:\\tmp\\mask.tif");
-
 		//Image::imageInfo(inputImg, "input");
 
 
-	
+		////test LSD
+		////-------------------------------------------------------------------------------------
+		//ReadLSD lsd(inputG);
+		////ReadLSD(inputG, mask);
+
+		//lsd.compute();
+
+		////end LSD
+		////-------------------------------------------------------------------------------------
+
+
+
+		//test registration
+		//-------------------------------------------------------------------------------------
 		QImage imgTemplate;
 		//TODO: change path to template
 		QString templPath = "D:\\projects\\READ\\formTest\\5117-087-0010.jpg";
@@ -127,14 +133,28 @@ namespace rdf {
 		//rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
 		//detLineImg = cmpImg.getMatchedLineImg(detLineImg);
 		detLineImg = cmpImg.getMatchedLineImg(imgTempl, cmpImg.offset());
+		//end test registration
+		//-------------------------------------------------------------------------------------		
 		
-		
-		
+		//test binary linetracer
+		//-------------------------------------------------------------------------------------
+
+		//rdf::BaseBinarizationSu testBin(inputImg);
+		//testBin.setPreFiltering(false);
+		//testBin.compute();
+		//cv::Mat binImg = testBin.binaryImage();
+		//rdf::LineTrace linetest(binImg);
+		//linetest.compute();
+		//Image::save(binImg, "D:\\tmp\\test.tif");
+
 		////cv::Mat lImg = linetest.lineImage();
 		////cv::Mat synLine = linetest.generatedLineImage();
 		////Image::save(synLine, "D:\\tmp\\synLine.tif");
+		//end test binary linetracer
+		//-------------------------------------------------------------------------------------
 
-
+		//test skew estimation
+		//-------------------------------------------------------------------------------------
 		//rdf::BaseSkewEstimation skewTest;
 
 		//skewTest.setImages(inputImg/*, mask*/);
