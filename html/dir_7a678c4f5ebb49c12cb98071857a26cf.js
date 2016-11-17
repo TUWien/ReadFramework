@@ -59,16 +59,17 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "SuperPixelClassification.h", "_super_pixel_classification_8h.html", [
       [ "SuperPixelFeatureConfig", "classrdf_1_1_super_pixel_feature_config.html", "classrdf_1_1_super_pixel_feature_config" ],
       [ "SuperPixelFeature", "classrdf_1_1_super_pixel_feature.html", "classrdf_1_1_super_pixel_feature" ],
-      [ "SuperPixelClassificationConfig", "classrdf_1_1_super_pixel_classification_config.html", "classrdf_1_1_super_pixel_classification_config" ],
-      [ "SuperPixelClassification", "classrdf_1_1_super_pixel_classification.html", "classrdf_1_1_super_pixel_classification" ]
+      [ "SuperPixelClassifierConfig", "classrdf_1_1_super_pixel_classifier_config.html", "classrdf_1_1_super_pixel_classifier_config" ],
+      [ "SuperPixelClassifier", "classrdf_1_1_super_pixel_classifier.html", "classrdf_1_1_super_pixel_classifier" ]
     ] ],
     [ "SuperPixelTrainer.cpp", "_super_pixel_trainer_8cpp.html", "_super_pixel_trainer_8cpp" ],
     [ "SuperPixelTrainer.h", "_super_pixel_trainer_8h.html", [
-      [ "SuperPixelLabelerConfig", "classrdf_1_1_super_pixel_labeler_config.html", "classrdf_1_1_super_pixel_labeler_config" ],
-      [ "LabelManager", "classrdf_1_1_label_manager.html", "classrdf_1_1_label_manager" ],
       [ "FeatureCollection", "classrdf_1_1_feature_collection.html", "classrdf_1_1_feature_collection" ],
       [ "FeatureCollectionManager", "classrdf_1_1_feature_collection_manager.html", "classrdf_1_1_feature_collection_manager" ],
-      [ "SuperPixelLabeler", "classrdf_1_1_super_pixel_labeler.html", "classrdf_1_1_super_pixel_labeler" ]
+      [ "SuperPixelLabelerConfig", "classrdf_1_1_super_pixel_labeler_config.html", "classrdf_1_1_super_pixel_labeler_config" ],
+      [ "SuperPixelLabeler", "classrdf_1_1_super_pixel_labeler.html", "classrdf_1_1_super_pixel_labeler" ],
+      [ "SuperPixelTrainerConfig", "classrdf_1_1_super_pixel_trainer_config.html", "classrdf_1_1_super_pixel_trainer_config" ],
+      [ "SuperPixelTrainer", "classrdf_1_1_super_pixel_trainer.html", "classrdf_1_1_super_pixel_trainer" ]
     ] ],
     [ "TabStopAnalysis.cpp", "_tab_stop_analysis_8cpp.html", null ],
     [ "TabStopAnalysis.h", "_tab_stop_analysis_8h.html", [

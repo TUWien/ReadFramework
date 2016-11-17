@@ -114,7 +114,10 @@ $(document).ready(function(){initNavTree('classrdf_1_1_label_manager.html','');}
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_super_pixel_trainer_8h_source.html">SuperPixelTrainer.h</a>&gt;</code></p>
+<p>This class manages all labels loaded. It can be used to compare <a class="el" href="classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) ">LabelInfo</a> objects, and load them.  
+ <a href="classrdf_1_1_label_manager.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_pixel_label_8h_source.html">PixelLabel.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -124,6 +127,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af51fbdc20745c04477edfa6c8b46409a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a3f987fa321611814ce6b11dd49d9f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a1a3f987fa321611814ce6b11dd49d9f6">size</a> () const </td></tr>
 <tr class="separator:a1a3f987fa321611814ce6b11dd49d9f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41fd212cf38d57180b28447286a8a512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a41fd212cf38d57180b28447286a8a512">toJson</a> (QJsonObject &amp;jo) const </td></tr>
+<tr class="separator:a41fd212cf38d57180b28447286a8a512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58cfdb545c539efabf0787e1671698bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a58cfdb545c539efabf0787e1671698bf">add</a> (const <a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a> &amp;label)</td></tr>
 <tr class="separator:a58cfdb545c539efabf0787e1671698bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af76aa983786529b39af92a6988c450ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#af76aa983786529b39af92a6988c450ec">contains</a> (const <a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a> &amp;label) const </td></tr>
@@ -138,18 +143,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3fa9c06f84f355245583769e30a5604b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72c9216da76c0185ea545884ff4f170e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a72c9216da76c0185ea545884ff4f170e">find</a> (int id) const </td></tr>
 <tr class="separator:a72c9216da76c0185ea545884ff4f170e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8abc114e691dbb7f9ff17914fbe9d164"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a8abc114e691dbb7f9ff17914fbe9d164">draw</a> (QPainter &amp;p) const </td></tr>
+<tr class="separator:a8abc114e691dbb7f9ff17914fbe9d164"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:afe17b5b0ff12e8b26a596aedc4237d6f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#afe17b5b0ff12e8b26a596aedc4237d6f">read</a> (const QString &amp;filePath)</td></tr>
 <tr class="separator:afe17b5b0ff12e8b26a596aedc4237d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1f84d357cc473b20a7215992ac09319"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#ab1f84d357cc473b20a7215992ac09319">fromJson</a> (const QJsonObject &amp;jo)</td></tr>
+<tr class="separator:ab1f84d357cc473b20a7215992ac09319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5646e2781c36b0a14c103e23cc14e481"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a5646e2781c36b0a14c103e23cc14e481">jsonKey</a> ()</td></tr>
+<tr class="separator:a5646e2781c36b0a14c103e23cc14e481"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a7869803c167c2083cb14c51cc2890c2e"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html#a7869803c167c2083cb14c51cc2890c2e">mLookups</a></td></tr>
 <tr class="separator:a7869803c167c2083cb14c51cc2890c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class manages all labels loaded. It can be used to compare <a class="el" href="classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) ">LabelInfo</a> objects, and load them. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a2a6e9108b65cd8dea452bded9bd64399"></a>
 <div class="memitem">
 <div class="memproto">
@@ -214,6 +227,22 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8abc114e691dbb7f9ff17914fbe9d164"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::LabelManager::draw </td>
+          <td>(</td>
+          <td class="paramtype">QPainter &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a36d7bc70f2fa36a505e12618ba9be7fa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -262,6 +291,30 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab1f84d357cc473b20a7215992ac09319"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a> rdf::LabelManager::fromJson </td>
+          <td>(</td>
+          <td class="paramtype">const QJsonObject &amp;&#160;</td>
+          <td class="paramname"><em>jo</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af51fbdc20745c04477edfa6c8b46409a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -273,6 +326,29 @@ Protected Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5646e2781c36b0a14c103e23cc14e481"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString rdf::LabelManager::jsonKey </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -309,6 +385,22 @@ Protected Attributes</h2></td></tr>
           <td class="memname">int rdf::LabelManager::size </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a41fd212cf38d57180b28447286a8a512"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::LabelManager::toJson </td>
+          <td>(</td>
+          <td class="paramtype">QJsonObject &amp;&#160;</td>
+          <td class="paramname"><em>jo</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -353,8 +445,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/Module/<a class="el" href="_super_pixel_trainer_8h_source.html">SuperPixelTrainer.h</a></li>
-<li>src/Module/<a class="el" href="_super_pixel_trainer_8cpp.html">SuperPixelTrainer.cpp</a></li>
+<li>src/Core/<a class="el" href="_pixel_label_8h_source.html">PixelLabel.h</a></li>
+<li>src/Core/<a class="el" href="_pixel_label_8cpp.html">PixelLabel.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

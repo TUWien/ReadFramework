@@ -39,7 +39,9 @@ var dir_a2f0e5642e47e7ed59fe0f0829eafb5f =
     [ "PixelLabel.cpp", "_pixel_label_8cpp.html", "_pixel_label_8cpp" ],
     [ "PixelLabel.h", "_pixel_label_8h.html", [
       [ "LabelInfo", "classrdf_1_1_label_info.html", "classrdf_1_1_label_info" ],
-      [ "PixelLabel", "classrdf_1_1_pixel_label.html", "classrdf_1_1_pixel_label" ]
+      [ "LabelManager", "classrdf_1_1_label_manager.html", "classrdf_1_1_label_manager" ],
+      [ "PixelLabel", "classrdf_1_1_pixel_label.html", "classrdf_1_1_pixel_label" ],
+      [ "SuperPixelModel", "classrdf_1_1_super_pixel_model.html", "classrdf_1_1_super_pixel_model" ]
     ] ],
     [ "PixelSet.cpp", "_pixel_set_8cpp.html", null ],
     [ "PixelSet.h", "_pixel_set_8h.html", [

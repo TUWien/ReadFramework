@@ -1,8 +1,8 @@
 <map id="src/Module/SuperPixel.h" name="src/Module/SuperPixel.h">
-<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="326,229,431,256"/>
-<area shape="rect" id="node6" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="151,155,227,181"/>
-<area shape="rect" id="node9" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="569,80,631,107"/>
-<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="704,229,851,256"/>
+<area shape="rect" id="node2" href="$_base_module_8h.html" title="BaseModule.h" alt="" coords="842,229,947,256"/>
+<area shape="rect" id="node6" href="$_shapes_8h.html" title="Shapes.h" alt="" coords="140,155,216,181"/>
+<area shape="rect" id="node9" href="$_pixel_8h.html" title="Pixel.h" alt="" coords="565,80,627,107"/>
+<area shape="rect" id="node10" href="$_base_image_element_8h.html" title="BaseImageElement.h" alt="" coords="576,229,723,256"/>
 <area shape="rect" id="node11" href="$_utils_8h.html" title="Utils.h" alt="" coords="242,229,301,256"/>
-<area shape="rect" id="node14" href="$_pixel_label_8h.html" title="PixelLabel.h" alt="" coords="453,155,547,181"/>
+<area shape="rect" id="node14" href="$_pixel_label_8h.html" title="PixelLabel.h" alt="" coords="449,155,543,181"/>
 </map>

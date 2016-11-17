@@ -11,6 +11,7 @@ var classrdf_1_1_gradient_vector =
     [ "debugGaussImg", "classrdf_1_1_gradient_vector.html#aa09b846c29fd16d111b49a0bc7a06f2b", null ],
     [ "isEmpty", "classrdf_1_1_gradient_vector.html#a40abcc7b2eede64dfb8787fc397227b3", null ],
     [ "magImg", "classrdf_1_1_gradient_vector.html#aa74e5cae1fe2b25a51ed1e813ac3c688", null ],
+    [ "mask", "classrdf_1_1_gradient_vector.html#a7e2fbcf221869c093bfdae15c4e187f9", null ],
     [ "maxVal", "classrdf_1_1_gradient_vector.html#a5c5f1b04538c120dd8355b7763bca814", null ],
     [ "minVal", "classrdf_1_1_gradient_vector.html#ae7d84c8855c0512feae094b19d36786f", null ],
     [ "radImg", "classrdf_1_1_gradient_vector.html#a30bc6d5037185415b0d1fd716a63d814", null ],

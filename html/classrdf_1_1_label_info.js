@@ -1,9 +1,9 @@
 var classrdf_1_1_label_info =
 [
     [ "DefaultLabels", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000", [
+      [ "label_unknown", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000ad05185512e8289dcdc37c268ef87f412", null ],
       [ "label_background", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000a9214c816747e66db809cd648b19d5c55", null ],
       [ "label_ignore", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000a1d618323832d40cbe1e00f2ee3daf749", null ],
-      [ "label_unknown", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000ad05185512e8289dcdc37c268ef87f412", null ],
       [ "label_end", "classrdf_1_1_label_info.html#a703dac257086ea6a1892197a02e2c000a7f7bcd97426d05bd554bf82eb38afc69", null ]
     ] ],
     [ "LabelInfo", "classrdf_1_1_label_info.html#a33559eda39e36459ee4a49e10863c1b6", null ],

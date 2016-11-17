@@ -107,6 +107,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_feature_collection_manage
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrdf_1_1_feature_collection_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -114,12 +115,17 @@ $(document).ready(function(){initNavTree('classrdf_1_1_feature_collection_manage
 </div><!--header-->
 <div class="contents">
 
+<p>Manages FeatureCollections. Hence, each label (e.g. printed text) is stored here along with it's features retrieved from groundtruthed images.  
+ <a href="classrdf_1_1_feature_collection_manager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_super_pixel_trainer_8h_source.html">SuperPixelTrainer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9e002d693cbe1ebbf209370d3378748"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#ad9e002d693cbe1ebbf209370d3378748">FeatureCollectionManager</a> (const cv::Mat &amp;descriptors=cv::Mat(), const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;set=<a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a>())</td></tr>
 <tr class="separator:ad9e002d693cbe1ebbf209370d3378748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af413acf148644aca5bfa685b1be909a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#af413acf148644aca5bfa685b1be909a7">isEmpty</a> () const </td></tr>
+<tr class="separator:af413acf148644aca5bfa685b1be909a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61a140cf855aab62c13c7207f106c12a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a61a140cf855aab62c13c7207f106c12a">write</a> (const QString &amp;filePath) const </td></tr>
 <tr class="separator:a61a140cf855aab62c13c7207f106c12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cd7e91f6d55a34c6cf35e7c2dfd7896"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a3cd7e91f6d55a34c6cf35e7c2dfd7896">add</a> (const <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &amp;<a class="el" href="classrdf_1_1_feature_collection_manager.html#a41c315179e561ee696a886673e0cd3b6">collection</a>)</td></tr>
@@ -131,20 +137,37 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a71da3a223fa76f48da7f8f85da44198e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41c315179e561ee696a886673e0cd3b6"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a41c315179e561ee696a886673e0cd3b6">collection</a> () const </td></tr>
 <tr class="separator:a41c315179e561ee696a886673e0cd3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d88b06b15cb1369caee01ceba57d038"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a8d88b06b15cb1369caee01ceba57d038">numFeatures</a> () const </td></tr>
+<tr class="separator:a8d88b06b15cb1369caee01ceba57d038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1cefae1ac5a0e551c3c191c9f99bd1d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#ad1cefae1ac5a0e551c3c191c9f99bd1d">toString</a> () const </td></tr>
 <tr class="separator:ad1cefae1ac5a0e551c3c191c9f99bd1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec927c4ad0af4a069ddea8614225baed"><td class="memItemLeft" align="right" valign="top">cv::Ptr&lt; cv::ml::TrainData &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#aec927c4ad0af4a069ddea8614225baed">toCvTrainData</a> (int maxSamples=-1) const </td></tr>
+<tr class="separator:aec927c4ad0af4a069ddea8614225baed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b122cba74459ca73e020c091738557c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a0b122cba74459ca73e020c091738557c">toLabelManager</a> () const </td></tr>
+<tr class="separator:a0b122cba74459ca73e020c091738557c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a97a55de5fc7c40e29444108b12ff0b1d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a97a55de5fc7c40e29444108b12ff0b1d">read</a> (const QString &amp;filePath)</td></tr>
 <tr class="separator:a97a55de5fc7c40e29444108b12ff0b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9b97aa3a401275173700fdd39fbf1b5a"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#a9b97aa3a401275173700fdd39fbf1b5a">allFeatures</a> () const </td></tr>
+<tr class="memdesc:a9b97aa3a401275173700fdd39fbf1b5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges all features for training.  <a href="#a9b97aa3a401275173700fdd39fbf1b5a">More...</a><br/></td></tr>
+<tr class="separator:a9b97aa3a401275173700fdd39fbf1b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecc5c09bdc061da13de503fe3dbc352d"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#aecc5c09bdc061da13de503fe3dbc352d">allLabels</a> () const </td></tr>
+<tr class="memdesc:aecc5c09bdc061da13de503fe3dbc352d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the labels in a OpenCV compilant format.  <a href="#aecc5c09bdc061da13de503fe3dbc352d">More...</a><br/></td></tr>
+<tr class="separator:aecc5c09bdc061da13de503fe3dbc352d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ac53f7fb10481e1ada370a2fc0ac9c18d"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html#ac53f7fb10481e1ada370a2fc0ac9c18d">mCollection</a></td></tr>
 <tr class="separator:ac53f7fb10481e1ada370a2fc0ac9c18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manages FeatureCollections. Hence, each label (e.g. printed text) is stored here along with it's features retrieved from groundtruthed images. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad9e002d693cbe1ebbf209370d3378748"></a>
 <div class="memitem">
 <div class="memproto">
@@ -188,12 +211,79 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9b97aa3a401275173700fdd39fbf1b5a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::FeatureCollectionManager::allFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Merges all features for training. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aecc5c09bdc061da13de503fe3dbc352d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::FeatureCollectionManager::allLabels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the labels in a OpenCV compilant format. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a41c315179e561ee696a886673e0cd3b6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">QVector&lt; <a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a> &gt; rdf::FeatureCollectionManager::collection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af413acf148644aca5bfa685b1be909a7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::FeatureCollectionManager::isEmpty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -253,6 +343,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8d88b06b15cb1369caee01ceba57d038"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int rdf::FeatureCollectionManager::numFeatures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a97a55de5fc7c40e29444108b12ff0b1d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -273,6 +378,37 @@ Protected Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aec927c4ad0af4a069ddea8614225baed"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Ptr&lt; cv::ml::TrainData &gt; rdf::FeatureCollectionManager::toCvTrainData </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxSamples</em> = <code>-1</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b122cba74459ca73e020c091738557c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a> rdf::FeatureCollectionManager::toLabelManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

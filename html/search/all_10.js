@@ -51,7 +51,7 @@ var searchData=
   ['pixeltabstop',['PixelTabStop',['../classrdf_1_1_pixel_tab_stop.html',1,'rdf']]],
   ['pointat',['pointAt',['../classrdf_1_1_triangle.html#ab0ae4a2e4d3fdd9172e4a8cddcb9897e',1,'rdf::Triangle']]],
   ['pointset',['pointSet',['../classrdf_1_1_pixel_set.html#a244539d40b36ed50cadc6dac5d0b69ae',1,'rdf::PixelSet']]],
-  ['polygon',['polygon',['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_pixel_set.html#aaf5a8a6cd415c9090ef57e4574a9ce23',1,'rdf::PixelSet::polygon()'],['../classrdf_1_1_base_line.html#a6191883b205770cb7400c4c54d28538c',1,'rdf::BaseLine::polygon()'],['../classrdf_1_1_polygon.html#a34f7546f749983a4dae29eeb002bd68c',1,'rdf::Polygon::polygon() const '],['../classrdf_1_1_polygon.html#a18b70b6a77725d6842e3f7fd7047ee47',1,'rdf::Polygon::Polygon(const QPolygonF &amp;polygon=QPolygonF())']]],
+  ['polygon',['Polygon',['../classrdf_1_1_polygon.html#a18b70b6a77725d6842e3f7fd7047ee47',1,'rdf::Polygon::Polygon()'],['../classrdf_1_1_region.html#a1ebf22d644b2e800a06639e807be484c',1,'rdf::Region::polygon()'],['../classrdf_1_1_pixel_set.html#aaf5a8a6cd415c9090ef57e4574a9ce23',1,'rdf::PixelSet::polygon()'],['../classrdf_1_1_base_line.html#a6191883b205770cb7400c4c54d28538c',1,'rdf::BaseLine::polygon()'],['../classrdf_1_1_polygon.html#a34f7546f749983a4dae29eeb002bd68c',1,'rdf::Polygon::polygon()']]],
   ['polygon',['Polygon',['../classrdf_1_1_polygon.html',1,'rdf']]],
   ['polytostring',['polyToString',['../classrdf_1_1_converter.html#acab5ac0a7d0c58db70a8f2d2b15c5cd4',1,'rdf::Converter']]],
   ['prec',['prec',['../classrdf_1_1_line_segment.html#ab874d979ee550a18e4129efa9ffffae7',1,'rdf::LineSegment']]],

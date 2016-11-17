@@ -1,6 +1,7 @@
 var searchData=
 [
   ['feasiblesites',['feasibleSites',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#ad0e1fb1e544346703e5944d210ae45b1',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;']]],
+  ['featurecachepath',['featureCachePath',['../classrdf_1_1_debug_config.html#ae777d8c2dcbf705157b02e4d8eb40b65',1,'rdf::DebugConfig']]],
   ['featurecollection',['FeatureCollection',['../classrdf_1_1_feature_collection.html#a314a5f5f08d0cbe45586f21088b83651',1,'rdf::FeatureCollection']]],
   ['featurecollectionmanager',['FeatureCollectionManager',['../classrdf_1_1_feature_collection_manager.html#ad9e002d693cbe1ebbf209370d3378748',1,'rdf::FeatureCollectionManager']]],
   ['featurefilepath',['featureFilePath',['../classrdf_1_1_super_pixel_labeler_config.html#aaf928e8d859527cbf0dd9868895f7d69',1,'rdf::SuperPixelLabelerConfig']]],
@@ -27,7 +28,7 @@ var searchData=
   ['fromcvpoints',['fromCvPoints',['../classrdf_1_1_polygon.html#a8eb0976d6cc87c1776aa42e8f8bb1506',1,'rdf::Polygon::fromCvPoints(const std::vector&lt; cv::Point2d &gt; &amp;pts)'],['../classrdf_1_1_polygon.html#ad95b2221789187d3fd5a1585435efb10',1,'rdf::Polygon::fromCvPoints(const std::vector&lt; cv::Point2f &gt; &amp;pts)'],['../classrdf_1_1_polygon.html#a93f766911df0aaed5610ecf4cb3ed1b3',1,'rdf::Polygon::fromCvPoints(const std::vector&lt; cv::Point &gt; &amp;pts)']]],
   ['fromdata',['fromData',['../classrdf_1_1_ellipse.html#a8c486e9ea7638ab5ba08b183934f5163',1,'rdf::Ellipse']]],
   ['fromedges',['fromEdges',['../classrdf_1_1_pixel_set.html#a56b7e064412c514d1c1fae1ff1cae809',1,'rdf::PixelSet']]],
-  ['fromjson',['fromJson',['../classrdf_1_1_label_info.html#a73a613ad34892675ca17d1dbed3fcc6e',1,'rdf::LabelInfo']]],
+  ['fromjson',['fromJson',['../classrdf_1_1_label_info.html#a73a613ad34892675ca17d1dbed3fcc6e',1,'rdf::LabelInfo::fromJson()'],['../classrdf_1_1_label_manager.html#ab1f84d357cc473b20a7215992ac09319',1,'rdf::LabelManager::fromJson()']]],
   ['frompoints',['fromPoints',['../classrdf_1_1_rect.html#a8135a38c117d0354e1b0098c5bb074c6',1,'rdf::Rect']]],
   ['fromstring',['fromString',['../classrdf_1_1_label_info.html#ab737b8d1f7df6ac421eb6273c7f05cfd',1,'rdf::LabelInfo']]]
 ];

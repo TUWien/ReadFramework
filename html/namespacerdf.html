@@ -177,7 +177,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_info.html">LabelInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is used for mapping classes (e.g. handwriting, decoration)  <a href="classrdf_1_1_label_info.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class manages all labels loaded. It can be used to compare <a class="el" href="classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) ">LabelInfo</a> objects, and load them.  <a href="classrdf_1_1_label_manager.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_label.html">PixelLabel</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_model.html">SuperPixelModel</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_pixel_connector.html">PixelConnector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class <a class="el" href="classrdf_1_1_pixel_connector.html" title="Abstract class PixelConnector. This is the base class for all pixel connecting classes which implemen...">PixelConnector</a>. This is the base class for all pixel connecting classes which implement different algorithms for connecting super pixels.  <a href="classrdf_1_1_pixel_connector.html#details">More...</a><br/></td></tr>
@@ -315,19 +320,26 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_feature.html">SuperPixelFeature</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification_config.html">SuperPixelClassificationConfig</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html">SuperPixelClassifierConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html">SuperPixelClassification</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_labeler_config.html">SuperPixelLabelerConfig</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_label_manager.html">LabelManager</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier.html">SuperPixelClassifier</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection.html">FeatureCollection</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classrdf_1_1_feature_collection.html" title="FeatureCollection maps one LabelInfo to its features. In addition it handles the I/O using Json...">FeatureCollection</a> maps one <a class="el" href="classrdf_1_1_label_info.html" title="This class is used for mapping classes (e.g. handwriting, decoration) ">LabelInfo</a> to its features. In addition it handles the I/O using Json.  <a href="classrdf_1_1_feature_collection.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages FeatureCollections. Hence, each label (e.g. printed text) is stored here along with it's features retrieved from groundtruthed images.  <a href="classrdf_1_1_feature_collection_manager.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_labeler_config.html">SuperPixelLabelerConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class configures the feature collection process. It controls I/O paths for feature labels and feature cache files and the normalization process through the read settings file.  <a href="classrdf_1_1_super_pixel_labeler_config.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_labeler.html">SuperPixelLabeler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts GT information to label images. This class is used to assign a GT label to each <a class="el" href="classrdf_1_1_super_pixel.html">SuperPixel</a> computed in an image.  <a href="classrdf_1_1_super_pixel_labeler.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer_config.html">SuperPixelTrainerConfig</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html">SuperPixelTrainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts GT information to label images. This class is used to assign a GT label to each <a class="el" href="classrdf_1_1_super_pixel.html">SuperPixel</a> computed in an image.  <a href="classrdf_1_1_super_pixel_trainer.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_tab_stop_config.html">TabStopConfig</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>

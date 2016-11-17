@@ -1,7 +1,7 @@
 var searchData=
 [
   ['absanglediff',['absAngleDiff',['../classrdf_1_1_algorithms.html#a00b15f1e6a8a0063d06dc7dd79ca8bf9',1,'rdf::Algorithms']]],
-  ['add',['add',['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet::add()'],['../classrdf_1_1_label_manager.html#a58cfdb545c539efabf0787e1671698bf',1,'rdf::LabelManager::add()'],['../classrdf_1_1_feature_collection_manager.html#a3cd7e91f6d55a34c6cf35e7c2dfd7896',1,'rdf::FeatureCollectionManager::add()']]],
+  ['add',['add',['../classrdf_1_1_label_manager.html#a58cfdb545c539efabf0787e1671698bf',1,'rdf::LabelManager::add()'],['../classrdf_1_1_pixel_set.html#a047e25da8550f7762083417b5b93c8c8',1,'rdf::PixelSet::add()'],['../classrdf_1_1_feature_collection_manager.html#a3cd7e91f6d55a34c6cf35e7c2dfd7896',1,'rdf::FeatureCollectionManager::add()']]],
   ['add_5fconstant',['add_constant',['../class_energy.html#a8f9f4a82cb09a00f8975c2e2f5df8d76',1,'Energy']]],
   ['add_5fedge',['add_edge',['../class_graph.html#a11e1464f7a3a7b6b61da38684008f74a',1,'Graph']]],
   ['add_5fnode',['add_node',['../class_graph.html#a7a00b3b8101ad2b749364893a1dd951f',1,'Graph']]],
@@ -20,6 +20,8 @@ var searchData=
   ['addtermweights',['addTermWeights',['../classrd3_1_1_g_c_graph.html#a3489fa31d42ba75203df884bfe237ea1',1,'rd3::GCGraph']]],
   ['adduniquechild',['addUniqueChild',['../classrdf_1_1_region.html#a46222a0588b22efd13fe48d493f84396',1,'rdf::Region']]],
   ['addvtx',['addVtx',['../classrd3_1_1_g_c_graph.html#a0e649f65a741c7c0a29459d78e430961',1,'rd3::GCGraph']]],
+  ['allfeatures',['allFeatures',['../classrdf_1_1_feature_collection_manager.html#a9b97aa3a401275173700fdd39fbf1b5a',1,'rdf::FeatureCollectionManager']]],
+  ['alllabels',['allLabels',['../classrdf_1_1_feature_collection_manager.html#aecc5c09bdc061da13de503fe3dbc352d',1,'rdf::FeatureCollectionManager']]],
   ['allregions',['allRegions',['../classrdf_1_1_region.html#afda47aa74c831d3f63b97b541a1ea9d9',1,'rdf::Region']]],
   ['alpha_5fbeta_5fswap',['alpha_beta_swap',['../class_g_coptimization.html#a57f0d069940664c15590b24227d3b0d1',1,'GCoptimization::alpha_beta_swap(LabelID alpha_label, LabelID beta_label)'],['../class_g_coptimization.html#a00515a02e277e6d517aec4d60493e4f1',1,'GCoptimization::alpha_beta_swap(LabelID alpha_label, LabelID beta_label, SiteID *alphaSites, SiteID alpha_size, SiteID *betaSites, SiteID beta_size)']]],
   ['alpha_5fexpansion',['alpha_expansion',['../class_g_coptimization.html#a66d6a83f1df5aae78bdd0c494fdba058',1,'GCoptimization']]],

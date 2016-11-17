@@ -1,6 +1,6 @@
 var annotated =
 [
-    [ "cv", "namespacecv.html", null ],
+    [ "cv", "namespacecv.html", "namespacecv" ],
     [ "rd3", "namespacerd3.html", "namespacerd3" ],
     [ "rdf", "namespacerdf.html", "namespacerdf" ],
     [ "Block", "class_block.html", "class_block" ],

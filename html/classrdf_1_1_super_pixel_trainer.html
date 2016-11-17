@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>ReadFramework: rdf::SuperPixelClassification Class Reference</title>
+<title>ReadFramework: rdf::SuperPixelTrainer Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,7 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('classrdf_1_1_super_pixel_classification.html','');});
+$(document).ready(function(){initNavTree('classrdf_1_1_super_pixel_trainer.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,46 +106,53 @@ $(document).ready(function(){initNavTree('classrdf_1_1_super_pixel_classificatio
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="classrdf_1_1_super_pixel_classification-members.html">List of all members</a>  </div>
+<a href="classrdf_1_1_super_pixel_trainer-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">rdf::SuperPixelClassification Class Reference</div>  </div>
+<div class="title">rdf::SuperPixelTrainer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_super_pixel_classification_8h_source.html">SuperPixelClassification.h</a>&gt;</code></p>
+<p>Converts GT information to label images. This class is used to assign a GT label to each <a class="el" href="classrdf_1_1_super_pixel.html">SuperPixel</a> computed in an image.  
+ <a href="classrdf_1_1_super_pixel_trainer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_super_pixel_trainer_8h_source.html">SuperPixelTrainer.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for rdf::SuperPixelClassification:</div>
+Inheritance diagram for rdf::SuperPixelTrainer:</div>
 <div class="dyncontent">
-<div class="center"><img src="classrdf_1_1_super_pixel_classification__inherit__graph.png" border="0" usemap="#rdf_1_1_super_pixel_classification_inherit__map" alt="Inheritance graph"/></div>
-<map name="rdf_1_1_super_pixel_classification_inherit__map" id="rdf_1_1_super_pixel_classification_inherit__map">
-<area shape="rect" id="node2" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module..." alt="" coords="55,5,141,32"/></map>
+<div class="center"><img src="classrdf_1_1_super_pixel_trainer__inherit__graph.png" border="0" usemap="#rdf_1_1_super_pixel_trainer_inherit__map" alt="Inheritance graph"/></div>
+<map name="rdf_1_1_super_pixel_trainer_inherit__map" id="rdf_1_1_super_pixel_trainer_inherit__map">
+<area shape="rect" id="node2" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module..." alt="" coords="35,5,121,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for rdf::SuperPixelClassification:</div>
+Collaboration diagram for rdf::SuperPixelTrainer:</div>
 <div class="dyncontent">
-<div class="center"><img src="classrdf_1_1_super_pixel_classification__coll__graph.png" border="0" usemap="#rdf_1_1_super_pixel_classification_coll__map" alt="Collaboration graph"/></div>
-<map name="rdf_1_1_super_pixel_classification_coll__map" id="rdf_1_1_super_pixel_classification_coll__map">
-<area shape="rect" id="node2" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module..." alt="" coords="55,5,141,32"/></map>
+<div class="center"><img src="classrdf_1_1_super_pixel_trainer__coll__graph.png" border="0" usemap="#rdf_1_1_super_pixel_trainer_coll__map" alt="Collaboration graph"/></div>
+<map name="rdf_1_1_super_pixel_trainer_coll__map" id="rdf_1_1_super_pixel_trainer_coll__map">
+<area shape="rect" id="node2" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module..." alt="" coords="35,5,121,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abea958cfdf80d6e3a6f0e723bbc86796"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#abea958cfdf80d6e3a6f0e723bbc86796">SuperPixelClassification</a> (const cv::Mat &amp;img, const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;set)</td></tr>
-<tr class="separator:abea958cfdf80d6e3a6f0e723bbc86796"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc77f659d3db94648d6b1a64e00cc888"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#afc77f659d3db94648d6b1a64e00cc888">isEmpty</a> () const override</td></tr>
-<tr class="memdesc:afc77f659d3db94648d6b1a64e00cc888"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed.  <a href="#afc77f659d3db94648d6b1a64e00cc888">More...</a><br/></td></tr>
-<tr class="separator:afc77f659d3db94648d6b1a64e00cc888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf398663bbf2d26dc2a3d66ce35aba0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#acf398663bbf2d26dc2a3d66ce35aba0a">compute</a> () override</td></tr>
-<tr class="memdesc:acf398663bbf2d26dc2a3d66ce35aba0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#acf398663bbf2d26dc2a3d66ce35aba0a">More...</a><br/></td></tr>
-<tr class="separator:acf398663bbf2d26dc2a3d66ce35aba0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a976725a533f3fd168be25ed2d712264d"><td class="memItemLeft" align="right" valign="top">QSharedPointer<br class="typebreak"/>
-&lt; <a class="el" href="classrdf_1_1_super_pixel_classification_config.html">SuperPixelClassificationConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#a976725a533f3fd168be25ed2d712264d">config</a> () const </td></tr>
-<tr class="separator:a976725a533f3fd168be25ed2d712264d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2002100eef5e3f2851bb2438e4a91926"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#a2002100eef5e3f2851bb2438e4a91926">draw</a> (const cv::Mat &amp;img) const </td></tr>
-<tr class="separator:a2002100eef5e3f2851bb2438e4a91926"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c87cd78dd3e1b3c4bd4f0efcce841e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classification.html#a9c87cd78dd3e1b3c4bd4f0efcce841e2">toString</a> () const override</td></tr>
-<tr class="memdesc:a9c87cd78dd3e1b3c4bd4f0efcce841e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#a9c87cd78dd3e1b3c4bd4f0efcce841e2">More...</a><br/></td></tr>
-<tr class="separator:a9c87cd78dd3e1b3c4bd4f0efcce841e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a577f05f63624919c8f98a74903037537"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a577f05f63624919c8f98a74903037537">SuperPixelTrainer</a> (const <a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a> &amp;fcm)</td></tr>
+<tr class="separator:a577f05f63624919c8f98a74903037537"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6a5b752dcf4bcd6fbd7868c6a83198c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#aa6a5b752dcf4bcd6fbd7868c6a83198c">isEmpty</a> () const override</td></tr>
+<tr class="memdesc:aa6a5b752dcf4bcd6fbd7868c6a83198c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the module was initialized with the default constructor. Note, if empty is true, nothing can be computed.  <a href="#aa6a5b752dcf4bcd6fbd7868c6a83198c">More...</a><br/></td></tr>
+<tr class="separator:aa6a5b752dcf4bcd6fbd7868c6a83198c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b41d8d6778da85d9dc8f6ed9c20dfaf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a1b41d8d6778da85d9dc8f6ed9c20dfaf">compute</a> () override</td></tr>
+<tr class="memdesc:a1b41d8d6778da85d9dc8f6ed9c20dfaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#a1b41d8d6778da85d9dc8f6ed9c20dfaf">More...</a><br/></td></tr>
+<tr class="separator:a1b41d8d6778da85d9dc8f6ed9c20dfaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d14ffad5dde23c382012a29187cfb88"><td class="memItemLeft" align="right" valign="top">QSharedPointer<br class="typebreak"/>
+&lt; <a class="el" href="classrdf_1_1_super_pixel_trainer_config.html">SuperPixelTrainerConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a4d14ffad5dde23c382012a29187cfb88">config</a> () const </td></tr>
+<tr class="separator:a4d14ffad5dde23c382012a29187cfb88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f44a0e9b4cef59e985ed87f47761713"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a0f44a0e9b4cef59e985ed87f47761713">draw</a> (const cv::Mat &amp;img) const </td></tr>
+<tr class="separator:a0f44a0e9b4cef59e985ed87f47761713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a9e5245ee03f6d6e2b6a872b3367475"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a9a9e5245ee03f6d6e2b6a872b3367475">toString</a> () const override</td></tr>
+<tr class="memdesc:a9a9e5245ee03f6d6e2b6a872b3367475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the module's parameters and results to a string.  <a href="#a9a9e5245ee03f6d6e2b6a872b3367475">More...</a><br/></td></tr>
+<tr class="separator:a9a9e5245ee03f6d6e2b6a872b3367475"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8f60a58160b36b4b97c9ab23afc388"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a5c8f60a58160b36b4b97c9ab23afc388">write</a> (const QString &amp;filePath) const </td></tr>
+<tr class="separator:a5c8f60a58160b36b4b97c9ab23afc388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77a683745de1dcd59d63aa2ed8128d7f"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_super_pixel_model.html">SuperPixelModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_trainer.html#a77a683745de1dcd59d63aa2ed8128d7f">model</a> () const </td></tr>
+<tr class="separator:a77a683745de1dcd59d63aa2ed8128d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_module.html">rdf::Module</a></td></tr>
 <tr class="memitem:a2c7864d8a5bfbbcd7a62d311cde6cf99 inherit pub_methods_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#a2c7864d8a5bfbbcd7a62d311cde6cf99">Module</a> ()</td></tr>
 <tr class="memdesc:a2c7864d8a5bfbbcd7a62d311cde6cf99 inherit pub_methods_classrdf_1_1_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor Initializes a new instance of the <a class="el" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module...">Module</a> class.  <a href="#a2c7864d8a5bfbbcd7a62d311cde6cf99">More...</a><br/></td></tr>
@@ -167,27 +174,20 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:ab95cf35f9dff6adbc42e37284d6a2e6c inherit pro_attribs_classrdf_1_1_module"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_module_config.html">ModuleConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module.html#ab95cf35f9dff6adbc42e37284d6a2e6c">mConfig</a></td></tr>
 <tr class="separator:ab95cf35f9dff6adbc42e37284d6a2e6c inherit pro_attribs_classrdf_1_1_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="abea958cfdf80d6e3a6f0e723bbc86796"></a>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Converts GT information to label images. This class is used to assign a GT label to each <a class="el" href="classrdf_1_1_super_pixel.html">SuperPixel</a> computed in an image. </p>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classrdf_1_1_module.html" title="This is the base class for all modules. It provides all functions which are implemented by the module...">Module</a></dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a577f05f63624919c8f98a74903037537"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">rdf::SuperPixelClassification::SuperPixelClassification </td>
+          <td class="memname">rdf::SuperPixelTrainer::SuperPixelTrainer </td>
           <td>(</td>
-          <td class="paramtype">const cv::Mat &amp;&#160;</td>
-          <td class="paramname"><em>img</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const <a class="el" href="classrdf_1_1_feature_collection_manager.html">FeatureCollectionManager</a> &amp;&#160;</td>
+          <td class="paramname"><em>fcm</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classrdf_1_1_pixel_set.html">PixelSet</a> &amp;&#160;</td>
-          <td class="paramname"><em>set</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -195,7 +195,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="acf398663bbf2d26dc2a3d66ce35aba0a"></a>
+<a class="anchor" id="a1b41d8d6778da85d9dc8f6ed9c20dfaf"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -203,7 +203,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool rdf::SuperPixelClassification::compute </td>
+          <td class="memname">bool rdf::SuperPixelTrainer::compute </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -223,12 +223,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a976725a533f3fd168be25ed2d712264d"></a>
+<a class="anchor" id="a4d14ffad5dde23c382012a29187cfb88"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_super_pixel_classification_config.html">SuperPixelClassificationConfig</a> &gt; rdf::SuperPixelClassification::config </td>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_super_pixel_trainer_config.html">SuperPixelTrainerConfig</a> &gt; rdf::SuperPixelTrainer::config </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -238,12 +238,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2002100eef5e3f2851bb2438e4a91926"></a>
+<a class="anchor" id="a0f44a0e9b4cef59e985ed87f47761713"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cv::Mat rdf::SuperPixelClassification::draw </td>
+          <td class="memname">cv::Mat rdf::SuperPixelTrainer::draw </td>
           <td>(</td>
           <td class="paramtype">const cv::Mat &amp;&#160;</td>
           <td class="paramname"><em>img</em></td><td>)</td>
@@ -254,7 +254,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afc77f659d3db94648d6b1a64e00cc888"></a>
+<a class="anchor" id="aa6a5b752dcf4bcd6fbd7868c6a83198c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -262,7 +262,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool rdf::SuperPixelClassification::isEmpty </td>
+          <td class="memname">bool rdf::SuperPixelTrainer::isEmpty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -282,7 +282,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9c87cd78dd3e1b3c4bd4f0efcce841e2"></a>
+<a class="anchor" id="a77a683745de1dcd59d63aa2ed8128d7f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSharedPointer&lt; <a class="el" href="classrdf_1_1_super_pixel_model.html">SuperPixelModel</a> &gt; rdf::SuperPixelTrainer::model </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9a9e5245ee03f6d6e2b6a872b3367475"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -290,7 +305,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString rdf::SuperPixelClassification::toString </td>
+          <td class="memname">QString rdf::SuperPixelTrainer::toString </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -310,16 +325,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5c8f60a58160b36b4b97c9ab23afc388"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool rdf::SuperPixelTrainer::write </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/Module/<a class="el" href="_super_pixel_classification_8h_source.html">SuperPixelClassification.h</a></li>
-<li>src/Module/<a class="el" href="_super_pixel_classification_8cpp.html">SuperPixelClassification.cpp</a></li>
+<li>src/Module/<a class="el" href="_super_pixel_trainer_8h_source.html">SuperPixelTrainer.h</a></li>
+<li>src/Module/<a class="el" href="_super_pixel_trainer_8cpp.html">SuperPixelTrainer.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacerdf.html">rdf</a></li><li class="navelem"><a class="el" href="classrdf_1_1_super_pixel_classification.html">SuperPixelClassification</a></li>
+    <li class="navelem"><a class="el" href="namespacerdf.html">rdf</a></li><li class="navelem"><a class="el" href="classrdf_1_1_super_pixel_trainer.html">SuperPixelTrainer</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

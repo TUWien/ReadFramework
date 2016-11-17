@@ -8,10 +8,11 @@
 <area shape="rect" id="node8" href="$classrdf_1_1_page_segmentation_config.html" title="rdf::PageSegmentationConfig" alt="" coords="186,309,379,336"/>
 <area shape="rect" id="node9" href="$classrdf_1_1_read_l_s_d_config.html" title="rdf::ReadLSDConfig" alt="" coords="213,360,353,387"/>
 <area shape="rect" id="node10" href="$classrdf_1_1_simple_binarization_config.html" title="rdf::SimpleBinarizationConfig" alt="" coords="187,411,378,437"/>
-<area shape="rect" id="node11" href="$classrdf_1_1_super_pixel_classification_config.html" title="rdf::SuperPixelClassification\lConfig" alt="" coords="189,462,376,503"/>
+<area shape="rect" id="node11" href="$classrdf_1_1_super_pixel_classifier_config.html" title="rdf::SuperPixelClassifier\lConfig" alt="" coords="201,462,364,503"/>
 <area shape="rect" id="node12" href="$classrdf_1_1_super_pixel_config.html" title="rdf::SuperPixelConfig" alt="" coords="209,528,356,555"/>
 <area shape="rect" id="node13" href="$classrdf_1_1_super_pixel_feature_config.html" title="rdf::SuperPixelFeatureConfig" alt="" coords="187,579,378,605"/>
-<area shape="rect" id="node14" href="$classrdf_1_1_super_pixel_labeler_config.html" title="rdf::SuperPixelLabelerConfig" alt="" coords="189,629,377,656"/>
-<area shape="rect" id="node15" href="$classrdf_1_1_tab_stop_config.html" title="rdf::TabStopConfig" alt="" coords="217,680,349,707"/>
-<area shape="rect" id="node16" href="$classrdf_1_1_text_line_config.html" title="rdf::TextLineConfig" alt="" coords="216,731,349,757"/>
+<area shape="rect" id="node14" href="$classrdf_1_1_super_pixel_labeler_config.html" title="This class configures the feature collection process. It controls I/O paths for feature labels and fe..." alt="" coords="189,629,377,656"/>
+<area shape="rect" id="node15" href="$classrdf_1_1_super_pixel_trainer_config.html" title="rdf::SuperPixelTrainerConfig" alt="" coords="189,680,376,707"/>
+<area shape="rect" id="node16" href="$classrdf_1_1_tab_stop_config.html" title="rdf::TabStopConfig" alt="" coords="217,731,349,757"/>
+<area shape="rect" id="node17" href="$classrdf_1_1_text_line_config.html" title="rdf::TextLineConfig" alt="" coords="216,781,349,808"/>
 </map>

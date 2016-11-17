@@ -140,6 +140,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab6548717c2117e6b3b0fb1b9f90793fb"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#ab6548717c2117e6b3b0fb1b9f90793fb">compute</a> () override</td></tr>
 <tr class="memdesc:ab6548717c2117e6b3b0fb1b9f90793fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the algorithm implemented by the module.  <a href="#ab6548717c2117e6b3b0fb1b9f90793fb">More...</a><br/></td></tr>
 <tr class="separator:ab6548717c2117e6b3b0fb1b9f90793fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e905c84e306c42d0545a3aef831d585"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#a6e905c84e306c42d0545a3aef831d585">magImg</a> () const </td></tr>
+<tr class="separator:a6e905c84e306c42d0545a3aef831d585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b50707153dfefb1e78d375e83f6ae4c"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#a1b50707153dfefb1e78d375e83f6ae4c">radImg</a> () const </td></tr>
+<tr class="separator:a1b50707153dfefb1e78d375e83f6ae4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef2def37a22d33843a634c25645fd30f"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classrdf_1_1_line_segment.html">rdf::LineSegment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#aef2def37a22d33843a634c25645fd30f">lines</a> () const </td></tr>
+<tr class="separator:aef2def37a22d33843a634c25645fd30f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a857aa33cf9487fc1f1fa1150bc2e65b5"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classrdf_1_1_read_l_s_d_config.html">ReadLSDConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#a857aa33cf9487fc1f1fa1150bc2e65b5">config</a> () const </td></tr>
 <tr class="separator:a857aa33cf9487fc1f1fa1150bc2e65b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8c5e04475116206c5dbec8c75d32cc5"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_read_l_s_d.html#ae8c5e04475116206c5dbec8c75d32cc5">toString</a> () const override</td></tr>
@@ -270,6 +276,13 @@ Protected Attributes</h2></td></tr>
 
 <p>Runs the algorithm implemented by the module. </p>
 <dl class="section return"><dt>Returns</dt><dd>True on success.</dd></dl>
+<ul>
+<li>Check if the rectangle exceeds the minimal density of</li>
+</ul>
+<p>TODO improvement</p>
+<ul>
+<li>compute NFA value </li>
+</ul>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#abf92c24692d1fafafe156960ac107e7c">rdf::Module</a>.</p>
 
@@ -315,6 +328,51 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the module was initialized.</dd></dl>
 
 <p>Implements <a class="el" href="classrdf_1_1_module.html#a85ba7a0e15f79287047b6fe58399078f">rdf::Module</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aef2def37a22d33843a634c25645fd30f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt; <a class="el" href="classrdf_1_1_line_segment.html">rdf::LineSegment</a> &gt; rdf::ReadLSD::lines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6e905c84e306c42d0545a3aef831d585"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::ReadLSD::magImg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1b50707153dfefb1e78d375e83f6ae4c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat rdf::ReadLSD::radImg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
