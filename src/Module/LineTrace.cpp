@@ -886,9 +886,10 @@ namespace rdf {
 
 	bool ReadLSD::compute()
 	{
-		/* angle tolerance */
+		/* angle tolerance in rad*/
 		double prec = CV_PI * config()->angleThr() / 180.0;
 		if (prec < 0.0) mWarning << "isaligned: 'prec' must be positive.";
+		/* angle tolerance (norm [0 1])*/
 		double p = config()->angleThr() / 180.0;
 		double rho = config()->quant() / sin(prec); /* gradient magnitude threshold */
 		double logNT = 0;
@@ -916,8 +917,6 @@ namespace rdf {
 		mMagImg = gr.magImg();
 		mRadImg = gr.radImg();
 
-		return true;
-
 		/* Number of Tests - NT
 
 		The theoretical number of tests is Np.(XY)^(5/2)
@@ -943,9 +942,6 @@ namespace rdf {
 		//the original version of LSD implementation
 		cv::sortIdx(rM, idxMat, CV_SORT_EVERY_ROW + CV_SORT_DESCENDING);
 
-
-
-		
 		mRegionImg = cv::Mat(scaledImg.size(), CV_64FC1);
 		mRegionImg.setTo(0);
 		QVector<cv::Point> region;
@@ -958,7 +954,7 @@ namespace rdf {
 			int x = ptrIdx[colIdx] % mMagImg.cols;
 
 			double angle = regionGrow(x, y, region, regionIdx, rho, prec);
-			qDebug() << "new angle is: " << angle;
+			//qDebug() << "new angle is: " << angle;
 
 			if (region.size() < minRegSize) {
 				region.clear();
@@ -968,26 +964,28 @@ namespace rdf {
 			}
 
 			/* construct rectangular approximation for the region */
+			qDebug() << "region size is: " << region.size();
+			qDebug() << "adding a new line..." << angle;
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
-			/* Check if the rectangle exceeds the minimal density of
-			region points. If not, try to improve the region.
-			The rectangle will be rejected if the final one does
-			not fulfill the minimal density condition.
-			This is an addition to the original LSD algorithm published in
-			"LSD: A Fast Line Segment Detector with a False Detection Control"
-			by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
-			The original algorithm is obtained with density_th = 0.0.
-			*/
-			if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
-				continue;
-			}
-			
-			
-			//TODO improvement
-			/* compute NFA value */
-			double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
-			if (logNfa <= config()->logEps()) continue;
+			///* Check if the rectangle exceeds the minimal density of
+			//region points. If not, try to improve the region.
+			//The rectangle will be rejected if the final one does
+			//not fulfill the minimal density condition.
+			//This is an addition to the original LSD algorithm published in
+			//"LSD: A Fast Line Segment Detector with a False Detection Control"
+			//by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
+			//The original algorithm is obtained with density_th = 0.0.
+			//*/
+			//if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
+			//	continue;
+			//}
+			//
+			//
+			////TODO improvement
+			///* compute NFA value */
+			//double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
+			//if (logNfa <= config()->logEps()) continue;
 
 
 			if (config()->scale() != 1.0) {
@@ -1017,6 +1015,10 @@ namespace rdf {
 		return mRadImg;
 	}
 
+	QVector<rdf::LineSegment> ReadLSD::lines() const {
+		return mLineSegments;
+	}
+
 	double ReadLSD::regionGrow(int x, int y, QVector<cv::Point>& region, int regionIdx, double thr, double prec)
 	{
 		region.push_back(cv::Point(x, y));
@@ -1030,20 +1032,31 @@ namespace rdf {
 			double sumdx = cos(angle);
 			double sumdy = sin(angle);
 
-			for (int xx = xt - 1; xx <= xt + 1; xx++ ) {
-				for (int yy = yt - 1; yy <= yt + 1; yy++) {
-					double regIdx = mRegionImg.at<double>(yy, xx);
-					double magnitude = mMagImg.at<double>(yy, xx);
-					double cmpAngle = mRadImg.at<double>(yy, xx);
+			for (int xx = xt-1; xx < xt + 1; xx++ ) {
+				for (int yy = yt-1; yy < yt + 1; yy++) {
+					//if coordinates are inside image get regionIdx and magnitude/angle					
+					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows) {
+						double regIdx = mRegionImg.at<double>(yy, xx);
+						double magnitude = mMagImg.at<double>(yy, xx);
+						double cmpAngle = mRadImg.at<double>(yy, xx);
+						//qDebug() << "coordinates inside...";
+						//if (regIdx == 0) qDebug() << "regionIdx is not used";
+						//if (magnitude > thr) qDebug() << "magnitude is greater";
+						//qDebug() << "magnitude: " << magnitude << " thr: " << thr;
+						//if (isAligned(cmpAngle, angle, prec)) qDebug() << "point is aligned";
+						//qDebug() << "-------------------------------------------------";
 
-					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows &&
-						regIdx == 0 && isAligned(cmpAngle,angle, prec) && magnitude < thr) {
+						//check regionIdx (0 == unused and if point is aligned)
+						if (regIdx == 0 && isAligned(cmpAngle, angle, prec) && magnitude > thr) {
 
-						mRegionImg.at<double>(yy, xx) = (double)regionIdx;
-						region.push_back(cv::Point(xx, yy));
-						sumdx += cos(mMagImg.at<double>(yy, xx));
-						sumdy += sin(mMagImg.at<double>(yy, xx));
-						angle = atan2(sumdy, sumdx);
+							mRegionImg.at<double>(yy, xx) = (double)regionIdx;
+							region.push_back(cv::Point(xx, yy));
+							//qDebug() << "point added";
+
+							sumdx += cos(mMagImg.at<double>(yy, xx));
+							sumdy += sin(mMagImg.at<double>(yy, xx));
+							angle = atan2(sumdy, sumdx);
+						}
 					}
 				}
 			}
@@ -1278,7 +1291,7 @@ namespace rdf {
 		int i, n;
 		double idx = 0;
 
-		if (region.size() >= 1) {
+		if (region.size() <= 1) {
 			mWarning << "illegal region size in refine";
 			return false;
 		}

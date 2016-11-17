@@ -249,7 +249,14 @@ private:
 								//	Suggested value : 0.0
 	double mDensityThr = 0.7f;	//Minimal proportion of 'supporting' points in a rectangle.	Suggested value : 0.7
 	int mNBins = 1024;			//Number of bins used in the pseudo-ordering of gradient modulus. Suggested value : 1024
-	double mQuant = 1.0f;
+	double mQuant = 2.0f / 255.0f; //Bound to the quantization error on the gradient norm.
+									//Example: if gray levels are quantized to integer steps,
+									//the gradient(computed by finite differences) error
+									//due to quantization will be bounded by 2.0, as the
+									//worst case is when the error are 1 and -1, that
+									//gives an error of 2.0.
+									//Suggested value : 2.0
+									//normalize -> 2.0/255.0
 
 
 };
@@ -264,6 +271,7 @@ public:
 	virtual bool compute() override;
 	cv::Mat magImg() const;
 	cv::Mat radImg() const;
+	QVector<rdf::LineSegment> lines() const;
 	QSharedPointer<ReadLSDConfig> config() const;
 
 	//void setMaxAspectRatio(float ratio);
