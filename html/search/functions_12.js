@@ -113,6 +113,7 @@ var searchData=
   ['setp',['setP',['../classrdf_1_1_line_segment.html#a3672662f6924ea54ee38b9f153ed29ca',1,'rdf::LineSegment']]],
   ['setpage',['setPage',['../classrdf_1_1_page_xml_parser.html#a37885ad33bcb55ec98d621415797cc4f',1,'rdf::PageXmlParser']]],
   ['setpen',['setPen',['../classrdf_1_1_drawer.html#a2191cdb9fd6952e49c865e64bd798ae8',1,'rdf::Drawer::setPen()'],['../classrdf_1_1_region_type_config.html#af6e2fb1a662a5263c43c983c27c765ed',1,'rdf::RegionTypeConfig::setPen()']]],
+  ['setperpendangle',['setPerpendAngle',['../classrdf_1_1_gradient_vector_config.html#a57d9301d2eed305ad8efff568389ff03',1,'rdf::GradientVectorConfig']]],
   ['setpolygon',['setPolygon',['../classrdf_1_1_region.html#a9e64582aa1aa804388689fc6b348f399',1,'rdf::Region::setPolygon()'],['../classrdf_1_1_base_line.html#a70e190888abe050542a76ca416aaabde',1,'rdf::BaseLine::setPolygon()'],['../classrdf_1_1_polygon.html#a55b7eb1fdc276fd315277d16f8f7f580',1,'rdf::Polygon::setPolygon()']]],
   ['setposition',['setPosition',['../classrdf_1_1_patch.html#a7a2d45f4ffe51ef66ce5a0f958acedc9',1,'rdf::Patch']]],
   ['setprec',['setPrec',['../classrdf_1_1_line_segment.html#aa5d08621fb9c6ba0e057ec562cb43d3f',1,'rdf::LineSegment']]],

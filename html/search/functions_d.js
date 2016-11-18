@@ -6,7 +6,7 @@ var searchData=
   ['niter',['nIter',['../classrdf_1_1_base_skew_estimation_config.html#a3d384c20cbc24aa215fbd8e2e7947287',1,'rdf::BaseSkewEstimationConfig']]],
   ['normalize',['normalize',['../classrdf_1_1_i_p.html#a69ce4c12c5b5c200e500da82c3213b58',1,'rdf::IP::normalize()'],['../classrdf_1_1_feature_collection_manager.html#a71da3a223fa76f48da7f8f85da44198e',1,'rdf::FeatureCollectionManager::normalize()']]],
   ['normalvec',['normalVec',['../classrdf_1_1_vector2_d.html#a53f91b76db0436495f85b89fd6cbe16d',1,'rdf::Vector2D']]],
-  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#aee91b31592b2993718600744ba2a24e4',1,'rdf::Algorithms']]],
+  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#abe87469e82fc6f6efbb3fa3e2a59b6c5',1,'rdf::Algorithms']]],
   ['normgrad',['normGrad',['../classrdf_1_1_gradient_vector_config.html#a734942ce35eb3b836de741eafbd5f25f',1,'rdf::GradientVectorConfig']]],
   ['numdescriptors',['numDescriptors',['../classrdf_1_1_feature_collection.html#aedc2a6aca1c675a025659512fda9906c',1,'rdf::FeatureCollection']]],
   ['numfeatures',['numFeatures',['../classrdf_1_1_feature_collection_manager.html#a8d88b06b15cb1369caee01ceba57d038',1,'rdf::FeatureCollectionManager']]],

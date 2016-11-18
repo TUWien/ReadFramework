@@ -60,11 +60,13 @@ var NAVTREEINDEX3 =
 "classrdf_1_1_gradient_vector.html#af1713194e18fadf32120e0c940c70688":[2,0,2,72,15],
 "classrdf_1_1_gradient_vector_config.html":[2,0,2,71],
 "classrdf_1_1_gradient_vector_config.html#a0913536817fc2945c3544f8808731980":[2,0,2,71,0],
-"classrdf_1_1_gradient_vector_config.html#a36ffdfc6e3c3c7948e552468981509c1":[2,0,2,71,2],
-"classrdf_1_1_gradient_vector_config.html#a3a7557a51f207b731f5e4d2bc2346fc7":[2,0,2,71,4],
-"classrdf_1_1_gradient_vector_config.html#a412a109778673eb833b7eb35b46e28a0":[2,0,2,71,5],
+"classrdf_1_1_gradient_vector_config.html#a31a3a04f289fa08d685eeeb5c527253a":[2,0,2,71,2],
+"classrdf_1_1_gradient_vector_config.html#a36ffdfc6e3c3c7948e552468981509c1":[2,0,2,71,3],
+"classrdf_1_1_gradient_vector_config.html#a3a7557a51f207b731f5e4d2bc2346fc7":[2,0,2,71,6],
+"classrdf_1_1_gradient_vector_config.html#a412a109778673eb833b7eb35b46e28a0":[2,0,2,71,7],
+"classrdf_1_1_gradient_vector_config.html#a57d9301d2eed305ad8efff568389ff03":[2,0,2,71,4],
 "classrdf_1_1_gradient_vector_config.html#a734942ce35eb3b836de741eafbd5f25f":[2,0,2,71,1],
-"classrdf_1_1_gradient_vector_config.html#a73f3a2c7bb8011dac4a97d1b5f13c769":[2,0,2,71,3],
+"classrdf_1_1_gradient_vector_config.html#a73f3a2c7bb8011dac4a97d1b5f13c769":[2,0,2,71,5],
 "classrdf_1_1_graph_cut_orientation.html":[2,0,2,86],
 "classrdf_1_1_graph_cut_orientation.html#a3ffd82d14ecd4f095f1c7f5783e960a9":[2,0,2,86,2],
 "classrdf_1_1_graph_cut_orientation.html#a4eb97fec251c4d6f263a2b131523c2a3":[2,0,2,86,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "classrdf_1_1_line_trace_config.html#a1164a332e33688ccf5c6f8ec7d22ce91":[2,0,2,73,29],
 "classrdf_1_1_line_trace_config.html#a2441d8ede42448a510860659373ea680":[2,0,2,73,17],
 "classrdf_1_1_line_trace_config.html#a2c0389ba860da02abef6ac52947fff97":[2,0,2,73,12],
-"classrdf_1_1_line_trace_config.html#a2eff72afd5ae51fee62c40bec41c05c4":[2,0,2,73,18],
-"classrdf_1_1_line_trace_config.html#a30a2475ad8bbf994534097cf243a1b08":[2,0,2,73,2],
-"classrdf_1_1_line_trace_config.html#a33c87207edfded18cecae06dc15e0f0e":[2,0,2,73,8]
+"classrdf_1_1_line_trace_config.html#a2eff72afd5ae51fee62c40bec41c05c4":[2,0,2,73,18]
 };

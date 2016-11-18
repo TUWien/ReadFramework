@@ -1,5 +1,7 @@
 var NAVTREEINDEX7 =
 {
+"classrdf_1_1_vector2_d.html#add5d5b3acbea3a54c7db93704c3d1011":[2,0,2,41,19],
+"classrdf_1_1_vector2_d.html#ae28dac900758d136841d5d88ab82c72f":[2,0,2,41,33],
 "classrdf_1_1_vector2_d.html#aea51da9bad49b149b7bf8158e1f16688":[2,0,2,41,5],
 "classrdf_1_1_vector2_d.html#aec6294bf2d849a86806cd374c4b0bac6":[2,0,2,41,18],
 "classrdf_1_1_vector2_d.html#af019c53c88351ab0a3a6de08245f016f":[2,0,2,41,21],
@@ -17,8 +19,8 @@ var NAVTREEINDEX7 =
 "energy_8h.html":[3,0,0,0,0,1],
 "energy_8h_source.html":[3,0,0,0,0,1],
 "files.html":[3,0],
-"functions.html":[2,3,0,0],
 "functions.html":[2,3,0],
+"functions.html":[2,3,0,0],
 "functions_b.html":[2,3,0,1],
 "functions_c.html":[2,3,0,2],
 "functions_d.html":[2,3,0,3],
@@ -71,8 +73,8 @@ var NAVTREEINDEX7 =
 "functions_type.html":[2,3,3],
 "functions_u.html":[2,3,0,20],
 "functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2],
 "functions_vars.html":[2,3,2,0],
+"functions_vars.html":[2,3,2],
 "functions_vars_b.html":[2,3,2,1],
 "functions_vars_c.html":[2,3,2,2],
 "functions_vars_h.html":[2,3,2,3],

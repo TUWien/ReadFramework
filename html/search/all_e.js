@@ -9,7 +9,7 @@ var searchData=
   ['noise',['noise',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da4a11e3ebfec9d0bd1e6505c98cf0d5d2',1,'rdf::DBScanPixel']]],
   ['normalize',['normalize',['../classrdf_1_1_i_p.html#a69ce4c12c5b5c200e500da82c3213b58',1,'rdf::IP::normalize()'],['../classrdf_1_1_feature_collection_manager.html#a71da3a223fa76f48da7f8f85da44198e',1,'rdf::FeatureCollectionManager::normalize()']]],
   ['normalvec',['normalVec',['../classrdf_1_1_vector2_d.html#a53f91b76db0436495f85b89fd6cbe16d',1,'rdf::Vector2D']]],
-  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#aee91b31592b2993718600744ba2a24e4',1,'rdf::Algorithms']]],
+  ['normanglerad',['normAngleRad',['../classrdf_1_1_algorithms.html#abe87469e82fc6f6efbb3fa3e2a59b6c5',1,'rdf::Algorithms']]],
   ['normgrad',['normGrad',['../classrdf_1_1_gradient_vector_config.html#a734942ce35eb3b836de741eafbd5f25f',1,'rdf::GradientVectorConfig']]],
   ['not_5fvisited',['not_visited',['../classrdf_1_1_d_b_scan_pixel.html#a284682ca62219a12177183080b37303da1ba74791be64a026cbbac3ba702c7760',1,'rdf::DBScanPixel']]],
   ['numdescriptors',['numDescriptors',['../classrdf_1_1_feature_collection.html#aedc2a6aca1c675a025659512fda9906c',1,'rdf::FeatureCollection']]],
