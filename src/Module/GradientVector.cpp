@@ -66,23 +66,32 @@ namespace rdf {
 		mNormGrad = n;
 	}
 
+	bool GradientVectorConfig::perpendAngle() const	{
+		return mPerpendAngle;
+	}
+
+	void GradientVectorConfig::setPerpendAngle(bool p) 	{
+		mPerpendAngle = p;
+	}
+
 
 
 	QString GradientVectorConfig::toString() const {
 		QString msg;
 		msg += "  mSigma: " + QString::number(mSigma);
-
 		return msg;
 	}
 
 	void GradientVectorConfig::load(const QSettings & settings) {
 		mSigma = settings.value("sigma", mSigma).toDouble();
 		mNormGrad = settings.value("normGrad", mNormGrad).toBool();
+		mPerpendAngle = settings.value("perpendAngle", mPerpendAngle).toBool();
 	}
 
 	void GradientVectorConfig::save(QSettings & settings) const {
 		settings.setValue("sigma", mSigma);
 		settings.setValue("normGrad", mNormGrad);
+		settings.setValue("perpendAngle", mPerpendAngle);
 	}
 
 	GradientVector::GradientVector(const cv::Mat & img, const cv::Mat & mask)	{
@@ -306,6 +315,8 @@ namespace rdf {
 			rows = 1;
 		}
 
+		if (config()->perpendAngle()) qDebug() << "WARNING: gradient orientation is perpendicular according setting...";
+
 		for (int rIdx = 0; rIdx < rows; rIdx++) {
 
 			const double* dxPtr = mDxImg.ptr<double>(rIdx);
@@ -313,9 +324,18 @@ namespace rdf {
 			double* radPtr = mRadImg.ptr<double>(rIdx);
 
 			for (int cIdx = 0; cIdx < cols; cIdx++) {
-				angle = atan2(dyPtr[cIdx], dxPtr[cIdx]);
-				//radPtr[cIdx] = DkMath::normAngleRad(angle);
+
+				if (config()->perpendAngle()) {
+					angle = atan2(dxPtr[cIdx],-dyPtr[cIdx]);
+				} else {
+					angle = atan2(dyPtr[cIdx], dxPtr[cIdx]);
+				}
+				
+				//angle = atan2(dxPtr[cIdx], -dyPtr[cIdx]);
+				//result of atan2 is -pi to +pi
+				//normangleRad -> 0 to 2pi
 				radPtr[cIdx] = rdf::Algorithms::normAngleRad(angle);
+				//radPtr[cIdx] = angle;
 			}
 		}
 	}

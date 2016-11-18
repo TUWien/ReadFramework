@@ -910,6 +910,9 @@ namespace rdf {
 
 		//compute Gradients
 		GradientVector gr(scaledImg);
+		//make gradient orientation perpendicular
+		gr.config()->setPerpendAngle(true);
+
 		if (!gr.compute()) {
 			mWarning << "could not compute gradients in ReadLSD compute...";
 			return false;
@@ -964,7 +967,7 @@ namespace rdf {
 			}
 
 			/* construct rectangular approximation for the region */
-			qDebug() << "region size is: " << region.size();
+			//qDebug() << "region size is: " << region.size();
 			qDebug() << "adding a new line..." << angle;
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
@@ -1023,14 +1026,14 @@ namespace rdf {
 	{
 		region.push_back(cv::Point(x, y));
 		double angle = mRadImg.at<double>(y, x);
+		double sumdx = cos(angle);
+		double sumdy = sin(angle);
 
 		for (int regSizeIdx = 0; regSizeIdx < region.size(); regSizeIdx++) {
 
 			int xt = region[regSizeIdx].x;
 			int yt = region[regSizeIdx].y;
 			mRegionImg.at<double>(yt, xt) = regionIdx;
-			double sumdx = cos(angle);
-			double sumdy = sin(angle);
 
 			for (int xx = xt-1; xx < xt + 1; xx++ ) {
 				for (int yy = yt-1; yy < yt + 1; yy++) {
@@ -1045,17 +1048,23 @@ namespace rdf {
 						//qDebug() << "magnitude: " << magnitude << " thr: " << thr;
 						//if (isAligned(cmpAngle, angle, prec)) qDebug() << "point is aligned";
 						//qDebug() << "-------------------------------------------------";
+						//if (cmpAngle < 0) qDebug() << "cmpAngle is < 0";
+						//if (angle < 0) qDebug() << "angle is < 0";
 
 						//check regionIdx (0 == unused and if point is aligned)
-						if (regIdx == 0 && isAligned(cmpAngle, angle, prec) && magnitude > thr) {
+						if (regIdx == 0 && magnitude > thr && isAligned(cmpAngle, angle, prec)) {
+						//if (regIdx == 0 && magnitude > thr) {
+						//if (regIdx == 0 && isAligned(cmpAngle, angle, prec)) {
 
 							mRegionImg.at<double>(yy, xx) = (double)regionIdx;
 							region.push_back(cv::Point(xx, yy));
 							//qDebug() << "point added";
 
-							sumdx += cos(mMagImg.at<double>(yy, xx));
-							sumdy += sin(mMagImg.at<double>(yy, xx));
+							sumdx += cos(cmpAngle);
+							sumdy += sin(cmpAngle);
 							angle = atan2(sumdy, sumdx);
+
+							angle = rdf::Algorithms::normAngleRad(angle);
 						}
 					}
 				}
@@ -1243,10 +1252,13 @@ namespace rdf {
 
 		/* compute angle */
 		theta = fabs(Ixx)>fabs(Iyy) ? atan2(lambda - Ixx, Ixy) : atan2(Ixy, lambda - Iyy);
+		theta = rdf::Algorithms::normAngleRad(theta);
 
 		/* The previous procedure doesn't cares about orientation,
 		so it could be wrong by 180 degrees. Here is corrected if necessary. */
 		if (rdf::Algorithms::absAngleDiff(theta, angle) > prec) theta += M_PI;
+		//inserted -> test?
+		theta = rdf::Algorithms::normAngleRad(theta);
 
 		return theta;
 	}
@@ -1690,14 +1702,24 @@ namespace rdf {
 		//										 interested in the exact NOTDEF value */
 
 												 /* it is assumed that 'theta' and 'a' are in the range [-pi,pi] */
-		theta -= thetaTest;
-		if (theta < 0.0) theta = -theta;
-		if (theta > 3.0/2.0*CV_PI)
-		{
-			theta -= 2*CV_PI;
-			if (theta < 0.0) theta = -theta;
-		}
-		return theta <= prec;
+												//but now it is [0, 2pi]
+		theta = Algorithms::normAngleRad(theta, 0, CV_PI);
+		thetaTest = Algorithms::normAngleRad(thetaTest, 0, CV_PI);
+
+		double diffangle = theta - thetaTest;
+
+		diffangle = cv::min(abs(diffangle) , CV_PI - abs(diffangle));
+
+		return diffangle <= prec;
+
+		//theta -= thetaTest;
+		//if (theta < 0.0) theta = -theta;
+		//if (theta > 3.0/2.0*CV_PI)
+		//{
+		//	theta -= 2*CV_PI;
+		//	if (theta < 0.0) theta = -theta;
+		//}
+		//return theta <= prec;
 	}
 
 	bool ReadLSD::isAligned(int x, int y, const cv::Mat &img, double theta, double prec) {
