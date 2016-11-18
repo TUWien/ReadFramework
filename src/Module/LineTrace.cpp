@@ -968,7 +968,6 @@ namespace rdf {
 
 			/* construct rectangular approximation for the region */
 			//qDebug() << "region size is: " << region.size();
-			qDebug() << "adding a new line..." << angle;
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
 			///* Check if the rectangle exceeds the minimal density of
@@ -980,11 +979,12 @@ namespace rdf {
 			//by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
 			//The original algorithm is obtained with density_th = 0.0.
 			//*/
-			//if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
-			//	continue;
-			//}
-			//
-			//
+			if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
+				qDebug() << "region was rejected due to refine";
+				continue;
+			}
+			
+			
 			////TODO improvement
 			///* compute NFA value */
 			//double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
@@ -997,6 +997,7 @@ namespace rdf {
 				tmp.setLine(tmpLine);
 			}
 
+			qDebug() << "adding a new line..." << angle;
 			mLineSegments.push_back(tmp);
 
 			regionIdx++;
@@ -1708,7 +1709,7 @@ namespace rdf {
 
 		double diffangle = theta - thetaTest;
 
-		diffangle = cv::min(abs(diffangle) , CV_PI - abs(diffangle));
+		diffangle = cv::min(std::abs(diffangle) , CV_PI - std::abs(diffangle));
 
 		return diffangle <= prec;
 
