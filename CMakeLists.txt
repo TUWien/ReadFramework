@@ -44,6 +44,7 @@ RDF_CHECK_COMPILER()
 RDF_FIND_QT()
 
 # find OpenCV
+option(WITH_XFEATURES2D "Compile with xfeatures2d" OFF)
 RDF_FIND_OPENCV()
 
 if (DISABLE_QT_DEBUG)
