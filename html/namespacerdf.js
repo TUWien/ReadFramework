@@ -101,5 +101,8 @@ var namespacerdf =
     [ "TabStopCluster", "classrdf_1_1_tab_stop_cluster.html", "classrdf_1_1_tab_stop_cluster" ],
     [ "TabStopAnalysis", "classrdf_1_1_tab_stop_analysis.html", "classrdf_1_1_tab_stop_analysis" ],
     [ "TextLineConfig", "classrdf_1_1_text_line_config.html", "classrdf_1_1_text_line_config" ],
-    [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ]
+    [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ],
+    [ "WriterVocabulary", "classrdf_1_1_writer_vocabulary.html", "classrdf_1_1_writer_vocabulary" ],
+    [ "WriterDatabase", "classrdf_1_1_writer_database.html", "classrdf_1_1_writer_database" ],
+    [ "WriterRetrieval", "classrdf_1_1_writer_retrieval.html", "classrdf_1_1_writer_retrieval" ]
 ];

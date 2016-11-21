@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['l2mean',['l2Mean',['../classrdf_1_1_writer_vocabulary.html#a3d7e6d95024b4cfddae4fbaef04c8c41',1,'rdf::WriterVocabulary']]],
+  ['l2sigma',['l2Sigma',['../classrdf_1_1_writer_vocabulary.html#a84f7af4c6f919ec1a431c019b6126475',1,'rdf::WriterVocabulary']]],
   ['label',['label',['../class_g_coptimization_1_1_greedy_iter_3_01_g_coptimization_1_1_data_cost_fn_sparse_01_4.html#a95616e545bbab04968dd38f53bc658d5',1,'GCoptimization::GreedyIter&lt; GCoptimization::DataCostFnSparse &gt;::label()'],['../classrdf_1_1_pixel.html#aea9eddf6407e017906b0ec4254edaf4e',1,'rdf::Pixel::label()'],['../classrdf_1_1_pixel_label.html#a73cb462de012031d33f2e090ed5410fc',1,'rdf::PixelLabel::label()'],['../classrdf_1_1_feature_collection.html#a6a1ee0cef194a1b8220714dec7a7f1f0',1,'rdf::FeatureCollection::label()']]],
   ['labelconfigfilepath',['labelConfigFilePath',['../classrdf_1_1_super_pixel_labeler_config.html#a81f57660053c4ec8ec43a3089d68c6cc',1,'rdf::SuperPixelLabelerConfig']]],
   ['labelinfo',['LabelInfo',['../classrdf_1_1_label_info.html#a33559eda39e36459ee4a49e10863c1b6',1,'rdf::LabelInfo']]],
@@ -25,8 +27,10 @@ var searchData=
   ['linetraceconfig',['LineTraceConfig',['../classrdf_1_1_line_trace_config.html#a644d9e948e1080d50a103494ecf6fdba',1,'rdf::LineTraceConfig']]],
   ['linkedblocklist',['LinkedBlockList',['../class_linked_block_list.html#a16c5096bee0e6b55ae4c03b53abc8fac',1,'LinkedBlockList']]],
   ['load',['load',['../classrdf_1_1_region_type_config.html#a3d16be5bebe30c78f83df9fedd4eaea6',1,'rdf::RegionTypeConfig::load()'],['../classrdf_1_1_generic_settings.html#a988daf67befbee022897c9b6f48dc746',1,'rdf::GenericSettings::load()'],['../classrdf_1_1_global_settings.html#aaeeb34e5876b8c5fab307e4ed89020fb',1,'rdf::GlobalSettings::load()'],['../classrdf_1_1_config.html#a0bd579fa01f31f98787caefc7ad50c4d',1,'rdf::Config::load()'],['../classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409',1,'rdf::ModuleConfig::load()'],['../classrdf_1_1_simple_binarization_config.html#a45955c54fb2c51c254abde12a8e77946',1,'rdf::SimpleBinarizationConfig::load()'],['../classrdf_1_1_super_pixel_config.html#ac4cfac755d1d8dcf4ca51e4bddfbea6a',1,'rdf::SuperPixelConfig::load()'],['../classrdf_1_1_local_orientation_config.html#a03a77e2b28907a65d4937b81de4a2b13',1,'rdf::LocalOrientationConfig::load()'],['../classrdf_1_1_super_pixel_classifier_config.html#a0967cc031a466a90bfa4970f5a43fe16',1,'rdf::SuperPixelClassifierConfig::load()'],['../classrdf_1_1_super_pixel_labeler_config.html#a8915f1baa6a05ce21ef747b45092c818',1,'rdf::SuperPixelLabelerConfig::load()'],['../classrdf_1_1_super_pixel_trainer_config.html#a727c91186375ae84c6a3d0a1876859b3',1,'rdf::SuperPixelTrainerConfig::load()']]],
+  ['loadfeatures',['loadFeatures',['../classrdf_1_1_writer_retrieval.html#a8371356c3185e47db441b99d71ec27da',1,'rdf::WriterRetrieval']]],
   ['loadsettings',['loadSettings',['../classrdf_1_1_module_config.html#ac0f2344041144a13c87abae1a6e2a947',1,'rdf::ModuleConfig']]],
   ['loadtemplatedatabase',['loadTemplateDatabase',['../classrdf_1_1_form_features.html#ab6f6a9a3c69e87326692b284c5cfbde0',1,'rdf::FormFeatures']]],
+  ['loadvocabulary',['loadVocabulary',['../classrdf_1_1_writer_vocabulary.html#a333a807d491154af974120832f287a02',1,'rdf::WriterVocabulary']]],
   ['localorientation',['LocalOrientation',['../classrdf_1_1_local_orientation.html#a3e23d3d5b39c5211fe84835f9e0dcbd2',1,'rdf::LocalOrientation']]],
   ['localorientationconfig',['LocalOrientationConfig',['../classrdf_1_1_local_orientation_config.html#ab865429c7db4e1b54f0f1924303b931f',1,'rdf::LocalOrientationConfig']]],
   ['logeps',['logEps',['../classrdf_1_1_read_l_s_d_config.html#ae041df108012a862ca70f0ff27fa1aff',1,'rdf::ReadLSDConfig']]],

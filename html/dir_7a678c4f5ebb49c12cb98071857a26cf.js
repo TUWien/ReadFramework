@@ -81,5 +81,9 @@ var dir_7a678c4f5ebb49c12cb98071857a26cf =
     [ "TextLineSegmentation.h", "_text_line_segmentation_8h.html", [
       [ "TextLineConfig", "classrdf_1_1_text_line_config.html", "classrdf_1_1_text_line_config" ],
       [ "TextLineSegmentation", "classrdf_1_1_text_line_segmentation.html", "classrdf_1_1_text_line_segmentation" ]
-    ] ]
+    ] ],
+    [ "WriterDatabase.cpp", "_writer_database_8cpp.html", null ],
+    [ "WriterDatabase.h", "_writer_database_8h.html", "_writer_database_8h" ],
+    [ "WriterRetrieval.cpp", "_writer_retrieval_8cpp.html", null ],
+    [ "WriterRetrieval.h", "_writer_retrieval_8h.html", "_writer_retrieval_8h" ]
 ];

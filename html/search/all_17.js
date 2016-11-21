@@ -6,6 +6,9 @@ var searchData=
   ['weightfunction',['weightFunction',['../classrdf_1_1_binarization_su_fgd_weight.html#af3ecb2042125d16aff9dc39e7e502d02',1,'rdf::BinarizationSuFgdWeight']]],
   ['what_5fsegment',['what_segment',['../class_graph.html#ac73a2f17861930048daf119eb5b12914',1,'Graph']]],
   ['whatlabel',['whatLabel',['../class_g_coptimization.html#afd9c56d148a74346bdd9a10edcac7350',1,'GCoptimization::whatLabel(SiteID site)'],['../class_g_coptimization.html#a004d5e1e6c680d643bd2299d66ea4559',1,'GCoptimization::whatLabel(SiteID start, SiteID count, LabelID *labeling)']]],
+  ['wi_5fbow',['WI_BOW',['../classrdf_1_1_writer_vocabulary.html#a3c58be63f3e2fc59824324b366d391e7a2ce4b256fe7e9aab82e449d379375262',1,'rdf::WriterVocabulary']]],
+  ['wi_5fgmm',['WI_GMM',['../classrdf_1_1_writer_vocabulary.html#a3c58be63f3e2fc59824324b366d391e7aeabbc309add6a31026049a161fa24bca',1,'rdf::WriterVocabulary']]],
+  ['wi_5fundefined',['WI_UNDEFINED',['../classrdf_1_1_writer_vocabulary.html#a3c58be63f3e2fc59824324b366d391e7ab8f69dcb534e78202b6b8a45e374b709',1,'rdf::WriterVocabulary']]],
   ['width',['width',['../classrdf_1_1_rect.html#afcedbe5c1f54a7e5e55186fa6f68dc5f',1,'rdf::Rect::width()'],['../classrdf_1_1_patch.html#a8dfb072cc7a82df177e55b7c5c73d1be',1,'rdf::Patch::width()'],['../classrdf_1_1_base_skew_estimation_config.html#afdf979e0afb6f88f6a98347bd10ae11f',1,'rdf::BaseSkewEstimationConfig::width()']]],
   ['windowsize',['windowSize',['../classrdf_1_1_basic_f_m.html#a9673ab79a0a5a90f0adfd56b85bb6d0b',1,'rdf::BasicFM::windowSize()'],['../classrdf_1_1_basic_contrast.html#a10a89c760b0e4805bf741fdb13e1cb46',1,'rdf::BasicContrast::windowSize()'],['../classrdf_1_1_focus_estimation.html#a7582c8514175c93937722e8d0c9f69a8',1,'rdf::FocusEstimation::windowSize()'],['../classrdf_1_1_contrast_estimation.html#a22c1418e53ac536ab74d67479608233b',1,'rdf::ContrastEstimation::windowSize()']]],
   ['within',['within',['../classrdf_1_1_line.html#af9f0c2adbd5f4fa4adabb1f492c52dcd',1,'rdf::Line']]],
@@ -14,5 +17,15 @@ var searchData=
   ['writechildren',['writeChildren',['../classrdf_1_1_region.html#a33b1b20e571b300ae1788b807fbfad28',1,'rdf::Region']]],
   ['writejson',['writeJson',['../classrdf_1_1_utils.html#a5f16ae1ae77d39aa79e4249cb25f5c5e',1,'rdf::Utils']]],
   ['writemetadata',['writeMetaData',['../classrdf_1_1_page_xml_parser.html#a06ec6de2b9c6b9838a555a5a413a5ba1',1,'rdf::PageXmlParser']]],
-  ['writepageelement',['writePageElement',['../classrdf_1_1_page_xml_parser.html#a9abefe468a0f87621d41752e92f8179d',1,'rdf::PageXmlParser']]]
+  ['writepageelement',['writePageElement',['../classrdf_1_1_page_xml_parser.html#a9abefe468a0f87621d41752e92f8179d',1,'rdf::PageXmlParser']]],
+  ['writerdatabase',['WriterDatabase',['../classrdf_1_1_writer_database.html',1,'rdf']]],
+  ['writerdatabase',['WriterDatabase',['../classrdf_1_1_writer_database.html#a1b47e01ac6a921ceef76c26b58c99890',1,'rdf::WriterDatabase']]],
+  ['writerdatabase_2ecpp',['WriterDatabase.cpp',['../_writer_database_8cpp.html',1,'']]],
+  ['writerdatabase_2eh',['WriterDatabase.h',['../_writer_database_8h.html',1,'']]],
+  ['writerretrieval',['WriterRetrieval',['../classrdf_1_1_writer_retrieval.html#a8bcd9baeb395b69f95680d07419dc967',1,'rdf::WriterRetrieval']]],
+  ['writerretrieval',['WriterRetrieval',['../classrdf_1_1_writer_retrieval.html',1,'rdf']]],
+  ['writerretrieval_2ecpp',['WriterRetrieval.cpp',['../_writer_retrieval_8cpp.html',1,'']]],
+  ['writerretrieval_2eh',['WriterRetrieval.h',['../_writer_retrieval_8h.html',1,'']]],
+  ['writervocabulary',['WriterVocabulary',['../classrdf_1_1_writer_vocabulary.html#a62d108bbef90d9e57e2a156562a4658c',1,'rdf::WriterVocabulary']]],
+  ['writervocabulary',['WriterVocabulary',['../classrdf_1_1_writer_vocabulary.html',1,'rdf']]]
 ];

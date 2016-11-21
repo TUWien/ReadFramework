@@ -12,5 +12,8 @@ var searchData=
   ['writechildren',['writeChildren',['../classrdf_1_1_region.html#a33b1b20e571b300ae1788b807fbfad28',1,'rdf::Region']]],
   ['writejson',['writeJson',['../classrdf_1_1_utils.html#a5f16ae1ae77d39aa79e4249cb25f5c5e',1,'rdf::Utils']]],
   ['writemetadata',['writeMetaData',['../classrdf_1_1_page_xml_parser.html#a06ec6de2b9c6b9838a555a5a413a5ba1',1,'rdf::PageXmlParser']]],
-  ['writepageelement',['writePageElement',['../classrdf_1_1_page_xml_parser.html#a9abefe468a0f87621d41752e92f8179d',1,'rdf::PageXmlParser']]]
+  ['writepageelement',['writePageElement',['../classrdf_1_1_page_xml_parser.html#a9abefe468a0f87621d41752e92f8179d',1,'rdf::PageXmlParser']]],
+  ['writerdatabase',['WriterDatabase',['../classrdf_1_1_writer_database.html#a1b47e01ac6a921ceef76c26b58c99890',1,'rdf::WriterDatabase']]],
+  ['writerretrieval',['WriterRetrieval',['../classrdf_1_1_writer_retrieval.html#a8bcd9baeb395b69f95680d07419dc967',1,'rdf::WriterRetrieval']]],
+  ['writervocabulary',['WriterVocabulary',['../classrdf_1_1_writer_vocabulary.html#a62d108bbef90d9e57e2a156562a4658c',1,'rdf::WriterVocabulary']]]
 ];

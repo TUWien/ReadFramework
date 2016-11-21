@@ -138,5 +138,8 @@ var hierarchy =
     [ "rdf::Triangle", "classrdf_1_1_triangle.html", null ],
     [ "rdf::Utils", "classrdf_1_1_utils.html", null ],
     [ "rdf::Vector2D", "classrdf_1_1_vector2_d.html", null ],
+    [ "rdf::WriterDatabase", "classrdf_1_1_writer_database.html", null ],
+    [ "rdf::WriterRetrieval", "classrdf_1_1_writer_retrieval.html", null ],
+    [ "rdf::WriterVocabulary", "classrdf_1_1_writer_vocabulary.html", null ],
     [ "rdf::XmlTest", "classrdf_1_1_xml_test.html", null ]
 ];
