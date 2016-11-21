@@ -40,13 +40,19 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
 
 namespace rdf {
-	class WriterRetrieval {
+	class DllModuleExport WriterRetrieval {
 	public:
 		WriterRetrieval();
 

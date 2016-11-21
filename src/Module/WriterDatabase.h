@@ -40,12 +40,18 @@
 #include "opencv2/ml/ml.hpp"
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllModuleExport
+#ifdef DLL_MODULE_EXPORT
+#define DllModuleExport Q_DECL_EXPORT
+#else
+#define DllModuleExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
 namespace rdf {
-	class WriterVocabulary {
+	class DllModuleExport WriterVocabulary {
 	public:
 		WriterVocabulary();
 
@@ -132,7 +138,7 @@ namespace rdf {
 	};
 
 // read defines
-	class WriterDatabase {
+	class DllModuleExport WriterDatabase {
 	public:
 		WriterDatabase();
 
