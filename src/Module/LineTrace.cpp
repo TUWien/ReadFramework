@@ -979,14 +979,12 @@ namespace rdf {
 			//by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
 			//The original algorithm is obtained with density_th = 0.0.
 			//*/
-			if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
-				qDebug() << "region was rejected due to refine";
-				continue;
-			}
+			//if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
+			//	qDebug() << "region was rejected due to refine";
+			//	continue;
+			//}
 			
-			
-			////TODO improvement
-			///* compute NFA value */
+			/////* compute NFA value */
 			//double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
 			//if (logNfa <= config()->logEps()) continue;
 
@@ -997,7 +995,7 @@ namespace rdf {
 				tmp.setLine(tmpLine);
 			}
 
-			qDebug() << "adding a new line..." << angle;
+			//qDebug() << "adding a new line..." << angle;
 			mLineSegments.push_back(tmp);
 
 			regionIdx++;
@@ -1327,8 +1325,7 @@ namespace rdf {
 		sum = s_sum = 0.0;
 		n = 0;
 		for (i = 1; i<region.size(); i++) {
-			//why label as not used again?
-			//used->data[region[i].x + region[i].y * used->xsize] = NOTUSED;
+			//set label as not used since region growing is applied again
 			mRegionImg.at<double>(region[i].y, region[i].x) = 0;
 			
 			Vector2D vecTmp(region[i].x, region[i].y);
