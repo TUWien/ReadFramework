@@ -497,8 +497,10 @@ QSharedPointer<SuperPixelModel> SuperPixelModel::read(const QString & filePath) 
 		qInfo() << "var count:" << sm->model()->getVarCount() << "is classifier" << sm->model()->isClassifier();
 		qInfo() << "SuperPixel classifier loaded from" << filePath << "in" << dt;
 	}
-	else
+	else {
 		qCritical() << "Could not load model from" << filePath;
+		return QSharedPointer<SuperPixelModel>::create();
+	}
 
 	return sm;
 }
