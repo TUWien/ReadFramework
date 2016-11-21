@@ -30,7 +30,7 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "WriterIdentification.h"
+#include "WriterRetrieval.h"
 
 
 //opencv
@@ -50,20 +50,20 @@ namespace rdf {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WriterIdentification"/> class.
 	/// </summary>
-	WriterIdentification::WriterIdentification() {
+	WriterRetrieval::WriterRetrieval() {
 		// do nothing
 	}
 	/// <summary>
 	/// Sets the image.
 	/// </summary>
 	/// <param name="img">The img.</param>
-	void WriterIdentification::setImage(const cv::Mat img) {
+	void WriterRetrieval::setImage(const cv::Mat img) {
 		this->mImg = img;
 	}
 	/// <summary>
 	/// Calculates the SIFT features of the image.
 	/// </summary>
-	void WriterIdentification::calculateFeatures() {
+	void WriterRetrieval::calculateFeatures() {
 		if(mImg.empty())
 			return;
 #ifdef WITH_XFEATURES2D
@@ -96,7 +96,7 @@ namespace rdf {
 	/// Saves the SIFT features to the given file path.
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
-	void WriterIdentification::saveFeatures(QString filePath) {
+	void WriterRetrieval::saveFeatures(QString filePath) {
 		if(mKeyPoints.empty() || mDescriptors.empty()) {
 			qWarning() << debugName() << " keypoints or descriptors empty ... unable to save to file";
 			return;
@@ -114,7 +114,7 @@ namespace rdf {
 	/// Loads the features from the given file path.
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
-	void WriterIdentification::loadFeatures(QString filePath) {
+	void WriterRetrieval::loadFeatures(QString filePath) {
 		cv::FileStorage fs(filePath.toStdString(), cv::FileStorage::READ);
 		if(!fs.isOpened()) {
 			qWarning() << debugName() << " unable to read file " << filePath;
@@ -130,35 +130,35 @@ namespace rdf {
 	/// Sets the key points for this Writer Identification task.
 	/// </summary>
 	/// <param name="kp">The keypoints.</param>
-	void WriterIdentification::setKeyPoints(QVector<cv::KeyPoint> kp) {
+	void WriterRetrieval::setKeyPoints(QVector<cv::KeyPoint> kp) {
 		mKeyPoints = kp;
 	}
 	/// <summary>
 	/// Returns the keypoints of the SIFT features.
 	/// </summary>
 	/// <returns>keypoints</returns>
-	QVector<cv::KeyPoint> WriterIdentification::keyPoints() const {
+	QVector<cv::KeyPoint> WriterRetrieval::keyPoints() const {
 		return mKeyPoints;
 	}
 	/// <summary>
 	/// Sets the descriptors for this Writer Identification task.
 	/// </summary>
 	/// <param name="desc">The descriptors.</param>
-	void WriterIdentification::setDescriptors(cv::Mat desc) {
+	void WriterRetrieval::setDescriptors(cv::Mat desc) {
 		mDescriptors = desc;
 	}
 	/// <summary>
 	/// Returns the descriptors of the SIFT features
 	/// </summary>
 	/// <returns></returns>
-	cv::Mat WriterIdentification::descriptors() const {
+	cv::Mat WriterRetrieval::descriptors() const {
 		return mDescriptors;
 	}
 	/// <summary>
 	/// Debug name
 	/// </summary>
 	/// <returns></returns>
-	QString WriterIdentification::debugName() {
+	QString WriterRetrieval::debugName() {
 		return "WriterIdentification";
 	}
 }

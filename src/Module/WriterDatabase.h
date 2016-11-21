@@ -45,9 +45,9 @@
 // Qt defines
 
 namespace rdf {
-	class WIVocabulary {
+	class WriterVocabulary {
 	public:
-		WIVocabulary();
+		WriterVocabulary();
 
 		void loadVocabulary(const QString filePath);
 		void saveVocabulary(const QString filePath);
@@ -132,15 +132,15 @@ namespace rdf {
 	};
 
 // read defines
-	class WIDatabase {
+	class WriterDatabase {
 	public:
-		WIDatabase();
+		WriterDatabase();
 
 		void addFile(const QString filePath);
 		void generateVocabulary();
 
-		void setVocabulary(const WIVocabulary voc);
-		WIVocabulary vocabulary() const;
+		void setVocabulary(const WriterVocabulary voc);
+		WriterVocabulary vocabulary() const;
 		void saveVocabulary(QString filePath);
 
 		void evaluateDatabase(QStringList classLabels, QStringList filePaths, QString filePath = QString());
@@ -155,6 +155,6 @@ namespace rdf {
 		void loadFeatures(const QString filePath, cv::Mat& descriptors, QVector<cv::KeyPoint>& keypoints);
 		QVector<QVector<cv::KeyPoint> > mKeyPoints;
 		QVector<cv::Mat> mDescriptors;
-		WIVocabulary mVocabulary = WIVocabulary();
+		WriterVocabulary mVocabulary = WriterVocabulary();
 	};
 };

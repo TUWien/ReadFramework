@@ -46,9 +46,9 @@
 
 
 namespace rdf {
-	class WriterIdentification {
+	class WriterRetrieval {
 	public:
-		WriterIdentification();
+		WriterRetrieval();
 
 		void setImage(cv::Mat img);
 		void calculateFeatures();
