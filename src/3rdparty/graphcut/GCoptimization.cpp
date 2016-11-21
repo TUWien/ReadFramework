@@ -11,6 +11,8 @@
 // will leave this one just for the laughs :)
 //#define olga_assert(expr) assert(!(expr))
 
+#pragma warning(disable:4701)		// potentially uninitialized local variable used
+
 // Choose reasonably high-precision timer (sub-millisec resolution if possible).
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -503,6 +505,7 @@ bool GCoptimization::solveSpecialCases(EnergyType& energy)
 	}
 
 	if ( dc && !sc && lc ) {
+		#pragma warning(disable: 4456) // declaration hides previous local declaration
 		LabelCost* lc;
 		for ( lc = m_labelcostsAll; lc; lc = lc->next )
 			if ( lc->numLabels > 1)
@@ -1176,7 +1179,6 @@ void GCoptimization::updateLabelingInfo(bool updateCounts, bool updateActive, bo
 			for ( LabelCost* lc = m_labelcostsAll; lc; lc = lc->next )
 				lc->active = false;
 
-			EnergyType energy = 0;
 			for ( LabelID l = 0; l < m_num_labels; ++l ) 
 				if ( m_labelCounts[l] )
 					for ( LabelCostIter* lci = m_labelcostsByLabel[l]; lci; lci = lci->next ) 

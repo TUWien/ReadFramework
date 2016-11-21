@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "graph.h"
 
+#pragma warning(disable: 4706)  // assignment within conditional expression
+#pragma warning(disable: 4463)  // overflow; assigning 1 to bit-field that can only hold values from -1 to 0
+
 
 /*
 	special constants for node->parent

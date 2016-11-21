@@ -33,6 +33,8 @@
 #include "Elements.h"
 #include "ElementsHelper.h"
 
+#pragma warning (disable: 4714)	// force inline
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QXmlStreamReader>

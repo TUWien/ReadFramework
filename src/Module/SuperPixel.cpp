@@ -39,15 +39,16 @@
 
 #include "PixelSet.h"
 
-#include "GCGraph.hpp"
-
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
+#pragma warning(disable: 4706)
+#include "GCGraph.hpp"
 #include "graphcut/GCoptimization.h"
+
 
 #pragma warning(pop)
 

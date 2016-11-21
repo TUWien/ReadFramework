@@ -48,6 +48,8 @@
 #endif
 #endif
 
+#pragma warning(disable: 4251)	// dll interface
+
 // Qt defines
 
 
