@@ -377,7 +377,7 @@ bool operator==(const QSharedPointer<const Pixel>& px, const cv::KeyPoint & kp) 
 cv::KeyPoint Pixel::toKeyPoint() const {
 
 	double angle = stats() ? stats()->orientation() : mEllipse.angle();
-	cv::KeyPoint kp(mEllipse.center().toCvPoint2f(), (float)mEllipse.majorAxis(), (float)angle);
+	cv::KeyPoint kp(mEllipse.center().toCvPoint2f(), (float)mEllipse.majorAxis()*2.0f, (float)angle);
 
 	return kp;
 }

@@ -60,8 +60,21 @@ QString SuperPixelClassifierConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-int SuperPixelClassifierConfig::maxSide() const {
-	return mMaxSide;
+void SuperPixelClassifierConfig::setClassifierPath(const QString & path) {
+	mClassifierPath = path;
+}
+
+QString SuperPixelClassifierConfig::classifierPath() const {
+	return mClassifierPath;
+}
+
+void SuperPixelClassifierConfig::load(const QSettings & settings) {
+	mClassifierPath = settings.value("classifierPath", mClassifierPath).toString();
+}
+
+void SuperPixelClassifierConfig::save(QSettings & settings) const {
+
+	settings.setValue("classifierPath", mClassifierPath);
 }
 
 // SuperPixelClassifier --------------------------------------------------------------------
@@ -78,11 +91,8 @@ bool SuperPixelClassifier::isEmpty() const {
 
 bool SuperPixelClassifier::compute() {
 
-
-	if (!mModel || !mModel->model() || !mModel->model()->isTrained()) {
-		mWarning << "cannot classify - model is empty";
+	if (!checkInput())
 		return false;
-	}
 
 	Timer dt;
 
@@ -109,11 +119,8 @@ bool SuperPixelClassifier::compute() {
 	assert(labels.size() == mSet.size());
 
 	for (int idx = 0; idx < mSet.size(); idx++) {
-		
 		pixels[idx]->setLabel(labels[idx]);
-		//sp->setLabel();
 	}
-
 
 	mInfo << mSet.size() << "pixels classified in" << dt;
 
@@ -125,6 +132,9 @@ QSharedPointer<SuperPixelClassifierConfig> SuperPixelClassifier::config() const 
 }
 
 cv::Mat SuperPixelClassifier::draw(const cv::Mat& img) const {
+
+	if (!checkInput())
+		return cv::Mat();
 
 	// draw mser blobs
 	Timer dtf;
@@ -149,7 +159,10 @@ void SuperPixelClassifier::setModel(const QSharedPointer<SuperPixelModel>& model
 
 bool SuperPixelClassifier::checkInput() const {
 
-	return !mImg.empty();
+	if (mModel && mModel->model() && !mModel->model()->isTrained())
+		mCritical << "I cannot classify, since the model is not trained";
+
+	return mModel && mModel->model() && mModel->model()->isTrained() && !isEmpty();
 }
 
 // SuperPixelFeatureConfig --------------------------------------------------------------------

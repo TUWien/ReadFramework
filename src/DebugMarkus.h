@@ -77,5 +77,4 @@ protected:
 	DebugConfig mConfig;
 };
 
-
 };
