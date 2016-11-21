@@ -3,6 +3,6 @@
 	<DisplayName>ReadFramework [x64]</DisplayName>
 	<Description>READ Framework for x64 systems (v0.1).</Description>
 	<Version>0.1</Version>
-	<ReleaseDate>2016-10-25</ReleaseDate>
+	<ReleaseDate>2016-11-10</ReleaseDate>
 	<Default>true</Default>
 </Package>

@@ -406,7 +406,7 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 void PixelSet::draw(QPainter& p) const {
 
 	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
 
 	//polyLine(0.0).draw(p);
 	convexHull().draw(p);

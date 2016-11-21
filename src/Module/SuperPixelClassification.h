@@ -97,14 +97,15 @@ public:
 
 	virtual QString toString() const override;
 	
-	int maxSide() const;
+	void setClassifierPath(const QString& path);
+	QString classifierPath() const;
 
 protected:
 
-	int mMaxSide = 200;
+	QString mClassifierPath;
 
-	//void load(const QSettings& settings) override;
-	//void save(QSettings& settings) const override;
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
 };
 
 class DllModuleExport SuperPixelClassifier : public Module {
