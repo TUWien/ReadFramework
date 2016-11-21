@@ -66,6 +66,9 @@ class DllModuleExport GradientVectorConfig : public ModuleConfig {
 		bool normGrad() const;
 		void setNormGrad(bool n);
 
+		bool perpendAngle() const;
+		void setPerpendAngle(bool p);
+
 		QString toString() const override;
 
 	private:
@@ -74,6 +77,7 @@ class DllModuleExport GradientVectorConfig : public ModuleConfig {
 
 		double mSigma = 1.75;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 5 deg)
 		bool mNormGrad = true;
+		bool mPerpendAngle = false;	//if you want to get perpendicular angles compared to the gradient orientation
 };
 
 class DllModuleExport GradientVector : public Module {

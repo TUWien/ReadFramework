@@ -859,9 +859,9 @@ double Algorithms::normAngleRad(double angle, double startIvl, double endIvl) {
 	if (abs(angle) > 1000)
 		return angle;
 
-	while (angle <= startIvl)
+	while (angle < startIvl)
 		angle += endIvl - startIvl;
-	while (angle > endIvl)
+	while (angle >= endIvl)
 		angle -= endIvl - startIvl;
 
 	return angle;
