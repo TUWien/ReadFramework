@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('classrdf_1_1_super_pixel_classifier_co
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrdf_1_1_super_pixel_classifier_config-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -135,8 +136,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a042c297a0b4fdec331d635712b075ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48c0b17b4eeeeceb5c904668ce417666"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a48c0b17b4eeeeceb5c904668ce417666">toString</a> () const override</td></tr>
 <tr class="separator:a48c0b17b4eeeeceb5c904668ce417666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4942da05db72c69f6918583194fe462a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a4942da05db72c69f6918583194fe462a">maxSide</a> () const </td></tr>
-<tr class="separator:a4942da05db72c69f6918583194fe462a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e8496b16a4acdd82b20ba5b1c797be8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a6e8496b16a4acdd82b20ba5b1c797be8">setClassifierPath</a> (const QString &amp;path)</td></tr>
+<tr class="separator:a6e8496b16a4acdd82b20ba5b1c797be8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed2e66a062332648e505b819c81cb46"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a4ed2e66a062332648e505b819c81cb46">classifierPath</a> () const </td></tr>
+<tr class="separator:a4ed2e66a062332648e505b819c81cb46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrdf_1_1_module_config"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrdf_1_1_module_config')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></td></tr>
 <tr class="memitem:ae65377987b0c184c7c127b8de6492f06 inherit pub_methods_classrdf_1_1_module_config"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module_config.html#ae65377987b0c184c7c127b8de6492f06">ModuleConfig</a> (const QString &amp;moduleName=&quot;Generic <a class="el" href="classrdf_1_1_module.html">Module</a>&quot;)</td></tr>
 <tr class="separator:ae65377987b0c184c7c127b8de6492f06 inherit pub_methods_classrdf_1_1_module_config"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,21 +152,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c3aefe966e688ef3081585a7de5cd8a inherit pub_methods_classrdf_1_1_module_config"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module_config.html#a3c3aefe966e688ef3081585a7de5cd8a">name</a> () const </td></tr>
 <tr class="separator:a3c3aefe966e688ef3081585a7de5cd8a inherit pub_methods_classrdf_1_1_module_config"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a0967cc031a466a90bfa4970f5a43fe16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a0967cc031a466a90bfa4970f5a43fe16">load</a> (const QSettings &amp;settings) override</td></tr>
+<tr class="separator:a0967cc031a466a90bfa4970f5a43fe16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624cae0a17ff82b7236bd8fa567d8d18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a624cae0a17ff82b7236bd8fa567d8d18">save</a> (QSettings &amp;settings) const override</td></tr>
+<tr class="separator:a624cae0a17ff82b7236bd8fa567d8d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a595d8cf18da9c95a5e96fe74d769fbdd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a595d8cf18da9c95a5e96fe74d769fbdd">mMaxSide</a> = 200</td></tr>
-<tr class="separator:a595d8cf18da9c95a5e96fe74d769fbdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b0f7df76764c4e276df87bd00b67a6"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_super_pixel_classifier_config.html#a18b0f7df76764c4e276df87bd00b67a6">mClassifierPath</a></td></tr>
+<tr class="separator:a18b0f7df76764c4e276df87bd00b67a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classrdf_1_1_module_config"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrdf_1_1_module_config')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></td></tr>
 <tr class="memitem:a1514c419642411e5a5fce610bedc7435 inherit pro_attribs_classrdf_1_1_module_config"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module_config.html#a1514c419642411e5a5fce610bedc7435">mModuleName</a></td></tr>
 <tr class="separator:a1514c419642411e5a5fce610bedc7435 inherit pro_attribs_classrdf_1_1_module_config"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classrdf_1_1_module_config"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrdf_1_1_module_config')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrdf_1_1_module_config.html">rdf::ModuleConfig</a></td></tr>
-<tr class="memitem:a99111c0f53fb3dc8f34a585f28ca0409 inherit pro_methods_classrdf_1_1_module_config"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409">load</a> (const QSettings &amp;settings)</td></tr>
-<tr class="separator:a99111c0f53fb3dc8f34a585f28ca0409 inherit pro_methods_classrdf_1_1_module_config"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7f5fd3e8fd58bd66821f40328077ad5 inherit pro_methods_classrdf_1_1_module_config"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5">save</a> (QSettings &amp;settings) const </td></tr>
-<tr class="separator:ab7f5fd3e8fd58bd66821f40328077ad5 inherit pro_methods_classrdf_1_1_module_config"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a042c297a0b4fdec331d635712b075ab2"></a>
@@ -182,15 +184,83 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a4942da05db72c69f6918583194fe462a"></a>
+<a class="anchor" id="a4ed2e66a062332648e505b819c81cb46"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int rdf::SuperPixelClassifierConfig::maxSide </td>
+          <td class="memname">QString rdf::SuperPixelClassifierConfig::classifierPath </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0967cc031a466a90bfa4970f5a43fe16"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::SuperPixelClassifierConfig::load </td>
+          <td>(</td>
+          <td class="paramtype">const QSettings &amp;&#160;</td>
+          <td class="paramname"><em>settings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classrdf_1_1_module_config.html#a99111c0f53fb3dc8f34a585f28ca0409">rdf::ModuleConfig</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a624cae0a17ff82b7236bd8fa567d8d18"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::SuperPixelClassifierConfig::save </td>
+          <td>(</td>
+          <td class="paramtype">QSettings &amp;&#160;</td>
+          <td class="paramname"><em>settings</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classrdf_1_1_module_config.html#ab7f5fd3e8fd58bd66821f40328077ad5">rdf::ModuleConfig</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e8496b16a4acdd82b20ba5b1c797be8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rdf::SuperPixelClassifierConfig::setClassifierPath </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -223,7 +293,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a595d8cf18da9c95a5e96fe74d769fbdd"></a>
+<a class="anchor" id="a18b0f7df76764c4e276df87bd00b67a6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -231,7 +301,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int rdf::SuperPixelClassifierConfig::mMaxSide = 200</td>
+          <td class="memname">QString rdf::SuperPixelClassifierConfig::mClassifierPath</td>
         </tr>
       </table>
   </td>

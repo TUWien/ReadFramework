@@ -55,9 +55,12 @@ var NAVTREEINDEX6 =
 "classrdf_1_1_super_pixel_classifier.html#ad520327335428df4a182fc72df870579":[2,0,2,90,4],
 "classrdf_1_1_super_pixel_classifier_config.html":[2,0,2,89],
 "classrdf_1_1_super_pixel_classifier_config.html#a042c297a0b4fdec331d635712b075ab2":[2,0,2,89,0],
-"classrdf_1_1_super_pixel_classifier_config.html#a48c0b17b4eeeeceb5c904668ce417666":[2,0,2,89,2],
-"classrdf_1_1_super_pixel_classifier_config.html#a4942da05db72c69f6918583194fe462a":[2,0,2,89,1],
-"classrdf_1_1_super_pixel_classifier_config.html#a595d8cf18da9c95a5e96fe74d769fbdd":[2,0,2,89,3],
+"classrdf_1_1_super_pixel_classifier_config.html#a0967cc031a466a90bfa4970f5a43fe16":[2,0,2,89,2],
+"classrdf_1_1_super_pixel_classifier_config.html#a18b0f7df76764c4e276df87bd00b67a6":[2,0,2,89,6],
+"classrdf_1_1_super_pixel_classifier_config.html#a48c0b17b4eeeeceb5c904668ce417666":[2,0,2,89,5],
+"classrdf_1_1_super_pixel_classifier_config.html#a4ed2e66a062332648e505b819c81cb46":[2,0,2,89,1],
+"classrdf_1_1_super_pixel_classifier_config.html#a624cae0a17ff82b7236bd8fa567d8d18":[2,0,2,89,3],
+"classrdf_1_1_super_pixel_classifier_config.html#a6e8496b16a4acdd82b20ba5b1c797be8":[2,0,2,89,4],
 "classrdf_1_1_super_pixel_config.html":[2,0,2,81],
 "classrdf_1_1_super_pixel_config.html#a7ac698aab8f0d6330e5c3b4ab6bfb893":[2,0,2,81,2],
 "classrdf_1_1_super_pixel_config.html#a9c1c80d9869db9f33c04a5c725c4f6c7":[2,0,2,81,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX6 =
 "classrdf_1_1_vector2_d.html#ab92a13cb71d33e5572b56b21af9dadd5":[2,0,2,41,24],
 "classrdf_1_1_vector2_d.html#abe14ad567a8a01be2b5bb4415d3ab8e9":[2,0,2,41,12],
 "classrdf_1_1_vector2_d.html#abe4565267d66032c4863db5322e5c6a2":[2,0,2,41,26],
-"classrdf_1_1_vector2_d.html#ac6f6d09f2fd1d5e625d0479492c43482":[2,0,2,41,41],
-"classrdf_1_1_vector2_d.html#acc3daf696b9d8cd2034803d0a0e8ea67":[2,0,2,41,10],
-"classrdf_1_1_vector2_d.html#ad21e917b5a42fd05190e664b2f56b43a":[2,0,2,41,8],
-"classrdf_1_1_vector2_d.html#adba960e1ebca0e9d14b1e349232ae1ed":[2,0,2,41,36]
+"classrdf_1_1_vector2_d.html#ac6f6d09f2fd1d5e625d0479492c43482":[2,0,2,41,41]
 };

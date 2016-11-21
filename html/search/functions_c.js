@@ -21,7 +21,7 @@ var searchData=
   ['maxnumfeaturesperclass',['maxNumFeaturesPerClass',['../classrdf_1_1_super_pixel_labeler_config.html#a980197ea08ba58ae05ac637cff901045',1,'rdf::SuperPixelLabelerConfig']]],
   ['maxnumfeaturesperimage',['maxNumFeaturesPerImage',['../classrdf_1_1_super_pixel_labeler_config.html#ac5e3b73e867b7f82004fa7c1ec79002c',1,'rdf::SuperPixelLabelerConfig']]],
   ['maxscale',['maxScale',['../classrdf_1_1_local_orientation_config.html#a2390feabaeb099afd997bfa607b3c6c3',1,'rdf::LocalOrientationConfig']]],
-  ['maxside',['maxSide',['../classrdf_1_1_page_segmentation_config.html#a484825336b748863876c5b41f744685c',1,'rdf::PageSegmentationConfig::maxSide()'],['../classrdf_1_1_super_pixel_classifier_config.html#a4942da05db72c69f6918583194fe462a',1,'rdf::SuperPixelClassifierConfig::maxSide()']]],
+  ['maxside',['maxSide',['../classrdf_1_1_page_segmentation_config.html#a484825336b748863876c5b41f744685c',1,'rdf::PageSegmentationConfig']]],
   ['maxslopediff',['maxSlopeDiff',['../classrdf_1_1_line_trace_config.html#a33c87207edfded18cecae06dc15e0f0e',1,'rdf::LineTraceConfig']]],
   ['maxsloperotat',['maxSlopeRotat',['../classrdf_1_1_line_trace_config.html#ac7fdc5b085519a46ccefdf6749274100',1,'rdf::LineTraceConfig']]],
   ['maxval',['maxVal',['../classrdf_1_1_gradient_vector.html#a5c5f1b04538c120dd8355b7763bca814',1,'rdf::GradientVector']]],

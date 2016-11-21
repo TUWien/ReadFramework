@@ -9,7 +9,7 @@ var searchData=
   ['checkinterrupt',['checkInterrupt',['../class_g_coptimization.html#a94b50b8a17e8a9e755f429c8abbc7f67',1,'GCoptimization']]],
   ['children',['children',['../classrdf_1_1_region.html#ae03077756dc88e3b8fd498a9934663e1',1,'rdf::Region']]],
   ['childrentostring',['childrenToString',['../classrdf_1_1_region.html#a24a3df4160cc5b76f9461f8f2810ea7e',1,'rdf::Region']]],
-  ['classifierpath',['classifierPath',['../classrdf_1_1_debug_config.html#aa97ecd5db6b724431b5c38c39a6a790e',1,'rdf::DebugConfig']]],
+  ['classifierpath',['classifierPath',['../classrdf_1_1_debug_config.html#aa97ecd5db6b724431b5c38c39a6a790e',1,'rdf::DebugConfig::classifierPath()'],['../classrdf_1_1_super_pixel_classifier_config.html#a4ed2e66a062332648e505b819c81cb46',1,'rdf::SuperPixelClassifierConfig::classifierPath()']]],
   ['classify',['classify',['../classrdf_1_1_super_pixel_model.html#a42a6bc40ea7edc7fb37952d482a1ac64',1,'rdf::SuperPixelModel']]],
   ['clipped',['clipped',['../classrdf_1_1_rect.html#a0f2d9fc2c8a54a3300654cc7b8f40d5e',1,'rdf::Rect']]],
   ['closedpolygon',['closedPolygon',['../classrdf_1_1_polygon.html#a36407adf0803d3bac41ac90a8fbf2aa7',1,'rdf::Polygon']]],
