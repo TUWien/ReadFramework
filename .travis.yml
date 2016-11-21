@@ -46,6 +46,6 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then chmod 0600 config/travisci_rsa; fi
 - if [ "$TRAVIS_OS_NAME" = "linux" ]; then cp config/travisci_rsa ~/.ssh/id_rsa; fi
 
-after_success:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then cd ..; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then ./config/publish-doxygen; fi
+#after_success:
+#- if [ "$TRAVIS_OS_NAME" = "linux" ]; then cd ..; fi
+#- if [ "$TRAVIS_OS_NAME" = "linux" ]; then ./config/publish-doxygen; fi
