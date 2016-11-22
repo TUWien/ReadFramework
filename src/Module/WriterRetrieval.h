@@ -55,6 +55,7 @@
 
 namespace rdf {
 	class DllModuleExport WriterRetrieval {
+
 	public:
 		WriterRetrieval();
 
