@@ -59,6 +59,7 @@ namespace rdf {
 SuperPixel::SuperPixel(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
 	mConfig = QSharedPointer<SuperPixelConfig>::create();
+	mConfig->loadSettings();
 	mConfig->saveDefaultSettings();
 }
 
@@ -200,6 +201,9 @@ bool SuperPixel::compute() {
 	QSharedPointer<MserContainer> rawBlobs(new MserContainer());
 
 	int maxFilter = config()->erosionStep()*config()->numErosionLayers();
+
+	qDebug() << "# erosion layers: " << config()->numErosionLayers();
+
 	for (int idx = 0; idx < maxFilter; idx += config()->erosionStep()) {
 
 		Timer dti;
@@ -459,6 +463,7 @@ void LocalOrientationConfig::save(QSettings & settings) const {
 LocalOrientation::LocalOrientation(const QVector<QSharedPointer<Pixel> >& set) {
 	mSet = set;
 	mConfig = QSharedPointer<LocalOrientationConfig>::create();
+	mConfig->loadSettings();
 	mConfig->saveDefaultSettings();
 }
 
