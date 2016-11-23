@@ -83,6 +83,7 @@ SuperPixelClassifier::SuperPixelClassifier(const cv::Mat& img, const PixelSet& s
 	mImg = img;
 	mSet = set;
 	mConfig = QSharedPointer<SuperPixelClassifierConfig>::create();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelClassifier::isEmpty() const {
@@ -178,6 +179,7 @@ SuperPixelFeature::SuperPixelFeature(const cv::Mat & img, const PixelSet & set) 
 	mImg = img;
 	mSet = set;
 	mConfig = QSharedPointer<SuperPixelFeatureConfig>::create();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelFeature::isEmpty() const {

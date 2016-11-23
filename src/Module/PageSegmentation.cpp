@@ -67,6 +67,7 @@ PageSegmentation::PageSegmentation(const cv::Mat& img) {
 
 	mImg = img;
 	mConfig = QSharedPointer<PageSegmentationConfig>::create();
+	mConfig->saveDefaultSettings();
 }
 
 bool PageSegmentation::isEmpty() const {

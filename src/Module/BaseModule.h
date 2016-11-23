@@ -67,15 +67,9 @@ public:
 	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const ModuleConfig& m);
 	friend DllModuleExport QDebug operator<< (QDebug d, const ModuleConfig &m);
 
-	/// <summary>
-	/// Loads the settings.
-	/// </summary>
 	void loadSettings();
-
-	/// <summary>
-	/// Saves the settings.
-	/// </summary>
-	void saveSettings();
+	void saveSettings() const;
+	virtual void saveDefaultSettings() const;
 
 	QString name() const;
 	virtual QString toString() const;
@@ -85,6 +79,7 @@ protected:
 	virtual void save(QSettings& settings) const;
 
 	QString mModuleName;						/**< the module's name.**/
+	int checkIntParam(int param, int min, int max, const QString& name = "param") const;
 };
 
 
