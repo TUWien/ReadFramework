@@ -405,14 +405,14 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 
 void PixelSet::draw(QPainter& p, const QFlag& options) const {
 
-	if (options & draw_pixels) {
+	if (options & (QFlag)draw_pixels) {
 		for (auto px : mSet)
 			px->draw(p, 0.3, Pixel::draw_ellipse_stats);
 	}
 
 	//polyLine(0.0).draw(p);
 
-	if (options & draw_poly)
+	if (options & (QFlag)draw_poly)
 		convexHull().draw(p);
 }
 
