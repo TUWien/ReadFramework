@@ -57,11 +57,14 @@
 namespace rdf {
 
 	class DllModuleExport WriterVocabulary {
+
 	public:
 		WriterVocabulary();
 
 		void loadVocabulary(const QString filePath);
 		void saveVocabulary(const QString filePath);
+
+		cv::Mat calcualteDistanceMatrix(cv::Mat hists) const;
 
 		bool isEmpty() const;
 
@@ -144,6 +147,7 @@ namespace rdf {
 
 // read defines
 	class DllModuleExport WriterDatabase {
+
 	public:
 		WriterDatabase();
 
@@ -155,7 +159,7 @@ namespace rdf {
 		void saveVocabulary(QString filePath);
 
 		void evaluateDatabase(QStringList classLabels, QStringList filePaths, QString filePath = QString());
-		void evaluateDatabase(QVector<cv::Mat>, QStringList classLabels, QStringList filePaths, QString filePath = QString()) const;
+		void evaluateDatabase(cv::Mat hists, QStringList classLabels, QStringList filePaths, QString filePath = QString()) const;
 
 	private:
 		QString debugName() const;
