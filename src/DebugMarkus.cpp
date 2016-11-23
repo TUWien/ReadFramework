@@ -426,7 +426,6 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 
-
 	//// write XML -----------------------------------
 	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 

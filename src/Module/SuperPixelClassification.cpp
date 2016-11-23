@@ -142,7 +142,7 @@ cv::Mat SuperPixelClassifier::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
-	mSet.draw(p);
+	mSet.draw(p, PixelSet::draw_pixels);
 	
 	// draw legend
 	mModel->manager().draw(p);

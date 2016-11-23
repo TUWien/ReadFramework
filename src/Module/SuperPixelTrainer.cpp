@@ -144,7 +144,11 @@ cv::Mat SuperPixelLabeler::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
-	mSet.draw(p);
+	p.setPen(ColorManager::red());
+	mSet.draw(p, PixelSet::draw_pixels);
+
+	// draw legend
+	mManager.draw(p);
 
 	//for (auto b : mBlobs)
 	//	p.drawRect(Converter::cvRectToQt(b->bbox().toCvRect()));
