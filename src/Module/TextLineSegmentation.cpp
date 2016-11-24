@@ -57,6 +57,8 @@ TextLineSegmentation::TextLineSegmentation(const QVector<QSharedPointer<Pixel> >
 
 	mSuperPixels = superPixels;
 	mConfig = QSharedPointer<TextLineConfig>::create();
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool TextLineSegmentation::isEmpty() const {

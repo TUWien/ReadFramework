@@ -67,10 +67,15 @@ public:
 
 	int mserMinArea() const;
 	int mserMaxArea() const;
+	int erosionStep() const;
+	int numErosionLayers() const;
+
 
 protected:
-	int mMserMinArea = 50;
+	int mMserMinArea = 100;
 	int mMserMaxArea = 1000;
+	int mErosionStep = 4;
+	int mNumErosionLayers = 3;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

@@ -171,7 +171,7 @@ namespace rdf {
 			}
 		}
 
-		QVector<cv::Mat> hists;
+		cv::Mat hists;
 		qDebug() << "calculating histograms for all images";
 		for(int i = 0; i < mDescriptors.length(); i++) {
 			hists.push_back(mVocabulary.generateHist(mDescriptors[i]));
@@ -186,7 +186,7 @@ namespace rdf {
 	/// <param name="classLabels">The class labels.</param>
 	/// <param name="filePaths">The file paths.</param>
 	/// <param name="evalFilePath">The eval file path.</param>
-	void WriterDatabase::evaluateDatabase(QVector<cv::Mat> hists, QStringList classLabels, QStringList filePaths, QString evalFilePath) const {
+	void WriterDatabase::evaluateDatabase(cv::Mat hists, QStringList classLabels, QStringList filePaths, QString evalFilePath) const {
 		qDebug() << "starting evaluation";
 		int tp = 0; 
 		int fp = 0;
@@ -196,23 +196,27 @@ namespace rdf {
 			soft.push_back(0);
 			hard.push_back(0);
 		}
-		for(int i = 0; i < hists.length(); i++) {
-			cv::Mat distances(hists.length(), 1, CV_32FC1);
-			distances.setTo(0);
-			for(int j = 0; j < hists.length(); j++) {
-				if(mVocabulary.type() == WriterVocabulary::WI_GMM) {
-					distances.at<float>(j) = (float)(1 - hists[i].dot(hists[j]) / (cv::norm(hists[i])*cv::norm(hists[j]) + DBL_EPSILON)); // 1-dist ... 0 is equal 2 is orthogonal
-				} else if(mVocabulary.type() == WriterVocabulary::WI_BOW) {
-					cv::Mat tmp;
-					pow(hists[i] - hists[j], 2, tmp);
-					cv::Scalar scal = cv::sum(tmp);
-					distances.at<float>(j) = (float)sqrt(scal[0]);
-				}
-			}
+		
+		cv::Mat dist = mVocabulary.calcualteDistanceMatrix(hists);
+		for(int i = 0; i < hists.rows; i++) {
+			cv::Mat distances = dist.row(i);
+			//cv::Mat distances(hists.rows, 1, CV_32FC1);
+			//distances.setTo(0);
+
+			//for(int j = 0; j < hists.length(); j++) {
+			//	if(mVocabulary.type() == WriterVocabulary::WI_GMM) {
+			//		distances.at<float>(j) = (float)(1 - hists[i].dot(hists[j]) / (cv::norm(hists[i])*cv::norm(hists[j]) + DBL_EPSILON)); // 1-dist ... 0 is equal 2 is orthogonal
+			//	} else if(mVocabulary.type() == WriterVocabulary::WI_BOW) {
+			//		cv::Mat tmp;
+			//		pow(hists[i] - hists[j], 2, tmp);
+			//		cv::Scalar scal = cv::sum(tmp);
+			//		distances.at<float>(j) = (float)sqrt(scal[0]);
+			//	}
+			//}
 			cv::Mat idxs;
 			//writeMatToFile(distances, "c:\\tmp\\distances-unsorted.txt");
-			cv::sortIdx(distances, idxs, CV_SORT_EVERY_COLUMN| CV_SORT_ASCENDING);
-			cv::sort(distances, distances, CV_SORT_EVERY_COLUMN | CV_SORT_ASCENDING);
+			cv::sortIdx(distances, idxs, CV_SORT_EVERY_ROW| CV_SORT_ASCENDING);
+			cv::sort(distances, distances, CV_SORT_EVERY_ROW | CV_SORT_ASCENDING);
 
 			//writeMatToFile(distances, "c:\\tmp\\distances.txt");
 			//writeMatToFile(idxs, "c:\\tmp\\distances-idxs.txt");
@@ -259,7 +263,7 @@ namespace rdf {
 				tp++;
 			else
 				fp++;
-			if(idxs.rows > 11) {
+			if(idxs.cols > 11) {
 				bool allCorrect = true;
 				bool oneCorrect = false;
 				for(int j = 1; j <= 11; j++) { // 1 because idx 0 is the original file
@@ -555,6 +559,34 @@ namespace rdf {
 		mVocabularyPath = filePath;
 		fs.release();
 	}
+	/// <summary>
+	/// Calcualtes the distance matrix of the histograms given in the RxC matrix. Depending on the type of the vocabulary either
+	/// the consine distance (GMM) or the euclidean (BOW) distance is used.
+	/// </summary>
+	/// <param name="hists">a matrix with the feature vectors of different images stored in the rows</param>
+	/// <returns>a RxR matrix of the distances between the feature vectors in the rows of the input matrix.</returns>
+	cv::Mat WriterVocabulary::calcualteDistanceMatrix(cv::Mat hists) const {
+		cv::Mat distances = cv::Mat(hists.rows, hists.rows, CV_32F);
+		distances.setTo(0);
+		for(int i = 0; i < hists.rows; i++) {
+			for(int j = i; j < hists.rows; j++) {
+				if(mVocabulary.type() == WriterVocabulary::WI_GMM) {
+					distances.at<float>(i, j) = (float)(1 - hists.row(i).dot(hists.row(j)) / (cv::norm(hists.row(i))*cv::norm(hists.row(j)) + DBL_EPSILON)); // 1-dist ... 0 is equal 2 is orthogonal
+					distances.at<float>(j, i) = distances.at<float>(i, j);
+				}
+				else if(mVocabulary.type() == WriterVocabulary::WI_BOW) {
+					cv::Mat tmp;
+					pow(hists.row(i) - hists.row(j), 2, tmp);
+					cv::Scalar scal = cv::sum(tmp);
+					distances.at<float>(i,j) = (float)sqrt(scal[0]);
+					distances.at<float>(j, i) = distances.at<float>(i, j);
+				}
+			}
+		}
+		return distances;
+	}
+
+
 	/// <summary>
 	/// Determines whether the vocabulary is empty respl. not trained.
 	/// </summary>

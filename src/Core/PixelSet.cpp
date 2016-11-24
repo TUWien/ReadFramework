@@ -403,13 +403,18 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 	return textLine;
 }
 
-void PixelSet::draw(QPainter& p) const {
+void PixelSet::draw(QPainter& p, const QFlag& options) const {
 
-	for (auto px : mSet)
-		px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+	// NOTE: that int cast is not needed - but gcc is confused otherwise
+	if ((int)options & (int)draw_pixels) {
+		for (auto px : mSet)
+			px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+	}
 
 	//polyLine(0.0).draw(p);
-	convexHull().draw(p);
+
+	if ((int)options & (int)draw_poly)
+		convexHull().draw(p);
 }
 
 // PixelGraph --------------------------------------------------------------------

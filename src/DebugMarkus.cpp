@@ -389,7 +389,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//auto model = spt.model();
 
 	SuperPixelClassifier spc(src, sp);
-	//spc.setModel(model);
+	spc.setModel(model);
 
 	if (!spc.compute())
 		qWarning() << "could not classify SuperPixels";
@@ -425,7 +425,6 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-classified");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
-
 
 	//// write XML -----------------------------------
 	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());

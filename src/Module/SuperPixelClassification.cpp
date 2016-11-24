@@ -83,6 +83,8 @@ SuperPixelClassifier::SuperPixelClassifier(const cv::Mat& img, const PixelSet& s
 	mImg = img;
 	mSet = set;
 	mConfig = QSharedPointer<SuperPixelClassifierConfig>::create();
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelClassifier::isEmpty() const {
@@ -141,7 +143,7 @@ cv::Mat SuperPixelClassifier::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
-	mSet.draw(p);
+	mSet.draw(p, PixelSet::draw_pixels);
 	
 	// draw legend
 	mModel->manager().draw(p);
@@ -178,6 +180,10 @@ SuperPixelFeature::SuperPixelFeature(const cv::Mat & img, const PixelSet & set) 
 	mImg = img;
 	mSet = set;
 	mConfig = QSharedPointer<SuperPixelFeatureConfig>::create();
+	
+	// TODO: these settings are still generic...
+	//mConfig->loadSettings();
+	//mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelFeature::isEmpty() const {

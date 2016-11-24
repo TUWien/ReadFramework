@@ -369,8 +369,16 @@ QString LabelManager::jsonKey() {
 
 void LabelManager::draw(QPainter & p) const {
 
+	int lineSpacing = 30;
+	Vector2D margin(5,5);
+
 	QPen oldPen = p.pen();
 	Rect r(10, 10, 20, 20);
+
+	Rect bgRect(r.topLeft()-margin, Vector2D(200, lineSpacing*mLookups.size())+margin);
+	p.setPen(ColorManager::white());
+	p.setBrush(ColorManager::white(0.4));
+	p.drawRect(bgRect.toQRect());
 
 	for (const LabelInfo& li : mLookups) {
 		
@@ -382,7 +390,7 @@ void LabelManager::draw(QPainter & p) const {
 		Vector2D tp = r.bottomRight();
 		tp += Vector2D(10, -5);
 		p.drawText(tp.toQPoint(), li.name());
-		r.move(Vector2D(0, 30));
+		r.move(Vector2D(0, lineSpacing));
 	}
 	p.setPen(oldPen);
 }

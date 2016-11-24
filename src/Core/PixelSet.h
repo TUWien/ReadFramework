@@ -157,6 +157,16 @@ public:
 		connect_end
 	};
 
+	enum DrawFlag {
+		draw_nothing = 0x0,
+		draw_pixels = 0x1,
+		draw_poly = 0x2,
+
+		draw_end
+	};
+
+	Q_DECLARE_FLAGS(DrawFlags, DrawFlag)
+
 	QSharedPointer<Pixel> operator[](int idx) const;
 
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
@@ -177,7 +187,7 @@ public:
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
 
-	void draw(QPainter& p) const;
+	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
@@ -188,6 +198,8 @@ protected:
 
 	Polygon polygon(const QVector<Vector2D>& pts) const;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(PixelSet::DrawFlags)
 
 /// <summary>
 /// Represents a pixel graph.

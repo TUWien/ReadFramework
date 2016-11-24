@@ -112,6 +112,8 @@ SuperPixelLabeler::SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& b
 	mBlobs = blobs;
 	mImgRect = imgRect;
 	mConfig = QSharedPointer<SuperPixelLabelerConfig>::create();
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelLabeler::isEmpty() const {
@@ -143,7 +145,11 @@ cv::Mat SuperPixelLabeler::draw(const cv::Mat& img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
-	mSet.draw(p);
+	p.setPen(ColorManager::red());
+	mSet.draw(p, PixelSet::draw_pixels);
+
+	// draw legend
+	mManager.draw(p);
 
 	//for (auto b : mBlobs)
 	//	p.drawRect(Converter::cvRectToQt(b->bbox().toCvRect()));
@@ -414,7 +420,10 @@ void FeatureCollectionManager::normalize(int minFeaturesPerClass, int maxFeature
 
 	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
 	for (int ri : removeIdx) {
-		qInfo() << mCollection[ri].label().name() << "removed since it has too few features: " << mCollection[ri].numDescriptors();
+		qInfo() << mCollection[ri].label().name() << 
+			"removed since it has too few features: " << 
+			mCollection[ri].numDescriptors() <<
+			"minimum:" << minFeaturesPerClass;
 		mCollection.remove(ri);
 	}
 }
@@ -542,7 +551,8 @@ void SuperPixelTrainerConfig::save(QSettings &) const {
 SuperPixelTrainer::SuperPixelTrainer(const FeatureCollectionManager & fcm) {
 	mFeatureManager = fcm;
 	mConfig = QSharedPointer<SuperPixelTrainerConfig>::create();
-
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelTrainer::isEmpty() const {
