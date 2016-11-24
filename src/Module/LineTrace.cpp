@@ -1017,6 +1017,10 @@ namespace rdf {
 		return mRadImg;
 	}
 
+	cv::Mat ReadLSD::regImg() const	{
+		return mRegionImg;
+	}
+
 	QVector<rdf::LineSegment> ReadLSD::lines() const {
 		return mLineSegments;
 	}
