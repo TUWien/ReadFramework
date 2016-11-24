@@ -59,6 +59,8 @@ class QSettings;
 
 namespace rdf {	
 
+#define WHO_IS_CUTE "Anna"
+
 // read defines
 class DllCoreExport Utils {
 
@@ -89,6 +91,7 @@ public:
 	static QColor lightGray(double alpha = 1.0);
 	static QColor darkGray(double alpha = 1.0);
 	static QColor red(double alpha = 1.0);
+	static QColor white(double alpha = 1.0);
 };
 
 

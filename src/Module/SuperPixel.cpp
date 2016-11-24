@@ -59,6 +59,8 @@ namespace rdf {
 SuperPixel::SuperPixel(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
 	mConfig = QSharedPointer<SuperPixelConfig>::create();
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixel::checkInput() const {
@@ -198,7 +200,11 @@ bool SuperPixel::compute() {
 
 	QSharedPointer<MserContainer> rawBlobs(new MserContainer());
 
-	for (int idx = 0; idx < 10; idx += 4) {
+	int maxFilter = config()->erosionStep()*config()->numErosionLayers();
+
+	qDebug() << "# erosion layers: " << config()->numErosionLayers();
+
+	for (int idx = 0; idx < maxFilter; idx += config()->erosionStep()) {
 
 		Timer dti;
 		QSharedPointer<MserContainer> cb = getBlobs(img, idx);
@@ -303,27 +309,67 @@ QString SuperPixelConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
+/// <summary>
+/// The minimum SuperPixel area in pixel.
+/// NOTE: the segmented pixels are summed up
+/// rather than its resulting ellipses.
+/// </summary>
+/// <returns></returns>
 int SuperPixelConfig::mserMinArea() const {
 	return mMserMinArea;
 }
 
+/// <summary>
+/// The maximum SuperPixel area in pixel.
+/// NOTE: the segmented pixels are summed up
+/// rather than its resulting ellipses.
+/// </summary>
+/// <returns></returns>
 int SuperPixelConfig::mserMaxArea() const {
-	return mMserMaxArea;
+	
+	return checkIntParam(mMserMaxArea, mserMinArea(), INT_MAX, "mserMaxArea");
+}
+
+/// <summary>
+/// The erosion step in pixel.
+/// The kernelsize is iteratively increased
+/// when computing the erosion layers.
+/// </summary>
+/// <returns></returns>
+int SuperPixelConfig::erosionStep() const {
+
+	return checkIntParam(mErosionStep, 1, 20, "erosionStep");
+}
+
+/// <summary>
+/// Numbers the erosion layers.
+/// The image is iteratively eroded in order to split
+/// cursive handwriting. Specify how many erosion layers
+/// should be created - when testing 3 seemed to be a good
+/// trade-off between accuracy and speed.
+/// </summary>
+/// <returns></returns>
+int SuperPixelConfig::numErosionLayers() const {
+	
+	return checkIntParam(mNumErosionLayers, 1, 20, "numErosionLayers");
 }
 
 void SuperPixelConfig::load(const QSettings & settings) {
 
 	// add parameters
-	mMserMinArea = settings.value("MserMinArea", mMserMinArea).toInt();
-	mMserMaxArea = settings.value("MserMaxArea", mMserMaxArea).toInt();
-
+	mMserMinArea = settings.value("mserMinArea", mserMinArea()).toInt();
+	mMserMaxArea = settings.value("mserMaxArea", mserMaxArea()).toInt();
+	mErosionStep = settings.value("erosionStep", erosionStep()).toInt();
+	mNumErosionLayers = settings.value("numErosionLayers", numErosionLayers()).toInt();
 }
 
 void SuperPixelConfig::save(QSettings & settings) const {
 
 	// add parameters
-	settings.setValue("MserMinArea", mMserMinArea);
-	settings.setValue("MserMaxArea", mMserMaxArea);
+	settings.setValue("mserMinArea", mserMinArea());
+	settings.setValue("mserMaxArea", mserMaxArea());
+	settings.setValue("erosionStep", erosionStep());
+	settings.setValue("numErosionLayers", numErosionLayers());
 }
 
 // MserContainer --------------------------------------------------------------------
@@ -417,6 +463,8 @@ void LocalOrientationConfig::save(QSettings & settings) const {
 LocalOrientation::LocalOrientation(const QVector<QSharedPointer<Pixel> >& set) {
 	mSet = set;
 	mConfig = QSharedPointer<LocalOrientationConfig>::create();
+	mConfig->loadSettings();
+	mConfig->saveDefaultSettings();
 }
 
 bool LocalOrientation::isEmpty() const {
@@ -537,7 +585,6 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 	const Vector2D pc = pixel->center();
 
 	// prepare histogram
-	//orHist.setTo(0);
 	float* orPtr = orHist.ptr<float>();
 
 	for (const Pixel* p : set) {

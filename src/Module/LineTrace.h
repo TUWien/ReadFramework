@@ -271,6 +271,7 @@ public:
 	virtual bool compute() override;
 	cv::Mat magImg() const;
 	cv::Mat radImg() const;
+	cv::Mat regImg() const;
 	QVector<rdf::LineSegment> lines() const;
 	QSharedPointer<ReadLSDConfig> config() const;
 

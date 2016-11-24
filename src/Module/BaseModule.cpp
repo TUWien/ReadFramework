@@ -53,12 +53,23 @@ void ModuleConfig::loadSettings() {
 	settings.endGroup();
 }
 
-void ModuleConfig::saveSettings() {
+void ModuleConfig::saveSettings() const {
 
 	QSettings& settings = Config::instance().settings();
 	settings.beginGroup(mModuleName);
 	save(settings);
 	settings.endGroup();
+}
+
+void ModuleConfig::saveDefaultSettings() const {
+
+	if (name() != "Generic Module") {
+		// write default settings
+		QSettings& settings = Config::instance().settings();
+		if (!settings.childGroups().contains(name())) {
+			saveSettings();
+		}
+	}
 }
 
 QString ModuleConfig::name() const {
@@ -71,10 +82,27 @@ QString ModuleConfig::toString() const {
 
 void ModuleConfig::load(const QSettings&) {
 	// dummy
+	qWarning() << "ModuleConfig::load() called - make sure to call the derived method...";
 }
 
 void ModuleConfig::save(QSettings&) const {
 	// dummy
+	qWarning() << "ModuleConfig::save() called - make sure to call the derived method...";
+}
+
+int ModuleConfig::checkIntParam(int param, int min, int max, const QString & name) const {
+
+	if (param < min) {
+		qWarning().noquote() << name << "must be >" << min << "but it is: " << param;
+		return min;
+	}
+
+	if (param > max) {
+		qWarning().noquote() << name << "must be <" << max << "but it is: " << param;
+		return max;
+	}
+
+	return param;
 }
 
 

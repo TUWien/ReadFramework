@@ -51,7 +51,7 @@ namespace rdf {
 /// are contained in the extended PAGE XML.
 /// </summary>
 Region::Region(const Type& type) {
-	mId = QUuid::createUuid().toString();
+	mId = "CVL-" + QUuid::createUuid().toString();
 	mType = type;
 }
 
