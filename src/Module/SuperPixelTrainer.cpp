@@ -420,7 +420,10 @@ void FeatureCollectionManager::normalize(int minFeaturesPerClass, int maxFeature
 
 	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
 	for (int ri : removeIdx) {
-		qInfo() << mCollection[ri].label().name() << "removed since it has too few features: " << mCollection[ri].numDescriptors();
+		qInfo() << mCollection[ri].label().name() << 
+			"removed since it has too few features: " << 
+			mCollection[ri].numDescriptors() <<
+			"minimum:" << minFeaturesPerClass;
 		mCollection.remove(ri);
 	}
 }

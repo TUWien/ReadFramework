@@ -405,14 +405,15 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 
 void PixelSet::draw(QPainter& p, const QFlag& options) const {
 
-	if (options & (QFlag)draw_pixels) {
+	// NOTE: that int cast is not needed - but gcc is confused otherwise
+	if ((int)options & (int)draw_pixels) {
 		for (auto px : mSet)
 			px->draw(p, 0.3, Pixel::draw_ellipse_stats);
 	}
 
 	//polyLine(0.0).draw(p);
 
-	if (options & (QFlag)draw_poly)
+	if ((int)options & (int)draw_poly)
 		convexHull().draw(p);
 }
 
