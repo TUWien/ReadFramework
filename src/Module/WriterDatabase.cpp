@@ -199,7 +199,7 @@ namespace rdf {
 		
 		cv::Mat dist = mVocabulary.calcualteDistanceMatrix(hists);
 		for(int i = 0; i < hists.rows; i++) {
-			cv::Mat distances = dist.row(i);
+			cv::Mat distances = dist.row(i).t();
 			//cv::Mat distances(hists.rows, 1, CV_32FC1);
 			//distances.setTo(0);
 
@@ -215,8 +215,8 @@ namespace rdf {
 			//}
 			cv::Mat idxs;
 			//writeMatToFile(distances, "c:\\tmp\\distances-unsorted.txt");
-			cv::sortIdx(distances, idxs, CV_SORT_EVERY_ROW| CV_SORT_ASCENDING);
-			cv::sort(distances, distances, CV_SORT_EVERY_ROW | CV_SORT_ASCENDING);
+			cv::sortIdx(distances, idxs, CV_SORT_EVERY_COLUMN| CV_SORT_ASCENDING);
+			cv::sort(distances, distances, CV_SORT_EVERY_COLUMN | CV_SORT_ASCENDING);
 
 			//writeMatToFile(distances, "c:\\tmp\\distances.txt");
 			//writeMatToFile(idxs, "c:\\tmp\\distances-idxs.txt");
@@ -263,7 +263,7 @@ namespace rdf {
 				tp++;
 			else
 				fp++;
-			if(idxs.cols > 11) {
+			if(idxs.rows > 11) {
 				bool allCorrect = true;
 				bool oneCorrect = false;
 				for(int j = 1; j <= 11; j++) { // 1 because idx 0 is the original file
