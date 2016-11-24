@@ -61,7 +61,7 @@
 namespace rdf {
 
 // SuperPixelLabelerConfig --------------------------------------------------------------------
-SuperPixelLabelerConfig::SuperPixelLabelerConfig() : ModuleConfig("Super Pixel Trainer") {
+SuperPixelLabelerConfig::SuperPixelLabelerConfig() : ModuleConfig("Super Pixel Labeler") {
 }
 
 QString SuperPixelLabelerConfig::featureFilePath() const {
@@ -535,16 +535,33 @@ cv::Mat FeatureCollectionManager::allLabels() const {
 SuperPixelTrainerConfig::SuperPixelTrainerConfig() : ModuleConfig("SuperPixelTrainer") {
 }
 
+QStringList SuperPixelTrainerConfig::featureCachePaths() const {
+	return mFeatureCachePaths;
+}
+
+QString SuperPixelTrainerConfig::modelPath() const {
+	return mModelPath;
+}
+
 QString SuperPixelTrainerConfig::toString() const {
-	return ModuleConfig::toString();
+
+	QString msg = ModuleConfig::toString();
+	msg += "feature files:\n" + featureCachePaths().join("\n");
+
+	return msg;
 }
 
-void SuperPixelTrainerConfig::load(const QSettings &) {
-	// TODO: add load/save here
+void SuperPixelTrainerConfig::load(const QSettings & settings) {
+
+	QString paths = settings.value("featureCachePaths", mFeatureCachePaths.join(",")).toString();
+	mFeatureCachePaths = paths.split(",");
+	mModelPath = settings.value("modelPath", mModelPath).toString();
 }
 
-void SuperPixelTrainerConfig::save(QSettings &) const {
-	// TODO: add load/save here
+void SuperPixelTrainerConfig::save(QSettings & settings) const {
+	
+	settings.setValue("featureCachePaths", mFeatureCachePaths.join(","));
+	settings.setValue("modelPath", mModelPath);
 }
 
 // SuperPixelTrainer --------------------------------------------------------------------
@@ -573,8 +590,9 @@ bool SuperPixelTrainer::compute() {
 		return false;
 	}
 
+	mInfo << "training model with" << mFeatureManager.numFeatures() << "this might take a while...";
+
 	mModel->train(mFeatureManager.toCvTrainData());
-	mModel->save("C:/temp/rt.yml");
 
 	mInfo << "trained in" << dt;
 

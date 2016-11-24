@@ -198,9 +198,15 @@ class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {
 public:
 	SuperPixelTrainerConfig();
 
+	QStringList featureCachePaths() const;
+	QString modelPath() const;
+
 	virtual QString toString() const override;
 
 protected:
+
+	QStringList mFeatureCachePaths;
+	QString mModelPath;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

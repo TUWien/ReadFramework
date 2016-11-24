@@ -319,6 +319,7 @@ void LayoutTest::testTrainer() {
 	
 	Timer dt;
 	FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
+	
 
 	// train classifier
 	SuperPixelTrainer spt(fcm);
