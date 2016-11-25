@@ -150,8 +150,8 @@ protected:
 
 	QString mFeatureFilePath;
 	QString mLabelConfigFilePath;
-	int mMaxNumFeaturesPerImage = 10000;	// 1e4
-	int mMinNumFeaturesPerClass = 1000000;	// 1e6
+	int mMaxNumFeaturesPerImage = 1000000;	// 1e6
+	int mMinNumFeaturesPerClass = 10000;	// 1e4
 	int mMaxNumFeaturesPerClass = 10000;	// 1e4;
 };
 

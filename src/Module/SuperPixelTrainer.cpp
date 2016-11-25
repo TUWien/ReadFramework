@@ -175,7 +175,7 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 		mWarning << "label manager is empty...";
 
 	QImage img(imgRect.size().toQSize(), QImage::Format_RGB888);
-	img.fill(LabelInfo::backgroundLabel().color());
+	img.fill(LabelInfo::unknownLabel().color());
 
 	auto allRegions = Region::allRegions(mGtRegion);
 
@@ -189,7 +189,7 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 
 		if (ll.isNull()) { 
 			qDebug() << "could not find region: " << region->type();
-			ll = LabelInfo::ignoreLabel();
+			continue;
 		}
 		
 		QColor labelC = ll.color();
