@@ -191,6 +191,11 @@ QString Utils::baseName(const QString & filePath) const {
 
 QJsonObject Utils::readJson(const QString & filePath) {
 	
+	if (filePath.isEmpty()) {
+		qCritical() << "cannot read Json, file path is empty...";
+		return QJsonObject();
+	}
+
 	QFile file(filePath);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		QFileInfo fi(filePath);
@@ -215,6 +220,11 @@ QJsonObject Utils::readJson(const QString & filePath) {
 }
 
 int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
+
+	if (filePath.isEmpty()) {
+		qCritical() << "cannot write Json, file path is empty...";
+		return 0;
+	}
 
 	QFile file(filePath);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {

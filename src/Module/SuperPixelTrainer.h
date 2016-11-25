@@ -173,6 +173,8 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
+	void setFilePath(const QString& filePath);
+	void setBackgroundLabelName(const QString& name);
 	void setRootRegion(const QSharedPointer<Region>& region);
 	void setLabelManager(const LabelManager& manager);
 	QImage createLabelImage(const Rect& imgRect) const;
@@ -184,13 +186,14 @@ private:
 	QSharedPointer<Region> mGtRegion;
 	Rect mImgRect;
 	LabelManager mManager;
+	QString mGlobalName;
 
 	// results
 	PixelSet mSet;
 
 	bool checkInput() const override;
 	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
-	
+	QString parseLabel(const QString& filePath) const;
 };
 
 class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {

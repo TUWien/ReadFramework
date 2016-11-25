@@ -60,6 +60,9 @@ public:
 	void setClassifierPath(const QString& path);
 	QString classifierPath() const;
 
+	void setLabelConfigPath(const QString& path);
+	QString labelConfigPath() const;
+
 	void setFeatureCachePath(const QString& path);
 	QString featureCachePath() const;
 
@@ -69,6 +72,7 @@ protected:
 	QString mOutputPath;
 	QString mClassifierPath;
 	QString mFeatureCachePath;
+	QString mLabelConfigPath;
 };
 
 };

@@ -229,8 +229,6 @@ QSharedPointer<SuperPixelFeatureConfig> SuperPixelFeature::config() const {
 
 cv::Mat SuperPixelFeature::draw(const cv::Mat & img) const {
 	
-	qDebug() << "not implemented...";
-
 	cv::Mat avg;
 	cv::reduce(mDescriptors, avg, 0, CV_REDUCE_SUM, CV_32FC1);
 

@@ -145,10 +145,10 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	//testFeatureCollector(imgCv);
+	testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
-	testLayout(imgCv);
+	//testLayout(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -243,7 +243,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	parser.read(mConfig.xmlPath());
 
 	// test loading of label lookup
-	LabelManager lm = LabelManager::read(mConfig.featureCachePath());
+	LabelManager lm = LabelManager::read(mConfig.labelConfigPath());
 	qInfo().noquote() << lm.toString();
 
 	// compute super pixels
@@ -255,6 +255,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	// feed the label lookup
 	SuperPixelLabeler spl(sp.getMserBlobs(), Rect(src));
 	spl.setLabelManager(lm);
+	spl.setFilePath(mConfig.imagePath());
 
 	// set the ground truth
 	if (parser.page())
@@ -268,9 +269,9 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 		qCritical() << "could not compute SuperPixel features!";
 
 	FeatureCollectionManager fcm(spf.features(), spf.set());
-	fcm.write(spl.config()->featureFilePath());
+	fcm.write(mConfig.featureCachePath());
 	
-	FeatureCollectionManager testFcm = FeatureCollectionManager::read(spl.config()->featureFilePath());
+	FeatureCollectionManager testFcm = FeatureCollectionManager::read(mConfig.featureCachePath());
 
 	for (int idx = 0; idx < testFcm.collection().size(); idx++) {
 

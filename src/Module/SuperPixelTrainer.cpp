@@ -1,3 +1,6 @@
+#include "SuperPixelTrainer.h"
+#include "SuperPixelTrainer.h"
+#include "SuperPixelTrainer.h"
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
@@ -61,25 +64,52 @@
 namespace rdf {
 
 // SuperPixelLabelerConfig --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="SuperPixelLabelerConfig"/> class.
+/// This class configures the feature collection process.
+/// </summary>
 SuperPixelLabelerConfig::SuperPixelLabelerConfig() : ModuleConfig("Super Pixel Labeler") {
 }
 
+/// <summary>
+/// Full file path to the feature cache file.
+/// This file is the collection's output and contains
+/// all features collected.
+/// </summary>
+/// <returns></returns>
 QString SuperPixelLabelerConfig::featureFilePath() const {
 	return mFeatureFilePath;
 }
 
+/// <summary>
+/// Full file path to the label config file.
+/// The label config file configures the labeling process (e.g. if TextRegion is handwritten or printed).
+/// </summary>
+/// <returns></returns>
 QString SuperPixelLabelerConfig::labelConfigFilePath() const {
 	return mLabelConfigFilePath;
 }
 
+/// <summary>
+/// Sepcify the maximum number of images collected per image.
+/// </summary>
+/// <returns></returns>
 int SuperPixelLabelerConfig::maxNumFeaturesPerImage() const {
 	return mMaxNumFeaturesPerImage;
 }
 
+/// <summary>
+/// If less features are found for a class, it is not saved.
+/// </summary>
+/// <returns></returns>
 int SuperPixelLabelerConfig::minNumFeaturesPerClass() const {
 	return mMinNumFeaturesPerClass;
 }
 
+/// <summary>
+/// The maximum number of features collected per class.
+/// </summary>
+/// <returns></returns>
 int SuperPixelLabelerConfig::maxNumFeaturesPerClass() const {
 	return mMaxNumFeaturesPerClass;
 }
@@ -161,6 +191,27 @@ QString SuperPixelLabeler::toString() const {
 	return Module::toString();
 }
 
+/// <summary>
+/// Parses the filePath for GT labels.
+/// If a label is found, the background of
+/// label image is set to the GT label.
+/// </summary>
+/// <param name="filePath">The file path.</param>
+void SuperPixelLabeler::setFilePath(const QString & filePath) {
+	QString name = parseLabel(filePath);
+	setBackgroundLabelName(name);
+}
+
+/// <summary>
+/// Sets the name of the background label.
+/// This is useful if the GT is specified on
+/// image level.
+/// </summary>
+/// <param name="name">The label name.</param>
+void SuperPixelLabeler::setBackgroundLabelName(const QString & name) {
+	mGlobalName = name;
+}
+
 void SuperPixelLabeler::setRootRegion(const QSharedPointer<Region>& region) {
 	mGtRegion = region;
 }
@@ -174,8 +225,10 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 	if (mManager.isEmpty())
 		mWarning << "label manager is empty...";
 
+	LabelInfo bgLabel = mManager.find(mGlobalName);
+
 	QImage img(imgRect.size().toQSize(), QImage::Format_RGB888);
-	img.fill(LabelInfo::unknownLabel().color());
+	img.fill(bgLabel.color());
 
 	auto allRegions = Region::allRegions(mGtRegion);
 
@@ -203,6 +256,49 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 
 PixelSet SuperPixelLabeler::set() const {
 	return mSet;
+}
+
+/// <summary>
+/// Parses the filePath for potential GT labels.
+/// Labels have to be between braces []:
+/// C:\images\[printed]\img001.jpg
+/// C:\images\img001[handwritten].jpg
+/// If a label was extracted, but could not be found in 
+/// the label config, the LabelInfo::unknownLabel() name
+/// is returned.
+/// </summary>
+/// <param name="filePath">The file path.</param>
+/// <returns></returns>
+QString SuperPixelLabeler::parseLabel(const QString & filePath) const {
+
+	LabelInfo labelInfo;
+
+	QRegExp re("\\[(.*)\\]");
+	int pos = re.indexIn(filePath);	// match it
+
+	if (pos == -1) {
+		qInfo() << "no label found in" << filePath;
+		return labelInfo.name();
+	}
+
+	QStringList labels = re.capturedTexts();
+
+	//if (labels.size() > 1)
+	//	qWarning() << "I have found more than one potential label:" << labels.join(",");
+
+	for (const QString& labelStr : labels) {
+		labelInfo = mManager.find(labelStr);
+
+		if (!labelInfo.isNull()) {
+			qInfo() << "GT label found in filepath:" << labelStr;
+			break;
+		}
+	}
+
+	if (labelInfo.isNull())
+		qWarning() << "I have found a potential label, but could not match it:" << labels.join(" ");
+
+	return labelInfo.name();
 }
 
 bool SuperPixelLabeler::checkInput() const {
@@ -407,7 +503,7 @@ void FeatureCollectionManager::normalize(int minFeaturesPerClass, int maxFeature
 	for (int idx = 0; idx < mCollection.size(); idx++) {
 
 		int nd = mCollection[idx].numDescriptors();
-		if (nd < minFeaturesPerClass) {
+		if (nd < minFeaturesPerClass || mCollection[idx].label() == LabelInfo::unknownLabel()) {
 			removeIdx << idx;
 		}
 		else if (nd > maxFeaturesPerClass) {
@@ -420,10 +516,16 @@ void FeatureCollectionManager::normalize(int minFeaturesPerClass, int maxFeature
 
 	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
 	for (int ri : removeIdx) {
-		qInfo() << mCollection[ri].label().name() << 
-			"removed since it has too few features: " << 
-			mCollection[ri].numDescriptors() <<
-			"minimum:" << minFeaturesPerClass;
+
+		if (mCollection[ri].label() == LabelInfo::unknownLabel()) {
+			qInfo() << mCollection[ri].label().name() << "removed since it is 'unknown'";
+		}
+		else {
+			qInfo() << mCollection[ri].label().name() <<
+				"removed since it has too few features: " <<
+				mCollection[ri].numDescriptors() <<
+				"minimum:" << minFeaturesPerClass;
+		}
 		mCollection.remove(ri);
 	}
 }
