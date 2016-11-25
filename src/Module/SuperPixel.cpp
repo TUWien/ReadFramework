@@ -49,7 +49,6 @@
 #include "GCGraph.hpp"
 #include "graphcut/GCoptimization.h"
 
-
 #pragma warning(pop)
 
 namespace rdf {
@@ -750,11 +749,11 @@ void GraphCutOrientation::graphCut(const PixelGraph& graph) {
 	int gcIter = 2;	// # iterations of graph-cut (expansion)
 
 	// stats must be computed already
-	QVector<QSharedPointer<Pixel> > pixel = graph.set()->pixels();
+	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
 	assert(pixel[0]->stats());
 
 	// the statistics columns == the number of possible labels
-	int nLabels = graph.set()->pixels()[0]->stats()->data().cols;
+	int nLabels = graph.set().pixels()[0]->stats()->data().cols;
 	
 	// get costs and smoothness term
 	cv::Mat c = costs(nLabels);					 // SetSize x #labels

@@ -59,6 +59,10 @@ QSharedPointer<Pixel> PixelSet::operator[](int idx) const {
 	return mSet[idx];
 }
 
+bool PixelSet::isEmpty() const {
+	return mSet.isEmpty();
+}
+
 bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {
 
 	return mSet.contains(pixel);
@@ -419,21 +423,20 @@ void PixelSet::draw(QPainter& p, const QFlag& options) const {
 
 // PixelGraph --------------------------------------------------------------------
 PixelGraph::PixelGraph() {
-
 }
 
-PixelGraph::PixelGraph(const QVector<QSharedPointer<Pixel>>& set) {
-	mSet = QSharedPointer<PixelSet>::create(set);
+PixelGraph::PixelGraph(const PixelSet& set) {
+	mSet = set;
 }
 
 bool PixelGraph::isEmpty() const {
-	return !mSet || mSet->pixels().isEmpty();
+	return mSet.isEmpty();
 }
 
 void PixelGraph::draw(QPainter& p) const {
 
 	p.setPen(ColorManager::colors()[0]);
-	for (auto px : mSet->pixels())
+	for (auto px : mSet.pixels())
 		px->draw(p, 0.3, Pixel::draw_ellipse_only);
 
 	p.setPen(ColorManager::darkGray(.4));
@@ -449,7 +452,7 @@ void PixelGraph::connect(const PixelConnector& connector) {
 		return;
 
 	assert(mSet);
-	const QVector<QSharedPointer<Pixel> >& pixels = mSet->pixels();
+	const QVector<QSharedPointer<Pixel> >& pixels = mSet.pixels();
 
 	mEdges = connector.connect(pixels);
 
@@ -471,7 +474,7 @@ void PixelGraph::connect(const PixelConnector& connector) {
 
 }
 
-QSharedPointer<PixelSet> PixelGraph::set() const {
+PixelSet PixelGraph::set() const {
 	return mSet;
 }
 

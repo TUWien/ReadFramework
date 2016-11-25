@@ -47,6 +47,11 @@
 
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/ml/ml.hpp>
+
+#pragma warning(disable: 4706)
+#include "GCGraph.hpp"
+#include "graphcut/GCoptimization.h"
+
 #pragma warning(pop)
 
 namespace rdf {
@@ -299,6 +304,129 @@ void SuperPixelFeature::syncSuperPixels(const std::vector<cv::KeyPoint>& keyPoin
 	for (int ri : removeIdx) 
 		mSet.remove(mSet.pixels()[ri]);
 
+}
+
+// GraphCutLabels --------------------------------------------------------------------
+GraphCutLabels::GraphCutLabels(const PixelSet & set) {
+	mSet = set;
+}
+
+bool GraphCutLabels::isEmpty() const {
+	return mSet.isEmpty() || !mModel;
+}
+
+bool GraphCutLabels::checkInput() const {
+	return !isEmpty();
+}
+
+bool GraphCutLabels::compute() {
+	
+	if (!checkInput())
+		return false;
+
+	DelauneyPixelConnector dpc;
+
+	Timer dt;
+	PixelGraph graph(mSet);
+	graph.connect(dpc);
+	graphCut(graph);
+	qInfo() << "[Label Graph Cut] computed in" << dt;
+
+	return true;
+}
+
+PixelSet GraphCutLabels::set() const {
+	return mSet;
+}
+
+void GraphCutLabels::setModel(const QSharedPointer<SuperPixelModel>& model) {
+	mModel = model;
+}
+
+void GraphCutLabels::graphCut(const PixelGraph & graph) {
+
+	if (graph.isEmpty())
+		return;
+
+	int gcIter = 2;	// # iterations of graph-cut (expansion)
+
+	// stats must be computed already
+	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
+
+	// # of labels
+	int nLabels = mModel->manager().size();
+
+	// get costs and smoothness term
+	cv::Mat c = costs(nLabels);				// SetSize x #labels
+	cv::Mat sm = labelDistMatrix(nLabels);	// #labels x #labels
+
+	// init the graph
+	QSharedPointer<GCoptimizationGeneralGraph> graphCut(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
+	graphCut->setDataCost(c.ptr<int>());
+	graphCut->setSmoothCost(sm.ptr<int>());
+
+	// create neighbors
+	const QVector<QSharedPointer<PixelEdge> >& edges = graph.edges();
+	for (int idx = 0; idx < pixel.size(); idx++) {
+
+		for (int edgeIdx : graph.edgeIndexes(pixel.at(idx)->id())) {
+
+			assert(edgeIdx != -1);
+
+			// get vertex ID
+			const QSharedPointer<PixelEdge>& pe = edges[edgeIdx];
+			int sVtxIdx = graph.pixelIndex(pe->second()->id());
+
+			// compute weight
+			int w = qRound((1.0-pe->edgeWeight()) * mScaleFactor);
+
+			graphCut->setNeighbors(idx, sVtxIdx, w);
+		}
+	}
+
+	// run the expansion-move
+	graphCut->expansion(gcIter);
+
+	// update labels
+	for (int idx = 0; idx < pixel.size(); idx++) {
+
+		LabelInfo li = mModel->manager().find(graphCut->whatLabel(idx));
+		PixelLabel pl;
+		pl.setLabel(li);
+		pixel[idx]->setLabel(pl);
+	}
+
+}
+
+cv::Mat GraphCutLabels::costs(int numLabels) const {
+	
+	// fill costs
+	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		// TODO: get the class weights here!
+		auto ps = mSet[idx]->stats();
+		assert(ps);
+
+		cv::Mat cData = ps->data(PixelStats::combined_idx);
+		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);	// TODO: check scaling
+	}
+
+	return data;
+}
+
+cv::Mat GraphCutLabels::labelDistMatrix(int numLabels) const {
+	
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1, cv::Scalar(1));
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+		sPtr[rIdx] = 0;	// 0 for the diagonal
+	}
+
+	return orDist;
 }
 
 }

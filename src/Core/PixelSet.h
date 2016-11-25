@@ -169,6 +169,7 @@ public:
 
 	QSharedPointer<Pixel> operator[](int idx) const;
 
+	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
@@ -211,14 +212,14 @@ class DllCoreExport PixelGraph : public BaseElement {
 
 public:
 	PixelGraph();
-	PixelGraph(const QVector<QSharedPointer<Pixel> >& set);
+	PixelGraph(const PixelSet& set);
 
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
 	void connect(const PixelConnector& connector = DelauneyPixelConnector());
 
-	QSharedPointer<PixelSet> set() const;
+	PixelSet set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QVector<int>& edgeIDs) const;
 	QVector<QSharedPointer<PixelEdge> > edges() const;
@@ -227,7 +228,7 @@ public:
 	QVector<int> edgeIndexes(const QString & pixelID) const;
 
 protected:
-	QSharedPointer<PixelSet> mSet;
+	PixelSet mSet;
 	QVector<QSharedPointer<PixelEdge> > mEdges;
 
 	QMap<QString, int> mPixelLookup;			// maps pixel IDs to their current vector index

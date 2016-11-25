@@ -35,6 +35,7 @@
 #include "ImageProcessor.h"
 #include "Elements.h"
 #include "ElementsHelper.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QJsonObject>		// needed for LabelInfo
@@ -428,10 +429,22 @@ QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
 
 	QVector<PixelLabel> labelInfos;
 
+	//cv::ml::RTrees trees = dynamicmModel;
+
+	//qDebug().noquote() << Image::printMat(mModel->getPriors());
+
 	for (int rIdx = 0; rIdx < cFeatures.rows; rIdx++) {
 		
+		// TODO: get weights
 		const cv::Mat& cr = cFeatures.row(rIdx);
-		int labelId = qRound(mModel->predict(cr));
+		cv::Mat out(1, cr.cols, cr.depth());
+		float l = mModel->predict(cr, out, cv::ml::DTrees::PREDICT_MAX_VOTE);// , cv::ml::DTrees::PREDICT_MASK);
+
+		//int labelId = qRound(mModel->predict(cr));
+		qDebug() << Image::printImage(out, "voting");
+		qDebug() << "label" << l;
+		int labelId = qRound(l);
+
 		LabelInfo label = mManager.find(labelId);
 		assert(label.id() != LabelInfo::label_unknown);
 		

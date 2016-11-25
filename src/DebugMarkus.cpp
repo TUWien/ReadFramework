@@ -145,10 +145,11 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	testFeatureCollector(imgCv);
+	// switch tests
+	//testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
-	//testLayout(imgCv);
+	testLayout(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
