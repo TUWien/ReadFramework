@@ -93,7 +93,7 @@ namespace rdf {
 
 		if(mVocabulary.numberOfPCA() > 0) { 
 			rdf::Image::imageInfo(allDesc, "allDesc vor aufruf calculatePCA");
-			allDesc = calculatePCA(allDesc); // TODO ... currently also making a L2 normalization
+			allDesc = calculatePCA(allDesc, false); 
 		}		
 
 		switch(mVocabulary.type()) {
@@ -196,7 +196,9 @@ namespace rdf {
 			soft.push_back(0);
 			hard.push_back(0);
 		}
+
 		
+		cv::Mat avgPrec(0, 0, CV_32F);
 		cv::Mat dist = mVocabulary.calcualteDistanceMatrix(hists);
 		for(int i = 0; i < hists.rows; i++) {
 			cv::Mat distances = dist.row(i).t();
@@ -278,11 +280,24 @@ namespace rdf {
 						hard[j-1] += 1;
 				}
 			}
+
+			// calculating mean average precession
+			float sum = 0;
+			int pageOfWriter = 0;
+			for(int j = 1; j < idxs.rows; j++) { // 1 because idx 0 is the original file
+				if(classLabels[i] == classLabels[idxs.at<int>(j)]) {
+					sum += (float)++pageOfWriter / j; // ++ before so that the first page is one
+				}
+			}
+			avgPrec.push_back(sum / pageOfWriter);
 		}
+		
+		cv::Scalar map = cv::mean(avgPrec);
 
 		// begin evluation output
 		qDebug() << "total:" << tp+fp << " tp:" << tp << " fp:" << fp;
 		qDebug() << "precision:" << (float)tp / ((float)tp + fp);
+		qDebug() << "map:" << map.val[0];
 
 		QVector<float> softPerc;
 		QVector<float> hardPerc;
@@ -916,7 +931,7 @@ namespace rdf {
 
 
 		cv::Mat d = desc.clone();
-		if(!mL2Mean .empty())
+		if(!mL2Mean.empty())
 			d = l2Norm(d, mL2Mean, mL2Sigma);
 		else
 			qDebug() << "gnerateHistGMM: mVocabulary.l2Mean() is empty ... no L2 normalization (before fisher vector) done";
