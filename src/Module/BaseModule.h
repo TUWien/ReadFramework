@@ -68,7 +68,9 @@ public:
 	friend DllModuleExport QDebug operator<< (QDebug d, const ModuleConfig &m);
 
 	void loadSettings();
+	void loadSettings(QSettings& settings);
 	void saveSettings() const;
+	void saveSettings(QSettings& settings) const;
 	virtual void saveDefaultSettings() const;
 
 	QString name() const;

@@ -150,8 +150,8 @@ protected:
 
 	QString mFeatureFilePath;
 	QString mLabelConfigFilePath;
-	int mMaxNumFeaturesPerImage = 10000;	// 1e4
-	int mMinNumFeaturesPerClass = 1000000;	// 1e6
+	int mMaxNumFeaturesPerImage = 1000000;	// 1e6
+	int mMinNumFeaturesPerClass = 10000;	// 1e4
 	int mMaxNumFeaturesPerClass = 10000;	// 1e4;
 };
 
@@ -173,6 +173,8 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
+	void setFilePath(const QString& filePath);
+	void setBackgroundLabelName(const QString& name);
 	void setRootRegion(const QSharedPointer<Region>& region);
 	void setLabelManager(const LabelManager& manager);
 	QImage createLabelImage(const Rect& imgRect) const;
@@ -184,13 +186,14 @@ private:
 	QSharedPointer<Region> mGtRegion;
 	Rect mImgRect;
 	LabelManager mManager;
+	QString mGlobalName;
 
 	// results
 	PixelSet mSet;
 
 	bool checkInput() const override;
 	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
-	
+	QString parseLabel(const QString& filePath) const;
 };
 
 class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {
@@ -198,9 +201,15 @@ class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {
 public:
 	SuperPixelTrainerConfig();
 
+	QStringList featureCachePaths() const;
+	QString modelPath() const;
+
 	virtual QString toString() const override;
 
 protected:
+
+	QStringList mFeatureCachePaths;
+	QString mModelPath;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

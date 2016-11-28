@@ -86,6 +86,14 @@ QString DebugConfig::classifierPath() const {
 	return mClassifierPath;
 }
 
+void DebugConfig::setLabelConfigPath(const QString & path) {
+	mLabelConfigPath = path;
+}
+
+QString DebugConfig::labelConfigPath() const {
+	return mLabelConfigPath;
+}
+
 void DebugConfig::setFeatureCachePath(const QString & path) {
 	mFeatureCachePath = path;
 }

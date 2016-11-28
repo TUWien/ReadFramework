@@ -75,8 +75,6 @@ public:
 
 	enum DefaultLabels {
 		label_unknown = 0,	// unknown is not -1 because we only have unsigned bytes for labels
-		label_background,
-		label_ignore,
 
 		label_end
 	};
@@ -105,9 +103,7 @@ public:
 	static int color2Id(const QColor& col);
 
 	// create default labels
-	static LabelInfo ignoreLabel();
 	static LabelInfo unknownLabel();
-	static LabelInfo backgroundLabel();
 
 protected:
 

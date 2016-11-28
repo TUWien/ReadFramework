@@ -92,22 +92,10 @@ int LabelInfo::color2Id(const QColor & col) {
 	return ci >> 8 & 0xFFFF;
 }
 
-LabelInfo LabelInfo::ignoreLabel() {
-	LabelInfo ll(label_ignore, QObject::tr("Ignore"));
-	ll.mVisColor = ColorManager::darkGray(0.4);
-	return ll;
-}
-
 LabelInfo LabelInfo::unknownLabel() {
 	LabelInfo ll(label_unknown, QObject::tr("Unknown"));
+	ll.mId = 0;
 	ll.mVisColor = ColorManager::red();
-
-	return ll;
-}
-
-LabelInfo LabelInfo::backgroundLabel() {
-	LabelInfo ll(label_background, QObject::tr("Background"));
-	ll.mVisColor = QColor(0, 0, 0);
 
 	return ll;
 }
@@ -228,8 +216,6 @@ QString LabelInfo::jsonKey() {
 
 // LabelManager --------------------------------------------------------------------
 LabelManager::LabelManager() {
-	add(LabelInfo::backgroundLabel());
-	add(LabelInfo::ignoreLabel());
 	add(LabelInfo::unknownLabel());
 }
 

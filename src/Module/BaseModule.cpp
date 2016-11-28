@@ -48,6 +48,10 @@ ModuleConfig::ModuleConfig(const QString& moduleName) {
 void ModuleConfig::loadSettings() {
 
 	QSettings& settings = Config::instance().settings();
+	loadSettings(settings);
+}
+
+void ModuleConfig::loadSettings(QSettings & settings) {
 	settings.beginGroup(mModuleName);
 	load(settings);
 	settings.endGroup();
@@ -56,6 +60,11 @@ void ModuleConfig::loadSettings() {
 void ModuleConfig::saveSettings() const {
 
 	QSettings& settings = Config::instance().settings();
+	saveSettings(settings);
+}
+
+void ModuleConfig::saveSettings(QSettings & settings) const {
+
 	settings.beginGroup(mModuleName);
 	save(settings);
 	settings.endGroup();
