@@ -190,7 +190,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
 		dc.setImagePath("D:/read/test/debug-tiny[printed].png");
-
+		dc.setImagePath("D:/read/test/00000003.jpg");
+	
 		//dc.setImagePath("D:/read/test/sp-classification/00000158.tif");
 		qInfo() << dc.imagePath() << "added as image path";
 	}
@@ -201,7 +202,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.classifierPath().isEmpty()) {
-		dc.setClassifierPath("D:/read/configs/model.json");
+		dc.setClassifierPath("D:/read/configs/model-debug.json");
 		qInfo() << dc.classifierPath() << "added as classifier path";
 	} 
 
@@ -211,7 +212,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	} 
 
 	if (dc.featureCachePath().isEmpty()) {
-		dc.setFeatureCachePath("D:/read/configs/features-config-debug.json");
+		dc.setFeatureCachePath("D:/read/configs/features-prima.json");
 		qInfo() << dc.featureCachePath() << "added as feature cache path";
 	} 
 

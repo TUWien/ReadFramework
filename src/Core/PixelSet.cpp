@@ -260,28 +260,70 @@ Line PixelSet::fitLine(double offsetAngle) const {
 	return line;
 }
 
-Ellipse PixelSet::profileRect() const {
+Ellipse PixelSet::fitEllipse() const {
 	
-	// TODO: this is not fixed yet
-	Line bLine = fitLine();
-	if (bLine.isEmpty())
-		return Ellipse();
+	double angle = orientation() + CV_PI*0.5;
 
-	Line xLine = fitLine(CV_PI);
+	Vector2D c = center();
+	Vector2D majorAxis(1, 0);
+	Vector2D minorAxis(1, 0);
 
-	double angle = (bLine.angle() + Algorithms::angleDist(xLine.angle(), bLine.angle())*0.5f);
-	
-	Vector2D blc = bLine.p1() + bLine.vector() * 0.5;
-	Vector2D xlc = xLine.p1() + xLine.vector() * 0.5;
-	Vector2D centerLine = blc - xlc;
-	Vector2D center = xlc + centerLine * 0.5;
+	majorAxis.rotate(angle);
+	minorAxis.rotate(angle - CV_PI*0.5);
+
+	double maxWidth = 0.0;
+	double maxHeight = 0.0;
+
+	for (auto px : pixels()) {
+		assert(px);
+		
+		Vector2D orH = px->ellipse().getPoint(angle) - c;
+		Vector2D orV = px->ellipse().getPoint(angle + CV_PI*0.5) - c;
+		double w = orH*majorAxis;
+		double h = orV*minorAxis;
+
+		if (w > maxWidth)
+			maxWidth = w;
+		if (h > maxHeight)
+			maxHeight = h;
+	}
 
 	Ellipse el;
 	el.setAngle(angle);
-	el.setCenter(center);
-	el.setAxis(Vector2D(std::max(bLine.length(), xLine.length()), centerLine.length()));
+	el.setCenter(c);
+	el.setAxis(Vector2D(maxWidth, maxHeight));
 
 	return el;
+}
+
+Vector2D PixelSet::center() const {
+
+	Vector2D center;
+
+	QList<double> xCoords;
+	QList<double> yCoords;
+	for (auto px : pixels()) {
+		xCoords << px->ellipse().center().x();
+		yCoords << px->ellipse().center().y();
+	}
+
+	center.setX(Algorithms::statMoment<double>(xCoords, 0.5));
+	center.setY(Algorithms::statMoment<double>(yCoords, 0.5));
+
+	return center;
+}
+
+Vector2D PixelSet::meanCenter() const {
+
+	Vector2D center;
+
+	for (auto px : pixels()) {
+		center += px->ellipse().center();
+	}
+
+	center /= size();
+
+	return center;
 }
 
 /// <summary>
@@ -317,6 +359,30 @@ double PixelSet::lineSpacing(double statMoment) const {
 	}
 
 	return Algorithms::statMoment(spacings, statMoment);
+}
+
+double PixelSet::overlapRatio(const PixelSet & set, double angle) const {
+
+	Ellipse me = fitEllipse();
+	Ellipse oe = set.fitEllipse();
+
+	// get upper overlap
+	Vector2D muv = me.getPoint(angle);
+	Vector2D ouv = oe.getPoint(angle);
+	Vector2D a(1,0);
+	a.rotate(angle);
+
+	double vu = a * (ouv - muv);
+
+	// get lower overlap
+	muv = me.getPoint(-angle);
+	ouv = oe.getPoint(-angle);
+	a.rotate(CV_PI);
+	double vl = a * (ouv - muv);
+
+	//qDebug() << "vu:" << vu << "vl:" << vl;
+
+	return abs(vu) + abs(vl);
 }
 
 /// <summary>
@@ -416,6 +482,15 @@ void PixelSet::draw(QPainter& p, const QFlag& options) const {
 	}
 
 	//polyLine(0.0).draw(p);
+
+	if ((int)options & (int)draw_rect) {
+		QPen oPen = p.pen();
+		QPen nPen = oPen;
+		nPen.setWidth(3);
+		p.setPen(nPen);
+		fitEllipse().draw(p);
+		p.setPen(oPen);
+	}
 
 	if ((int)options & (int)draw_poly)
 		convexHull().draw(p);

@@ -55,6 +55,7 @@ class DllCoreExport BaseElement {
 public:
 	BaseElement(const QString& id = QString());
 
+	DllCoreExport friend bool operator==(const BaseElement& l, const QString& id);
 	DllCoreExport friend bool operator==(const BaseElement& l, const BaseElement& r);
 	DllCoreExport friend bool operator!=(const BaseElement& l, const BaseElement& r);
 	QString id() const;

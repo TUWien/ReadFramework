@@ -161,6 +161,7 @@ public:
 		draw_nothing = 0x0,
 		draw_pixels = 0x1,
 		draw_poly = 0x2,
+		draw_rect = 0x4,
 
 		draw_end
 	};
@@ -180,13 +181,16 @@ public:
 	int size() const;
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
 	Polygon convexHull() const;
-	//Polygon polyLine(double angle, double maxCosThr = 0.9) const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
-	Ellipse profileRect() const;					// TODO: remove!
+	Ellipse fitEllipse() const;
 
+	Vector2D center() const;
+	Vector2D meanCenter() const;
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
+
+	double overlapRatio(const PixelSet& set, double angle = CV_PI*0.5) const;	// TODO: delete
 
 	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
 

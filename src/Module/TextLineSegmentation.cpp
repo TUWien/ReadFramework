@@ -44,12 +44,28 @@
 namespace rdf {
 
 // TextLineConfig --------------------------------------------------------------------
-TextLineConfig::TextLineConfig() {
-	mModuleName = "Text Line";
+TextLineConfig::TextLineConfig() : ModuleConfig("Text Line Module") {
 }
 
 QString TextLineConfig::toString() const {
 	return ModuleConfig::toString();
+}
+
+double TextLineConfig::minDistFactor() const {
+	return mMinDistFactor;
+}
+
+void TextLineConfig::setMinDistFactor(double val) {
+	mMinDistFactor = val;
+}
+
+void TextLineConfig::load(const QSettings & settings) {
+	mMinDistFactor = settings.value("minDistFactor", minDistFactor()).toDouble();
+}
+
+void TextLineConfig::save(QSettings & settings) const {
+
+	settings.setValue("minDistFactor", minDistFactor());
 }
 
 // TextLineSegmentation --------------------------------------------------------------------
@@ -72,19 +88,30 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	RegionPixelConnector rpc;
-	rpc.setLineSpacingMultiplier(2.0);
-	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSuperPixels);
+	//RegionPixelConnector rpc;
+	//rpc.setLineSpacingMultiplier(2.0);
+	DelauneyPixelConnector dpc;
+	QVector<QSharedPointer<PixelEdge> > pEdges = dpc.connect(mSuperPixels);
 
 	qDebug() << "# edges: " << pEdges.size();
 
+	QVector<QSharedPointer<LineEdge> > lEdges;
 	for (const QSharedPointer<PixelEdge>& pe : pEdges)
-		mEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
+		lEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
 
-	mEdges = filterEdges(mEdges);
+	lEdges = filterEdges(lEdges, config()->minDistFactor());
 
 	if (!mStopLines.empty())
-		mEdges = filterEdges(mEdges, mStopLines);
+		lEdges = filterEdges(lEdges, mStopLines);
+
+	mSets = toSets(lEdges);
+
+	//mDebug << mSets.size() << "text lines found";
+	//mSets = merge(mSets, 160);
+	//mDebug << mSets.size() << "text lines (after merging)";
+
+	//mSets = filter(mSets, 1.0);
+	//mDebug << mSets.size() << "text lines (after filtering)";
 
 	mDebug << "computed in" << dt;
 
@@ -131,34 +158,162 @@ QVector<QSharedPointer<LineEdge>> TextLineSegmentation::filterEdges(const QVecto
 	return pixelEdgesClean;
 }
 
-QVector<QSharedPointer<PixelSet> > TextLineSegmentation::toSets() const {
+QVector<PixelSet > TextLineSegmentation::toSets(const QVector<QSharedPointer<LineEdge> > & edges) const {
 
 	// why do I have to do this?
 	QVector<QSharedPointer<PixelEdge> > pe;
-	for (auto e : mEdges)
+	for (auto e : edges)
 		pe << e;
 
 	QVector<QSharedPointer<PixelSet> > allSets = PixelSet::fromEdges(pe);
-	QVector<QSharedPointer<PixelSet> > filteredSets;
+	QVector<PixelSet> filteredSets;
 
 	for (auto s : allSets) {
 
 		if (s->pixels().size() > 3)
-			filteredSets << s;
+			filteredSets << *s;
 	}
 
 	return filteredSets;
 }
 
-void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge>>& edges) const {
+QVector<PixelSet> TextLineSegmentation::merge(const QVector<PixelSet>& sets, double ) const {
 
-	QVector<QSharedPointer<PixelSet> > clusters;
 
-	for (const QSharedPointer<PixelEdge>& pe : edges) {
-		QSharedPointer<PixelSet> ps(new PixelSet());
-		ps->add(pe->first());
-		ps->add(pe->second());
+
+	QVector<QString> mergedIds;
+	QVector<PixelSet> mergedSets;
+
+
+	for (auto oSet : sets) {
+
+		if (mergedIds.contains(oSet.id()))
+			continue;
+
+		Line baseLine = oSet.fitLine();
+		Vector2D center = oSet.meanCenter();
+		
+		Vector2D orVec(0, 1);
+		double angle = oSet.orientation();
+		orVec.rotate(angle);
+
+		for (auto cSet : sets) {
+
+			if (cSet == oSet)
+				continue;
+
+			if (mergedIds.contains(cSet.id()))
+				continue;
+
+
+			PixelSet clSet = oSet;	// clone
+			clSet.merge(cSet);
+			
+			Vector2D cd = clSet.meanCenter() - center;
+			double w = cd.theta(orVec);
+			
+			if (baseLine.diffAngle(clSet.fitLine()) < CV_PI*0.001 && cd.length()*w < 10) {
+				oSet = clSet;
+				mergedIds << oSet.id();
+				mergedIds << cSet.id();
+			}
+		}
+
+		mergedSets << oSet;
 	}
+
+	return mergedSets;
+
+	//QMap<QString, QString> mergeMap;
+	//QVector<QString> mergedIds;
+
+	//QVector<PixelSet > mergedSets;
+
+
+	//for (auto oSet : sets) {
+
+	//	if (mergedIds.contains(oSet->id()))
+	//		continue;
+
+	//	for (auto cSet : sets) {
+
+	//		if (cSet == oSet)
+	//			continue;
+
+	//		if (mergedIds.contains(cSet->id()))
+	//			continue;
+
+	//		assert(cSet);
+
+	//		double o = oSet->overlapRatio(*cSet);
+
+	//		if (o < overlap) {
+	//			oSet->merge(*cSet);
+	//			//mergeMap.insert(oSet->id(), cSet->id());
+	//			mergedIds << oSet->id();
+	//			mergedIds << cSet->id();
+	//		}
+	//	}
+
+	//	mergedSets << oSet;
+	//}
+
+	////for (const QString& fId : mergeMap) {
+	////	
+	////	PixelSet set = findSet(sets, fId);
+	////	PixelSet oSet = findSet(sets, mergeMap.value(fId));
+
+	////	assert(set && oSet);
+
+	////	set->merge(*oSet);
+	////}
+
+
+	//return mergedSets;
+}
+
+QVector<PixelSet> TextLineSegmentation::filter(const QVector<PixelSet>& sets, double ) const {
+
+	double nPx = 0;
+
+	for (auto set : sets) {
+		nPx += (double)sets.size();
+	}
+
+	nPx /= sets.size();
+	
+	QVector<PixelSet> fSets;
+
+	for (auto set : sets) {
+
+		if (set.size() > 32)
+			fSets << set;
+
+	}
+
+	return fSets;
+}
+
+PixelSet TextLineSegmentation::findSet(const QVector<PixelSet>& sets, const QString & id) const {
+
+	for (auto set : sets) {
+		assert(set);
+		if (set.id() == id)
+			return set;
+	}
+
+	return PixelSet();
+}
+
+void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge> >& ) const {
+
+	QVector<PixelSet > clusters;
+
+	//for (const QSharedPointer<PixelEdge>& pe : edges) {
+	//	PixelSet ps(new PixelSet());
+	//	ps->add(pe->first());
+	//	ps->add(pe->second());
+	//}
 
 	// TODO: go on here...
 
@@ -176,9 +331,9 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	Drawer::instance().setColor(ColorManager::darkGray(0.4));
 	p.setPen(Drawer::instance().pen());
 
-	for (auto b : mEdges) {
-		b->draw(p);
-	}
+	//for (auto b : mEdges) {
+	//	b->draw(p);
+	//}
 
 	// show the stop lines
 	Drawer::instance().setColor(ColorManager::red(0.4));
@@ -187,19 +342,23 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	for (auto l : mStopLines)
 		l.draw(p);
 
-	auto sets = toSets();
+	//auto sets = toSets();
 	
-	for (auto set : sets) {
+	for (auto set : mSets) {
 		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
-		set->draw(p);
+		set.draw(p, (int)PixelSet::draw_poly | (int)PixelSet::draw_pixels);
+
+		Line baseLine = set.fitLine();
+		baseLine.setThickness(3.0);
+		baseLine.draw(p);
 
 		//for (auto pixel : set->pixels()) {
 		//	pixel->draw(p, .3, Pixel::draw_ellipse_only);
 		//}
 	}
 
-	mDebug << mEdges.size() << "edges drawn in" << dtf;
+	//mDebug << mEdges.size() << "edges drawn in" << dtf;
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -215,8 +374,8 @@ void TextLineSegmentation::addLines(const QVector<Line>& lines) {
 QVector<QSharedPointer<TextLine>> TextLineSegmentation::textLines() const {
 	
 	QVector<QSharedPointer<TextLine>> tls;
-	for (auto set : toSets())
-		tls << set->toTextLine();
+	for (auto set : mSets)
+		tls << set.toTextLine();
 
 	return tls;
 }

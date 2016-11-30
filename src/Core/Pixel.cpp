@@ -588,5 +588,5 @@ double rdf::PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1,
 
 	double a = qMin(dt1, dt2);
 
-	return edge.length() * (a + 0.1);	// + 0.1 -> we don't want to map all 'aligned' pixels to 0
+	return edge.length() * (a + 0.01);	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
 }

@@ -253,29 +253,29 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 
-	DBScanPixel dbs(mPixels);
-	dbs.compute();
-	QVector<PixelSet> sets = dbs.sets();
-	qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
+	//DBScanPixel dbs(mPixels);
+	//dbs.compute();
+	//QVector<PixelSet> sets = dbs.sets();
+	//qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
 
-	for (auto s : sets) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		QPen pen = Drawer::instance().pen();
-		p.setPen(pen);
-		s.draw(p);
-	}
-
-	//for (int idx = 0; idx < mBlobs.size(); idx++) {
+	//for (auto s : sets) {
 	//	Drawer::instance().setColor(ColorManager::getColor());
 	//	QPen pen = Drawer::instance().pen();
-	//	pen.setWidth(2);
 	//	p.setPen(pen);
-
-	//	//// uncomment if you want to see MSER & SuperPixel at the same time
-	//	//mBlobs[idx].draw(p);
-	//	mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_only);
-	//	//qDebug() << mPixels[idx].ellipse();
+	//	s.draw(p);
 	//}
+
+	for (int idx = 0; idx < mBlobs.size(); idx++) {
+		Drawer::instance().setColor(ColorManager::getColor());
+		QPen pen = Drawer::instance().pen();
+		pen.setWidth(2);
+		p.setPen(pen);
+
+		// uncomment if you want to see MSER & SuperPixel at the same time
+		//mBlobs[idx].draw(p);
+		mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_stats);
+		//qDebug() << mPixels[idx].ellipse();
+	}
 
 	qDebug() << "drawing takes" << dtf;
 	return Image::qPixmap2Mat(pm);
