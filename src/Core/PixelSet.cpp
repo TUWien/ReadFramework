@@ -526,7 +526,6 @@ void PixelGraph::connect(const PixelConnector& connector) {
 	if (isEmpty())
 		return;
 
-	assert(mSet);
 	const QVector<QSharedPointer<Pixel> >& pixels = mSet.pixels();
 
 	mEdges = connector.connect(pixels);

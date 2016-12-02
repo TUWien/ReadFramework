@@ -297,7 +297,7 @@ QVector<PixelSet> TextLineSegmentation::filter(const QVector<PixelSet>& sets, do
 PixelSet TextLineSegmentation::findSet(const QVector<PixelSet>& sets, const QString & id) const {
 
 	for (auto set : sets) {
-		assert(set);
+		//assert(set);
 		if (set.id() == id)
 			return set;
 	}
