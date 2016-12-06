@@ -91,7 +91,6 @@ private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
 	//QVector<QSharedPointer<LineEdge> > mEdges;
 	QVector<PixelSet> mSets;
-	//QVector<QSharedPointer<LineEdge> > mDbgEdges;	// remove
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
@@ -102,7 +101,6 @@ private:
 	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// TODO: delete
 	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const;	// TODO: delete
 	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const;	// TODO: move this to a PixelSetManager
-
 
 	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
 
