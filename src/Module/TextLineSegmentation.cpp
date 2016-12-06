@@ -88,10 +88,10 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	//RegionPixelConnector rpc;
-	//rpc.setLineSpacingMultiplier(2.0);
-	DelauneyPixelConnector dpc;
-	QVector<QSharedPointer<PixelEdge> > pEdges = dpc.connect(mSuperPixels);
+	RegionPixelConnector rpc;
+	rpc.setLineSpacingMultiplier(2.0);
+	//DelauneyPixelConnector dpc;
+	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSuperPixels);
 
 	qDebug() << "# edges: " << pEdges.size();
 
@@ -110,7 +110,14 @@ bool TextLineSegmentation::compute() {
 	//mSets = merge(mSets, 160);
 	//mDebug << mSets.size() << "text lines (after merging)";
 
-	//mSets = filter(mSets, 1.0);
+	QVector<PixelSet> ps;
+	for (auto p : mSets) {
+		if (p.size() > 10)
+			ps << p;
+	}
+	mSets = ps;
+
+	//mSets = filter(mSets);
 	//mDebug << mSets.size() << "text lines (after filtering)";
 
 	mDebug << "computed in" << dt;
@@ -347,11 +354,15 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	for (auto set : mSets) {
 		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
-		set.draw(p, (int)PixelSet::draw_poly | (int)PixelSet::draw_pixels);
+		set.draw(p, (int)PixelSet::draw_pixels);
 
 		Line baseLine = set.fitLine();
-		baseLine.setThickness(3.0);
+		baseLine.setThickness(6.0);
+		
+		//if (baseLine.length() > 300)
 		baseLine.draw(p);
+
+
 
 		//for (auto pixel : set->pixels()) {
 		//	pixel->draw(p, .3, Pixel::draw_ellipse_only);

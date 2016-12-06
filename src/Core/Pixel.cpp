@@ -565,15 +565,13 @@ double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {
 	return vec * eVec;
 }
 
-}
-
-double rdf::PixelDistance::euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
+double PixelDistance::euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
 	
 	assert(!px1.isNull() && !px2.isNull());
 	return Vector2D(px2->center() - px1->center()).length();
 }
 
-double rdf::PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
+double PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
 
 	assert(!px1.isNull() && !px2.isNull());
 
@@ -589,4 +587,6 @@ double rdf::PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1,
 	double a = qMin(dt1, dt2);
 
 	return edge.length() * (a + 0.01);	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+}
+
 }
