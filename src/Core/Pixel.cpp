@@ -311,6 +311,11 @@ Ellipse Pixel::ellipse() const {
 	return mEllipse;
 }
 
+void Pixel::scale(double factor) {
+	mEllipse.scale(factor);
+	mBBox.scale(factor);
+}
+
 //Rect Pixel::bbox() const {
 //	return mBBox;
 //}

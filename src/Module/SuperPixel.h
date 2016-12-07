@@ -36,6 +36,7 @@
 
 #include "Shapes.h"
 #include "Pixel.h"
+#include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QRectF>
@@ -109,6 +110,7 @@ public:
 	// results - available after compute() is called
 	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
 	QVector<QSharedPointer<MserBlob> > getMserBlobs() const;
+	PixelSet pixelSet() const;
 
 	cv::Mat drawSuperPixels(const cv::Mat& img) const;
 	cv::Mat drawMserBlobs(const cv::Mat& img) const;
@@ -127,6 +129,49 @@ private:
 	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.1) const;
 	int filterDuplicates(MserContainer& blobs, int eps = 5, int upperBound = -1) const;
 
+};
+
+class DllModuleExport ScaleSpaceSPConfig : public ModuleConfig {
+
+public:
+	ScaleSpaceSPConfig();
+
+	virtual QString toString() const override;
+
+	int numLayers() const;
+	int minLayer() const;
+
+protected:
+	int mNumLayers = 3;
+	int mMinLayer = 0;
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+class DllModuleExport ScaleSpaceSuperPixel : public Module {
+
+public:
+	ScaleSpaceSuperPixel(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	QString toString() const override;
+	QSharedPointer<ScaleSpaceSPConfig> config() const;
+
+	// results - available after compute() is called
+	PixelSet superPixels() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+
+protected:
+	cv::Mat mSrcImg;
+
+	// results
+	PixelSet mSet;
+
+	bool checkInput() const override;
 };
 
 

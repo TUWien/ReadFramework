@@ -54,6 +54,10 @@ PixelSet::PixelSet(const QVector<QSharedPointer<Pixel> >& set) {
 	mSet = set;
 }
 
+void PixelSet::operator+=(const PixelSet & set) {
+	mSet << set.pixels();
+}
+
 QSharedPointer<Pixel> PixelSet::operator[](int idx) const {
 	assert(idx >= 0 && idx < size());
 	return mSet[idx];
@@ -359,6 +363,17 @@ double PixelSet::lineSpacing(double statMoment) const {
 	}
 
 	return Algorithms::statMoment(spacings, statMoment);
+}
+
+void PixelSet::append(const QVector<QSharedPointer<Pixel>>& set) {
+	
+	mSet << set;
+}
+
+void PixelSet::scale(double factor) {
+
+	for (QSharedPointer<Pixel>& px : mSet)
+		px->scale(factor);
 }
 
 double PixelSet::overlapRatio(const PixelSet & set, double angle) const {
