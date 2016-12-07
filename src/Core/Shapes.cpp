@@ -983,6 +983,11 @@ void Rect::move(const Vector2D & vec) {
 	mTopLeft += vec;
 }
 
+void Rect::scale(double factor) {
+	mTopLeft *= factor;
+	mSize *= factor;
+}
+
 void Rect::expand(double v) {
 	mTopLeft -= 0.5*v;
 	mSize += v;
@@ -1255,6 +1260,11 @@ void Ellipse::setAxis(const Vector2D & axis) {
 
 Vector2D Ellipse::axis() const {
 	return mAxis;
+}
+
+void Ellipse::scale(double factor) {
+	mAxis *= factor;
+	mCenter *= factor;
 }
 
 double Ellipse::majorAxis() const {

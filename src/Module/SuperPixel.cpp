@@ -100,11 +100,11 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 
 	Timer dtf;
 	int nF = filterDuplicates(*blobs, 7, 10);
-	qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
+	//qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
 	dtf.start();
 	nF = filterAspectRatio(*blobs);
-	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
+	//qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	return blobs;
 }
@@ -201,20 +201,18 @@ bool SuperPixel::compute() {
 
 	int maxFilter = config()->erosionStep()*config()->numErosionLayers();
 
-	qDebug() << "# erosion layers: " << config()->numErosionLayers();
-
 	for (int idx = 0; idx < maxFilter; idx += config()->erosionStep()) {
 
 		Timer dti;
 		QSharedPointer<MserContainer> cb = getBlobs(img, idx);
 		rawBlobs->append(*cb);
-		qDebug() << cb->size() << "/" << rawBlobs->size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
+		//qDebug() << cb->size() << "/" << rawBlobs->size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
 	}
 
 	// filter duplicates that occur from different erosion sizes
 	Timer dtf;
 	int nf = filterDuplicates(*rawBlobs);
-	qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
+	//qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
 
 	// convert to pixels
 	mBlobs = rawBlobs->toBlobs();
@@ -239,6 +237,13 @@ QVector<QSharedPointer<Pixel> > SuperPixel::getSuperPixels() const {
 
 QVector<QSharedPointer<MserBlob>> SuperPixel::getMserBlobs() const {
 	return mBlobs;
+}
+
+PixelSet SuperPixel::pixelSet() const {
+
+	PixelSet ps(mPixels);
+	
+	return ps;
 }
 
 QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
@@ -829,5 +834,113 @@ cv::Mat GraphCutOrientation::orientationDistMatrix(int numLabels) const {
 
 	return orDist;
 }
+
+ScaleSpaceSuperPixel::ScaleSpaceSuperPixel(const cv::Mat & img) {
+	mConfig = QSharedPointer<ScaleSpaceSPConfig>::create();
+	mSrcImg = img;
+}
+
+bool ScaleSpaceSuperPixel::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+bool ScaleSpaceSuperPixel::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	cv::Mat img = mSrcImg.clone();
+	img = IP::grayscale(img);
+	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
+
+
+	for (int idx = 0; idx < config()->numLayers(); idx++) {
+	
+		// compute super pixel
+		if (config()->minLayer() <= idx) {
+
+			SuperPixel spm(img);
+			if (!spm.compute())
+				mWarning << "could not compute super pixels for layer #" << idx;
+
+			PixelSet set = spm.getSuperPixels();
+			
+			if (idx > 0) {
+				// re-scale
+				double sf = std::pow(2, idx);
+				set.scale(sf);
+			}
+
+			mSet += set;
+			//mInfo << set.size() << "pixels found at scale:" << idx;
+		}
+
+		cv::resize(img, img, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
+	}
+
+	mInfo << mSet.size() << "pixels extraced in" << dt;
+
+	return true;
+}
+
+QString ScaleSpaceSuperPixel::toString() const {
+	return config()->toString();
+}
+
+QSharedPointer<ScaleSpaceSPConfig> ScaleSpaceSuperPixel::config() const {
+	return qSharedPointerDynamicCast<ScaleSpaceSPConfig>(mConfig);
+}
+
+PixelSet ScaleSpaceSuperPixel::superPixels() const {
+	return mSet;
+}
+
+cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
+	
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter painter(&pm);
+
+	mSet.draw(painter);
+
+
+	return Image::qPixmap2Mat(pm);
+}
+
+bool ScaleSpaceSuperPixel::checkInput() const {
+
+	return !mSrcImg.empty();
+}
+
+// ScaleSpaceSpConfig --------------------------------------------------------------------
+ScaleSpaceSPConfig::ScaleSpaceSPConfig() : ModuleConfig("Scale Space Super Pixel") {
+}
+
+QString ScaleSpaceSPConfig::toString() const {
+	return ModuleConfig::toString();
+}
+
+int ScaleSpaceSPConfig::numLayers() const {
+	return checkIntParam(mNumLayers, 1, 10, "numLayers");
+}
+
+int ScaleSpaceSPConfig::minLayer() const {
+	return checkIntParam(mMinLayer, 0, numLayers()-1, "minLayer");
+}
+
+void ScaleSpaceSPConfig::load(const QSettings & settings) {
+
+	mNumLayers = settings.value("numLayers", numLayers()).toInt();
+	mMinLayer = settings.value("minLayer", minLayer()).toInt();
+}
+
+void ScaleSpaceSPConfig::save(QSettings & settings) const {
+	settings.setValue("numLayers", numLayers());
+	settings.setValue("minLayer", minLayer());
+}
+
+
 
 }

@@ -166,6 +166,8 @@ public:
 		draw_end
 	};
 
+	void operator+=(const PixelSet& set);
+
 	Q_DECLARE_FLAGS(DrawFlags, DrawFlag)
 
 	QSharedPointer<Pixel> operator[](int idx) const;
@@ -175,6 +177,8 @@ public:
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
 	void remove(const QSharedPointer<Pixel>& pixel);
+	void append(const QVector<QSharedPointer<Pixel> >& set);
+	void scale(double factor);
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
@@ -189,7 +193,7 @@ public:
 	Vector2D meanCenter() const;
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
-
+	
 	double overlapRatio(const PixelSet& set, double angle = CV_PI*0.5) const;	// TODO: delete
 
 	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;

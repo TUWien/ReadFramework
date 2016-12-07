@@ -358,6 +358,7 @@ public:
 
 	// setter
 	void move(const Vector2D& vec);
+	void scale(double factor);
 	void expand(double v);
 	void setTopLeft(const Vector2D& topLeft);
 	void setSize(const Vector2D& newSize);
@@ -410,6 +411,8 @@ public:
 
 	void setAxis(const Vector2D& axis);
 	Vector2D axis() const;
+
+	void scale(double factor);
 
 	double majorAxis() const;
 	double minorAxis() const;
