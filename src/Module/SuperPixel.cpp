@@ -211,7 +211,7 @@ bool SuperPixel::compute() {
 
 	// filter duplicates that occur from different erosion sizes
 	Timer dtf;
-	int nf = filterDuplicates(*rawBlobs);
+	filterDuplicates(*rawBlobs);
 	//qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
 
 	// convert to pixels
@@ -879,6 +879,10 @@ bool ScaleSpaceSuperPixel::compute() {
 
 		cv::resize(img, img, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
 	}
+
+	// TODO: 
+	// - do not erode at large scales
+	// - filter duplicates over all scales
 
 	mInfo << mSet.size() << "pixels extraced in" << dt;
 

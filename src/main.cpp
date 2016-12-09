@@ -202,7 +202,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.classifierPath().isEmpty()) {
-		dc.setClassifierPath("D:/read/configs/model-debug.json");
+		dc.setClassifierPath("D:/read/configs/model.json");
 		qInfo() << dc.classifierPath() << "added as classifier path";
 	} 
 

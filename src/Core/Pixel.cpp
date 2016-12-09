@@ -295,10 +295,6 @@ bool Pixel::isNull() const {
 	return mIsNull;
 }
 
-//Vector2D Pixel::center() const {
-//	return mEllipse.center();
-//}
-
 Vector2D Pixel::size() const {
 	return mEllipse.axis();
 }
@@ -315,11 +311,6 @@ void Pixel::scale(double factor) {
 	mEllipse.scale(factor);
 	mBBox.scale(factor);
 }
-
-//Rect Pixel::bbox() const {
-//	return mBBox;
-//}
-
 
 void Pixel::addStats(const QSharedPointer<PixelStats>& stats) {
 	mStats << stats;
@@ -433,15 +424,6 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 		p.setPen(oPen);
 	}
 
-	//if (stats()) {
-	//	QPen pe = p.pen();
-	//	p.setPen(QColor(255, 0, 0));
-	//	Vector2D upper = mEllipse.getPoint(stats()->orientation());
-	//	Vector2D lower = mEllipse.getPoint(stats()->orientation() + CV_PI);
-	//	p.drawLine(upper.toQPointF(), lower.toQPointF());
-	//	p.setPen(pe);
-	//}
-
 	if (!stats() || df != draw_stats_only)
 		mEllipse.draw(p, alpha);
 
@@ -548,10 +530,19 @@ double LineEdge::edgeWeight() const {
 }
 
 double LineEdge::calcWeight() const {
+
+	assert(mFirst && mSecond);
 	double d1 = statsWeight(mFirst);
 	double d2 = statsWeight(mSecond);
 
-	return qMax(abs(d1), abs(d2));
+	double d = qMax(abs(d1), abs(d2));
+	
+	// normalize by scale
+	double mr = qMin(mFirst->ellipse().radius(), mSecond->ellipse().radius());
+	if (mr > 0)
+		d /= mr;
+
+	return d;
 }
 
 double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {

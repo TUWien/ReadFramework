@@ -88,23 +88,23 @@ bool TextLineSegmentation::compute() {
 	if (!checkInput())
 		return false;
 
-	RegionPixelConnector rpc;
-	rpc.setLineSpacingMultiplier(2.0);
-	//DelauneyPixelConnector dpc;
+	//RegionPixelConnector rpc;
+	//rpc.setLineSpacingMultiplier(2.0);
+	DelauneyPixelConnector rpc;
 	QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSuperPixels);
 
 	qDebug() << "# edges: " << pEdges.size();
 
-	QVector<QSharedPointer<LineEdge> > lEdges;
+	//QVector<QSharedPointer<LineEdge> > mEdges;
 	for (const QSharedPointer<PixelEdge>& pe : pEdges)
-		lEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
+		mEdges << QSharedPointer<LineEdge>(new LineEdge(*pe));
 
-	lEdges = filterEdges(lEdges, config()->minDistFactor());
+	mEdges = filterEdges(mEdges, config()->minDistFactor());
 
 	if (!mStopLines.empty())
-		lEdges = filterEdges(lEdges, mStopLines);
+		mEdges = filterEdges(mEdges, mStopLines);
 
-	mSets = toSets(lEdges);
+	mSets = toSets(mEdges);
 
 	//mDebug << mSets.size() << "text lines found";
 	//mSets = merge(mSets, 160);
@@ -131,20 +131,27 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 
 QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, double factor) const {
 
-	QVector<QSharedPointer<LineEdge> > pixelEdgesClean;
+	factor = 0.5;
+	double se = 0.0;
+	for (auto e : edges) {
+		se += e->edgeWeight();
+	}
+	se /= edges.size();
+
+	QVector<QSharedPointer<LineEdge> > PixelEdgesClean;
 
 	for (auto pe : edges) {
 
-		if (pe->edgeWeight() < factor)
-			pixelEdgesClean << pe;
+		if (pe->edgeWeight() < se*factor)
+			PixelEdgesClean << pe;
 	}
 
-	return pixelEdgesClean;
+	return PixelEdgesClean;
 }
 
 QVector<QSharedPointer<LineEdge>> TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, const QVector<Line>& lines) const {
 
-	QVector<QSharedPointer<LineEdge> > pixelEdgesClean;
+	QVector<QSharedPointer<LineEdge> > PixelEdgesClean;
 
 	for (const QSharedPointer<LineEdge>& pe : edges) {
 
@@ -159,10 +166,10 @@ QVector<QSharedPointer<LineEdge>> TextLineSegmentation::filterEdges(const QVecto
 		}
 
 		if (!filter)
-			pixelEdgesClean << pe;
+			PixelEdgesClean << pe;
 	}
 
-	return pixelEdgesClean;
+	return PixelEdgesClean;
 }
 
 QVector<PixelSet > TextLineSegmentation::toSets(const QVector<QSharedPointer<LineEdge> > & edges) const {
@@ -185,8 +192,6 @@ QVector<PixelSet > TextLineSegmentation::toSets(const QVector<QSharedPointer<Lin
 }
 
 QVector<PixelSet> TextLineSegmentation::merge(const QVector<PixelSet>& sets, double ) const {
-
-
 
 	QVector<QString> mergedIds;
 	QVector<PixelSet> mergedSets;
@@ -338,9 +343,9 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	Drawer::instance().setColor(ColorManager::darkGray(0.4));
 	p.setPen(Drawer::instance().pen());
 
-	//for (auto b : mEdges) {
-	//	b->draw(p);
-	//}
+	for (auto b : mEdges) {
+		b->draw(p);
+	}
 
 	// show the stop lines
 	Drawer::instance().setColor(ColorManager::red(0.4));
