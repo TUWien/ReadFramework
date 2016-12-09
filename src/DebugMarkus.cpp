@@ -392,11 +392,11 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	//auto model = spt.model();
 
-	//SuperPixelClassifier spc(src, sp);
-	//spc.setModel(model);
+	SuperPixelClassifier spc(src, sp);
+	spc.setModel(model);
 
-	//if (!spc.compute())
-	//	qWarning() << "could not classify SuperPixels";
+	if (!spc.compute())
+		qWarning() << "could not classify SuperPixels";
 
 	//// find tab stops
 	//rdf::TabStopAnalysis tabStops(sp);
@@ -423,10 +423,10 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	rImg = superPixel.draw(rImg);
+	//rImg = superPixel.draw(rImg);
 	//rImg = tabStops.draw(rImg);
+	rImg = spc.draw(rImg);
 	rImg = textLines.draw(rImg);
-	//rImg = spc.draw(rImg);
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;

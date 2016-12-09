@@ -416,6 +416,7 @@ public:
 
 	double majorAxis() const;
 	double minorAxis() const;
+	double radius() const;
 
 	void setAngle(double angle);
 	double angle() const;

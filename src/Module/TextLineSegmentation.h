@@ -89,7 +89,7 @@ public:
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
-	//QVector<QSharedPointer<LineEdge> > mEdges;
+	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
 	QVector<PixelSet> mSets;
 	QVector<Line> mStopLines;
 
