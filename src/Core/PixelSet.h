@@ -179,11 +179,12 @@ public:
 
 	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
-	void merge(const PixelSet& o);
-	void add(const QSharedPointer<Pixel>& pixel);
-	void remove(const QSharedPointer<Pixel>& pixel);
-	void append(const QVector<QSharedPointer<Pixel> >& set);
-	void scale(double factor);
+	
+	// functions that change the set
+	virtual void add(const QSharedPointer<Pixel>& pixel);
+	virtual void remove(const QSharedPointer<Pixel>& pixel);
+	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
+	virtual void scale(double factor);
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
@@ -199,13 +200,12 @@ public:
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
 	
-	double overlapRatio(const PixelSet& set, double angle = CV_PI*0.5) const;	// TODO: delete
+	QSharedPointer<TextLine> toTextLine() const;
 
 	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
-	QSharedPointer<TextLine> toTextLine() const;
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
@@ -214,6 +214,31 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PixelSet::DrawFlags)
+
+class DllCoreExport TextLineSet : public PixelSet {
+
+public:
+	TextLineSet();
+	TextLineSet(const QVector<QSharedPointer<Pixel> >& set);
+
+	// functions that change the set
+	virtual void add(const QSharedPointer<Pixel>& pixel);
+	virtual void remove(const QSharedPointer<Pixel>& pixel);
+	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
+	virtual void scale(double factor);
+
+	Line line() const;
+	double error() const;
+	QVector<Vector2D> centers() const;
+	double computeError(const QVector<Vector2D>& pts) const;
+
+protected:
+	Line mLine;
+	double mLineErr = DBL_MAX;
+
+	void updateLine();
+};
+
 
 /// <summary>
 /// Represents a pixel graph.

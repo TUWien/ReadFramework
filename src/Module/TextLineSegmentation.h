@@ -90,27 +90,15 @@ public:
 private:
 	PixelSet mSet;
 	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
-	QVector<QSharedPointer<PixelSet> > mTextLines;
+	QVector<QSharedPointer<TextLineSet> > mTextLines;
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;		// deprecated
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;	// deprecated
-	QVector<PixelSet> toSets(const QVector<QSharedPointer<LineEdge> > & edges) const;	// deprecated
 
-	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// deprecated	// TODO: delete
-	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const; // deprecated	// TODO: delete
-	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const; // deprecated	// TODO: move this to a PixelSetManager
-
-	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const; // deprecated
-
-
-	QVector<QSharedPointer<PixelSet> > clusterTextLines(const PixelGraph& graph) const;
-
-	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<PixelSet> >& sets) const;
-	void addPixel(QSharedPointer<PixelSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
-	bool mergeTextLines(const QSharedPointer<PixelSet>& tln1, const QSharedPointer<PixelSet>& tln2, double heat) const;
-	Ellipse textLineEllipse(const QVector<QSharedPointer<Pixel> >& pixels) const;
+	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph) const;
+	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
+	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
+	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;
 };
 
 };

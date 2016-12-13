@@ -72,11 +72,6 @@ bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {
 	return mSet.contains(pixel);
 }
 
-void PixelSet::merge(const PixelSet& o) {
-
-	mSet.append(o.pixels());
-}
-
 void PixelSet::add(const QSharedPointer<Pixel>& pixel) {
 	mSet << pixel;
 }
@@ -376,30 +371,6 @@ void PixelSet::scale(double factor) {
 		px->scale(factor);
 }
 
-double PixelSet::overlapRatio(const PixelSet & set, double angle) const {
-
-	Ellipse me = fitEllipse();
-	Ellipse oe = set.fitEllipse();
-
-	// get upper overlap
-	Vector2D muv = me.getPoint(angle);
-	Vector2D ouv = oe.getPoint(angle);
-	Vector2D a(1,0);
-	a.rotate(angle);
-
-	double vu = a * (ouv - muv);
-
-	// get lower overlap
-	muv = me.getPoint(-angle);
-	ouv = oe.getPoint(-angle);
-	a.rotate(CV_PI);
-	double vl = a * (ouv - muv);
-
-	//qDebug() << "vu:" << vu << "vl:" << vl;
-
-	return abs(vu) + abs(vl);
-}
-
 /// <summary>
 /// This is a convenience function that connects SuperPixels.
 /// It is recommended to use the connector classes respectively.
@@ -467,7 +438,7 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 		}
 		// two different idx? - merge the sets
 		else if (fIdx != sIdx) {
-			sets[fIdx]->merge(*sets[sIdx]);
+			sets[fIdx]->append(sets[sIdx]->pixels());
 			sets.remove(sIdx);
 		}
 		// else : nothing to do - they are both already added
@@ -1054,6 +1025,84 @@ cv::Mat DBScanPixel::calcDists(const PixelSet& pixels) const {
 	}
 	
 	return dists;
+}
+
+// TextLineSet --------------------------------------------------------------------
+TextLineSet::TextLineSet() {
+}
+
+TextLineSet::TextLineSet(const QVector<QSharedPointer<Pixel>>& set) : PixelSet(set) {
+	updateLine();
+}
+
+void TextLineSet::add(const QSharedPointer<Pixel>& pixel) {
+	PixelSet::add(pixel);
+	updateLine();
+}
+
+void TextLineSet::remove(const QSharedPointer<Pixel>& pixel) {
+	PixelSet::remove(pixel);
+	updateLine();
+}
+
+void TextLineSet::append(const QVector<QSharedPointer<Pixel>>& set) {
+	PixelSet::append(set);
+	updateLine();
+}
+
+void TextLineSet::scale(double factor) {
+	PixelSet::scale(factor);
+	updateLine();
+}
+
+Line TextLineSet::line() const {
+	
+	return mLine;
+}
+
+double TextLineSet::error() const {
+	return mLineErr;
+}
+
+QVector<Vector2D> TextLineSet::centers() const {
+
+	return pointSet(DBL_MAX);
+}
+
+double TextLineSet::computeError(const QVector<Vector2D>& pts) const {
+
+	// compute residual error
+	double rErr = 0;
+	for (const Vector2D& pt : pts) {
+		rErr += mLine.distance(pt);
+	}
+	return rErr / pts.size();
+}
+
+void TextLineSet::updateLine() {
+
+	if (mSet.size() < 2) {
+		qWarning() << "cannot fit a line if the set has less than 2 pixels";
+		mLine = Line();
+		mLineErr = DBL_MAX;
+		return;
+	}
+	
+	// it _is_ a line
+	if (mSet.size() == 2) {
+		mLine = Line(mSet[0]->center(), mSet[1]->center());
+		mLineErr = 0.0;
+		return;
+	}
+
+	QVector<Vector2D> ptSet = centers();
+
+	LineFitting lf(ptSet);
+	Line line = lf.fitLineLMS();
+	line = line.extendBorder(boundingBox());
+
+	mLine = line;
+	mLineErr = computeError(ptSet);
 }
 
 }

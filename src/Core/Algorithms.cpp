@@ -1172,7 +1172,7 @@ Line LineFitting::fitLineLMS() const {
 			// compute distance of current set
 			double mr = medianResiduals(mPts, line);
 
-			if (minLMS > mr) {
+			if (mr < minLMS) {
 				minLMS = mr;
 				bestLine = line;
 			}
@@ -1197,7 +1197,7 @@ Line LineFitting::fitLineLMS() const {
 
 				double mr = medianResiduals(mPts, line);
 
-				if (minLMS > mr) {
+				if (mr < minLMS) {
 					minLMS = mr;
 					bestLine = line;
 				}

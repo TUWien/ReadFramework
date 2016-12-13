@@ -115,11 +115,11 @@ bool TextLineSegmentation::compute() {
 	//mTextLines = merge(mTextLines, 160);
 	//mDebug << mTextLines.size() << "text lines (after merging)";
 
-	QVector<QSharedPointer<PixelSet> > ps;
-	for (auto p : mTextLines) {
-		if (p->size() > 10)
-			ps << p;
-	}
+	QVector<QSharedPointer<TextLineSet> > ps;
+	//for (auto p : mTextLines) {
+	//	if (p->size() > 10)
+	//		ps << p;
+	//}
 	mTextLines = ps;
 
 	//mTextLines = filter(mTextLines);
@@ -133,216 +133,14 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 	return qSharedPointerDynamicCast<TextLineConfig>(mConfig);
 }
 
-QVector<QSharedPointer<LineEdge> > TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, double factor) const {
-
-	factor = 0.5;
-	double se = 0.0;
-	for (auto e : edges) {
-		se += e->edgeWeight();
-	}
-	se /= edges.size();
-
-	QVector<QSharedPointer<LineEdge> > PixelEdgesClean;
-
-	for (auto pe : edges) {
-
-		if (pe->edgeWeight() < se*factor)
-			PixelEdgesClean << pe;
-	}
-
-	return PixelEdgesClean;
-}
-
-QVector<QSharedPointer<LineEdge>> TextLineSegmentation::filterEdges(const QVector<QSharedPointer<LineEdge>>& edges, const QVector<Line>& lines) const {
-
-	QVector<QSharedPointer<LineEdge> > PixelEdgesClean;
-
-	for (const QSharedPointer<LineEdge>& pe : edges) {
-
-		bool filter = false;
-		
-		// does the edge intersect with any 'stop' line?
-		for (const Line& line : lines) {
-			if (pe->edge().intersects(line)) {
-				filter = true;
-				break;
-			}
-		}
-
-		if (!filter)
-			PixelEdgesClean << pe;
-	}
-
-	return PixelEdgesClean;
-}
-
-QVector<PixelSet > TextLineSegmentation::toSets(const QVector<QSharedPointer<LineEdge> > & edges) const {
-
-	// why do I have to do this?
-	QVector<QSharedPointer<PixelEdge> > pe;
-	for (auto e : edges)
-		pe << e;
-
-	QVector<QSharedPointer<PixelSet> > allSets = PixelSet::fromEdges(pe);
-	QVector<PixelSet> filteredSets;
-
-	for (auto s : allSets) {
-
-		if (s->pixels().size() > 3)
-			filteredSets << *s;
-	}
-
-	return filteredSets;
-}
-
-QVector<PixelSet> TextLineSegmentation::merge(const QVector<PixelSet>& sets, double ) const {
-
-	QVector<QString> mergedIds;
-	QVector<PixelSet> mergedSets;
-
-
-	for (auto oSet : sets) {
-
-		if (mergedIds.contains(oSet.id()))
-			continue;
-
-		Line baseLine = oSet.fitLine();
-		Vector2D center = oSet.meanCenter();
-		
-		Vector2D orVec(0, 1);
-		double angle = oSet.orientation();
-		orVec.rotate(angle);
-
-		for (auto cSet : sets) {
-
-			if (cSet == oSet)
-				continue;
-
-			if (mergedIds.contains(cSet.id()))
-				continue;
-
-
-			PixelSet clSet = oSet;	// clone
-			clSet.merge(cSet);
-			
-			Vector2D cd = clSet.meanCenter() - center;
-			double w = cd.theta(orVec);
-			
-			if (baseLine.diffAngle(clSet.fitLine()) < CV_PI*0.001 && cd.length()*w < 10) {
-				oSet = clSet;
-				mergedIds << oSet.id();
-				mergedIds << cSet.id();
-			}
-		}
-
-		mergedSets << oSet;
-	}
-
-	return mergedSets;
-
-	//QMap<QString, QString> mergeMap;
-	//QVector<QString> mergedIds;
-
-	//QVector<PixelSet > mergedSets;
-
-
-	//for (auto oSet : sets) {
-
-	//	if (mergedIds.contains(oSet->id()))
-	//		continue;
-
-	//	for (auto cSet : sets) {
-
-	//		if (cSet == oSet)
-	//			continue;
-
-	//		if (mergedIds.contains(cSet->id()))
-	//			continue;
-
-	//		assert(cSet);
-
-	//		double o = oSet->overlapRatio(*cSet);
-
-	//		if (o < overlap) {
-	//			oSet->merge(*cSet);
-	//			//mergeMap.insert(oSet->id(), cSet->id());
-	//			mergedIds << oSet->id();
-	//			mergedIds << cSet->id();
-	//		}
-	//	}
-
-	//	mergedSets << oSet;
-	//}
-
-	////for (const QString& fId : mergeMap) {
-	////	
-	////	PixelSet set = findSet(sets, fId);
-	////	PixelSet oSet = findSet(sets, mergeMap.value(fId));
-
-	////	assert(set && oSet);
-
-	////	set->merge(*oSet);
-	////}
-
-
-	//return mergedSets;
-}
-
-QVector<PixelSet> TextLineSegmentation::filter(const QVector<PixelSet>& sets, double ) const {
-
-	double nPx = 0;
-
-	for (auto set : sets) {
-		nPx += (double)sets.size();
-	}
-
-	nPx /= sets.size();
-	
-	QVector<PixelSet> fSets;
-
-	for (auto set : sets) {
-
-		if (set.size() > 32)
-			fSets << set;
-
-	}
-
-	return fSets;
-}
-
-PixelSet TextLineSegmentation::findSet(const QVector<PixelSet>& sets, const QString & id) const {
-
-	for (auto set : sets) {
-		if (set.id() == id)
-			return set;
-	}
-
-	return PixelSet();
-}
-
-void TextLineSegmentation::slac(const QVector<QSharedPointer<LineEdge> >& ) const {
-
-	QVector<PixelSet > clusters;
-
-	//for (const QSharedPointer<PixelEdge>& pe : edges) {
-	//	PixelSet ps(new PixelSet());
-	//	ps->add(pe->first());
-	//	ps->add(pe->second());
-	//}
-
-	// TODO: go on here...
-
-}
-
-QVector<QSharedPointer<PixelSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
+QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
 
 	// TODOs
 	// - distance sorting (w.r.t angles) has an issue
 	// - addPixel: do not add _all_
 	// - merge textlines: check axis ratio (it's basically PCA...)
 
-
-	QVector<QSharedPointer<PixelSet> > textLines;
+	QVector<QSharedPointer<TextLineSet> > textLines;
 
 	// debug ------------------------------------
 	QString fp("C:/temp/cluster/");
@@ -364,27 +162,44 @@ QVector<QSharedPointer<PixelSet> > TextLineSegmentation::clusterTextLines(const 
 	for (auto e : graph.edges()) {
 
 		double heat = std::sqrt(++idx / (double)graph.edges().size());
-		qDebug() << "heat" << heat;
+		//qDebug() << "heat" << heat;
 
 		int psIdx1 = locate(e->first(), textLines);
 		int psIdx2 = locate(e->second(), textLines);
 
 		// create a new text line
 		if (psIdx1 == -1 && psIdx2 == -1) {
-			QSharedPointer<PixelSet> ps = QSharedPointer<PixelSet>::create();
-			ps->add(e->first());
-			ps->add(e->second());
+
+			if (e->first()->center() == e->second()->center()) {
+				qInfo() << "pixels have the same center - skipping";
+				continue;
+			}
+			
+			QVector<QSharedPointer<Pixel> > px;
+			px << e->first();
+			px << e->second();
+
+			QSharedPointer<TextLineSet> ps = QSharedPointer<TextLineSet>::create(px);
 			textLines << ps;
 
 			p.setPen(ColorManager::darkGray(0.8));
 		}
 		else if (psIdx2 == -1) {
-			addPixel(textLines[psIdx1], e->second(), heat);
-			p.setPen(ColorManager::lightGray(0.8));
+
+			if (addPixel(textLines[psIdx1], e->second(), heat)) {
+				textLines[psIdx1]->add(e->second());
+				p.setPen(ColorManager::lightGray(0.8));
+			}
+			else
+				p.setPen(ColorManager::red(0.8));
 		}
 		else if (psIdx1 == -1) {
-			addPixel(textLines[psIdx2], e->first(), heat);
-			p.setPen(ColorManager::lightGray(0.8));
+			if (addPixel(textLines[psIdx2], e->first(), heat)) {
+				textLines[psIdx2]->add(e->first());
+				p.setPen(ColorManager::lightGray(0.8));
+			}
+			else
+				p.setPen(ColorManager::red(0.8));
 		}
 		else if (mergeTextLines(textLines[psIdx1], textLines[psIdx2], heat)) {
 
@@ -393,15 +208,13 @@ QVector<QSharedPointer<PixelSet> > TextLineSegmentation::clusterTextLines(const 
 			p.setPen(ColorManager::blue(0.8));
 		}
 		else
-			p.setPen(ColorManager::red(0.8));
+			p.setPen(ColorManager::red(1.0));
 
 		// else drop
 
 		// debug --------------------------------
 		e->draw(p);
 
-
-		
 		//p.setPen(ColorManager::getColor(1));
 
 		//Line l1(e->first()->center(), e->first()->center() + (e->first()->stats()->orVec()*20.0));
@@ -422,7 +235,7 @@ QVector<QSharedPointer<PixelSet> > TextLineSegmentation::clusterTextLines(const 
 	return textLines;
 }
 
-int TextLineSegmentation::locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<PixelSet> >& sets) const {
+int TextLineSegmentation::locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const {
 
 	for (int idx = 0; idx < sets.size(); idx++) {
 
@@ -433,69 +246,56 @@ int TextLineSegmentation::locate(const QSharedPointer<Pixel>& pixel, const QVect
 	return -1;
 }
 
-void TextLineSegmentation::addPixel(QSharedPointer<PixelSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const {
+bool TextLineSegmentation::addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const {
 
-	// param
-	//double maxErrPerc = 1.1;
-	double maxErr = 0.5 * heat;
+	// do not create vertical lines
+	if (set->line().length() < 10)
+		return true;
 
-	// TODO: cache!
-	QVector<QSharedPointer<Pixel> > pixels;
-	pixels = set->pixels();
+	double mErr = qMax(set->error() * 2.0, 10.0);
+	double newErr = set->line().distance(pixel->center());
 
-	double tIvl = (1.0-heat) * std::sqrt(pixels.size());
-
-	//if (set->size() > 2) {
-	//	double oErr = textLineError(pixels) * maxErrPerc;
-
-	//	if (oErr < maxErr)
-	//		maxErr = oErr;
-	//}
-	Ellipse e1 = textLineEllipse(pixels);
-
-	// add the new pixel & check again
-	pixels << pixel;
-	Ellipse nE = textLineEllipse(pixels);
-
-	double d1 = Algorithms::angleDist(e1.angle(), nE.angle(), CV_PI);
-	double angleThresh = CV_PI*0.5 / tIvl;
-
-	// do not add...
-	if (d1 > angleThresh)
-		return;
-	
-	// add pixel if it does not increase the error much
-	if (nE.minorAxis()/nE.majorAxis() < maxErr)
-		set->add(pixel);
+	return newErr < mErr;
 }
 
-bool TextLineSegmentation::mergeTextLines(const QSharedPointer<PixelSet>& tln1, const QSharedPointer<PixelSet>& tln2, double heat) const {
+bool TextLineSegmentation::mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const {
 
-	Ellipse e1 = textLineEllipse(tln1->pixels());
-	Ellipse e2 = textLineEllipse(tln2->pixels());
+	// do not create vertical lines
+	if (tln1->line().length() < 10 || tln2->line().length() < 10)
+		return true;
 
-	// compute the new text line error
-	QVector<QSharedPointer<Pixel> > pixels;
-	pixels << tln1->pixels();
-	pixels << tln2->pixels();
+	double maxErr1 = qMax(tln1->error() * 2.0, 20.0);
+	double maxErr2 = qMax(tln2->error() * 2.0, 20.0);
 
-	Ellipse nE = textLineEllipse(pixels);
+	double nErr1 = tln1->computeError(tln2->centers());
+	double nErr2 = tln2->computeError(tln1->centers());
 
-	double d1 = Algorithms::angleDist(e1.angle(), nE.angle(), CV_PI);
-	double d2 = Algorithms::angleDist(e2.angle(), nE.angle(), CV_PI);
-	double angleThresh = CV_PI*0.5 / std::sqrt(pixels.size());
+	return nErr1 < maxErr1 && nErr2 < maxErr2;
+	//Ellipse e1 = textLineEllipse(tln1->pixels());
+	//Ellipse e2 = textLineEllipse(tln2->pixels());
 
-	if (d1 > angleThresh || d2 > angleThresh)
-		return false;
+	//// compute the new text line error
+	//QVector<QSharedPointer<Pixel> > pixels;
+	//pixels << tln1->pixels();
+	//pixels << tln2->pixels();
 
-	//double er1 = e1.minorAxis() / e1.majorAxis();
-	//double er2 = e2.minorAxis() / e2.majorAxis();
-	double ern = nE.minorAxis() / nE.majorAxis();
+	//Ellipse nE = textLineEllipse(pixels);
+
+	//double d1 = Algorithms::angleDist(e1.angle(), nE.angle(), CV_PI);
+	//double d2 = Algorithms::angleDist(e2.angle(), nE.angle(), CV_PI);
+	//double angleThresh = CV_PI*0.5 / std::sqrt(pixels.size());
+
+	//if (d1 > angleThresh || d2 > angleThresh)
+	//	return false;
+
+	////double er1 = e1.minorAxis() / e1.majorAxis();
+	////double er2 = e2.minorAxis() / e2.majorAxis();
+	//double ern = nE.minorAxis() / nE.majorAxis();
 
 
-	double aRatioThresh = 1.0 / std::sqrt(pixels.size());
+	//double aRatioThresh = 1.0 / std::sqrt(pixels.size());
 
-	return ern < aRatioThresh;
+	//return ern < aRatioThresh;
 
 /*
 	double maxErr = qMax(er1, er2);
@@ -513,16 +313,6 @@ bool TextLineSegmentation::mergeTextLines(const QSharedPointer<PixelSet>& tln1, 
 	//double nErr = textLineError(pixels);
 
 	//return nErr < minErr;
-}
-
-Ellipse TextLineSegmentation::textLineEllipse(const QVector<QSharedPointer<Pixel>>& pixels) const {
-
-	// TODO: cache!
-	QVector<Vector2D> centers;
-	for (auto px : pixels)
-		centers << px->center();
-
-	return Ellipse::fromData(centers);
 }
 
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
