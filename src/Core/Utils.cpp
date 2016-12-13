@@ -320,6 +320,10 @@ QColor ColorManager::red(double alpha) {
 	return QColor(200, 50, 50, qRound(alpha*255));
 }
 
+QColor ColorManager::blue(double alpha) {
+	return QColor(0, 102, 153, qRound(alpha*255));
+}
+
 QColor ColorManager::white(double alpha) {
 	return QColor(255,255,255, qRound(alpha*255));
 }

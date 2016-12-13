@@ -75,7 +75,7 @@ protected:
 class DllModuleExport TextLineSegmentation : public Module {
 
 public:
-	TextLineSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TextLineSegmentation(const PixelSet& set = PixelSet());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -88,22 +88,29 @@ public:
 	QVector<QSharedPointer<TextLine> > textLines() const;
 
 private:
-	QVector<QSharedPointer<Pixel> > mSuperPixels;
+	PixelSet mSet;
 	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
-	QVector<PixelSet> mSets;
+	QVector<QSharedPointer<PixelSet> > mTextLines;
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;
-	QVector<PixelSet> toSets(const QVector<QSharedPointer<LineEdge> > & edges) const;
+	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;		// deprecated
+	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;	// deprecated
+	QVector<PixelSet> toSets(const QVector<QSharedPointer<LineEdge> > & edges) const;	// deprecated
 
-	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// TODO: delete
-	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const;	// TODO: delete
-	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const;	// TODO: move this to a PixelSetManager
+	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// deprecated	// TODO: delete
+	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const; // deprecated	// TODO: delete
+	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const; // deprecated	// TODO: move this to a PixelSetManager
 
-	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
+	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const; // deprecated
 
+
+	QVector<QSharedPointer<PixelSet> > clusterTextLines(const PixelGraph& graph) const;
+
+	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<PixelSet> >& sets) const;
+	void addPixel(QSharedPointer<PixelSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
+	bool mergeTextLines(const QSharedPointer<PixelSet>& tln1, const QSharedPointer<PixelSet>& tln2, double heat) const;
+	Ellipse textLineEllipse(const QVector<QSharedPointer<Pixel> >& pixels) const;
 };
 
 };

@@ -199,4 +199,15 @@ protected:
 	double medianResiduals(const QVector<Vector2D>& pts, const Line& line) const;
 };
 
+// pixel distance functions
+class Pixel;
+
+namespace PixelDistance {
+	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+
+	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+};
+
+
 };

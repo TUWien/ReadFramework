@@ -35,6 +35,7 @@
 #include "Shapes.h"
 #include "BaseImageElement.h"
 #include "Pixel.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
@@ -72,6 +73,10 @@ class DllCoreExport PixelConnector {
 public:
 	PixelConnector();
 	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const = 0;
+	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
+
+protected:
+	PixelDistance::PixelDistanceFunction mDistanceFnc;
 
 };
 
@@ -222,10 +227,18 @@ public:
 	PixelGraph();
 	PixelGraph(const PixelSet& set);
 
+	enum SortMode {
+		sort_none,
+		sort_edges,
+		sort_line_edges,
+
+		sort_end
+	};
+
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
-	void connect(const PixelConnector& connector = DelauneyPixelConnector());
+	void connect(const PixelConnector& connector = DelauneyPixelConnector(), const SortMode& sort = sort_none);
 
 	PixelSet set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;

@@ -237,11 +237,15 @@ public:
 		const QSharedPointer<Pixel> second,
 		const QString& id = QString());
 
+	friend DllCoreExport bool operator<(const PixelEdge& pe1, const PixelEdge& pe2);
+	friend DllCoreExport bool operator<(const QSharedPointer<PixelEdge>& pe1, const QSharedPointer<PixelEdge>& pe2);
+
 	bool isNull() const;
 
 	virtual double edgeWeight() const;
 	Line edge() const;
 	void draw(QPainter& p) const;
+	virtual bool lessThan(const PixelEdge& e) const;
 
 	QSharedPointer<Pixel> first() const;
 	QSharedPointer<Pixel> second() const;
@@ -264,6 +268,7 @@ public:
 	LineEdge(const QSharedPointer<Pixel> first, 
 		const QSharedPointer<Pixel> second,
 		const QString& id = QString());
+	friend DllCoreExport bool operator<(const QSharedPointer<LineEdge>& le1, const QSharedPointer<LineEdge>& le2);
 
 	virtual double edgeWeight() const override;
 
@@ -273,15 +278,5 @@ protected:
 	double statsWeight(const QSharedPointer<Pixel>& pixel) const;
 	double calcWeight() const;
 };
-
-// pixel distance functions
-
-namespace PixelDistance {
-	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-
-	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-}
-
 
 };

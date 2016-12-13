@@ -535,16 +535,30 @@ void PixelGraph::draw(QPainter& p) const {
 
 }
 
-void PixelGraph::connect(const PixelConnector& connector) {
+void PixelGraph::connect(const PixelConnector& connector, const SortMode& sort) {
 
 	// nothing todo?
 	if (isEmpty())
 		return;
 
-	assert(mSet);
 	const QVector<QSharedPointer<Pixel> >& pixels = mSet.pixels();
 
 	mEdges = connector.connect(pixels);
+
+	if (sort == sort_edges)
+		qSort(mEdges.begin(), mEdges.end());
+	else if (sort == sort_line_edges) {
+
+		QVector<QSharedPointer<LineEdge> > lEdges;
+		for (auto e : mEdges)
+			lEdges << QSharedPointer<LineEdge>(new LineEdge(*e));
+
+		qSort(lEdges.begin(), lEdges.end());
+
+		mEdges.clear();
+		for (auto e : lEdges)
+			mEdges << e;
+	}
 
 	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	for (int idx = 0; idx < mEdges.size(); idx++) {
@@ -713,6 +727,10 @@ PixelTabStop::Type PixelTabStop::type() const {
 
 // PixelConnector --------------------------------------------------------------------
 PixelConnector::PixelConnector() {
+}
+
+void PixelConnector::setDistanceFunction(const PixelDistance::PixelDistanceFunction & distFnc) {
+	mDistanceFnc = distFnc;
 }
 
 // DelauneyPixelConnector --------------------------------------------------------------------
@@ -900,6 +918,7 @@ DBScanPixelConnector::DBScanPixelConnector() {
 QVector<QSharedPointer<PixelEdge>> DBScanPixelConnector::connect(const QVector<QSharedPointer<Pixel>>& pixels) const {
 	
 	DBScanPixel dbs(pixels);
+	dbs.setDistanceFunction(mDistanceFnc);
 	dbs.compute();
 
 	return dbs.edges();

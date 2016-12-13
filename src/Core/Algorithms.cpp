@@ -32,6 +32,7 @@
 
 #include "Algorithms.h"
 #include "Utils.h"
+#include "Pixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
@@ -1248,4 +1249,28 @@ double LineFitting::medianResiduals(const QVector<Vector2D>& pts, const Line & l
 	return Algorithms::statMoment(squaredDists, 0.5);
 }
 
+// Pixel Distances --------------------------------------------------------------------
+double PixelDistance::euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
+
+	assert(!px1.isNull() && !px2.isNull());
+	return Vector2D(px2->center() - px1->center()).length();
+}
+
+double PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
+
+	assert(!px1.isNull() && !px2.isNull());
+
+	if (!px1->stats() || !px2->stats()) {
+		qWarning() << "cannot compute angle weighted distance if stats are NULL";
+		return euclidean(px1, px2);
+	}
+
+	Vector2D edge = px2->center() - px1->center();
+	double dt1 = std::abs(edge.theta(px1->stats()->orVec()));
+	double dt2 = std::abs(edge.theta(px2->stats()->orVec()));
+
+	double a = qMin(dt1, dt2);
+
+	return edge.length() * (a + 0.01);	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+}
 }

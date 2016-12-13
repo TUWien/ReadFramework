@@ -449,6 +449,14 @@ PixelEdge::PixelEdge(const QSharedPointer<Pixel> first,
 
 }
 
+bool operator<(const PixelEdge & pe1, const PixelEdge & pe2) {
+	return pe1.lessThan(pe2);
+}
+
+bool operator<(const QSharedPointer<PixelEdge> & pe1, const QSharedPointer<PixelEdge> & pe2) {
+	return pe1->lessThan(*pe2);
+}
+
 bool PixelEdge::isNull() const {
 	return mIsNull;
 }
@@ -458,28 +466,30 @@ double PixelEdge::edgeWeight() const {
 	if (!mFirst || !mSecond)
 		return 0.0;
 
-	double beta = 1.0;
+	return mEdge.length() / qMin(mFirst->ellipse().radius(), mSecond->ellipse().radius());
 
-	if (mFirst->stats() && mSecond->stats()) {
-	
-		double sp = mFirst->stats()->lineSpacing();
-		double sq = mSecond->stats()->lineSpacing();
-		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
-		double ew = 1.0-exp(-nl);
+	//double beta = 1.0;
 
-		if (ew < 0.0 || ew > 1.0) {
-			qDebug() << "illegal edge weight: " << ew;
-		}
-		//else
-		//	qDebug() << "weight: " << nl;
+	//if (mFirst->stats() && mSecond->stats()) {
+	//
+	//	double sp = mFirst->stats()->lineSpacing();
+	//	double sq = mSecond->stats()->lineSpacing();
+	//	double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
+	//	double ew = 1.0-exp(-nl);
 
-		// TODO: add mu(fp,fq) according to koo's indices
-		return ew;
-	}
+	//	if (ew < 0.0 || ew > 1.0) {
+	//		qDebug() << "illegal edge weight: " << ew;
+	//	}
+	//	//else
+	//	//	qDebug() << "weight: " << nl;
 
-	qDebug() << "no stats when computing the scaled edges...";
+	//	// TODO: add mu(fp,fq) according to koo's indices
+	//	return ew;
+	//}
 
-	return 0.0;
+	//qDebug() << "no stats when computing the scaled edges...";
+
+	//return 0.0;
 
 	//// get minimum scale
 	//double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());
@@ -508,6 +518,10 @@ void PixelEdge::draw(QPainter & p) const {
 	edge().draw(p);
 }
 
+bool PixelEdge::lessThan(const PixelEdge & e) const {
+	return edgeWeight() < e.edgeWeight();
+}
+
 // LineEdge --------------------------------------------------------------------
 LineEdge::LineEdge() {
 }
@@ -525,6 +539,10 @@ LineEdge::LineEdge(
 	mStatsWeight = calcWeight();
 }
 
+bool operator<(const QSharedPointer<LineEdge>& le1, const QSharedPointer<LineEdge>& le2) {
+	return le1->lessThan(*le2);
+}
+
 double LineEdge::edgeWeight() const {
 	return mStatsWeight;
 }
@@ -532,17 +550,25 @@ double LineEdge::edgeWeight() const {
 double LineEdge::calcWeight() const {
 
 	assert(mFirst && mSecond);
-	double d1 = statsWeight(mFirst);
-	double d2 = statsWeight(mSecond);
+	//double d1 = statsWeight(mFirst);
+	//double d2 = statsWeight(mSecond);
 
-	double d = qMax(abs(d1), abs(d2));
-	
+	//double d = qMax(abs(d1), abs(d2));
+	//
+
+	//double dt1 = std::abs(edge.theta(px1->stats()->orVec()));
+	//double dt2 = std::abs(edge.theta(px2->stats()->orVec()));
+
+	//double a = qMin(dt1, dt2);
+
 	// normalize by scale
-	double mr = qMin(mFirst->ellipse().radius(), mSecond->ellipse().radius());
-	if (mr > 0)
-		d /= mr;
+	//double mr = qMin(mFirst->ellipse().radius(), mSecond->ellipse().radius());
+	//if (mr > 0)
+	//	d /= mr;
 
-	return d;
+	return PixelDistance::angleWeighted(mFirst, mSecond);
+
+	//return d;
 }
 
 double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {
@@ -559,30 +585,6 @@ double LineEdge::statsWeight(const QSharedPointer<Pixel>& pixel) const {
 	Vector2D eVec = edge().vector();
 
 	return vec * eVec;
-}
-
-double PixelDistance::euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
-	
-	assert(!px1.isNull() && !px2.isNull());
-	return Vector2D(px2->center() - px1->center()).length();
-}
-
-double PixelDistance::angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2) {
-
-	assert(!px1.isNull() && !px2.isNull());
-
-	if (!px1->stats() || !px2->stats()) {
-		qWarning() << "cannot compute angle weighted distance if stats are NULL";
-		return euclidean(px1, px2);
-	}
-
-	Vector2D edge = px2->center() - px1->center();
-	double dt1 = std::abs(edge.theta(px1->stats()->orVec()));
-	double dt2 = std::abs(edge.theta(px2->stats()->orVec()));
-
-	double a = qMin(dt1, dt2);
-
-	return edge.length() * (a + 0.01);	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
 }
 
 }

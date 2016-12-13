@@ -189,7 +189,7 @@ void LayoutTest::layoutToXml() const {
 	rdf::TextLineSegmentation textLines(sp);
 	
 	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+		qWarning() << "could not compute text line segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -377,7 +377,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	// smooth estimation
 	rdf::GraphCutOrientation pse(sp.pixels());
 	
-	if (!pse.compute())
+	//if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 	
 	// pixel labeling
@@ -408,7 +408,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	textLines.config()->setMinDistFactor(10);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+		qWarning() << "could not compute text line segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 

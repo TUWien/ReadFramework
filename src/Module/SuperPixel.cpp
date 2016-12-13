@@ -755,7 +755,7 @@ void GraphCutOrientation::graphCut(const PixelGraph& graph) {
 
 	// stats must be computed already
 	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
-	assert(pixel[0]->stats());
+	assert(pixel[0]->stats());	// local orientation must be computed first
 
 	// the statistics columns == the number of possible labels
 	int nLabels = graph.set().pixels()[0]->stats()->data().cols;
