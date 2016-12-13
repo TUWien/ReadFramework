@@ -208,15 +208,20 @@ public:
 	cv::KeyPoint toKeyPoint() const;
 
 	enum DrawFlag {
-		draw_ellipse_only = 0,
-		draw_stats_only,
-		draw_ellipse_stats,
-		draw_all,
+		draw_none				= 0x00,
+		draw_ellipse			= 0x01,
+		draw_stats				= 0x02,
+		draw_center				= 0x04,
+		draw_label_colors		= 0x08,
+		draw_tab_stops			= 0x10,
+		draw_id					= 0x20,
+
+		draw_all				= 0xFF,
 
 		draw_end
 	};
 
-	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = draw_stats_only) const;
+	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = (DrawFlag)(draw_stats | draw_ellipse | draw_label_colors)) const;
 
 protected:
 	bool mIsNull = true;

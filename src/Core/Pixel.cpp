@@ -382,50 +382,60 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 	
 	QPen oldPen = p.pen();
 
-	if (df == draw_all) {
+	// show pixel id
+	if (df & draw_id) {
 		p.setPen(ColorManager::red());
 		p.drawText(center().toQPoint(), id());
 		p.setPen(oldPen);
 	}
 
-	// easy cheasy visualization for now
-	if (!label().trueLabel().isNull()) {
-		p.setPen(label().trueLabel().visColor());
-	}
-	else if (!label().label().isNull()) {
-		p.setPen(label().label().visColor());
-	}
-
-	if (stats() && (df != draw_ellipse_only)) {
-
-		auto s = stats();
-
-		//QPen pen = p.pen();
-		//p.setPen(c);
-
-		Vector2D vec = stats()->orVec();
-		vec *= stats()->lineSpacing();
-		vec = vec + center();
-
-		p.drawLine(Line(center(), vec).line());
-		//p.setPen(pen);
+	// colorize according to labels
+	if (df & draw_label_colors) {
+		if (!label().trueLabel().isNull()) {
+			p.setPen(label().trueLabel().visColor());
+		}
+		else if (!label().label().isNull()) {
+			p.setPen(label().label().visColor());
+		}
 	}
 
-	if (stats() && tabStop().type() != PixelTabStop::type_none) {
+	if (stats()) {
 
-		// get tab vec
-		Vector2D vec = stats()->orVec();
-		vec *= 40;
-		vec.rotate(tabStop().orientation());
+		// show local orientation
+		if (df & draw_stats) {
 
-		QPen oPen = p.pen();
-		p.setPen(ColorManager::red());
-		p.drawLine(Line(center(), center()+vec).line());
-		p.setPen(oPen);
+			Vector2D vec = stats()->orVec();
+			vec *= stats()->lineSpacing();
+			vec = vec + center();
+
+			p.drawLine(Line(center(), vec).line());
+		}
+
+		// indicate tab stop
+		if (tabStop().type() != PixelTabStop::type_none && df & draw_tab_stops) {
+
+			// get tab vec
+			Vector2D vec = stats()->orVec();
+			vec *= 40;
+			vec.rotate(tabStop().orientation());
+
+			QPen oPen = p.pen();
+			p.setPen(ColorManager::red());
+			p.drawLine(Line(center(), center() + vec).line());
+			p.setPen(oPen);
+		}
 	}
 
-	if (!stats() || df != draw_stats_only)
+	// draw the superpixel (ellipse)
+	if (df & draw_ellipse)
 		mEllipse.draw(p, alpha);
+
+	if (df & draw_center) {
+
+		Ellipse e = mEllipse;
+		e.setAxis(Vector2D(3, 3));
+		e.draw(p, alpha);
+	}
 
 	p.setPen(oldPen);
 }
@@ -515,7 +525,12 @@ QSharedPointer<Pixel> PixelEdge::second() const {
 
 void PixelEdge::draw(QPainter & p) const {
 
-	edge().draw(p);
+	Line e = edge();
+	e.setThickness(3);
+	e.draw(p);
+
+	first()->draw(p, 1, Pixel::draw_center);
+	second()->draw(p, 1, Pixel::draw_center);
 }
 
 bool PixelEdge::lessThan(const PixelEdge & e) const {

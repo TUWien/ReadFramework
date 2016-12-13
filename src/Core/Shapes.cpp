@@ -487,7 +487,7 @@ double Line::minDistance(const Line& l) const {
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.
 /// </summary>
-/// <param name="p">The p.</param>
+/// <param name="p">The point p.</param>
 /// <returns>The distance of point p.</returns>
 double Line::distance(const Vector2D& p) const {
 
@@ -520,7 +520,7 @@ bool Line::within(const Vector2D& p) const {
 
 	Vector2D tmp = mLine.p2() - mLine.p1();
 	Vector2D pe = p - mLine.p2();	//p-end
-	Vector2D ps = p - mLine.p2();	//p-start
+	Vector2D ps = p - mLine.p1();	//p-start
 	
 	return (tmp.x()*pe.x() + tmp.y()*pe.y()) * (tmp.x()*ps.x() + tmp.y()*ps.y()) < 0;
 

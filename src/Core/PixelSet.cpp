@@ -459,12 +459,12 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 	return textLine;
 }
 
-void PixelSet::draw(QPainter& p, const QFlag& options) const {
+void PixelSet::draw(QPainter& p, const QFlag& options, const Pixel::DrawFlag& pixelOptions) const {
 
 	// NOTE: that int cast is not needed - but gcc is confused otherwise
 	if ((int)options & (int)draw_pixels) {
 		for (auto px : mSet)
-			px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+			px->draw(p, 0.3, pixelOptions);
 	}
 
 	//polyLine(0.0).draw(p);
@@ -498,7 +498,7 @@ void PixelGraph::draw(QPainter& p) const {
 
 	p.setPen(ColorManager::colors()[0]);
 	for (auto px : mSet.pixels())
-		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+		px->draw(p, 0.3, Pixel::draw_ellipse);
 
 	p.setPen(ColorManager::darkGray(.4));
 	for (auto e : edges())
@@ -1053,6 +1053,17 @@ void TextLineSet::append(const QVector<QSharedPointer<Pixel>>& set) {
 void TextLineSet::scale(double factor) {
 	PixelSet::scale(factor);
 	updateLine();
+}
+
+void TextLineSet::draw(QPainter & p, const QFlag & options, const Pixel::DrawFlag& pixelOptions) const {
+
+	if (options & (int)PixelSet::draw_pixels) {
+		for (auto px : mSet) {
+			px->draw(p, 0.3, pixelOptions);
+		}
+	}
+
+	mLine.draw(p);
 }
 
 Line TextLineSet::line() const {

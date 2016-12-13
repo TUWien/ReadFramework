@@ -278,7 +278,7 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 
 		// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_stats);
+		mPixels[idx]->draw(p, 0.2, (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops));
 		//qDebug() << mPixels[idx].ellipse();
 	}
 
@@ -676,7 +676,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		
 		if (ec.isNeighbor(p->center(), radius)) {
 			neighbors << p.data();
-			p->draw(painter, 0.3, Pixel::draw_ellipse_stats);
+			p->draw(painter, 0.3, (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats));
 		}
 	}
 

@@ -418,18 +418,22 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	//// draw edges
 	//rImg = textBlocks.draw(rImg);
-	//rImg = lo.draw(rImg, "1012", 256);
-	//rImg = lo.draw(rImg, "507", 128);
-	//rImg = lo.draw(rImg, "507", 64);
-
 	//// save super pixel image
 	//rImg = superPixel.draw(rImg);
 	//rImg = tabStops.draw(rImg);
-	rImg = spc.draw(rImg);
+	//rImg = spc.draw(rImg);
 	rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
-	rdf::Image::save(rImg, maskPath);
-	qDebug() << "debug image added" << maskPath;
+	QString imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "debug image added" << imgPath;
+
+	// draw a second image ---------------------------------
+	rImg = img.clone();
+
+	rImg = spc.draw(rImg);
+	imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-sp");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "debug image added" << imgPath;
 
 	//// write XML -----------------------------------
 	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());

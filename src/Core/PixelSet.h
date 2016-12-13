@@ -202,7 +202,10 @@ public:
 	
 	QSharedPointer<TextLine> toTextLine() const;
 
-	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
+	virtual void draw(
+		QPainter& p, 
+		const QFlag& options = draw_pixels | draw_poly,
+		const Pixel::DrawFlag& pixelOptions = (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_label_colors)) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
@@ -222,10 +225,13 @@ public:
 	TextLineSet(const QVector<QSharedPointer<Pixel> >& set);
 
 	// functions that change the set
-	virtual void add(const QSharedPointer<Pixel>& pixel);
-	virtual void remove(const QSharedPointer<Pixel>& pixel);
-	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
-	virtual void scale(double factor);
+	void add(const QSharedPointer<Pixel>& pixel) override;
+	void remove(const QSharedPointer<Pixel>& pixel) override;
+	void append(const QVector<QSharedPointer<Pixel> >& set) override;
+	void scale(double factor) override;
+
+	void draw(QPainter& p, const QFlag& options = PixelSet::draw_poly, 
+		const Pixel::DrawFlag& pixelOptions = Pixel::draw_ellipse) const override;
 
 	Line line() const;
 	double error() const;
