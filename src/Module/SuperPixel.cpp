@@ -331,7 +331,7 @@ int SuperPixelConfig::mserMinArea() const {
 /// <returns></returns>
 int SuperPixelConfig::mserMaxArea() const {
 	
-	return checkIntParam(mMserMaxArea, mserMinArea(), INT_MAX, "mserMaxArea");
+	return checkParam(mMserMaxArea, mserMinArea(), INT_MAX, "mserMaxArea");
 }
 
 /// <summary>
@@ -342,7 +342,7 @@ int SuperPixelConfig::mserMaxArea() const {
 /// <returns></returns>
 int SuperPixelConfig::erosionStep() const {
 
-	return checkIntParam(mErosionStep, 1, 20, "erosionStep");
+	return checkParam(mErosionStep, 1, 20, "erosionStep");
 }
 
 /// <summary>
@@ -355,7 +355,7 @@ int SuperPixelConfig::erosionStep() const {
 /// <returns></returns>
 int SuperPixelConfig::numErosionLayers() const {
 	
-	return checkIntParam(mNumErosionLayers, 1, 20, "numErosionLayers");
+	return checkParam(mNumErosionLayers, 1, 20, "numErosionLayers");
 }
 
 void SuperPixelConfig::load(const QSettings & settings) {
@@ -927,11 +927,11 @@ QString ScaleSpaceSPConfig::toString() const {
 }
 
 int ScaleSpaceSPConfig::numLayers() const {
-	return checkIntParam(mNumLayers, 1, 10, "numLayers");
+	return checkParam(mNumLayers, 1, 10, "numLayers");
 }
 
 int ScaleSpaceSPConfig::minLayer() const {
-	return checkIntParam(mMinLayer, 0, numLayers()-1, "minLayer");
+	return checkParam(mMinLayer, 0, numLayers()-1, "minLayer");
 }
 
 void ScaleSpaceSPConfig::load(const QSettings & settings) {

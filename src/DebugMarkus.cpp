@@ -405,8 +405,8 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// find text lines
 	rdf::TextLineSegmentation textLines(sp.pixels());
-	textLines.config()->setMinDistFactor(10);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
+
 	if (!textLines.compute())
 		qWarning() << "could not compute text line segmentation!";
 

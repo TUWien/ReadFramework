@@ -61,12 +61,20 @@ public:
 
 	virtual QString toString() const override;
 
-	double minDistFactor() const;
-	void setMinDistFactor(double val);
+	void setMinLineLength(int length);
+	int minLineLength() const;
+
+	void setMinPointDistance(double dist);
+	double minPointDistance() const;
+
+	void setErrorMultiplier(double multiplier);
+	double errorMultiplier() const;
 
 protected:
 
-	double mMinDistFactor = 10.0;
+	int mMinLineLength = 10;			// minimum text line length when clustering
+	double mMinPointDist = 100.0;		// acceptable minimal distance of a point to a line
+	double mErrorMultiplier = 2.0;		// maximal increase of error when merging two lines
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

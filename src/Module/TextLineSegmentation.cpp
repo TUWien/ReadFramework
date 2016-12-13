@@ -51,21 +51,44 @@ QString TextLineConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-double TextLineConfig::minDistFactor() const {
-	return mMinDistFactor;
+void TextLineConfig::setMinLineLength(int length) {
+
+	mMinLineLength = length;
 }
 
-void TextLineConfig::setMinDistFactor(double val) {
-	mMinDistFactor = val;
+int TextLineConfig::minLineLength() const {
+	return checkParam(mMinLineLength, 0, INT_MAX, "minLineLength");
 }
+
+void TextLineConfig::setMinPointDistance(double dist) {
+	mMinPointDist = dist;
+}
+
+double TextLineConfig::minPointDistance() const {
+	return checkParam(mMinPointDist, 0.0, DBL_MAX, "minPointDist");
+}
+
+void TextLineConfig::setErrorMultiplier(double multiplier) {
+	mErrorMultiplier = multiplier;
+}
+
+double TextLineConfig::errorMultiplier() const {
+	return checkParam(mErrorMultiplier, 0.0, DBL_MAX, "errorMultiplier");
+}
+
 
 void TextLineConfig::load(const QSettings & settings) {
-	mMinDistFactor = settings.value("minDistFactor", minDistFactor()).toDouble();
+
+	mMinLineLength = settings.value("minLineLength", minLineLength()).toInt();
+	mMinPointDist = settings.value("minPointDistance", minPointDistance()).toDouble();
+	mErrorMultiplier = settings.value("errorMultiplier", errorMultiplier()).toDouble();
 }
 
 void TextLineConfig::save(QSettings & settings) const {
 
-	settings.setValue("minDistFactor", minDistFactor());
+	settings.setValue("minLineLength", minLineLength());
+	settings.setValue("minPointDistance", minPointDistance());
+	settings.setValue("errorMultiplier", errorMultiplier());
 }
 
 // TextLineSegmentation --------------------------------------------------------------------
@@ -139,15 +162,13 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 	QPen pen = p.pen();
 	pen.setWidth(3);
 	p.setPen(pen);
-
-	int mIdx = 0;
 	// debug ------------------------------------
 
 	int idx = 0;
 
 	for (auto e : graph.edges()) {
 
-		double heat = std::sqrt(++idx / (double)graph.edges().size());
+		double heat = 1.0 - (++idx / (double)graph.edges().size());
 		//qDebug() << "heat" << heat;
 
 		int psIdx1 = locate(e->first(), textLines);
@@ -208,13 +229,12 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 		// debug --------------------------------
 		e->draw(p);
 
-		if (mIdx % 200 == 0) {
+		if (idx % 100 == 0) {
 			cv::Mat imgCv = Image::qImage2Mat(img);
-			QString iPath = fp + "img" + QString::number(mIdx) + ".png";
+			QString iPath = fp + "img" + QString::number(idx) + ".tif";
 			Image::save(imgCv, iPath);
 			qDebug() << iPath << "written...";
 		}
-		mIdx++;
 
 		//qDebug() << "# textlines" << textLines.size();
 		// debug --------------------------------
@@ -254,7 +274,7 @@ bool TextLineSegmentation::addPixel(QSharedPointer<TextLineSet>& set, const QSha
 	if (set->line().length() < 10)
 		return true;
 
-	double mErr = qMax(set->error() * 2.0, 10.0);
+	double mErr = qMax(set->error() * config()->errorMultiplier(), config()->minPointDistance() * heat);
 	double newErr = set->line().distance(pixel->center());
 
 	return newErr < mErr;
@@ -267,11 +287,12 @@ bool TextLineSegmentation::mergeTextLines(const QSharedPointer<TextLineSet>& tln
 		return false;
 
 	// do not create vertical lines
-	if (tln1->line().length() < 10 || tln2->line().length() < 10)
+	if (tln1->line().length() < config()->minLineLength() || 
+		tln2->line().length() < config()->minLineLength())
 		return true;
 
-	double maxErr1 = qMax(tln1->error() * 2.0, 20.0);
-	double maxErr2 = qMax(tln2->error() * 2.0, 20.0);
+	double maxErr1 = qMax(tln1->error() * config()->errorMultiplier(), config()->minPointDistance() * heat);
+	double maxErr2 = qMax(tln2->error() * config()->errorMultiplier(), config()->minPointDistance() * heat);
 
 	double nErr1 = tln1->computeError(tln2->centers());
 	double nErr2 = tln2->computeError(tln1->centers());
@@ -307,13 +328,13 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	for (const QSharedPointer<TextLineSet>& set : mTextLines) {
 		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
-		set->draw(p, (int)PixelSet::draw_pixels, Pixel::draw_ellipse);
+		//set->draw(p, (int)PixelSet::draw_pixels, Pixel::draw_ellipse);
 
-		//Line baseLine = set->fitLine();
-		//baseLine.setThickness(6.0);
+		Line baseLine = set->fitLine();
+		baseLine.setThickness(6.0);
 		
 		//if (baseLine.length() > 300)
-		//baseLine.draw(p);
+		baseLine.draw(p);
 
 		//for (auto pixel : set->pixels()) {
 		//	pixel->draw(p, .3, Pixel::draw_ellipse_only);

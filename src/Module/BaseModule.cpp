@@ -99,22 +99,6 @@ void ModuleConfig::save(QSettings&) const {
 	qWarning() << "ModuleConfig::save() called - make sure to call the derived method...";
 }
 
-int ModuleConfig::checkIntParam(int param, int min, int max, const QString & name) const {
-
-	if (param < min) {
-		qWarning().noquote() << name << "must be >" << min << "but it is: " << param;
-		return min;
-	}
-
-	if (param > max) {
-		qWarning().noquote() << name << "must be <" << max << "but it is: " << param;
-		return max;
-	}
-
-	return param;
-}
-
-
 // Module --------------------------------------------------------------------
 Module::Module() {
 	mConfig = QSharedPointer<ModuleConfig>::create();
