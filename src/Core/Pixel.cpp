@@ -476,30 +476,30 @@ double PixelEdge::edgeWeight() const {
 	if (!mFirst || !mSecond)
 		return 0.0;
 
-	return mEdge.length() / qMin(mFirst->ellipse().radius(), mSecond->ellipse().radius());
 
-	//double beta = 1.0;
+	double beta = 1.0;
 
-	//if (mFirst->stats() && mSecond->stats()) {
-	//
-	//	double sp = mFirst->stats()->lineSpacing();
-	//	double sq = mSecond->stats()->lineSpacing();
-	//	double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
-	//	double ew = 1.0-exp(-nl);
+	// this edge weight is needed for the GraphCut
+	if (mFirst->stats() && mSecond->stats()) {
+	
+		double sp = mFirst->stats()->lineSpacing();
+		double sq = mSecond->stats()->lineSpacing();
+		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
+		double ew = 1.0-exp(-nl);
 
-	//	if (ew < 0.0 || ew > 1.0) {
-	//		qDebug() << "illegal edge weight: " << ew;
-	//	}
-	//	//else
-	//	//	qDebug() << "weight: " << nl;
+		if (ew < 0.0 || ew > 1.0) {
+			qDebug() << "illegal edge weight: " << ew;
+		}
+		//else
+		//	qDebug() << "weight: " << nl;
 
-	//	// TODO: add mu(fp,fq) according to koo's indices
-	//	return ew;
-	//}
+		// TODO: add mu(fp,fq) according to koo's indices
+		return ew;
+	}
 
-	//qDebug() << "no stats when computing the scaled edges...";
+	qDebug() << "no stats when computing the scaled edges...";
 
-	//return 0.0;
+	return 0.0;
 
 	//// get minimum scale
 	//double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());

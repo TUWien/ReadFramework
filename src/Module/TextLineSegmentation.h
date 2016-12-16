@@ -73,7 +73,7 @@ public:
 protected:
 
 	int mMinLineLength = 10;			// minimum text line length when clustering
-	double mMinPointDist = 100.0;		// acceptable minimal distance of a point to a line
+	double mMinPointDist = 80.0;		// acceptable minimal distance of a point to a line
 	double mErrorMultiplier = 2.0;		// maximal increase of error when merging two lines
 
 	void load(const QSettings& settings) override;
@@ -107,6 +107,7 @@ private:
 	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
 	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
 	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;
+	void filterDuplicates(PixelSet& set) const;
 };
 
 };

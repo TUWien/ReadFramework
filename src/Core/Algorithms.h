@@ -203,10 +203,10 @@ protected:
 class Pixel;
 
 namespace PixelDistance {
-	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	DllCoreExport double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	DllCoreExport double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
 
-	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	DllCoreExport typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
 };
 
 

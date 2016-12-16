@@ -35,6 +35,7 @@
 #include "Utils.h"
 #include "Image.h"
 #include "Drawer.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -116,6 +117,9 @@ bool TextLineSegmentation::compute() {
 	//DelauneyPixelConnector rpc;
 	//QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSet.pixels());
 
+	filterDuplicates(mSet);
+	//qDebug() << mSet.size()-fSet.size() << "/" << mSet.size() << "pixels filtered";
+
 	PixelGraph pg(mSet);
 	pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
 
@@ -149,13 +153,13 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 
 	// debug ------------------------------------
 	QString fp("C:/temp/cluster/");
-	//Vector2D maxSize = graph.set().boundingBox().bottomRight();
+	Vector2D maxSize = graph.set().boundingBox().bottomRight();
 	
-	QImage img("D:/read/test/synthetic-test.png");
-
-
-	//QPixmap pm(maxSize.toQSize());
+	QImage img("D:/read/test/00075751.tif");
+	img = img.convertToFormat(QImage::Format_ARGB32);
+	//QImage img(maxSize.toQSize(), QImage::Format_ARGB32);
 	//QPixmap pm(QSize(800, 446));
+	//QPainter p(&img);
 	QPainter p(&img);
 	p.setBrush(ColorManager::white(0.5));
 	p.drawRect(img.rect());
@@ -229,7 +233,7 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 		// debug --------------------------------
 		e->draw(p);
 
-		if (idx % 100 == 0) {
+		if (idx % 500 == 0) {
 			cv::Mat imgCv = Image::qImage2Mat(img);
 			QString iPath = fp + "img" + QString::number(idx) + ".tif";
 			Image::save(imgCv, iPath);
@@ -298,6 +302,54 @@ bool TextLineSegmentation::mergeTextLines(const QSharedPointer<TextLineSet>& tln
 	double nErr2 = tln2->computeError(tln1->centers());
 
 	return nErr1 < maxErr1 && nErr2 < maxErr2;
+}
+
+void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
+
+	Timer dt;
+	double md = config()->minLineLength();
+
+	Rect boxD(Vector2D(), Vector2D(2*md, 2*md));
+	auto pxs = set.pixels();
+
+	QVector<QSharedPointer<Pixel> > remPixels;
+
+	for (int idx = 0; idx < set.size(); idx++) {
+	
+		const QSharedPointer<Pixel> px = pxs[idx];
+		
+		if (remPixels.contains(px))
+			continue;
+
+		Rect box = boxD;
+		box.move(px->center()-Vector2D(md, md));
+		
+		for (int i = idx+1; i < set.size(); i++) {
+
+			const QSharedPointer<Pixel> pxi = pxs[i];
+			const Vector2D& c = pxi->center();
+
+			// speed up
+			if (!box.contains(c))
+				continue;
+
+			// skip if it is already 'removed'
+			if (remPixels.contains(pxi))
+				continue;
+
+			if (PixelDistance::euclidean(px, pxi) < config()->minLineLength()) {
+
+				// remove the smaller one
+				remPixels << (px->ellipse().radius() < pxi->ellipse().radius() ? px : pxi);
+				break;
+			}
+		}
+	}
+	
+	for (auto px : remPixels)
+		set.remove(px);
+
+	qDebug() << remPixels.size() << "px removed in " << dt;
 }
 
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {

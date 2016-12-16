@@ -86,12 +86,12 @@ void PixelSet::remove(const QSharedPointer<Pixel>& pixel) {
 		qWarning() << "cannot remove a pixel which is not in the set:" << pixel->id();
 }
 
-QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
-	return mSet;
-}
-
 int PixelSet::size() const {
 	return mSet.size();
+}
+
+QVector<Vector2D> PixelSet::centers() const {
+	return pointSet(DBL_MAX);
 }
 
 /// <summary>
@@ -496,9 +496,9 @@ bool PixelGraph::isEmpty() const {
 
 void PixelGraph::draw(QPainter& p) const {
 
-	p.setPen(ColorManager::colors()[0]);
-	for (auto px : mSet.pixels())
-		px->draw(p, 0.3, Pixel::draw_ellipse);
+	//p.setPen(ColorManager::colors()[0]);
+	//for (auto px : mSet.pixels())
+	//	px->draw(p, 0.3, Pixel::draw_ellipse);
 
 	p.setPen(ColorManager::darkGray(.4));
 	for (auto e : edges())
@@ -1073,11 +1073,6 @@ Line TextLineSet::line() const {
 
 double TextLineSet::error() const {
 	return mLineErr;
-}
-
-QVector<Vector2D> TextLineSet::centers() const {
-
-	return pointSet(DBL_MAX);
 }
 
 double TextLineSet::computeError(const QVector<Vector2D>& pts) const {

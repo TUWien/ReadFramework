@@ -362,35 +362,26 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// find super pixels
 	//rdf::SuperPixel superPixel(img);
-	rdf::ScaleSpaceSuperPixel superPixel(img);
+	rdf::SuperPixel superPixel(img);
 	
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	PixelSet sp = superPixel.superPixels();
+	PixelSet sp = superPixel.pixelSet();
 
 	// find local orientation per pixel
-	rdf::LocalOrientation lo(sp.pixels());
+	rdf::LocalOrientation lo(sp);
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
 	// smooth estimation
-	rdf::GraphCutOrientation pse(sp.pixels());
+	rdf::GraphCutOrientation pse(sp);
 	
-	//if (!pse.compute())
+	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 	
 	// pixel labeling
 	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
-	//FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
-
-	//// train classifier
-	//SuperPixelTrainer spt(fcm);
-
-	//if (!spt.compute())
-	//	qCritical() << "could not train data...";
-
-	//auto model = spt.model();
 
 	SuperPixelClassifier spc(src, sp);
 	spc.setModel(model);
@@ -398,13 +389,15 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	if (!spc.compute())
 		qWarning() << "could not classify SuperPixels";
 
+
 	//// find tab stops
 	//rdf::TabStopAnalysis tabStops(sp);
 	//if (!tabStops.compute())
 	//	qWarning() << "could not compute text block segmentation!";
 
+
 	// find text lines
-	rdf::TextLineSegmentation textLines(sp.pixels());
+	rdf::TextLineSegmentation textLines(sp);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 
 	if (!textLines.compute())
@@ -413,8 +406,8 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	qInfo() << "algorithm computation time" << dt;
 
 	// drawing
-	//cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(150));
 	cv::Mat rImg = img.clone();
+	rImg = textLines.draw(rImg);
 
 	//// draw edges
 	//rImg = textBlocks.draw(rImg);
@@ -422,7 +415,6 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = superPixel.draw(rImg);
 	//rImg = tabStops.draw(rImg);
 	//rImg = spc.draw(rImg);
-	rImg = textLines.draw(rImg);
 	QString imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
 	rdf::Image::save(rImg, imgPath);
 	qDebug() << "debug image added" << imgPath;

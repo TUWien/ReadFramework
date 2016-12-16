@@ -90,7 +90,7 @@ private:
 class DllModuleExport TabStopAnalysis : public Module {
 
 public:
-	TabStopAnalysis(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TabStopAnalysis(const PixelSet& set = PixelSet());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -104,7 +104,7 @@ public:
 	QVector<Line> tabStopLines(double offset = 0.0) const;
 
 private:
-	QVector<QSharedPointer<Pixel> > mSuperPixels;
+	PixelSet mSet;
 	QSharedPointer<PixelGraph> mGraph;
 
 	QVector<QSharedPointer<TabStopCluster> > mTabStops;

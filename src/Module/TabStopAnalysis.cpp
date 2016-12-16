@@ -55,14 +55,14 @@ QString TabStopConfig::toString() const {
 }
 
 // TabStopAnalysis --------------------------------------------------------------------
-TabStopAnalysis::TabStopAnalysis(const QVector<QSharedPointer<Pixel> >& superPixels) {
+TabStopAnalysis::TabStopAnalysis(const PixelSet& set) {
 	
-	mSuperPixels = superPixels;
+	mSet = set;
 	mConfig = QSharedPointer<TabStopConfig>::create();
 }
 
 bool TabStopAnalysis::isEmpty() const {
-	return mSuperPixels.empty();
+	return mSet.isEmpty();
 }
 
 bool TabStopAnalysis::compute() {
@@ -72,7 +72,7 @@ bool TabStopAnalysis::compute() {
 	if (!checkInput())
 		return false;
 
-	mGraph = QSharedPointer<PixelGraph>::create(mSuperPixels);
+	mGraph = QSharedPointer<PixelGraph>::create(mSet);
 	mGraph->connect(RegionPixelConnector());
 
 	QVector<QSharedPointer<Pixel> > tabStops = findTabStopCandidates(mGraph);
@@ -144,7 +144,7 @@ QVector<Line> TabStopAnalysis::tabStopLines(double offset) const {
 
 bool TabStopAnalysis::checkInput() const {
 	
-	return !mSuperPixels.isEmpty();
+	return !mSet.isEmpty();
 }
 
 QVector<QSharedPointer<Pixel> > TabStopAnalysis::findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const {

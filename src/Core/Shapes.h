@@ -379,6 +379,8 @@ public:
 	
 	static Rect fromPoints(const QVector<Vector2D>& pts);
 
+	virtual QString toString() const;
+
 protected:
 	bool mIsNull = true;
 	

@@ -112,7 +112,7 @@ public:
 	QVector<QSharedPointer<MserBlob> > getMserBlobs() const;
 	PixelSet pixelSet() const;
 
-	cv::Mat drawSuperPixels(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img) const;
 	cv::Mat drawMserBlobs(const cv::Mat& img) const;
 
 private:
@@ -206,7 +206,7 @@ protected:
 class DllModuleExport LocalOrientation : public Module {
 
 public:
-	LocalOrientation(const QVector<QSharedPointer<Pixel> >& set = QVector<QSharedPointer<Pixel> >());
+	LocalOrientation(const PixelSet& set = PixelSet());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -215,14 +215,14 @@ public:
 	QSharedPointer<LocalOrientationConfig> config() const;
 
 	// results - available after compute() is called
-	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+	PixelSet set() const;
 
 	cv::Mat draw(const cv::Mat& img, const QString& id, double radius) const;
 
 private:
 	
 	// input/output
-	QVector<QSharedPointer<Pixel> > mSet;
+	PixelSet mSet;
 
 	bool checkInput() const override;
 
@@ -239,7 +239,7 @@ private:
 class DllModuleExport GraphCutOrientation : public Module {
 
 public:
-	GraphCutOrientation(const QVector<QSharedPointer<Pixel> >& set);
+	GraphCutOrientation(const PixelSet& set);
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -248,14 +248,14 @@ public:
 	//QSharedPointer<LocalOrientationConfig> config() const;
 
 	// results - available after compute() is called
-	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+	PixelSet set() const;
 
-	//cv::Mat draw(const cv::Mat& img, const QString& id, double radius) const;
+	cv::Mat draw(const cv::Mat& img) const;
 
 private:
 
 	// input/output
-	QVector<QSharedPointer<Pixel> > mSet;
+	PixelSet mSet;
 	double mScaleFactor = 1000.0;	// TODO: think about that
 
 	bool checkInput() const override;

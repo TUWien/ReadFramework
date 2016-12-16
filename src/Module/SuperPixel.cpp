@@ -250,7 +250,7 @@ QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
 	return qSharedPointerDynamicCast<SuperPixelConfig>(mConfig);
 }
 
-cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
+cv::Mat SuperPixel::draw(const cv::Mat & img) const {
 
 	// draw super pixels
 	Timer dtf;
@@ -464,7 +464,7 @@ void LocalOrientationConfig::save(QSettings & settings) const {
 }
 
 // LocalOrientation --------------------------------------------------------------------
-LocalOrientation::LocalOrientation(const QVector<QSharedPointer<Pixel> >& set) {
+LocalOrientation::LocalOrientation(const PixelSet& set) {
 	mSet = set;
 	mConfig = QSharedPointer<LocalOrientationConfig>::create();
 	mConfig->loadSettings();
@@ -483,7 +483,7 @@ bool LocalOrientation::compute() {
 	Timer dt;
 
 	QVector<Pixel*> ptrSet;
-	for (const QSharedPointer<Pixel> p : mSet)
+	for (const QSharedPointer<Pixel> p : mSet.pixels())
 		ptrSet << p.data();
 
 	for (Pixel* p : ptrSet)
@@ -503,7 +503,7 @@ QSharedPointer<LocalOrientationConfig> LocalOrientation::config() const {
 	return qSharedPointerDynamicCast<LocalOrientationConfig>(mConfig);
 }
 
-QVector<QSharedPointer<Pixel>> LocalOrientation::getSuperPixels() const {
+PixelSet LocalOrientation::set() const {
 	return mSet;
 }
 
@@ -649,7 +649,7 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
 
 	QSharedPointer<Pixel> pixel;
-	for (auto p : mSet)
+	for (auto p : mSet.pixels())
 		if (p->id() == id) {
 			pixel = p;
 			break;
@@ -672,7 +672,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	QVector<const Pixel*> neighbors;
 
 	// create neighbor set
-	for (const QSharedPointer<Pixel>& p : mSet) {
+	for (const QSharedPointer<Pixel>& p : mSet.pixels()) {
 		
 		if (ec.isNeighbor(p->center(), radius)) {
 			neighbors << p.data();
@@ -713,7 +713,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 
 // GraphCutOrientation --------------------------------------------------------------------
-GraphCutOrientation::GraphCutOrientation(const QVector<QSharedPointer<Pixel>>& set) {
+GraphCutOrientation::GraphCutOrientation(const PixelSet& set) {
 	mSet = set;
 }
 
@@ -737,9 +737,31 @@ bool GraphCutOrientation::compute() {
 	return true;
 }
 
-QVector<QSharedPointer<Pixel>> GraphCutOrientation::getSuperPixels() const {
+PixelSet GraphCutOrientation::set() const {
 	
 	return mSet;
+}
+
+cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
+
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter p(&pm);
+
+	// show the graph
+	DelauneyPixelConnector dpc;
+	PixelGraph graph(mSet);
+	graph.connect(dpc);
+
+	p.setPen(ColorManager::darkGray(0.3));
+	graph.draw(p);
+
+	for (auto px : mSet.pixels()) {
+		p.setPen(ColorManager::getColor());
+		px->draw(p, 0.3, (Pixel::DrawFlag)(Pixel::draw_stats));
+	}
+
+	return Image::qPixmap2Mat(pm);
 }
 
 bool GraphCutOrientation::checkInput() const {
@@ -835,6 +857,7 @@ cv::Mat GraphCutOrientation::orientationDistMatrix(int numLabels) const {
 	return orDist;
 }
 
+// ScaleSpaceSuperPixel --------------------------------------------------------------------
 ScaleSpaceSuperPixel::ScaleSpaceSuperPixel(const cv::Mat & img) {
 	mConfig = QSharedPointer<ScaleSpaceSPConfig>::create();
 	mSrcImg = img;
@@ -884,7 +907,7 @@ bool ScaleSpaceSuperPixel::compute() {
 	// - do not erode at large scales
 	// - filter duplicates over all scales
 
-	mInfo << mSet.size() << "pixels extraced in" << dt;
+	mInfo << mSet.size() << "pixels extracted in" << dt;
 
 	return true;
 }
@@ -905,10 +928,12 @@ cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
 	
 	// debug - remove
 	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter painter(&pm);
+	QPainter p(&pm);
 
-	mSet.draw(painter);
-
+	for (auto px : mSet.pixels()) {
+		p.setPen(ColorManager::getColor());
+		px->draw(p, 0.3, (Pixel::DrawFlag)(Pixel::draw_center | Pixel::draw_stats));
+	}
 
 	return Image::qPixmap2Mat(pm);
 }

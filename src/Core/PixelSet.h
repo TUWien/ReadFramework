@@ -186,10 +186,13 @@ public:
 	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
 	virtual void scale(double factor);
 
-	QVector<QSharedPointer<Pixel> > pixels() const;
+	QVector<QSharedPointer<Pixel> > pixels() const {
+		return mSet;
+	};
 
 	int size() const;
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
+	QVector<Vector2D> centers() const;
 	Polygon convexHull() const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
@@ -235,7 +238,6 @@ public:
 
 	Line line() const;
 	double error() const;
-	QVector<Vector2D> centers() const;
 	double computeError(const QVector<Vector2D>& pts) const;
 
 protected:

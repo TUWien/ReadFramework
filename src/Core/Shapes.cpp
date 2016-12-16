@@ -1100,6 +1100,17 @@ Rect Rect::fromPoints(const QVector<Vector2D>& pts) {
 	return Rect(left, top, right-left, bottom-top);
 }
 
+QString Rect::toString() const {
+	
+	QString msg = "Rect [";
+	msg += "x: " + QString::number(mTopLeft.x());
+	msg += ", y: " + QString::number(mTopLeft.y());
+	msg += ", width: " + QString::number(mSize.x());
+	msg += ", height: " + QString::number(mSize.y());
+
+	return msg;
+}
+
 // Ellipse --------------------------------------------------------------------
 Ellipse::Ellipse() {
 
