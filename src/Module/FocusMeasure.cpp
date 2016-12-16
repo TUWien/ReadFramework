@@ -414,6 +414,8 @@ namespace rdf {
 		cv::Mat binImg;
 		mSrcImg.convertTo(binImg, CV_8U);
 		cv::threshold(binImg, binImg, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+		//cv::adaptiveThreshold(binImg, binImg, 255, cv::ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 11, 2);
+
 		binImg.convertTo(binImg, CV_64F);
 
 		//rdf::Image::imageInfo(binImg, "binImg ");

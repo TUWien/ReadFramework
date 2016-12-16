@@ -956,10 +956,21 @@ namespace rdf {
 			int y = ptrIdx[colIdx] / mMagImg.cols;
 			int x = ptrIdx[colIdx] % mMagImg.cols;
 
+			//x = 100;
+			//y = 100;
+
 			double angle = regionGrow(x, y, region, regionIdx, rho, prec);
 			//qDebug() << "new angle is: " << angle;
 
 			if (region.size() < minRegSize) {
+
+				//for (int tmpIdx = 0; tmpIdx < region.size(); tmpIdx++) {
+				//	int xt = region[tmpIdx].x;
+				//	int yt = region[tmpIdx].y;
+				//	//label as not used
+				//	mRegionImg.at<double>(yt, xt) = -1.0;
+				//}
+
 				region.clear();
 				//do not use region, but it is labelled in mRegionImg
 				regionIdx++;
@@ -970,23 +981,33 @@ namespace rdf {
 			//qDebug() << "region size is: " << region.size();
 			LineSegment tmp = region2Rect(region, mMagImg, angle, prec, p);
 
-			///* Check if the rectangle exceeds the minimal density of
-			//region points. If not, try to improve the region.
-			//The rectangle will be rejected if the final one does
-			//not fulfill the minimal density condition.
-			//This is an addition to the original LSD algorithm published in
-			//"LSD: A Fast Line Segment Detector with a False Detection Control"
-			//by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
-			//The original algorithm is obtained with density_th = 0.0.
-			//*/
+			/* Check if the rectangle exceeds the minimal density of
+			region points. If not, try to improve the region.
+			The rectangle will be rejected if the final one does
+			not fulfill the minimal density condition.
+			This is an addition to the original LSD algorithm published in
+			"LSD: A Fast Line Segment Detector with a False Detection Control"
+			by R. Grompone von Gioi, J. Jakubowicz, J.M. Morel, and G. Randall.
+			The original algorithm is obtained with density_th = 0.0.
+			*/
 			//if (!refine(tmp, region, mMagImg, mRadImg, config()->density(), rho, prec, p)) {
 			//	qDebug() << "region was rejected due to refine";
+
+			//	region.clear();
+			//	//do not use region, but it is labelled in mRegionImg
+			//	regionIdx++;
 			//	continue;
 			//}
-			
+
 			/////* compute NFA value */
 			//double logNfa = rectImprove(tmp, mRadImg, logNT, config()->logEps());
-			//if (logNfa <= config()->logEps()) continue;
+			//if (logNfa <= config()->logEps()) {
+			//	region.clear();
+			//	//do not use region, but it is labelled in mRegionImg
+			//	regionIdx++;
+
+			//	continue;
+			//}
 
 
 			if (config()->scale() != 1.0) {
@@ -1038,14 +1059,15 @@ namespace rdf {
 			int yt = region[regSizeIdx].y;
 			mRegionImg.at<double>(yt, xt) = regionIdx;
 
-			for (int xx = xt-1; xx < xt + 1; xx++ ) {
-				for (int yy = yt-1; yy < yt + 1; yy++) {
+			for (int xx = xt-1; xx <= xt + 1; xx++ ) {
+				for (int yy = yt-1; yy <= yt + 1; yy++) {
 					//if coordinates are inside image get regionIdx and magnitude/angle					
 					if (xx >= 0 && yy >= 0 && xx < mRegionImg.cols && yy < mRegionImg.rows) {
 						double regIdx = mRegionImg.at<double>(yy, xx);
 						double magnitude = mMagImg.at<double>(yy, xx);
 						double cmpAngle = mRadImg.at<double>(yy, xx);
 						//qDebug() << "coordinates inside...";
+						
 						//if (regIdx == 0) qDebug() << "regionIdx is not used";
 						//if (magnitude > thr) qDebug() << "magnitude is greater";
 						//qDebug() << "magnitude: " << magnitude << " thr: " << thr;
@@ -1705,12 +1727,12 @@ namespace rdf {
 
 												 /* it is assumed that 'theta' and 'a' are in the range [-pi,pi] */
 												//but now it is [0, 2pi]
-		theta = Algorithms::normAngleRad(theta, 0, CV_PI);
-		thetaTest = Algorithms::normAngleRad(thetaTest, 0, CV_PI);
+		//theta = Algorithms::normAngleRad(theta, 0, CV_PI);
+		//thetaTest = Algorithms::normAngleRad(thetaTest, 0, CV_PI);
 
-		double diffangle = theta - thetaTest;
+		double diffangle = std::abs(theta - thetaTest);
 
-		diffangle = cv::min(std::abs(diffangle) , CV_PI - std::abs(diffangle));
+		diffangle = cv::min(diffangle , 2*CV_PI - diffangle);
 
 		return diffangle <= prec;
 
