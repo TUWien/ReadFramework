@@ -49,7 +49,6 @@
 #include "GCGraph.hpp"
 #include "graphcut/GCoptimization.h"
 
-
 #pragma warning(pop)
 
 namespace rdf {
@@ -101,11 +100,11 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 
 	Timer dtf;
 	int nF = filterDuplicates(*blobs, 7, 10);
-	qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
+	//qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
 	dtf.start();
 	nF = filterAspectRatio(*blobs);
-	qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
+	//qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	return blobs;
 }
@@ -202,20 +201,18 @@ bool SuperPixel::compute() {
 
 	int maxFilter = config()->erosionStep()*config()->numErosionLayers();
 
-	qDebug() << "# erosion layers: " << config()->numErosionLayers();
-
 	for (int idx = 0; idx < maxFilter; idx += config()->erosionStep()) {
 
 		Timer dti;
 		QSharedPointer<MserContainer> cb = getBlobs(img, idx);
 		rawBlobs->append(*cb);
-		qDebug() << cb->size() << "/" << rawBlobs->size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
+		//qDebug() << cb->size() << "/" << rawBlobs->size() << "collected with kernel size" << 2*idx+1 << "in" << dti;
 	}
 
 	// filter duplicates that occur from different erosion sizes
 	Timer dtf;
-	int nf = filterDuplicates(*rawBlobs);
-	qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
+	filterDuplicates(*rawBlobs);
+	//qDebug() << "[final duplicates filter] removes" << nf << "blobs in" << dtf;
 
 	// convert to pixels
 	mBlobs = rawBlobs->toBlobs();
@@ -242,6 +239,13 @@ QVector<QSharedPointer<MserBlob>> SuperPixel::getMserBlobs() const {
 	return mBlobs;
 }
 
+PixelSet SuperPixel::pixelSet() const {
+
+	PixelSet ps(mPixels);
+	
+	return ps;
+}
+
 QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
 	return qSharedPointerDynamicCast<SuperPixelConfig>(mConfig);
 }
@@ -254,29 +258,29 @@ cv::Mat SuperPixel::drawSuperPixels(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 
-	DBScanPixel dbs(mPixels);
-	dbs.compute();
-	QVector<PixelSet> sets = dbs.sets();
-	qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
+	//DBScanPixel dbs(mPixels);
+	//dbs.compute();
+	//QVector<PixelSet> sets = dbs.sets();
+	//qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
 
-	for (auto s : sets) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		QPen pen = Drawer::instance().pen();
-		p.setPen(pen);
-		s.draw(p);
-	}
-
-	//for (int idx = 0; idx < mBlobs.size(); idx++) {
+	//for (auto s : sets) {
 	//	Drawer::instance().setColor(ColorManager::getColor());
 	//	QPen pen = Drawer::instance().pen();
-	//	pen.setWidth(2);
 	//	p.setPen(pen);
-
-	//	//// uncomment if you want to see MSER & SuperPixel at the same time
-	//	//mBlobs[idx].draw(p);
-	//	mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_only);
-	//	//qDebug() << mPixels[idx].ellipse();
+	//	s.draw(p);
 	//}
+
+	for (int idx = 0; idx < mBlobs.size(); idx++) {
+		Drawer::instance().setColor(ColorManager::getColor());
+		QPen pen = Drawer::instance().pen();
+		pen.setWidth(2);
+		p.setPen(pen);
+
+		// uncomment if you want to see MSER & SuperPixel at the same time
+		//mBlobs[idx].draw(p);
+		mPixels[idx]->draw(p, 0.2, Pixel::draw_ellipse_stats);
+		//qDebug() << mPixels[idx].ellipse();
+	}
 
 	qDebug() << "drawing takes" << dtf;
 	return Image::qPixmap2Mat(pm);
@@ -750,11 +754,11 @@ void GraphCutOrientation::graphCut(const PixelGraph& graph) {
 	int gcIter = 2;	// # iterations of graph-cut (expansion)
 
 	// stats must be computed already
-	QVector<QSharedPointer<Pixel> > pixel = graph.set()->pixels();
+	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
 	assert(pixel[0]->stats());
 
 	// the statistics columns == the number of possible labels
-	int nLabels = graph.set()->pixels()[0]->stats()->data().cols;
+	int nLabels = graph.set().pixels()[0]->stats()->data().cols;
 	
 	// get costs and smoothness term
 	cv::Mat c = costs(nLabels);					 // SetSize x #labels
@@ -830,5 +834,117 @@ cv::Mat GraphCutOrientation::orientationDistMatrix(int numLabels) const {
 
 	return orDist;
 }
+
+ScaleSpaceSuperPixel::ScaleSpaceSuperPixel(const cv::Mat & img) {
+	mConfig = QSharedPointer<ScaleSpaceSPConfig>::create();
+	mSrcImg = img;
+}
+
+bool ScaleSpaceSuperPixel::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+bool ScaleSpaceSuperPixel::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	cv::Mat img = mSrcImg.clone();
+	img = IP::grayscale(img);
+	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
+
+
+	for (int idx = 0; idx < config()->numLayers(); idx++) {
+	
+		// compute super pixel
+		if (config()->minLayer() <= idx) {
+
+			SuperPixel spm(img);
+			if (!spm.compute())
+				mWarning << "could not compute super pixels for layer #" << idx;
+
+			PixelSet set = spm.getSuperPixels();
+			
+			if (idx > 0) {
+				// re-scale
+				double sf = std::pow(2, idx);
+				set.scale(sf);
+			}
+
+			mSet += set;
+			//mInfo << set.size() << "pixels found at scale:" << idx;
+		}
+
+		cv::resize(img, img, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
+	}
+
+	// TODO: 
+	// - do not erode at large scales
+	// - filter duplicates over all scales
+
+	mInfo << mSet.size() << "pixels extraced in" << dt;
+
+	return true;
+}
+
+QString ScaleSpaceSuperPixel::toString() const {
+	return config()->toString();
+}
+
+QSharedPointer<ScaleSpaceSPConfig> ScaleSpaceSuperPixel::config() const {
+	return qSharedPointerDynamicCast<ScaleSpaceSPConfig>(mConfig);
+}
+
+PixelSet ScaleSpaceSuperPixel::superPixels() const {
+	return mSet;
+}
+
+cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
+	
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter painter(&pm);
+
+	mSet.draw(painter);
+
+
+	return Image::qPixmap2Mat(pm);
+}
+
+bool ScaleSpaceSuperPixel::checkInput() const {
+
+	return !mSrcImg.empty();
+}
+
+// ScaleSpaceSpConfig --------------------------------------------------------------------
+ScaleSpaceSPConfig::ScaleSpaceSPConfig() : ModuleConfig("Scale Space Super Pixel") {
+}
+
+QString ScaleSpaceSPConfig::toString() const {
+	return ModuleConfig::toString();
+}
+
+int ScaleSpaceSPConfig::numLayers() const {
+	return checkIntParam(mNumLayers, 1, 10, "numLayers");
+}
+
+int ScaleSpaceSPConfig::minLayer() const {
+	return checkIntParam(mMinLayer, 0, numLayers()-1, "minLayer");
+}
+
+void ScaleSpaceSPConfig::load(const QSettings & settings) {
+
+	mNumLayers = settings.value("numLayers", numLayers()).toInt();
+	mMinLayer = settings.value("minLayer", minLayer()).toInt();
+}
+
+void ScaleSpaceSPConfig::save(QSettings & settings) const {
+	settings.setValue("numLayers", numLayers());
+	settings.setValue("minLayer", minLayer());
+}
+
+
 
 }

@@ -53,6 +53,10 @@ BaseElement::BaseElement(const QString& id) {
 	mId = id.isEmpty() ? QUuid::createUuid().toString() : id;
 }
 
+bool operator==(const BaseElement & l, const QString & id) {
+	return l.id() == id;
+}
+
 /// <summary>
 /// Returns true if l and r have the same id.
 /// </summary>

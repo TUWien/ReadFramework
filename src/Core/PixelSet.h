@@ -161,31 +161,40 @@ public:
 		draw_nothing = 0x0,
 		draw_pixels = 0x1,
 		draw_poly = 0x2,
+		draw_rect = 0x4,
 
 		draw_end
 	};
+
+	void operator+=(const PixelSet& set);
 
 	Q_DECLARE_FLAGS(DrawFlags, DrawFlag)
 
 	QSharedPointer<Pixel> operator[](int idx) const;
 
+	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
 	void merge(const PixelSet& o);
 	void add(const QSharedPointer<Pixel>& pixel);
 	void remove(const QSharedPointer<Pixel>& pixel);
+	void append(const QVector<QSharedPointer<Pixel> >& set);
+	void scale(double factor);
 
 	QVector<QSharedPointer<Pixel> > pixels() const;
 
 	int size() const;
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
 	Polygon convexHull() const;
-	//Polygon polyLine(double angle, double maxCosThr = 0.9) const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
-	Ellipse profileRect() const;					// TODO: remove!
+	Ellipse fitEllipse() const;
 
+	Vector2D center() const;
+	Vector2D meanCenter() const;
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
+	
+	double overlapRatio(const PixelSet& set, double angle = CV_PI*0.5) const;	// TODO: delete
 
 	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
 
@@ -211,14 +220,14 @@ class DllCoreExport PixelGraph : public BaseElement {
 
 public:
 	PixelGraph();
-	PixelGraph(const QVector<QSharedPointer<Pixel> >& set);
+	PixelGraph(const PixelSet& set);
 
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
 	void connect(const PixelConnector& connector = DelauneyPixelConnector());
 
-	QSharedPointer<PixelSet> set() const;
+	PixelSet set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QVector<int>& edgeIDs) const;
 	QVector<QSharedPointer<PixelEdge> > edges() const;
@@ -227,7 +236,7 @@ public:
 	QVector<int> edgeIndexes(const QString & pixelID) const;
 
 protected:
-	QSharedPointer<PixelSet> mSet;
+	PixelSet mSet;
 	QVector<QSharedPointer<PixelEdge> > mEdges;
 
 	QMap<QString, int> mPixelLookup;			// maps pixel IDs to their current vector index

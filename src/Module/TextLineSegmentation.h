@@ -61,10 +61,15 @@ public:
 
 	virtual QString toString() const override;
 
+	double minDistFactor() const;
+	void setMinDistFactor(double val);
+
 protected:
 
-	//void load(const QSettings& settings) override;
-	//void save(QSettings& settings) const override;
+	double mMinDistFactor = 10.0;
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
 };
 
 class DllModuleExport TextLineSegmentation : public Module {
@@ -84,14 +89,18 @@ public:
 
 private:
 	QVector<QSharedPointer<Pixel> > mSuperPixels;
-	QVector<QSharedPointer<LineEdge> > mEdges;
-	//QVector<QSharedPointer<LineEdge> > mDbgEdges;	// remove
+	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
+	QVector<PixelSet> mSets;
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
 	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;
-	QVector<QSharedPointer<PixelSet> > toSets() const;
+	QVector<PixelSet> toSets(const QVector<QSharedPointer<LineEdge> > & edges) const;
+
+	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// TODO: delete
+	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const;	// TODO: delete
+	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const;	// TODO: move this to a PixelSetManager
 
 	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
 

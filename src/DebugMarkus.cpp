@@ -145,10 +145,11 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
-	testFeatureCollector(imgCv);
+	// switch tests
+	//testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
-	//testLayout(imgCv);
+	testLayout(imgCv);
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -360,20 +361,21 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	Timer dt;
 
 	// find super pixels
-	rdf::SuperPixel superPixel(img);
+	//rdf::SuperPixel superPixel(img);
+	rdf::ScaleSpaceSuperPixel superPixel(img);
 	
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
+	PixelSet sp = superPixel.superPixels();
 
 	// find local orientation per pixel
-	rdf::LocalOrientation lo(sp);
+	rdf::LocalOrientation lo(sp.pixels());
 	if (!lo.compute())
 		qWarning() << "could not compute local orientation";
 
 	// smooth estimation
-	rdf::GraphCutOrientation pse(sp);
+	rdf::GraphCutOrientation pse(sp.pixels());
 	
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
@@ -401,11 +403,12 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//if (!tabStops.compute())
 	//	qWarning() << "could not compute text block segmentation!";
 
-	//// find text lines
-	//rdf::TextLineSegmentation textLines(sp);
+	// find text lines
+	rdf::TextLineSegmentation textLines(sp.pixels());
+	textLines.config()->setMinDistFactor(10);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
-	//if (!textLines.compute())
-	//	qWarning() << "could not compute text block segmentation!";
+	if (!textLines.compute())
+		qWarning() << "could not compute text block segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -420,11 +423,11 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = lo.draw(rImg, "507", 64);
 
 	//// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = superPixel.draw(rImg);
 	//rImg = tabStops.draw(rImg);
-	//rImg = textLines.draw(rImg);
 	rImg = spc.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-classified");
+	rImg = textLines.draw(rImg);
+	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 

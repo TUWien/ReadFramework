@@ -194,6 +194,8 @@ public:
 	double angle() const;
 	Ellipse ellipse() const;
 	
+	void scale(double factor);
+
 	void addStats(const QSharedPointer<PixelStats>& stats);
 	QSharedPointer<PixelStats> stats(int idx = -1) const;
 

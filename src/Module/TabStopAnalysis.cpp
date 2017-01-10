@@ -151,7 +151,7 @@ QVector<QSharedPointer<Pixel> > TabStopAnalysis::findTabStopCandidates(const QSh
 
 	QVector<QSharedPointer<Pixel> > tabStops;
 	
-	for (const QSharedPointer<Pixel>& pixel : graph->set()->pixels()) {
+	for (const QSharedPointer<Pixel>& pixel : graph->set().pixels()) {
 
 		if (!pixel->stats()) {
 			mWarning << "pixel stats NULL where they should not be, pixel ID:" << pixel->id();

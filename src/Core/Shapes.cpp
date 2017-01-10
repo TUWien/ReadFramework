@@ -983,6 +983,11 @@ void Rect::move(const Vector2D & vec) {
 	mTopLeft += vec;
 }
 
+void Rect::scale(double factor) {
+	mTopLeft *= factor;
+	mSize *= factor;
+}
+
 void Rect::expand(double v) {
 	mTopLeft -= 0.5*v;
 	mSize += v;
@@ -1257,12 +1262,37 @@ Vector2D Ellipse::axis() const {
 	return mAxis;
 }
 
+/// <summary>
+/// Scales the ellipse (center and size).
+/// </summary>
+/// <param name="factor">The scale factor.</param>
+void Ellipse::scale(double factor) {
+	mAxis *= factor;
+	mCenter *= factor;
+}
+
+/// <summary>
+/// The ellipses major axis.
+/// </summary>
+/// <returns></returns>
 double Ellipse::majorAxis() const {
 	return qMax(mAxis.x(), mAxis.y());
 }
 
+/// <summary>
+/// The ellipse's minor axis.
+/// </summary>
+/// <returns></returns>
 double Ellipse::minorAxis() const {
 	return qMin(mAxis.x(), mAxis.y());
+}
+
+/// <summary>
+/// The mean of major and minor axis.
+/// </summary>
+/// <returns></returns>
+double Ellipse::radius() const {
+	return (mAxis.x() + mAxis.y()) / 2.0;
 }
 
 void Ellipse::setAngle(double angle) {
@@ -1302,7 +1332,7 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 }
 
 /// <summary>
-/// Returns the ellipse point of angle.
+/// Returns a point on the ellipse at the specified angle.
 /// 0 degree corresponds to the positive x-axis.
 /// The angle is clockwise.
 /// </summary>

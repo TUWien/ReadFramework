@@ -692,9 +692,20 @@ bool SuperPixelTrainer::compute() {
 		return false;
 	}
 
-	mInfo << "training model with" << mFeatureManager.numFeatures() << "this might take a while...";
+	mInfo << "training model with" << mFeatureManager.numFeatures() << "features, this might take a while...";
 
 	mModel->train(mFeatureManager.toCvTrainData());
+
+	// Print variable importance
+	cv::Mat vi = mModel->getVarImportance();
+	if(!vi.empty()) {
+		
+		double viSum = cv::sum(vi)[0];
+		qInfo() << "var#\timportance (in %%):";
+		int i, n = (int)vi.total();
+		for (i = 0; i < n; i++ )
+			qInfo() << i << "\t" << 100.f * vi.at<float>(i)/viSum;
+	}
 
 	mInfo << "trained in" << dt;
 

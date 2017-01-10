@@ -130,4 +130,34 @@ private:
 	bool checkInput() const override;
 };
 
+class DllModuleExport GraphCutLabels : public Module {
+
+public:
+	GraphCutLabels(const PixelSet& set);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	//QString toString() const override;
+	//QSharedPointer<LocalOrientationConfig> config() const;
+
+	// results - available after compute() is called
+	PixelSet set() const;
+	void setModel(const QSharedPointer<SuperPixelModel>& model);
+
+private:
+
+	// input/output
+	PixelSet mSet;
+	QSharedPointer<SuperPixelModel> mModel;
+	double mScaleFactor = 1000.0;	// TODO: think about that
+
+	bool checkInput() const override;
+
+	void graphCut(const PixelGraph& graph);
+	cv::Mat costs(int numLabels) const;
+	cv::Mat labelDistMatrix(int numLabels) const;
+};
+
+
 };
