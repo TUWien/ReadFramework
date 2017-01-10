@@ -50,20 +50,20 @@ namespace rdf {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WriterIdentification"/> class.
 	/// </summary>
-	WriterRetrieval::WriterRetrieval() {
+	WriterImage::WriterImage() {
 		// do nothing
 	}
 	/// <summary>
 	/// Sets the image.
 	/// </summary>
 	/// <param name="img">The img.</param>
-	void WriterRetrieval::setImage(const cv::Mat img) {
+	void WriterImage::setImage(const cv::Mat img) {
 		this->mImg = img;
 	}
 	/// <summary>
 	/// Calculates the SIFT features of the image.
 	/// </summary>
-	void WriterRetrieval::calculateFeatures() {
+	void WriterImage::calculateFeatures() {
 		if(mImg.empty())
 			return;
 #ifdef WITH_XFEATURES2D
@@ -96,7 +96,7 @@ namespace rdf {
 	/// Saves the SIFT features to the given file path.
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
-	void WriterRetrieval::saveFeatures(QString filePath) {
+	void WriterImage::saveFeatures(QString filePath) {
 		if(mKeyPoints.empty() || mDescriptors.empty()) {
 			qWarning() << debugName() << " keypoints or descriptors empty ... unable to save to file";
 			return;
@@ -114,7 +114,7 @@ namespace rdf {
 	/// Loads the features from the given file path.
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
-	void WriterRetrieval::loadFeatures(QString filePath) {
+	void WriterImage::loadFeatures(QString filePath) {
 		cv::FileStorage fs(filePath.toStdString(), cv::FileStorage::READ);
 		if(!fs.isOpened()) {
 			qWarning() << debugName() << " unable to read file " << filePath;
@@ -130,35 +130,146 @@ namespace rdf {
 	/// Sets the key points for this Writer Identification task.
 	/// </summary>
 	/// <param name="kp">The keypoints.</param>
-	void WriterRetrieval::setKeyPoints(QVector<cv::KeyPoint> kp) {
+	void WriterImage::setKeyPoints(QVector<cv::KeyPoint> kp) {
 		mKeyPoints = kp;
 	}
 	/// <summary>
 	/// Returns the keypoints of the SIFT features.
 	/// </summary>
 	/// <returns>keypoints</returns>
-	QVector<cv::KeyPoint> WriterRetrieval::keyPoints() const {
+	QVector<cv::KeyPoint> WriterImage::keyPoints() const {
 		return mKeyPoints;
 	}
 	/// <summary>
 	/// Sets the descriptors for this Writer Identification task.
 	/// </summary>
 	/// <param name="desc">The descriptors.</param>
-	void WriterRetrieval::setDescriptors(cv::Mat desc) {
+	void WriterImage::setDescriptors(cv::Mat desc) {
 		mDescriptors = desc;
 	}
 	/// <summary>
 	/// Returns the descriptors of the SIFT features
 	/// </summary>
 	/// <returns></returns>
-	cv::Mat WriterRetrieval::descriptors() const {
+	cv::Mat WriterImage::descriptors() const {
 		return mDescriptors;
+	}
+	void WriterImage::filterKeyPoints(int minSize, int maxSize) {
+		cv::Mat filteredDesc = cv::Mat(0, mDescriptors.cols, mDescriptors.type());
+		int r = 0;
+		for(auto kpItr = mKeyPoints.begin(); kpItr != mKeyPoints.end(); r++) {
+			if(kpItr->size*1.5 * 4 > maxSize && maxSize > 0) {
+				kpItr = mKeyPoints.erase(kpItr);
+			}
+			else if(kpItr->size * 1.5 * 4 < minSize) {
+				kpItr = mKeyPoints.erase(kpItr);
+			}
+			else {
+				kpItr++;
+				filteredDesc.push_back(mDescriptors.row(r).clone());
+			}
+		}
+		mDescriptors = filteredDesc;
 	}
 	/// <summary>
 	/// Debug name
 	/// </summary>
 	/// <returns></returns>
-	QString WriterRetrieval::debugName() {
+	QString WriterImage::debugName() {
 		return "WriterIdentification";
+	}
+	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("Writer Retrieval") {
+	}
+	QString WriterRetrievalConfig::toString() const {
+		return "featureDir:" + mFeatureDir + " " + mVoc.toString();
+	}
+	bool WriterRetrievalConfig::isEmpty() {
+		return mVoc.isEmpty();
+	}
+	WriterVocabulary WriterRetrievalConfig::vocabulary() {
+		return mVoc;
+	}
+	void WriterRetrievalConfig::load(const QSettings & settings) {
+		
+
+		mSettingsVocPath = settings.value("vocPath", QString()).toString();
+		if(!mSettingsVocPath.isEmpty()) {
+			mInfo << "loading vocabulary from " << mSettingsVocPath;
+			mVoc.loadVocabulary(mSettingsVocPath);
+		} else {
+			mVoc.setType(settings.value("vocType", mVoc.type()).toInt());
+			if(mVoc.type() > rdf::WriterVocabulary::WI_UNDEFINED)
+				mVoc.setType(rdf::WriterVocabulary::WI_UNDEFINED);
+			mVoc.setNumberOfCluster(settings.value("numberOfClusters", mVoc.numberOfCluster()).toInt());
+			mVoc.setNumberOfPCA(settings.value("numberOfPCA", mVoc.numberOfPCA()).toInt());
+			mVoc.setMaximumSIFTSize(settings.value("maxSIFTSize", mVoc.maximumSIFTSize()).toInt());
+			mVoc.setMinimumSIFTSize(settings.value("minSIFTSize", mVoc.minimumSIFTSize()).toInt());
+			mVoc.setPowerNormalization(settings.value("powerNormalization", mVoc.powerNormalization()).toInt());
+			mInfo << "settings set to: type: " << mVoc.type() << " numberOfClusters: " << mVoc.numberOfCluster() << " numberOfPCA:" << mVoc.numberOfPCA();
+		}
+
+		
+		mFeatureDir = settings.value("featureDir", QString()).toString();
+
+		mEvalFile = settings.value("evalFile", QString()).toString();
+	}
+	void WriterRetrievalConfig::save(QSettings & settings) const {
+		settings.setValue("vocType", mVoc.type());
+		settings.setValue("numberOfClusters", mVoc.numberOfCluster());
+		settings.setValue("numberOfPCA", mVoc.numberOfPCA());
+		settings.setValue("maxSIFTSize", mVoc.maximumSIFTSize());
+		settings.setValue("minSIFTSize", mVoc.minimumSIFTSize());
+		settings.setValue("powerNormalization", mVoc.powerNormalization());
+
+		settings.setValue("vocPath", mSettingsVocPath);
+		settings.setValue("featureDir", mFeatureDir);
+		settings.setValue("evalFile", mEvalFile);
+	}
+	QString WriterRetrievalConfig::debugName() {
+		return mDebugName;
+	}
+	WriterRetrieval::WriterRetrieval(cv::Mat img) : Module() {
+		mImg = img;
+		mConfig = QSharedPointer<WriterRetrievalConfig>::create();
+	}
+	bool WriterRetrieval::isEmpty() const {
+		return config()->isEmpty();
+	}
+	bool WriterRetrieval::compute() {
+		if (isEmpty())
+			return false;
+
+		WriterImage wi = WriterImage();
+		wi.setImage(mImg);
+		wi.calculateFeatures();
+		wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
+		mFeature = config()->vocabulary().generateHist(wi.descriptors());
+		return true;
+	}
+	QSharedPointer<WriterRetrievalConfig> WriterRetrieval::config() const {
+		return qSharedPointerDynamicCast<WriterRetrievalConfig>(mConfig);
+	}
+	cv::Mat WriterRetrieval::getFeature() {
+		return mFeature;
+	}
+	cv::Mat WriterRetrieval::draw(const cv::Mat & img) const {
+		cv::Mat imgCopy = img.clone();
+		WriterImage wi = WriterImage();
+		wi.setImage(img);
+		wi.calculateFeatures();
+		wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
+
+		QVector<cv::KeyPoint> kp = wi.keyPoints();
+		for(auto kpItr = kp.begin(); kpItr != kp.end(); kpItr++) {
+			kpItr->size *= 1.5 * 4;
+		}
+		cv::drawKeypoints(imgCopy, kp.toStdVector(), imgCopy, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+		return imgCopy;
+	}
+	QString WriterRetrieval::toString() const {
+		return QString("TODO: write a realy toString method");
+	}
+	bool WriterRetrieval::checkInput() const {
+		return mImg.empty();
 	}
 }

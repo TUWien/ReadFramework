@@ -33,11 +33,15 @@
 #pragma once
 
 
+#include "BaseModule.h"
+#include "WriterDatabase.h"
+
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QVector>
 #include "opencv2/imgproc/imgproc.hpp"
+#include <QSettings>
 #pragma warning(pop)
 
 #ifndef DllModuleExport
@@ -54,10 +58,55 @@
 
 
 namespace rdf {
-	class DllModuleExport WriterRetrieval {
+	class WriterRetrievalConfig;
+
+	class DllModuleExport WriterRetrieval : public Module {
+	public:
+		WriterRetrieval(cv::Mat img);
+
+		bool isEmpty() const override;
+		bool compute() override;
+		QSharedPointer<WriterRetrievalConfig> config() const;
+		cv::Mat getFeature();
+
+		cv::Mat draw(const cv::Mat& img) const;
+		QString toString() const override;
+
+	private:
+
+		bool checkInput() const override;
+		cv::Mat mImg;
+		cv::Mat mFeature;
+		
+		
+	};
+
+	class DllModuleExport WriterRetrievalConfig : public ModuleConfig {
+	public:
+		WriterRetrievalConfig();
+
+		virtual QString toString() const override;
+		bool isEmpty();
+		WriterVocabulary vocabulary();
+
+	protected:
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+
+	private:
+		QString debugName();
+		QString mDebugName = "Writer Retrieval Config";
+		WriterVocabulary mVoc;
+		QString mSettingsVocPath;
+		QString mFeatureDir = "sift";
+		QString mEvalFile = "";
+	};
+
+	class DllModuleExport WriterImage {
 
 	public:
-		WriterRetrieval();
+		WriterImage();
 
 		void setImage(cv::Mat img);
 		void calculateFeatures();
@@ -70,6 +119,7 @@ namespace rdf {
 		void setDescriptors(cv::Mat desc);
 		cv::Mat descriptors() const;
 		
+		void filterKeyPoints(int minSize, int maxSize);
 
 	private:
 		QString debugName();
