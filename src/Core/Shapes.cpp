@@ -317,6 +317,13 @@ Vector2D Line::p2() const {
 	return mLine.p2();
 }
 
+Vector2D Line::center() const {
+
+	Vector2D rv = p2() - p1();
+	rv /= 2.0;
+	return p1() + rv;
+}
+
 /// <summary>
 /// Determines whether the specified m angle tresh is horizontal.
 /// </summary>

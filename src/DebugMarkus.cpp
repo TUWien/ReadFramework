@@ -380,6 +380,20 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 	
+	// drawing
+	cv::Mat nImg = img.clone();
+
+	//// draw edges
+	//rImg = textBlocks.draw(rImg);
+	//// save super pixel image
+	nImg = superPixel.draw(nImg);
+	//rImg = tabStops.draw(rImg);
+	//rImg = spc.draw(rImg);
+	QString imgPathN = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-nomacs", "png");
+	rdf::Image::save(nImg, imgPathN);
+	qDebug() << "debug image added" << imgPathN;
+	return;
+
 	// pixel labeling
 	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
 

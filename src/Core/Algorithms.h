@@ -93,13 +93,13 @@ public:
 	static double absAngleDiff(double a, double b);
 	static double signedAngleDiff(double a, double b);
 
-
 	// convenience functions
 	static QPointF calcRotationSize(double angleRad, const QPointF& srcSize);
 	static double min(const QVector<double>& vec);
 	static double max(const QVector<double>& vec);
 
 	// template functions --------------------------------------------------------------------
+	
 	/// <summary>
 	/// Computes robust statistical moments (quantiles).
 	/// </summary>

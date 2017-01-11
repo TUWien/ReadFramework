@@ -36,6 +36,7 @@
 #include "Image.h"
 #include "Drawer.h"
 #include "Algorithms.h"
+#include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -144,18 +145,13 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
 
-	// TODOs
-	// - distance sorting (w.r.t angles) has an issue
-	// - addPixel: do not add _all_
-	// - merge textlines: check axis ratio (it's basically PCA...)
-
 	QVector<QSharedPointer<TextLineSet> > textLines;
 
 	// debug ------------------------------------
 	QString fp("C:/temp/cluster/");
 	Vector2D maxSize = graph.set().boundingBox().bottomRight();
 	
-	QImage img("D:/read/test/00075751.tif");
+	QImage img("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
 	img = img.convertToFormat(QImage::Format_ARGB32);
 	//QImage img(maxSize.toQSize(), QImage::Format_ARGB32);
 	//QPixmap pm(QSize(800, 446));
@@ -225,15 +221,14 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 
 			p.setPen(ColorManager::blue(1.0));
 		}
+		// else drop
 		else
 			p.setPen(ColorManager::red(0.4));
-
-		// else drop
 
 		// debug --------------------------------
 		e->draw(p);
 
-		if (idx % 500 == 0) {
+		if (idx % 200 == 0) {
 			cv::Mat imgCv = Image::qImage2Mat(img);
 			QString iPath = fp + "img" + QString::number(idx) + ".tif";
 			Image::save(imgCv, iPath);
@@ -360,6 +355,52 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	QPainter p(&pm);
 	
+
+	//PixelGraph pg(mSet);
+	//pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
+
+
+	//auto edges = pg.edges();
+	//cv::Mat lm(1, edges.size(), CV_64FC1);
+	//double* lmp = lm.ptr<double>();
+
+	//for (auto e : edges) {
+	//	*lmp = std::sqrt(e->edge().length());
+	//	lmp++;
+	//}
+
+	//int nBins = 50;
+	//cv::Mat h = IP::computeHist(lm, nBins);
+	//Histogram hist(h);
+	//hist.draw(p, Rect(Vector2D(10,10), Vector2D(100, 200)));
+
+	//double minV, maxV;
+	//cv::minMaxLoc(lm, &minV, &maxV);
+
+	//double step = (maxV - minV) / nBins;
+	//double minStep = 0;
+	//lmp = lm.ptr<double>();
+
+	//for (int idx = 0; idx < nBins; idx++) {
+
+	//	PixelSet cSet;
+	//	double maxStep = minStep + step;
+
+	//	p.setPen(ColorManager::getColor());
+	//	QVector<Vector2D> pts;
+	//	for (int cIdx = 0; cIdx < lm.cols; cIdx++) {
+	//		
+	//		if (lmp[cIdx] >= minStep && lmp[cIdx] < maxStep) {
+	//			Vector2D pt = edges[cIdx]->edge().center();
+	//			pts << pt;
+	//			p.drawPoint(pt.toQPoint());
+	//			edges[cIdx]->edge().draw(p);
+	//		}
+	//	}
+
+	//	minStep = maxStep;
+	//}
+
 	// this block draws the edges
 	Drawer::instance().setColor(ColorManager::darkGray(0.4));
 	p.setPen(Drawer::instance().pen());
@@ -393,7 +434,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 		//}
 	}
 
-	//mDebug << mEdges.size() << "edges drawn in" << dtf;
+	mDebug << mEdges.size() << "edges drawn in" << dtf;
 
 	return Image::qPixmap2Mat(pm);
 }
