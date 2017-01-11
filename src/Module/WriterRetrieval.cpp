@@ -271,7 +271,11 @@ namespace rdf {
 		for(auto kpItr = kp.begin(); kpItr != kp.end(); kpItr++) {
 			kpItr->size *= 1.5 * 4;
 		}
+
+#ifdef WITH_XFEATURES2D
 		cv::drawKeypoints(imgCopy, kp.toStdVector(), imgCopy, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+#endif
+
 		return imgCopy;
 	}
 	QString WriterRetrieval::toString() const {
