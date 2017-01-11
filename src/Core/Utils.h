@@ -76,6 +76,7 @@ public:
 
 	static QJsonObject readJson(const QString& filePath);
 	static int64 writeJson(const QString& filePath, const QJsonObject& jo);
+	static void initDefaultFramework();
 
 private:
 	Utils();

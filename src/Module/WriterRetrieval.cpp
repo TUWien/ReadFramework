@@ -176,9 +176,11 @@ namespace rdf {
 	/// </summary>
 	/// <returns></returns>
 	QString WriterImage::debugName() {
-		return "WriterIdentification";
+		return "WriterImage";
 	}
-	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("Writer Retrieval") {
+
+	// --------------- WriterRetrievalConfig -----------------------------------------------------------------------------
+	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("WriterRetrieval") {
 	}
 	QString WriterRetrievalConfig::toString() const {
 		return "featureDir:" + mFeatureDir + " " + mVoc.toString();
@@ -228,6 +230,9 @@ namespace rdf {
 	QString WriterRetrievalConfig::debugName() {
 		return mDebugName;
 	}
+
+	// --------------- WriterRetrieval ----------------------------------------------------------------------------------
+
 	WriterRetrieval::WriterRetrieval(cv::Mat img) : Module() {
 		mImg = img;
 		mConfig = QSharedPointer<WriterRetrievalConfig>::create();
@@ -236,6 +241,7 @@ namespace rdf {
 		return config()->isEmpty();
 	}
 	bool WriterRetrieval::compute() {
+		mInfo << "computing writer retrieval";
 		if (isEmpty())
 			return false;
 
@@ -267,7 +273,7 @@ namespace rdf {
 		return imgCopy;
 	}
 	QString WriterRetrieval::toString() const {
-		return QString("TODO: write a realy toString method");
+		return QString("TODO: write a real toString method");
 	}
 	bool WriterRetrieval::checkInput() const {
 		return mImg.empty();
