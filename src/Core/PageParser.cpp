@@ -217,33 +217,6 @@ void PageXmlParser::parseRegion(QXmlStreamReader & reader, QSharedPointer<Region
 	region->setType(rType);
 	region->readAttributes(reader);
 
-
-	//if (rType == Region::type_table_region) {
-	//	QSharedPointer<TableRegion> pT = region.dynamicCast<TableRegion>();
-	//	pT->setRows(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rows)).toInt());
-	//	pT->setCols(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_cols)).toInt());
-	//}
-
-	//if (rType == Region::type_table_cell) {
-	//	QSharedPointer<TableCell> pT = region.dynamicCast<TableCell>();
-	//	pT->setRow(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_row)).toInt());
-	//	pT->setCol(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_col)).toInt());
-	//	
-	//	pT->setRowSpan(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rowspan)).toInt());
-	//	pT->setColSpan(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_colspan)).toInt());
-
-	//	bool tb;
-	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_leftVisible)).toString().compare("true") == 0 ? true : false;
-	//	pT->setLeftBorderVisible(tb);
-	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rightVisible)).toString().compare("true") == 0 ? true : false;
-	//	pT->setRightBorderVisible(tb);
-	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_topVisible)).toString().compare("true") == 0 ? true : false;
-	//	pT->setTopBorderVisible(tb);
-	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_bottomVisible)).toString().compare("true") == 0 ? true : false;
-	//	pT->setBottomBorderVisible(tb);
-	//}
-
-
 	parent->addChild(region);
 
 	// TODO add type to text regions
