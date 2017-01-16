@@ -115,6 +115,7 @@ public:
 	virtual QString childrenToString() const;
 
 	virtual bool read(QXmlStreamReader& reader);
+	virtual void readAttributes(QXmlStreamReader& reader);
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
 	virtual void writeChildren(QXmlStreamWriter& writer) const;
 
@@ -143,6 +144,8 @@ public:
 	void setText(const QString& text);
 	QString text() const;
 
+	
+	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 
