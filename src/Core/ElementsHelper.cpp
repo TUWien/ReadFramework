@@ -193,6 +193,17 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 	case attr_points:		return "points";
 	case attr_id:			return "id";
 	case attr_custom:		return "custom";
+
+	case attr_rows:			return "rows";
+	case attr_cols:			return "cols";
+	case attr_row:			return "row";
+	case attr_col:			return "col";
+	case attr_rowspan:		return "rowSpan";
+	case attr_colspan:		return "colSpan";
+	case attr_leftVisible:	return "leftBorderVisible";
+	case attr_rightVisible:	return "rightBorderVisible";
+	case attr_topVisible:	return "topBorderVisible";
+	case attr_bottomVisible:return "bottomBorderVisible";
 	}
 
 	qWarning() << "unknown tag: " << tagId;
@@ -257,6 +268,8 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_unknown:		return "Unknown";
 	case Region::type_root:			return "Root";
 	case Region::type_text_region:	return "TextRegion";
+	case Region::type_table_region:	return "TableRegion";
+	case Region::type_table_cell:	return "TableCell";
 	case Region::type_text_line:	return "TextLine";
 	case Region::type_word:			return "Word";
 	case Region::type_separator:	return "SeparatorRegion";
@@ -301,7 +314,10 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	case Region::type_chart:
 	case Region::type_noise:
 		return QSharedPointer<Region>::create(type);
-
+	case Region::type_table_region:
+		return QSharedPointer<TableRegion>::create(type);
+	case Region::type_table_cell:
+		return QSharedPointer<TableCell>::create(type);
 		// Add new types here...
 	default:
 		qWarning() << "unknown region type" << type;
