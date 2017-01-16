@@ -325,6 +325,12 @@ bool Region::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+void Region::readAttributes(QXmlStreamReader & reader) {
+	
+	setId(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_id)).toString());
+	setCustom(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_custom)).toString());
+}
+
 bool Region::readPoints(QXmlStreamReader & reader) {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -462,6 +468,13 @@ void TextLine::setText(const QString & text) {
 /// <returns></returns>
 QString TextLine::text() const {
 	return mText;
+}
+
+void TextLine::readAttributes(QXmlStreamReader & reader) {
+
+	Region::readAttributes(reader);
+	//qDebug() << "josef is: " << reader.attributes().value("josef").toString();
+	// TODO: dummy implementation - remove this function!
 }
 
 /// <summary>

@@ -247,6 +247,16 @@ int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 	return 0;
 }
 
+void Utils::initDefaultFramework() {
+
+	QCoreApplication::setOrganizationName("TU Wien");
+	QCoreApplication::setOrganizationDomain("http://www.caa.tuwien.ac.at/cvl");
+	QCoreApplication::setApplicationName("READ Framework");
+
+	rdf::Utils::instance().initFramework();
+
+}
+
 // ColorManager --------------------------------------------------------------------
 /// <summary>
 /// Returns a pleasent random color.

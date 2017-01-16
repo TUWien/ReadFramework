@@ -35,7 +35,9 @@
 
 //opencv
 #include "opencv2/imgproc/imgproc.hpp"
+#ifdef WITH_XFEATURES2D
 #include "opencv2/xfeatures2d.hpp"
+#endif
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -176,9 +178,11 @@ namespace rdf {
 	/// </summary>
 	/// <returns></returns>
 	QString WriterImage::debugName() {
-		return "WriterIdentification";
+		return "WriterImage";
 	}
-	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("Writer Retrieval") {
+
+	// --------------- WriterRetrievalConfig -----------------------------------------------------------------------------
+	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("WriterRetrieval") {
 	}
 	QString WriterRetrievalConfig::toString() const {
 		return "featureDir:" + mFeatureDir + " " + mVoc.toString();
@@ -228,6 +232,9 @@ namespace rdf {
 	QString WriterRetrievalConfig::debugName() {
 		return mDebugName;
 	}
+
+	// --------------- WriterRetrieval ----------------------------------------------------------------------------------
+
 	WriterRetrieval::WriterRetrieval(cv::Mat img) : Module() {
 		mImg = img;
 		mConfig = QSharedPointer<WriterRetrievalConfig>::create();
@@ -236,6 +243,7 @@ namespace rdf {
 		return config()->isEmpty();
 	}
 	bool WriterRetrieval::compute() {
+		mInfo << "computing writer retrieval";
 		if (isEmpty())
 			return false;
 
@@ -263,11 +271,15 @@ namespace rdf {
 		for(auto kpItr = kp.begin(); kpItr != kp.end(); kpItr++) {
 			kpItr->size *= 1.5 * 4;
 		}
+
+#ifdef WITH_XFEATURES2D
 		cv::drawKeypoints(imgCopy, kp.toStdVector(), imgCopy, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+#endif
+
 		return imgCopy;
 	}
 	QString WriterRetrieval::toString() const {
-		return QString("TODO: write a realy toString method");
+		return QString("TODO: write a real toString method");
 	}
 	bool WriterRetrieval::checkInput() const {
 		return mImg.empty();
