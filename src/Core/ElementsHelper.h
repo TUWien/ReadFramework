@@ -118,6 +118,16 @@ public:
 		attr_points,
 		attr_id,
 		attr_custom,
+		attr_rows,
+		attr_cols,
+		attr_row,
+		attr_col,
+		attr_rowspan,
+		attr_colspan,
+		attr_leftVisible,
+		attr_rightVisible,
+		attr_topVisible,
+		attr_bottomVisible,
 
 		tag_end
 	};

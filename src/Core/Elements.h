@@ -68,6 +68,8 @@ public:
 	enum Type {
 		type_unknown = 0,
 		type_root,
+		type_table_region,
+		type_table_cell,
 		type_text_region,
 		type_text_line,
 		type_word,
@@ -115,6 +117,7 @@ public:
 	virtual QString childrenToString() const;
 
 	virtual bool read(QXmlStreamReader& reader);
+	virtual void readAttributes(QXmlStreamReader& reader);
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
 	virtual void writeChildren(QXmlStreamWriter& writer) const;
 
@@ -132,6 +135,71 @@ protected:
 	virtual bool readPoints(QXmlStreamReader& reader);
 };
 
+class DllCoreExport TableRegion : public Region {
+
+public:
+	TableRegion(const Type& type = Type::type_unknown);
+
+	//virtual bool read(QXmlStreamReader& reader);
+
+	void setRows(int r);
+	int rows() const;
+
+	void setCols(int c);
+	int cols() const;
+
+protected:
+	int mRows = -1;
+	int mCols = -1;
+
+	//QColor mLineColor;
+	//QColor mBgColor;
+};
+
+class DllCoreExport TableCell : public Region {
+
+public:
+	TableCell(const Type& type = Type::type_unknown);
+
+	void setRow(int r);
+	int row() const;
+	void setCol(int c);
+	int col() const;
+
+	void setRowSpan(int r);
+	int rowSpan() const;
+	void setColSpan(int c);
+	int colSpan() const;
+
+	void setLeftBorderVisible(bool b);
+	bool leftBorderVisible() const;
+
+	void setRightBorderVisible(bool b);
+	bool rightBorderVisible() const;
+
+	void setTopBorderVisible(bool b);
+	bool topBorderVisible() const;
+
+	void setBottomBorderVisible(bool b);
+	bool bottomBorderVisible() const;
+
+protected:
+	int mRow = -1;
+	int mCol = -1;
+
+	int mRowSpan = -1;
+	int mColSpan = -1;
+
+	bool mLeftBorderVisible = false;
+	bool mRightBorderVisible = false;
+	bool mTopBorderVisible = false;
+	bool mBottomBorderVisible = false;
+
+	//QString mComments;
+	//Polygon mPoly;
+};
+
+
 class DllCoreExport TextLine : public Region {
 
 public:
@@ -143,6 +211,8 @@ public:
 	void setText(const QString& text);
 	QString text() const;
 
+	
+	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;
 	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 

@@ -325,6 +325,12 @@ bool Region::read(QXmlStreamReader & reader) {
 	return true;
 }
 
+void Region::readAttributes(QXmlStreamReader & reader) {
+	
+	setId(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_id)).toString());
+	setCustom(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_custom)).toString());
+}
+
 bool Region::readPoints(QXmlStreamReader & reader) {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -462,6 +468,13 @@ void TextLine::setText(const QString & text) {
 /// <returns></returns>
 QString TextLine::text() const {
 	return mText;
+}
+
+void TextLine::readAttributes(QXmlStreamReader & reader) {
+
+	Region::readAttributes(reader);
+	//qDebug() << "josef is: " << reader.attributes().value("josef").toString();
+	// TODO: dummy implementation - remove this function!
 }
 
 /// <summary>
@@ -834,6 +847,103 @@ bool SeparatorRegion::operator==(const Region & sr1) {
 	else
 		return false;
 
+}
+
+TableRegion::TableRegion(const Type & type) : Region(type) {
+
+	// default to text line
+	if (mType == type_unknown)
+		mType = Region::type_table_region;
+}
+
+//bool TableRegion::read(QXmlStreamReader & reader) {
+//	return false;
+//}
+
+void TableRegion::setRows(int r) {
+	mRows = r;
+}
+
+int TableRegion::rows() const {
+	return mRows;
+}
+
+void TableRegion::setCols(int c) {
+	mCols = c;
+}
+
+int TableRegion::cols() const {
+	return mCols;
+}
+
+TableCell::TableCell(const Type & type) : Region(type) {
+	// default to text line
+	if (mType == type_unknown)
+		mType = Region::type_table_cell;
+}
+
+void TableCell::setRow(int r) {
+	mRow = r;
+}
+
+int TableCell::row() const {
+	return mRow;
+}
+
+void TableCell::setCol(int c) {
+	mCol = c;
+}
+
+int TableCell::col() const {
+	return mCol;
+}
+
+void TableCell::setRowSpan(int r) {
+	mRowSpan = r;
+}
+
+int TableCell::rowSpan() const {
+	return mRowSpan;
+}
+
+void TableCell::setColSpan(int c) {
+	mColSpan = c;
+}
+
+int TableCell::colSpan() const {
+	return mColSpan;
+}
+
+void TableCell::setLeftBorderVisible(bool b) {
+	mLeftBorderVisible = b;
+}
+
+bool TableCell::leftBorderVisible() const {
+	return mLeftBorderVisible;
+}
+
+void TableCell::setRightBorderVisible(bool b) {
+	mRightBorderVisible = b;
+}
+
+bool TableCell::rightBorderVisible() const {
+	return mRightBorderVisible;
+}
+
+void TableCell::setTopBorderVisible(bool b) {
+	mTopBorderVisible = b;
+}
+
+bool TableCell::topBorderVisible() const {
+	return mTopBorderVisible;
+}
+
+void TableCell::setBottomBorderVisible(bool b) {
+	mBottomBorderVisible = b;
+}
+
+bool TableCell::bottomBorderVisible() const {
+	return mBottomBorderVisible;
 }
 
 }
