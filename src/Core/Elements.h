@@ -162,6 +162,11 @@ class DllCoreExport TableCell : public Region {
 public:
 	TableCell(const Type& type = Type::type_unknown);
 
+	rdf::Line topBorder() const;
+	rdf::Line bottomBorder() const;
+	rdf::Line leftBorder() const;
+	rdf::Line rightBorder() const;
+
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 
 	void setRow(int r);
