@@ -470,13 +470,6 @@ QString TextLine::text() const {
 	return mText;
 }
 
-void TextLine::readAttributes(QXmlStreamReader & reader) {
-
-	Region::readAttributes(reader);
-	//qDebug() << "josef is: " << reader.attributes().value("josef").toString();
-	// TODO: dummy implementation - remove this function!
-}
-
 /// <summary>
 /// Reads a Textline from the XML stream.
 /// The stream must be at the position of the 
@@ -860,6 +853,20 @@ TableRegion::TableRegion(const Type & type) : Region(type) {
 //	return false;
 //}
 
+void TableRegion::readAttributes(QXmlStreamReader & reader) {
+
+	Region::readAttributes(reader);
+
+	mRows = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rows)).toInt();
+	mCols = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_cols)).toInt();
+
+	//if (rType == Region::type_table_region) {
+	//	QSharedPointer<TableRegion> pT = region.dynamicCast<TableRegion>();
+	//	pT->setRows(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rows)).toInt());
+	//	pT->setCols(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_cols)).toInt());
+	//}
+}
+
 void TableRegion::setRows(int r) {
 	mRows = r;
 }
@@ -880,6 +887,95 @@ TableCell::TableCell(const Type & type) : Region(type) {
 	// default to text line
 	if (mType == type_unknown)
 		mType = Region::type_table_cell;
+}
+
+rdf::Line TableCell::topBorder() const
+{
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[0];
+		QPointF p2 = mPoly.polygon()[3];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableCell::bottomBorder() const
+{
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[1];
+		QPointF p2 = mPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableCell::leftBorder() const
+{
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[0];
+		QPointF p2 = mPoly.polygon()[1];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableCell::rightBorder() const
+{
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[3];
+		QPointF p2 = mPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+void TableCell::readAttributes(QXmlStreamReader & reader) {
+
+	Region::readAttributes(reader);
+
+	mRow = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_row)).toInt();
+	mCol = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_col)).toInt();
+
+	mRowSpan = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rowspan)).toInt();
+	mColSpan = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_colspan)).toInt();
+
+	mLeftBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_leftVisible)).toString().compare("true") == 0 ? true : false;
+	mRightBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rightVisible)).toString().compare("true") == 0 ? true : false;;
+	mTopBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_topVisible)).toString().compare("true") == 0 ? true : false;
+	mBottomBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_bottomVisible)).toString().compare("true") == 0 ? true : false;
+
+	//if (rType == Region::type_table_cell) {
+	//	QSharedPointer<TableCell> pT = region.dynamicCast<TableCell>();
+	//	pT->setRow(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_row)).toInt());
+	//	pT->setCol(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_col)).toInt());
+	//	
+	//	pT->setRowSpan(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rowspan)).toInt());
+	//	pT->setColSpan(reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_colspan)).toInt());
+
+	//	bool tb;
+	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_leftVisible)).toString().compare("true") == 0 ? true : false;
+	//	pT->setLeftBorderVisible(tb);
+	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rightVisible)).toString().compare("true") == 0 ? true : false;
+	//	pT->setRightBorderVisible(tb);
+	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_topVisible)).toString().compare("true") == 0 ? true : false;
+	//	pT->setTopBorderVisible(tb);
+	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_bottomVisible)).toString().compare("true") == 0 ? true : false;
+	//	pT->setBottomBorderVisible(tb);
+	//}
+
+
 }
 
 void TableCell::setRow(int r) {
