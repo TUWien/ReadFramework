@@ -31,7 +31,8 @@
  *******************************************************************************************************/
 
 #include "WriterRetrieval.h"
-
+#include "PageParser.h"
+#include "Elements.h"
 
 //opencv
 #include "opencv2/imgproc/imgproc.hpp"
@@ -46,6 +47,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
+#include <QPolygon>
 #pragma warning(pop)
 
 namespace rdf {
@@ -173,6 +175,23 @@ namespace rdf {
 		}
 		mDescriptors = filteredDesc;
 	}
+	void WriterImage::filterKeyPointsPoly(QVector<QPolygonF> polys) {
+		if(polys.isEmpty())
+			return;
+		cv::Mat filteredDesc = cv::Mat(0, mDescriptors.cols, mDescriptors.type());
+		QVector<cv::KeyPoint> filteredKeyPoints;
+		for(int i = 0; i < polys.size(); i++) {
+			for(int j = 0; j < mKeyPoints.size(); j++) {
+				const QPointF p = QPointF(mKeyPoints[j].pt.x, mKeyPoints[j].pt.y);
+				if(polys[i].containsPoint(p, Qt::FillRule::WindingFill)) {
+					filteredKeyPoints.push_back(mKeyPoints[j]);
+					filteredDesc.push_back(mDescriptors.row(j).clone());
+				}
+			}
+		}
+		mKeyPoints = filteredKeyPoints;
+		mDescriptors = filteredDesc;
+	}
 	/// <summary>
 	/// Debug name
 	/// </summary>
@@ -251,7 +270,27 @@ namespace rdf {
 		wi.setImage(mImg);
 		wi.calculateFeatures();
 		wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
+		
+		// collect all polygons in xml file and filter keypoints
+		QVector<QPolygonF> polys;
+		if(!mXmlPath.isEmpty()) {
+			PageXmlParser parser;
+			parser.read(mXmlPath); // TODO: config()->xmlPath
+
+			QSharedPointer<Region> root = parser.page()->rootRegion();
+			for (QSharedPointer<Region> c : root->children()) {
+				if(c->type() == Region::type_text_region) {
+					polys.push_back(c->polygon().polygon());
+				}
+			}
+			if (!polys.isEmpty())
+				wi.filterKeyPointsPoly(polys);
+		}
+		
 		mFeature = config()->vocabulary().generateHist(wi.descriptors());
+
+		mDesc = wi.descriptors();
+		mKeyPoints = wi.keyPoints();
 		return true;
 	}
 	QSharedPointer<WriterRetrievalConfig> WriterRetrieval::config() const {
@@ -260,19 +299,30 @@ namespace rdf {
 	cv::Mat WriterRetrieval::getFeature() {
 		return mFeature;
 	}
+	void WriterRetrieval::setXmlPath(std::string xmlPath) {
+		if (xmlPath != "")
+			mXmlPath = QString::fromStdString(xmlPath);
+	}
+
 	cv::Mat WriterRetrieval::draw(const cv::Mat & img) const {
 		cv::Mat imgCopy = img.clone();
-		WriterImage wi = WriterImage();
-		wi.setImage(img);
-		wi.calculateFeatures();
-		wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
+		//WriterImage wi = WriterImage();
+		//wi.setImage(img);
+		//wi.calculateFeatures();
+		//wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
 
-		QVector<cv::KeyPoint> kp = wi.keyPoints();
+		if(mKeyPoints.empty()) {
+			mWarning << "keypoints not calculated .... not drawing";
+			return imgCopy;
+		}
+
+		QVector<cv::KeyPoint> kp = mKeyPoints;
 		for(auto kpItr = kp.begin(); kpItr != kp.end(); kpItr++) {
 			kpItr->size *= 1.5 * 4;
 		}
 
 #ifdef WITH_XFEATURES2D
+		//cv::drawKeypoints(imgCopy, kp.toStdVector(), imgCopy, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 		cv::drawKeypoints(imgCopy, kp.toStdVector(), imgCopy, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 #endif
 

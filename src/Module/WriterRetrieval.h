@@ -69,6 +69,8 @@ namespace rdf {
 		QSharedPointer<WriterRetrievalConfig> config() const;
 		cv::Mat getFeature();
 
+		void setXmlPath(std::string xmlPath);
+
 		cv::Mat draw(const cv::Mat& img) const;
 		QString toString() const override;
 
@@ -77,6 +79,11 @@ namespace rdf {
 		bool checkInput() const override;
 		cv::Mat mImg;
 		cv::Mat mFeature;
+
+		cv::Mat mDesc = cv::Mat();
+		QVector<cv::KeyPoint> mKeyPoints;
+
+		QString mXmlPath = "";
 		
 		
 	};
@@ -120,6 +127,7 @@ namespace rdf {
 		cv::Mat descriptors() const;
 		
 		void filterKeyPoints(int minSize, int maxSize);
+		void filterKeyPointsPoly(QVector<QPolygonF> polys);
 
 	private:
 		QString debugName();
