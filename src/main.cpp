@@ -138,6 +138,9 @@ int main(int argc, char** argv) {
 		else if (parser.isSet(devOpt) && parser.value(devOpt) == "stefan") {
 			// TODO do what ever you want
 			qDebug() << "loading stefan's debug code";
+
+			rdf::TestWriterRetrieval twr = rdf::TestWriterRetrieval();
+			twr.run();
 		}
 		// sebastians section
 		else if (parser.isSet(devOpt) && parser.value(devOpt) == "sebastian") {

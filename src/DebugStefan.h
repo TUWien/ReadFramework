@@ -44,4 +44,10 @@ namespace rdf {
 
 // read defines
 
+	class TestWriterRetrieval {
+	public:
+		TestWriterRetrieval();
+		void run();
+
+	};
 };

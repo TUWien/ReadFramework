@@ -32,10 +32,39 @@
 
 #include "DebugStefan.h"
 
+#include "WriterDatabase.h"
+#include "WriterRetrieval.h"
+#include "Image.h"
+#include "opencv2/ml.hpp"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
+#include <QSharedPointer>
+#include <QImage>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
+	TestWriterRetrieval::TestWriterRetrieval() {
+	}
+	void TestWriterRetrieval::run() {
+		//QSharedPointer<rdf::WriterRetrievalConfig> wrc = QSharedPointer<rdf::WriterRetrievalConfig>(new rdf::WriterRetrievalConfig());
+		//wrc->loadSettings();
 
+		//QString imgPath = "D:/ABP_FirstTestCollection/M_Aigen_am_Inn_007_0021.jpg";
+		//std::string xmlFile = "D:/ABP_FirstTestCollection/page/M_Aigen_am_Inn_007_0021.xml";
+
+		//QImage i = QImage(imgPath);
+		//rdf::WriterRetrieval wr = rdf::WriterRetrieval(Image::qImage2Mat(i));
+		//wr.setConfig(wrc);
+		//wr.setXmlPath(xmlFile);
+		//wr.compute();
+
+		std::string gmmPath = "C:/tmp/transkribus-settings/trigraph-gmm-pca64-40cluster-max90-min0-woNormbeforePCA-gmm.yml";
+		cv::Ptr<cv::ml::EM>  mEM = cv::ml::EM::load<cv::ml::EM>(gmmPath);
+		qDebug() << "loading done";
+		std::string out;
+
+		std::cout << mEM->getMeans();
+	}
 }
