@@ -158,6 +158,11 @@ namespace rdf {
 	cv::Mat WriterImage::descriptors() const {
 		return mDescriptors;
 	}
+	/// <summary>
+	/// Filters the key points according to the size of the keypoints
+	/// </summary>
+	/// <param name="minSize">The minimum size of the keypoints</param>
+	/// <param name="maxSize">The maximum size of the keypoints (-1 to ignore)</param>
 	void WriterImage::filterKeyPoints(int minSize, int maxSize) {
 		cv::Mat filteredDesc = cv::Mat(0, mDescriptors.cols, mDescriptors.type());
 		int r = 0;
@@ -175,6 +180,10 @@ namespace rdf {
 		}
 		mDescriptors = filteredDesc;
 	}
+	/// <summary>
+	/// Filters out key points which are not inside one of the polygons in the vector
+	/// </summary>
+	/// <param name="polys">Vector of polygons (text regions).</param>
 	void WriterImage::filterKeyPointsPoly(QVector<QPolygonF> polys) {
 		if(polys.isEmpty())
 			return;
@@ -201,20 +210,37 @@ namespace rdf {
 	}
 
 	// --------------- WriterRetrievalConfig -----------------------------------------------------------------------------
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WriterRetrievalConfig"/> class.
+	/// </summary>
 	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("WriterRetrieval") {
 	}
+	/// <summary>
+	/// outputs the feature directory and the properties of the vocabulary
+	/// </summary>
+	/// <returns></returns>
 	QString WriterRetrievalConfig::toString() const {
 		return "featureDir:" + mFeatureDir + " " + mVoc.toString();
 	}
+	/// <summary>
+	/// Determines whether this instance is empty.
+	/// </summary>
+	/// <returns></returns>
 	bool WriterRetrievalConfig::isEmpty() {
 		return mVoc.isEmpty();
 	}
+	/// <summary>
+	/// returns the vocabulary
+	/// </summary>
+	/// <returns></returns>
 	WriterVocabulary WriterRetrievalConfig::vocabulary() {
 		return mVoc;
 	}
+	/// <summary>
+	/// Loads the properties from the settings. If a vocabulary path is set, the vocabulary is also loaded.
+	/// </summary>
+	/// <param name="settings">The settings.</param>
 	void WriterRetrievalConfig::load(const QSettings & settings) {
-		
-
 		mSettingsVocPath = settings.value("vocPath", QString()).toString();
 		if(!mSettingsVocPath.isEmpty()) {
 			mInfo << "loading vocabulary from " << mSettingsVocPath;
@@ -236,6 +262,10 @@ namespace rdf {
 
 		mEvalFile = settings.value("evalFile", QString()).toString();
 	}
+	/// <summary>
+	/// Saves the current setup into the settings
+	/// </summary>
+	/// <param name="settings">The settings.</param>
 	void WriterRetrievalConfig::save(QSettings & settings) const {
 		settings.setValue("vocType", mVoc.type());
 		settings.setValue("numberOfClusters", mVoc.numberOfCluster());
@@ -248,19 +278,35 @@ namespace rdf {
 		settings.setValue("featureDir", mFeatureDir);
 		settings.setValue("evalFile", mEvalFile);
 	}
+	/// <summary>
+	/// Returns the debugName
+	/// </summary>
+	/// <returns></returns>
 	QString WriterRetrievalConfig::debugName() {
 		return mDebugName;
 	}
 
 	// --------------- WriterRetrieval ----------------------------------------------------------------------------------
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WriterRetrieval"/> class.
+	/// </summary>
+	/// <param name="img">The img.</param>
 	WriterRetrieval::WriterRetrieval(cv::Mat img) : Module() {
 		mImg = img;
 		mConfig = QSharedPointer<WriterRetrievalConfig>::create();
 	}
+	/// <summary>
+	/// Determines whether this instance is empty (if a config is set).
+	/// </summary>
+	/// <returns></returns>
 	bool WriterRetrieval::isEmpty() const {
 		return config()->isEmpty();
 	}
+	/// <summary>
+	/// Computes feature for the image. If a xmlPath is set the keypoints are also filterd according to the text regions.
+	/// </summary>
+	/// <returns></returns>
 	bool WriterRetrieval::compute() {
 		mInfo << "computing writer retrieval";
 		if (isEmpty())
@@ -293,17 +339,34 @@ namespace rdf {
 		mKeyPoints = wi.keyPoints();
 		return true;
 	}
+	/// <summary>
+	/// Returns the WriterRetrievalConfig
+	/// </summary>
+	/// <returns></returns>
 	QSharedPointer<WriterRetrievalConfig> WriterRetrieval::config() const {
 		return qSharedPointerDynamicCast<WriterRetrievalConfig>(mConfig);
 	}
+	/// <summary>
+	/// Returns the feature (does not calculate the feature!)
+	/// </summary>
+	/// <returns></returns>
 	cv::Mat WriterRetrieval::getFeature() {
 		return mFeature;
 	}
+	/// <summary>
+	/// Sets the XML path.
+	/// </summary>
+	/// <param name="xmlPath">The XML path.</param>
 	void WriterRetrieval::setXmlPath(std::string xmlPath) {
 		if (xmlPath != "")
 			mXmlPath = QString::fromStdString(xmlPath);
 	}
 
+	/// <summary>
+	/// Draws the keypoinst which were calculated in the compute method
+	/// </summary>
+	/// <param name="img">The img.</param>
+	/// <returns></returns>
 	cv::Mat WriterRetrieval::draw(const cv::Mat & img) const {
 		cv::Mat imgCopy = img.clone();
 		//WriterImage wi = WriterImage();
@@ -328,9 +391,17 @@ namespace rdf {
 
 		return imgCopy;
 	}
+	/// <summary>
+	/// To the string.
+	/// </summary>
+	/// <returns></returns>
 	QString WriterRetrieval::toString() const {
 		return QString("TODO: write a real toString method");
 	}
+	/// <summary>
+	/// Checks the input. True if a image is set
+	/// </summary>
+	/// <returns></returns>
 	bool WriterRetrieval::checkInput() const {
 		return mImg.empty();
 	}
