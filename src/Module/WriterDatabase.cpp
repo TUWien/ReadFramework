@@ -524,7 +524,10 @@ namespace rdf {
 		else {
 			std::string gmmPath;
 			fs["GmmPath"] >> gmmPath;
-			mEM = cv::ml::EM::load<cv::ml::EM>(gmmPath);
+			if(QFileInfo(QString::fromStdString(gmmPath)).exists())
+				mEM = cv::ml::EM::load<cv::ml::EM>(gmmPath);
+			else
+				mWarning << "gmm file " << QString::fromStdString(gmmPath) << " (stored in the vocabulary) not found!";
 
 			//cv::FileNode fn = fs["StatModel.EM"];
 			//mEM->read(fn);
@@ -872,6 +875,14 @@ namespace rdf {
 			qWarning() << "vocabulary type is undefined... not generating histograms";
 			return cv::Mat();
 		}
+	}
+
+	/// <summary>
+	/// Returns the debug name of the class
+	/// </summary>
+	/// <returns></returns>
+	QString WriterVocabulary::debugName() {
+		return "WriterVocabulary";
 	}
 
 	/// <summary>

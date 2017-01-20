@@ -118,6 +118,11 @@ namespace rdf {
 		cv::Mat applyPCA(cv::Mat desc) const;
 
 	private:
+		/// <summary>
+		/// Debugs the name.
+		/// </summary>
+		/// <returns></returns>
+		QString debugName();
 		cv::Mat generateHistBOW(cv::Mat desc) const;
 		cv::Mat generateHistGMM(cv::Mat desc) const;
 		

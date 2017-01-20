@@ -244,7 +244,10 @@ namespace rdf {
 		mSettingsVocPath = settings.value("vocPath", QString()).toString();
 		if(!mSettingsVocPath.isEmpty()) {
 			mInfo << "loading vocabulary from " << mSettingsVocPath;
-			mVoc.loadVocabulary(mSettingsVocPath);
+			if(!QFileInfo(mSettingsVocPath).exists()) 
+				mWarning << "vocabulary " << mSettingsVocPath << " does not exist!";
+			else
+				mVoc.loadVocabulary(mSettingsVocPath);
 		} else {
 			mVoc.setType(settings.value("vocType", mVoc.type()).toInt());
 			if(mVoc.type() > rdf::WriterVocabulary::WI_UNDEFINED)
