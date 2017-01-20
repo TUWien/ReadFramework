@@ -143,6 +143,11 @@ public:
 	//virtual bool read(QXmlStreamReader& reader);
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 
+	rdf::Line topBorder() const;
+	rdf::Line bottomBorder() const;
+	rdf::Line leftBorder() const;
+	rdf::Line rightBorder() const;
+
 	void setRows(int r);
 	int rows() const;
 
@@ -191,6 +196,12 @@ public:
 	void setBottomBorderVisible(bool b);
 	bool bottomBorderVisible() const;
 
+	void setHeader(bool b);
+	bool header() const;
+
+	//sorts Cells according row and cell
+	bool operator< (const TableCell& cell) const;
+
 protected:
 	int mRow = -1;
 	int mCol = -1;
@@ -202,6 +213,8 @@ protected:
 	bool mRightBorderVisible = false;
 	bool mTopBorderVisible = false;
 	bool mBottomBorderVisible = false;
+
+	bool mHeader = false;
 
 	//QString mComments;
 	//Polygon mPoly;

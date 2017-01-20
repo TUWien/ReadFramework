@@ -867,6 +867,54 @@ void TableRegion::readAttributes(QXmlStreamReader & reader) {
 	//}
 }
 
+rdf::Line TableRegion::topBorder() const {
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[0];
+		QPointF p2 = mPoly.polygon()[1];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableRegion::bottomBorder() const {
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[3];
+		QPointF p2 = mPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableRegion::leftBorder() const {
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[0];
+		QPointF p2 = mPoly.polygon()[3];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
+rdf::Line TableRegion::rightBorder() const {
+	if (mPoly.size() != 4)
+		return rdf::Line();
+	else {
+		QPointF p1 = mPoly.polygon()[1];
+		QPointF p2 = mPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+}
+
 void TableRegion::setRows(int r) {
 	mRows = r;
 }
@@ -1040,6 +1088,23 @@ void TableCell::setBottomBorderVisible(bool b) {
 
 bool TableCell::bottomBorderVisible() const {
 	return mBottomBorderVisible;
+}
+
+void TableCell::setHeader(bool b) {
+	mHeader = b;
+}
+
+bool TableCell::header() const {
+	return mHeader;
+}
+
+bool TableCell::operator<(const TableCell & cell) const {
+
+	if (row() == cell.row()) {
+		return col() < cell.col();
+	} else {
+		return row() < cell.row();
+	}
 }
 
 }
