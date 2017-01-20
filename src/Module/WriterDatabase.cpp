@@ -58,14 +58,14 @@ namespace rdf {
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
 	void WriterDatabase::addFile(const QString filePath) {
-		qDebug() << "adding file " << filePath;
+		mInfo << "adding file " << filePath;
 		cv::Mat descriptors;
 		QVector<cv::KeyPoint> kp;
 		loadFeatures(filePath, descriptors, kp);
 
 		mDescriptors.append(descriptors);
 		mKeyPoints.append(kp);
-		qDebug() << "lenght of keypoint vector:" << mKeyPoints.length();
+		mInfo << "lenght of keypoint vector:" << mKeyPoints.length();
 
 		//QString descFile = filePath;
 		//writeMatToFile(descriptors, descFile.append("-desc.txt"));
@@ -76,14 +76,14 @@ namespace rdf {
 	/// </summary>
 	void WriterDatabase::generateVocabulary() {
 		if(mVocabulary.type() == WriterVocabulary::WI_UNDEFINED || mVocabulary.numberOfCluster() <= 0 ) {
-			qWarning() << " WIDatabase: vocabulary type and number of clusters have to be set before generating a new vocabulary";
+			mWarning << " WIDatabase: vocabulary type and number of clusters have to be set before generating a new vocabulary";
 			return;
 		}
 		if(mDescriptors.size() == 0) {
 			qWarning() << " WIDatabase: at least one image has to be in the dataset before generating a new vocabulary";
 			return;
 		}
-		qDebug() << "generating vocabulary:" << mVocabulary.toString();
+		mInfo << "generating vocabulary:" << mVocabulary.toString();
 
 		rdf::Image::imageInfo(mDescriptors[0], "mDescriptors[0]");
 		cv::Mat allDesc(0, 0, CV_32FC1);
@@ -104,9 +104,9 @@ namespace rdf {
 		}
 
 		// allDesc.cols is either PCA number or descriptor size
-		qDebug() << "mVocabulary.numberOfCluster() * allDesc.cols:" << mVocabulary.numberOfCluster() * allDesc.cols;
+		mInfo << "mVocabulary.numberOfCluster() * allDesc.cols:" << mVocabulary.numberOfCluster() * allDesc.cols;
 		cv::Mat allHists = cv::Mat(0, mVocabulary.numberOfCluster() * allDesc.cols, CV_32F);
-		qDebug() << "calculating histograms for all images";
+		mInfo << "calculating histograms for all images";
 		for(int i = 0; i < mDescriptors.length(); i++) {
 			cv::Mat hist = mVocabulary.generateHist(mDescriptors[i]);
 			allHists.push_back(hist);
@@ -153,15 +153,15 @@ namespace rdf {
 	/// <param name="filePaths">The files paths of the images if needed in the evaluation output</param>
 	/// <param name="evalFilePath">If set a csv file with the evaluation is written to the path.</param>
 	void WriterDatabase::evaluateDatabase(QStringList classLabels, QStringList filePaths, QString evalFilePath)  {
-		qDebug() << "evaluating database";
+		mInfo << "evaluating database";
 		if(mVocabulary.histL2Mean().empty())
-			qDebug() << "no l2 normalization of the histogram";
+			mInfo << "no l2 normalization of the histogram";
 		if(std::abs(mVocabulary.powerNormalization() - 1.0f) > DBL_EPSILON)
-			qDebug() << "power normalization of " << mVocabulary.powerNormalization() << " applied to the feature vector";
+			mInfo << "power normalization of " << mVocabulary.powerNormalization() << " applied to the feature vector";
 
 
 		if(mDescriptors.empty() && !filePaths.empty()) { // load features if not already loaded
-			qDebug() << "descriptors empty, loading features from filePaths";
+			mInfo << "descriptors empty, loading features from filePaths";
 			for(int i = 0; i < filePaths.length(); i++) {
 				cv::Mat desc;
 				QVector<cv::KeyPoint> kp;
@@ -172,7 +172,7 @@ namespace rdf {
 		}
 
 		cv::Mat hists;
-		qDebug() << "calculating histograms for all images";
+		mInfo << "calculating histograms for all images";
 		for(int i = 0; i < mDescriptors.length(); i++) {
 			hists.push_back(mVocabulary.generateHist(mDescriptors[i]));
 		}
@@ -187,7 +187,7 @@ namespace rdf {
 	/// <param name="filePaths">The file paths.</param>
 	/// <param name="evalFilePath">The eval file path.</param>
 	void WriterDatabase::evaluateDatabase(cv::Mat hists, QStringList classLabels, QStringList filePaths, QString evalFilePath) const {
-		qDebug() << "starting evaluation";
+		mInfo << "starting evaluation";
 		int tp = 0; 
 		int fp = 0;
 		QVector<int> soft;
@@ -295,9 +295,9 @@ namespace rdf {
 		cv::Scalar map = cv::mean(avgPrec);
 
 		// begin evluation output
-		qDebug() << "total:" << tp+fp << " tp:" << tp << " fp:" << fp;
-		qDebug() << "precision:" << (float)tp / ((float)tp + fp);
-		qDebug() << "map:" << map.val[0];
+		mInfo << "total:" << tp+fp << " tp:" << tp << " fp:" << fp;
+		mInfo << "precision:" << (float)tp / ((float)tp + fp);
+		mInfo << "map:" << map.val[0];
 
 		QVector<float> softPerc;
 		QVector<float> hardPerc;
@@ -311,7 +311,7 @@ namespace rdf {
 		QString softOutput = "";
 		for(int i = 0; i < softCriteria.size(); i++) {
 			if(softCriteria[i] > soft.size()) {
-				qDebug() << "Database evaluation: criteria " << softCriteria[i] << " is larger than " << soft.size()-1 << " ... skipping";
+				mWarning << "Database evaluation: criteria " << softCriteria[i] << " is larger than " << soft.size()-1 << " ... skipping";
 				continue;
 			}
 			softOutputHeader += "Top " + QString::number(softCriteria[i]) + "\t";
@@ -324,7 +324,7 @@ namespace rdf {
 		QString hardOutput = "";
 		for(int i = 0; i < hardCriteria.size(); i++) {
 			if(hardCriteria[i] > hard.size()) {
-				qDebug() << "Database evaluation: criteria " << hardCriteria[i] << " is larger than " << hard.size()-1 << " ... skipping";
+				mWarning << "Database evaluation: criteria " << hardCriteria[i] << " is larger than " << hard.size()-1 << " ... skipping";
 				continue;
 			}
 			hardOutputHeader += "Top " + QString::number(hardCriteria[i]) + "\t";
@@ -380,10 +380,10 @@ namespace rdf {
 			rdf::Image::imageInfo(descResult, "descResults nach l2");
 		}
 		else {
-			qDebug() << "normalization before L2 is turned off ... skipping";
+			mDebug << "normalization before L2 is turned off ... skipping";
 			descResult = desc;
 		}
-		qDebug() << "calculating PCA";
+		mInfo << "calculating PCA";
 		cv::PCA pca = cv::PCA(descResult, cv::Mat(), CV_PCA_DATA_AS_ROW, mVocabulary.numberOfPCA());
 		mVocabulary.setPcaEigenvectors(pca.eigenvectors);
 		mVocabulary.setPcaEigenvalues(pca.eigenvalues);
@@ -408,14 +408,14 @@ namespace rdf {
 	/// </summary>
 	/// <param name="desc">The desc.</param>
 	void WriterDatabase::generateGMM(cv::Mat desc) {
-		qDebug() << "start training GMM";		
+		mInfo << "start training GMM";		
 		cv::Ptr<cv::ml::EM> em = cv::ml::EM::create();
 		em->setClustersNumber(mVocabulary.numberOfCluster());
 		em->setCovarianceMatrixType(cv::ml::EM::COV_MAT_DIAGONAL);
 		cv::TermCriteria tc = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 5000, FLT_EPSILON);
 		em->setTermCriteria(tc);
 
-		qDebug() << "start training GMM - number of features:" << desc.rows; 
+		mInfo << "start training GMM - number of features:" << desc.rows; 
 		rdf::Image::imageInfo(desc, "all descriptors");
 		if(!em->trainEM(desc)) {
 			qWarning() << "unable to train GMM";
@@ -423,7 +423,7 @@ namespace rdf {
 		} 
 		
 		mVocabulary.setEM(em);
-		qDebug() << "finished";
+		mInfo << "finished";
 	}
 	/// <summary>
 	/// Writes an opencv mat to txt file.
@@ -475,11 +475,11 @@ namespace rdf {
 					filteredDesc.push_back(descriptors.row(r).clone());
 				}
 			}
-			qDebug() << "filtered " << descriptors.rows - filteredDesc.rows << " SIFT features (maxSize:" << mVocabulary.maximumSIFTSize() << " minSize:" << mVocabulary.minimumSIFTSize() << ")";
+			mInfo << "filtered " << descriptors.rows - filteredDesc.rows << " SIFT features (maxSize:" << mVocabulary.maximumSIFTSize() << " minSize:" << mVocabulary.minimumSIFTSize() << ")";
 			descriptors = filteredDesc;
 		}
 		else
-			qDebug() << "not filtering SIFT features, vocabulary is emtpy, or min or max size not set";
+			mInfo << "not filtering SIFT features, vocabulary is emtpy, or min or max size not set";
 
 		keypoints = QVector<cv::KeyPoint>::fromStdVector(kp);
 	}
@@ -497,10 +497,10 @@ namespace rdf {
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
 	void WriterVocabulary::loadVocabulary(const QString filePath) {
-		qDebug() << "loading vocabulary from " << filePath; 
+		mInfo << "loading vocabulary from " << filePath; 
 		cv::FileStorage fs(filePath.toStdString(), cv::FileStorage::READ);
 		if(!fs.isOpened()) {
-			qWarning() << "WIVocabulary: unable to read file " << filePath;
+			mWarning << "WIVocabulary: unable to read file " << filePath;
 			return;
 		}
 		fs["PcaMean"] >> mPcaMean;
@@ -542,9 +542,9 @@ namespace rdf {
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
 	void WriterVocabulary::saveVocabulary(const QString filePath) {
-		qDebug() << "saving vocabulary to " << filePath;
+		mInfo << "saving vocabulary to " << filePath;
 		if(isEmpty()) {
-			qWarning() << "WIVocabulary: isEmpty() is true ... unable to save to file";
+			mWarning << "WIVocabulary: isEmpty() is true ... unable to save to file";
 			return;
 		}
 		cv::FileStorage fs(filePath.toStdString(), cv::FileStorage::WRITE);
