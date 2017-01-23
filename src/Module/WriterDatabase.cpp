@@ -459,29 +459,22 @@ namespace rdf {
 		fs["keypoints"] >> kp;
 		fs["descriptors"] >> descriptors;
 		fs.release();
+		QVector<cv::KeyPoint> kpQt = QVector<cv::KeyPoint>::fromStdVector(kp);
 
 		if(mVocabulary.minimumSIFTSize() > 0 || mVocabulary.maximumSIFTSize() > 0) {
-			cv::Mat filteredDesc = cv::Mat(0, descriptors.cols, descriptors.type());
-			int r = 0;
-			for(auto kpItr = kp.begin(); kpItr != kp.end(); r++) {
-				if(kpItr->size*1.5 * 4 > mVocabulary.maximumSIFTSize() && mVocabulary.maximumSIFTSize() > 0) {
-					kpItr = kp.erase(kpItr);
-				}
-				else if(kpItr->size * 1.5 * 4 < mVocabulary.minimumSIFTSize()) {
-					kpItr = kp.erase(kpItr);
-				}
-				else {
-					kpItr++;
-					filteredDesc.push_back(descriptors.row(r).clone());
-				}
-			}
-			mInfo << "filtered " << descriptors.rows - filteredDesc.rows << " SIFT features (maxSize:" << mVocabulary.maximumSIFTSize() << " minSize:" << mVocabulary.minimumSIFTSize() << ")";
-			descriptors = filteredDesc;
+
+			WriterImage wi = WriterImage();
+			wi.setKeyPoints(kpQt);
+			wi.setDescriptors(descriptors);
+
+			wi.filterKeyPoints(mVocabulary.minimumSIFTSize(), mVocabulary.maximumSIFTSize());
+			kpQt = wi.keyPoints();
+			descriptors = wi.descriptors();
 		}
 		else
 			mInfo << "not filtering SIFT features, vocabulary is emtpy, or min or max size not set";
 
-		keypoints = QVector<cv::KeyPoint>::fromStdVector(kp);
+		keypoints = kpQt;
 	}
 
 	// WIVocabulary ----------------------------------------------------------------------------------

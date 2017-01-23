@@ -178,6 +178,7 @@ namespace rdf {
 				filteredDesc.push_back(mDescriptors.row(r).clone());
 			}
 		}
+		mInfo << "filtered " << mDescriptors.rows - filteredDesc.rows << " SIFT features (maxSize:" << maxSize << " minSize:" << minSize << ")";
 		mDescriptors = filteredDesc;
 	}
 	/// <summary>
