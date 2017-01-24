@@ -93,7 +93,7 @@ namespace rdf {
 
 		if(mVocabulary.numberOfPCA() > 0) { 
 			rdf::Image::imageInfo(allDesc, "allDesc vor aufruf calculatePCA");
-			allDesc = calculatePCA(allDesc, false); 
+			allDesc = calculatePCA(allDesc, mVocabulary.l2before()); 
 		}		
 
 		switch(mVocabulary.type()) {
@@ -509,6 +509,7 @@ namespace rdf {
 		fs["minimumSIFTSize"] >> mMinimumSIFTSize;
 		fs["maximumSIFTSize"] >> mMaximumSIFTSize;
 		fs["powerNormalization"] >> mPowerNormalization;
+		fs["L2before"] >> mL2Before;
 		std::string note;
 		fs["note"] >> note;
 		mNote = QString::fromStdString(note);
@@ -557,6 +558,7 @@ namespace rdf {
 		fs << "L2Sigma" << mL2Sigma;
 		fs << "histL2Mean" << mHistL2Mean;
 		fs << "histL2Sigma" << mHistL2Sigma;
+		fs << "L2before" << mL2Before;
 		if(mType == WI_BOW)
 			fs << "Vocabulary" << mVocabulary;
 		else if(mType == WI_GMM) {
@@ -824,6 +826,12 @@ namespace rdf {
 	/// <returns>the current power normalization factor</returns>
 	double WriterVocabulary::powerNormalization() const {
 		return mPowerNormalization;
+	}
+	void WriterVocabulary::setL2Before(const bool l2before) {
+		mL2Before = l2before;
+	}
+	bool WriterVocabulary::l2before() const {
+		return mL2Before;
 	}
 	/// <summary>
 	/// Returns the note of the vocabulary.

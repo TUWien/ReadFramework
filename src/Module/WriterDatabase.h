@@ -107,6 +107,8 @@ namespace rdf {
 		void setPowerNormalization(const double power);
 		double powerNormalization() const;
 		
+		void setL2Before(const bool l2before);
+		bool l2before() const;
 
 		QString note() const;
 		QString toString() const;
@@ -148,6 +150,7 @@ namespace rdf {
 		QString mNote = QString();
 
 		QString mVocabularyPath = QString();
+		bool mL2Before = false;
 	};
 
 // read defines
