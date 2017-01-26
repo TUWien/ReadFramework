@@ -40,11 +40,11 @@
 
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -54,7 +54,7 @@ namespace rdf {
 
 // read defines
 
-class DllModuleExport TextLineConfig : public ModuleConfig {
+class DllCoreExport TextLineConfig : public ModuleConfig {
 
 public:
 	TextLineConfig();
@@ -80,7 +80,7 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllModuleExport TextLineSegmentation : public Module {
+class DllCoreExport TextLineSegmentation : public Module {
 
 public:
 	TextLineSegmentation(const PixelSet& set = PixelSet());

@@ -42,11 +42,11 @@
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -56,7 +56,7 @@ namespace rdf {
 
 
 
-class DllModuleExport LineTraceConfig : public ModuleConfig {
+class DllCoreExport LineTraceConfig : public ModuleConfig {
 
 public:
 	LineTraceConfig();
@@ -133,7 +133,7 @@ private:
 ///	It is also possible to filter lines according a specified angle.
 /// </summary>
 /// <seealso cref="Module" />
-class DllModuleExport LineTrace : public Module {
+class DllCoreExport LineTrace : public Module {
 
 public:
 	LineTrace(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
@@ -190,7 +190,7 @@ private:
 
 
 
-class DllModuleExport ReadLSDConfig : public ModuleConfig {
+class DllCoreExport ReadLSDConfig : public ModuleConfig {
 
 public:
 	ReadLSDConfig();
@@ -262,7 +262,7 @@ private:
 };
 
 
-class DllModuleExport ReadLSD : public Module {
+class DllCoreExport ReadLSD : public Module {
 
 public:
 	ReadLSD(const cv::Mat& img, const cv::Mat& mask = cv::Mat());

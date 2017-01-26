@@ -40,11 +40,11 @@
 #include "opencv2/ml/ml.hpp"
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -57,7 +57,7 @@
 namespace rdf {
 	class WriterImage;
 
-	class DllModuleExport WriterVocabulary {
+	class DllCoreExport WriterVocabulary {
 
 	public:
 		WriterVocabulary();
@@ -167,7 +167,7 @@ namespace rdf {
 	};
 
 // read defines
-	class DllModuleExport WriterDatabase {
+	class DllCoreExport WriterDatabase {
 
 	public:
 		WriterDatabase();

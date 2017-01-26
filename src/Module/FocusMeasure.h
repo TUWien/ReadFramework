@@ -40,11 +40,11 @@
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -52,7 +52,7 @@ namespace rdf {
 
 // read defines
 
-	class DllModuleExport BasicFM {
+	class DllCoreExport BasicFM {
 
 	public:
 		BasicFM();
@@ -86,7 +86,7 @@ namespace rdf {
 	};
 
 
-	class DllModuleExport BasicContrast {
+	class DllCoreExport BasicContrast {
 
 	public:
 		BasicContrast();
@@ -114,7 +114,7 @@ namespace rdf {
 
 
 
-	class DllModuleExport Patch {
+	class DllCoreExport Patch {
 	public:
 		Patch();
 		Patch(cv::Point p, int w, int h, double f);
@@ -149,7 +149,7 @@ namespace rdf {
 		double mArea = -1;
 	};
 
-	class DllModuleExport FocusEstimation {
+	class DllCoreExport FocusEstimation {
 
 	public:
 		enum FocusMeasure { BREN = 0, GLVA, GLVN, GLLV, GRAT, GRAS, LAPE, LAPV, ROGR };
@@ -178,7 +178,7 @@ namespace rdf {
 	};
 
 
-	class DllModuleExport ContrastEstimation {
+	class DllCoreExport ContrastEstimation {
 
 	public:
 		enum ContrastMeasure { WEBER = 0, MICHELSON, RMS };

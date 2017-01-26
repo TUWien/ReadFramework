@@ -44,11 +44,11 @@
 #include <QSettings>
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -60,7 +60,7 @@
 namespace rdf {
 	class WriterRetrievalConfig;
 
-	class DllModuleExport WriterRetrieval : public Module {
+	class DllCoreExport WriterRetrieval : public Module {
 	public:
 		WriterRetrieval(cv::Mat img);
 
@@ -88,7 +88,7 @@ namespace rdf {
 		
 	};
 
-	class DllModuleExport WriterRetrievalConfig : public ModuleConfig {
+	class DllCoreExport WriterRetrievalConfig : public ModuleConfig {
 	public:
 		WriterRetrievalConfig();
 
@@ -110,7 +110,7 @@ namespace rdf {
 		QString mEvalFile = "";
 	};
 
-	class DllModuleExport WriterImage {
+	class DllCoreExport WriterImage {
 
 	public:
 		WriterImage();

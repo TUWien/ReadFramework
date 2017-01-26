@@ -39,11 +39,11 @@
 
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -51,7 +51,7 @@
 
 namespace rdf {
 
-class DllModuleExport SuperPixelFeatureConfig : public ModuleConfig {
+class DllCoreExport SuperPixelFeatureConfig : public ModuleConfig {
 
 public:
 	SuperPixelFeatureConfig();
@@ -64,7 +64,7 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport SuperPixelFeature : public Module {
+class DllCoreExport SuperPixelFeature : public Module {
 
 public:
 	SuperPixelFeature(const cv::Mat& img, const PixelSet& set);
@@ -90,7 +90,7 @@ private:
 	void syncSuperPixels(const std::vector<cv::KeyPoint>& keyPointsOld, const std::vector<cv::KeyPoint>& keyPointsNew);
 };
 
-class DllModuleExport SuperPixelClassifierConfig : public ModuleConfig {
+class DllCoreExport SuperPixelClassifierConfig : public ModuleConfig {
 
 public:
 	SuperPixelClassifierConfig();
@@ -108,7 +108,7 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllModuleExport SuperPixelClassifier : public Module {
+class DllCoreExport SuperPixelClassifier : public Module {
 
 public:
 	SuperPixelClassifier(const cv::Mat& img, const PixelSet& set);
@@ -130,7 +130,7 @@ private:
 	bool checkInput() const override;
 };
 
-class DllModuleExport GraphCutLabels : public Module {
+class DllCoreExport GraphCutLabels : public Module {
 
 public:
 	GraphCutLabels(const PixelSet& set);

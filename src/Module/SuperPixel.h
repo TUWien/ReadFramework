@@ -44,11 +44,11 @@
 #include <QPainter>
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -59,7 +59,7 @@ namespace rdf {
 // read defines
 class PixelGraph;
 
-class DllModuleExport SuperPixelConfig : public ModuleConfig {
+class DllCoreExport SuperPixelConfig : public ModuleConfig {
 
 public:
 	SuperPixelConfig();
@@ -96,7 +96,7 @@ public:
 	std::vector<cv::Rect> boxes;
 };
 
-class DllModuleExport SuperPixel : public Module {
+class DllCoreExport SuperPixel : public Module {
 
 public:
 	SuperPixel(const cv::Mat& img);
@@ -131,7 +131,7 @@ private:
 
 };
 
-class DllModuleExport ScaleSpaceSPConfig : public ModuleConfig {
+class DllCoreExport ScaleSpaceSPConfig : public ModuleConfig {
 
 public:
 	ScaleSpaceSPConfig();
@@ -149,7 +149,7 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllModuleExport ScaleSpaceSuperPixel : public Module {
+class DllCoreExport ScaleSpaceSuperPixel : public Module {
 
 public:
 	ScaleSpaceSuperPixel(const cv::Mat& img);
@@ -175,7 +175,7 @@ protected:
 };
 
 
-class DllModuleExport LocalOrientationConfig : public ModuleConfig {
+class DllCoreExport LocalOrientationConfig : public ModuleConfig {
 
 public:
 	LocalOrientationConfig();
@@ -203,7 +203,7 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllModuleExport LocalOrientation : public Module {
+class DllCoreExport LocalOrientation : public Module {
 
 public:
 	LocalOrientation(const PixelSet& set = PixelSet());
@@ -236,7 +236,7 @@ private:
 
 };
 
-class DllModuleExport GraphCutOrientation : public Module {
+class DllCoreExport GraphCutOrientation : public Module {
 
 public:
 	GraphCutOrientation(const PixelSet& set);

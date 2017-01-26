@@ -39,11 +39,11 @@
 
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -65,11 +65,11 @@ class Region;
 /// FeatureCollection maps one LabelInfo to its features.
 /// In addition it handles the I/O using Json.
 /// </summary>
-class DllModuleExport FeatureCollection {
+class DllCoreExport FeatureCollection {
 
 public:
 	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
-	friend DllModuleExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
+	friend DllCoreExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
 
 	QJsonObject toJson() const;
 	static FeatureCollection read(QJsonObject& jo);
@@ -94,7 +94,7 @@ protected:
 /// here along with it's features retrieved from
 /// groundtruthed images.
 /// </summary>
-class DllModuleExport FeatureCollectionManager {
+class DllCoreExport FeatureCollectionManager {
 
 public:
 	FeatureCollectionManager(const cv::Mat& descriptors = cv::Mat(), const PixelSet& set = PixelSet());
@@ -130,7 +130,7 @@ protected:
 /// read settings file.
 /// </summary>
 /// <seealso cref="ModuleConfig" />
-class DllModuleExport SuperPixelLabelerConfig : public ModuleConfig {
+class DllCoreExport SuperPixelLabelerConfig : public ModuleConfig {
 
 public:
 	SuperPixelLabelerConfig();
@@ -161,7 +161,7 @@ protected:
 /// to each SuperPixel computed in an image.
 /// </summary>
 /// <seealso cref="Module" />
-class DllModuleExport SuperPixelLabeler : public Module {
+class DllCoreExport SuperPixelLabeler : public Module {
 
 public:
 	SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& blobs, const Rect& imgRect);
@@ -196,7 +196,7 @@ private:
 	QString parseLabel(const QString& filePath) const;
 };
 
-class DllModuleExport SuperPixelTrainerConfig : public ModuleConfig {
+class DllCoreExport SuperPixelTrainerConfig : public ModuleConfig {
 
 public:
 	SuperPixelTrainerConfig();
@@ -221,7 +221,7 @@ protected:
 /// to each SuperPixel computed in an image.
 /// </summary>
 /// <seealso cref="Module" />
-class DllModuleExport SuperPixelTrainer : public Module {
+class DllCoreExport SuperPixelTrainer : public Module {
 
 public:
 	SuperPixelTrainer(const FeatureCollectionManager& fcm);

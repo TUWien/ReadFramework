@@ -1,7 +1,7 @@
 # Searches for Qt with the required components
 macro(RDF_FIND_QT)
 	
-	set(CMAKE_AUTOMOC ON)
+	set(CMAKE_AUTOMOC OFF)	# we should not need the Qt meta compiler in the framework!
 	set(CMAKE_AUTORCC OFF)
 	
 	set(CMAKE_INCLUDE_CURRENT_DIR ON)
