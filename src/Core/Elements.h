@@ -151,6 +151,9 @@ public:
 	QPointF leftUpper() const;
 	QPointF rightDown() const;
 
+	QPointF leftUpperCorner() const;
+	QPointF rightDownCorner() const;
+
 	void setRows(int r);
 	int rows() const;
 
