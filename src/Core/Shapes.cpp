@@ -538,7 +538,7 @@ Line Line::moved(const Vector2D & mVec) const {
 
 bool Line::lessX1(const Line& l1, const Line& l2) {
 
-	if (l1.p1().x() < l2.p2().x())
+	if (l1.p1().x() < l2.p1().x())
 		return true;
 	else
 		return false;

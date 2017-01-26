@@ -915,6 +915,22 @@ rdf::Line TableRegion::rightBorder() const {
 	}
 }
 
+QPointF TableRegion::leftUpper() const {
+	if (mPoly.size() != 4)
+		return QPointF();
+	else {
+		return mPoly.polygon()[0];
+	}
+}
+
+QPointF TableRegion::rightDown() const {
+	if (mPoly.size() != 4)
+		return QPointF();
+	else {
+		return mPoly.polygon()[2];
+	}
+}
+
 void TableRegion::setRows(int r) {
 	mRows = r;
 }

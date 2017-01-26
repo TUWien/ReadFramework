@@ -191,6 +191,7 @@ namespace rdf {
 			lt.setAngle(0);
 		}
 		lt.compute();
+		mBwImg = lt.lineImage();
 
 		mHorLines = lt.getHLines();
 		mVerLines = lt.getVLines();
@@ -224,7 +225,8 @@ namespace rdf {
 		//if empty, create it.. can happen if the only xmls are used to set the line information
 		//function errLine needs it for 'tracing'
 		if (mSrcImg.empty()) {
-			mSrcImg = cv::Mat::zeros(mSizeSrc, CV_8UC1);
+			mSrcImg = cv::Mat(mSizeSrc, CV_8UC1);
+			mSrcImg.setTo(0);
 		}
 
 		std::sort(mHorLines.begin(), mHorLines.end(), rdf::Line::lessY1);

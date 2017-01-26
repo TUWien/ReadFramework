@@ -148,6 +148,9 @@ public:
 	rdf::Line leftBorder() const;
 	rdf::Line rightBorder() const;
 
+	QPointF leftUpper() const;
+	QPointF rightDown() const;
+
 	void setRows(int r);
 	int rows() const;
 
