@@ -35,6 +35,7 @@
 #include "WriterDatabase.h"
 #include "WriterRetrieval.h"
 #include "Image.h"
+#include "Utils.h"
 #include "opencv2/ml.hpp"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -42,29 +43,57 @@
 #include <QSharedPointer>
 #include <QImage>
 #include <QDebug>
+#include <QDirIterator>
 #pragma warning(pop)
 
 namespace rdf {
 	TestWriterRetrieval::TestWriterRetrieval() {
 	}
 	void TestWriterRetrieval::run() {
-		//QSharedPointer<rdf::WriterRetrievalConfig> wrc = QSharedPointer<rdf::WriterRetrievalConfig>(new rdf::WriterRetrievalConfig());
-		//wrc->loadSettings();
+		rdf::WriterDatabase wd = rdf::WriterDatabase();
+		WriterVocabulary voc;
+		voc.loadVocabulary("E:/Databases/writer-identification-competition/vocs/trigraph-binarized-gmm-pca96-60cluster-max90-min0.yml");
+		wd.setVocabulary(voc);
 
-		//QString imgPath = "D:/ABP_FirstTestCollection/M_Aigen_am_Inn_007_0021.jpg";
-		//std::string xmlFile = "D:/ABP_FirstTestCollection/page/M_Aigen_am_Inn_007_0021.xml";
+		QString dirPath = "D:/Databases/icdar2011-cropped-invert/";
+		QStringList list;
+		//list << "1-1.png";
+		//list << "1-2.png";
+		//list << "1-3.png";
+		//list << "4-1.png";
+		//list << "4-2.png";
+		//cv::Mat hists;
+		//for(int i = 0; i < list.size(); i++) {
+		//	WriterImage wi = WriterImage();
+		//	QImage img = QImage(dirPath + list[i]);
+		//	wi.setImage(Image::qImage2Mat(img));
+		//	wd.addFile(wi);
+		//}
 
-		//QImage i = QImage(imgPath);
-		//rdf::WriterRetrieval wr = rdf::WriterRetrieval(Image::qImage2Mat(i));
-		//wr.setConfig(wrc);
-		//wr.setXmlPath(xmlFile);
-		//wr.compute();
+		QDirIterator it(dirPath );
+		while(it.hasNext()) {
+			QString curEntry = it.next();
+			if(!QFileInfo(curEntry).isDir()) {
+				WriterImage wi = WriterImage();
+				QImage img = QImage(curEntry);
+				wi.setImage(Image::qImage2Mat(img));
+				wd.addFile(wi);
+				QFileInfo fi = QFileInfo(curEntry);
+				list << fi.baseName();
+			}
+		}
+		wd.writeCompetitionEvaluationFile(list, "c:/tmp/comp.csv");
 
-		std::string gmmPath = "C:/tmp/transkribus-settings/trigraph-gmm-pca64-40cluster-max90-min0-woNormbeforePCA-gmm.yml";
-		cv::Ptr<cv::ml::EM>  mEM = cv::ml::EM::load<cv::ml::EM>(gmmPath);
-		qDebug() << "loading done";
-		std::string out;
+		//QString outputString = "";
+		//for(auto l : list) {
+		//	outputString += l + "=" + l + "\n";
+		//}
+		//QFile file("C:/tmp/gtfile.csv");
+		//if(file.open(QIODevice::WriteOnly)) {
+		//	QTextStream stream(&file);
+		//	stream << outputString;
+		//	file.close();
+		//}
 
-		std::cout << mEM->getMeans();
 	}
 }

@@ -71,6 +71,14 @@ namespace rdf {
 		//writeMatToFile(descriptors, descFile.append("-desc.txt"));
 	}
 
+	void WriterDatabase::addFile(WriterImage wi) {
+		wi.calculateFeatures();
+		wi.filterKeyPoints(mVocabulary.minimumSIFTSize(), mVocabulary.maximumSIFTSize());
+
+		mDescriptors.append(wi.descriptors());
+		mKeyPoints.append(wi.keyPoints());
+	}
+
 	/// <summary>
 	/// Generates the vocabulary according to the type set in the vocabulary variable. If the number of PCA components is larger than 0 a PCA is applied beforehand.
 	/// </summary>
@@ -112,18 +120,27 @@ namespace rdf {
 			allHists.push_back(hist);
 		}
 		
-		 //calculate mean and stddev for L2 normalization
-		cv::Mat means, stddev;
-		for(int i = 0; i < allHists.cols; i++) {
-			cv::Scalar m, s;
-			meanStdDev(allHists.col(i), m, s);
-			means.push_back(m.val[0]);
-			stddev.push_back(s.val[0]);
+		if(mVocabulary.numberOfPCAWhiteningComponents() > 0) {
+			mInfo << "generating PCA whitening";
+			cv::PCA pca = cv::PCA(allHists, cv::Mat(), CV_PCA_DATA_AS_ROW, mVocabulary.numberOfPCAWhiteningComponents());
+			mVocabulary.setPcaWhiteEigenvectors(pca.eigenvectors);
+			mVocabulary.setPcaWhiteEigenvalues(pca.eigenvalues);
+			mVocabulary.setPcaWhiteMean(pca.mean);
 		}
-		stddev.convertTo(stddev, CV_32F);
-		means.convertTo(means, CV_32F);
-		mVocabulary.setHistL2Mean(means);
-		mVocabulary.setHistL2Sigma(stddev);
+		else {
+			//calculate mean and stddev for L2 normalization
+			cv::Mat means, stddev;
+			for(int i = 0; i < allHists.cols; i++) {
+				cv::Scalar m, s;
+				meanStdDev(allHists.col(i), m, s);
+				means.push_back(m.val[0]);
+				stddev.push_back(s.val[0]);
+			}
+			stddev.convertTo(stddev, CV_32F);
+			means.convertTo(means, CV_32F);
+			mVocabulary.setHistL2Mean(means);
+			mVocabulary.setHistL2Sigma(stddev);
+		}
 	}
 	/// <summary>
 	/// Sets the vocabulary for this database
@@ -187,6 +204,10 @@ namespace rdf {
 	/// <param name="filePaths">The file paths.</param>
 	/// <param name="evalFilePath">The eval file path.</param>
 	void WriterDatabase::evaluateDatabase(cv::Mat hists, QStringList classLabels, QStringList filePaths, QString evalFilePath) const {
+		if(classLabels.empty()) {
+			mWarning << "unable to evaluate database without classLabels";
+			return;
+		}
 		mInfo << "starting evaluation";
 		int tp = 0; 
 		int fp = 0;
@@ -336,6 +357,39 @@ namespace rdf {
 		qDebug().noquote() << hardOutputHeader;
 		qDebug().noquote() << hardOutput;
 		
+	}
+	void WriterDatabase::writeCompetitionEvaluationFile(QStringList imageNames, QString outputPath) const {
+		cv::Mat hists;
+		mInfo << "calculating histograms for all images";
+		for(int i = 0; i < mDescriptors.length(); i++) {
+			hists.push_back(mVocabulary.generateHist(mDescriptors[i]));
+		}
+
+		writeCompetitionEvaluationFile(hists, imageNames, outputPath);
+	}
+	void WriterDatabase::writeCompetitionEvaluationFile(cv::Mat hists, QStringList imageNames, QString outputPath) const {
+		cv::Mat dist = mVocabulary.calcualteDistanceMatrix(hists);
+		QString outputString;
+		for(int i = 0; i < hists.rows; i++) {
+			cv::Mat distances = dist.row(i).t();
+			cv::Mat idxs;
+			cv::sortIdx(distances, idxs, CV_SORT_EVERY_COLUMN | CV_SORT_ASCENDING);
+			cv::sort(distances, distances, CV_SORT_EVERY_COLUMN | CV_SORT_ASCENDING);
+
+			for(int j = 0; j < idxs.rows; j++) {
+				if(j != 0)
+					outputString += ",";
+				outputString += imageNames[idxs.at<int>(j)];
+			}
+			outputString += "\n";
+		}
+
+		QFile file(outputPath);
+		if(file.open(QIODevice::WriteOnly)) {
+			QTextStream stream(&file);
+			stream << outputString;
+			file.close();
+		}
 	}
 	/// <summary>
 	/// Debug name.
@@ -499,12 +553,16 @@ namespace rdf {
 		fs["PcaMean"] >> mPcaMean;
 		fs["PcaEigenvectors"] >> mPcaEigenvectors;
 		fs["PcaEigenvalues"] >> mPcaEigenvalues;
+		fs["PcaWhiteMean"] >> mPcaWhiteMean;
+		fs["PcaWhiteEigenvectors"] >> mPcaWhiteEigenvectors;
+		fs["PcaWhiteEigenvalues"] >> mPcaWhiteEigenvalues;
 		fs["L2Mean"] >> mL2Mean;
 		fs["L2Sigma"] >> mL2Sigma;
 		fs["histL2Mean"] >> mHistL2Mean;
 		fs["histL2Sigma"] >> mHistL2Sigma;
 		fs["NumberOfClusters"] >> mNumberOfClusters;
 		fs["NumberOfPCA"] >> mNumberPCA;
+		fs["NumberOfPCAWhitening"] >> mNumPCAWhiteComponents;
 		fs["type"] >> mType;
 		fs["minimumSIFTSize"] >> mMinimumSIFTSize;
 		fs["maximumSIFTSize"] >> mMaximumSIFTSize;
@@ -546,6 +604,7 @@ namespace rdf {
 		fs << "description" << toString().toStdString();
 		fs << "NumberOfClusters" << mNumberOfClusters;
 		fs << "NumberOfPCA" << mNumberPCA;
+		fs << "NumberOfPCAWhitening" << mNumPCAWhiteComponents;
 		fs << "type" << mType;
 		fs << "powerNormalization" << mPowerNormalization;
 		fs << "minimumSIFTSize" << mMinimumSIFTSize;
@@ -554,6 +613,9 @@ namespace rdf {
 		fs << "PcaMean" << mPcaMean;
 		fs << "PcaEigenvectors" << mPcaEigenvectors;
 		fs << "PcaEigenvalues" << mPcaEigenvalues;
+		fs << "PcaWhiteMean" << mPcaWhiteMean;
+		fs << "PcaWhiteEigenvectors" << mPcaWhiteEigenvectors;
+		fs << "PcaWhiteEigenvalues" << mPcaWhiteEigenvalues;
 		fs << "L2Mean" << mL2Mean;
 		fs << "L2Sigma" << mL2Sigma;
 		fs << "histL2Mean" << mHistL2Mean;
@@ -678,6 +740,24 @@ namespace rdf {
 	/// </summary>
 	/// <returns>Mat of the eigenvalues</returns>
 	cv::Mat WriterVocabulary::pcaEigenvalues() const {
+		return mPcaEigenvalues;
+	}
+	void WriterVocabulary::setPcaWhiteMean(cv::Mat mean) {
+		mPcaWhiteMean = mean;
+	}
+	cv::Mat WriterVocabulary::pcaWhiteMean() const {
+		return mPcaWhiteMean;
+	}
+	void WriterVocabulary::setPcaWhiteEigenvectors(cv::Mat ev) {
+		mPcaWhiteEigenvectors = ev;
+	}
+	cv::Mat WriterVocabulary::pcaWhiteEigenvectors() const {
+		return mPcaWhiteEigenvectors;
+	}
+	void WriterVocabulary::setPcaWhiteEigenvalues(cv::Mat ev) {
+		mPcaWhiteEigenvalues = ev;
+	}
+	cv::Mat WriterVocabulary::pcaWhiteEigenvalues() const {
 		return mPcaEigenvalues;
 	}
 	/// <summary>
@@ -827,9 +907,23 @@ namespace rdf {
 	double WriterVocabulary::powerNormalization() const {
 		return mPowerNormalization;
 	}
+	void WriterVocabulary::setNumOfPCAWhiteComp(const int numOfComp) {
+		mNumPCAWhiteComponents = numOfComp;
+	}
+	int WriterVocabulary::numberOfPCAWhiteningComponents() const {
+		return mNumPCAWhiteComponents;
+	}
+	/// <summary>
+	/// Sets the L2 before flag (perform L2 normalization before generating the fisher vector).
+	/// </summary>
+	/// <param name="l2before">The l2before.</param>
 	void WriterVocabulary::setL2Before(const bool l2before) {
 		mL2Before = l2before;
 	}
+	/// <summary>
+	/// Setting if a L2 normalization should be performed before generating the feature vector
+	/// </summary>
+	/// <returns></returns>
 	bool WriterVocabulary::l2before() const {
 		return mL2Before;
 	}
@@ -851,6 +945,10 @@ namespace rdf {
 		else if(type() == WI_BOW)
 			description.append("BOW ");
 		description += " clusters:" + QString::number(mNumberOfClusters) + " pca:" + QString::number(mNumberPCA);
+		if(mNumPCAWhiteComponents > 0)
+			description += " pca whitening components:" + QString::number(mNumPCAWhiteComponents);
+		else
+			description += " no pca whitening";
 		return description;
 	}
 	/// <summary>
@@ -994,6 +1092,15 @@ namespace rdf {
 
 		if(!mHistL2Mean.empty())
 			hist = l2Norm(hist, mHistL2Mean, mHistL2Sigma);
+		if(!mPcaWhiteEigenvalues.empty()) {
+			qDebug() << "applying pca whitening new";		
+			hist = mPcaWhiteEigenvectors*(hist - mPcaWhiteMean).t();
+			cv::Mat latent;
+			cv::pow(mPcaWhiteEigenvalues + FLT_EPSILON, -0.5, latent);
+			hist = cv::Mat::diag(latent)*hist;
+			hist /= cv::norm(hist, cv::NORM_L1);
+			hist = hist.t();
+		}
 
 		return hist;
 	}

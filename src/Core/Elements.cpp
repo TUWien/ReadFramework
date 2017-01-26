@@ -931,6 +931,34 @@ QPointF TableRegion::rightDown() const {
 	}
 }
 
+QPointF TableRegion::leftUpperCorner() const {
+
+	if (mPoly.size() != 4)
+		return QPointF();
+	else {
+		QPointF lu = mPoly.polygon()[0];
+		QPointF ru = mPoly.polygon()[1];
+		QPointF ld = mPoly.polygon()[3];
+		//check which coordinate is the leftmost (upperleft or downleft)
+		return QPointF(lu.x() < ld.x() ? lu.x() : ld.x(), 
+			lu.y() < ru.y() ? lu.y() : ru.y());
+	}
+}
+
+QPointF TableRegion::rightDownCorner() const {
+
+	if (mPoly.size() != 4)
+		return QPointF();
+	else {
+		QPointF ru = mPoly.polygon()[1];
+		QPointF rd = mPoly.polygon()[2];
+		QPointF ld = mPoly.polygon()[3];
+		//check which coordinate is the leftmost (upperleft or downleft)
+		return QPointF(ru.x() > rd.x() ? ru.x() : rd.x(), 
+			rd.y() > ld.y() ? rd.y() : ld.y());
+	}
+}
+
 void TableRegion::setRows(int r) {
 	mRows = r;
 }
