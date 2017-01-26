@@ -55,6 +55,7 @@
 // Qt defines
 
 namespace rdf {
+	class WriterImage;
 
 	class DllModuleExport WriterVocabulary {
 
@@ -85,6 +86,12 @@ namespace rdf {
 		cv::Mat pcaEigenvectors() const;
 		void setPcaEigenvalues(cv::Mat ev);
 		cv::Mat pcaEigenvalues() const;
+		void setPcaWhiteMean(cv::Mat mean);
+		cv::Mat pcaWhiteMean() const;
+		void setPcaWhiteEigenvectors(cv::Mat ev);
+		cv::Mat pcaWhiteEigenvectors() const;
+		void setPcaWhiteEigenvalues(cv::Mat ev);
+		cv::Mat pcaWhiteEigenvalues() const;
 		void setL2Mean(const cv::Mat l2mean);
 		cv::Mat l2Mean() const;
 		void setL2Sigma(const cv::Mat l2sigma);
@@ -106,7 +113,9 @@ namespace rdf {
 		int maximumSIFTSize() const;
 		void setPowerNormalization(const double power);
 		double powerNormalization() const;
-		
+		void setNumOfPCAWhiteComp(const int numOfComp);
+		int numberOfPCAWhiteningComponents() const;
+
 		void setL2Before(const bool l2before);
 		bool l2before() const;
 
@@ -136,6 +145,9 @@ namespace rdf {
 		cv::Mat mPcaMean = cv::Mat();
 		cv::Mat mPcaEigenvectors = cv::Mat();
 		cv::Mat mPcaEigenvalues = cv::Mat();
+		cv::Mat mPcaWhiteMean = cv::Mat();
+		cv::Mat mPcaWhiteEigenvectors = cv::Mat();
+		cv::Mat mPcaWhiteEigenvalues = cv::Mat();
 		cv::Mat mL2Mean = cv::Mat();
 		cv::Mat mL2Sigma = cv::Mat();
 		cv::Mat mHistL2Mean = cv::Mat();
@@ -151,6 +163,7 @@ namespace rdf {
 
 		QString mVocabularyPath = QString();
 		bool mL2Before = false;
+		int mNumPCAWhiteComponents = 0;
 	};
 
 // read defines
@@ -160,6 +173,7 @@ namespace rdf {
 		WriterDatabase();
 
 		void addFile(const QString filePath);
+		void addFile(WriterImage wi);
 		void generateVocabulary();
 
 		void setVocabulary(const WriterVocabulary voc);
@@ -168,6 +182,9 @@ namespace rdf {
 
 		void evaluateDatabase(QStringList classLabels, QStringList filePaths, QString filePath = QString());
 		void evaluateDatabase(cv::Mat hists, QStringList classLabels, QStringList filePaths, QString filePath = QString()) const;
+
+		void writeCompetitionEvaluationFile(QStringList imageNames, QString outputPath) const;
+		void writeCompetitionEvaluationFile(cv::Mat hists, QStringList imageNames, QString outputPath) const;
 
 	private:
 		QString debugName() const;

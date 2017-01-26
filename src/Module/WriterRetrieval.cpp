@@ -258,6 +258,7 @@ namespace rdf {
 			mVoc.setMaximumSIFTSize(settings.value("maxSIFTSize", mVoc.maximumSIFTSize()).toInt());
 			mVoc.setMinimumSIFTSize(settings.value("minSIFTSize", mVoc.minimumSIFTSize()).toInt());
 			mVoc.setPowerNormalization(settings.value("powerNormalization", mVoc.powerNormalization()).toInt());
+			mVoc.setNumOfPCAWhiteComp(settings.value("numberOfPCAWhitening", mVoc.numberOfPCAWhiteningComponents()).toInt());
 			mInfo << "settings set to: type: " << mVoc.type() << " numberOfClusters: " << mVoc.numberOfCluster() << " numberOfPCA:" << mVoc.numberOfPCA();
 		}
 
