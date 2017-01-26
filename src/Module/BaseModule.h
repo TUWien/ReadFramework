@@ -35,6 +35,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 #include <QSharedPointer>
+#include <QDebug>
 #pragma warning(pop)
 
 #include "opencv2/core/core.hpp"
