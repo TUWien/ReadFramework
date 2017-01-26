@@ -459,17 +459,17 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 	return textLine;
 }
 
-void PixelSet::draw(QPainter& p, const QFlag& options, const Pixel::DrawFlag& pixelOptions) const {
+void PixelSet::draw(QPainter& p, const DrawFlag& options, const Pixel::DrawFlag& pixelOptions) const {
 
 	// NOTE: that int cast is not needed - but gcc is confused otherwise
-	if ((int)options & (int)draw_pixels) {
+	if (options & draw_pixels) {
 		for (auto px : mSet)
 			px->draw(p, 0.3, pixelOptions);
 	}
 
 	//polyLine(0.0).draw(p);
 
-	if ((int)options & (int)draw_rect) {
+	if (options & draw_rect) {
 		QPen oPen = p.pen();
 		QPen nPen = oPen;
 		nPen.setWidth(3);
@@ -478,7 +478,7 @@ void PixelSet::draw(QPainter& p, const QFlag& options, const Pixel::DrawFlag& pi
 		p.setPen(oPen);
 	}
 
-	if ((int)options & (int)draw_poly)
+	if (options & draw_poly)
 		convexHull().draw(p);
 }
 
@@ -1055,7 +1055,7 @@ void TextLineSet::scale(double factor) {
 	updateLine();
 }
 
-void TextLineSet::draw(QPainter & p, const QFlag & options, const Pixel::DrawFlag& pixelOptions) const {
+void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::DrawFlag& pixelOptions) const {
 
 	if (options & (int)PixelSet::draw_pixels) {
 		for (auto px : mSet) {

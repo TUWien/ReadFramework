@@ -173,8 +173,6 @@ public:
 
 	void operator+=(const PixelSet& set);
 
-	Q_DECLARE_FLAGS(DrawFlags, DrawFlag)
-
 	QSharedPointer<Pixel> operator[](int idx) const;
 
 	bool isEmpty() const;
@@ -207,7 +205,7 @@ public:
 
 	virtual void draw(
 		QPainter& p, 
-		const QFlag& options = draw_pixels | draw_poly,
+		const DrawFlag& options = (DrawFlag)(draw_pixels | draw_poly),
 		const Pixel::DrawFlag& pixelOptions = (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_label_colors)) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
@@ -218,8 +216,6 @@ protected:
 
 	Polygon polygon(const QVector<Vector2D>& pts) const;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(PixelSet::DrawFlags)
 
 class DllCoreExport TextLineSet : public PixelSet {
 
@@ -233,7 +229,7 @@ public:
 	void append(const QVector<QSharedPointer<Pixel> >& set) override;
 	void scale(double factor) override;
 
-	void draw(QPainter& p, const QFlag& options = PixelSet::draw_poly, 
+	void draw(QPainter& p, const DrawFlag& options = PixelSet::draw_poly, 
 		const Pixel::DrawFlag& pixelOptions = Pixel::draw_ellipse) const override;
 
 	Line line() const;
