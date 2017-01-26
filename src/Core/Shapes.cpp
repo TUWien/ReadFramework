@@ -317,6 +317,13 @@ Vector2D Line::p2() const {
 	return mLine.p2();
 }
 
+Vector2D Line::center() const {
+
+	Vector2D rv = p2() - p1();
+	rv /= 2.0;
+	return p1() + rv;
+}
+
 /// <summary>
 /// Determines whether the specified m angle tresh is horizontal.
 /// </summary>
@@ -487,7 +494,7 @@ double Line::minDistance(const Line& l) const {
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.
 /// </summary>
-/// <param name="p">The p.</param>
+/// <param name="p">The point p.</param>
 /// <returns>The distance of point p.</returns>
 double Line::distance(const Vector2D& p) const {
 
@@ -520,7 +527,7 @@ bool Line::within(const Vector2D& p) const {
 
 	Vector2D tmp = mLine.p2() - mLine.p1();
 	Vector2D pe = p - mLine.p2();	//p-end
-	Vector2D ps = p - mLine.p2();	//p-start
+	Vector2D ps = p - mLine.p1();	//p-start
 	
 	return (tmp.x()*pe.x() + tmp.y()*pe.y()) * (tmp.x()*ps.x() + tmp.y()*ps.y()) < 0;
 
@@ -1100,6 +1107,17 @@ Rect Rect::fromPoints(const QVector<Vector2D>& pts) {
 	return Rect(left, top, right-left, bottom-top);
 }
 
+QString Rect::toString() const {
+	
+	QString msg = "Rect [";
+	msg += "x: " + QString::number(mTopLeft.x());
+	msg += ", y: " + QString::number(mTopLeft.y());
+	msg += ", width: " + QString::number(mSize.x());
+	msg += ", height: " + QString::number(mSize.y());
+
+	return msg;
+}
+
 // Ellipse --------------------------------------------------------------------
 Ellipse::Ellipse() {
 
@@ -1132,21 +1150,6 @@ QDebug operator<<(QDebug d, const Ellipse& e) {
 	return d;
 }
 
-//Ellipse Ellipse::fromData(const cv::Mat & means, const cv::Mat & cov) {
-//
-//	// TODO: not tested
-//	assert(means.depth() == CV_64FC1 && means.rows == 1 && means.cols == 2);
-//	assert(cov.depth() == CV_64FC1 && cov.rows == 2 && cov.cols == 2);
-//
-//	// get the center
-//	Ellipse e(Vector2D(means.ptr<double>()[0], means.ptr<double>()[1]));
-//
-//	if (e.axisFromCov(cov))
-//		return e;
-//	else
-//		return Ellipse();
-//}
-
 Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts) {
 		
 	// estimate center
@@ -1156,8 +1159,6 @@ Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts) {
 		c += cp;
 	}
 	c /= (double)pts.size();
-
-	Ellipse e(c);
 
 	// convert pts
 	cv::Mat cPointsMat((int)pts.size(), 2, CV_32FC1);
@@ -1169,12 +1170,39 @@ Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts) {
 		ptrM[1] = (float)pts[rIdx].y;
 	}
 
+	return fromData(cPointsMat, c);
+}
+
+Ellipse Ellipse::fromData(const QVector<Vector2D>& pts) {
+
+	// convert pts
+	cv::Mat cPointsMat((int)pts.size(), 2, CV_32FC1);
+	Vector2D center;
+
+	for (int rIdx = 0; rIdx < cPointsMat.rows; rIdx++) {
+		float* ptrM = cPointsMat.ptr<float>(rIdx);
+
+		const Vector2D& pt = pts[rIdx];
+
+		ptrM[0] = (float)pt.x();
+		ptrM[1] = (float)pt.y();
+		center += pt;
+	}
+	
+	center /= pts.size();
+
+	return fromData(cPointsMat, center);
+}
+
+Ellipse Ellipse::fromData(const cv::Mat & pts, const Vector2D & center) {
+	
 	// find the angle
-	cv::PCA pca(cPointsMat, cv::Mat(), CV_PCA_DATA_AS_ROW);
+	cv::PCA pca(pts, cv::Mat(), CV_PCA_DATA_AS_ROW);
 
 	Vector2D eVec(pca.eigenvectors.at<float>(0,0),
-				 pca.eigenvectors.at<float>(0,1));
+		pca.eigenvectors.at<float>(0,1));
 
+	Ellipse e(center);
 	e.setAngle(eVec.angle());
 
 	// now compute and equalize the axis
@@ -1188,52 +1216,6 @@ Ellipse Ellipse::fromData(const std::vector<cv::Point>& pts) {
 
 	return e;
 }
-
-//Ellipse Ellipse::fromImage(const cv::Mat & img) {
-//
-//	// we expect a binary region here
-//	assert(img.depth() == CV_8U);
-//
-//	cv::Moments m = cv::moments(img, true);
-//
-//	// get the center
-//	double area = m.m00;
-//	Vector2D c(m.m01 / area, m.m10 / area);
-//	Ellipse e(c);
-//
-//	cv::Mat cov(2, 2, CV_64FC1);
-//	cov.at<double>(0, 0) = m.nu21;
-//	cov.at<double>(0, 1) = m.nu02;
-//	cov.at<double>(1, 0) = m.nu20;
-//	cov.at<double>(1, 1) = m.nu12;
-//
-//	if (e.axisFromCov(cov))
-//		return e;
-//	else
-//		return Ellipse();
-//}
-//
-//bool Ellipse::axisFromCov(const cv::Mat & cov) {
-//
-//	assert(cov.depth() == CV_64FC1);
-//
-//	cv::Mat eVal, eVec;
-//	bool worked = cv::eigen(cov, eVal, eVec);
-//
-//	if (!worked) {
-//		qWarning() << "warning cv::eigen did not seem to work...";
-//		return false;
-//	}
-//
-//	// get axis from eigen values
-//	mAxis = Vector2D(eVal.ptr<double>()[0], eVal.ptr<double>(1)[0]);
-//	
-//	// get angle of first eigen vector
-//	Vector2D vec(eVec.ptr<double>()[0], eVec.ptr<double>()[1]);
-//	mAngle = vec.angle();
-//
-//	return true;
-//}
 
 bool Ellipse::isNull() const {
 	return mIsNull;

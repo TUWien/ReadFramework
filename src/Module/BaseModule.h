@@ -81,7 +81,23 @@ protected:
 	virtual void save(QSettings& settings) const;
 
 	QString mModuleName;						/**< the module's name.**/
-	int checkIntParam(int param, int min, int max, const QString& name = "param") const;
+
+	template <class num>
+	num checkParam(num param, num min, num max, const QString & name) const {
+
+		if (param < min) {
+			qWarning().noquote() << name << "must be >" << min << "but it is: " << param;
+			return min;
+		}
+
+		if (param > max) {
+			qWarning().noquote() << name << "must be <" << max << "but it is: " << param;
+			return max;
+		}
+
+		return param;
+	};
+
 };
 
 

@@ -189,7 +189,7 @@ void LayoutTest::layoutToXml() const {
 	rdf::TextLineSegmentation textLines(sp);
 	
 	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+		qWarning() << "could not compute text line segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
@@ -380,17 +380,21 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	if (!pse.compute())
 		qWarning() << "could not compute set orientation";
 	
+	// drawing
+	cv::Mat nImg = img.clone();
+
+	//// draw edges
+	//rImg = textBlocks.draw(rImg);
+	//// save super pixel image
+	nImg = superPixel.draw(nImg);
+	//rImg = tabStops.draw(rImg);
+	//rImg = spc.draw(rImg);
+	QString imgPathN = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-nomacs", "png");
+	rdf::Image::save(nImg, imgPathN);
+	qDebug() << "debug image added" << imgPathN;
+
 	// pixel labeling
 	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
-	//FeatureCollectionManager fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
-
-	//// train classifier
-	//SuperPixelTrainer spt(fcm);
-
-	//if (!spt.compute())
-	//	qCritical() << "could not train data...";
-
-	//auto model = spt.model();
 
 	SuperPixelClassifier spc(src, sp);
 	spc.setModel(model);
@@ -403,33 +407,38 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//if (!tabStops.compute())
 	//	qWarning() << "could not compute text block segmentation!";
 
+
 	// find text lines
 	rdf::TextLineSegmentation textLines(sp.pixels());
-	textLines.config()->setMinDistFactor(10);
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
+
 	if (!textLines.compute())
-		qWarning() << "could not compute text block segmentation!";
+		qWarning() << "could not compute text line segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
 
 	// drawing
-	//cv::Mat rImg(img.rows, img.cols, CV_8UC1, cv::Scalar::all(150));
 	cv::Mat rImg = img.clone();
+	rImg = textLines.draw(rImg);
 
 	//// draw edges
 	//rImg = textBlocks.draw(rImg);
-	//rImg = lo.draw(rImg, "1012", 256);
-	//rImg = lo.draw(rImg, "507", 128);
-	//rImg = lo.draw(rImg, "507", 64);
-
 	//// save super pixel image
 	//rImg = superPixel.draw(rImg);
 	//rImg = tabStops.draw(rImg);
 	rImg = spc.draw(rImg);
 	rImg = textLines.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
-	rdf::Image::save(rImg, maskPath);
-	qDebug() << "debug image added" << maskPath;
+	QString imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "debug image added" << imgPath;
+
+	// draw a second image ---------------------------------
+	rImg = img.clone();
+
+	rImg = spc.draw(rImg);
+	imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-sp");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "debug image added" << imgPath;
 
 	//// write XML -----------------------------------
 	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());

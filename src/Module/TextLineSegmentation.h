@@ -61,12 +61,20 @@ public:
 
 	virtual QString toString() const override;
 
-	double minDistFactor() const;
-	void setMinDistFactor(double val);
+	void setMinLineLength(int length);
+	int minLineLength() const;
+
+	void setMinPointDistance(double dist);
+	double minPointDistance() const;
+
+	void setErrorMultiplier(double multiplier);
+	double errorMultiplier() const;
 
 protected:
 
-	double mMinDistFactor = 10.0;
+	int mMinLineLength = 10;			// minimum text line length when clustering
+	double mMinPointDist = 80.0;		// acceptable minimal distance of a point to a line
+	double mErrorMultiplier = 2.0;		// maximal increase of error when merging two lines
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
@@ -75,7 +83,7 @@ protected:
 class DllModuleExport TextLineSegmentation : public Module {
 
 public:
-	TextLineSegmentation(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TextLineSegmentation(const PixelSet& set = PixelSet());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -88,22 +96,18 @@ public:
 	QVector<QSharedPointer<TextLine> > textLines() const;
 
 private:
-	QVector<QSharedPointer<Pixel> > mSuperPixels;
+	PixelSet mSet;
 	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
-	QVector<PixelSet> mSets;
+	QVector<QSharedPointer<TextLineSet> > mTextLines;
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, double factor = 10.0) const;
-	QVector<QSharedPointer<LineEdge> > filterEdges(const QVector<QSharedPointer<LineEdge> >& edges, const QVector<Line>& lines) const;
-	QVector<PixelSet> toSets(const QVector<QSharedPointer<LineEdge> > & edges) const;
 
-	QVector<PixelSet> merge(const QVector<PixelSet>& sets, double overlap = 2.0) const;	// TODO: delete
-	QVector<PixelSet> filter(const QVector<PixelSet>& sets, double sizeRatio = 0.5) const;	// TODO: delete
-	PixelSet findSet(const QVector<PixelSet>& sets, const QString& id) const;	// TODO: move this to a PixelSetManager
-
-	void slac(const QVector<QSharedPointer<LineEdge> >& edges) const;
-
+	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph) const;
+	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
+	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
+	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;
+	void filterDuplicates(PixelSet& set) const;
 };
 
 };

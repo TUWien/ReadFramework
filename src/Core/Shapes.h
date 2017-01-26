@@ -93,6 +93,7 @@ public:
 	// getter
 	Vector2D p1() const;
 	Vector2D p2() const;
+	Vector2D center() const;
 	QLineF line() const;
 	QPolygonF toPoly() const;
 
@@ -379,6 +380,8 @@ public:
 	
 	static Rect fromPoints(const QVector<Vector2D>& pts);
 
+	virtual QString toString() const;
+
 protected:
 	bool mIsNull = true;
 	
@@ -396,6 +399,8 @@ public:
 	DllCoreExport friend QDebug operator<< (QDebug d, const Ellipse &e);
 
 	static Ellipse fromData(const std::vector<cv::Point>& pts);
+	static Ellipse fromData(const QVector<Vector2D>& pts);
+	static Ellipse fromData(const cv::Mat& pts, const Vector2D& center);
 	//static Ellipse fromData(const cv::Mat& means, const cv::Mat& covs);
 	//static Ellipse fromImage(const cv::Mat& img);
 	//bool axisFromCov(const cv::Mat& cov);

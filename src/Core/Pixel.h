@@ -208,15 +208,20 @@ public:
 	cv::KeyPoint toKeyPoint() const;
 
 	enum DrawFlag {
-		draw_ellipse_only = 0,
-		draw_stats_only,
-		draw_ellipse_stats,
-		draw_all,
+		draw_none				= 0x00,
+		draw_ellipse			= 0x01,
+		draw_stats				= 0x02,
+		draw_center				= 0x04,
+		draw_label_colors		= 0x08,
+		draw_tab_stops			= 0x10,
+		draw_id					= 0x20,
+
+		draw_all				= 0xFF,
 
 		draw_end
 	};
 
-	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = draw_stats_only) const;
+	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = (DrawFlag)(draw_stats | draw_ellipse | draw_label_colors)) const;
 
 protected:
 	bool mIsNull = true;
@@ -237,11 +242,15 @@ public:
 		const QSharedPointer<Pixel> second,
 		const QString& id = QString());
 
+	friend DllCoreExport bool operator<(const PixelEdge& pe1, const PixelEdge& pe2);
+	friend DllCoreExport bool operator<(const QSharedPointer<PixelEdge>& pe1, const QSharedPointer<PixelEdge>& pe2);
+
 	bool isNull() const;
 
 	virtual double edgeWeight() const;
 	Line edge() const;
 	void draw(QPainter& p) const;
+	virtual bool lessThan(const PixelEdge& e) const;
 
 	QSharedPointer<Pixel> first() const;
 	QSharedPointer<Pixel> second() const;
@@ -264,6 +273,7 @@ public:
 	LineEdge(const QSharedPointer<Pixel> first, 
 		const QSharedPointer<Pixel> second,
 		const QString& id = QString());
+	friend DllCoreExport bool operator<(const QSharedPointer<LineEdge>& le1, const QSharedPointer<LineEdge>& le2);
 
 	virtual double edgeWeight() const override;
 
@@ -273,15 +283,5 @@ protected:
 	double statsWeight(const QSharedPointer<Pixel>& pixel) const;
 	double calcWeight() const;
 };
-
-// pixel distance functions
-
-namespace PixelDistance {
-	double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-	double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-
-	typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
-}
-
 
 };
