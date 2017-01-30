@@ -253,9 +253,9 @@ namespace rdf {
 		for (auto l : hline) {
 
 			cv::Point2d pStart(l.p1().x(), l.p1().y());
-			pStart -= offset;
+			pStart += offset;
 			cv::Point2d pEnd(l.p2().x(), l.p2().y());
-			pEnd -= offset;
+			pEnd += offset;
 
 			cv::line(img, pStart, pEnd, hCol, (int)l.thickness(), 8, 0);
 		}
@@ -263,9 +263,9 @@ namespace rdf {
 		for (auto l : vline) {
 
 			cv::Point2d pStart(l.p1().x(), l.p1().y());
-			pStart -= offset;
+			pStart += offset;
 			cv::Point2d pEnd(l.p2().x(), l.p2().y());
-			pEnd -= offset;
+			pEnd += offset;
 
 			cv::line(img, pStart, pEnd, vCol, (int)l.thickness(), 8, 0);
 		}
