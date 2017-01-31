@@ -121,18 +121,18 @@ namespace rdf {
 		FormFeatures formTempl(imgTemplG);
 		formTempl.compute();
 
-		FormFeatures cmpImg(inputG);
-		cmpImg.compute();
-		if (cmpImg.compareWithTemplate(formTempl)) {
-			qDebug() << "Match is true";
-		} else {
-			qDebug() << "Match is false";
-		}
+		//FormFeatures cmpImg(inputG);
+		//cmpImg.compute();
+		//if (cmpImg.compareWithTemplate(formTempl)) {
+		//	qDebug() << "Match is true";
+		//} else {
+		//	qDebug() << "Match is false";
+		//}
 
-		cv::Mat detLineImg = inputImg.clone();
-		//rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
-		//detLineImg = cmpImg.getMatchedLineImg(detLineImg);
-		detLineImg = cmpImg.getMatchedLineImg(imgTempl, cmpImg.offset());
+		//cv::Mat detLineImg = inputImg.clone();
+		////rdf::LineTrace::generateLineImage(cmpImg.horLines(), cmpImg.verLines(), inputG);
+		////detLineImg = cmpImg.getMatchedLineImg(detLineImg);
+		//detLineImg = cmpImg.getMatchedLineImg(imgTempl, cmpImg.offset());
 		//end test registration
 		//-------------------------------------------------------------------------------------		
 		
@@ -241,7 +241,8 @@ namespace rdf {
 		////rdf::Image::imageInfo(binImg, "binImg");
 		////qDebug() << testBin << " in " << dt;
 		
-		QImage resultImg = rdf::Image::mat2QImage(detLineImg);
+		//QImage resultImg = rdf::Image::mat2QImage(detLineImg);
+		QImage resultImg;
 
 		if (!mConfig.outputPath().isEmpty()) {
 			qDebug() << "saving to" << mConfig.outputPath();

@@ -34,7 +34,7 @@
 
 #include "BaseModule.h"
 #include "LineTrace.h"
-
+#include "Elements.h"
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 
@@ -91,25 +91,35 @@ namespace rdf {
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-		bool loadTemplateDatabase(QString db);
-		QVector<rdf::FormFeatures> templatesDb() const;
-
-		cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0,0)) const;
-
 		void setInputImg(const cv::Mat& img);
 		void setMask(const cv::Mat& mask);
 		bool isEmpty() const override;
 		bool compute() override;
 		bool computeBinaryInput();
-		bool compareWithTemplate(const FormFeatures& fTempl);
+
+		//old version
+		//bool loadTemplateDatabase(QString db);
+		//QVector<rdf::FormFeatures> templatesDb() const;
+		//bool compareWithTemplate(const FormFeatures& fTempl);
+		//cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0, 0)) const;
+		//QVector<rdf::Line> horLinesMatched() const;
+		//QVector<rdf::Line> verLinesMatched() const;
+		bool readTemplate(QSharedPointer<rdf::FormFeatures>& templateForm);
+		bool estimateRoughAlignment(bool useBinaryImg = false);
+
+		bool isEmptyLines() const;
+		bool isEmptyTable() const;
+
+		void setTemplateName(QString s);
+		QString templateName() const;
+
 		cv::Size sizeImg() const;
 		void setSize(cv::Size s);
 		QVector<rdf::Line> horLines() const;
 		void setHorLines(const QVector<rdf::Line>& h);
-		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
 		void setVerLines(const QVector<rdf::Line>& v);
-		QVector<rdf::Line> verLinesMatched() const;
+
 		cv::Point offset() const;
 		double error() const;
 
@@ -125,10 +135,17 @@ namespace rdf {
 		void setFormName(QString s);
 		QString formName() const;
 
+		
+		void setCells(QVector<QSharedPointer<rdf::TableCell>> c);
+		QVector<QSharedPointer<rdf::TableCell>> cells() const;
+		void setRegion(QSharedPointer<rdf::TableRegion> r);
+		QSharedPointer<rdf::TableRegion> region() const;
+
 	protected:
 
-		float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
-		void findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const;
+		//old version
+		//float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
+		//void findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const;
 		
 
 	private:
@@ -144,10 +161,11 @@ namespace rdf {
 		QVector<rdf::Line> mHorLines;
 		QVector<rdf::Line> mVerLines;
 
-		QVector<rdf::FormFeatures> mTemplates;
+		//rdf::FormFeatures mTemplateForm;
+		QSharedPointer<rdf::FormFeatures> mTemplateForm;
 
-		QVector<rdf::Line> mHorLinesMatched;
-		QVector<rdf::Line> mVerLinesMatched;
+		//QVector<rdf::Line> mHorLinesMatched;
+		//QVector<rdf::Line> mVerLinesMatched;
 		cv::Point mOffset;
 		cv::Size mSizeSrc;
 
@@ -155,6 +173,10 @@ namespace rdf {
 
 		bool checkInput() const override;
 		QString mFormName;
+		QString mTemplateName;
+
+		QVector<QSharedPointer<rdf::TableCell>> mCells;
+		QSharedPointer<rdf::TableRegion> mRegion;
 
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;
