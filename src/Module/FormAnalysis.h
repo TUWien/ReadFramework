@@ -104,8 +104,9 @@ namespace rdf {
 		//cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0, 0)) const;
 		//QVector<rdf::Line> horLinesMatched() const;
 		//QVector<rdf::Line> verLinesMatched() const;
-		bool readTemplate(QSharedPointer<rdf::FormFeatures>& templateForm);
+		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
 		bool estimateRoughAlignment(bool useBinaryImg = false);
+		cv::Mat drawAlignment();
 
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;

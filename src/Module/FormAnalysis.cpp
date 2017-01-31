@@ -375,7 +375,7 @@ namespace rdf {
 	//}
 
 
-bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures>& templateForm) {
+bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) {
 	
 	if (mTemplateName.isEmpty()) {
 		return false;
@@ -547,6 +547,22 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 	//rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), mSrcImg, cv::Scalar(255, 0, 0), cv::Scalar(255, 0, 0), -lU + shift);
 
 	return true;
+}
+
+cv::Mat FormFeatures::drawAlignment() {
+
+	if (mSrcImg.empty()) {
+		cv::Mat alignmentImg(mSizeSrc, CV_8UC3);
+
+		rdf::LineTrace::generateLineImage(mHorLines, mVerLines, alignmentImg, cv::Scalar(0, 255, 0), cv::Scalar(0, 255, 0), mOffset);
+		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), alignmentImg, cv::Scalar(255, 0, 0), cv::Scalar(255, 0, 0), mOffset);
+		
+		return alignmentImg;
+	} else {
+		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), mSrcImg, cv::Scalar(255), cv::Scalar(255), mOffset);
+	}
+
+	return mSrcImg;
 }
 
 bool FormFeatures::isEmptyLines() const {
