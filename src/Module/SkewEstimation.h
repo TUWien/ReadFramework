@@ -46,11 +46,11 @@
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -59,7 +59,7 @@
 namespace rdf {
 
 
-	class DllModuleExport BaseSkewEstimationConfig : public ModuleConfig {
+	class DllCoreExport BaseSkewEstimationConfig : public ModuleConfig {
 
 	public:
 		BaseSkewEstimationConfig();
@@ -121,7 +121,7 @@ namespace rdf {
 /// "Skew estimation of natural images based on a salient line detector", Hyung Il Koo and Nam Ik Cho
 /// </summary>
 /// <seealso cref="Module" />
-	class DllModuleExport BaseSkewEstimation : public Module {
+	class DllCoreExport BaseSkewEstimation : public Module {
 
 	public:
 		enum EdgeDirection { HORIZONTAL = 0, VERTICAL };

@@ -43,11 +43,11 @@
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -55,7 +55,7 @@
 
 namespace rdf {
 
-class DllModuleExport SimpleBinarizationConfig : public ModuleConfig {
+class DllCoreExport SimpleBinarizationConfig : public ModuleConfig {
 
 public:
 	SimpleBinarizationConfig();
@@ -77,7 +77,7 @@ protected:
 /// A simple binarization module using a defined threshold.
 /// </summary>
 /// <seealso cref="Module" />
-class DllModuleExport SimpleBinarization : public Module {
+class DllCoreExport SimpleBinarization : public Module {
 
 public:
 	SimpleBinarization(const cv::Mat& img);
@@ -97,7 +97,7 @@ private:
 
 };
 
-class DllModuleExport BaseBinarizationSuConfig : public ModuleConfig {
+class DllCoreExport BaseBinarizationSuConfig : public ModuleConfig {
 
 public:
 	BaseBinarizationSuConfig();
@@ -119,7 +119,7 @@ private:
 /// "Binarization of Historical Document Images Using Local Maximum and Minimum", Bolan Su, Shijian Lu and Chew Lim Tan, DAS 2010.
 /// </summary>
 /// <seealso cref="Module" />
-class DllModuleExport BaseBinarizationSu : public Module {
+class DllCoreExport BaseBinarizationSu : public Module {
 
 public:
 	BaseBinarizationSu(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
@@ -164,7 +164,7 @@ protected:
 /// In contrast to DkSegmentationSu the ContrastImg is adapted and the strokeWidth is constant.
 /// </summary>
 /// <seealso cref="BaseBinarizationSu" />
-class DllModuleExport BinarizationSuAdapted : public BaseBinarizationSu {
+class DllCoreExport BinarizationSuAdapted : public BaseBinarizationSu {
 
 public:
 	BinarizationSuAdapted(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
@@ -193,7 +193,7 @@ private:
 /// (Foreground estimation is performed by a Mean Filter with a size of 32x32 px).
 /// </summary>
 /// <seealso cref="BinarizationSuAdapted" />
-	class DllModuleExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
+	class DllCoreExport BinarizationSuFgdWeight : public BinarizationSuAdapted {
 
 public:
 	BinarizationSuFgdWeight(const cv::Mat& img, const cv::Mat& mask = cv::Mat());

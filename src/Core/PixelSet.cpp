@@ -72,11 +72,6 @@ bool PixelSet::contains(const QSharedPointer<Pixel>& pixel) const {
 	return mSet.contains(pixel);
 }
 
-void PixelSet::merge(const PixelSet& o) {
-
-	mSet.append(o.pixels());
-}
-
 void PixelSet::add(const QSharedPointer<Pixel>& pixel) {
 	mSet << pixel;
 }
@@ -91,12 +86,12 @@ void PixelSet::remove(const QSharedPointer<Pixel>& pixel) {
 		qWarning() << "cannot remove a pixel which is not in the set:" << pixel->id();
 }
 
-QVector<QSharedPointer<Pixel> > PixelSet::pixels() const {
-	return mSet;
-}
-
 int PixelSet::size() const {
 	return mSet.size();
+}
+
+QVector<Vector2D> PixelSet::centers() const {
+	return pointSet(DBL_MAX);
 }
 
 /// <summary>
@@ -376,30 +371,6 @@ void PixelSet::scale(double factor) {
 		px->scale(factor);
 }
 
-double PixelSet::overlapRatio(const PixelSet & set, double angle) const {
-
-	Ellipse me = fitEllipse();
-	Ellipse oe = set.fitEllipse();
-
-	// get upper overlap
-	Vector2D muv = me.getPoint(angle);
-	Vector2D ouv = oe.getPoint(angle);
-	Vector2D a(1,0);
-	a.rotate(angle);
-
-	double vu = a * (ouv - muv);
-
-	// get lower overlap
-	muv = me.getPoint(-angle);
-	ouv = oe.getPoint(-angle);
-	a.rotate(CV_PI);
-	double vl = a * (ouv - muv);
-
-	//qDebug() << "vu:" << vu << "vl:" << vl;
-
-	return abs(vu) + abs(vl);
-}
-
 /// <summary>
 /// This is a convenience function that connects SuperPixels.
 /// It is recommended to use the connector classes respectively.
@@ -467,7 +438,7 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 		}
 		// two different idx? - merge the sets
 		else if (fIdx != sIdx) {
-			sets[fIdx]->merge(*sets[sIdx]);
+			sets[fIdx]->append(sets[sIdx]->pixels());
 			sets.remove(sIdx);
 		}
 		// else : nothing to do - they are both already added
@@ -488,17 +459,17 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 	return textLine;
 }
 
-void PixelSet::draw(QPainter& p, const QFlag& options) const {
+void PixelSet::draw(QPainter& p, const DrawFlag& options, const Pixel::DrawFlag& pixelOptions) const {
 
 	// NOTE: that int cast is not needed - but gcc is confused otherwise
-	if ((int)options & (int)draw_pixels) {
+	if (options & draw_pixels) {
 		for (auto px : mSet)
-			px->draw(p, 0.3, Pixel::draw_ellipse_stats);
+			px->draw(p, 0.3, pixelOptions);
 	}
 
 	//polyLine(0.0).draw(p);
 
-	if ((int)options & (int)draw_rect) {
+	if (options & draw_rect) {
 		QPen oPen = p.pen();
 		QPen nPen = oPen;
 		nPen.setWidth(3);
@@ -507,7 +478,7 @@ void PixelSet::draw(QPainter& p, const QFlag& options) const {
 		p.setPen(oPen);
 	}
 
-	if ((int)options & (int)draw_poly)
+	if (options & draw_poly)
 		convexHull().draw(p);
 }
 
@@ -525,9 +496,9 @@ bool PixelGraph::isEmpty() const {
 
 void PixelGraph::draw(QPainter& p) const {
 
-	p.setPen(ColorManager::colors()[0]);
-	for (auto px : mSet.pixels())
-		px->draw(p, 0.3, Pixel::draw_ellipse_only);
+	//p.setPen(ColorManager::colors()[0]);
+	//for (auto px : mSet.pixels())
+	//	px->draw(p, 0.3, Pixel::draw_ellipse);
 
 	p.setPen(ColorManager::darkGray(.4));
 	for (auto e : edges())
@@ -535,7 +506,7 @@ void PixelGraph::draw(QPainter& p) const {
 
 }
 
-void PixelGraph::connect(const PixelConnector& connector) {
+void PixelGraph::connect(const PixelConnector& connector, const SortMode& sort) {
 
 	// nothing todo?
 	if (isEmpty())
@@ -544,6 +515,21 @@ void PixelGraph::connect(const PixelConnector& connector) {
 	const QVector<QSharedPointer<Pixel> >& pixels = mSet.pixels();
 
 	mEdges = connector.connect(pixels);
+
+	if (sort == sort_edges)
+		qSort(mEdges.begin(), mEdges.end());
+	else if (sort == sort_line_edges) {
+
+		QVector<QSharedPointer<LineEdge> > lEdges;
+		for (auto e : mEdges)
+			lEdges << QSharedPointer<LineEdge>(new LineEdge(*e));
+
+		qSort(lEdges.begin(), lEdges.end());
+
+		mEdges.clear();
+		for (auto e : lEdges)
+			mEdges << e;
+	}
 
 	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	for (int idx = 0; idx < mEdges.size(); idx++) {
@@ -712,6 +698,10 @@ PixelTabStop::Type PixelTabStop::type() const {
 
 // PixelConnector --------------------------------------------------------------------
 PixelConnector::PixelConnector() {
+}
+
+void PixelConnector::setDistanceFunction(const PixelDistance::PixelDistanceFunction & distFnc) {
+	mDistanceFnc = distFnc;
 }
 
 // DelauneyPixelConnector --------------------------------------------------------------------
@@ -899,6 +889,7 @@ DBScanPixelConnector::DBScanPixelConnector() {
 QVector<QSharedPointer<PixelEdge>> DBScanPixelConnector::connect(const QVector<QSharedPointer<Pixel>>& pixels) const {
 	
 	DBScanPixel dbs(pixels);
+	dbs.setDistanceFunction(mDistanceFnc);
 	dbs.compute();
 
 	return dbs.edges();
@@ -1034,6 +1025,90 @@ cv::Mat DBScanPixel::calcDists(const PixelSet& pixels) const {
 	}
 	
 	return dists;
+}
+
+// TextLineSet --------------------------------------------------------------------
+TextLineSet::TextLineSet() {
+}
+
+TextLineSet::TextLineSet(const QVector<QSharedPointer<Pixel>>& set) : PixelSet(set) {
+	updateLine();
+}
+
+void TextLineSet::add(const QSharedPointer<Pixel>& pixel) {
+	PixelSet::add(pixel);
+	updateLine();
+}
+
+void TextLineSet::remove(const QSharedPointer<Pixel>& pixel) {
+	PixelSet::remove(pixel);
+	updateLine();
+}
+
+void TextLineSet::append(const QVector<QSharedPointer<Pixel>>& set) {
+	PixelSet::append(set);
+	updateLine();
+}
+
+void TextLineSet::scale(double factor) {
+	PixelSet::scale(factor);
+	updateLine();
+}
+
+void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::DrawFlag& pixelOptions) const {
+
+	if (options & (int)PixelSet::draw_pixels) {
+		for (auto px : mSet) {
+			px->draw(p, 0.3, pixelOptions);
+		}
+	}
+
+	mLine.draw(p);
+}
+
+Line TextLineSet::line() const {
+	
+	return mLine;
+}
+
+double TextLineSet::error() const {
+	return mLineErr;
+}
+
+double TextLineSet::computeError(const QVector<Vector2D>& pts) const {
+
+	// compute residual error
+	double rErr = 0;
+	for (const Vector2D& pt : pts) {
+		rErr += mLine.distance(pt);
+	}
+	return rErr / pts.size();
+}
+
+void TextLineSet::updateLine() {
+
+	if (mSet.size() < 2) {
+		qWarning() << "cannot fit a line if the set has less than 2 pixels";
+		mLine = Line();
+		mLineErr = DBL_MAX;
+		return;
+	}
+	
+	// it _is_ a line
+	if (mSet.size() == 2) {
+		mLine = Line(mSet[0]->center(), mSet[1]->center());
+		mLineErr = 0.0;
+		return;
+	}
+
+	QVector<Vector2D> ptSet = centers();
+
+	LineFitting lf(ptSet);
+	Line line = lf.fitLineLMS();
+	line = line.extendBorder(boundingBox());
+
+	mLine = line;
+	mLineErr = computeError(ptSet);
 }
 
 }

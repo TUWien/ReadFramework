@@ -32,6 +32,7 @@
 
 #include "Algorithms.h"
 #include "Utils.h"
+#include "Pixel.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
@@ -1171,7 +1172,7 @@ Line LineFitting::fitLineLMS() const {
 			// compute distance of current set
 			double mr = medianResiduals(mPts, line);
 
-			if (minLMS > mr) {
+			if (mr < minLMS) {
 				minLMS = mr;
 				bestLine = line;
 			}
@@ -1196,7 +1197,7 @@ Line LineFitting::fitLineLMS() const {
 
 				double mr = medianResiduals(mPts, line);
 
-				if (minLMS > mr) {
+				if (mr < minLMS) {
 					minLMS = mr;
 					bestLine = line;
 				}

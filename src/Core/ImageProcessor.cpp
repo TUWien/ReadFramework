@@ -228,11 +228,6 @@ double IP::statMomentMat(const cv::Mat& src, const cv::Mat& mask, double momentV
 	return Algorithms::statMoment(samples, momentValue);
 }
 
-/// <summary>
-/// C.
-/// </summary>
-/// <param name="src">The source.</param>
-/// <returns></returns>
 QColor IP::statMomentColor(const cv::Mat & src, const cv::Mat& mask, double momentValue) {
 
 	assert(src.type() == CV_8UC3 || src.type() == CV_8UC4);

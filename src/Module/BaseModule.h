@@ -35,17 +35,18 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 #include <QSharedPointer>
+#include <QDebug>
 #pragma warning(pop)
 
 #include "opencv2/core/core.hpp"
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -59,13 +60,13 @@ namespace rdf {
 #define mWarning	qWarning().noquote()	<< debugName()
 #define mCritical	qCritical().noquote()	<< debugName()
 
-class DllModuleExport ModuleConfig {
+class DllCoreExport ModuleConfig {
 
 public:
 	ModuleConfig(const QString& moduleName = "Generic Module");
 
-	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const ModuleConfig& m);
-	friend DllModuleExport QDebug operator<< (QDebug d, const ModuleConfig &m);
+	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const ModuleConfig& m);
+	friend DllCoreExport QDebug operator<< (QDebug d, const ModuleConfig &m);
 
 	void loadSettings();
 	void loadSettings(QSettings& settings);
@@ -81,7 +82,23 @@ protected:
 	virtual void save(QSettings& settings) const;
 
 	QString mModuleName;						/**< the module's name.**/
-	int checkIntParam(int param, int min, int max, const QString& name = "param") const;
+
+	template <class num>
+	num checkParam(num param, num min, num max, const QString & name) const {
+
+		if (param < min) {
+			qWarning().noquote() << name << "must be >" << min << "but it is: " << param;
+			return min;
+		}
+
+		if (param > max) {
+			qWarning().noquote() << name << "must be <" << max << "but it is: " << param;
+			return max;
+		}
+
+		return param;
+	};
+
 };
 
 
@@ -89,7 +106,7 @@ protected:
 /// This is the base class for all modules.
 /// It provides all functions which are implemented by the modules.
 /// </summary>
-class DllModuleExport Module {
+class DllCoreExport Module {
 	
 public:
 
@@ -99,8 +116,8 @@ public:
 	/// </summary>
 	Module();
 
-	friend DllModuleExport QDataStream& operator<<(QDataStream& s, const Module& m);
-	friend DllModuleExport QDebug operator<< (QDebug d, const Module &m);
+	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Module& m);
+	friend DllCoreExport QDebug operator<< (QDebug d, const Module &m);
 
 
 	 /// <summary>

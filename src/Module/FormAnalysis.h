@@ -47,7 +47,7 @@
 
 namespace rdf {
 
-	class DllModuleExport FormFeaturesConfig : public ModuleConfig {
+	class DllCoreExport FormFeaturesConfig : public ModuleConfig {
 
 	public:
 		FormFeaturesConfig();
@@ -85,7 +85,7 @@ namespace rdf {
 
 	};
 
-	class DllModuleExport FormFeatures : public Module {
+	class DllCoreExport FormFeatures : public Module {
 
 	public:
 		FormFeatures();

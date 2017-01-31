@@ -40,11 +40,11 @@
 // Qt Includes
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -54,7 +54,7 @@ namespace rdf {
 
 // read defines
 
-class DllModuleExport TabStopConfig : public ModuleConfig {
+class DllCoreExport TabStopConfig : public ModuleConfig {
 
 public:
 	TabStopConfig();
@@ -67,7 +67,7 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport TabStopCluster {
+class DllCoreExport TabStopCluster {
 
 public:
 	TabStopCluster(const QSharedPointer<PixelSet>& ps);
@@ -87,10 +87,10 @@ private:
 	double mMedAngle;
 };
 
-class DllModuleExport TabStopAnalysis : public Module {
+class DllCoreExport TabStopAnalysis : public Module {
 
 public:
-	TabStopAnalysis(const QVector<QSharedPointer<Pixel> >& superPixels = QVector<QSharedPointer<Pixel> >());
+	TabStopAnalysis(const PixelSet& set = PixelSet());
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -104,7 +104,7 @@ public:
 	QVector<Line> tabStopLines(double offset = 0.0) const;
 
 private:
-	QVector<QSharedPointer<Pixel> > mSuperPixels;
+	PixelSet mSet;
 	QSharedPointer<PixelGraph> mGraph;
 
 	QVector<QSharedPointer<TabStopCluster> > mTabStops;

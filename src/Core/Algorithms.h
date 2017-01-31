@@ -93,13 +93,13 @@ public:
 	static double absAngleDiff(double a, double b);
 	static double signedAngleDiff(double a, double b);
 
-
 	// convenience functions
 	static QPointF calcRotationSize(double angleRad, const QPointF& srcSize);
 	static double min(const QVector<double>& vec);
 	static double max(const QVector<double>& vec);
 
 	// template functions --------------------------------------------------------------------
+	
 	/// <summary>
 	/// Computes robust statistical moments (quantiles).
 	/// </summary>
@@ -198,5 +198,16 @@ protected:
 	void sample(const QVector<Vector2D>& pts, QVector<Vector2D>& set, int setSize = 2) const;
 	double medianResiduals(const QVector<Vector2D>& pts, const Line& line) const;
 };
+
+// pixel distance functions
+class Pixel;
+
+namespace PixelDistance {
+	DllCoreExport double euclidean(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+	DllCoreExport double angleWeighted(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+
+	DllCoreExport typedef  double (*PixelDistanceFunction)(const QSharedPointer<const Pixel>& px1, const QSharedPointer<const Pixel>& px2);
+};
+
 
 };

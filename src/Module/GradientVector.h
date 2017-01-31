@@ -42,11 +42,11 @@ related links:
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -55,7 +55,7 @@ related links:
 namespace rdf {
 
 
-class DllModuleExport GradientVectorConfig : public ModuleConfig {
+class DllCoreExport GradientVectorConfig : public ModuleConfig {
 
 	public:
 		GradientVectorConfig();
@@ -80,7 +80,7 @@ class DllModuleExport GradientVectorConfig : public ModuleConfig {
 		bool mPerpendAngle = false;	//if you want to get perpendicular angles compared to the gradient orientation
 };
 
-class DllModuleExport GradientVector : public Module {
+class DllCoreExport GradientVector : public Module {
 
 
 public:

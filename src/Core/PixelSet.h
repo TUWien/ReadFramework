@@ -35,6 +35,7 @@
 #include "Shapes.h"
 #include "BaseImageElement.h"
 #include "Pixel.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
@@ -72,6 +73,10 @@ class DllCoreExport PixelConnector {
 public:
 	PixelConnector();
 	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const = 0;
+	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
+
+protected:
+	PixelDistance::PixelDistanceFunction mDistanceFnc;
 
 };
 
@@ -168,22 +173,24 @@ public:
 
 	void operator+=(const PixelSet& set);
 
-	Q_DECLARE_FLAGS(DrawFlags, DrawFlag)
-
 	QSharedPointer<Pixel> operator[](int idx) const;
 
 	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
-	void merge(const PixelSet& o);
-	void add(const QSharedPointer<Pixel>& pixel);
-	void remove(const QSharedPointer<Pixel>& pixel);
-	void append(const QVector<QSharedPointer<Pixel> >& set);
-	void scale(double factor);
+	
+	// functions that change the set
+	virtual void add(const QSharedPointer<Pixel>& pixel);
+	virtual void remove(const QSharedPointer<Pixel>& pixel);
+	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
+	virtual void scale(double factor);
 
-	QVector<QSharedPointer<Pixel> > pixels() const;
+	QVector<QSharedPointer<Pixel> > pixels() const {
+		return mSet;
+	};
 
 	int size() const;
 	QVector<Vector2D> pointSet(double offsetAngle = 0.0) const;
+	QVector<Vector2D> centers() const;
 	Polygon convexHull() const;
 	Rect boundingBox() const;
 	Line fitLine(double offsetAngle = 0.0) const;
@@ -194,13 +201,15 @@ public:
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
 	
-	double overlapRatio(const PixelSet& set, double angle = CV_PI*0.5) const;	// TODO: delete
+	QSharedPointer<TextLine> toTextLine() const;
 
-	void draw(QPainter& p, const QFlag& options = draw_pixels | draw_poly) const;
+	virtual void draw(
+		QPainter& p, 
+		const DrawFlag& options = (DrawFlag)(draw_pixels | draw_poly),
+		const Pixel::DrawFlag& pixelOptions = (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_label_colors)) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
-	QSharedPointer<TextLine> toTextLine() const;
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
@@ -208,7 +217,32 @@ protected:
 	Polygon polygon(const QVector<Vector2D>& pts) const;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PixelSet::DrawFlags)
+class DllCoreExport TextLineSet : public PixelSet {
+
+public:
+	TextLineSet();
+	TextLineSet(const QVector<QSharedPointer<Pixel> >& set);
+
+	// functions that change the set
+	void add(const QSharedPointer<Pixel>& pixel) override;
+	void remove(const QSharedPointer<Pixel>& pixel) override;
+	void append(const QVector<QSharedPointer<Pixel> >& set) override;
+	void scale(double factor) override;
+
+	void draw(QPainter& p, const DrawFlag& options = PixelSet::draw_poly, 
+		const Pixel::DrawFlag& pixelOptions = Pixel::draw_ellipse) const override;
+
+	Line line() const;
+	double error() const;
+	double computeError(const QVector<Vector2D>& pts) const;
+
+protected:
+	Line mLine;
+	double mLineErr = DBL_MAX;
+
+	void updateLine();
+};
+
 
 /// <summary>
 /// Represents a pixel graph.
@@ -222,10 +256,18 @@ public:
 	PixelGraph();
 	PixelGraph(const PixelSet& set);
 
+	enum SortMode {
+		sort_none,
+		sort_edges,
+		sort_line_edges,
+
+		sort_end
+	};
+
 	bool isEmpty() const;
 
 	void draw(QPainter& p) const;
-	void connect(const PixelConnector& connector = DelauneyPixelConnector());
+	void connect(const PixelConnector& connector = DelauneyPixelConnector(), const SortMode& sort = sort_none);
 
 	PixelSet set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;

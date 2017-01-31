@@ -39,11 +39,11 @@
 
 #pragma warning(pop)
 
-#ifndef DllModuleExport
-#ifdef DLL_MODULE_EXPORT
-#define DllModuleExport Q_DECL_EXPORT
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
 #else
-#define DllModuleExport Q_DECL_IMPORT
+#define DllCoreExport Q_DECL_IMPORT
 #endif
 #endif
 
@@ -53,7 +53,7 @@ namespace rdf {
 
 // read defines
 
-class DllModuleExport PageSegmentationConfig : public ModuleConfig {
+class DllCoreExport PageSegmentationConfig : public ModuleConfig {
 
 public:
 	PageSegmentationConfig();
@@ -70,7 +70,7 @@ protected:
 	//void save(QSettings& settings) const override;
 };
 
-class DllModuleExport PageSegmentation : public Module {
+class DllCoreExport PageSegmentation : public Module {
 
 public:
 	PageSegmentation(const cv::Mat& img);
