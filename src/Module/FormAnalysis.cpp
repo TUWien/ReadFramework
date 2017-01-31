@@ -469,7 +469,7 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 		return false;
 
 	cv::Mat lineImg;
-	
+		
 	//use or generate line form/table image
 	if (useBinaryImg && !mBwImg.empty()) {
 		lineImg = mBwImg;
@@ -486,11 +486,11 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 	cv::distanceTransform(lineImg, distLineImg, CV_DIST_L1, CV_DIST_MASK_3, CV_32FC1);
 
 	//generate line form/table template image
-	QPointF sizeTemplate = mRegion->rightDownCorner() - mRegion->leftUpperCorner();
+	QPointF sizeTemplate = mTemplateForm->region()->rightDownCorner() - mTemplateForm->region()->leftUpperCorner();
 	//use 10 pixel as offset
 	QPointF offsetSize = QPointF(60, 60);
 	sizeTemplate += offsetSize;
-	cv::Point2d lU((int)mRegion->leftUpperCorner().x(), (int)mRegion->leftUpperCorner().y());
+	cv::Point2d lU((int)mTemplateForm->region()->leftUpperCorner().x(), (int)mTemplateForm->region()->leftUpperCorner().y());
 	cv::Point2d offSetLines = cv::Point2d(offsetSize.x() / 2, offsetSize.y() / 2);
 	lU -= offSetLines;
 
@@ -549,9 +549,13 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 	return true;
 }
 
-cv::Mat FormFeatures::drawAlignment() {
+cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
 
-	if (mSrcImg.empty()) {
+	if (!img.empty()) {
+
+		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), img, cv::Scalar(255), cv::Scalar(255), mOffset);
+		return img;
+	} else if (mSrcImg.empty()) {
 		cv::Mat alignmentImg(mSizeSrc, CV_8UC3);
 
 		rdf::LineTrace::generateLineImage(mHorLines, mVerLines, alignmentImg, cv::Scalar(0, 255, 0), cv::Scalar(0, 255, 0), mOffset);
@@ -567,16 +571,16 @@ cv::Mat FormFeatures::drawAlignment() {
 
 bool FormFeatures::isEmptyLines() const {
 	if (mVerLines.isEmpty() && mHorLines.isEmpty())
-		return false;
-	else
 		return true;
+	else
+		return false;
 }
 
 bool FormFeatures::isEmptyTable() const {
 	if (mRegion.isNull() || mCells.isEmpty())
-		return false;
-	else
 		return true;
+	else
+		return false;
 }
 
 void FormFeatures::setTemplateName(QString s) {

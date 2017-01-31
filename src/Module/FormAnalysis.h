@@ -106,7 +106,7 @@ namespace rdf {
 		//QVector<rdf::Line> verLinesMatched() const;
 		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
 		bool estimateRoughAlignment(bool useBinaryImg = false);
-		cv::Mat drawAlignment();
+		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
 
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;
