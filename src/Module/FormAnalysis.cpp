@@ -569,6 +569,161 @@ cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
 	return mSrcImg;
 }
 
+cv::Mat FormFeatures::drawMatchedForm(cv::Mat img) {
+
+	QVector<rdf::Line> hLines, vLines;
+	//create line vectors
+	for (auto c : mCells) {
+		if (c->topBorderVisible()) {
+			hLines.push_back(c->topBorder());
+		}
+		if (c->bottomBorderVisible()) {
+			hLines.push_back(c->bottomBorder());
+		}
+		if (c->leftBorderVisible()) {
+			vLines.push_back(c->leftBorder());
+		}
+		if (c->rightBorderVisible()) {
+			vLines.push_back(c->rightBorder());
+		}
+	}
+
+	if (!img.empty()) {
+
+		rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255), cv::Scalar(255), mOffset);
+		return img;
+	} else {
+		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255), cv::Scalar(255), mOffset);
+	}
+
+	return mSrcImg;
+}
+
+bool FormFeatures::matchTemplate() {
+
+	if (mTemplateForm.isNull())
+		return false;
+
+
+	QVector<QSharedPointer<rdf::TableCell>> cells = mTemplateForm->cells();
+	QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion);
+
+	//shift table region by offset
+	rdf::Polygon newTableRegionPoly = mTemplateForm->region()->polygon();
+	QPointF tmpOffset = QPointF((float)mOffset.x, (float)mOffset.y);
+	QPolygonF tmp = newTableRegionPoly.polygon();
+	tmp.translate(tmpOffset);
+	newTableRegionPoly.setPolygon(tmp);
+	
+	//set region properties
+	region->setPolygon(newTableRegionPoly);
+	region->setRows(mTemplateForm->region()->rows());
+	region->setCols(mTemplateForm->region()->cols());
+
+	mRegion = region;
+	
+	//generate cells
+	for (auto c : cells) {
+		
+		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell);
+
+
+		newCell->setHeader(c->header());
+		newCell->setCol(c->col());
+		newCell->setRow(c->row());
+		newCell->setColSpan(c->colSpan());
+		newCell->setRowSpan(c->rowSpan());
+		newCell->setTopBorderVisible(c->topBorderVisible());
+		newCell->setBottomBorderVisible(c->bottomBorderVisible());
+		newCell->setLeftBorderVisible(c->leftBorderVisible());
+		newCell->setRightBorderVisible(c->rightBorderVisible());
+
+		rdf::Line tL = c->topBorder();
+		tL.translate(mOffset);
+		rdf::Line lL = c->leftBorder();
+		lL.translate(mOffset);
+		rdf::Line rL = c->rightBorder();
+		rL.translate(mOffset);
+		rdf::Line bL = c->bottomBorder();
+		bL.translate(mOffset);
+
+		tL = findLine(tL);
+		lL = findLine(lL);
+		rL = findLine(rL);
+		bL = findLine(bL);
+
+		rdf::Polygon p = createPolygon(tL, lL, rL, bL);
+		newCell->setPolygon(p);
+
+		mCells.push_back(newCell);
+	}
+
+	return true;
+}
+
+rdf::Line FormFeatures::findLine(rdf::Line l, bool horizontal) {
+
+	int index = -1;
+	double distance = std::numeric_limits<double>::max();
+
+	if (horizontal) {
+		for (int lidx = 0; lidx < mHorLines.size(); lidx++) {
+			double d = lineDistance(l, mHorLines[lidx]);
+			if (d < distance) {
+				distance = d;
+				index = lidx;
+			}
+		}
+	} else {
+		for (int lidx = 0; lidx < mVerLines.size(); lidx++) {
+			double d = lineDistance(l, mVerLines[lidx]);
+			if (d < distance) {
+				distance = d;
+				index = lidx;
+			}
+		}
+	}
+
+	//return correct line
+	if (index >= 0 && horizontal) {
+
+		if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), index) != mUsedHorLineIdx.end()) {
+			mUsedHorLineIdx.append(index);
+		}
+		return mHorLines[index];
+	}
+	else if (index >= 0 && !horizontal) {
+
+		if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), index) != mUsedVerLineIdx.end()) {
+			mUsedVerLineIdx.append(index);
+		}
+		return mVerLines[index];
+	} else 
+		return l;
+}
+
+rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl) {
+
+
+	rdf::Vector2D upperLeft, upperRight, bottomLeft, bottomRight;
+
+	upperLeft = tl.intersection(ll, QLineF::UnboundedIntersection);
+	upperRight = tl.intersection(rl, QLineF::UnboundedIntersection);
+	bottomLeft = bl.intersection(ll, QLineF::UnboundedIntersection);
+	bottomRight = bl.intersection(rl, QLineF::UnboundedIntersection);
+
+	QVector<QPointF> tmp;
+
+	tmp.push_back(upperLeft.toQPointF());
+	tmp.push_back(bottomLeft.toQPointF());
+	tmp.push_back(bottomRight.toQPointF());
+	tmp.push_back(upperRight.toQPointF());
+
+	QPolygonF tmpPoly(tmp);
+
+	return rdf::Polygon(tmpPoly);
+}
+
 bool FormFeatures::isEmptyLines() const {
 	if (mVerLines.isEmpty() && mHorLines.isEmpty())
 		return true;
@@ -619,6 +774,83 @@ cv::Size FormFeatures::sizeImg() const
 
 	void FormFeatures::setVerLines(const QVector<rdf::Line>& v)	{
 		mVerLines = v;
+	}
+
+	QVector<rdf::Line> FormFeatures::usedHorLines() const {
+
+		QVector<rdf::Line> usedHor;
+
+		for (auto i : mUsedHorLineIdx) {
+
+			usedHor.push_back(mHorLines[i]);
+
+		}
+		return usedHor;
+	}
+
+	QVector<rdf::Line> FormFeatures::notUsedHorLines() const {
+		QVector<rdf::Line> notUsedHor;
+
+		for (int idx = 0; idx <= mHorLines.size(); idx++) {
+
+			if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), idx) == mUsedHorLineIdx.end()) {
+				notUsedHor.push_back(mHorLines[idx]);
+			}
+		}
+
+		return notUsedHor;
+	}
+
+	QVector<rdf::Line> FormFeatures::useVerLines() const {
+		QVector<rdf::Line> usedVer;
+
+		for (auto i : mUsedVerLineIdx) {
+
+			usedVer.push_back(mVerLines[i]);
+
+		}
+		return usedVer;
+
+	}
+
+	QVector<rdf::Line> FormFeatures::notUseVerLines() const {
+		QVector<rdf::Line> notUsedVer;
+
+		for (int idx = 0; idx <= mVerLines.size(); idx++) {
+
+			if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), idx) == mUsedVerLineIdx.end()) {
+				notUsedVer.push_back(mVerLines[idx]);
+			}
+		}
+
+		return notUsedVer;
+
+	}
+
+	double FormFeatures::lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap, bool horizontal) 	{
+
+		double overlap, length;
+		double distance = 0;
+		//double midpointDist;
+
+		length = templateLine.length();
+		if (horizontal) {
+			overlap = templateLine.horizontalOverlap(formLine);
+		}
+		else {
+			overlap = templateLine.verticalOverlap(formLine);
+		}
+
+		//templateLine.center()
+		distance = formLine.distance(templateLine.center());
+
+		if (overlap / length > minOverlap) {
+			distance = (1.0 / (overlap / length)) * distance;
+		} else {
+			distance = std::numeric_limits<double>::max();
+		}
+
+		return distance;
 	}
 
 	//QVector<rdf::Line> FormFeatures::verLinesMatched() const	{

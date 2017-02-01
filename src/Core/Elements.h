@@ -177,6 +177,11 @@ public:
 	rdf::Line bottomBorder() const;
 	rdf::Line leftBorder() const;
 	rdf::Line rightBorder() const;
+	
+	rdf::Vector2D upperLeft() const;
+	rdf::Vector2D upperRight() const;
+	rdf::Vector2D downLeft() const;
+	rdf::Vector2D downRight() const;
 
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;

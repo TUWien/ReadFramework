@@ -107,6 +107,10 @@ namespace rdf {
 		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
 		bool estimateRoughAlignment(bool useBinaryImg = false);
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
+		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat());
+		bool matchTemplate();
+		rdf::Line findLine(rdf::Line l, bool horizontal = true);
+		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;
@@ -120,6 +124,14 @@ namespace rdf {
 		void setHorLines(const QVector<rdf::Line>& h);
 		QVector<rdf::Line> verLines() const;
 		void setVerLines(const QVector<rdf::Line>& v);
+
+		QVector<rdf::Line> usedHorLines() const;
+		QVector<rdf::Line> notUsedHorLines() const;
+		QVector<rdf::Line> useVerLines() const;
+		QVector<rdf::Line> notUseVerLines() const;
+
+
+		double lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap = 0.1, bool horizontal = true);
 
 		cv::Point offset() const;
 		double error() const;
@@ -160,14 +172,16 @@ namespace rdf {
 		double mMinError = std::numeric_limits<double>::max();
 
 		QVector<rdf::Line> mHorLines;
+		QVector<int> mUsedHorLineIdx;
 		QVector<rdf::Line> mVerLines;
+		QVector<int> mUsedVerLineIdx;
 
 		//rdf::FormFeatures mTemplateForm;
 		QSharedPointer<rdf::FormFeatures> mTemplateForm;
 
 		//QVector<rdf::Line> mHorLinesMatched;
 		//QVector<rdf::Line> mVerLinesMatched;
-		cv::Point mOffset;
+		cv::Point mOffset = cv::Point(0,0);
 		cv::Size mSizeSrc;
 
 		// parameters

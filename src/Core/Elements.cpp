@@ -1072,6 +1072,81 @@ rdf::Line TableCell::rightBorder() const
 	return rdf::Line();
 }
 
+rdf::Vector2D TableCell::upperLeft() const {
+	
+
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[0]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[0];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+
+}
+
+rdf::Vector2D TableCell::upperRight() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[3]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[3];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+}
+
+rdf::Vector2D TableCell::downLeft() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[1]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[1];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+}
+
+rdf::Vector2D TableCell::downRight() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[2]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[2];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+}
+
 void TableCell::readAttributes(QXmlStreamReader & reader) {
 
 	Region::readAttributes(reader);

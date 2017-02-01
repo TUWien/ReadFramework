@@ -81,6 +81,9 @@ public:
 	double weightedLength(const Vector2D& orVec) const;
 	double angle() const;
 	double minDistance(const Line& l) const;
+
+	void translate(cv::Point offset);
+
 	double distance(const Vector2D& p) const;
 	double horizontalOverlap(const Line& l) const;
 	double verticalOverlap(const Line& l) const;

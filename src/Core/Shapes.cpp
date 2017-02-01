@@ -491,6 +491,13 @@ double Line::minDistance(const Line& l) const {
 	return dist1;
 }
 
+void Line::translate(cv::Point offset) {
+	QPointF tmp((float)offset.x, (float)offset.y);
+
+	mLine.translate(tmp);
+}
+
+
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.
 /// </summary>
