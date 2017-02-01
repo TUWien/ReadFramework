@@ -99,9 +99,9 @@ public:
 
 	bool isHorizontal(double mAngleTresh = 0.5) const;
 	bool isVertical(double mAngleTresh = 0.5) const;
-	bool intersects(const Line& line) const;
+	bool intersects(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 
-	Vector2D intersection(const Line& line) const;
+	Vector2D intersection(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 	Vector2D vector() const;
 
 	void draw(QPainter& p) const;

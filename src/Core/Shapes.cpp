@@ -363,9 +363,9 @@ bool Line::isVertical(double mAngleTresh) const {
 
 }
 
-bool Line::intersects(const Line & line) const {
+bool Line::intersects(const Line & line, QLineF::IntersectType t) const {
 
-	return mLine.intersect(line.line(), 0) == QLineF::BoundedIntersection;
+	return mLine.intersect(line.line(), 0) == t;
 }
 
 /// <summary>
@@ -375,13 +375,13 @@ bool Line::intersects(const Line & line) const {
 /// </summary>
 /// <param name="line">Another line.</param>
 /// <returns>The line intersection.</returns>
-Vector2D Line::intersection(const Line & line) const {
+Vector2D Line::intersection(const Line & line, QLineF::IntersectType t) const {
 
 	QPointF p;
 
 	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
 
-	if (it == QLineF::BoundedIntersection)
+	if (it == t)
 		return Vector2D(p);
 
 	return Vector2D();
