@@ -189,6 +189,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 	case tag_unicode:		return "Unicode";
 	case tag_plain_text:	return "PlainText";
 	case tag_baseline:		return "Baseline";
+	case tag_cornerpts:		return "CornerPts";
 
 	case attr_points:		return "points";
 	case attr_id:			return "id";

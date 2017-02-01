@@ -32,6 +32,7 @@
 
 #include "Elements.h"
 #include "ElementsHelper.h"
+#include "Utils.h"
 
 #pragma warning (disable: 4714)	// force inline
 
@@ -983,54 +984,92 @@ TableCell::TableCell(const Type & type) : Region(type) {
 
 rdf::Line TableCell::topBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+		
+		QPointF p1 = mPoly.polygon()[mCornerPts[0]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[3]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+		
+	//no cornerpoints but polygon is present
+	} else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
 		QPointF p1 = mPoly.polygon()[0];
 		QPointF p2 = mPoly.polygon()[3];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::bottomBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[1]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[1];
 		QPointF p2 = mPoly.polygon()[2];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::leftBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[0]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[1]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[0];
 		QPointF p2 = mPoly.polygon()[1];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::rightBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[3]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[3];
 		QPointF p2 = mPoly.polygon()[2];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 void TableCell::readAttributes(QXmlStreamReader & reader) {
@@ -1068,6 +1107,47 @@ void TableCell::readAttributes(QXmlStreamReader & reader) {
 	//}
 
 
+}
+
+bool TableCell::read(QXmlStreamReader & reader) {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_cornerpts)) {
+
+		reader.readNext();
+		QString pts = reader.text().toUtf8().trimmed();	// add text
+
+		if (!pts.isEmpty()) {
+
+			QStringList points = pts.split(" ");
+
+			if (points.size() != 4) {
+				qWarning() << "illegal point string: " << points;
+			}
+			else {
+
+				bool xok = false;
+				for (auto i : points) {
+					int x = i.toInt(&xok);
+					
+					if (xok)
+						mCornerPts.append(x);
+					else
+						qWarning() << "illegal point string: " << x;
+				}
+			}
+		}
+		// fallback to old point coordinates
+		//else {
+		//	readPoints(reader);
+		//}
+	}
+	else
+		return Region::read(reader);
+
+	return true;
+	
 }
 
 void TableCell::setRow(int r) {

@@ -179,6 +179,7 @@ public:
 	rdf::Line rightBorder() const;
 
 	virtual void readAttributes(QXmlStreamReader& reader) override;
+	virtual bool read(QXmlStreamReader& reader) override;
 
 	void setRow(int r);
 	int row() const;
@@ -224,6 +225,8 @@ protected:
 
 	//QString mComments;
 	//Polygon mPoly;
+	//Polygon mCornerPts;
+	QVector<int> mCornerPts;
 };
 
 
