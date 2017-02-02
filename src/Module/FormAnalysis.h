@@ -107,7 +107,9 @@ namespace rdf {
 		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
 		bool estimateRoughAlignment(bool useBinaryImg = false);
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
-		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat());
+		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		QSharedPointer<rdf::TableRegion> tableRegion();
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool horizontal = true);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
@@ -153,6 +155,7 @@ namespace rdf {
 		QVector<QSharedPointer<rdf::TableCell>> cells() const;
 		void setRegion(QSharedPointer<rdf::TableRegion> r);
 		QSharedPointer<rdf::TableRegion> region() const;
+		void setSeparators(QSharedPointer<rdf::Region> r);
 
 	protected:
 

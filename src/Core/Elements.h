@@ -142,6 +142,7 @@ public:
 
 	//virtual bool read(QXmlStreamReader& reader);
 	virtual void readAttributes(QXmlStreamReader& reader) override;
+	virtual bool operator==(const Region& sr1);
 
 	rdf::Line topBorder() const;
 	rdf::Line bottomBorder() const;
@@ -185,6 +186,7 @@ public:
 
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;
+	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 
 	void setRow(int r);
 	int row() const;

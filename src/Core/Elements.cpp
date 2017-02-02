@@ -868,6 +868,14 @@ void TableRegion::readAttributes(QXmlStreamReader & reader) {
 	//}
 }
 
+bool TableRegion::operator==(const Region & sr1) {
+
+	if (!mId.compare(sr1.id()))
+		return true;
+	else
+		return false;
+}
+
 rdf::Line TableRegion::topBorder() const {
 	if (mPoly.size() != 4)
 		return rdf::Line();
@@ -1223,6 +1231,73 @@ bool TableCell::read(QXmlStreamReader & reader) {
 
 	return true;
 	
+}
+
+void TableCell::write(QXmlStreamWriter & writer, bool withChildren, bool close) const {
+
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	writer.writeStartElement(RegionManager::instance().typeName(mType));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_row), QString::number(mRow));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_col), QString::number(mCol));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rowspan), QString::number(mRowSpan));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_colspan), QString::number(mColSpan));
+
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_leftVisible), mLeftBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rightVisible), mRightBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_topVisible), mTopBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_bottomVisible), mBottomBorderVisible ? QString("true") : QString("false"));
+
+	// write polygon
+	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
+	writer.writeEndElement();	// <Coords>
+
+	//if (!mCornerPts.isEmpty()) {
+	//	//writer.writeStartElement(rm.tag(RegionXmlHelper::tag_cornerpts));
+	//	QString tmp;
+	//	QString cornerPts;
+	//	for (auto i : mCornerPts) {
+	//		tmp.setNum(i);
+	//		cornerPts.append(tmp);
+	//		cornerPts.append(" ");
+	//	}
+	//	writer.writeTextElement(rm.tag(RegionXmlHelper::tag_cornerpts), tmp);
+	//	//writer.writeEndElement(); // </CornerPts>
+	//}//</CornerPts>
+
+	if (withChildren)
+		writeChildren(writer);
+
+	if (close)
+		writer.writeEndElement();	// <Type>
+
+	////old version?
+	////-------------------------------------------------------------------------------
+	//RegionXmlHelper& rm = RegionXmlHelper::instance();
+	//Region::write(writer, false, false);
+
+	//if (!mCornerPts.isEmpty()) {
+	//	//writer.writeStartElement(rm.tag(RegionXmlHelper::tag_cornerpts));
+	//	QString tmp;
+	//	QString cornerPts;
+	//	for (auto i : mCornerPts) {
+	//		tmp.setNum(i);
+	//		cornerPts.append(tmp);
+	//		cornerPts.append(" ");
+	//	}
+	//	writer.writeTextElement(rm.tag(RegionXmlHelper::tag_cornerpts), tmp);
+	//	//writer.writeEndElement(); // </CornerPts>
+	//}
+
+	//if (withChildren)
+	//	writeChildren(writer);
+
+	//if (close)
+	//	writer.writeEndElement(); // </Region>
+
+
 }
 
 void TableCell::setRow(int r) {

@@ -419,6 +419,7 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 				}
 			}
 
+
 			float thickness = 10.0; //30
 									//if (tCell && tCell->header()) {
 			if (tCell) {
@@ -448,7 +449,7 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 		}
 	}
 
-	std::sort(cells.begin(), cells.end());
+	//std::sort(cells.begin(), cells.end());
 
 	templateForm->setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
 	templateForm->setFormName(mTemplateName);
@@ -569,44 +570,101 @@ cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
 	return mSrcImg;
 }
 
-cv::Mat FormFeatures::drawMatchedForm(cv::Mat img) {
+cv::Mat FormFeatures::drawMatchedForm(cv::Mat img, float t) {
 
 	QVector<rdf::Line> hLines, vLines;
 	//create line vectors
 	for (auto c : mCells) {
 		if (c->topBorderVisible()) {
-			hLines.push_back(c->topBorder());
+			rdf::Line tmp = c->topBorder();
+			tmp.setThickness(t);
+			hLines.push_back(tmp);
 		}
 		if (c->bottomBorderVisible()) {
-			hLines.push_back(c->bottomBorder());
+			rdf::Line tmp = c->bottomBorder();
+			tmp.setThickness(t);
+			hLines.push_back(tmp);
 		}
 		if (c->leftBorderVisible()) {
-			vLines.push_back(c->leftBorder());
+			rdf::Line tmp = c->leftBorder();
+			tmp.setThickness(t);
+			vLines.push_back(tmp);
 		}
 		if (c->rightBorderVisible()) {
-			vLines.push_back(c->rightBorder());
+			rdf::Line tmp = c->rightBorder();
+			tmp.setThickness(t);
+			vLines.push_back(tmp);
 		}
 	}
 
 	if (!img.empty()) {
 
-		rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255), cv::Scalar(255), mOffset);
+		rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
 		return img;
 	} else {
-		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255), cv::Scalar(255), mOffset);
+		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
 	}
 
 	return mSrcImg;
+}
+
+cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
+
+
+	QVector<rdf::Line> hLines, vLines;
+	//create line vectors
+
+	hLines = notUsedHorLines();
+	vLines = notUseVerLines();
+
+	for (auto i : hLines) {
+		i.setThickness(t);
+	}
+	for (auto i : vLines) {
+		i.setThickness(t);
+	}
+
+	if (!img.empty()) {
+
+		if (img.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255), cv::Scalar(255));
+		} else {
+			rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(0,0,255), cv::Scalar(0,255,0));
+		}
+	
+		return	img;
+	}
+	else {
+		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255), cv::Scalar(255));
+	}
+
+	return mSrcImg;
+}
+
+QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
+
+
+	if (mRegion.isNull()) {
+		QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());
+		return region;
+	} else {
+
+		for (auto i : mCells) {
+			mRegion->addChild(i);
+		}
+	}
+		
+	return mRegion;
 }
 
 bool FormFeatures::matchTemplate() {
 
 	if (mTemplateForm.isNull())
 		return false;
-
-
+	
 	QVector<QSharedPointer<rdf::TableCell>> cells = mTemplateForm->cells();
-	QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion);
+	QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());
+	
 
 	//shift table region by offset
 	rdf::Polygon newTableRegionPoly = mTemplateForm->region()->polygon();
@@ -619,16 +677,20 @@ bool FormFeatures::matchTemplate() {
 	region->setPolygon(newTableRegionPoly);
 	region->setRows(mTemplateForm->region()->rows());
 	region->setCols(mTemplateForm->region()->cols());
+	region->setId(mTemplateForm->region()->id());
+	region->setCustom(mTemplateForm->region()->custom());
 
 	mRegion = region;
 	
 	//generate cells
 	for (auto c : cells) {
 		
-		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell);
+		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
 
+		qDebug() << "try to match cell : " << c->row() << " " << c->col() << " isHeader: " << c->header();
 
 		newCell->setHeader(c->header());
+		newCell->setId(c->id());
 		newCell->setCol(c->col());
 		newCell->setRow(c->row());
 		newCell->setColSpan(c->colSpan());
@@ -647,10 +709,10 @@ bool FormFeatures::matchTemplate() {
 		rdf::Line bL = c->bottomBorder();
 		bL.translate(mOffset);
 
-		tL = findLine(tL, 50);
-		lL = findLine(lL, 50, false);
-		rL = findLine(rL, 50, false);
-		bL = findLine(bL, 50);
+		tL = findLine(tL, 100);
+		lL = findLine(lL, 100, false);
+		rL = findLine(rL, 100, false);
+		bL = findLine(bL, 100);
 
 		rdf::Polygon p = createPolygon(tL, lL, rL, bL);
 		newCell->setPolygon(p);
@@ -689,14 +751,14 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizon
 
 	//return correct line
 	if (index >= 0 && horizontal) {
-
+		qDebug() << "...matched horizontal line";
 		if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), index) != mUsedHorLineIdx.end()) {
 			mUsedHorLineIdx.append(index);
 		}
 		return mHorLines[index];
 	}
 	else if (index >= 0 && !horizontal) {
-
+		qDebug() << "...matched vertical line";
 		if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), index) != mUsedVerLineIdx.end()) {
 			mUsedVerLineIdx.append(index);
 		}
@@ -794,7 +856,7 @@ cv::Size FormFeatures::sizeImg() const
 	QVector<rdf::Line> FormFeatures::notUsedHorLines() const {
 		QVector<rdf::Line> notUsedHor;
 
-		for (int idx = 0; idx <= mHorLines.size(); idx++) {
+		for (int idx = 0; idx < mHorLines.size(); idx++) {
 
 			if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), idx) == mUsedHorLineIdx.end()) {
 				notUsedHor.push_back(mHorLines[idx]);
@@ -819,7 +881,7 @@ cv::Size FormFeatures::sizeImg() const
 	QVector<rdf::Line> FormFeatures::notUseVerLines() const {
 		QVector<rdf::Line> notUsedVer;
 
-		for (int idx = 0; idx <= mVerLines.size(); idx++) {
+		for (int idx = 0; idx < mVerLines.size(); idx++) {
 
 			if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), idx) == mUsedVerLineIdx.end()) {
 				notUsedVer.push_back(mVerLines[idx]);
@@ -912,6 +974,28 @@ cv::Size FormFeatures::sizeImg() const
 
 	QSharedPointer<rdf::TableRegion> FormFeatures::region() const 	{
 		return mRegion;
+	}
+
+	void FormFeatures::setSeparators(QSharedPointer<rdf::Region> r)	{
+
+		QVector<rdf::Line> tmp = notUsedHorLines();
+
+		//horizontalLines
+		for (int i = 0; i < tmp.size(); i++) {
+
+			QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
+			pSepR->setLine(tmp[i].line());
+
+			r->addUniqueChild(pSepR);
+		}
+		//vertical lines
+		tmp = notUseVerLines();
+		for (int i = 0; i < tmp.size(); i++) {
+
+			QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
+			pSepR->setLine(tmp[i].line());
+			r->addUniqueChild(pSepR);
+		}
 	}
 
 	//float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)

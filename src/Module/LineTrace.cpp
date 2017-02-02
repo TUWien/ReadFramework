@@ -249,6 +249,7 @@ namespace rdf {
 			return;
 
 		//img.setTo(0);
+		//hCol = cv::Scalar(255, 0, 0);
 
 		for (auto l : hline) {
 
