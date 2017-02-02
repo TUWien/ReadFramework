@@ -109,7 +109,7 @@ namespace rdf {
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat());
 		bool matchTemplate();
-		rdf::Line findLine(rdf::Line l, bool horizontal = true);
+		rdf::Line findLine(rdf::Line l, double distThreshold, bool horizontal = true);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;

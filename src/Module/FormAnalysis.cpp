@@ -647,10 +647,10 @@ bool FormFeatures::matchTemplate() {
 		rdf::Line bL = c->bottomBorder();
 		bL.translate(mOffset);
 
-		tL = findLine(tL);
-		lL = findLine(lL);
-		rL = findLine(rL);
-		bL = findLine(bL);
+		tL = findLine(tL, 50);
+		lL = findLine(lL, 50, false);
+		rL = findLine(rL, 50, false);
+		bL = findLine(bL, 50);
 
 		rdf::Polygon p = createPolygon(tL, lL, rL, bL);
 		newCell->setPolygon(p);
@@ -661,14 +661,14 @@ bool FormFeatures::matchTemplate() {
 	return true;
 }
 
-rdf::Line FormFeatures::findLine(rdf::Line l, bool horizontal) {
+rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizontal) {
 
 	int index = -1;
 	double distance = std::numeric_limits<double>::max();
 
 	if (horizontal) {
 		for (int lidx = 0; lidx < mHorLines.size(); lidx++) {
-			double d = lineDistance(l, mHorLines[lidx]);
+			double d = lineDistance(l, mHorLines[lidx], 0.1);
 			if (d < distance) {
 				distance = d;
 				index = lidx;
@@ -676,13 +676,16 @@ rdf::Line FormFeatures::findLine(rdf::Line l, bool horizontal) {
 		}
 	} else {
 		for (int lidx = 0; lidx < mVerLines.size(); lidx++) {
-			double d = lineDistance(l, mVerLines[lidx]);
+			double d = lineDistance(l, mVerLines[lidx], 0.1, false);
 			if (d < distance) {
 				distance = d;
 				index = lidx;
 			}
 		}
 	}
+
+	if (distance > distThreshold)
+		index = -1;
 
 	//return correct line
 	if (index >= 0 && horizontal) {
