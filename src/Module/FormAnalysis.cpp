@@ -574,27 +574,32 @@ cv::Mat FormFeatures::drawMatchedForm(cv::Mat img, float t) {
 
 	QVector<rdf::Line> hLines, vLines;
 	//create line vectors
-	for (auto c : mCells) {
-		if (c->topBorderVisible()) {
-			rdf::Line tmp = c->topBorder();
-			tmp.setThickness(t);
-			hLines.push_back(tmp);
-		}
-		if (c->bottomBorderVisible()) {
-			rdf::Line tmp = c->bottomBorder();
-			tmp.setThickness(t);
-			hLines.push_back(tmp);
-		}
-		if (c->leftBorderVisible()) {
-			rdf::Line tmp = c->leftBorder();
-			tmp.setThickness(t);
-			vLines.push_back(tmp);
-		}
-		if (c->rightBorderVisible()) {
-			rdf::Line tmp = c->rightBorder();
-			tmp.setThickness(t);
-			vLines.push_back(tmp);
-		}
+
+	//for (int i = 0; i < mCells.size(); i++) {
+		//if (i == 3) break;
+		//QSharedPointer<rdf::TableCell> c = mCells[i];
+		for (auto c : mCells) {
+			if (c->topBorderVisible()) {
+				rdf::Line tmp = c->topBorder();
+				tmp.setThickness(t);
+				hLines.push_back(tmp);
+			}
+			if (c->bottomBorderVisible()) {
+				rdf::Line tmp = c->bottomBorder();
+				tmp.setThickness(t);
+				hLines.push_back(tmp);
+			}
+			if (c->leftBorderVisible()) {
+				rdf::Line tmp = c->leftBorder();
+				tmp.setThickness(t);
+				vLines.push_back(tmp);
+			}
+			if (c->rightBorderVisible()) {
+				rdf::Line tmp = c->rightBorder();
+				tmp.setThickness(t);
+				vLines.push_back(tmp);
+			}
+		//}
 	}
 
 	if (!img.empty()) {
@@ -772,10 +777,15 @@ rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line r
 
 	rdf::Vector2D upperLeft, upperRight, bottomLeft, bottomRight;
 
-	upperLeft = tl.intersection(ll, QLineF::UnboundedIntersection);
-	upperRight = tl.intersection(rl, QLineF::UnboundedIntersection);
-	bottomLeft = bl.intersection(ll, QLineF::UnboundedIntersection);
-	bottomRight = bl.intersection(rl, QLineF::UnboundedIntersection);
+	//upperLeft = tl.intersection(ll, QLineF::UnboundedIntersection);
+	//upperRight = tl.intersection(rl, QLineF::UnboundedIntersection);
+	//bottomLeft = bl.intersection(ll, QLineF::UnboundedIntersection);
+	//bottomRight = bl.intersection(rl, QLineF::UnboundedIntersection);
+	
+	upperLeft = tl.intersectionUnrestricted(ll);
+	upperRight = tl.intersectionUnrestricted(rl);
+	bottomLeft = bl.intersectionUnrestricted(ll);
+	bottomRight = bl.intersectionUnrestricted(rl);
 
 	QVector<QPointF> tmp;
 
@@ -892,11 +902,15 @@ cv::Size FormFeatures::sizeImg() const
 
 	}
 
+
 	double FormFeatures::lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap, bool horizontal) 	{
 
 		double overlap, length;
 		double distance = 0;
 		//double midpointDist;
+
+		formLine.sortEndpoints(horizontal);
+		//templateLine.sortEndpoints(horizontal);
 
 		length = templateLine.length();
 		if (horizontal) {

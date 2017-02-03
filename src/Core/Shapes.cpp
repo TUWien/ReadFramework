@@ -222,6 +222,36 @@ bool Line::isEmpty() const {
 	return (mLine.isNull());
 }
 
+void Line::sortEndpoints(bool horizontal) {
+
+	QPointF p1, p2;
+	p1 = mLine.p1();
+	p2 = mLine.p2();
+
+	if (horizontal) {
+		int x1 = (int)p1.x();
+		int x2 = (int)p2.x();
+
+		if (x1 < x2)
+			return;
+		else {
+			mLine.setP1(p2);
+			mLine.setP2(p1);
+			return;
+		}
+	} else {
+		int y1 = (int)p1.y();
+		int y2 = (int)p2.y();
+
+		if (y1 < y2)
+			return;
+		else {
+			mLine.setP1(p2);
+			mLine.setP2(p1);
+		}
+	}
+}
+
 /// <summary>
 /// Sets the line.
 /// </summary>
@@ -387,6 +417,18 @@ Vector2D Line::intersection(const Line & line, QLineF::IntersectType t) const {
 	return Vector2D();
 }
 
+Vector2D Line::intersectionUnrestricted(const Line & line) const
+{
+	QPointF p;
+
+	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
+
+	if (it != QLineF::NoIntersection)
+		return Vector2D(p);
+
+	return Vector2D();
+}
+
 /// <summary>
 /// Returns the line's orientation vector.
 /// </summary>
@@ -514,13 +556,25 @@ double Line::distance(const Vector2D& p) const {
 }
 
 double Line::horizontalOverlap(const Line & l) const {
-	double ol = std::max(mLine.x1(), l.p1().x()) - std::min(mLine.x2(), l.p2().x());
+	double ol;
+	//l is on the right side of mLine (no overlap)
+	//or on the left side
+	if (l.p1().x() > mLine.x2() || l.p2().x() < mLine.x1())
+		ol = 0;
+	else
+		ol = std::min(mLine.x2(), l.p2().x()) - std::max(mLine.x1(), l.p1().x());
 
 	return ol;
 }
 
 double Line::verticalOverlap(const Line & l) const {
-	double ol = std::max(mLine.y1(), l.p1().y()) - std::min(mLine.y2(), l.p2().y());
+
+	double ol;
+	//l is before mLine or mLine is before l
+	if (l.p2().y() < mLine.y1() || l.p1().y() > mLine.y2())
+		ol = 0;
+	else
+		ol = std::min(mLine.y2(), l.p2().y()) - std::max(mLine.y1(), l.p1().y());
 
 	return ol;
 }

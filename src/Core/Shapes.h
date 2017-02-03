@@ -73,6 +73,7 @@ public:
 	Line(double p1x, double p1y, double p2x, double p2y, float thickness = 1);
 
 	bool isEmpty() const;
+	void sortEndpoints(bool horizontal = true);
 	void setLine(const QLineF& line, float thickness = 1);
 	void setThickness(float thickness);
 	float thickness() const;
@@ -105,6 +106,7 @@ public:
 	bool intersects(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 
 	Vector2D intersection(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
+	Vector2D intersectionUnrestricted(const Line& line) const;
 	Vector2D vector() const;
 
 	void draw(QPainter& p) const;
