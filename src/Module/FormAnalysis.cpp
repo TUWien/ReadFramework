@@ -553,9 +553,9 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
 
 	if (!img.empty()) {
-
-		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), img, cv::Scalar(255), cv::Scalar(255), mOffset);
-		return img;
+		cv::Mat tmp = img.clone();
+		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), tmp, cv::Scalar(255,0,0), cv::Scalar(255,0,0), mOffset);
+		return tmp;
 	} else if (mSrcImg.empty()) {
 		cv::Mat alignmentImg(mSizeSrc, CV_8UC3);
 
@@ -564,10 +564,13 @@ cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
 		
 		return alignmentImg;
 	} else {
-		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), mSrcImg, cv::Scalar(255), cv::Scalar(255), mOffset);
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(mTemplateForm->horLines(), mTemplateForm->verLines(), tmp, cv::Scalar(255), cv::Scalar(255), mOffset);
+
+		return tmp;
 	}
 
-	return mSrcImg;
+	
 }
 
 cv::Mat FormFeatures::drawMatchedForm(cv::Mat img, float t) {
@@ -603,14 +606,16 @@ cv::Mat FormFeatures::drawMatchedForm(cv::Mat img, float t) {
 	}
 
 	if (!img.empty()) {
-
-		rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
-		return img;
+		cv::Mat tmp = img.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
+		return tmp;
 	} else {
-		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
+		return tmp;
 	}
 
-	return mSrcImg;
+	
 }
 
 cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
@@ -630,20 +635,23 @@ cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
 	}
 
 	if (!img.empty()) {
-
-		if (img.channels() == 1) {
-			rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(255), cv::Scalar(255));
+		cv::Mat tmp = img.clone();
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
 		} else {
-			rdf::LineTrace::generateLineImage(hLines, vLines, img, cv::Scalar(0,0,255), cv::Scalar(0,255,0));
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0,0,255), cv::Scalar(0,255,0));
 		}
 	
-		return	img;
+		return	tmp;
 	}
 	else {
-		rdf::LineTrace::generateLineImage(hLines, vLines, mSrcImg, cv::Scalar(255), cv::Scalar(255));
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+
+		return tmp;
 	}
 
-	return mSrcImg;
+	
 }
 
 QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
@@ -654,8 +662,18 @@ QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
 		return region;
 	} else {
 
-		for (auto i : mCells) {
-			mRegion->addChild(i);
+		//for (auto i : mCells) {
+		for (int i = 0; i < mCells.size(); i++) {
+
+			//if (!mTemplateForm.isNull()) {
+			//	//set children of parent?
+			//	QVector<QSharedPointer<rdf::TableCell>> templateCells =  mTemplateForm->cells();
+			//	if (i < templateCells.size()) {
+			//		mCells[i]->setChildren(templateCells[i]->children());
+			//	}
+
+			//}
+			mRegion->addChild(mCells[i]);
 		}
 	}
 		
@@ -757,14 +775,14 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizon
 	//return correct line
 	if (index >= 0 && horizontal) {
 		qDebug() << "...matched horizontal line";
-		if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), index) != mUsedHorLineIdx.end()) {
+		if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), index) == mUsedHorLineIdx.end()) {
 			mUsedHorLineIdx.append(index);
 		}
 		return mHorLines[index];
 	}
 	else if (index >= 0 && !horizontal) {
 		qDebug() << "...matched vertical line";
-		if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), index) != mUsedVerLineIdx.end()) {
+		if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), index) == mUsedVerLineIdx.end()) {
 			mUsedVerLineIdx.append(index);
 		}
 		return mVerLines[index];
