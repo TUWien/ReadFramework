@@ -638,6 +638,8 @@ bool PageElement::isEmpty() {
 	return !mRoot || mXmlPath.isEmpty();
 }
 
+
+
 /// <summary>
 /// Prints the page element to the debug stream.
 /// </summary>
@@ -1379,6 +1381,10 @@ bool TableCell::operator<(const TableCell & cell) const {
 	} else {
 		return row() < cell.row();
 	}
+}
+
+bool TableCell::compareCells(const QSharedPointer<rdf::TableCell> l1, const QSharedPointer<rdf::TableCell> l2) {
+	return *l1 < *l2;
 }
 
 }

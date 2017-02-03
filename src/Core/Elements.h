@@ -215,6 +215,7 @@ public:
 
 	//sorts Cells according row and cell
 	bool operator< (const TableCell& cell) const;
+	static bool compareCells(const QSharedPointer<rdf::TableCell> l1, const QSharedPointer<rdf::TableCell> l2);
 
 protected:
 	int mRow = -1;
@@ -235,6 +236,8 @@ protected:
 	//Polygon mCornerPts;
 	QVector<int> mCornerPts;
 };
+
+
 
 
 class DllCoreExport TextLine : public Region {
