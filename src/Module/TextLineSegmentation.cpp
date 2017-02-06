@@ -41,6 +41,8 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QPainter>
+#include <QFileInfo>
+#include <QDir>
 #pragma warning(pop)
 
 namespace rdf {
@@ -78,12 +80,18 @@ double TextLineConfig::errorMultiplier() const {
 	return checkParam(mErrorMultiplier, 0.0, DBL_MAX, "errorMultiplier");
 }
 
+QString TextLineConfig::debugPath() const {
+
+	return mDebugPath;
+}
+
 
 void TextLineConfig::load(const QSettings & settings) {
 
 	mMinLineLength = settings.value("minLineLength", minLineLength()).toInt();
 	mMinPointDist = settings.value("minPointDistance", minPointDistance()).toDouble();
 	mErrorMultiplier = settings.value("errorMultiplier", errorMultiplier()).toDouble();
+	mDebugPath = settings.value("debugPath", debugPath()).toString();
 }
 
 void TextLineConfig::save(QSettings & settings) const {
@@ -91,6 +99,7 @@ void TextLineConfig::save(QSettings & settings) const {
 	settings.setValue("minLineLength", minLineLength());
 	settings.setValue("minPointDistance", minPointDistance());
 	settings.setValue("errorMultiplier", errorMultiplier());
+	settings.setValue("debugPath", debugPath());
 }
 
 // TextLineSegmentation --------------------------------------------------------------------
@@ -108,6 +117,11 @@ bool TextLineSegmentation::isEmpty() const {
 
 bool TextLineSegmentation::compute() {
 
+	return compute(cv::Mat());
+}
+
+bool TextLineSegmentation::compute(const cv::Mat& img) {
+
 	Timer dt;
 
 	if (!checkInput())
@@ -124,7 +138,10 @@ bool TextLineSegmentation::compute() {
 	PixelGraph pg(mSet);
 	pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
 
-	mTextLines = clusterTextLines(pg);
+	if (img.empty())
+		mTextLines = clusterTextLines(pg);
+	else
+		mTextLines = clusterTextLinesDebug(pg, img);
 
 	//QVector<QSharedPointer<TextLineSet> > ps;
 	//for (auto p : mTextLines) {
@@ -144,21 +161,22 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 }
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
+	
+	qWarning() << "text clustering is not implemented yet!";
+	return QVector<QSharedPointer<TextLineSet> >();
+}
+
+QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLinesDebug(const PixelGraph & graph, const cv::Mat& img) const {
 
 	QVector<QSharedPointer<TextLineSet> > textLines;
 
 	// debug ------------------------------------
-	QString fp("C:/temp/cluster/");
-	Vector2D maxSize = graph.set().boundingBox().bottomRight();
+	QImage imgR = Image::mat2QImage(img);
+	imgR = imgR.convertToFormat(QImage::Format_ARGB32);
 	
-	QImage img("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
-	img = img.convertToFormat(QImage::Format_ARGB32);
-	//QImage img(maxSize.toQSize(), QImage::Format_ARGB32);
-	//QPixmap pm(QSize(800, 446));
-	//QPainter p(&img);
-	QPainter p(&img);
+	QPainter p(&imgR);
 	p.setBrush(ColorManager::white(0.5));
-	p.drawRect(img.rect());
+	p.drawRect(imgR.rect());
 	QPen pen = p.pen();
 	pen.setWidth(3);
 	p.setPen(pen);
@@ -229,8 +247,9 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 		e->draw(p);
 
 		if (idx % 200 == 0) {
-			cv::Mat imgCv = Image::qImage2Mat(img);
-			QString iPath = fp + "img" + QString::number(idx) + ".tif";
+			cv::Mat imgCv = Image::qImage2Mat(imgR);
+			QString fName("img" + QString::number(idx) + ".tif");
+			QString iPath = QFileInfo(QDir(config()->debugPath()), fName).absoluteFilePath();
 			Image::save(imgCv, iPath);
 			qDebug() << iPath << "written...";
 		}

@@ -70,11 +70,14 @@ public:
 	void setErrorMultiplier(double multiplier);
 	double errorMultiplier() const;
 
+	QString debugPath() const;
+
 protected:
 
 	int mMinLineLength = 10;			// minimum text line length when clustering
 	double mMinPointDist = 80.0;		// acceptable minimal distance of a point to a line
 	double mErrorMultiplier = 2.0;		// maximal increase of error when merging two lines
+	QString mDebugPath = "C:/temp/cluster/";
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
@@ -87,6 +90,7 @@ public:
 
 	bool isEmpty() const override;
 	bool compute() override;
+	bool compute(const cv::Mat& img);
 	QSharedPointer<TextLineConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
@@ -104,6 +108,7 @@ private:
 	bool checkInput() const override;
 
 	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph) const;
+	QVector<QSharedPointer<TextLineSet> > clusterTextLinesDebug(const PixelGraph& graph, const cv::Mat& img) const;
 	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
 	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
 	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;

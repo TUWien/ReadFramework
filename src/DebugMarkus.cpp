@@ -412,7 +412,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	rdf::TextLineSegmentation textLines(sp.pixels());
 	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 
-	if (!textLines.compute())
+	if (!textLines.compute(img))
 		qWarning() << "could not compute text line segmentation!";
 
 	qInfo() << "algorithm computation time" << dt;
