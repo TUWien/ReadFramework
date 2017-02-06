@@ -34,7 +34,7 @@
 
 #include "BaseModule.h"
 #include "LineTrace.h"
-
+#include "Elements.h"
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 
@@ -91,25 +91,50 @@ namespace rdf {
 		FormFeatures();
 		FormFeatures(const cv::Mat& img, const cv::Mat& mask = cv::Mat());
 
-		bool loadTemplateDatabase(QString db);
-		QVector<rdf::FormFeatures> templatesDb() const;
-
-		cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0,0)) const;
-
 		void setInputImg(const cv::Mat& img);
 		void setMask(const cv::Mat& mask);
 		bool isEmpty() const override;
 		bool compute() override;
 		bool computeBinaryInput();
-		bool compareWithTemplate(const FormFeatures& fTempl);
+
+		//old version
+		//bool loadTemplateDatabase(QString db);
+		//QVector<rdf::FormFeatures> templatesDb() const;
+		//bool compareWithTemplate(const FormFeatures& fTempl);
+		//cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0, 0)) const;
+		//QVector<rdf::Line> horLinesMatched() const;
+		//QVector<rdf::Line> verLinesMatched() const;
+		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
+		bool estimateRoughAlignment(bool useBinaryImg = false);
+		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
+		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		QSharedPointer<rdf::TableRegion> tableRegion();
+		bool matchTemplate();
+		rdf::Line findLine(rdf::Line l, double distThreshold, bool horizontal = true);
+		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
+
+		bool isEmptyLines() const;
+		bool isEmptyTable() const;
+
+		void setTemplateName(QString s);
+		QString templateName() const;
+
 		cv::Size sizeImg() const;
 		void setSize(cv::Size s);
 		QVector<rdf::Line> horLines() const;
 		void setHorLines(const QVector<rdf::Line>& h);
-		QVector<rdf::Line> horLinesMatched() const;
 		QVector<rdf::Line> verLines() const;
 		void setVerLines(const QVector<rdf::Line>& v);
-		QVector<rdf::Line> verLinesMatched() const;
+
+		QVector<rdf::Line> usedHorLines() const;
+		QVector<rdf::Line> notUsedHorLines() const;
+		QVector<rdf::Line> useVerLines() const;
+		QVector<rdf::Line> notUseVerLines() const;
+
+
+		double lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap = 0.1, bool horizontal = true);
+
 		cv::Point offset() const;
 		double error() const;
 
@@ -125,10 +150,18 @@ namespace rdf {
 		void setFormName(QString s);
 		QString formName() const;
 
+		
+		void setCells(QVector<QSharedPointer<rdf::TableCell>> c);
+		QVector<QSharedPointer<rdf::TableCell>> cells() const;
+		void setRegion(QSharedPointer<rdf::TableRegion> r);
+		QSharedPointer<rdf::TableRegion> region() const;
+		void setSeparators(QSharedPointer<rdf::Region> r);
+
 	protected:
 
-		float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
-		void findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const;
+		//old version
+		//float errLine(const cv::Mat& distImg, const rdf::Line l, cv::Point offset = cv::Point(0,0));
+		//void findOffsets(const QVector<Line>& hT, const QVector<Line>& vT, QVector<int>& offX, QVector<int>& offY) const;
 		
 
 	private:
@@ -142,19 +175,26 @@ namespace rdf {
 		double mMinError = std::numeric_limits<double>::max();
 
 		QVector<rdf::Line> mHorLines;
+		QVector<int> mUsedHorLineIdx;
 		QVector<rdf::Line> mVerLines;
+		QVector<int> mUsedVerLineIdx;
 
-		QVector<rdf::FormFeatures> mTemplates;
+		//rdf::FormFeatures mTemplateForm;
+		QSharedPointer<rdf::FormFeatures> mTemplateForm;
 
-		QVector<rdf::Line> mHorLinesMatched;
-		QVector<rdf::Line> mVerLinesMatched;
-		cv::Point mOffset;
+		//QVector<rdf::Line> mHorLinesMatched;
+		//QVector<rdf::Line> mVerLinesMatched;
+		cv::Point mOffset = cv::Point(0,0);
 		cv::Size mSizeSrc;
 
 		// parameters
 
 		bool checkInput() const override;
 		QString mFormName;
+		QString mTemplateName;
+
+		QVector<QSharedPointer<rdf::TableCell>> mCells;
+		QSharedPointer<rdf::TableRegion> mRegion;
 
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;

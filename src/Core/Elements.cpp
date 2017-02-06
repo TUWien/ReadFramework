@@ -32,6 +32,7 @@
 
 #include "Elements.h"
 #include "ElementsHelper.h"
+#include "Utils.h"
 
 #pragma warning (disable: 4714)	// force inline
 
@@ -637,6 +638,8 @@ bool PageElement::isEmpty() {
 	return !mRoot || mXmlPath.isEmpty();
 }
 
+
+
 /// <summary>
 /// Prints the page element to the debug stream.
 /// </summary>
@@ -867,6 +870,14 @@ void TableRegion::readAttributes(QXmlStreamReader & reader) {
 	//}
 }
 
+bool TableRegion::operator==(const Region & sr1) {
+
+	if (!mId.compare(sr1.id()))
+		return true;
+	else
+		return false;
+}
+
 rdf::Line TableRegion::topBorder() const {
 	if (mPoly.size() != 4)
 		return rdf::Line();
@@ -983,54 +994,167 @@ TableCell::TableCell(const Type & type) : Region(type) {
 
 rdf::Line TableCell::topBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+		
+		QPointF p1 = mPoly.polygon()[mCornerPts[0]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[3]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+		
+	//no cornerpoints but polygon is present
+	} else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
 		QPointF p1 = mPoly.polygon()[0];
 		QPointF p2 = mPoly.polygon()[3];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::bottomBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[1]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[1];
 		QPointF p2 = mPoly.polygon()[2];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::leftBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[0]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[1]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[0];
 		QPointF p2 = mPoly.polygon()[1];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
 }
 
 rdf::Line TableCell::rightBorder() const
 {
-	if (mPoly.size() != 4)
-		return rdf::Line();
-	else {
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p1 = mPoly.polygon()[mCornerPts[3]];
+		QPointF p2 = mPoly.polygon()[mCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
 		QPointF p1 = mPoly.polygon()[3];
 		QPointF p2 = mPoly.polygon()[2];
 		QPolygonF tmp;
 		tmp << p1 << p2;
 		return rdf::Line(rdf::Polygon(tmp));
 	}
+
+	return rdf::Line();
+}
+
+rdf::Vector2D TableCell::upperLeft() const {
+	
+
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[0]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[0];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+
+}
+
+rdf::Vector2D TableCell::upperRight() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[3]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[3];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+}
+
+rdf::Vector2D TableCell::downLeft() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[1]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[1];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
+}
+
+rdf::Vector2D TableCell::downRight() const {
+	//check if cornerpoints are defined
+	if (mPoly.size() >= 4 && mCornerPts.size() == 4) {
+
+		QPointF p = mPoly.polygon()[mCornerPts[2]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mPoly.size() == 4 && mCornerPts.isEmpty()) {
+
+		QPointF p = mPoly.polygon()[2];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
 }
 
 void TableCell::readAttributes(QXmlStreamReader & reader) {
@@ -1066,6 +1190,114 @@ void TableCell::readAttributes(QXmlStreamReader & reader) {
 	//	tb = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_bottomVisible)).toString().compare("true") == 0 ? true : false;
 	//	pT->setBottomBorderVisible(tb);
 	//}
+
+
+}
+
+bool TableCell::read(QXmlStreamReader & reader) {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_cornerpts)) {
+
+		reader.readNext();
+		QString pts = reader.text().toUtf8().trimmed();	// add text
+
+		if (!pts.isEmpty()) {
+
+			QStringList points = pts.split(" ");
+
+			if (points.size() != 4) {
+				qWarning() << "illegal point string: " << points;
+			}
+			else {
+
+				bool xok = false;
+				for (auto i : points) {
+					int x = i.toInt(&xok);
+					
+					if (xok)
+						mCornerPts.append(x);
+					else
+						qWarning() << "illegal point string: " << x;
+				}
+			}
+		}
+		// fallback to old point coordinates
+		//else {
+		//	readPoints(reader);
+		//}
+	}
+	else
+		return Region::read(reader);
+
+	return true;
+	
+}
+
+void TableCell::write(QXmlStreamWriter & writer, bool withChildren, bool close) const {
+
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	writer.writeStartElement(RegionManager::instance().typeName(mType));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_row), QString::number(mRow));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_col), QString::number(mCol));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rowspan), QString::number(mRowSpan));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_colspan), QString::number(mColSpan));
+
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_leftVisible), mLeftBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rightVisible), mRightBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_topVisible), mTopBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_bottomVisible), mBottomBorderVisible ? QString("true") : QString("false"));
+
+	// write polygon
+	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
+	writer.writeEndElement();	// <Coords>
+
+	//if (!mCornerPts.isEmpty()) {
+	//	//writer.writeStartElement(rm.tag(RegionXmlHelper::tag_cornerpts));
+	//	QString tmp;
+	//	QString cornerPts;
+	//	for (auto i : mCornerPts) {
+	//		tmp.setNum(i);
+	//		cornerPts.append(tmp);
+	//		cornerPts.append(" ");
+	//	}
+	//	writer.writeTextElement(rm.tag(RegionXmlHelper::tag_cornerpts), tmp);
+	//	//writer.writeEndElement(); // </CornerPts>
+	//}//</CornerPts>
+
+	if (withChildren)
+		writeChildren(writer);
+
+	if (close)
+		writer.writeEndElement();	// <Type>
+
+	////old version?
+	////-------------------------------------------------------------------------------
+	//RegionXmlHelper& rm = RegionXmlHelper::instance();
+	//Region::write(writer, false, false);
+
+	//if (!mCornerPts.isEmpty()) {
+	//	//writer.writeStartElement(rm.tag(RegionXmlHelper::tag_cornerpts));
+	//	QString tmp;
+	//	QString cornerPts;
+	//	for (auto i : mCornerPts) {
+	//		tmp.setNum(i);
+	//		cornerPts.append(tmp);
+	//		cornerPts.append(" ");
+	//	}
+	//	writer.writeTextElement(rm.tag(RegionXmlHelper::tag_cornerpts), tmp);
+	//	//writer.writeEndElement(); // </CornerPts>
+	//}
+
+	//if (withChildren)
+	//	writeChildren(writer);
+
+	//if (close)
+	//	writer.writeEndElement(); // </Region>
 
 
 }
@@ -1149,6 +1381,10 @@ bool TableCell::operator<(const TableCell & cell) const {
 	} else {
 		return row() < cell.row();
 	}
+}
+
+bool TableCell::compareCells(const QSharedPointer<rdf::TableCell> l1, const QSharedPointer<rdf::TableCell> l2) {
+	return *l1 < *l2;
 }
 
 }

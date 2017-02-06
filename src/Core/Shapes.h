@@ -73,6 +73,7 @@ public:
 	Line(double p1x, double p1y, double p2x, double p2y, float thickness = 1);
 
 	bool isEmpty() const;
+	void sortEndpoints(bool horizontal = true);
 	void setLine(const QLineF& line, float thickness = 1);
 	void setThickness(float thickness);
 	float thickness() const;
@@ -81,6 +82,9 @@ public:
 	double weightedLength(const Vector2D& orVec) const;
 	double angle() const;
 	double minDistance(const Line& l) const;
+
+	void translate(cv::Point offset);
+
 	double distance(const Vector2D& p) const;
 	double horizontalOverlap(const Line& l) const;
 	double verticalOverlap(const Line& l) const;
@@ -99,9 +103,10 @@ public:
 
 	bool isHorizontal(double mAngleTresh = 0.5) const;
 	bool isVertical(double mAngleTresh = 0.5) const;
-	bool intersects(const Line& line) const;
+	bool intersects(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 
-	Vector2D intersection(const Line& line) const;
+	Vector2D intersection(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
+	Vector2D intersectionUnrestricted(const Line& line) const;
 	Vector2D vector() const;
 
 	void draw(QPainter& p) const;

@@ -142,6 +142,7 @@ public:
 
 	//virtual bool read(QXmlStreamReader& reader);
 	virtual void readAttributes(QXmlStreamReader& reader) override;
+	virtual bool operator==(const Region& sr1);
 
 	rdf::Line topBorder() const;
 	rdf::Line bottomBorder() const;
@@ -177,8 +178,15 @@ public:
 	rdf::Line bottomBorder() const;
 	rdf::Line leftBorder() const;
 	rdf::Line rightBorder() const;
+	
+	rdf::Vector2D upperLeft() const;
+	rdf::Vector2D upperRight() const;
+	rdf::Vector2D downLeft() const;
+	rdf::Vector2D downRight() const;
 
 	virtual void readAttributes(QXmlStreamReader& reader) override;
+	virtual bool read(QXmlStreamReader& reader) override;
+	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
 
 	void setRow(int r);
 	int row() const;
@@ -207,6 +215,7 @@ public:
 
 	//sorts Cells according row and cell
 	bool operator< (const TableCell& cell) const;
+	static bool compareCells(const QSharedPointer<rdf::TableCell> l1, const QSharedPointer<rdf::TableCell> l2);
 
 protected:
 	int mRow = -1;
@@ -224,7 +233,11 @@ protected:
 
 	//QString mComments;
 	//Polygon mPoly;
+	//Polygon mCornerPts;
+	QVector<int> mCornerPts;
 };
+
+
 
 
 class DllCoreExport TextLine : public Region {

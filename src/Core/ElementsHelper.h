@@ -114,6 +114,7 @@ public:
 		tag_unicode,
 		tag_plain_text,
 		tag_baseline,
+		tag_cornerpts,
 
 		attr_points,
 		attr_id,
