@@ -390,6 +390,11 @@ void Region::write(QXmlStreamWriter& writer) const {
 	writer.writeEndElement();	// </Region>
 }
 
+/// <summary>
+/// Creates the element.
+/// After a call to this method, attributes can be appended to the element.
+/// </summary>
+/// <param name="writer">The XML stream at the position where the region should be written.</param>
 void Region::createElement(QXmlStreamWriter& writer) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -401,6 +406,13 @@ void Region::createElement(QXmlStreamWriter& writer) const {
 		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
 }
 
+/// <summary>
+/// Writes the polygon.
+/// This is a convenience function for derived classes.
+/// Typically writePolygon is called after all (additional)
+/// attributes of the current element are set.
+/// </summary>
+/// <param name="writer">The XML stream at the position where the region should be written.</param>
 void Region::writePolygon(QXmlStreamWriter& writer) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
@@ -1242,7 +1254,6 @@ bool TableCell::read(QXmlStreamReader & reader) {
 
 void TableCell::write(QXmlStreamWriter & writer) const {
 
-
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
 	Region::createElement(writer);
@@ -1270,8 +1281,6 @@ void TableCell::write(QXmlStreamWriter & writer) const {
 
 	writeChildren(writer);
 	writer.writeEndElement();	// </Region>
-
-
 }
 
 void TableCell::setRow(int r) {
