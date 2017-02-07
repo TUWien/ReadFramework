@@ -50,8 +50,6 @@
 // Qt defines
 class QXmlStreamReader;
 class QXmlStreamWriter;
-class QDomElement;
-class QDomDocument;
 
 namespace rdf {
 
@@ -102,7 +100,7 @@ protected:
 	void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
 
 	QByteArray writePageElement() const;
-	QDomElement createMetaData(QDomDocument& document) const;
+	void writeMetaData(QXmlStreamWriter& writer) const;
 };
 
 };

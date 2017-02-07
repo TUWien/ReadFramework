@@ -39,7 +39,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QXmlStreamReader>
-#include <QDomDocument>
 #include <QDebug>
 #include <QBuffer>
 #include <QDir>
@@ -291,63 +290,54 @@ QByteArray PageXmlParser::writePageElement() const {
 		return QByteArray();
 	}
 
-	// create document & header
-	QDomDocument document("");
-	document.appendChild(document.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+	QByteArray ba;
+	QBuffer buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+
+
+	QXmlStreamWriter writer(&buffer);
+	writer.setAutoFormatting(true);
+	writer.writeStartDocument();
 
 	// <PcGts>
-	QDomElement domRoot = document.createElement(tagName(tag_root));
-	domRoot.setAttribute(tagName(attr_xmlns), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15");
-	domRoot.setAttribute(tagName(attr_xsi), "http://www.w3.org/2001/XMLSchema-instance");
-	domRoot.setAttribute(tagName(attr_schemaLocation), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd");
-	document.appendChild(domRoot);
+	writer.writeStartElement(tagName(tag_root));
+	writer.writeAttribute(tagName(attr_xmlns), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15");
+	writer.writeAttribute(tagName(attr_xsi), "http://www.w3.org/2001/XMLSchema-instance");
+	writer.writeAttribute(tagName(attr_schemaLocation), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd");
 
 	// <Metadata>
-	domRoot.appendChild(createMetaData(document));
-	
+	writeMetaData(writer);
+
 	// <Page>
-	QDomElement pe = document.createElement(tagName(tag_page));
-	pe.setAttribute(tagName(attr_imageFilename), mPage->imageFileName());
-	pe.setAttribute(tagName(attr_imageWidth), QString::number(mPage->imageSize().width()));
-	pe.setAttribute(tagName(attr_imageHeight), QString::number(mPage->imageSize().height()));
-	domRoot.appendChild(pe);
+	writer.writeStartElement(tagName(tag_page));
+	writer.writeAttribute(tagName(attr_imageFilename), mPage->imageFileName());
+	writer.writeAttribute(tagName(attr_imageWidth), QString::number(mPage->imageSize().width()));
+	writer.writeAttribute(tagName(attr_imageHeight), QString::number(mPage->imageSize().height()));
 
 	QSharedPointer<Region> root = mPage->rootRegion();
 
 	for (const QSharedPointer<Region> r : root->children()) {
-		pe.appendChild(r->write(document, true));
+		r->write(writer);
 	}
 
-	//// close
-	//writer.writeEndElement();	// </Page>
-	//writer.writeEndElement();	// </PcGts>
-	//writer.writeEndDocument();
-
-	QByteArray ba = document.toByteArray(3);	// 3 -> intent 3 spaces
+	// close
+	writer.writeEndElement();	// </Page>
+	writer.writeEndElement();	// </PcGts>
+	writer.writeEndDocument();
 
 	return ba;
 }
 
-QDomElement PageXmlParser::createMetaData(QDomDocument& document) const {
+void PageXmlParser::writeMetaData(QXmlStreamWriter& writer) const {
 
-	QDomElement me = document.createElement(tagName(tag_meta));
+	writer.writeStartElement(tagName(tag_meta));
 	
-	// <Creator>
-	QDomElement ce = document.createElement(tagName(tag_meta_creator));
-	ce.appendChild(document.createTextNode(mPage->creator()));
-	me.appendChild(ce);
+	writer.writeTextElement(tagName(tag_meta_creator), mPage->creator());
+	writer.writeTextElement(tagName(tag_meta_created), mPage->dateCreated().toString(Qt::ISODate));
+	writer.writeTextElement(tagName(tag_meta_changed), mPage->dateModified().toString(Qt::ISODate));
 
-	// <Created>
-	ce = document.createElement(tagName(tag_meta_created));
-	ce.appendChild(document.createTextNode(mPage->dateCreated().toString(Qt::ISODate)));
-	me.appendChild(ce);
+	writer.writeEndElement();	// <Metadata>
 
-	// <LastChange>
-	ce = document.createElement(tagName(tag_meta_changed));
-	ce.appendChild(document.createTextNode(mPage->dateModified().toString(Qt::ISODate)));
-	me.appendChild(ce);
-
-	return me;
 }
 
 

@@ -39,7 +39,6 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QXmlStreamReader>
-#include <QDomElement>		// needs QXml
 #include <QUuid>
 #include <QPainter>
 #pragma warning(pop)
@@ -376,41 +375,50 @@ bool Region::readPoints(QXmlStreamReader & reader) {
 	return !poly.isEmpty();
 }
 
-
 /// <summary>
 /// Writes the Region to the XML stream.
 /// </summary>
 /// <param name="writer">The XML stream at the position where the region should be written.</param>
 /// <param name="withChildren">if set to <c>true</c> the Region's children are written too.</param>
 /// <param name="close">if set to <c>true</c> the element's close tag is appended.</param>
-QDomElement Region::write(QDomDocument& doc, bool withChildren) const {
+void Region::write(QXmlStreamWriter& writer) const {
+
+	createElement(writer);
+	writePolygon(writer);
+	writeChildren(writer);
+
+	writer.writeEndElement();	// </Region>
+}
+
+void Region::createElement(QXmlStreamWriter& writer) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
-	QDomElement e = doc.createElement(RegionManager::instance().typeName(mType));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
+	writer.writeStartElement(RegionManager::instance().typeName(mType));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_id), mId);
+	
 	if (!mCustom.isEmpty())
-		e.setAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_custom), mCustom);
+}
+
+void Region::writePolygon(QXmlStreamWriter& writer) const {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
 
 	// write polygon
-	QDomElement pe = doc.createElement(rm.tag(RegionXmlHelper::tag_coords));
-	pe.setAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
-	e.appendChild(pe);
-
-	if (withChildren)
-		writeChildren(doc, e);
-
-	return e;
+	writer.writeStartElement(rm.tag(RegionXmlHelper::tag_coords));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mPoly.write());
+	writer.writeEndElement();	// <Coords>
 }
 
 /// <summary>
 /// Writes the Region's children to the XML stream.
 /// </summary>
 /// <param name="writer">The XML stream.</param>
-void Region::writeChildren(QDomDocument& doc, QDomElement& parent) const {
+void Region::writeChildren(QXmlStreamWriter& writer) const {
 
 	for (const QSharedPointer<Region> child : mChildren)
-		parent.appendChild(child->write(doc, true));
+		child->write(writer);
 }
 
 bool Region::operator==(const Region & r1) {
@@ -520,28 +528,27 @@ bool TextLine::read(QXmlStreamReader & reader) {
 /// Writes the TextLine instance to the XML stream.
 /// </summary>
 /// <param name="writer">The XML stream.</param>
-/// <param name="withChildren">if set to <c>true</c> the TextLine's children are written to the XML.</param>
-/// <param name="close">if set to <c>true</c> the TextLine's end element is written.</param>
-QDomElement TextLine::write(QDomDocument& doc, bool withChildren) const {
+void TextLine::write(QXmlStreamWriter & writer) const {
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
-	QDomElement e = Region::write(doc, false);
+	
+	Region::createElement(writer);
+	Region::writePolygon(writer);
 
 	if (!mBaseLine.isEmpty()) {
-		QDomElement be = doc.createElement(rm.tag(RegionXmlHelper::tag_baseline));
-		be.setAttribute(rm.tag(RegionXmlHelper::attr_points), mBaseLine.write());
-		e.appendChild(be);
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_baseline));
+		writer.writeAttribute(rm.tag(RegionXmlHelper::attr_points), mBaseLine.write());
+		writer.writeEndElement(); // </Baseline>
 	}
 
 	if (!mText.isEmpty() || mTextPresent) {
-		QDomElement te = doc.createElement(rm.tag(RegionXmlHelper::tag_text_equiv));
-		e.appendChild(RegionXmlHelper::textNode(rm.tag(RegionXmlHelper::tag_unicode), mText));
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
+		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
+		writer.writeEndElement(); // </TextEquiv>
 	}
 
-	if (withChildren)
-		writeChildren(doc, e);
-
-	return e;
+	writeChildren(writer);
+	writer.writeEndElement(); // </Region>
 }
 
 /// <summary>
@@ -1233,35 +1240,38 @@ bool TableCell::read(QXmlStreamReader & reader) {
 	
 }
 
-QDomElement TableCell::write(QDomDocument& doc, bool withChildren) const {
+void TableCell::write(QXmlStreamWriter & writer) const {
+
 
 	RegionXmlHelper& rm = RegionXmlHelper::instance();
-	QDomElement e = Region::write(doc, false);
 
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_row), QString::number(mRow));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_col), QString::number(mCol));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_rowspan), QString::number(mRowSpan));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_colspan), QString::number(mColSpan));
+	Region::createElement(writer);
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_row), QString::number(mRow));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_col), QString::number(mCol));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rowspan), QString::number(mRowSpan));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_colspan), QString::number(mColSpan));
 
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_leftVisible), mLeftBorderVisible ? QString("true") : QString("false"));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_rightVisible), mRightBorderVisible ? QString("true") : QString("false"));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_topVisible), mTopBorderVisible ? QString("true") : QString("false"));
-	e.setAttribute(rm.tag(RegionXmlHelper::attr_bottomVisible), mBottomBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_leftVisible), mLeftBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_rightVisible), mRightBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_topVisible), mTopBorderVisible ? QString("true") : QString("false"));
+	writer.writeAttribute(rm.tag(RegionXmlHelper::attr_bottomVisible), mBottomBorderVisible ? QString("true") : QString("false"));
 
-	// <CornerPts>
+	Region::writePolygon(writer);
+
 	if (!mCornerPts.isEmpty()) {
-	
-		QString cornerPts;
-		for (int i : mCornerPts) {
-			cornerPts.append(QString::number(i) + " ");
+		
+		//</CornerPts>
+		QString pts;
+		for (int pt : mCornerPts) {
+			pts.append(QString::number(pt) + " ");
 		}
-		e.appendChild(RegionXmlHelper::textNode(rm.tag(RegionXmlHelper::tag_cornerpts), cornerPts));
+		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_cornerpts), pts);
 	}
 
-	if (withChildren)
-		writeChildren(doc, e);
+	writeChildren(writer);
+	writer.writeEndElement();	// </Region>
 
-	return e;
+
 }
 
 void TableCell::setRow(int r) {

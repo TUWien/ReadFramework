@@ -31,9 +31,9 @@ target_include_directories(${RDF_BINARY_NAME}       PRIVATE ${OpenCV_INCLUDE_DIR
 target_include_directories(${RDF_DLL_MODULE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_DLL_CORE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 
-qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets Xml)
-qt5_use_modules(${RDF_DLL_MODULE_NAME} 	Core Network Widgets Xml)
-qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets Xml)
+qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets)
+qt5_use_modules(${RDF_DLL_MODULE_NAME} 	Core Network Widgets)
+qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
 
 # core flags
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/libs)
