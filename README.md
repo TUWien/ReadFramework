@@ -31,12 +31,17 @@ Documentation can be found here: http://read-api.caa.tuwien.ac.at/ReadFramework/
 - check if your builds proceeded correctly
 
 ## Build on Ubuntu
-note that Qt 5.5 is needed, thus Ubuntu version must be >= 16.04 or backports of Qt 5.5 have to be used (see .travis.yml for an ppa repository and names packages which need to be installed)
+note that Qt 5.5 is needed, thus Ubuntu version must be >= 16.04 or backports of Qt 5.5 have to be used (see .travis.yml for an ppa repository and names packages which need to be installed). 
 
 Get required packages:
 
 ``` console
 sudo apt-get install qt5-qmake qttools5-dev-tools qt5-default libqt5svg5 qt5-image-formats-plugins libopencv-dev cmake git
+```
+
+You also need OpenCV > 3.0. Either you can compile it yourself or perhaps you find a repository (you can also use the one from the .travis file, but be carefull, these packages are not tested, then you need following packages:
+``` console
+sudo apt-get install libopencv-dev libopencv-stitching-dev libopencv-imgcodecs-dev libopencv-flann-dev   libopencv-features2d-dev libopencv-calib3d-dev libopencv-hdf-dev libopencv-reg-dev libopencv-shape-dev libopencv-xobjdetect-dev libopencv-xfeatures2d-dev libopencv-ximgproc-dev libopencv-highgui-dev
 ```
 
 Get the READ Framework sources from github:
