@@ -36,6 +36,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QSettings>
+#include <QDomElement>
 #pragma warning(pop)
 
 namespace rdf {
@@ -209,6 +210,19 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 
 	qWarning() << "unknown tag: " << tagId;
 	return "";
+}
+
+QDomElement RegionXmlHelper::textNode(const QString & tagName, const QString & text) {
+
+	QDomElement e;
+	e.setTagName(tagName);
+	
+	// append the text
+	QDomText t;
+	t.setData(text);
+	e.appendChild(t);
+
+	return e;
 }
 
 // RegionManager --------------------------------------------------------------------

@@ -135,6 +135,8 @@ public:
 
 	QString tag(const XmlTags& tagId) const;
 
+	static QDomElement textNode(const QString& tagName, const QString& text);
+
 private:
 	RegionXmlHelper();
 	RegionXmlHelper(const RegionXmlHelper&);

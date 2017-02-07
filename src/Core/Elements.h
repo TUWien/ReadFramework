@@ -54,6 +54,8 @@
 // Qt defines
 class QXmlStreamReader;
 class QXmlStreamWriter;
+class QDomElement;
+class QDomDocument;
 class QPainter;
 
 namespace rdf {
@@ -118,8 +120,9 @@ public:
 
 	virtual bool read(QXmlStreamReader& reader);
 	virtual void readAttributes(QXmlStreamReader& reader);
-	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const;
-	virtual void writeChildren(QXmlStreamWriter& writer) const;
+	
+	virtual QDomElement write(QDomDocument& doc, bool withChildren = true) const;
+	virtual void writeChildren(QDomDocument& doc, QDomElement& parent) const;
 
 	virtual bool operator==(const Region& r1);
 
@@ -186,7 +189,7 @@ public:
 
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;
-	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
+	virtual QDomElement write(QDomDocument& doc, bool withChildren = true) const override;
 
 	void setRow(int r);
 	int row() const;
@@ -252,7 +255,7 @@ public:
 	QString text() const;
 
 	virtual bool read(QXmlStreamReader& reader) override;
-	virtual void write(QXmlStreamWriter& writer, bool withChildren = true, bool close = true) const override;
+	virtual QDomElement write(QDomDocument& doc, bool withChildren = true) const override;
 
 	virtual QString toString(bool withChildren = false) const override;
 

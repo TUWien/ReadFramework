@@ -152,12 +152,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			//rdf::XmlTest test(dc);
-			//test.parseXml();
-			//test.linesToXml();
+			rdf::XmlTest test(dc);
+			test.parseXml();
+			test.linesToXml();
 
-			rdf::LayoutTest lt(dc);
-			lt.testComponents();
+			//rdf::LayoutTest lt(dc);
+			//lt.testComponents();
 		}
 
 	}
@@ -175,11 +175,11 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
 		//dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
-		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
-		//dc.setImagePath("D:/read/test/00000197.jpg");
+		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
+		dc.setImagePath("D:/read/test/00000197.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		//dc.setImagePath("D:/read/test/screenshot.png");
-		dc.setImagePath("D:/read/test/synthetic-test.png");
+		//dc.setImagePath("D:/read/test/synthetic-test.png");
 		//dc.setImagePath("D:/read/test/synthetic-test-single-line.png");
 		//dc.setImagePath("D:/read/data/Herbarium/George_Forrest_Herbarium_Specimens/E00000017-c.jpg");
 	
