@@ -162,8 +162,54 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
 	
-	qWarning() << "text clustering is not implemented yet!";
-	return QVector<QSharedPointer<TextLineSet> >();
+	QVector<QSharedPointer<TextLineSet> > textLines;
+	int idx = 0;
+
+	for (auto e : graph.edges()) {
+
+		double heat = 1.0 - (++idx / (double)graph.edges().size());
+
+		int psIdx1 = locate(e->first(), textLines);
+		int psIdx2 = locate(e->second(), textLines);
+
+		// create a new text line
+		if (psIdx1 == -1 && psIdx2 == -1) {
+
+			// let's call it a pair & create a new text line
+			QVector<QSharedPointer<Pixel> > px;
+			px << e->first();
+			px << e->second();
+			textLines << QSharedPointer<TextLineSet>::create(px);
+		}
+		// already clustered -> nothing todo
+		else if (psIdx1 == psIdx2) {
+			// this is nothing
+		}
+		// merge one pixel
+		else if (psIdx2 == -1) {
+
+			if (addPixel(textLines[psIdx1], e->second(), heat)) {
+				textLines[psIdx1]->add(e->second());
+			}
+			// else drop
+		}
+		// merge one pixel
+		else if (psIdx1 == -1) {
+			if (addPixel(textLines[psIdx2], e->first(), heat)) {
+				textLines[psIdx2]->add(e->first());
+			}
+			// else drop
+		}
+		// merge same text line
+		else if (mergeTextLines(textLines[psIdx1], textLines[psIdx2], heat)) {
+
+			textLines[psIdx2]->append(textLines[psIdx1]->pixels());
+			textLines.remove(psIdx1);
+		}
+		// else drop
+	}
+
+	return textLines;
 }
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLinesDebug(const PixelGraph & graph, const cv::Mat& img) const {
@@ -475,6 +521,10 @@ QVector<QSharedPointer<TextLine>> TextLineSegmentation::textLines() const {
 		tls << set->toTextLine();
 
 	return tls;
+}
+
+QVector<QSharedPointer<TextLineSet>> TextLineSegmentation::textLineSets() const {
+	return mTextLines;
 }
 
 bool TextLineSegmentation::checkInput() const {

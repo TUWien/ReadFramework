@@ -45,6 +45,7 @@
 #include "PageSegmentation.h"
 #include "SuperPixelClassification.h"
 #include "SuperPixelTrainer.h"
+#include "LayoutAnalysis.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -149,7 +150,8 @@ void LayoutTest::testComponents() {
 	//testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
-	testLayout(imgCv);
+	//testLayout(imgCv);
+	layoutToXml();
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -160,79 +162,40 @@ void LayoutTest::layoutToXml() const {
 	cv::Mat img = Image::qImage2Mat(imgQt);
 
 	Timer dt;
-
-	// find super pixels
-	rdf::SuperPixel superPixel(img);
-
-	if (!superPixel.compute())
-		qWarning() << "could not compute super pixel!";
-
-	QVector<QSharedPointer<Pixel> > sp = superPixel.getSuperPixels();
-
-	// find local orientation per pixel
-	rdf::LocalOrientation lo(sp);
-	if (!lo.compute())
-		qWarning() << "could not compute local orientation";
-
-	// smooth estimation
-	rdf::GraphCutOrientation pse(sp);
-
-	if (!pse.compute())
-		qWarning() << "could not compute set orientation";
-
-	//// find tab stops
-	//rdf::TabStopAnalysis tabStops(sp);
-	//if (!tabStops.compute())
-	//	qWarning() << "could not compute text block segmentation!";
-
-	// find text lines
-	rdf::TextLineSegmentation textLines(sp);
-	
-	if (!textLines.compute())
-		qWarning() << "could not compute text line segmentation!";
-
-	qInfo() << "algorithm computation time" << dt;
-
-	// drawing
-	cv::Mat rImg = img.clone();
-
-	// save super pixel image
-	//rImg = superPixel.drawSuperPixels(rImg);
-	//rImg = tabStops.draw(rImg);
-	rImg = textLines.draw(rImg);
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
-	rdf::Image::save(rImg, dstPath);
-	qDebug() << "debug image saved: " << dstPath;
-
-
-	// write XML -----------------------------------
 	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 
 	rdf::PageXmlParser parser;
 	parser.read(loadXmlPath);
 	auto pe = parser.page();
+
+	rdf::LayoutAnalysis la(img);
+	la.setTextRegions(Region::allRegions(pe->rootRegion()));
+
+	if (!la.compute())
+		qWarning() << "could not compute layout analysis";
+
+	// drawing --------------------------------------------------------------------
+	cv::Mat rImg = img.clone();
+
+	// save super pixel image
+	//rImg = superPixel.drawSuperPixels(rImg);
+	//rImg = tabStops.draw(rImg);
+	rImg = la.draw(rImg);
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	// write to XML --------------------------------------------------------------------
 	pe->setCreator(QString("CVL"));
 	pe->setImageSize(QSize(img.rows, img.cols));
 	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
 
-	// start writing content
-	auto ps = PixelSet::fromEdges(PixelSet::connect(sp));
-
-	if (!ps.empty()) {
-		QSharedPointer<Region> textRegion = QSharedPointer<Region>(new Region());
-		textRegion->setType(Region::type_text_region);
-		textRegion->setPolygon(ps[0]->convexHull());
-		
-		for (auto tl : textLines.textLines()) {
-			textRegion->addUniqueChild(tl);
-		}
-
-		pe->rootRegion()->addUniqueChild(textRegion);
-	}
+	pe->setRootRegion(la.textBlockSet().toTextRegion());
 
 	parser.write(mConfig.xmlPath(), pe);
 	qDebug() << "results written to" << mConfig.xmlPath();
 
+	qInfo() << "layout analysis computed in" << dt;
 }
 
 void LayoutTest::testFeatureCollector(const cv::Mat & src) const {

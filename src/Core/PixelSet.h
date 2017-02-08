@@ -243,6 +243,73 @@ protected:
 	void updateLine();
 };
 
+/// <summary>
+/// Represents a text block.
+/// A single text block has a
+/// boundary region and (possibly)
+/// a set of super pixels that are
+/// geometrically part of the text region.
+/// </summary>
+/// <seealso cref="BaseElement" />
+class DllCoreExport TextBlock : public BaseElement {
+
+public:
+	TextBlock(const Polygon& poly = Polygon());
+
+	enum DrawFlag {
+		draw_nothing = 0x0,
+		draw_poly = 0x1,
+		draw_text_lines = 0x2,
+		draw_pixels = 0x4,
+
+		draw_end
+	};
+
+	void addPixels(const PixelSet& ps);
+	PixelSet pixelSet() const;
+
+	Polygon poly() const;
+
+	void setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLines);
+	QVector<QSharedPointer<TextLineSet> > textLines() const;
+
+	QSharedPointer<Region> toTextRegion() const;
+
+	void draw(QPainter& p, const DrawFlag& df = (DrawFlag)(draw_poly | draw_text_lines));
+
+private:
+	Polygon mPoly;
+	PixelSet mSet;
+	QVector<QSharedPointer<TextLineSet> > mTextLines;
+};
+
+/// <summary>
+/// Stores all text blocks.
+/// This class is used to group
+/// super pixels with respect to
+/// layout constrains (e.g. text columns)
+/// </summary>
+/// <seealso cref="BaseElement" />
+class DllCoreExport TextBlockSet : public BaseElement {
+
+public:
+	TextBlockSet(const QVector<Polygon>& regions = QVector<Polygon>());
+	TextBlockSet(const QVector<QSharedPointer<Region>>& regions);
+
+	void operator<<(const TextBlock& block);
+
+	bool isEmpty() const;
+
+	void setPixels(const PixelSet& ps);
+	QVector<QSharedPointer<TextBlock> > textBlocks() const;
+
+	QSharedPointer<Region> toTextRegion() const;
+
+private:
+	
+	QVector<QSharedPointer<TextBlock> > mTextBlocks;
+};
+
 
 /// <summary>
 /// Represents a pixel graph.

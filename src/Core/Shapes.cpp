@@ -97,6 +97,17 @@ Polygon Polygon::fromCvPoints(const std::vector<cv::Point>& pts) {
 	return poly;
 }
 
+Polygon Polygon::fromRect(const Rect & rect) {
+
+	Polygon p;
+	p << rect.topLeft();
+	p << rect.topRight();
+	p << rect.bottomRight();
+	p << rect.bottomLeft();
+
+	return p;
+}
+
 void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
@@ -112,6 +123,11 @@ void Polygon::draw(QPainter & p) const {
 	p.setPen(oPen);
 }
 
+bool Polygon::contains(const Vector2D & pt) const {
+
+	return mPoly.containsPoint(pt.toQPointF(), Qt::WindingFill);
+}
+
 QPolygonF Polygon::polygon() const {
 	return mPoly;
 }
@@ -123,6 +139,15 @@ QPolygonF Polygon::closedPolygon() const {
 		closed.append(mPoly.first());
 
 	return closed;
+}
+
+QVector<Vector2D> Polygon::toPoints() const {
+
+	QVector<Vector2D> pts(mPoly.size());
+	for (const QPointF& p : mPoly)
+		pts << p;
+
+	return pts;
 }
 
 // BaseLine --------------------------------------------------------------------

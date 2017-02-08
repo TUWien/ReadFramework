@@ -45,6 +45,7 @@
 #include "DebugMarkus.h"
 #include "DebugFlo.h"
 #include "DebugStefan.h"
+#include "PageParser.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")
@@ -152,12 +153,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			rdf::XmlTest test(dc);
-			test.parseXml();
-			test.linesToXml();
+			//rdf::XmlTest test(dc);
+			//test.parseXml();
+			//test.linesToXml();
 
-			//rdf::LayoutTest lt(dc);
-			//lt.testComponents();
+			rdf::LayoutTest lt(dc);
+			lt.testComponents();
 		}
 
 	}
@@ -220,6 +221,13 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setFeatureCachePath("D:/read/configs/features-prima.json");
 		qInfo() << dc.featureCachePath() << "added as feature cache path";
 	} 
+
+	if (dc.xmlPath().isEmpty()) {
+		QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
+		dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
+		qInfo() << dc.xmlPath() << "added as XML path";
+	} 
+
 
 	// add your debug overwrites here...
 }

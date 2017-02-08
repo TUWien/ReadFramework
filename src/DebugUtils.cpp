@@ -59,10 +59,6 @@ void DebugConfig::setXmlPath(const QString & path) {
 }
 
 QString DebugConfig::xmlPath() const {
-
-	if (mXMLPath.isEmpty())
-		return PageXmlParser::imagePathToXmlPath(imagePath());
-
 	return mXMLPath;
 }
 

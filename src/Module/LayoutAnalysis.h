@@ -33,11 +33,10 @@
 #pragma once
 
 #include "BaseModule.h"
-#include "Pixel.h"
 #include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-
+// Qt Includes
 #pragma warning(pop)
 
 #ifndef DllCoreExport
@@ -53,67 +52,45 @@
 namespace rdf {
 
 // read defines
+class Region;
+class Polygon;
+class TextLine;
 
-class DllCoreExport TextLineConfig : public ModuleConfig {
+class DllCoreExport LayoutAnalysisConfig : public ModuleConfig {
 
 public:
-	TextLineConfig();
+	LayoutAnalysisConfig();
 
 	virtual QString toString() const override;
 
-	void setMinLineLength(int length);
-	int minLineLength() const;
-
-	void setMinPointDistance(double dist);
-	double minPointDistance() const;
-
-	void setErrorMultiplier(double multiplier);
-	double errorMultiplier() const;
-
-	QString debugPath() const;
-
 protected:
-
-	int mMinLineLength = 10;			// minimum text line length when clustering
-	double mMinPointDist = 80.0;		// acceptable minimal distance of a point to a line
-	double mErrorMultiplier = 2.0;		// maximal increase of error when merging two lines
-	QString mDebugPath = "C:/temp/cluster/";
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 };
 
-class DllCoreExport TextLineSegmentation : public Module {
+class DllCoreExport LayoutAnalysis : public Module {
 
 public:
-	TextLineSegmentation(const PixelSet& set = PixelSet());
+	LayoutAnalysis(const cv::Mat& img);
 
 	bool isEmpty() const override;
 	bool compute() override;
-	bool compute(const cv::Mat& img);
-	QSharedPointer<TextLineConfig> config() const;
+	QSharedPointer<LayoutAnalysisConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-	void addLines(const QVector<Line>& lines);
-	QVector<QSharedPointer<TextLine> > textLines() const;
-	QVector<QSharedPointer<TextLineSet> > textLineSets() const;
+	void setTextRegions(const QVector<QSharedPointer<Region> >& regions);
+	TextBlockSet textBlockSet() const;
 
 private:
-	PixelSet mSet;
-	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
-	QVector<QSharedPointer<TextLineSet> > mTextLines;
-	QVector<Line> mStopLines;
-
 	bool checkInput() const override;
 
-	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph) const;
-	QVector<QSharedPointer<TextLineSet> > clusterTextLinesDebug(const PixelGraph& graph, const cv::Mat& img) const;
-	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
-	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
-	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;
-	void filterDuplicates(PixelSet& set) const;
+	// input
+	cv::Mat mImg;
+	TextBlockSet mTextBlockSet;
 };
+
 
 };

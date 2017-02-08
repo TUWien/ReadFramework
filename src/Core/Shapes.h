@@ -478,11 +478,11 @@ class DllCoreExport Polygon {
 public:
 	Polygon(const QPolygonF& polygon = QPolygonF());
 
-	friend void operator<<(Polygon& poly, const QPointF& pt) {
-		poly.mPoly << pt;
+	void operator<<(const QPointF& pt) {
+		mPoly << pt;
 	}
-	friend void operator<<(Polygon& poly, const Vector2D& pt) {
-		poly.mPoly << pt.toQPointF();
+	void operator<<(const Vector2D& pt) {
+		mPoly << pt.toQPointF();
 	}
 
 	bool isEmpty() const;
@@ -495,13 +495,16 @@ public:
 	int size() const;
 	QPolygonF polygon() const;
 	QPolygonF closedPolygon() const;
+	QVector<Vector2D> toPoints() const;
 
 	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
 	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
 	static Polygon fromCvPoints(const std::vector<cv::Point>& pts);
+	static Polygon fromRect(const Rect& rect);
 	void setPolygon(const QPolygonF& polygon);
 
 	void draw(QPainter& p) const;
+	bool contains(const Vector2D& pt) const;
 
 protected:
 	QPolygonF mPoly;
