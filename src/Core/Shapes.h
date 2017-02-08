@@ -458,6 +458,8 @@ public:
 	QPolygonF polygon() const;
 	QPolygon toPolygon() const;
 
+	void translate(const QPointF& offset);
+
 	void read(const QString& pointList);
 	QString write() const;
 
@@ -484,6 +486,8 @@ public:
 
 	void read(const QString& pointList);
 	QString write() const;
+
+	void translate(const QPointF& offset);
 
 	int size() const;
 	QPolygonF polygon() const;

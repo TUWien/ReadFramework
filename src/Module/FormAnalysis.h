@@ -111,7 +111,7 @@ namespace rdf {
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		bool matchTemplate();
-		rdf::Line findLine(rdf::Line l, double distThreshold, bool horizontal = true);
+		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;

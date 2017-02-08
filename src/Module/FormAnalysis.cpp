@@ -665,14 +665,16 @@ QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
 		//for (auto i : mCells) {
 		for (int i = 0; i < mCells.size(); i++) {
 
+			// ------------- children of cells are now set in matchTemplate() ------------------------
+			//is done in matchTemplate
 			//if (!mTemplateForm.isNull()) {
 			//	//set children of parent?
 			//	QVector<QSharedPointer<rdf::TableCell>> templateCells =  mTemplateForm->cells();
 			//	if (i < templateCells.size()) {
 			//		mCells[i]->setChildren(templateCells[i]->children());
 			//	}
-
 			//}
+			// --------------------------------------------------------------------------------------
 			mRegion->addChild(mCells[i]);
 		}
 	}
@@ -708,10 +710,12 @@ bool FormFeatures::matchTemplate() {
 	//generate cells
 	for (auto c : cells) {
 		
+		//QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell(*c));
 		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
 
 		qDebug() << "try to match cell : " << c->row() << " " << c->col() << " isHeader: " << c->header();
-
+		
+		//copy attributes
 		newCell->setHeader(c->header());
 		newCell->setId(c->id());
 		newCell->setCol(c->col());
@@ -732,13 +736,62 @@ bool FormFeatures::matchTemplate() {
 		rdf::Line bL = c->bottomBorder();
 		bL.translate(mOffset);
 
-		tL = findLine(tL, 100);
-		lL = findLine(lL, 100, false);
-		rL = findLine(rL, 100, false);
-		bL = findLine(bL, 100);
+		bool found = false;
+		QString customTmp;
+		tL = findLine(tL, 100, found);
+		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+		//if (newCell->topBorderVisible())
+		//	newCell->setTopBorderVisible(found);
+
+		lL = findLine(lL, 100, found, false);
+		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+		//if (newCell->leftBorderVisible())
+		//	newCell->setLeftBorderVisible(found);
+
+		rL = findLine(rL, 100, found, false);
+		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+		//if (newCell->rightBorderVisible())
+		//	newCell->setRightBorderVisible(found);
+
+		bL = findLine(bL, 100, found);
+		customTmp = customTmp + (found ? QString("true") : QString("false"));
+		//if (newCell->bottomBorderVisible())
+		//	newCell->setBottomBorderVisible(found);
 
 		rdf::Polygon p = createPolygon(tL, lL, rL, bL);
 		newCell->setPolygon(p);
+		newCell->setCustom(customTmp);
+
+		rdf::Vector2D offSet = newCell->upperLeft() - c->upperLeft();
+		
+		//copy children
+		QVector<QSharedPointer<rdf::Region>> templateChildren = c->children();	//get children from template
+		QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
+		if (!templateChildren.isEmpty()) {
+			
+			for (QSharedPointer<rdf::Region> ci : templateChildren) {
+
+				if (ci->type() == ci->type_text_line) {
+
+					QSharedPointer<rdf::TextLine> tTextLine = ci.dynamicCast<rdf::TextLine>();
+					tTextLine = QSharedPointer<rdf::TextLine>(new rdf::TextLine(*tTextLine));
+					//get baseline and polygon
+					rdf::BaseLine tmpBL = tTextLine->baseLine();
+					rdf::Polygon tmpP = tTextLine->polygon();
+					//shift by offset;
+					tmpBL.translate(offSet.toQPointF());
+					tmpP.translate(offSet.toQPointF());
+					//set shifted polygon and baseline
+					tTextLine->setBaseLine(tmpBL);
+					tTextLine->setPolygon(tmpP);
+
+					newChildren.push_back(tTextLine);	//push back altered text line
+				} else {
+					newChildren.push_back(ci);			//otherwise push back pointer to original element
+				}
+			}
+			newCell->setChildren(newChildren);
+		}
 
 		mCells.push_back(newCell);
 	}
@@ -746,7 +799,7 @@ bool FormFeatures::matchTemplate() {
 	return true;
 }
 
-rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizontal) {
+rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal) {
 
 	int index = -1;
 	double distance = std::numeric_limits<double>::max();
@@ -778,6 +831,7 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizon
 		if (std::find(mUsedHorLineIdx.begin(), mUsedHorLineIdx.end(), index) == mUsedHorLineIdx.end()) {
 			mUsedHorLineIdx.append(index);
 		}
+		found = true;
 		return mHorLines[index];
 	}
 	else if (index >= 0 && !horizontal) {
@@ -785,9 +839,12 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool horizon
 		if (std::find(mUsedVerLineIdx.begin(), mUsedVerLineIdx.end(), index) == mUsedVerLineIdx.end()) {
 			mUsedVerLineIdx.append(index);
 		}
+		found = true;
 		return mVerLines[index];
-	} else 
+	} else {
+		found = false;
 		return l;
+	}
 }
 
 rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl) {

@@ -56,6 +56,10 @@ QString Polygon::write() const {
 	return Converter::polyToString(mPoly.toPolygon());
 }
 
+void Polygon::translate(const QPointF & offset) {
+	mPoly.translate(offset);
+}
+
 int Polygon::size() const {
 	return mPoly.size();
 }
@@ -151,6 +155,10 @@ QPolygonF BaseLine::polygon() const {
 
 QPolygon BaseLine::toPolygon() const {
 	return mBaseLine.toPolygon();
+}
+
+void BaseLine::translate(const QPointF & offset) {
+	mBaseLine.translate(offset);
 }
 
 void BaseLine::read(const QString & pointList) {
