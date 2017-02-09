@@ -129,8 +129,10 @@ namespace rdf {
 
 		QVector<rdf::Line> usedHorLines() const;
 		QVector<rdf::Line> notUsedHorLines() const;
+		QVector<rdf::Line> filterHorLines(double minOverlap = 0.1, double distThreshold=20) const;
 		QVector<rdf::Line> useVerLines() const;
 		QVector<rdf::Line> notUseVerLines() const;
+		QVector<rdf::Line> filterVerLines(double minOverlap = 0.1, double distThreshold=20) const;
 
 
 		double lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap = 0.1, bool horizontal = true);

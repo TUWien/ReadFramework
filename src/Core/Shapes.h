@@ -87,7 +87,10 @@ public:
 
 	double distance(const Vector2D& p) const;
 	double horizontalOverlap(const Line& l) const;
+	double horizontalDistance(const Line& l, double threshold = 20) const;
 	double verticalOverlap(const Line& l) const;
+	double verticalDistance(const Line& l, double threshold = 20) const;
+	
 	Line merge(const Line& l) const;
 	Line gapLine(const Line& l) const;
 	double diffAngle(const Line& l) const;

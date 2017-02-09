@@ -575,6 +575,30 @@ double Line::horizontalOverlap(const Line & l) const {
 	return ol;
 }
 
+double Line::horizontalDistance(const Line & l, double threshold) const {
+
+	double distance;
+	distance = horizontalOverlap(l);
+
+	//use symmetric distance
+	double minP1 = rdf::Line::distance(l.p1());
+	double minP1Rev = l.distance(mLine.p1());
+	minP1 = minP1 < minP1Rev ? minP1 : minP1Rev;
+	double minP2 = rdf::Line::distance(l.p2());
+	double minP2rev = l.distance(mLine.p2());
+	minP2 = minP2 < minP2rev ? minP2 : minP2rev;
+
+	//double minP1 = std::abs(mLine.y1() - l.p1().y()) < std::abs(mLine.y1() - l.p2().y()) ? std::abs(mLine.y1() - l.p1().y()) : std::abs(mLine.y1() - l.p2().y());
+	//double minP2 = std::abs(mLine.y2() - l.p1().y()) < std::abs(mLine.y2() - l.p2().y()) ? std::abs(mLine.y2() - l.p1().y()) : std::abs(mLine.y2() - l.p2().y());
+
+	double maxP = minP1 > minP2 ? minP1 : minP2;
+		
+	if (maxP < threshold)
+		return distance;
+	else
+		return 0;
+}
+
 double Line::verticalOverlap(const Line & l) const {
 
 	double ol;
@@ -585,6 +609,27 @@ double Line::verticalOverlap(const Line & l) const {
 		ol = std::min(mLine.y2(), l.p2().y()) - std::max(mLine.y1(), l.p1().y());
 
 	return ol;
+}
+
+double Line::verticalDistance(const Line & l, double threshold) const {
+	double distance;
+	distance = verticalOverlap(l);
+
+	//use symmetric minimum distance
+	double minP1 = rdf::Line::distance(l.p1());
+	double minP1Rev = l.distance(mLine.p1());
+	minP1 = minP1 < minP1Rev ? minP1 : minP1Rev;
+	double minP2 = rdf::Line::distance(l.p2());
+	double minP2rev = l.distance(mLine.p2());
+	minP2 = minP2 < minP2rev ? minP2 : minP2rev;
+	//double minP1 = std::abs(mLine.x1() - l.p1().x()) < std::abs(mLine.x1() - l.p2().x()) ? std::abs(mLine.x1() - l.p1().x()) : std::abs(mLine.x1() - l.p2().x());
+	//double minP2 = std::abs(mLine.x2() - l.p1().x()) < std::abs(mLine.x2() - l.p2().x()) ? std::abs(mLine.x2() - l.p1().x()) : std::abs(mLine.x2() - l.p2().x());
+	double maxP = minP1 > minP2 ? minP1 : minP2;
+
+	if (maxP < threshold)
+		return distance;
+	else
+		return 0;
 }
 
 /// <summary>

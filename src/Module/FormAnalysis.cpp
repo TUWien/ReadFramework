@@ -624,8 +624,11 @@ cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
 	QVector<rdf::Line> hLines, vLines;
 	//create line vectors
 
-	hLines = notUsedHorLines();
-	vLines = notUseVerLines();
+	//hLines = notUsedHorLines();
+	//vLines = notUseVerLines();
+
+	hLines = filterHorLines();
+	vLines = filterVerLines();
 
 	for (auto i : hLines) {
 		i.setThickness(t);
@@ -951,6 +954,50 @@ cv::Size FormFeatures::sizeImg() const
 		return notUsedHor;
 	}
 
+	QVector<rdf::Line> FormFeatures::filterHorLines(double minOverlap, double distThreshold) const {
+
+		QVector<rdf::Line> newHor;
+		//QVector<rdf::Line> newVer;
+
+		//create new Table lines
+		for (auto c : mCells) {
+			newHor.push_back(c->topBorder());
+			newHor.push_back(c->bottomBorder());
+			//newVer.push_back(c->leftBorder());
+			//newVer.push_back(c->rightBorder());
+		}
+
+		QVector<rdf::Line> notUsedHorTmp;
+		QVector<rdf::Line> filteredLines;
+
+		notUsedHorTmp = notUsedHorLines();
+		//QVector<rdf::Line> notUsedVerTmp;
+
+		bool found = false;
+		for (auto testLine : notUsedHorTmp) {
+
+			for (auto templateLine : newHor) {
+				templateLine.sortEndpoints();
+				testLine.sortEndpoints();
+				double ol = testLine.horizontalDistance(templateLine, distThreshold);
+				ol = ol / (testLine.length() < templateLine.length() ? testLine.length() : templateLine.length());
+				if (ol > minOverlap) {
+					found = true;
+					break;
+				}
+			}
+
+			if (found) {
+				found = false;
+				//do not add line
+			} else {
+				filteredLines.push_back(testLine);
+			}
+		}
+
+		return filteredLines;
+	}
+
 	QVector<rdf::Line> FormFeatures::useVerLines() const {
 		QVector<rdf::Line> usedVer;
 
@@ -977,6 +1024,47 @@ cv::Size FormFeatures::sizeImg() const
 
 	}
 
+	QVector<rdf::Line> FormFeatures::filterVerLines(double minOverlap, double distThreshold) const {
+		
+		QVector<rdf::Line> newVer;
+
+		//create new Table lines
+		for (auto c : mCells) {
+			newVer.push_back(c->leftBorder());
+			newVer.push_back(c->rightBorder());
+		}
+
+		QVector<rdf::Line> notUsedVerTmp;
+		QVector<rdf::Line> filteredLines;
+
+		notUsedVerTmp = notUseVerLines();
+
+		bool found = false;
+		for (auto testLine : notUsedVerTmp) {
+
+			for (auto templateLine : newVer) {
+				templateLine.sortEndpoints(false);
+				testLine.sortEndpoints(false);
+				double ol = testLine.verticalDistance(templateLine, distThreshold);
+				ol = ol / (testLine.length() < templateLine.length() ? testLine.length() : templateLine.length());
+				if (ol > minOverlap) {
+					found = true;
+					break;
+				}
+			}
+
+			if (found) {
+				found = false;
+				//do not add line
+			}
+			else {
+				filteredLines.push_back(testLine);
+			}
+		}
+
+		return filteredLines;
+	}
+
 
 	double FormFeatures::lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap, bool horizontal) 	{
 
@@ -985,10 +1073,11 @@ cv::Size FormFeatures::sizeImg() const
 		//double midpointDist;
 
 		formLine.sortEndpoints(horizontal);
-		//templateLine.sortEndpoints(horizontal);
+		templateLine.sortEndpoints(horizontal);
 
 		length = templateLine.length();
 		if (horizontal) {
+
 			overlap = templateLine.horizontalOverlap(formLine);
 		}
 		else {
@@ -1067,7 +1156,8 @@ cv::Size FormFeatures::sizeImg() const
 
 	void FormFeatures::setSeparators(QSharedPointer<rdf::Region> r)	{
 
-		QVector<rdf::Line> tmp = notUsedHorLines();
+		//QVector<rdf::Line> tmp = notUsedHorLines();
+		QVector<rdf::Line> tmp = filterHorLines();
 
 		//horizontalLines
 		for (int i = 0; i < tmp.size(); i++) {
@@ -1078,7 +1168,8 @@ cv::Size FormFeatures::sizeImg() const
 			r->addUniqueChild(pSepR);
 		}
 		//vertical lines
-		tmp = notUseVerLines();
+		//tmp = notUseVerLines();
+		tmp = filterVerLines();
 		for (int i = 0; i < tmp.size(); i++) {
 
 			QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
