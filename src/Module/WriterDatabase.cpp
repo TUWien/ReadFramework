@@ -88,7 +88,7 @@ namespace rdf {
 			return;
 		}
 		if(mDescriptors.size() == 0) {
-			qWarning() << " WIDatabase: at least one image has to be in the dataset before generating a new vocabulary";
+			mWarning() << " WIDatabase: at least one image has to be in the dataset before generating a new vocabulary";
 			return;
 		}
 		mInfo << "generating vocabulary:" << mVocabulary.toString();
@@ -97,6 +97,19 @@ namespace rdf {
 		cv::Mat allDesc(0, 0, CV_32FC1);
 		for(int i = 0; i < mDescriptors.size(); i++) {
 			allDesc.push_back(mDescriptors[i]);
+		}
+
+		int maxDescs = 1000000;
+		if(allDesc.rows > maxDescs) {
+			mInfo << "currently " << allDesc.rows << " descriptors ... reducing it to " << maxDescs;
+			cv::Mat tmpDesc(0, 0, CV_32FC1);
+			int stepSize = allDesc.rows / maxDescs;
+			if(stepSize < 1)
+				stepSize = 1;
+			for(int i = 0; i < allDesc.rows; i += stepSize)
+				tmpDesc.push_back(allDesc.row(i).clone());
+			allDesc = tmpDesc;
+			mInfo << "successfully reduced number of descriptors to " << allDesc.rows;
 		}
 
 		if(mVocabulary.numberOfPCA() > 0) { 
