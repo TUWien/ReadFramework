@@ -81,7 +81,7 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-	void setTextRegions(const QVector<QSharedPointer<Region> >& regions);
+	void setRootRegion(const QSharedPointer<Region>& region);
 	TextBlockSet textBlockSet() const;
 
 private:
@@ -89,7 +89,14 @@ private:
 
 	// input
 	cv::Mat mImg;
+	QSharedPointer<Region> mRoot;
+
+	// output
 	TextBlockSet mTextBlockSet;
+
+	TextBlockSet createTextBlocks() const;
+	QVector<Line> createStopLines() const;
+
 };
 
 

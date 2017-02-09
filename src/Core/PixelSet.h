@@ -72,12 +72,16 @@ class DllCoreExport PixelConnector {
 
 public:
 	PixelConnector();
+	
 	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const = 0;
 	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
+	void setStopLines(const QVector<Line>& stopLines);
 
 protected:
 	PixelDistance::PixelDistanceFunction mDistanceFnc;
+	QVector<Line> mStopLines;
 
+	QVector<QSharedPointer<PixelEdge> > filter(QVector<QSharedPointer<PixelEdge> >& edges) const;
 };
 
 /// <summary>

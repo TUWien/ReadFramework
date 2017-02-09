@@ -38,6 +38,7 @@
 #include "SuperPixel.h"
 #include "TextLineSegmentation.h"
 #include "Elements.h"
+#include "ElementsHelper.h"
 #include "PageParser.h"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -94,6 +95,8 @@ bool LayoutAnalysis::compute() {
 	// TODO: automatically find text blocks
 
 	// create an 'all-in' text block
+	mTextBlockSet = createTextBlocks();
+
 	if (mTextBlockSet.isEmpty()) {
 		Rect r(Vector2D(), mImg.size());
 		mTextBlockSet << Polygon::fromRect(r);
@@ -101,6 +104,8 @@ bool LayoutAnalysis::compute() {
 
 	PixelSet pixels = spM.superPixels();
 	mTextBlockSet.setPixels(pixels);
+
+	QVector<Line> stopLines = createStopLines();
 
 	// compute text lines for each text block
 	for (QSharedPointer<TextBlock> tb : mTextBlockSet.textBlocks()) {
@@ -129,6 +134,7 @@ bool LayoutAnalysis::compute() {
 
 		// find text lines
 		rdf::TextLineSegmentation textLines(sp);
+		textLines.addSeparatorLines(stopLines);
 
 		if (!textLines.compute()) {
 			qWarning() << "could not compute text line segmentation!";
@@ -162,17 +168,9 @@ QString LayoutAnalysis::toString() const {
 	return Module::toString();
 }
 
-void LayoutAnalysis::setTextRegions(const QVector<QSharedPointer<Region> >& regions) {
+void LayoutAnalysis::setRootRegion(const QSharedPointer<Region>& region) {
 
-	QVector<QSharedPointer<Region> > textRegions;
-
-	for (auto r : regions) {
-
-		if (r->type() == Region::type_text_region)
-			textRegions << r;
-	}
-
-	mTextBlockSet = TextBlockSet(textRegions);
+	mRoot = region;
 }
 
 TextBlockSet LayoutAnalysis::textBlockSet() const {
@@ -182,6 +180,42 @@ TextBlockSet LayoutAnalysis::textBlockSet() const {
 bool LayoutAnalysis::checkInput() const {
 
 	return !isEmpty();
+}
+
+TextBlockSet LayoutAnalysis::createTextBlocks() const {
+
+	if (mRoot) {
+		// get (potential) text regions
+		
+		QVector<QSharedPointer<Region> > textRegions = RegionManager::filter(mRoot, Region::type_text_region);
+		return TextBlockSet(textRegions);
+	}
+
+	return TextBlockSet();
+}
+
+QVector<Line> LayoutAnalysis::createStopLines() const {
+
+	QVector<Line> stopLines;
+
+	if (mRoot) {
+
+		auto separators = RegionManager::filter(mRoot, Region::type_separator);
+
+		for (auto r : separators) {
+
+			QSharedPointer<SeparatorRegion> sr = r.dynamicCast<SeparatorRegion>();
+			if (!sr) {
+				qCritical() << "could not cast separator...";
+				continue;
+			}
+			stopLines << sr->line();
+		}
+	}
+
+	qDebug() << stopLines.size() << "stop lines added...";
+
+	return stopLines;
 }
 
 

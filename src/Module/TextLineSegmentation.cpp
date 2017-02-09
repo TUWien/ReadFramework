@@ -127,16 +127,15 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	if (!checkInput())
 		return false;
 
-	//RegionPixelConnector rpc;
-	//rpc.setLineSpacingMultiplier(2.0);
-	//DelauneyPixelConnector rpc;
-	//QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSet.pixels());
-
 	filterDuplicates(mSet);
-	//qDebug() << mSet.size()-fSet.size() << "/" << mSet.size() << "pixels filtered";
+
+	// create delauney graph
+	DelauneyPixelConnector dpc;
+	dpc.setStopLines(mStopLines);
 
 	PixelGraph pg(mSet);
-	pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
+	pg.connect(dpc, PixelGraph::sort_line_edges);
+	// TODO: add stop lines here...
 
 	if (img.empty())
 		mTextLines = clusterTextLines(pg);
@@ -422,7 +421,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	
 
 	//PixelGraph pg(mSet);
-	//pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
+	//pg.connect(DelauneyPixelConnector(), PixelGraph::sort_line_edges);
 
 
 	//auto edges = pg.edges();
@@ -510,7 +509,7 @@ QString TextLineSegmentation::toString() const {
 	return Module::toString();
 }
 
-void TextLineSegmentation::addLines(const QVector<Line>& lines) {
+void TextLineSegmentation::addSeparatorLines(const QVector<Line>& lines) {
 	mStopLines << lines;
 }
 

@@ -704,13 +704,52 @@ void PixelConnector::setDistanceFunction(const PixelDistance::PixelDistanceFunct
 	mDistanceFnc = distFnc;
 }
 
+/// <summary>
+/// Sets the stop lines.
+/// Edges that intersect with stop lines are removed.
+/// </summary>
+/// <param name="stopLines">The stop lines.</param>
+void PixelConnector::setStopLines(const QVector<Line>& stopLines) {
+	mStopLines = stopLines;
+}
+
+QVector<QSharedPointer<PixelEdge> > PixelConnector::filter(QVector<QSharedPointer<PixelEdge> >& edges) const {
+
+	// nothing to do?
+	if (mStopLines.empty())
+		return edges;
+
+	QVector<QSharedPointer<PixelEdge> > filteredEdges;
+
+	for (int idx = 0; idx < edges.size(); ) {
+
+		assert(edges[idx]);
+
+		bool remove = false;
+
+		for (const Line& line : mStopLines) {
+			if (edges[idx]->edge().intersects(line)) {
+				remove = true;
+				continue;
+			}
+		}
+
+		if (remove)
+			edges.remove(idx);
+		else
+			idx++;
+	}
+
+	return filteredEdges;
+}
+
 // DelauneyPixelConnector --------------------------------------------------------------------
 DelauneyPixelConnector::DelauneyPixelConnector() : PixelConnector() {
 }
 
 QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
-	Timer dt;
+	//Timer dt;
 	// Create an instance of Subdiv2D
 	QVector<Vector2D> pts;
 	for (const QSharedPointer<Pixel>& px : pixels) {
@@ -749,6 +788,12 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		edges << pe;
 	}
 	//qDebug() << "converted to edges" << dt;
+
+	Timer dt;
+	int s = edges.size();
+	/*edges = */filter(edges);
+
+	qDebug() << edges.size()-s << "/" << s << "edges filtered in" << dt;
 
 	return edges;
 
@@ -1149,6 +1194,7 @@ QVector<QSharedPointer<TextLineSet> > TextBlock::textLines() const {
 QSharedPointer<Region> TextBlock::toTextRegion() const {
 
 	QSharedPointer<Region> r(new Region(Region::type_text_region));
+	r->setPolygon(mPoly);
 
 	for (auto tl : mTextLines)
 		r->addUniqueChild(tl->toTextLine());

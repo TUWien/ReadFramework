@@ -250,6 +250,20 @@ void RegionManager::selectRegions(const QVector<QSharedPointer<Region>>& selRegi
 
 }
 
+QVector<QSharedPointer<rdf::Region>> RegionManager::filter(QSharedPointer<rdf::Region> root, const rdf::Region::Type & type) {
+
+	QVector<QSharedPointer<Region> > regions = Region::allRegions(root);
+	QVector<QSharedPointer<Region> > filteredRegions;
+
+	for (auto r : regions) {
+
+		if (r->type() == type)
+			filteredRegions << r;
+	}
+
+	return filteredRegions;
+}
+
 QVector<QSharedPointer<RegionTypeConfig> > RegionManager::createConfig() const {
 
 	QVector<QSharedPointer<RegionTypeConfig> > typeConfig;

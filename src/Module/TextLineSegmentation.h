@@ -96,7 +96,7 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-	void addLines(const QVector<Line>& lines);
+	void addSeparatorLines(const QVector<Line>& lines);
 	QVector<QSharedPointer<TextLine> > textLines() const;
 	QVector<QSharedPointer<TextLineSet> > textLineSets() const;
 

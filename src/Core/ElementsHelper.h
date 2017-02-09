@@ -176,7 +176,7 @@ public:
 		const QVector<QSharedPointer<Region>>& selRegions, 
 		QSharedPointer<Region> rootRegion = QSharedPointer<Region>()) const;
 
-	QVector<QSharedPointer<rdf::Region> > filter(const rdf::Region::Type& type) const;
+	static QVector<QSharedPointer<rdf::Region> > filter(QSharedPointer<rdf::Region> root, const rdf::Region::Type& type);
 
 private:
 	RegionManager();

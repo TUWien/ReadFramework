@@ -169,7 +169,7 @@ void LayoutTest::layoutToXml() const {
 	auto pe = parser.page();
 
 	rdf::LayoutAnalysis la(img);
-	la.setTextRegions(Region::allRegions(pe->rootRegion()));
+	la.setRootRegion(pe->rootRegion());
 
 	if (!la.compute())
 		qWarning() << "could not compute layout analysis";
@@ -373,7 +373,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// find text lines
 	rdf::TextLineSegmentation textLines(sp.pixels());
-	//textLines.addLines(tabStops.tabStopLines(30));	// TODO: fix parameter
+	//textLines.addSeparatorLines(tabStops.tabStopLines(30));	// TODO: fix parameter
 
 	if (!textLines.compute(img))
 		qWarning() << "could not compute text line segmentation!";
