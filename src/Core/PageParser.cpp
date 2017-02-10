@@ -50,15 +50,17 @@ PageXmlParser::PageXmlParser() {
 
 }
 
-void PageXmlParser::read(const QString & xmlPath) {
+bool PageXmlParser::read(const QString & xmlPath) {
 
 	mPage = parse(xmlPath);
 
 	// create an empty page if we could not read the XML
 	if (!mPage) {
 		mPage = mPage.create();
+		return false;
 	}
 
+	return true;
 }
 
 void PageXmlParser::write(const QString & xmlPath, const QSharedPointer<PageElement> pageElement) {

@@ -382,8 +382,13 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	}
 
 	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mTemplateName);
+	
 	rdf::PageXmlParser parser;
-	parser.read(loadXmlPath);
+	if (!parser.read(loadXmlPath)) {
+		qWarning() << "could not read template from" << loadXmlPath;
+		return false;
+	}
+
 	auto pe = parser.page();
 
 	//read xml separators and store them to testinfo
@@ -465,6 +470,11 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 }
 
 bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
+
+	if (!mTemplateForm) {
+		qWarning() << "no template provided for form matching - aborting";
+		return false;
+	}
 
 	if (isEmptyLines() || mTemplateForm->isEmptyLines())
 		return false;
@@ -551,6 +561,9 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 }
 
 cv::Mat FormFeatures::drawAlignment(cv::Mat img) {
+
+	if (!mTemplateForm)
+		return cv::Mat();
 
 	if (!img.empty()) {
 		cv::Mat tmp = img.clone();

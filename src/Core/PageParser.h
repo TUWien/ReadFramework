@@ -81,7 +81,7 @@ public:
 		tag_end
 	};
 
-	void read(const QString& xmlPath);
+	bool read(const QString& xmlPath);
 	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
 
 	QString tagName(const RootTags& tag) const;
