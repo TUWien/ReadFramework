@@ -1,12 +1,19 @@
-Version 0.2
+Version 0.1
 ===========
 - Layout Analysis
+	- New textline clustering
 	- SuperPixel using MSER
 	- Local textline orientation
 	- Graph-Cut based orientation correction
 	- Tab stop based page segmenation
 
-Version 0.1
+- Table Analysis
+	- Coarse-to-fine template registration
+
+- Writer Retrieval added
+
+
+Version 0.0.1
 ===========
 - BinarizationFgdWeight added and tested (different result due to filtering of BinarizationAdapted)
 - BinarizationAdapted added and tested (horizontal and vertical lines at filter border originate from jpg compression, mean filter added)
