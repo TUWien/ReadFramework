@@ -142,12 +142,12 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	else
 		mTextLines = clusterTextLinesDebug(pg, img);
 
-	//QVector<QSharedPointer<TextLineSet> > ps;
-	//for (auto p : mTextLines) {
-	//	if (p->size() > 10)
-	//		ps << p;
-	//}
-	//mTextLines = ps;
+	QVector<QSharedPointer<TextLineSet> > ps;
+	for (auto p : mTextLines) {
+		if (p->size() > 3)
+			ps << p;
+	}
+	mTextLines = ps;
 
 	mDebug << mTextLines.size() << "text lines (after filtering)";
 	mDebug << "computed in" << dt;
@@ -379,7 +379,7 @@ void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 		
 		if (remPixels.contains(px))
 			continue;
-
+		
 		Rect box = boxD;
 		box.move(px->center()-Vector2D(md, md));
 		

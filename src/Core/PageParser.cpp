@@ -172,7 +172,6 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 		// e.g. <Page imageFilename="00001234.tif" imageWidth="1000" imageHeight="2000">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_page)) {
 
-
 			pageElement->setImageFileName(reader.attributes().value(tagName(attr_imageFilename)).toString());
 
 			bool wok = false, hok = false;
@@ -186,9 +185,11 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 		}
 		// e.g. <TextLine id="r1" type="heading">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) {
-			
 			parseRegion(reader, root);
 		}
+		//else if (reader.tokenType() == QXmlStreamReader::StartElement) {
+		//	qWarning() << "unknown token: " << tag;
+		//}
 
 		reader.readNext();
 	}
@@ -267,6 +268,10 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 		if (reader.tokenType() == QXmlStreamReader::EndElement && tag == tagName(tag_meta))
 			break;
 
+		// skip non-starting elements
+		if (reader.tokenType() != QXmlStreamReader::StartElement)
+			continue;
+
 		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_meta_created)) {
 			reader.readNext();
 			page->setDateCreated(QDateTime::fromString(reader.text().toString(), Qt::ISODate));
@@ -279,6 +284,8 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 			reader.readNext();
 			page->setCreator(reader.text().toString());
 		}
+		else if (reader.tokenType() == QXmlStreamReader::StartElement)
+			qDebug() << "unknown meta data token:" << tag;
 
 	}
 }

@@ -42,7 +42,7 @@
 #include "PageParser.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+ // Qt Includes
 #pragma warning(pop)
 
 namespace rdf {
@@ -158,9 +158,60 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 
 	QPainter p(&pm);
 	
-	for (auto tb : mTextBlockSet.textBlocks())
+	for (auto tb : mTextBlockSet.textBlocks()) {
+		p.setPen(ColorManager::getColor());
 		tb->draw(p);
+	}
 
+	//// LSD OpenCV --------------------------------------------------------------------
+	//Timer dt;
+	//
+	//double scale = 4.0;
+	//cv::Mat lImg;
+	//cv::resize(mImg, lImg, cv::Size(), 1.0/scale, 1.0/scale);
+	//cv::line_descriptor::LSDDetector lsd;
+	//std::vector<cv::line_descriptor::KeyLine> lines;
+	//lsd.detect(lImg, lines, 2, 1);
+	//
+	//qDebug() << lines.size() << "lines detected in" << dt;
+
+	//p.setPen(ColorManager::red());
+	//for (auto kl : lines) {
+	//	
+	//	Line l(kl.getStartPoint(), kl.getEndPoint());
+	//	l.scale(scale);
+	//	l.draw(p);
+	//}
+
+	//// LSD Flo --------------------------------------------------------------------
+	//
+	//cv::Mat imgIn = mImg;
+	////cv::resize(imgIn, imgIn, cv::Size(), 0.5, 0.5);
+	//
+	//Timer dtl;
+	//cv::Mat imgInG = imgIn;
+	//if (imgIn.channels() != 1) 
+	//	cv::cvtColor(imgIn, imgInG, CV_RGB2GRAY);
+
+	//ReadLSD lsdr(imgInG);
+	//lsdr.config()->setScale(0.5);
+
+	//if (!lsdr.compute())
+	//	qWarning() << "could not compute LSD";
+
+	//qDebug() << "Read LSD lines computed in" << dtl;
+
+	//p.setPen(ColorManager::blue(0.4));
+
+	//for (auto ls : lsdr.lines()) {
+	//	
+	//	Line l = ls.line();
+	//	l.setThickness(1);
+	//	l.draw(p);
+	//}
+
+	//// old school --------------------------------------------------------------------
+	
 	return Image::qPixmap2Mat(pm);
 }
 
@@ -213,7 +264,14 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 		}
 	}
 
-	qDebug() << stopLines.size() << "stop lines added...";
+	//if (stopLines.empty()) {
+
+		//cv::line_descriptor::LSDDetector lsd;
+		//std::vector<cv::line_descriptor::KeyLine> lines;
+		//lsd.detect(mImg, lines, 2, 4);
+
+		qDebug() << lines.size() << "lines detected";
+	//}
 
 	return stopLines;
 }

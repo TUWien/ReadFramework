@@ -572,6 +572,14 @@ void Line::translate(cv::Point offset) {
 	mLine.translate(tmp);
 }
 
+void Line::scale(double s) {
+	
+	mLine.setP1(mLine.p1() * s);
+	mLine.setP2(mLine.p2() * s);
+
+	mThickness *= (float)s;
+}
+
 
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.

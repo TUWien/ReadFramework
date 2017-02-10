@@ -1243,7 +1243,6 @@ void TextBlockSet::setPixels(const PixelSet & ps) {
 	for (auto tb : mTextBlocks) {
 		assert(tb);
 		tb->addPixels(ps);
-		qDebug() << "text box has" << tb->pixelSet().size();
 	}
 }
 

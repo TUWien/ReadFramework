@@ -84,6 +84,7 @@ public:
 	double minDistance(const Line& l) const;
 
 	void translate(cv::Point offset);
+	void scale(double s);
 
 	double distance(const Vector2D& p) const;
 	double horizontalOverlap(const Line& l) const;
