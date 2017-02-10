@@ -787,13 +787,9 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		QSharedPointer<PixelEdge> pe(new PixelEdge(pixels[orgVertex], pixels[dstVertex]));
 		edges << pe;
 	}
-	//qDebug() << "converted to edges" << dt;
 
-	Timer dt;
-	int s = edges.size();
-	/*edges = */filter(edges);
-
-	qDebug() << edges.size()-s << "/" << s << "edges filtered in" << dt;
+	// remove edges that cross stop lines
+	filter(edges);
 
 	return edges;
 
