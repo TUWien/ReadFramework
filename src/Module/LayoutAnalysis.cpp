@@ -238,7 +238,7 @@ TextBlockSet LayoutAnalysis::createTextBlocks() const {
 	if (mRoot) {
 		// get (potential) text regions
 		
-		QVector<QSharedPointer<Region> > textRegions = RegionManager::filter(mRoot, Region::type_text_region);
+		QVector<QSharedPointer<Region> > textRegions = RegionManager::filter<Region>(mRoot, Region::type_text_region);
 		return TextBlockSet(textRegions);
 	}
 
@@ -251,16 +251,10 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 
 	if (mRoot) {
 
-		auto separators = RegionManager::filter(mRoot, Region::type_separator);
+		auto separators = RegionManager::filter<SeparatorRegion>(mRoot, Region::type_separator);
 
-		for (auto r : separators) {
-
-			QSharedPointer<SeparatorRegion> sr = r.dynamicCast<SeparatorRegion>();
-			if (!sr) {
-				qCritical() << "could not cast separator...";
-				continue;
-			}
-			stopLines << sr->line();
+		for (auto s : separators) {
+			stopLines << s->line();
 		}
 	}
 
@@ -270,7 +264,7 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 		//std::vector<cv::line_descriptor::KeyLine> lines;
 		//lsd.detect(mImg, lines, 2, 4);
 
-		qDebug() << lines.size() << "lines detected";
+		qDebug() << stopLines.size() << "lines detected";
 	//}
 
 	return stopLines;
