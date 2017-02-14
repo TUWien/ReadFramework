@@ -73,7 +73,7 @@ public:
 
 
 protected:
-	int mMserMinArea = 100;
+	int mMserMinArea = 150;
 	int mMserMaxArea = 1000;
 	int mErosionStep = 4;
 	int mNumErosionLayers = 3;
