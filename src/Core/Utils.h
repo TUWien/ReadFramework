@@ -51,8 +51,13 @@
 #endif
 #endif
 
+// some basic defines - yes, we try to not create too many macros...
 #define DK_DEG2RAD	0.017453292519943
 #define DK_RAD2DEG 	57.295779513082323
+
+// converts a version (e.g. 3.1.0) to a comparable int
+#define RDF_VERSION(major, minor, revision) (major << 16 | minor << 8 | revision)
+#define RDF_OPENCV_VERSION RDF_VERSION(CV_MAJOR_VERSION, CV_MINOR_VERSION, CV_VERSION_REVISION)
 
 // Qt defines
 class QSettings;
@@ -69,6 +74,7 @@ public:
 	
 	void initFramework() const;
 	void registerVersion() const;
+	static int versionToInt(char major, char minor, char revision);
 	static double rand();
 
 	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;

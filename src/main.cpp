@@ -59,6 +59,9 @@ bool testFunction();
 
 int main(int argc, char** argv) {
 
+	// check opencv version
+	qInfo().nospace() << "I am using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION;
+
 	QCoreApplication::setOrganizationName("TU Wien");
 	QCoreApplication::setOrganizationDomain("http://www.caa.tuwien.ac.at/cvl");
 	QCoreApplication::setApplicationName("READ Framework");
