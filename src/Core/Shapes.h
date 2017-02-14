@@ -504,6 +504,7 @@ public:
 	static Polygon fromRect(const Rect& rect);
 	void setPolygon(const QPolygonF& polygon);
 
+	void scale(double factor);
 	void draw(QPainter& p) const;
 	bool contains(const Vector2D& pt) const;
 

@@ -370,6 +370,14 @@ bool operator==(const QSharedPointer<const Pixel>& px, const cv::KeyPoint & kp) 
 	return px->ellipse().center().toCvPoint2f() == kp.pt && px->ellipse().majorAxis() == kp.size && kp.angle == angle;
 }
 
+void Pixel::setPyramidLevel(int level) {
+	mPyramidLevel = level;
+}
+
+int Pixel::pyramidLevel() const {
+	return mPyramidLevel;
+}
+
 cv::KeyPoint Pixel::toKeyPoint() const {
 
 	double angle = stats() ? stats()->orientation() : mEllipse.angle();
@@ -398,7 +406,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 			p.setPen(label().label().visColor());
 		}
 	}
-
+	
 	if (stats()) {
 
 		// show local orientation
@@ -424,6 +432,13 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
 			p.drawLine(Line(center(), center() + vec).line());
 			p.setPen(oPen);
 		}
+	}
+
+	// scale stroke w.r.t pyramid level
+	if (mPyramidLevel != 0.0) {
+		QPen pen = p.pen();
+		pen.setWidthF(pen.widthF()*(mPyramidLevel+1));
+		p.setPen(pen);
 	}
 
 	// draw the superpixel (ellipse)

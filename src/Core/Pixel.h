@@ -205,6 +205,9 @@ public:
 	void setLabel(const PixelLabel& label);
 	PixelLabel label() const;
 
+	void setPyramidLevel(int level);
+	int pyramidLevel() const;
+
 	cv::KeyPoint toKeyPoint() const;
 
 	enum DrawFlag {
@@ -231,6 +234,8 @@ protected:
 	QVector<QSharedPointer<PixelStats> > mStats;
 	PixelTabStop mTabStop;
 	PixelLabel mLabel;
+
+	int mPyramidLevel = 0;	// 1.0/std::pow(2, mPyramidLevel) scales back to the pyramid
 };
 
 class DllCoreExport PixelEdge : public BaseElement {

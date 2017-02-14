@@ -345,6 +345,10 @@ int SuperPixelConfig::erosionStep() const {
 	return checkParam(mErosionStep, 1, 20, "erosionStep");
 }
 
+void SuperPixelConfig::setNumErosionLayers(int numLayers) {
+	mNumErosionLayers = numLayers;
+}
+
 /// <summary>
 /// Numbers the erosion layers.
 /// The image is iteratively eroded in order to split
@@ -885,28 +889,38 @@ bool ScaleSpaceSuperPixel::compute() {
 		if (config()->minLayer() <= idx) {
 
 			SuperPixel spm(img);
+
+			// do not erode large pyramid levels
+			if (idx > 3) {
+				auto cc = spm.config();
+				cc->setNumErosionLayers(1);
+			}
+
+			// get super pixels of the current scale
 			if (!spm.compute())
 				mWarning << "could not compute super pixels for layer #" << idx;
 
 			PixelSet set = spm.getSuperPixels();
-			
+
 			if (idx > 0) {
+
+				// assign the pyramid level
+				for (auto p : set.pixels())
+					p->setPyramidLevel(idx);
+
 				// re-scale
 				double sf = std::pow(2, idx);
 				set.scale(sf);
 			}
 
 			mSet += set;
-			//mInfo << set.size() << "pixels found at scale:" << idx;
 		}
 
 		cv::resize(img, img, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
 	}
 
-	// TODO: 
-	// - do not erode at large scales
-	// - filter duplicates over all scales
-
+	// filter from all scales
+	mSet.filterDuplicates();
 	mInfo << mSet.size() << "pixels extracted in" << dt;
 
 	return true;

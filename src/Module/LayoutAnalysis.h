@@ -61,12 +61,28 @@ class DllCoreExport LayoutAnalysisConfig : public ModuleConfig {
 public:
 	LayoutAnalysisConfig();
 
+	enum ScaleSideMode {
+		scale_max_side = 0,		// scales w.r.t to the max side usefull if you have free images
+		scale_height,			// [default] choose this if you now that you have pages & double pages
+
+		scale_end
+	};
+
 	virtual QString toString() const override;
+
+	void setMaxImageSide(int maxSide);
+	int maxImageSide() const;
+
+	void setScaleMode(const ScaleSideMode& mode);
+	int scaleMode() const;
 
 protected:
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
+
+	int mMaxImageSide = 3000;
+	int mScaleMode = scale_height;
 };
 
 class DllCoreExport LayoutAnalysis : public Module {
@@ -84,12 +100,17 @@ public:
 	void setRootRegion(const QSharedPointer<Region>& region);
 	TextBlockSet textBlockSet() const;
 
+	double scaleFactor() const;
+
 private:
 	bool checkInput() const override;
 
 	// input
 	cv::Mat mImg;
 	QSharedPointer<Region> mRoot;
+
+	// params
+	double mScale = 1.0;
 
 	// output
 	TextBlockSet mTextBlockSet;

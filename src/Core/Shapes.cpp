@@ -112,6 +112,17 @@ void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
 
+void Polygon::scale(double factor) {
+
+	QPolygonF sPoly;
+
+	for (const QPointF& pt : mPoly) {
+		sPoly << pt * factor;
+	}
+
+	mPoly = sPoly;
+}
+
 void Polygon::draw(QPainter & p) const {
 	
 	QPen oPen = p.pen();
@@ -574,6 +585,9 @@ void Line::translate(cv::Point offset) {
 
 void Line::scale(double s) {
 	
+	if (s == 1.0)
+		return;
+
 	mLine.setP1(mLine.p1() * s);
 	mLine.setP2(mLine.p2() * s);
 
