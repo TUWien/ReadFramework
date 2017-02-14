@@ -187,7 +187,7 @@ void LayoutTest::layoutToXml() const {
 
 	// write to XML --------------------------------------------------------------------
 	pe->setCreator(QString("CVL"));
-	pe->setImageSize(QSize(img.rows, img.cols));
+	pe->setImageSize(QSize(img.cols, img.rows));
 	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
 
 	pe->setRootRegion(la.textBlockSet().toTextRegion());
