@@ -152,7 +152,7 @@ void Config::load() {
 
 	mGlobal.load(mSettings);
 	mGlobalInit = mGlobal;
-	qInfo() << "loading settings from" << mGlobal.settingsFileName;
+	qInfo() << "[READ] loading settings from" << mGlobal.settingsFileName;
 }
 
 void Config::save() const {

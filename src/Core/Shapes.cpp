@@ -56,6 +56,10 @@ QString Polygon::write() const {
 	return Converter::polyToString(mPoly.toPolygon());
 }
 
+void Polygon::translate(const QPointF & offset) {
+	mPoly.translate(offset);
+}
+
 int Polygon::size() const {
 	return mPoly.size();
 }
@@ -93,6 +97,17 @@ Polygon Polygon::fromCvPoints(const std::vector<cv::Point>& pts) {
 	return poly;
 }
 
+Polygon Polygon::fromRect(const Rect & rect) {
+
+	Polygon p;
+	p << rect.topLeft();
+	p << rect.topRight();
+	p << rect.bottomRight();
+	p << rect.bottomLeft();
+
+	return p;
+}
+
 void Polygon::setPolygon(const QPolygonF & polygon) {
 	mPoly = polygon;
 }
@@ -108,6 +123,11 @@ void Polygon::draw(QPainter & p) const {
 	p.setPen(oPen);
 }
 
+bool Polygon::contains(const Vector2D & pt) const {
+
+	return mPoly.containsPoint(pt.toQPointF(), Qt::WindingFill);
+}
+
 QPolygonF Polygon::polygon() const {
 	return mPoly;
 }
@@ -119,6 +139,15 @@ QPolygonF Polygon::closedPolygon() const {
 		closed.append(mPoly.first());
 
 	return closed;
+}
+
+QVector<Vector2D> Polygon::toPoints() const {
+
+	QVector<Vector2D> pts(mPoly.size());
+	for (const QPointF& p : mPoly)
+		pts << p;
+
+	return pts;
 }
 
 // BaseLine --------------------------------------------------------------------
@@ -151,6 +180,10 @@ QPolygonF BaseLine::polygon() const {
 
 QPolygon BaseLine::toPolygon() const {
 	return mBaseLine.toPolygon();
+}
+
+void BaseLine::translate(const QPointF & offset) {
+	mBaseLine.translate(offset);
 }
 
 void BaseLine::read(const QString & pointList) {
@@ -539,6 +572,14 @@ void Line::translate(cv::Point offset) {
 	mLine.translate(tmp);
 }
 
+void Line::scale(double s) {
+	
+	mLine.setP1(mLine.p1() * s);
+	mLine.setP2(mLine.p2() * s);
+
+	mThickness *= (float)s;
+}
+
 
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.
@@ -567,6 +608,30 @@ double Line::horizontalOverlap(const Line & l) const {
 	return ol;
 }
 
+double Line::horizontalDistance(const Line & l, double threshold) const {
+
+	double distance;
+	distance = horizontalOverlap(l);
+
+	//use symmetric distance
+	double minP1 = rdf::Line::distance(l.p1());
+	double minP1Rev = l.distance(mLine.p1());
+	minP1 = minP1 < minP1Rev ? minP1 : minP1Rev;
+	double minP2 = rdf::Line::distance(l.p2());
+	double minP2rev = l.distance(mLine.p2());
+	minP2 = minP2 < minP2rev ? minP2 : minP2rev;
+
+	//double minP1 = std::abs(mLine.y1() - l.p1().y()) < std::abs(mLine.y1() - l.p2().y()) ? std::abs(mLine.y1() - l.p1().y()) : std::abs(mLine.y1() - l.p2().y());
+	//double minP2 = std::abs(mLine.y2() - l.p1().y()) < std::abs(mLine.y2() - l.p2().y()) ? std::abs(mLine.y2() - l.p1().y()) : std::abs(mLine.y2() - l.p2().y());
+
+	double maxP = minP1 > minP2 ? minP1 : minP2;
+		
+	if (maxP < threshold)
+		return distance;
+	else
+		return 0;
+}
+
 double Line::verticalOverlap(const Line & l) const {
 
 	double ol;
@@ -577,6 +642,27 @@ double Line::verticalOverlap(const Line & l) const {
 		ol = std::min(mLine.y2(), l.p2().y()) - std::max(mLine.y1(), l.p1().y());
 
 	return ol;
+}
+
+double Line::verticalDistance(const Line & l, double threshold) const {
+	double distance;
+	distance = verticalOverlap(l);
+
+	//use symmetric minimum distance
+	double minP1 = rdf::Line::distance(l.p1());
+	double minP1Rev = l.distance(mLine.p1());
+	minP1 = minP1 < minP1Rev ? minP1 : minP1Rev;
+	double minP2 = rdf::Line::distance(l.p2());
+	double minP2rev = l.distance(mLine.p2());
+	minP2 = minP2 < minP2rev ? minP2 : minP2rev;
+	//double minP1 = std::abs(mLine.x1() - l.p1().x()) < std::abs(mLine.x1() - l.p2().x()) ? std::abs(mLine.x1() - l.p1().x()) : std::abs(mLine.x1() - l.p2().x());
+	//double minP2 = std::abs(mLine.x2() - l.p1().x()) < std::abs(mLine.x2() - l.p2().x()) ? std::abs(mLine.x2() - l.p1().x()) : std::abs(mLine.x2() - l.p2().x());
+	double maxP = minP1 > minP2 ? minP1 : minP2;
+
+	if (maxP < threshold)
+		return distance;
+	else
+		return 0;
 }
 
 /// <summary>

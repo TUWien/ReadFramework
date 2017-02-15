@@ -644,7 +644,7 @@ namespace rdf {
 
 	void LineTrace::filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg) {
 
-
+		// compute horizontal lines
 		rdf::Blobs binBlobsH;
 		binBlobsH.setImage(hDSCCImg);
 		binBlobsH.compute();
@@ -655,8 +655,8 @@ namespace rdf {
 
 		hLines = rdf::BlobManager::instance().lines(binBlobsH);
 		hDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsH);
-
-
+		
+		// compute vertical lines
 		rdf::Blobs binBlobsV;
 		binBlobsV.setImage(vDSCCImg);
 		binBlobsV.compute();

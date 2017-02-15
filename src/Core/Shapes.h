@@ -84,10 +84,14 @@ public:
 	double minDistance(const Line& l) const;
 
 	void translate(cv::Point offset);
+	void scale(double s);
 
 	double distance(const Vector2D& p) const;
 	double horizontalOverlap(const Line& l) const;
+	double horizontalDistance(const Line& l, double threshold = 20) const;
 	double verticalOverlap(const Line& l) const;
+	double verticalDistance(const Line& l, double threshold = 20) const;
+	
 	Line merge(const Line& l) const;
 	Line gapLine(const Line& l) const;
 	double diffAngle(const Line& l) const;
@@ -458,6 +462,8 @@ public:
 	QPolygonF polygon() const;
 	QPolygon toPolygon() const;
 
+	void translate(const QPointF& offset);
+
 	void read(const QString& pointList);
 	QString write() const;
 
@@ -473,11 +479,11 @@ class DllCoreExport Polygon {
 public:
 	Polygon(const QPolygonF& polygon = QPolygonF());
 
-	friend void operator<<(Polygon& poly, const QPointF& pt) {
-		poly.mPoly << pt;
+	void operator<<(const QPointF& pt) {
+		mPoly << pt;
 	}
-	friend void operator<<(Polygon& poly, const Vector2D& pt) {
-		poly.mPoly << pt.toQPointF();
+	void operator<<(const Vector2D& pt) {
+		mPoly << pt.toQPointF();
 	}
 
 	bool isEmpty() const;
@@ -485,16 +491,21 @@ public:
 	void read(const QString& pointList);
 	QString write() const;
 
+	void translate(const QPointF& offset);
+
 	int size() const;
 	QPolygonF polygon() const;
 	QPolygonF closedPolygon() const;
+	QVector<Vector2D> toPoints() const;
 
 	static Polygon fromCvPoints(const std::vector<cv::Point2d>& pts);
 	static Polygon fromCvPoints(const std::vector<cv::Point2f>& pts);
 	static Polygon fromCvPoints(const std::vector<cv::Point>& pts);
+	static Polygon fromRect(const Rect& rect);
 	void setPolygon(const QPolygonF& polygon);
 
 	void draw(QPainter& p) const;
+	bool contains(const Vector2D& pt) const;
 
 protected:
 	QPolygonF mPoly;

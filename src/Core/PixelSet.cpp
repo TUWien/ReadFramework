@@ -704,13 +704,52 @@ void PixelConnector::setDistanceFunction(const PixelDistance::PixelDistanceFunct
 	mDistanceFnc = distFnc;
 }
 
+/// <summary>
+/// Sets the stop lines.
+/// Edges that intersect with stop lines are removed.
+/// </summary>
+/// <param name="stopLines">The stop lines.</param>
+void PixelConnector::setStopLines(const QVector<Line>& stopLines) {
+	mStopLines = stopLines;
+}
+
+QVector<QSharedPointer<PixelEdge> > PixelConnector::filter(QVector<QSharedPointer<PixelEdge> >& edges) const {
+
+	// nothing to do?
+	if (mStopLines.empty())
+		return edges;
+
+	QVector<QSharedPointer<PixelEdge> > filteredEdges;
+
+	for (int idx = 0; idx < edges.size(); ) {
+
+		assert(edges[idx]);
+
+		bool remove = false;
+
+		for (const Line& line : mStopLines) {
+			if (edges[idx]->edge().intersects(line)) {
+				remove = true;
+				continue;
+			}
+		}
+
+		if (remove)
+			edges.remove(idx);
+		else
+			idx++;
+	}
+
+	return filteredEdges;
+}
+
 // DelauneyPixelConnector --------------------------------------------------------------------
 DelauneyPixelConnector::DelauneyPixelConnector() : PixelConnector() {
 }
 
 QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
-	Timer dt;
+	//Timer dt;
 	// Create an instance of Subdiv2D
 	QVector<Vector2D> pts;
 	for (const QSharedPointer<Pixel>& px : pixels) {
@@ -748,7 +787,9 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		QSharedPointer<PixelEdge> pe(new PixelEdge(pixels[orgVertex], pixels[dstVertex]));
 		edges << pe;
 	}
-	//qDebug() << "converted to edges" << dt;
+
+	// remove edges that cross stop lines
+	filter(edges);
 
 	return edges;
 
@@ -1109,6 +1150,122 @@ void TextLineSet::updateLine() {
 
 	mLine = line;
 	mLineErr = computeError(ptSet);
+}
+
+// TextBlock --------------------------------------------------------------------
+TextBlock::TextBlock(const Polygon & poly) {
+	mPoly = poly;
+}
+
+/// <summary>
+/// Filters pixels w.r.t the text blocks boundary.
+/// Hence only pixels that are within the given 
+/// boundary are added.
+/// </summary>
+/// <param name="set">The set.</param>
+void TextBlock::addPixels(const PixelSet & ps) {
+	
+	for (auto px : ps.pixels()) {
+		if (mPoly.contains(px->center()))
+			mSet.add(px);
+	}
+}
+
+PixelSet TextBlock::pixelSet() const {
+	return mSet;
+}
+
+Polygon TextBlock::poly() const {
+	return mPoly;
+}
+
+void TextBlock::setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLines) {
+	mTextLines = textLines;
+}
+
+QVector<QSharedPointer<TextLineSet> > TextBlock::textLines() const {
+	return mTextLines;
+}
+
+QSharedPointer<Region> TextBlock::toTextRegion() const {
+
+	QSharedPointer<Region> r(new Region(Region::type_text_region));
+	r->setPolygon(mPoly);
+
+	for (auto tl : mTextLines)
+		r->addUniqueChild(tl->toTextLine());
+
+	return r;
+}
+
+void TextBlock::draw(QPainter & p, const DrawFlag & df) {
+
+	if (df & draw_pixels)
+		mSet.draw(p);
+
+	if (df & draw_text_lines) {
+		for (auto tl : mTextLines)
+			tl->draw(p);
+	}
+
+	if (df & draw_poly) {
+		mPoly.draw(p);
+	}
+}
+
+// TextBlockSet --------------------------------------------------------------------
+TextBlockSet::TextBlockSet(const QVector<Polygon>& regions) {
+
+	for (auto r : regions)
+		mTextBlocks << QSharedPointer<TextBlock>(new TextBlock(r));
+}
+
+TextBlockSet::TextBlockSet(const QVector<QSharedPointer<Region>>& regions) {
+
+	for (auto r : regions)
+		mTextBlocks << QSharedPointer<TextBlock>(new TextBlock(r->polygon()));
+}
+
+void TextBlockSet::operator<<(const TextBlock & block) {
+	mTextBlocks << QSharedPointer<TextBlock>(new TextBlock(block));
+}
+
+bool TextBlockSet::isEmpty() const {
+	return mTextBlocks.isEmpty();
+}
+
+void TextBlockSet::setPixels(const PixelSet & ps) {
+
+	for (auto tb : mTextBlocks) {
+		assert(tb);
+		tb->addPixels(ps);
+	}
+}
+
+QVector<QSharedPointer<TextBlock> > TextBlockSet::textBlocks() const {
+	return mTextBlocks;
+}
+
+QSharedPointer<Region> TextBlockSet::toTextRegion() const {
+
+	// collect all polygon points (to determine the bounding box)
+	QVector<Vector2D> pts;
+	for (auto tb : mTextBlocks) {
+		assert(tb);
+		pts << tb->poly().toPoints();
+	}
+
+	Rect bb = Rect::fromPoints(pts);
+
+	// create the XML-ready region
+	QSharedPointer<Region> region(new Region(Region::type_text_region));
+	region->setPolygon(Polygon::fromRect(bb));
+
+	// add all text blocks
+	for (auto tb : mTextBlocks)
+		region->addUniqueChild(tb->toTextRegion());
+
+	return region;
 }
 
 }

@@ -45,6 +45,8 @@
 #include "DebugMarkus.h"
 #include "DebugFlo.h"
 #include "DebugStefan.h"
+#include "PageParser.h"
+#include "Shapes.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")
@@ -53,6 +55,7 @@
 #endif
 
 void applyDebugSettings(rdf::DebugConfig& dc);
+bool testFunction();
 
 int main(int argc, char** argv) {
 
@@ -93,6 +96,10 @@ int main(int argc, char** argv) {
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
+
+	// stop processing if little tests are preformed
+	if (testFunction())
+		return 0;
 
 	// load settings
 	rdf::Config& config = rdf::Config::instance();
@@ -152,12 +159,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			rdf::XmlTest test(dc);
-			test.parseXml();
-			test.linesToXml();
+			//rdf::XmlTest test(dc);
+			//test.parseXml();
+			//test.linesToXml();
 
-			//rdf::LayoutTest lt(dc);
-			//lt.testComponents();
+			rdf::LayoutTest lt(dc);
+			lt.testComponents();
 		}
 
 	}
@@ -176,10 +183,10 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.imagePath().isEmpty()) {
 		//dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
-		dc.setImagePath("D:/read/test/00000197.jpg");
-		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_003-01_0001.jpg");
+		//dc.setImagePath("D:/read/test/00000197.jpg");
+		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_003-01_0001.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
-		//dc.setImagePath("D:/read/test/screenshot.png");
+		dc.setImagePath("D:/read/test/M_Freyung_012_0053.jpg");
 		//dc.setImagePath("D:/read/test/synthetic-test.png");
 		//dc.setImagePath("D:/read/test/synthetic-test-single-line.png");
 		//dc.setImagePath("D:/read/data/Herbarium/George_Forrest_Herbarium_Specimens/E00000017-c.jpg");
@@ -221,5 +228,27 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		qInfo() << dc.featureCachePath() << "added as feature cache path";
 	} 
 
+	if (dc.xmlPath().isEmpty()) {
+		QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
+		dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
+		qInfo() << dc.xmlPath() << "added as XML path";
+	} 
+
+
 	// add your debug overwrites here...
+}
+
+bool testFunction() {
+
+	// tests the line distance to point function
+	//rdf::Vector2D l1(1916, 1427);
+	//rdf::Vector2D l2(1931, 1859);
+	//rdf::Vector2D l3(1915, 834);
+	//rdf::Vector2D l4(1952, 3846);
+
+	//rdf::Line l(l3,l4);
+
+	//qDebug() << l.distance(l2) << "is the distance";
+
+	return false;
 }

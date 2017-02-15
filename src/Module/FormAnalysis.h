@@ -111,7 +111,7 @@ namespace rdf {
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		bool matchTemplate();
-		rdf::Line findLine(rdf::Line l, double distThreshold, bool horizontal = true);
+		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;
@@ -129,8 +129,10 @@ namespace rdf {
 
 		QVector<rdf::Line> usedHorLines() const;
 		QVector<rdf::Line> notUsedHorLines() const;
+		QVector<rdf::Line> filterHorLines(double minOverlap = 0.1, double distThreshold=20) const;
 		QVector<rdf::Line> useVerLines() const;
 		QVector<rdf::Line> notUseVerLines() const;
+		QVector<rdf::Line> filterVerLines(double minOverlap = 0.1, double distThreshold=20) const;
 
 
 		double lineDistance(rdf::Line templateLine, rdf::Line formLine, double minOverlap = 0.1, bool horizontal = true);

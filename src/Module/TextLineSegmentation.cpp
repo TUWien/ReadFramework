@@ -127,28 +127,27 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	if (!checkInput())
 		return false;
 
-	//RegionPixelConnector rpc;
-	//rpc.setLineSpacingMultiplier(2.0);
-	//DelauneyPixelConnector rpc;
-	//QVector<QSharedPointer<PixelEdge> > pEdges = rpc.connect(mSet.pixels());
-
 	filterDuplicates(mSet);
-	//qDebug() << mSet.size()-fSet.size() << "/" << mSet.size() << "pixels filtered";
+
+	// create delauney graph
+	DelauneyPixelConnector dpc;
+	dpc.setStopLines(mStopLines);
 
 	PixelGraph pg(mSet);
-	pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
+	pg.connect(dpc, PixelGraph::sort_line_edges);
+	// TODO: add stop lines here...
 
 	if (img.empty())
 		mTextLines = clusterTextLines(pg);
 	else
 		mTextLines = clusterTextLinesDebug(pg, img);
 
-	//QVector<QSharedPointer<TextLineSet> > ps;
-	//for (auto p : mTextLines) {
-	//	if (p->size() > 10)
-	//		ps << p;
-	//}
-	//mTextLines = ps;
+	QVector<QSharedPointer<TextLineSet> > ps;
+	for (auto p : mTextLines) {
+		if (p->size() > 3)
+			ps << p;
+	}
+	mTextLines = ps;
 
 	mDebug << mTextLines.size() << "text lines (after filtering)";
 	mDebug << "computed in" << dt;
@@ -162,8 +161,54 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
 	
-	qWarning() << "text clustering is not implemented yet!";
-	return QVector<QSharedPointer<TextLineSet> >();
+	QVector<QSharedPointer<TextLineSet> > textLines;
+	int idx = 0;
+
+	for (auto e : graph.edges()) {
+
+		double heat = 1.0 - (++idx / (double)graph.edges().size());
+
+		int psIdx1 = locate(e->first(), textLines);
+		int psIdx2 = locate(e->second(), textLines);
+
+		// create a new text line
+		if (psIdx1 == -1 && psIdx2 == -1) {
+
+			// let's call it a pair & create a new text line
+			QVector<QSharedPointer<Pixel> > px;
+			px << e->first();
+			px << e->second();
+			textLines << QSharedPointer<TextLineSet>::create(px);
+		}
+		// already clustered -> nothing todo
+		else if (psIdx1 == psIdx2) {
+			// this is nothing
+		}
+		// merge one pixel
+		else if (psIdx2 == -1) {
+
+			if (addPixel(textLines[psIdx1], e->second(), heat)) {
+				textLines[psIdx1]->add(e->second());
+			}
+			// else drop
+		}
+		// merge one pixel
+		else if (psIdx1 == -1) {
+			if (addPixel(textLines[psIdx2], e->first(), heat)) {
+				textLines[psIdx2]->add(e->first());
+			}
+			// else drop
+		}
+		// merge same text line
+		else if (mergeTextLines(textLines[psIdx1], textLines[psIdx2], heat)) {
+
+			textLines[psIdx2]->append(textLines[psIdx1]->pixels());
+			textLines.remove(psIdx1);
+		}
+		// else drop
+	}
+
+	return textLines;
 }
 
 QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLinesDebug(const PixelGraph & graph, const cv::Mat& img) const {
@@ -334,7 +379,7 @@ void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 		
 		if (remPixels.contains(px))
 			continue;
-
+		
 		Rect box = boxD;
 		box.move(px->center()-Vector2D(md, md));
 		
@@ -376,7 +421,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 	
 
 	//PixelGraph pg(mSet);
-	//pg.connect(rdf::DelauneyPixelConnector(), PixelGraph::sort_line_edges);
+	//pg.connect(DelauneyPixelConnector(), PixelGraph::sort_line_edges);
 
 
 	//auto edges = pg.edges();
@@ -464,7 +509,7 @@ QString TextLineSegmentation::toString() const {
 	return Module::toString();
 }
 
-void TextLineSegmentation::addLines(const QVector<Line>& lines) {
+void TextLineSegmentation::addSeparatorLines(const QVector<Line>& lines) {
 	mStopLines << lines;
 }
 
@@ -475,6 +520,10 @@ QVector<QSharedPointer<TextLine>> TextLineSegmentation::textLines() const {
 		tls << set->toTextLine();
 
 	return tls;
+}
+
+QVector<QSharedPointer<TextLineSet>> TextLineSegmentation::textLineSets() const {
+	return mTextLines;
 }
 
 bool TextLineSegmentation::checkInput() const {
