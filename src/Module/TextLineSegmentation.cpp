@@ -108,7 +108,7 @@ TextLineSegmentation::TextLineSegmentation(const PixelSet& set) {
 	mSet = set;
 	mConfig = QSharedPointer<TextLineConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
+
 }
 
 bool TextLineSegmentation::isEmpty() const {

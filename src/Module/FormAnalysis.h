@@ -77,9 +77,9 @@ namespace rdf {
 		//QString mTemplDatabase;
 		QString mTemplDatabase = QString("D:\\projects\\READ\\formTest\\form-gt\\Table_Template_M_Aigen-am-Inn_003_01\\page\\M_Aigen_am_Inn_003-01_0001.xml");
 
-		double mThreshLineLenRatio = 0.6f;
-		double mDistThreshold = 30.0f;
-		double mErrorThr = 15.0f;
+		double mThreshLineLenRatio = 0.6;
+		double mDistThreshold = 30.0;
+		double mErrorThr = 15.0;
 
 		int mSearchXOffset = 200;
 		int mSearchYOffset = 200;

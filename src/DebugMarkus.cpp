@@ -170,6 +170,7 @@ void LayoutTest::layoutToXml() const {
 
 	rdf::LayoutAnalysis la(img);
 	la.setRootRegion(pe->rootRegion());
+	la.config()->saveDefaultSettings(Config::instance().settings());	// save default layout settings
 
 	if (!la.compute())
 		qWarning() << "could not compute layout analysis";

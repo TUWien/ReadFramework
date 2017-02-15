@@ -59,7 +59,6 @@ SuperPixel::SuperPixel(const cv::Mat& srcImg) {
 	mSrcImg = srcImg;
 	mConfig = QSharedPointer<SuperPixelConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixel::checkInput() const {
@@ -472,7 +471,6 @@ LocalOrientation::LocalOrientation(const PixelSet& set) {
 	mSet = set;
 	mConfig = QSharedPointer<LocalOrientationConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool LocalOrientation::isEmpty() const {

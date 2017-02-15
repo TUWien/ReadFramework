@@ -91,7 +91,6 @@ LayoutAnalysis::LayoutAnalysis(const cv::Mat& img) {
 
 	mConfig = QSharedPointer<LayoutAnalysisConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool LayoutAnalysis::isEmpty() const {

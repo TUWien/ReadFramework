@@ -60,7 +60,6 @@ namespace rdf {
 
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
 		mConfig->loadSettings();
-		mConfig->saveDefaultSettings();
 	}
 
 	//bool FormFeatures::loadTemplateDatabase(QString db)	{
@@ -1344,12 +1343,14 @@ cv::Size FormFeatures::sizeImg() const
 		msg += "  mformTemplate: " + mTemplDatabase;
 		return msg;
 	}
+	
 	void FormFeaturesConfig::load(const QSettings & settings)	{
 		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
 		mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
 	}
+
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("distThreshold", mDistThreshold);
