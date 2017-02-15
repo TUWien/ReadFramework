@@ -88,7 +88,7 @@ namespace rdf {
 			return;
 		}
 		if(mDescriptors.size() == 0) {
-			mWarning() << " WIDatabase: at least one image has to be in the dataset before generating a new vocabulary";
+			mWarning << " WIDatabase: at least one image has to be in the dataset before generating a new vocabulary";
 			return;
 		}
 		mInfo << "generating vocabulary:" << mVocabulary.toString();
@@ -101,7 +101,7 @@ namespace rdf {
 
 		int maxDescs = 1000000;
 		if(allDesc.rows > maxDescs) {
-			mInfo << "currently " << allDesc.rows << " descriptors ... reducing it to " << maxDescs;
+			mInfo << "currently " << allDesc.rows << " descriptors ... reducing it to approx. " << maxDescs;
 			cv::Mat tmpDesc(0, 0, CV_32FC1);
 			int stepSize = allDesc.rows / maxDescs;
 			if(stepSize < 1)
