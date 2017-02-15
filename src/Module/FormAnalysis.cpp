@@ -59,12 +59,13 @@ namespace rdf {
 		mSizeSrc = mSrcImg.size();
 
 		mConfig = QSharedPointer<FormFeaturesConfig>::create();
+		mConfig->loadSettings();
+		mConfig->saveDefaultSettings();
 	}
 
 	//bool FormFeatures::loadTemplateDatabase(QString db)	{
 
 	//	QString dbDir = db.isEmpty() ? config()->templDatabase() : db;
-
 	//	mTemplates.clear();
 	//	
 	//	////QFileInfo fileInfo(dbDir);
@@ -359,7 +360,6 @@ namespace rdf {
 
 	//	qDebug() << "current Error: " << minError;
 	//	qDebug() << "current offSet: " << offSet.x << " " << offSet.y;
-
 	//	if (minError < std::numeric_limits<float>::max()) {
 	//		//at least threshLineLenRatio (default: 60%) of the lines are detected and matched with the template image
 
@@ -1297,26 +1297,26 @@ cv::Size FormFeatures::sizeImg() const
 	FormFeaturesConfig::FormFeaturesConfig() {
 		mModuleName = "FormFeatures";
 	}
-	float FormFeaturesConfig::threshLineLenRation() const	{
+	double FormFeaturesConfig::threshLineLenRation() const	{
 		return mThreshLineLenRatio;
 	}
-	void FormFeaturesConfig::setThreshLineLenRation(float s)	{
+	void FormFeaturesConfig::setThreshLineLenRation(double s)	{
 		mThreshLineLenRatio = s;
 	}
 
-	float FormFeaturesConfig::distThreshold() const	{
+	double FormFeaturesConfig::distThreshold() const	{
 		return mDistThreshold;
 	}
 
-	void FormFeaturesConfig::setDistThreshold(float d)	{
+	void FormFeaturesConfig::setDistThreshold(double d)	{
 		mDistThreshold = d;
 	}
 
-	float FormFeaturesConfig::errorThr() const	{
+	double FormFeaturesConfig::errorThr() const	{
 		return mErrorThr;
 	}
 
-	void FormFeaturesConfig::setErrorThr(float e)	{
+	void FormFeaturesConfig::setErrorThr(double e)	{
 		mErrorThr = e;
 	}
 
@@ -1341,19 +1341,19 @@ cv::Size FormFeatures::sizeImg() const
 		msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
 		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
 		msg += "  mErrorThr: " + QString::number(mErrorThr);
-
+		msg += "  mformTemplate: " + mTemplDatabase;
 		return msg;
 	}
 	void FormFeaturesConfig::load(const QSettings & settings)	{
-		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toFloat();
-		mDistThreshold = settings.value("distThreshold", mDistThreshold).toFloat();
-		mErrorThr = settings.value("errorThr", mErrorThr).toFloat();
-		mTemplDatabase = settings.value("templDatabase", mTemplDatabase).toString();
+		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
+		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
+		mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
+		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
 	}
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("distThreshold", mDistThreshold);
 		settings.setValue("errorThr", mErrorThr);
-		settings.setValue("templDatabase", mTemplDatabase);
+		settings.setValue("formTemplate", mTemplDatabase);
 	}
 }

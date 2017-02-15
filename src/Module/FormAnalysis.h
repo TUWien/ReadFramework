@@ -52,14 +52,14 @@ namespace rdf {
 	public:
 		FormFeaturesConfig();
 
-		float threshLineLenRation() const;
-		void setThreshLineLenRation(float s);
+		double threshLineLenRation() const;
+		void setThreshLineLenRation(double s);
 
-		float distThreshold() const;
-		void setDistThreshold(float d);
+		double distThreshold() const;
+		void setDistThreshold(double d);
 
-		float errorThr() const;
-		void setErrorThr(float e);
+		double errorThr() const;
+		void setErrorThr(double e);
 
 		int searchXOffset() const;
 		int searchYOffset() const;
@@ -74,11 +74,12 @@ namespace rdf {
 		void load(const QSettings& settings) override;
 		void save(QSettings& settings) const override;
 
-		QString mTemplDatabase;
+		//QString mTemplDatabase;
+		QString mTemplDatabase = QString("D:\\projects\\READ\\formTest\\form-gt\\Table_Template_M_Aigen-am-Inn_003_01\\page\\M_Aigen_am_Inn_003-01_0001.xml");
 
-		float mThreshLineLenRatio = 0.6f;
-		float mDistThreshold = 30.0;
-		float mErrorThr = 15.0;
+		double mThreshLineLenRatio = 0.6f;
+		double mDistThreshold = 30.0f;
+		double mErrorThr = 15.0f;
 
 		int mSearchXOffset = 200;
 		int mSearchYOffset = 200;
