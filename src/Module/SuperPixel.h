@@ -69,12 +69,14 @@ public:
 	int mserMinArea() const;
 	int mserMaxArea() const;
 	int erosionStep() const;
+	
+	void setNumErosionLayers(int numLayers);
 	int numErosionLayers() const;
 
 
 protected:
-	int mMserMinArea = 100;
-	int mMserMaxArea = 1000;
+	int mMserMinArea = 25;
+	int mMserMaxArea = 500;
 	int mErosionStep = 4;
 	int mNumErosionLayers = 3;
 

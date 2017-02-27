@@ -187,6 +187,7 @@ public:
 	virtual void remove(const QSharedPointer<Pixel>& pixel);
 	virtual void append(const QVector<QSharedPointer<Pixel> >& set);
 	virtual void scale(double factor);
+	virtual void filterDuplicates(int eps = 5);
 
 	QVector<QSharedPointer<Pixel> > pixels() const {
 		return mSet;
@@ -232,6 +233,7 @@ public:
 	void remove(const QSharedPointer<Pixel>& pixel) override;
 	void append(const QVector<QSharedPointer<Pixel> >& set) override;
 	void scale(double factor) override;
+	void update();
 
 	void draw(QPainter& p, const DrawFlag& options = PixelSet::draw_poly, 
 		const Pixel::DrawFlag& pixelOptions = Pixel::draw_ellipse) const override;
@@ -272,6 +274,8 @@ public:
 	void addPixels(const PixelSet& ps);
 	PixelSet pixelSet() const;
 
+	void scale(double factor);
+
 	Polygon poly() const;
 
 	void setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLines);
@@ -303,6 +307,8 @@ public:
 	void operator<<(const TextBlock& block);
 
 	bool isEmpty() const;
+
+	void scale(double factor);
 
 	void setPixels(const PixelSet& ps);
 	QVector<QSharedPointer<TextBlock> > textBlocks() const;

@@ -367,8 +367,50 @@ void PixelSet::append(const QVector<QSharedPointer<Pixel>>& set) {
 
 void PixelSet::scale(double factor) {
 
+	if (factor == 1.0)
+		return;
+
 	for (QSharedPointer<Pixel>& px : mSet)
 		px->scale(factor);
+}
+
+void PixelSet::filterDuplicates(int eps) {
+
+	int cnt = 0;
+
+	Timer dt;
+	QVector<QSharedPointer<Pixel> > pxClean;
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		const Rect& r = mSet[idx]->bbox();
+		bool duplicate = false;
+
+		for (int cIdx = idx+1; cIdx < mSet.size(); cIdx++) {
+
+			// should never happen...
+			assert(idx != cIdx);
+
+			const Rect& cr = mSet[cIdx]->bbox();
+
+			if (abs(r.topLeft().x() - cr.topLeft().x()) < eps &&
+				abs(r.topLeft().y() - cr.topLeft().y()) < eps &&
+				abs(r.width() - cr.width()) < eps &&
+				abs(r.height() - cr.height()) < eps) {
+
+				cnt++;
+				duplicate = true;
+				break;
+			}
+		}
+
+		if (!duplicate) {
+			pxClean << mSet[idx];
+		}
+	}
+
+	qDebug() << cnt << "/" << mSet.size() << "filtered in" << dt;
+	mSet = pxClean;
 }
 
 /// <summary>
@@ -1092,7 +1134,15 @@ void TextLineSet::append(const QVector<QSharedPointer<Pixel>>& set) {
 }
 
 void TextLineSet::scale(double factor) {
+
+	if (factor == 1.0)
+		return;
+	
 	PixelSet::scale(factor);
+	updateLine();
+}
+
+void TextLineSet::update() {
 	updateLine();
 }
 
@@ -1103,8 +1153,17 @@ void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::Draw
 			px->draw(p, 0.3, pixelOptions);
 		}
 	}
+	
+	QPen oPen = p.pen();
+	QPen pen = oPen;
+	pen.setColor(pen.color().darker());
+	p.setPen(pen);
 
-	mLine.draw(p);
+	Line tLine = mLine;
+	tLine.setThickness(3);
+	tLine.draw(p);
+	
+	p.setPen(oPen);
 }
 
 Line TextLineSet::line() const {
@@ -1175,6 +1234,19 @@ PixelSet TextBlock::pixelSet() const {
 	return mSet;
 }
 
+void TextBlock::scale(double factor) {
+	
+	if (factor == 1.0)
+		return;
+
+	mPoly.scale(factor);
+	mSet.scale(factor);
+
+	for (auto tl : mTextLines)
+		tl->update();
+
+}
+
 Polygon TextBlock::poly() const {
 	return mPoly;
 }
@@ -1232,6 +1304,15 @@ void TextBlockSet::operator<<(const TextBlock & block) {
 
 bool TextBlockSet::isEmpty() const {
 	return mTextBlocks.isEmpty();
+}
+
+void TextBlockSet::scale(double factor) {
+	
+	if (factor == 1.0)
+		return;
+
+	for (auto tb : mTextBlocks)
+		tb->scale(factor);
 }
 
 void TextBlockSet::setPixels(const PixelSet & ps) {

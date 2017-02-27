@@ -138,6 +138,20 @@ void Utils::registerVersion() const {
 }
 
 /// <summary>
+/// Combines a version number into one int.
+/// Version numbers thus converted can be queried (v1 < v2).
+/// Version numbers are assumed to be VERSION.MAJOR.MINOR (e.g. 3.4.1).
+/// </summary>
+/// <param name="major">The major version.</param>
+/// <param name="minor">The minor version.</param>
+/// <param name="revision">The revision.</param>
+/// <returns></returns>
+int Utils::versionToInt(char major, char minor, char revision) {
+	
+	return major << 16 | minor << 8 | revision;
+}
+
+/// <summary>
 /// Returns a random number within [0 1].
 /// </summary>
 /// <returns></returns>

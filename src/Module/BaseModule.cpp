@@ -70,13 +70,12 @@ void ModuleConfig::saveSettings(QSettings & settings) const {
 	settings.endGroup();
 }
 
-void ModuleConfig::saveDefaultSettings() const {
+void ModuleConfig::saveDefaultSettings(QSettings& settings) const {
 
 	if (name() != "Generic Module") {
 		// write default settings
-		QSettings& settings = Config::instance().settings();
 		if (!settings.childGroups().contains(name())) {
-			saveSettings();
+			saveSettings(settings);
 		}
 	}
 }

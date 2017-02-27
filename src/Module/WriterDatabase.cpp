@@ -33,6 +33,7 @@
 #include "WriterDatabase.h"
 #include "WriterRetrieval.h"
 #include "Image.h"
+#include "Utils.h"
 
 #include <iostream>
 #include <fstream>
@@ -589,8 +590,16 @@ namespace rdf {
 		else {
 			std::string gmmPath;
 			fs["GmmPath"] >> gmmPath;
-			if(QFileInfo(QString::fromStdString(gmmPath)).exists())
+
+			if (QFileInfo(QString::fromStdString(gmmPath)).exists()) {
+// Dear future me: we peaked before 3.2, there we needed this ifdef
+// so I leave it here in case this line fails again
+//#if RDF_OPENCV_VERSION > RDF_VERSION(3,2,0)
+//				mEM = cv::ml::EM::load(gmmPath);
+//#else
 				mEM = cv::ml::EM::load<cv::ml::EM>(gmmPath);
+//#endif
+			}
 			else
 				mWarning << "gmm file " << QString::fromStdString(gmmPath) << " (stored in the vocabulary) not found!";
 

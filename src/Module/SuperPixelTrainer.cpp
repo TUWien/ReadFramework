@@ -143,7 +143,6 @@ SuperPixelLabeler::SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& b
 	mImgRect = imgRect;
 	mConfig = QSharedPointer<SuperPixelLabelerConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelLabeler::isEmpty() const {
@@ -671,7 +670,6 @@ SuperPixelTrainer::SuperPixelTrainer(const FeatureCollectionManager & fcm) {
 	mFeatureManager = fcm;
 	mConfig = QSharedPointer<SuperPixelTrainerConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool SuperPixelTrainer::isEmpty() const {

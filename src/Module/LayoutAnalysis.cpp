@@ -56,10 +56,32 @@ QString LayoutAnalysisConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
+void LayoutAnalysisConfig::setMaxImageSide(int maxSide) {
+	mMaxImageSide = maxSide;
+}
+
+int LayoutAnalysisConfig::maxImageSide() const {
+	return ModuleConfig::checkParam(mMaxImageSide, -1, INT_MAX, "maxImageSide");
+}
+
+void LayoutAnalysisConfig::setScaleMode(const ScaleSideMode & mode) {
+	mScaleMode = mode;
+}
+
+int LayoutAnalysisConfig::scaleMode() const {
+	return ModuleConfig::checkParam(mScaleMode, 0, (int)scale_end, "scaleMode");
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
+
+	mMaxImageSide	= settings.value("maxImageSide", maxImageSide()).toInt();
+	mScaleMode		= settings.value("scaleMode", scaleMode()).toInt();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
+	
+	settings.setValue("maxImageSide", maxImageSide());
+	settings.setValue("scaleMode", scaleMode());
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -69,7 +91,6 @@ LayoutAnalysis::LayoutAnalysis(const cv::Mat& img) {
 
 	mConfig = QSharedPointer<LayoutAnalysisConfig>::create();
 	mConfig->loadSettings();
-	mConfig->saveDefaultSettings();
 }
 
 bool LayoutAnalysis::isEmpty() const {
@@ -83,12 +104,20 @@ bool LayoutAnalysis::compute() {
 
 	Timer dt;
 
+	mScale = scaleFactor();
+
+	// resize if necessary
+	if (mScale != 1.0) {
+		cv::resize(mImg, mImg, cv::Size(), mScale, mScale, CV_INTER_LINEAR);
+		qInfo() << "image resized, new dimension" << mImg.cols << "x" << mImg.rows << "scale factor:" << mScale;
+	}
+
 	// find super pixels
 	//rdf::SuperPixel spM(mImg);
 	rdf::ScaleSpaceSuperPixel spM(mImg);
 
 	if (!spM.compute()) {
-		qWarning() << "could not compute super pixels!";
+		mWarning << "could not compute super pixels!";
 		return false;
 	}
 
@@ -103,6 +132,8 @@ bool LayoutAnalysis::compute() {
 	}
 
 	PixelSet pixels = spM.superPixels();
+	
+	// scale back to original coordinates
 	mTextBlockSet.setPixels(pixels);
 
 	QVector<Line> stopLines = createStopLines();
@@ -145,6 +176,9 @@ bool LayoutAnalysis::compute() {
 		tb->setTextLines(textLines.textLineSets());
 	}
 	
+	// scale back to original coordinates
+	mTextBlockSet.scale(1.0 / mScale);
+
 	return true;
 }
 
@@ -155,12 +189,11 @@ QSharedPointer<LayoutAnalysisConfig> LayoutAnalysis::config() const {
 cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 
 	QPixmap pm = Image::mat2QPixmap(img);
-
 	QPainter p(&pm);
 	
 	for (auto tb : mTextBlockSet.textBlocks()) {
 		p.setPen(ColorManager::getColor());
-		tb->draw(p);
+		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines | TextBlock::draw_pixels));
 	}
 
 	//// LSD OpenCV --------------------------------------------------------------------
@@ -228,6 +261,37 @@ TextBlockSet LayoutAnalysis::textBlockSet() const {
 	return mTextBlockSet;
 }
 
+double LayoutAnalysis::scaleFactor() const {
+
+	int cms = config()->maxImageSide();
+
+	if (cms > 0) {
+
+		if (cms < 500) {
+			mWarning << "you chose the maximal image side to be" << cms << "px - this is pretty low";
+		}
+
+		// find the image side
+		int mSide = 0;
+		if (config()->scaleMode() == LayoutAnalysisConfig::scale_max_side)
+			mSide = qMax(mImg.rows, mImg.cols);
+		else
+			mSide = mImg.rows;
+
+		double sf = (double)cms / mSide;
+
+		// do not rescale if the factor is close to 1
+		if (sf <= 0.95)
+			return sf;
+
+		// inform user that we do not resize if the scale factor is close to 1
+		if (sf < 1.0)
+			mInfo << "I won't resize the image since the scale factor is" << sf;
+	}
+
+	return 1.0;
+}
+
 bool LayoutAnalysis::checkInput() const {
 
 	return !isEmpty();
@@ -236,10 +300,13 @@ bool LayoutAnalysis::checkInput() const {
 TextBlockSet LayoutAnalysis::createTextBlocks() const {
 
 	if (mRoot) {
-		// get (potential) text regions
 		
+		// get (potential) text regions - from XML
 		QVector<QSharedPointer<Region> > textRegions = RegionManager::filter<Region>(mRoot, Region::type_text_region);
-		return TextBlockSet(textRegions);
+		TextBlockSet tbs(textRegions);
+		tbs.scale(mScale);
+
+		return tbs;
 	}
 
 	return TextBlockSet();
@@ -254,18 +321,16 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 		auto separators = RegionManager::filter<SeparatorRegion>(mRoot, Region::type_separator);
 
 		for (auto s : separators) {
-			stopLines << s->line();
+			Line sl = s->line();
+			sl.scale(mScale);
+			stopLines << sl;
 		}
+
+		qDebug() << stopLines.size() << "lines loaded";
+
 	}
 
-	//if (stopLines.empty()) {
-
-		//cv::line_descriptor::LSDDetector lsd;
-		//std::vector<cv::line_descriptor::KeyLine> lines;
-		//lsd.detect(mImg, lines, 2, 4);
-
-		qDebug() << stopLines.size() << "lines detected";
-	//}
+	// TODO: detect lines here
 
 	return stopLines;
 }

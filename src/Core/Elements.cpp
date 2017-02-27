@@ -1368,4 +1368,46 @@ bool TableCell::compareCells(const QSharedPointer<rdf::TableCell> l1, const QSha
 	return *l1 < *l2;
 }
 
+ApaRegion::ApaRegion(const Type & type) : TextLine(type) {
+
+	// default to apa-it
+	if (mType == type_unknown)
+		mType = Region::type_apa_it_text;
+}
+
+bool ApaRegion::read(QXmlStreamReader & reader) {
+
+	//RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	// add text
+	if (!reader.text().isEmpty()) {
+		mText = reader.text().toUtf8();
+		qDebug() << "I am reading: "<< reader.text().toUtf8();
+	}
+	else
+		return Region::read(reader);
+
+	return true;
+}
+
+void ApaRegion::readAttributes(QXmlStreamReader & reader) {
+
+	bool ok = false;
+	double x1 = reader.attributes().value("x1").toDouble(&ok);	if (!ok) return;
+	double x2 = reader.attributes().value("x2").toDouble(&ok);	if (!ok) return;
+	double y1 = reader.attributes().value("y1").toDouble(&ok);	if (!ok) return;
+	double y2 = reader.attributes().value("y2").toDouble(&ok);	if (!ok) return;
+
+	Polygon p;
+	p << Vector2D(x1, y1);
+	p << Vector2D(x2, y1);
+	p << Vector2D(x2, y2);
+	p << Vector2D(x1, y2);
+
+	mPoly = p;
+
+	Region::readAttributes(reader);
+}
+
+
 }

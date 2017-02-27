@@ -278,6 +278,9 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_graphic:		return "GraphicRegion";
 	case Region::type_chart:		return "ChartRegion";
 	case Region::type_noise:		return "NoiseRegion";
+
+	// APA-IT
+	case Region::type_apa_it_text:	return "text";
 	}
 
 	return "Unknown";
@@ -319,6 +322,9 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 		return QSharedPointer<TableRegion>::create(type);
 	case Region::type_table_cell:
 		return QSharedPointer<TableCell>::create(type);
+	// APA-IT XMLs - not part of PAGE
+	case Region::type_apa_it_text:
+		return QSharedPointer<ApaRegion>::create(type);
 		// Add new types here...
 	default:
 		qWarning() << "unknown region type" << type;
