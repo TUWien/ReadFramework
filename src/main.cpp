@@ -162,12 +162,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			//rdf::XmlTest test(dc);
-			//test.parseXml();
+			rdf::XmlTest test(dc);
+			test.parseXml();
 			//test.linesToXml();
 
-			rdf::LayoutTest lt(dc);
-			lt.testComponents();
+			//rdf::LayoutTest lt(dc);
+			//lt.testComponents();
 		}
 
 	}
@@ -234,8 +234,10 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	} 
 
 	if (dc.xmlPath().isEmpty()) {
-		QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
-		dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
+		//QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
+		//dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
+
+		dc.setXmlPath("C:/temp/T_Aigen_am_Inn_001_0056.xml");
 		qInfo() << dc.xmlPath() << "added as XML path";
 	} 
 

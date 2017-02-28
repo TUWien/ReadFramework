@@ -37,6 +37,7 @@
 #include "Binarization.h"
 #include "LineTrace.h"
 #include "Elements.h"
+#include "ElementsHelper.h"
 #include "Settings.h"
 
 #include "SuperPixel.h"
@@ -82,6 +83,16 @@ void XmlTest::parseXml() {
 	// parse xml
 	PageXmlParser parser;
 	parser.read(mConfig.xmlPath());
+
+	auto root = parser.page()->rootRegion();
+	auto regions = rdf::RegionManager::filter<rdf::Region>(parser.page()->rootRegion(), Region::type_text_region);
+
+	for (auto r : regions)
+		r->removeAllChildren();
+	qDebug() << regions.size() << "/" << root->children().size() << "remain";
+	
+	root->setChildren(regions);
+	parser.write(mConfig.xmlPath(), parser.page());
 
 	qDebug() << mConfig.xmlPath() << "parsed in " << dt;
 }

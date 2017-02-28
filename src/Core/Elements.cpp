@@ -215,6 +215,10 @@ void Region::removeChild(QSharedPointer<Region> child) {
 		qWarning() << "cannot remove" << child;
 }
 
+void Region::removeAllChildren() {
+	mChildren.clear();
+}
+
 /// <summary>
 /// Sets the child regions.
 /// </summary>

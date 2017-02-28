@@ -105,6 +105,7 @@ public:
 	void addChild(QSharedPointer<Region> child);
 	void addUniqueChild(QSharedPointer<Region> child);
 	void removeChild(QSharedPointer<Region> child);
+	void removeAllChildren();
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
 
