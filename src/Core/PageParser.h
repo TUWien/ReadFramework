@@ -95,9 +95,9 @@ protected:
 
 	QSharedPointer<PageElement> mPage;
 
-	QSharedPointer<PageElement> parse(const QString& xmlPath) const;
-	void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
-	void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
+	virtual QSharedPointer<PageElement> parse(const QString& xmlPath) const;
+	virtual void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
+	virtual void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
 
 	QByteArray writePageElement() const;
 	void writeMetaData(QXmlStreamWriter& writer) const;

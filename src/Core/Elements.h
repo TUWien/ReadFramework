@@ -79,9 +79,6 @@ public:
 		type_chart,
 		type_noise,
 
-		// APA-IT not part of PAGE
-		type_apa_it_text,
-
 		type_end
 	};
 
@@ -242,6 +239,9 @@ protected:
 	QVector<int> mCornerPts;
 };
 
+
+
+
 class DllCoreExport TextLine : public Region {
 
 public:
@@ -264,20 +264,6 @@ protected:
 	BaseLine mBaseLine;
 	QString mText;
 	bool mTextPresent = false;
-};
-
-class DllCoreExport ApaRegion : public TextLine {
-
-public:
-	ApaRegion(const Type& type = Type::type_unknown);
-
-	virtual bool read(QXmlStreamReader& reader) override;
-	virtual void readAttributes(QXmlStreamReader& reader) override;
-
-protected:
-	double mArea = 0;	// TODO
-	double mAngle = 0;
-	// min font...
 };
 
 
