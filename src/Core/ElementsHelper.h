@@ -177,15 +177,24 @@ public:
 		QSharedPointer<Region> rootRegion = QSharedPointer<Region>()) const;
 
 	template <typename T>
-	static QVector<QSharedPointer<T> > filter(QSharedPointer<rdf::Region> root, const Region::Type& type) {
+	static QVector<QSharedPointer<T> > filter(
+		QSharedPointer<rdf::Region> root, 
+		const Region::Type& type, 
+		bool removeChildren = true) {
 		
 		QVector<QSharedPointer<Region> > regions = Region::allRegions(root);
 		QVector<QSharedPointer<T> > filteredRegions;
 
 		for (auto r : regions) {
 
-			if (r->type() == type)
+			if (r->type() == type) {
+				
+				// remove all children
+				if (removeChildren)
+					r->removeAllChildren();
+
 				filteredRegions << r.dynamicCast<T>();
+			}
 		}
 
 		return filteredRegions;
