@@ -202,7 +202,12 @@ void LayoutTest::layoutToXml() const {
 	pe->setImageSize(QSize(img.cols, img.rows));
 	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
 
-	pe->setRootRegion(la.textBlockSet().toTextRegion());
+	//pe->setRootRegion(la.textBlockSet().toTextRegion());
+
+	auto root = la.textBlockSet().toTextRegion();
+	for (const QSharedPointer<rdf::Region>& r : root->children()) {
+		pe->rootRegion()->addUniqueChild(r);
+	}
 
 	parser.write(mConfig.xmlPath(), pe);
 	qDebug() << "results written to" << mConfig.xmlPath();

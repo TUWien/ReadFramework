@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 	parser.addOption(devOpt);
 
 	// settings filename
-	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filename."), "filename");
+	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filepath."), "filepath");
 	parser.addOption(settingOpt);
 
 	// settings classifier
@@ -162,12 +162,12 @@ int main(int argc, char** argv) {
 		// my section
 		else {
 			qDebug() << "Servus Markus...";
-			rdf::XmlTest test(dc);
-			test.parseXml();
+			//rdf::XmlTest test(dc);
+			//test.parseXml();
 			//test.linesToXml();
 
-			//rdf::LayoutTest lt(dc);
-			//lt.testComponents();
+			rdf::LayoutTest lt(dc);
+			lt.testComponents();
 		}
 
 	}
@@ -190,7 +190,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_003-01_0001.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		dc.setImagePath("D:/read/test/M_Freyung_012_0053.jpg");
-		dc.setImagePath("D:/read/test/bugs/#7-crash.jpg");
+		dc.setImagePath("D:/read/baseline-competition/dataset/test-new/Baseline Competition - Simple Documents/ABP_FirstTestCollection/M_Freyung_010_0022.jpg");
 		
 		//dc.setImagePath("D:/read/test/synthetic-test.png");
 		//dc.setImagePath("D:/read/test/synthetic-test-single-line.png");
@@ -234,10 +234,11 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	} 
 
 	if (dc.xmlPath().isEmpty()) {
-		//QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
+		QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
+		dc.setXmlPath(xmlPath);		// overwrite
 		//dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
 
-		dc.setXmlPath("C:/temp/T_Aigen_am_Inn_001_0056.xml");
+		//dc.setXmlPath("C:/temp/T_Aigen_am_Inn_001_0056.xml");
 		qInfo() << dc.xmlPath() << "added as XML path";
 	} 
 

@@ -42,6 +42,7 @@
 #include <QColor>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QStandardPaths>
 
 #include <opencv2/core/core.hpp>
 #pragma warning(pop)
@@ -158,6 +159,31 @@ int Utils::versionToInt(char major, char minor, char revision) {
 double Utils::rand() {
 
 	return (double)qrand() / RAND_MAX;
+}
+
+/// <summary>
+/// Returns the path for writing persistant application data.
+/// The path refers to GenericDataLocation/organizationName.
+/// On Windows e.g. C:\Users\markus\AppData\Local\TU Wien
+/// </summary>
+/// <returns>The app path.</returns>
+QString Utils::appDataPath() {
+
+	QString appDataPath;
+
+#if QT_VERSION >= 0x050000
+	appDataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+#else
+	appDataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
+
+	// make our own folder
+	appDataPath += QDir::separator() + QCoreApplication::organizationName();
+
+	if (!QDir().mkpath(appDataPath))
+		qWarning() << "I could not create" << appDataPath;
+
+	return appDataPath;
 }
 
 /// <summary>

@@ -32,6 +32,8 @@
 
 #include "Settings.h"
 
+#include "Utils.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QFileInfo>
 #include <QDir>
@@ -93,7 +95,7 @@ void GlobalSettings::defaultSettings() {
 // Config --------------------------------------------------------------------
 Config::Config() {
 
-	mSettings = isPortable() ? QSharedPointer<QSettings>(new QSettings(createSettingsFilePath(), QSettings::IniFormat)) : QSharedPointer<QSettings>(new QSettings());
+	mSettings = QSharedPointer<QSettings>(new QSettings(createSettingsFilePath(), QSettings::IniFormat));
 	load();
 }
 
@@ -119,22 +121,19 @@ GlobalSettings& Config::globalIntern() {
 
 bool Config::isPortable() const {
 
-	QFileInfo settingsFile = createSettingsFilePath();
-	return settingsFile.isFile() && settingsFile.exists();
+	return settingsPath() == QCoreApplication::applicationDirPath();
 }
 
-void Config::setSettingsFile(const QString& fileName) {
+void Config::setSettingsFile(const QString& filePath) {
 
-	if (fileName.isEmpty())
+	if (filePath.isEmpty())
 		return;
 
-	QString settingsPath = createSettingsFilePath(fileName);
-	
-	if (QFileInfo(settingsPath).exists()) {
-		mSettings = QSharedPointer<QSettings>(new QSettings(settingsPath, QSettings::IniFormat));
-		mGlobal.settingsFileName = fileName;
+	QFileInfo fileInfo(filePath);
+	if (fileInfo.exists()) {
+		mSettings = QSharedPointer<QSettings>(new QSettings(filePath, QSettings::IniFormat));
+		mGlobal.settingsFileName = fileInfo.fileName();
 	}
-
 }
 
 QString Config::settingsFilePath() const {
@@ -145,13 +144,24 @@ QString Config::createSettingsFilePath(const QString& fileName) const {
 
 	QString settingsName = (!fileName.isEmpty()) ? fileName : mGlobal.settingsFileName;
 
-	return QFileInfo(QCoreApplication::applicationDirPath(), settingsName).absoluteFilePath();
+	return QFileInfo(settingsPath(), settingsName).absoluteFilePath();
+}
+
+QString Config::settingsPath() const {
+
+	// check if we have a local settings file (portable)
+	QFileInfo sf(QCoreApplication::applicationDirPath(), mGlobal.settingsFileName);
+	if (sf.exists())
+		return sf.absolutePath();
+
+	return Utils::appDataPath();
 }
 
 void Config::load() {
 
 	mGlobal.load(mSettings);
 	mGlobalInit = mGlobal;
+	
 	qInfo() << "[READ] loading settings from" << mGlobal.settingsFileName;
 }
 

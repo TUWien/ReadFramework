@@ -77,6 +77,7 @@ public:
 	static int versionToInt(char major, char minor, char revision);
 	static double rand();
 
+	static QString appDataPath();
 	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;
 	QString baseName(const QString& filePath) const;
 

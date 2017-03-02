@@ -95,7 +95,7 @@ public:
 	void save() const;
 
 	bool isPortable() const;
-	void setSettingsFile(const QString& fileName);
+	void setSettingsFile(const QString& filePath);
 	QString settingsFilePath() const;
 
 private:
@@ -103,6 +103,8 @@ private:
 	Config(const Config&);
 
 	QString createSettingsFilePath(const QString& fileName = QString()) const;
+	QString settingsPath() const;
+
 	GlobalSettings& globalIntern();
 
 	QSharedPointer<QSettings> mSettings;

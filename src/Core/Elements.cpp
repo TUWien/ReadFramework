@@ -182,23 +182,35 @@ void Region::addChild(QSharedPointer<Region> child) {
 	mChildren.append(child);
 }
 
-void Region::addUniqueChild(QSharedPointer<Region> child) {
+/// <summary>
+/// Adds the child if it does not exist already.
+/// If update is true, the duplicate element is updated, otherwise
+/// nothing happens if the child exists already.
+/// </summary>
+/// <param name="child">The child to append.</param>
+/// <param name="update">if set to <c>true</c>, the existing child is updated.</param>
+void Region::addUniqueChild(QSharedPointer<Region> child, bool update) {
 
 	if (!child) {
 		qWarning() << "addUniqueChild: child is NULL where it should not be";
 		return;
 	}
 
-	bool containsChild = false;
-	for (const QSharedPointer<Region> i  : mChildren) {
-		if (i && *i == *child) {
-			containsChild = true;
+	int childIdx = -1;
+	for (int idx = 0; idx < mChildren.size(); idx++) {
+
+		auto ci = mChildren[idx];
+
+		if (ci && *ci == *child) {
+			childIdx = idx;
 			break;
 		}
 	}
 
-	if (!containsChild)
+	if (childIdx == -1)
 		mChildren.append(child);
+	else if (update)
+		mChildren.replace(childIdx, child);	// update
 }
 
 /// <summary>
@@ -437,7 +449,17 @@ void Region::writeChildren(QXmlStreamWriter& writer) const {
 		child->write(writer);
 }
 
+/// <summary>
+/// Compare operator.
+/// Returns true if both regions have
+/// the same type and polygon.
+/// </summary>
+/// <param name="r1">The region to be compared.</param>
+/// <returns>true if both regions have the same type and polygon.</returns>
 bool Region::operator==(const Region & r1) {
+
+	if (type() != r1.type())
+		return false;
 
 	QPolygonF p1 = r1.polygon().polygon();
 	QPolygonF p2 = mPoly.polygon();

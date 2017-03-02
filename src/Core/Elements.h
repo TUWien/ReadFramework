@@ -103,7 +103,7 @@ public:
 	Polygon polygon() const;
 
 	void addChild(QSharedPointer<Region> child);
-	void addUniqueChild(QSharedPointer<Region> child);
+	void addUniqueChild(QSharedPointer<Region> child, bool update = false);
 	void removeChild(QSharedPointer<Region> child);
 	void removeAllChildren();
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
