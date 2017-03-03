@@ -1148,12 +1148,9 @@ void TextLineSet::update() {
 
 void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::DrawFlag& pixelOptions) const {
 
-	if (options & (int)PixelSet::draw_pixels) {
-		for (auto px : mSet) {
-			px->draw(p, 0.3, pixelOptions);
-		}
-	}
-	
+	PixelSet::draw(p, options, pixelOptions);
+
+	// draw baseline
 	QPen oPen = p.pen();
 	QPen pen = oPen;
 	pen.setColor(pen.color().darker());

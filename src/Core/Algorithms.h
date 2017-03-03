@@ -108,7 +108,18 @@ public:
 	/// <param name="interpolated">A flag if the value should be interpolated if the length of the list is even.</param>
 	/// <returns>The statistical moment.</returns>
 	template <typename numFmt>
-	static double statMoment(const QList<numFmt>& valuesIn, double momentValue, int interpolated = 1) {
+	static double statMoment(const QList<numFmt>& valuesIn, double momentValue, bool interpolated = true) {
+
+		// no stat moment if we have 1 value
+		if (valuesIn.size() == 1)
+			return valuesIn[0];
+		
+		// return mean if we have two & interpolation is turned on
+		if (valuesIn.size() == 2 && interpolated) {
+			return (valuesIn[0] + valuesIn[1]) / 2.0;
+		}
+		else if (valuesIn.size() == 2)
+			return valuesIn[0];
 
 		QList<numFmt> values = valuesIn;
 		qSort(values);
@@ -126,8 +137,9 @@ public:
 				idx++;
 				continue;
 			}
-			if (lSize % 2 == 0 && momIdx < lSize && interpolated == 1)
-				// compute mean between this and the next element
+
+			// compute mean between this and the next element
+			if (lSize % 2 == 0 && momIdx < lSize && interpolated)
 				moment = ((double)val + values[idx+1])*0.5;
 			else
 				moment = (double)val;

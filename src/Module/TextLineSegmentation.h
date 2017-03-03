@@ -100,20 +100,27 @@ public:
 	QVector<QSharedPointer<TextLine> > textLines() const;
 	QVector<QSharedPointer<TextLineSet> > textLineSets() const;
 
+	// functions applied to the results
+	void scale(double s);
+
 private:
 	PixelSet mSet;
-	QVector<QSharedPointer<LineEdge> > mEdges;		// this is nice for debugging - but I would remove it in the end
+	//QVector<QSharedPointer<PixelEdge> > mRemovedEdges;		// this is nice for debugging - but I would remove it in the end
 	QVector<QSharedPointer<TextLineSet> > mTextLines;
 	QVector<Line> mStopLines;
 
 	bool checkInput() const override;
 
-	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph) const;
+	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph, QVector<QSharedPointer<PixelEdge> >* removedEdges = 0) const;
 	QVector<QSharedPointer<TextLineSet> > clusterTextLinesDebug(const PixelGraph& graph, const cv::Mat& img) const;
 	int locate(const QSharedPointer<Pixel>& pixel, const QVector<QSharedPointer<TextLineSet> >& sets) const;
 	bool addPixel(QSharedPointer<TextLineSet>& set, const QSharedPointer<Pixel>& pixel, double heat) const;
 	bool mergeTextLines(const QSharedPointer<TextLineSet>& tln1, const QSharedPointer<TextLineSet>& tln2, double heat) const;
 	void filterDuplicates(PixelSet& set) const;
+
+	// post processing
+	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD) const;
+
 };
 
 };

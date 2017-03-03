@@ -538,6 +538,10 @@ QSharedPointer<Pixel> PixelEdge::second() const {
 	return mSecond;
 }
 
+void PixelEdge::scale(double s) {
+	mEdge.scale(s);
+}
+
 void PixelEdge::draw(QPainter & p) const {
 
 	Line e = edge();

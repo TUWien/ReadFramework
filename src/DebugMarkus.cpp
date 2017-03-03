@@ -162,7 +162,8 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	layoutToXml();
+	//layoutToXml();
+	layoutToXmlDebug();
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -213,6 +214,132 @@ void LayoutTest::layoutToXml() const {
 	qDebug() << "results written to" << mConfig.xmlPath();
 
 	qInfo() << "layout analysis computed in" << dt;
+}
+
+void LayoutTest::layoutToXmlDebug() const {
+
+	QImage imgQt(mConfig.imagePath());
+	cv::Mat img = Image::qImage2Mat(imgQt);
+
+	Timer dt;
+	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+	rdf::PageXmlParser parser;
+	parser.read(loadXmlPath);
+	auto pe = parser.page();
+
+	// start computing --------------------------------------------------------------------
+	cv::Mat rImg = img.clone();
+	double scale = scaleFactor(rImg);
+
+	// resize if necessary
+	if (scale != 1.0) {
+		cv::resize(rImg, rImg, cv::Size(), scale, scale, CV_INTER_LINEAR);
+		qInfo() << "image resized, new dimension" << rImg.cols << "x" << rImg.rows << "scale factor:" << scale;
+	}
+
+	// find super pixels
+	//rdf::SuperPixel spM(mImg);
+	rdf::ScaleSpaceSuperPixel spM(rImg);
+
+	if (!spM.compute()) {
+		qWarning() << "could not compute super pixels!";
+		return;
+	}
+
+	// create an 'all-in' text block
+	// get (potential) text regions - from XML
+	QVector<QSharedPointer<Region> > textRegions = RegionManager::filter<Region>(pe->rootRegion(), Region::type_text_region);
+	TextBlockSet textBlocks(textRegions);
+	textBlocks.scale(scale);
+
+
+	if (textBlocks.isEmpty()) {
+		Rect r(Vector2D(), rImg.size());
+		textBlocks << Polygon::fromRect(r);
+	}
+
+	PixelSet pixels = spM.superPixels();
+	textBlocks.setPixels(pixels);
+
+	// TODO: add lines?
+	//QVector<Line> stopLines = createStopLines();
+
+	cv::Mat dImg = img.clone();
+
+	// compute text lines for each text block
+	for (QSharedPointer<TextBlock> tb : textBlocks.textBlocks()) {
+
+		PixelSet sp = tb->pixelSet();
+
+		// find local orientation per pixel
+		rdf::LocalOrientation lo(sp);
+		if (!lo.compute()) {
+			qWarning() << "could not compute local orientation";
+			return;
+		}
+
+		// smooth estimation
+		rdf::GraphCutOrientation pse(sp);
+
+		if (!pse.compute()) {
+			qWarning() << "could not compute set orientation";
+			return;
+		}
+
+		//// find tab stops
+		//rdf::TabStopAnalysis tabStops(sp);
+		//if (!tabStops.compute())
+		//	qWarning() << "could not compute text block segmentation!";
+
+		// find text lines
+		rdf::TextLineSegmentation textLines(sp);
+		//textLines.addSeparatorLines(stopLines);
+
+		if (!textLines.compute()) {
+			qWarning() << "could not compute text line segmentation!";
+			return;
+		}
+
+		// save text lines
+		tb->setTextLines(textLines.textLineSets());
+
+		// drawing (per text block)
+		textLines.scale(1.0/scale);
+		dImg = textLines.draw(dImg);
+		textLines.scale(scale);
+	}
+
+	// scale back to original coordinates
+	textBlocks.scale(1.0 / scale);
+
+	// end computing --------------------------------------------------------------------
+
+	// drawing --------------------------------------------------------------------
+
+	// save super pixel image
+	//dImg = la.draw(rImg);
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	rdf::Image::save(dImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	// write to XML --------------------------------------------------------------------
+	pe->setCreator(QString("CVL"));
+	pe->setImageSize(QSize(img.cols, img.rows));
+	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
+
+	//pe->setRootRegion(la.textBlockSet().toTextRegion());
+
+	auto root = textBlocks.toTextRegion();
+	for (const QSharedPointer<rdf::Region>& r : root->children()) {
+		pe->rootRegion()->addUniqueChild(r);
+	}
+
+	parser.write(mConfig.xmlPath(), pe);
+	qDebug() << "results written to" << mConfig.xmlPath();
+
+	qInfo() << "layout analysis computed in" << dt;
+
 }
 
 void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
@@ -485,6 +612,34 @@ void LayoutTest::pageSegmentation(const cv::Mat & src) const {
 	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-page-seg");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
+}
+
+double LayoutTest::scaleFactor(const cv::Mat& img) const {
+
+	int cms = 3000;
+
+	if (cms > 0) {
+
+		if (cms < 500) {
+			qWarning() << "you chose the maximal image side to be" << cms << "px - this is pretty low";
+		}
+
+		// find the image side
+		int mSide = 0;
+		mSide = img.rows;
+
+		double sf = (double)cms / mSide;
+
+		// do not rescale if the factor is close to 1
+		if (sf <= 0.95)
+			return sf;
+
+		// inform user that we do not resize if the scale factor is close to 1
+		if (sf < 1.0)
+			qInfo() << "I won't resize the image since the scale factor is" << sf;
+	}
+
+	return 1.0;
 }
 
 }

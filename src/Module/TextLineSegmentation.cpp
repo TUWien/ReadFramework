@@ -138,16 +138,17 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	// TODO: add stop lines here...
 
 	if (img.empty())
-		mTextLines = clusterTextLines(pg);
+		mTextLines = clusterTextLines(pg/*, &mRemovedEdges*/);
 	else
 		mTextLines = clusterTextLinesDebug(pg, img);
 
-	QVector<QSharedPointer<TextLineSet> > ps;
-	for (auto p : mTextLines) {
-		if (p->size() > 3)
-			ps << p;
-	}
-	mTextLines = ps;
+	// there is still a warning for small textlines
+	//QVector<QSharedPointer<TextLineSet> > ps;
+	//for (auto p : mTextLines) {
+	//	if (p->size() > 3)
+	//		ps << p;
+	//}
+	//mTextLines = ps;
 
 	mDebug << mTextLines.size() << "text lines (after filtering)";
 	mDebug << "computed in" << dt;
@@ -159,9 +160,10 @@ QSharedPointer<TextLineConfig> TextLineSegmentation::config() const {
 	return qSharedPointerDynamicCast<TextLineConfig>(mConfig);
 }
 
-QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph) const {
+QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(const PixelGraph & graph, QVector<QSharedPointer<PixelEdge> >* removedEdges) const {
 	
 	QVector<QSharedPointer<TextLineSet> > textLines;
+	
 	int idx = 0;
 
 	for (auto e : graph.edges()) {
@@ -170,6 +172,8 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 
 		int psIdx1 = locate(e->first(), textLines);
 		int psIdx2 = locate(e->second(), textLines);
+
+		bool drop = false;
 
 		// create a new text line
 		if (psIdx1 == -1 && psIdx2 == -1) {
@@ -191,6 +195,8 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 				textLines[psIdx1]->add(e->second());
 			}
 			// else drop
+			else
+				drop = true;
 		}
 		// merge one pixel
 		else if (psIdx1 == -1) {
@@ -198,14 +204,22 @@ QVector<QSharedPointer<TextLineSet> > TextLineSegmentation::clusterTextLines(con
 				textLines[psIdx2]->add(e->first());
 			}
 			// else drop
+			else
+				drop = true;
 		}
-		// merge same text line
+		// merge to same text line
 		else if (mergeTextLines(textLines[psIdx1], textLines[psIdx2], heat)) {
 
 			textLines[psIdx2]->append(textLines[psIdx1]->pixels());
 			textLines.remove(psIdx1);
 		}
 		// else drop
+		else
+			drop = true;
+
+		// remember removed edges
+		if (removedEdges && drop)
+			*removedEdges << e;
 	}
 
 	return textLines;
@@ -359,7 +373,7 @@ bool TextLineSegmentation::mergeTextLines(const QSharedPointer<TextLineSet>& tln
 
 	double nErr1 = tln1->computeError(tln2->centers());
 	double nErr2 = tln2->computeError(tln1->centers());
-
+	
 	return nErr1 < maxErr1 && nErr2 < maxErr2;
 }
 
@@ -411,6 +425,30 @@ void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 	qDebug() << remPixels.size() << "px removed in " << dt;
 }
 
+/// <summary>
+/// Filters all textlines whose baseline angle is > maxAngle w.r.t the text orientation.
+/// </summary>
+/// <param name="textLines">The text lines.</param>
+/// <param name="maxAngle">The maximum angle.</param>
+/// <returns></returns>
+QVector<QSharedPointer<TextLineSet>> TextLineSegmentation::filterAngle(const QVector<QSharedPointer<TextLineSet>>& textLines, double maxAngle) const {
+	
+	QVector<QSharedPointer<TextLineSet> > filtered;
+	
+	for (auto tl : textLines) {
+
+		double textOr = tl->orientation() - CV_PI*0.5;
+		double baseLineOr = -tl->line().angle();
+		double orDist = Algorithms::angleDist(textOr, baseLineOr, CV_PI);
+		if (orDist > maxAngle) {
+			filtered << tl;
+			//qDebug() << tl->id() << "angle error:" << orDist*DK_RAD2DEG << "tl" << textOr*DK_RAD2DEG << "bl" << baseLineOr*DK_RAD2DEG;
+		}
+	}
+	
+	return filtered;
+}
+
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
@@ -419,88 +457,48 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	QPainter p(&pm);
 	
-
-	//PixelGraph pg(mSet);
-	//pg.connect(DelauneyPixelConnector(), PixelGraph::sort_line_edges);
-
-
-	//auto edges = pg.edges();
-	//cv::Mat lm(1, edges.size(), CV_64FC1);
-	//double* lmp = lm.ptr<double>();
-
-	//for (auto e : edges) {
-	//	*lmp = std::sqrt(e->edge().length());
-	//	lmp++;
-	//}
-
-	//int nBins = 50;
-	//cv::Mat h = IP::computeHist(lm, nBins);
-	//Histogram hist(h);
-	//hist.draw(p, Rect(Vector2D(10,10), Vector2D(100, 200)));
-
-	//double minV, maxV;
-	//cv::minMaxLoc(lm, &minV, &maxV);
-
-	//double step = (maxV - minV) / nBins;
-	//double minStep = 0;
-	//lmp = lm.ptr<double>();
-
-	//for (int idx = 0; idx < nBins; idx++) {
-
-	//	PixelSet cSet;
-	//	double maxStep = minStep + step;
-
-	//	p.setPen(ColorManager::getColor());
-	//	QVector<Vector2D> pts;
-	//	for (int cIdx = 0; cIdx < lm.cols; cIdx++) {
-	//		
-	//		if (lmp[cIdx] >= minStep && lmp[cIdx] < maxStep) {
-	//			Vector2D pt = edges[cIdx]->edge().center();
-	//			pts << pt;
-	//			p.drawPoint(pt.toQPoint());
-	//			edges[cIdx]->edge().draw(p);
-	//		}
-	//	}
-
-	//	minStep = maxStep;
-	//}
-
-	// this block draws the edges
-	Drawer::instance().setColor(ColorManager::darkGray(0.4));
-	p.setPen(Drawer::instance().pen());
-
-	for (auto b : mEdges) {
-		b->draw(p);
-	}
-
 	// show the stop lines
 	Drawer::instance().setColor(ColorManager::red(0.4));
 	p.setPen(Drawer::instance().pen());
 
 	for (auto l : mStopLines)
 		l.draw(p);
-
-	//auto sets = toSets();
 	
-	for (const QSharedPointer<TextLineSet>& set : mTextLines) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		p.setPen(Drawer::instance().pen());
-		//set->draw(p, (int)PixelSet::draw_pixels, Pixel::draw_ellipse);
+	// draw text lines
+	//for (const QSharedPointer<TextLineSet>& tl : mTextLines) {
+	//	Drawer::instance().setColor(ColorManager::getColor());
+	//	p.setPen(Drawer::instance().pen());
 
-		Line baseLine = set->fitLine();
-		baseLine.setThickness(6.0);
-		
-		//if (baseLine.length() > 300)
+	//	tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly | PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats));
+
+	//	Line baseLine = tl->line();
+	//	baseLine.draw(p);
+	//}
+
+	// draw errored/crucial text lines
+	Drawer::instance().setColor(ColorManager::red());
+	p.setPen(Drawer::instance().pen());
+
+	for (const auto tl : filterAngle(mTextLines)) {
+
+		if (tl->size() > 2)
+			continue;
+
+		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly | PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats));
+		p.drawText(tl->center().toQPointF(), tl->id());
+
+		Line baseLine = tl->line();
 		baseLine.draw(p);
 
-
-
-		//for (auto pixel : set->pixels()) {
-		//	pixel->draw(p, .3, Pixel::draw_ellipse_only);
-		//}
 	}
 
-	mDebug << mEdges.size() << "edges drawn in" << dtf;
+	//Drawer::instance().setColor(ColorManager::red());
+	//p.setPen(Drawer::instance().pen());
+
+	//for (const auto e : mRemovedEdges)
+	//	e->draw(p);
+
+	mDebug << mTextLines.size() << "edges drawn in" << dtf;
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -524,6 +522,18 @@ QVector<QSharedPointer<TextLine>> TextLineSegmentation::textLines() const {
 
 QVector<QSharedPointer<TextLineSet>> TextLineSegmentation::textLineSets() const {
 	return mTextLines;
+}
+
+void TextLineSegmentation::scale(double s) {
+
+	//for (auto e : mRemovedEdges)
+	//	e->scale(s);
+
+	for (auto tl : mTextLines)
+		tl->scale(s);
+
+	for (Line& sl : mStopLines)
+		sl.scale(s);
 }
 
 bool TextLineSegmentation::checkInput() const {

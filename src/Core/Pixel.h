@@ -260,6 +260,8 @@ public:
 	QSharedPointer<Pixel> first() const;
 	QSharedPointer<Pixel> second() const;
 
+	void scale(double s);
+
 protected:
 	bool mIsNull = true;
 

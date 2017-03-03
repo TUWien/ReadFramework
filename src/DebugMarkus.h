@@ -66,6 +66,7 @@ public:
 
 	void testComponents();
 	void layoutToXml() const;
+	void layoutToXmlDebug() const;
 
 protected:
 	void testFeatureCollector(const cv::Mat& src) const;
@@ -73,6 +74,8 @@ protected:
 
 	void testLayout(const cv::Mat& src) const;
 	void pageSegmentation(const cv::Mat& src) const;
+
+	double scaleFactor(const cv::Mat& img) const;
 
 	DebugConfig mConfig;
 };

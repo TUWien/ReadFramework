@@ -485,8 +485,7 @@ double Algorithms::logGammaWindschitl(double x)
 /// </summary>
 /// <param name="x">The Input x.</param>
 /// <returns>Natural Logarithm</returns>
-double Algorithms::logGamma(double x)
-{
+double Algorithms::logGamma(double x) {
 	return x > 15.0 ? logGammaWindschitl(x) : logGammaLanczos(x);
 }
 
@@ -523,11 +522,7 @@ int Algorithms::doubleEqual(double a, double b) {
 
 double Algorithms::absAngleDiff(double a, double b) {
 
-	a -= b;
-	while (a <= -CV_PI) a += 2*CV_PI;
-	while (a >   CV_PI) a -= 2*CV_PI;
-	if (a < 0.0) a = -a;
-	return a;
+	return std::abs(signedAngleDiff(a, b));
 }
 
 double Algorithms::signedAngleDiff(double a, double b) {
@@ -535,6 +530,7 @@ double Algorithms::signedAngleDiff(double a, double b) {
 	a -= b;
 	while (a <= -CV_PI) a += 2*CV_PI;
 	while (a >   CV_PI) a -= 2*CV_PI;
+	
 	return a;
 }
 
