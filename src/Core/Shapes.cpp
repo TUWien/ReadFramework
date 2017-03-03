@@ -127,9 +127,17 @@ void Polygon::draw(QPainter & p) const {
 	
 	QPen oPen = p.pen();
 	QPen pen = oPen;
+	QColor fc = pen.color();
+	fc.setAlpha(50);
+
+	// draw area
+	QPainterPath tmpPath;
+	tmpPath.addPolygon(closedPolygon());
+	p.fillPath(tmpPath, fc);
+
 	pen.setWidth(3);
 	p.setPen(pen);
-	
+
 	p.drawPolygon(closedPolygon());
 	p.setPen(oPen);
 }

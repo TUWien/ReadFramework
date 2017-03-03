@@ -142,6 +142,8 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	else
 		mTextLines = clusterTextLinesDebug(pg, img);
 
+	mergeUnstableTextLines(mTextLines);
+
 	// there is still a warning for small textlines
 	//QVector<QSharedPointer<TextLineSet> > ps;
 	//for (auto p : mTextLines) {
@@ -449,6 +451,67 @@ QVector<QSharedPointer<TextLineSet>> TextLineSegmentation::filterAngle(const QVe
 	return filtered;
 }
 
+void TextLineSegmentation::mergeUnstableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines) const {
+
+	// parameter - how much do we extend the text line?
+	double tlExtFactor = 1.2;
+
+	QVector<QSharedPointer<TextLineSet> > unstable = filterAngle(textLines);
+
+	// cache convex hulls
+	QVector<Polygon> polys;
+	for (const auto tl : textLines) {
+		polys << tl->convexHull();
+	}
+
+	for (int uIdx = 0; uIdx < unstable.size(); uIdx++) {
+
+		const auto utl = unstable[uIdx];
+
+		// compute left & right points (w.r.t text orientation)
+		Ellipse el = utl->fitEllipse();
+		Vector2D vl = el.getPoint(0);
+		Vector2D vr = el.getPoint(CV_PI);
+
+		// compute extended points
+		vl = el.center() + (el.center()-vl)*tlExtFactor;
+		vr = el.center() + (el.center()-vr)*tlExtFactor;
+
+		double cErr = DBL_MAX;
+		int bestIdx = -1;
+		QVector<Vector2D> pts = utl->centers();
+
+		// find merging candidates (textlines that contain the right/left most point)
+		for (int idx = 0; idx < textLines.size(); idx++) {
+
+			// do not merge myself
+			if (textLines[idx]->id() == utl->id())
+				continue;
+
+			// find all candidate textlines
+			if (polys[idx].contains(vl) || polys[idx].contains(vr)) {
+
+				double err = textLines[idx]->computeError(pts);
+
+				if (err < cErr) {
+					bestIdx = idx;
+					cErr = err;
+				}
+			}
+		}
+
+		// merge
+		if (bestIdx != -1) {
+			textLines[bestIdx]->append(utl->pixels());
+			int rIdx = textLines.indexOf(utl);
+			textLines.remove(rIdx);
+			polys.remove(rIdx);
+			qDebug() << "merging unstable textline...";
+		}
+	}
+
+}
+
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
@@ -465,15 +528,15 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 		l.draw(p);
 	
 	// draw text lines
-	//for (const QSharedPointer<TextLineSet>& tl : mTextLines) {
-	//	Drawer::instance().setColor(ColorManager::getColor());
-	//	p.setPen(Drawer::instance().pen());
+	for (const QSharedPointer<TextLineSet>& tl : mTextLines) {
+		Drawer::instance().setColor(ColorManager::getColor());
+		p.setPen(Drawer::instance().pen());
 
-	//	tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly | PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats));
+		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly /*| PixelSet::draw_pixels*/), (Pixel::DrawFlag)(Pixel::draw_stats));
 
-	//	Line baseLine = tl->line();
-	//	baseLine.draw(p);
-	//}
+		Line baseLine = tl->line();
+		baseLine.draw(p);
+	}
 
 	// draw errored/crucial text lines
 	Drawer::instance().setColor(ColorManager::red());
@@ -481,10 +544,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
 
 	for (const auto tl : filterAngle(mTextLines)) {
 
-		if (tl->size() > 2)
-			continue;
-
-		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly | PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats));
+		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_rect | PixelSet::draw_pixels), (Pixel::DrawFlag)(/*Pixel::draw_ellipse |*/ Pixel::draw_stats));
 		p.drawText(tl->center().toQPointF(), tl->id());
 
 		Line baseLine = tl->line();

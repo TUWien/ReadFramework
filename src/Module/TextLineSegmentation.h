@@ -120,6 +120,7 @@ private:
 
 	// post processing
 	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD) const;
+	void mergeUnstableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines) const;
 
 };
 
