@@ -80,17 +80,27 @@ bool LayoutAnalysisConfig::removeWeakTextLines() const {
 	return mRemoveWeakTextLines;
 }
 
+void LayoutAnalysisConfig::setMinSuperPixelsPerBlock(int minPx) {
+	mMinSuperPixelsPerBlock = minPx;
+}
+
+int LayoutAnalysisConfig::minSuperixelsPerBlock() const {
+	return ModuleConfig::checkParam(mMinSuperPixelsPerBlock, 0, INT_MAX, "minSuperPixelsPerBlock");
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
-	mMaxImageSide	= settings.value("maxImageSide", maxImageSide()).toInt();
-	mScaleMode		= settings.value("scaleMode", scaleMode()).toInt();
-	mRemoveWeakTextLines = settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
+	mMaxImageSide			= settings.value("maxImageSide", maxImageSide()).toInt();
+	mScaleMode				= settings.value("scaleMode", scaleMode()).toInt();
+	mMinSuperPixelsPerBlock	= settings.value("minSuperPixelsPerBlock", minSuperixelsPerBlock()).toInt();
+	mRemoveWeakTextLines	= settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
 	
 	settings.setValue("maxImageSide", maxImageSide());
 	settings.setValue("scaleMode", scaleMode());
+	settings.setValue("minSuperPixelsPerBlock", minSuperixelsPerBlock());
 	settings.setValue("removeWeakTextLines", removeWeakTextLines());
 }
 
@@ -174,21 +184,33 @@ bool LayoutAnalysis::compute() {
 		//	qWarning() << "could not compute text block segmentation!";
 
 		// find text lines
-		rdf::TextLineSegmentation textLines(sp);
-		textLines.addSeparatorLines(stopLines);
+		QVector<QSharedPointer<TextLineSet> > textLines;
+		if (sp.size() > config()->minSuperixelsPerBlock()) {
 
-		if (!textLines.compute()) {
-			qWarning() << "could not compute text line segmentation!";
-			return false;
+			rdf::TextLineSegmentation tlM(sp);
+			tlM.addSeparatorLines(stopLines);
+
+			if (!tlM.compute()) {
+				qWarning() << "could not compute text line segmentation!";
+				return false;
+			}
+
+			// save text lines
+			textLines = tlM.textLineSets();
 		}
 
-		// save text lines
-		tb->setTextLines(textLines.textLineSets());
+		// paragraph is a single textline
+		if (textLines.empty()) {
+			textLines << QSharedPointer<TextLineSet>(new TextLineSet(sp.pixels()));
+		}
+
+		tb->setTextLines(textLines);
 	}
 	
 	// scale back to original coordinates
 	mTextBlockSet.scale(1.0 / mScale);
 
+	// clean-up
 	if (config()->removeWeakTextLines()) {
 		mTextBlockSet.removeWeakTextLines();
 	}
@@ -207,7 +229,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 	
 	for (auto tb : mTextBlockSet.textBlocks()) {
 		p.setPen(ColorManager::getColor());
-		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines | TextBlock::draw_pixels));
+		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines /*| TextBlock::draw_pixels*/));
 	}
 
 	//// LSD OpenCV --------------------------------------------------------------------

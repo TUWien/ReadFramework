@@ -521,9 +521,6 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 
 		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly /*| PixelSet::draw_pixels*/), (Pixel::DrawFlag)(Pixel::draw_stats));
 
-		Line baseLine = tl->line();
-		baseLine.draw(p);
-
 		Vector2D c = tl->center();
 		c.setX(c.x() + 20);
 		p.drawText(c.toQPointF(), QString::number(tl->density()));
@@ -533,13 +530,9 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 	Drawer::instance().setColor(ColorManager::red());
 	p.setPen(Drawer::instance().pen());
 
-	for (const auto tl : TextLineHelper::filterLowDensity(textLines)) {
+	for (const auto tl : TextLineHelper::filterAngle(textLines)) {
 
 		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_rect | PixelSet::draw_pixels), (Pixel::DrawFlag)(/*Pixel::draw_ellipse |*/ Pixel::draw_stats));
-		//p.drawText(tl->center().toQPointF(), tl->id());
-
-		Line baseLine = tl->line();
-		baseLine.draw(p);
 	}
 
 	//Drawer::instance().setColor(ColorManager::red());

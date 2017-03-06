@@ -163,8 +163,8 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	//layoutToXml();
-	layoutToXmlDebug();
+	layoutToXml();
+	//layoutToXmlDebug();
 	eval();
 
 	qInfo() << "total computation time:" << dt;
@@ -209,7 +209,7 @@ void LayoutTest::layoutToXml() const {
 
 	auto root = la.textBlockSet().toTextRegion();
 	for (const QSharedPointer<rdf::Region>& r : root->children()) {
-		pe->rootRegion()->addUniqueChild(r);
+		pe->rootRegion()->addUniqueChild(r, true);
 	}
 
 	parser.write(mConfig.xmlPath(), pe);
@@ -255,7 +255,6 @@ void LayoutTest::layoutToXmlDebug() const {
 	TextBlockSet textBlocks(textRegions);
 	textBlocks.scale(scale);
 
-
 	if (textBlocks.isEmpty()) {
 		Rect r(Vector2D(), rImg.size());
 		textBlocks << Polygon::fromRect(r);
@@ -292,17 +291,29 @@ void LayoutTest::layoutToXmlDebug() const {
 		//if (!tabStops.compute())
 		//	qWarning() << "could not compute text block segmentation!";
 
-		// find text lines
-		rdf::TextLineSegmentation textLines(sp);
-		//textLines.addSeparatorLines(stopLines);
+		QVector<QSharedPointer<TextLineSet> > textLines;
 
-		if (!textLines.compute()) {
-			qWarning() << "could not compute text line segmentation!";
-			return;
+		if (sp.size() > 25) {
+
+			// find text lines
+			rdf::TextLineSegmentation tlM(sp);
+			//textLines.addSeparatorLines(stopLines);
+
+			if (!tlM.compute()) {
+				qWarning() << "could not compute text line segmentation!";
+				return;
+			}
+
+			// save text lines
+			textLines = tlM.textLineSets();
 		}
 
-		// save text lines
-		tb->setTextLines(textLines.textLineSets());
+		// paragraph is a single textline
+		if (textLines.empty()) {
+			textLines << QSharedPointer<TextLineSet>(new TextLineSet(sp.pixels()));
+		}
+		
+		tb->setTextLines(textLines);
 
 		//// drawing (per text block)
 		//textLines.scale(1.0/scale);
@@ -319,6 +330,7 @@ void LayoutTest::layoutToXmlDebug() const {
 		tls << tb->textLines();
 
 	cv::Mat dImg = img.clone();
+	dImg = spM.draw(dImg);
 	dImg = TextLineSegmentation::draw(dImg, tls);
 
 	// end computing --------------------------------------------------------------------

@@ -79,14 +79,18 @@ public:
 	void setRemoveWeakTextLiens(bool remove);
 	bool removeWeakTextLines() const;
 
+	void setMinSuperPixelsPerBlock(int minPx);
+	int minSuperixelsPerBlock() const;
+
 protected:
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	int mMaxImageSide = 3000;
-	int mScaleMode = scale_height;
-	bool mRemoveWeakTextLines = true;
+	int mMaxImageSide = 3000;			// maximum image side in px (larger images are downscaled accordingly)
+	int mScaleMode = scale_height;		// scaling mode (see ScaleSideMode)
+	bool mRemoveWeakTextLines = true;	// if true, unstable text lines are removed
+	int mMinSuperPixelsPerBlock = 15;	// the minimum number of components that are required to run the text line segmentation
 };
 
 class DllCoreExport LayoutAnalysis : public Module {

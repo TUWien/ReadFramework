@@ -1157,9 +1157,12 @@ void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::Draw
 	p.setPen(pen);
 
 	Line tLine = mLine;
-	tLine.setThickness(3);
 	tLine.draw(p);
 	
+	Line bLine = fitLine(0);
+	bLine.setThickness(3);
+	bLine.draw(p);
+
 	p.setPen(oPen);
 }
 
