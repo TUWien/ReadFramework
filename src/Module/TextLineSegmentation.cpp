@@ -485,7 +485,6 @@ void TextLineSegmentation::mergeUnstableTextLines(QVector<QSharedPointer<TextLin
 			int rIdx = textLines.indexOf(utl);
 			textLines.remove(rIdx);
 			polys.remove(rIdx);
-			qDebug() << "merging unstable textline...";
 		}
 	}
 

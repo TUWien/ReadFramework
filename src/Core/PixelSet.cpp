@@ -1217,7 +1217,9 @@ void TextLineSet::updateLine() {
 	QVector<Vector2D> ptSet = centers();
 
 	LineFitting lf(ptSet);
-	Line line = lf.fitLineLMS();
+
+	// use L2 for fitting - it's faster than LMS + unstable lines are good here (for the error increases on wrong merges)
+	Line line = lf.fitLine();	
 	line = line.extendBorder(boundingBox());
 
 	mLine = line;

@@ -197,6 +197,7 @@ public:
 	LineFitting(const QVector<Vector2D>& pts);
 
 	Line fitLineLMS() const;
+	Line fitLine() const;
 
 protected:
 	// parameters:

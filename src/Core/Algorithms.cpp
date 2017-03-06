@@ -1207,6 +1207,25 @@ Line LineFitting::fitLineLMS() const {
 	return bestLine;
 }
 
+Line LineFitting::fitLine() const {
+
+	std::vector<cv::Point> pts;
+
+	for (const Vector2D& pt : mPts)
+		pts.push_back(pt.toCvPoint());
+
+	cv::Vec4f lineVec;
+	cv::fitLine(pts, lineVec, CV_DIST_L2, 0, 10, 0.01);
+	
+	// convert line vec to a line:
+	// (vx, vy, x0, y0)
+	Vector2D g(lineVec[0], lineVec[1]);		
+	Vector2D x0(lineVec[2], lineVec[3]);
+	Vector2D x1 = x0 + g;
+
+	return Line(x0, x1);
+}
+
 /// <summary>
 /// Returns randomly sampled pts.
 /// </summary>
