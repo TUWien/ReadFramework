@@ -1182,6 +1182,19 @@ double TextLineSet::computeError(const QVector<Vector2D>& pts) const {
 	return rErr / pts.size();
 }
 
+/// <summary>
+/// Returns the text line density.
+/// The density is defined as # components/baseline length.
+/// </summary>
+/// <returns></returns>
+double TextLineSet::density() const {
+	
+	if (mLine.length() == 0)
+		return 0;	// is 0 good to return here?
+
+	return size()/mLine.length();
+}
+
 void TextLineSet::updateLine() {
 
 	if (mSet.size() < 2) {
@@ -1254,6 +1267,24 @@ void TextBlock::setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLi
 
 QVector<QSharedPointer<TextLineSet> > TextBlock::textLines() const {
 	return mTextLines;
+}
+
+/// <summary>
+/// Removes the textline from the text block.
+/// </summary>
+/// <param name="tl">The text line.</param>
+bool TextBlock::remove(const QSharedPointer<TextLineSet>& tl) {
+
+	// find the text line
+	for (int rIdx = 0; rIdx < mTextLines.size(); rIdx++) {
+
+		if (*tl == *mTextLines[rIdx]) {
+			mTextLines.remove(rIdx);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 QSharedPointer<Region> TextBlock::toTextRegion() const {
@@ -1344,6 +1375,78 @@ QSharedPointer<Region> TextBlockSet::toTextRegion() const {
 		region->addUniqueChild(tb->toTextRegion());
 
 	return region;
+}
+
+void TextBlockSet::removeWeakTextLines() const {
+
+	//  globally estimate text line density
+	QVector<QSharedPointer<TextLineSet> > tls;
+	for (auto tb : textBlocks())
+		tls << tb->textLines();
+
+	auto filtered = TextLineHelper::filterLowDensity(tls);
+
+	for (auto tb : textBlocks()) {
+		
+		// remove the textlines
+		for (auto tl : filtered)
+			tb->remove(tl);
+	}
+}
+
+// TextLine Helper functions --------------------------------------------------------------------
+/// <summary>
+/// Detects low density text lines and returns them.
+/// 'Low density' text lines are thosw whose density is below q5-(q75-q25) (median - interquartile distances).
+/// </summary>
+/// <param name="textLines">The text lines.</param>
+/// <returns>Low density (weak) textlines</returns>
+QVector<QSharedPointer<TextLineSet> > TextLineHelper::filterLowDensity(const QVector<QSharedPointer<TextLineSet>>& textLines) {
+
+	QList<double> densities;
+	for (auto tl : textLines)
+		densities << tl->density();
+
+	double q25 = Algorithms::statMoment(densities, 0.25);
+	double q50 = Algorithms::statMoment(densities, 0.5);
+	double q75 = Algorithms::statMoment(densities, 0.75);
+
+	// compute lower bound
+	double lb = q50 - (q75 - q25);
+	qDebug() << "lower bound for filtering w.r.t text line density:" << lb;
+
+	QVector<QSharedPointer<TextLineSet> > filtered;
+
+	for (auto tl : textLines) {
+		if (tl->density() < lb)
+			filtered << tl;
+	}
+
+	return filtered;
+}
+
+/// <summary>
+/// Filters all textlines whose baseline angle is > maxAngle w.r.t the text orientation.
+/// </summary>
+/// <param name="textLines">The text lines.</param>
+/// <param name="maxAngle">The maximum angle.</param>
+/// <returns></returns>
+QVector<QSharedPointer<TextLineSet>> TextLineHelper::filterAngle(const QVector<QSharedPointer<TextLineSet>>& textLines, double maxAngle) {
+
+	QVector<QSharedPointer<TextLineSet> > filtered;
+
+	for (auto tl : textLines) {
+
+		double textOr = tl->orientation() - CV_PI*0.5;
+		double baseLineOr = -tl->line().angle();
+		double orDist = Algorithms::angleDist(textOr, baseLineOr, CV_PI);
+		if (orDist > maxAngle) {
+			filtered << tl;
+			//qDebug() << tl->id() << "angle error:" << orDist*DK_RAD2DEG << "tl" << textOr*DK_RAD2DEG << "bl" << baseLineOr*DK_RAD2DEG;
+		}
+	}
+
+	return filtered;
 }
 
 }

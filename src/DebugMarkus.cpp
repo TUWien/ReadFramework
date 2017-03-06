@@ -52,6 +52,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
+#include <QProcess>
 
 #include <QJsonObject>
 
@@ -164,6 +165,7 @@ void LayoutTest::testComponents() {
 	//testLayout(imgCv);
 	//layoutToXml();
 	layoutToXmlDebug();
+	eval();
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -265,8 +267,6 @@ void LayoutTest::layoutToXmlDebug() const {
 	// TODO: add lines?
 	//QVector<Line> stopLines = createStopLines();
 
-	cv::Mat dImg = img.clone();
-
 	// compute text lines for each text block
 	for (QSharedPointer<TextBlock> tb : textBlocks.textBlocks()) {
 
@@ -304,14 +304,22 @@ void LayoutTest::layoutToXmlDebug() const {
 		// save text lines
 		tb->setTextLines(textLines.textLineSets());
 
-		// drawing (per text block)
-		textLines.scale(1.0/scale);
-		dImg = textLines.draw(dImg);
-		textLines.scale(scale);
+		//// drawing (per text block)
+		//textLines.scale(1.0/scale);
+		//dImg = textLines.draw(dImg);
+		//textLines.scale(scale);
 	}
 
 	// scale back to original coordinates
 	textBlocks.scale(1.0 / scale);
+	textBlocks.removeWeakTextLines();
+
+	QVector<QSharedPointer<TextLineSet> > tls;
+	for (auto tb : textBlocks.textBlocks())
+		tls << tb->textLines();
+
+	cv::Mat dImg = img.clone();
+	dImg = TextLineSegmentation::draw(dImg, tls);
 
 	// end computing --------------------------------------------------------------------
 
@@ -332,7 +340,7 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	auto root = textBlocks.toTextRegion();
 	for (const QSharedPointer<rdf::Region>& r : root->children()) {
-		pe->rootRegion()->addUniqueChild(r);
+		pe->rootRegion()->addUniqueChild(r, true);
 	}
 
 	parser.write(mConfig.xmlPath(), pe);
@@ -640,6 +648,50 @@ double LayoutTest::scaleFactor(const cv::Mat& img) const {
 	}
 
 	return 1.0;
+}
+
+void LayoutTest::eval() const {
+	
+	QString metricPath = "D:/read/evalTools/BaseLineEval/lineMetric.jar";
+	QString gtPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+	QString xmlPath = mConfig.xmlPath();
+
+	if (QFileInfo(metricPath).exists() &&
+		QFileInfo(gtPath).exists() &&
+		QFileInfo(xmlPath).exists()) {
+		eval(metricPath, gtPath, xmlPath);
+	}
+	else if (!QFileInfo(gtPath).exists()) {
+		qDebug() << gtPath << "does not exist";
+	}
+	else if (!QFileInfo(gtPath).exists()) {
+		qDebug() << gtPath << "does not exist";
+	}
+	else if (!QFileInfo(xmlPath).exists()) {
+		qDebug() << xmlPath << "does not exist";
+	}
+
+}
+
+void LayoutTest::eval(const QString & toolPath, const QString & gtPath, const QString & resultPath) const {
+
+	QStringList params;
+	params << "/c";
+	params << "java";
+	params << "-jar";
+	params << toolPath;
+	params << gtPath;
+	params << resultPath;
+
+	QProcess eval;
+	eval.start("cmd", params);
+	eval.waitForFinished();
+
+	//qDebug() << "cmd: " << params;
+	//qDebug() << "exit status: " << eval.exitStatus() << "code:" << eval.exitCode();
+
+	// show the results
+	qDebug().noquote() << "\n" << eval.readAllStandardOutput();
 }
 
 }

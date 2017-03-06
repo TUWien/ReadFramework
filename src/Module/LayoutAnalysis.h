@@ -76,6 +76,9 @@ public:
 	void setScaleMode(const ScaleSideMode& mode);
 	int scaleMode() const;
 
+	void setRemoveWeakTextLiens(bool remove);
+	bool removeWeakTextLines() const;
+
 protected:
 
 	void load(const QSettings& settings) override;
@@ -83,6 +86,7 @@ protected:
 
 	int mMaxImageSide = 3000;
 	int mScaleMode = scale_height;
+	bool mRemoveWeakTextLines = true;
 };
 
 class DllCoreExport LayoutAnalysis : public Module {

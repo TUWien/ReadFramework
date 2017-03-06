@@ -76,6 +76,8 @@ protected:
 	void pageSegmentation(const cv::Mat& src) const;
 
 	double scaleFactor(const cv::Mat& img) const;
+	void eval() const;
+	void eval(const QString& toolPath, const QString& gtPath, const QString& resultPath) const;
 
 	DebugConfig mConfig;
 };

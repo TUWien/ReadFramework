@@ -241,12 +241,20 @@ public:
 	Line line() const;
 	double error() const;
 	double computeError(const QVector<Vector2D>& pts) const;
+	double density() const;
 
 protected:
 	Line mLine;
 	double mLineErr = DBL_MAX;
 
 	void updateLine();
+};
+
+namespace TextLineHelper {
+
+	QVector<QSharedPointer<TextLineSet> > filterLowDensity(const QVector<QSharedPointer<TextLineSet> >& textLines);
+	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD);
+
 };
 
 /// <summary>
@@ -280,6 +288,7 @@ public:
 
 	void setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLines);
 	QVector<QSharedPointer<TextLineSet> > textLines() const;
+	bool remove(const QSharedPointer<TextLineSet>& tl);
 
 	QSharedPointer<Region> toTextRegion() const;
 
@@ -314,6 +323,8 @@ public:
 	QVector<QSharedPointer<TextBlock> > textBlocks() const;
 
 	QSharedPointer<Region> toTextRegion() const;
+
+	void removeWeakTextLines() const;
 
 private:
 	

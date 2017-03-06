@@ -94,6 +94,7 @@ public:
 	QSharedPointer<TextLineConfig> config() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
+	static cv::Mat draw(const cv::Mat& img, const QVector<QSharedPointer<TextLineSet> >& textLines);
 	QString toString() const override;
 
 	void addSeparatorLines(const QVector<Line>& lines);
@@ -119,7 +120,6 @@ private:
 	void filterDuplicates(PixelSet& set) const;
 
 	// post processing
-	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD) const;
 	void mergeUnstableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines) const;
 
 };

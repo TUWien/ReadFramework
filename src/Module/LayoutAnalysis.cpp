@@ -72,16 +72,26 @@ int LayoutAnalysisConfig::scaleMode() const {
 	return ModuleConfig::checkParam(mScaleMode, 0, (int)scale_end, "scaleMode");
 }
 
+void LayoutAnalysisConfig::setRemoveWeakTextLiens(bool remove) {
+	mRemoveWeakTextLines = remove;
+}
+
+bool LayoutAnalysisConfig::removeWeakTextLines() const {
+	return mRemoveWeakTextLines;
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
 	mMaxImageSide	= settings.value("maxImageSide", maxImageSide()).toInt();
 	mScaleMode		= settings.value("scaleMode", scaleMode()).toInt();
+	mRemoveWeakTextLines = settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
 	
 	settings.setValue("maxImageSide", maxImageSide());
 	settings.setValue("scaleMode", scaleMode());
+	settings.setValue("removeWeakTextLines", removeWeakTextLines());
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -178,6 +188,10 @@ bool LayoutAnalysis::compute() {
 	
 	// scale back to original coordinates
 	mTextBlockSet.scale(1.0 / mScale);
+
+	if (config()->removeWeakTextLines()) {
+		mTextBlockSet.removeWeakTextLines();
+	}
 
 	return true;
 }
