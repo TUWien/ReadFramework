@@ -163,6 +163,11 @@ bool LayoutAnalysis::compute() {
 
 		PixelSet sp = tb->pixelSet();
 
+		if (sp.isEmpty()) {
+			qInfo() << tb << "is empty...";
+			continue;
+		}
+
 		// find local orientation per pixel
 		rdf::LocalOrientation lo(sp);
 		if (!lo.compute()) {

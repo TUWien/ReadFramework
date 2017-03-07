@@ -191,7 +191,9 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		//dc.setImagePath("D:/read/test/M_Freyung_012_0053.jpg");
 		//dc.setImagePath("D:/read/baseline-competition/dataset/test-new/Baseline Competition - Simple Documents/ABP_FirstTestCollection/M_Freyung_010_0022.jpg");
-		dc.setImagePath("D:/read/test/cBAD/M_Aigen_am_Inn_007_0210.jpg");
+		//dc.setImagePath("D:/read/test/cBAD/M_Aigen_am_Inn_007_0210.jpg");
+		dc.setImagePath("D:/read/test/cBAD/010_023_001.jpg");
+		
 		//dc.setImagePath("D:/read/test/synthetic-test.png");
 		//dc.setImagePath("D:/read/test/synthetic-test-single-line.png");
 		//dc.setImagePath("D:/read/data/Herbarium/George_Forrest_Herbarium_Specimens/E00000017-c.jpg");
