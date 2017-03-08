@@ -245,15 +245,32 @@ Rect PixelSet::boundingBox() const {
 
 Line PixelSet::fitLine(double offsetAngle) const {
 
-	if (mSet.empty()) {
-		qWarning() << "cannot compute baseline if the set is empty...";
+	if (mSet.isEmpty()) {
+		qWarning() << "cannot compute baseline if the set has less than 1 px...";
 		return Line();
 	}
 
 	QVector<Vector2D> ptSet = pointSet(offsetAngle);
+	Line line;
 
-	LineFitting lf(ptSet);
-	Line line = lf.fitLineLMS();
+	if (ptSet.size() > 2) {
+		LineFitting lf(ptSet);
+		line = lf.fitLineLMS();
+	}
+	// create a baseline (if less than two sp are in the set)
+	else if (!ptSet.isEmpty()) {
+		Vector2D x0 = ptSet[0];
+		Vector2D g(0, 1);
+		double angle = orientation();
+		g.rotate(angle);
+
+		line = Line(x0, x0 + g);
+	}
+	else {
+		qWarning() << "cannot compute baseline!";
+		return Line();
+	}
+
 	line = line.extendBorder(boundingBox());
 
 	return line;
