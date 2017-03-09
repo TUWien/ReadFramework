@@ -111,8 +111,8 @@ int main(int argc, char** argv) {
 	if (parser.isSet(settingOpt)) {
 		QString sName = parser.value(settingOpt);
 		config.setSettingsFile(sName);
+		config.load();
 	}
-	config.load();
 
 	// create debug config
 	rdf::DebugConfig dc;
@@ -193,7 +193,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/baseline-competition/dataset/test-new/Baseline Competition - Simple Documents/ABP_FirstTestCollection/M_Freyung_010_0022.jpg");
 		//dc.setImagePath("D:/read/test/cBAD/M_Aigen_am_Inn_007_0210.jpg");
 		//dc.setImagePath("D:/read/test/cBAD/010_023_001.jpg");
-		dc.setImagePath("D:/read/test/cBAD/00000008.jpg");
+		//dc.setImagePath("D:/read/test/cBAD/00000008.jpg");
 		
 
 		
@@ -203,7 +203,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
 		//dc.setImagePath("D:/read/test/56_csrc.jpg");
-		//dc.setImagePath("D:/read/test/102_csrc.jpg");
+		dc.setImagePath("D:/read/test/102_csrc.jpg");
+		dc.setImagePath("D:/read/test/00000001-6.jpg");
 
 		// debug images
 		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");

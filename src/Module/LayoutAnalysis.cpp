@@ -158,13 +158,15 @@ bool LayoutAnalysis::compute() {
 
 	QVector<Line> stopLines = createStopLines();
 
+	Timer dtTl;
+
 	// compute text lines for each text block
 	for (QSharedPointer<TextBlock> tb : mTextBlockSet.textBlocks()) {
 
 		PixelSet sp = tb->pixelSet();
 
 		if (sp.isEmpty()) {
-			qInfo() << tb << "is empty...";
+			qInfo() << *tb << "is empty...";
 			continue;
 		}
 
@@ -212,6 +214,8 @@ bool LayoutAnalysis::compute() {
 		tb->setTextLines(textLines);
 	}
 	
+	mInfo << "Textlines computed in" << dtTl;
+
 	// scale back to original coordinates
 	mTextBlockSet.scale(1.0 / mScale);
 
@@ -219,6 +223,8 @@ bool LayoutAnalysis::compute() {
 	if (config()->removeWeakTextLines()) {
 		mTextBlockSet.removeWeakTextLines();
 	}
+
+	mInfo << "computed in" << dt;
 
 	return true;
 }
@@ -233,8 +239,15 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 	QPainter p(&pm);
 	
 	for (auto tb : mTextBlockSet.textBlocks()) {
-		p.setPen(ColorManager::getColor());
-		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines /*| TextBlock::draw_pixels*/));
+		
+		QVector<QSharedPointer<PixelSet> > s = tb->pixelSet().splitScales();
+		for (int idx = s.size()-1; idx >= 0; idx--) {
+			p.setPen(ColorManager::getColor());
+			s[idx]->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats | Pixel::draw_ellipse));
+			//qDebug() << "scale" << idx << ":" << *s[idx];
+
+		}
+		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines));
 	}
 
 	//// LSD OpenCV --------------------------------------------------------------------
@@ -366,9 +379,6 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 			sl.scale(mScale);
 			stopLines << sl;
 		}
-
-		qDebug() << stopLines.size() << "lines loaded";
-
 	}
 
 	// TODO: detect lines here

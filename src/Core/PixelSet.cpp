@@ -35,6 +35,7 @@
 #include "Algorithms.h"
 #include "Elements.h"
 #include "Utils.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -505,6 +506,41 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 	}
 
 	return sets;
+}
+
+QVector<QSharedPointer<PixelSet> > PixelSet::splitScales() const {
+
+	int numScales = Config::instance().global().numScales;
+
+	// init sets
+	QVector<QSharedPointer<PixelSet> > rawSets;
+	rawSets.resize(numScales);
+	for (int idx = 0; idx < numScales; idx++)
+		rawSets[idx] = QSharedPointer<PixelSet>(new PixelSet());
+
+	for (const auto p : mSet) {
+		
+		assert(p->pyramidLevel() >= 0 && p->pyramidLevel() < rawSets.size());
+		rawSets[p->pyramidLevel()]->add(p);
+	}
+
+	// remove empty sets
+	QVector<QSharedPointer<PixelSet> > sets;
+	for (const auto ps : rawSets) {
+		if (!ps->isEmpty())
+			sets << ps;
+	}
+
+	return sets;
+}
+
+QString PixelSet::toString() const {
+	
+	QString msg;
+	msg += QString::number(size());
+	msg += " super pixels";
+	
+	return msg;
 }
 
 QSharedPointer<TextLine> PixelSet::toTextLine() const {
@@ -1327,12 +1363,16 @@ void TextBlock::draw(QPainter & p, const DrawFlag & df) {
 
 	if (df & draw_text_lines) {
 		for (auto tl : mTextLines)
-			tl->draw(p);
+			tl->draw(p, PixelSet::draw_nothing);	// draw baseline only
 	}
 
 	if (df & draw_poly) {
 		mPoly.draw(p);
 	}
+}
+
+QString TextBlock::toString() const {
+	return "Text Block " + id();
 }
 
 // TextBlockSet --------------------------------------------------------------------
@@ -1401,12 +1441,16 @@ QSharedPointer<Region> TextBlockSet::toTextRegion() const {
 
 void TextBlockSet::removeWeakTextLines() const {
 
+	double maxAngleDiff = 10 * DK_DEG2RAD;
+
 	//  globally estimate text line density
 	QVector<QSharedPointer<TextLineSet> > tls;
 	for (auto tb : textBlocks())
 		tls << tb->textLines();
 
 	auto filtered = TextLineHelper::filterLowDensity(tls);
+	int nf = filtered.size();
+	filtered << TextLineHelper::filterAngle(tls, maxAngleDiff);
 
 	for (auto tb : textBlocks()) {
 		
@@ -1414,6 +1458,8 @@ void TextBlockSet::removeWeakTextLines() const {
 		for (auto tl : filtered)
 			tb->remove(tl);
 	}
+
+	qDebug().nospace() << filtered.size() << " unstable textlines removed (" << nf << "/" << filtered.size()-nf << ") sparse/angle";
 }
 
 // TextLine Helper functions --------------------------------------------------------------------
@@ -1435,7 +1481,7 @@ QVector<QSharedPointer<TextLineSet> > TextLineHelper::filterLowDensity(const QVe
 
 	// compute lower bound
 	double lb = q50 - (q75 - q25);
-	qDebug() << "lower bound for filtering w.r.t text line density:" << lb;
+	//qDebug() << "lower bound for filtering w.r.t text line density:" << lb;
 
 	QVector<QSharedPointer<TextLineSet> > filtered;
 

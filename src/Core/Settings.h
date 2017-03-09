@@ -79,6 +79,10 @@ public:
 	QString xmlSubDir;
 	QString superPixelClassifierPath;
 
+	// number of scales in the scale space
+	// this value is assigned by ScaleSpaceSuperPixel
+	int numScales = 1;
+
 protected:
 	void defaultSettings() override;
 };
@@ -102,7 +106,6 @@ private:
 	Config();
 	Config(const Config&);
 
-	QString createSettingsFilePath(const QString& fileName = QString()) const;
 	QString settingsPath() const;
 
 	GlobalSettings& globalIntern();

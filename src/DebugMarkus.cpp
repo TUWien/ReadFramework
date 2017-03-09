@@ -213,7 +213,6 @@ void LayoutTest::layoutToXml() const {
 	}
 
 	parser.write(mConfig.xmlPath(), pe);
-	qDebug() << "results written to" << mConfig.xmlPath();
 
 	qInfo() << "layout analysis computed in" << dt;
 }

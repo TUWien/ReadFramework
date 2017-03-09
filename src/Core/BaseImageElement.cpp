@@ -34,6 +34,7 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QUuid>
+#include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
@@ -67,8 +68,27 @@ bool operator==(const BaseElement & l, const BaseElement & r) {
 	return l.id() == r.id();
 }
 
+/// <summary>
+/// Returns true if l and r do not have the same id.
+/// </summary>
+/// <param name="l">An element to compare.</param>
+/// <param name="r">An element to compare.</param>
+/// <returns></returns>
 bool operator!=(const BaseElement & l, const BaseElement & r) {
 	return !(l == r);
+}
+
+QDataStream& operator<<(QDataStream& s, const BaseElement& e) {
+
+	// this makes the operator<< virtual (stroustrup)
+	s << e.toString();
+	return s;
+}
+
+QDebug operator<<(QDebug d, const BaseElement& e) {
+
+	d << qPrintable(e.toString());
+	return d;
 }
 
 /// <summary>
@@ -77,6 +97,10 @@ bool operator!=(const BaseElement & l, const BaseElement & r) {
 /// <returns></returns>
 QString BaseElement::id() const {
 	return mId;
+}
+
+QString BaseElement::toString() const {
+	return id() + " toString() not implemented for this object";
 }
 
 }

@@ -122,7 +122,7 @@ bool TextLineSegmentation::compute() {
 
 bool TextLineSegmentation::compute(const cv::Mat& img) {
 
-	Timer dt;
+	//Timer dt;
 
 	if (!checkInput())
 		return false;
@@ -152,8 +152,8 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 	//}
 	//mTextLines = ps;
 
-	mDebug << mTextLines.size() << "text lines (after filtering)";
-	mDebug << "computed in" << dt;
+	//mDebug << mTextLines.size() << "text lines (after filtering)";
+	//mDebug << "computed in" << dt;
 
 	return true;
 }
@@ -381,7 +381,7 @@ bool TextLineSegmentation::mergeTextLines(const QSharedPointer<TextLineSet>& tln
 
 void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 
-	Timer dt;
+	//Timer dt;
 	double md = config()->minLineLength();
 
 	Rect boxD(Vector2D(), Vector2D(2*md, 2*md));
@@ -424,7 +424,7 @@ void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 	for (auto px : remPixels)
 		set.remove(px);
 
-	qDebug() << remPixels.size() << "px removed in " << dt;
+	//qDebug() << remPixels.size() << "px removed in " << dt;
 }
 
 void TextLineSegmentation::mergeUnstableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines) const {

@@ -36,6 +36,7 @@
 #include "ImageProcessor.h"
 #include "Drawer.h"
 #include "Utils.h"
+#include "Settings.h"
 
 #include "PixelSet.h"
 
@@ -482,17 +483,21 @@ bool LocalOrientation::compute() {
 	if (!checkInput())
 		return false;
 	
-	Timer dt;
+	//Timer dt;
 
-	QVector<Pixel*> ptrSet;
-	for (const QSharedPointer<Pixel> p : mSet.pixels())
-		ptrSet << p.data();
+	// estimate orientation per scale pyramid
+	//for (const QSharedPointer<PixelSet>& set : mSet.splitScales()) {
+		
+		QVector<Pixel*> ptrSet;
+		for (const QSharedPointer<Pixel>& p : mSet.pixels())
+			ptrSet << p.data();
 
-	for (Pixel* p : ptrSet)
-		computeScales(p, ptrSet);
+		for (Pixel* p : ptrSet)
+			computeScales(p, ptrSet);
+	//}
 
-	mDebug << config()->toString();
-	mDebug << "computed in" << dt;
+	//mDebug << config()->toString();
+	//mDebug << "computed in" << dt;
 
 	return true;
 }
@@ -728,13 +733,19 @@ bool GraphCutOrientation::compute() {
 	if (!checkInput())
 		return false;
 
+	//Timer dt;
+
 	DelauneyPixelConnector dpc;
 
-	Timer dt;
-	PixelGraph graph(mSet);
-	graph.connect(dpc);
-	graphCut(graph);
-	qInfo() << "[Graph Cut] computed in" << dt;
+	// build a graph for every scale
+	//for (const QSharedPointer<PixelSet>& set : mSet.splitScales()) {
+		
+		PixelGraph graph(mSet);
+		graph.connect(dpc);
+		graphCut(graph);
+	//}
+
+	//qInfo() << "[Graph Cut] computed in" << dt;
 
 	return true;
 }
@@ -880,6 +891,7 @@ bool ScaleSpaceSuperPixel::compute() {
 	img = IP::grayscale(img);
 	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
 
+	Config::instance().global().numScales = config()->numLayers();
 
 	for (int idx = 0; idx < config()->numLayers(); idx++) {
 	

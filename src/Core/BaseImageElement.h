@@ -58,7 +58,11 @@ public:
 	DllCoreExport friend bool operator==(const BaseElement& l, const QString& id);
 	DllCoreExport friend bool operator==(const BaseElement& l, const BaseElement& r);
 	DllCoreExport friend bool operator!=(const BaseElement& l, const BaseElement& r);
+	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const BaseElement& e);
+	DllCoreExport friend QDebug operator<< (QDebug d, const BaseElement &e);
+
 	QString id() const;
+	virtual QString toString() const;
 
 protected:
 	QString mId;

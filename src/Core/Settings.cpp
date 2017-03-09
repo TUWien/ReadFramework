@@ -95,7 +95,7 @@ void GlobalSettings::defaultSettings() {
 // Config --------------------------------------------------------------------
 Config::Config() {
 
-	mSettings = QSharedPointer<QSettings>(new QSettings(createSettingsFilePath(), QSettings::IniFormat));
+	mSettings = QSharedPointer<QSettings>(new QSettings(settingsFilePath(), QSettings::IniFormat));
 	load();
 }
 
@@ -137,14 +137,8 @@ void Config::setSettingsFile(const QString& filePath) {
 }
 
 QString Config::settingsFilePath() const {
-	return createSettingsFilePath();
-}
 
-QString Config::createSettingsFilePath(const QString& fileName) const {
-
-	QString settingsName = (!fileName.isEmpty()) ? fileName : mGlobal.settingsFileName;
-
-	return QFileInfo(settingsPath(), settingsName).absoluteFilePath();
+	return QFileInfo(settingsPath(), mGlobal.settingsFileName).absoluteFilePath();
 }
 
 QString Config::settingsPath() const {
@@ -162,7 +156,7 @@ void Config::load() {
 	mGlobal.load(mSettings);
 	mGlobalInit = mGlobal;
 	
-	qInfo() << "[READ] loading settings from" << mGlobal.settingsFileName;
+	qInfo() << "[READ] loading settings from" << settingsFilePath();
 }
 
 void Config::save() const {

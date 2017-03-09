@@ -215,6 +215,9 @@ public:
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
+	QVector<QSharedPointer<PixelSet> > splitScales() const;
+
+	virtual QString toString() const override;
 
 protected:
 	QVector<QSharedPointer<Pixel> > mSet;
@@ -293,6 +296,7 @@ public:
 	QSharedPointer<Region> toTextRegion() const;
 
 	void draw(QPainter& p, const DrawFlag& df = (DrawFlag)(draw_poly | draw_text_lines));
+	virtual QString toString() const override;
 
 private:
 	Polygon mPoly;
