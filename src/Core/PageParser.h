@@ -66,6 +66,7 @@ public:
 		tag_root,
 		tag_page,
 		tag_meta,
+		tag_layers,
 		tag_meta_creator,
 		tag_meta_created,
 		tag_meta_changed,
@@ -98,6 +99,7 @@ protected:
 	virtual QSharedPointer<PageElement> parse(const QString& xmlPath) const;
 	virtual void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 	virtual void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
+	virtual void parseLayers(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
 
 	QByteArray writePageElement() const;
 	void writeMetaData(QXmlStreamWriter& writer) const;

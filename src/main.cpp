@@ -45,6 +45,7 @@
 #include "DebugMarkus.h"
 #include "DebugFlo.h"
 #include "DebugStefan.h"
+#include "DebugThomas.h"
 #include "PageParser.h"
 #include "Shapes.h"
 
@@ -174,6 +175,12 @@ int main(int argc, char** argv) {
 
 			rdf::LayoutTest lt(dc);
 			lt.layoutToXml();
+		}
+		// thomas
+		else if (parser.isSet(devOpt) && parser.value(devOpt) == "thomas") {
+			qDebug() << "thomas";
+			rdf::ThomasTest test(dc);
+			test.test();
 		}
 		// my section
 		else {

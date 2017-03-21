@@ -839,7 +839,32 @@ QDateTime PageElement::dateModified() const {
 	return mDateModified;
 }
 
+void PageElement::setLayers(const QVector<QSharedPointer<LayerElement>>& layers) {
+	mLayers = QVector<QSharedPointer<LayerElement>>(layers);
+}
 
+QVector<QSharedPointer<LayerElement>> PageElement::layers() {
+	return mLayers;
+}
+
+void PageElement::setDefaultLayer(const QSharedPointer<LayerElement>& defaultLayer) {
+	mDefaultLayer = defaultLayer;
+}
+
+QSharedPointer<LayerElement> PageElement::defaultLayer() {
+	return mDefaultLayer;
+}
+
+void PageElement::sortLayers(bool checkIfSorted) {
+	if (checkIfSorted && std::is_sorted(mLayers.begin(), mLayers.end(), PageElement::layerZIndexGt)) {
+		return;
+	}
+	std::sort(mLayers.begin(), mLayers.end(), PageElement::layerZIndexGt);
+}
+
+bool PageElement::layerZIndexGt(const QSharedPointer<LayerElement>& l1, const QSharedPointer<LayerElement>& l2) {
+	return l1->zIndex() < l2->zIndex();
+}
 
 SeparatorRegion::SeparatorRegion(const Type& type) : Region(type) {
 	
@@ -1392,6 +1417,110 @@ bool TableCell::operator<(const TableCell & cell) const {
 
 bool TableCell::compareCells(const QSharedPointer<rdf::TableCell> l1, const QSharedPointer<rdf::TableCell> l2) {
 	return *l1 < *l2;
+}
+
+LayerElement::LayerElement() {
+}
+
+/// <summary>
+/// Reads the attributes of the layer element.
+/// </summary>
+/// <param name="reader">The reader.</param>
+/// <returns></returns>
+bool LayerElement::readAttributes(QXmlStreamReader & reader) {
+	mId = reader.attributes().value("id").toString();
+	bool ok;
+	mZIndex = reader.attributes().value("zIndex").toInt(&ok);
+	if (!ok) {
+		qWarning() << "Layer: invalid zIndex value!";
+		return false;
+	}
+	mCaption = reader.attributes().value("caption").toString();
+	return true;
+}
+
+/// <summary>
+/// Reads the children of the layer element, which can only be RegionRef elements.
+/// </summary>
+/// <param name="reader">The reader.</param>
+void LayerElement::readChildren(QXmlStreamReader & reader) {
+	while (!reader.atEnd()) {
+
+		reader.readNext();
+		QString tag = reader.qualifiedName().toString();
+
+		if (reader.tokenType() == QXmlStreamReader::EndElement && tag == "Layer") {
+			break;
+		}
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == "RegionRef") {
+			mRegionRefIds << reader.attributes().value("regionRef").toString();
+		}
+	}
+}
+
+/// <summary>
+/// Writes the layer element to an XML stream.
+/// </summary>
+/// <param name="writer">The writer.</param>
+void LayerElement::write(QXmlStreamWriter & writer) const {
+	if (mId.isNull() || mId.isEmpty()) {
+		qWarning() << "writing layer with invalid or empty id";
+	}
+	writer.writeStartElement("Layer");
+	writer.writeAttribute("id", mId);
+	writer.writeAttribute("zIndex", QString::number(mZIndex));
+	writer.writeAttribute("caption", mCaption);
+	
+	// write children (RegionRef elements)
+	// at this point, mRegions should contain the Region elements which the ref ids refer to
+	for (const auto& region : mRegions) {
+		writer.writeStartElement("RegionRef");
+		writer.writeAttribute("regionRef", region->id());
+		writer.writeEndElement();
+	}
+
+	writer.writeEndElement();
+}
+
+void LayerElement::setId(const QString & id) {
+	mId = id;
+}
+
+QString LayerElement::id() const {
+	return mId;
+}
+
+void LayerElement::setZIndex(int zIndex) {
+	mZIndex = zIndex;
+}
+
+int LayerElement::zIndex() const {
+	return mZIndex;
+}
+
+void LayerElement::setCaption(const QString & caption) {
+	mCaption = caption;
+}
+
+QString LayerElement::caption() const {
+	return mCaption;
+}
+
+void LayerElement::setRegionRefIds(const QVector<QString>& regionRefIds) {
+	mRegionRefIds = regionRefIds;
+}
+
+QVector<QString> LayerElement::regionRefIds() const {
+	return mRegionRefIds;
+}
+
+void LayerElement::setRegions(const QVector<QSharedPointer<Region>>& regions) {
+	mRegions = regions;
+}
+
+QVector<QSharedPointer<Region>> LayerElement::regions() const {
+	return mRegions;
 }
 
 }

@@ -240,9 +240,6 @@ protected:
 	QVector<int> mCornerPts;
 };
 
-
-
-
 class DllCoreExport TextLine : public Region {
 
 public:
@@ -289,6 +286,41 @@ protected:
 	Line mLine;
 };
 
+class DllCoreExport LayerElement {
+
+public:
+
+	LayerElement();
+
+	bool readAttributes(QXmlStreamReader& reader);
+	void readChildren(QXmlStreamReader& reader);
+	void write(QXmlStreamWriter& writer) const;
+
+	void setId(const QString& id);
+	QString id() const;
+
+	void setZIndex(int zIndex);
+	int zIndex() const;
+
+	void setCaption(const QString& caption);
+	QString caption() const;
+
+	void setRegionRefIds(const QVector<QString>& regionRefIds);
+	QVector<QString> regionRefIds() const;
+
+	void setRegions(const QVector<QSharedPointer<Region>>& regions);
+	QVector<QSharedPointer<Region>> regions() const;
+
+protected:
+	bool mChanged = false;
+	QString mId = "";
+	int mZIndex = 0;
+	QString mCaption = "";
+	QVector<QString> mRegionRefIds;
+	QVector<QSharedPointer<Region>> mRegions;
+
+};
+
 class DllCoreExport PageElement {
 
 public:
@@ -317,6 +349,14 @@ public:
 	void setDateModified(const QDateTime& date);
 	QDateTime dateModified() const;
 
+	void setLayers(const QVector<QSharedPointer<LayerElement>>& layers);
+	QVector<QSharedPointer<LayerElement>> layers();
+
+	void setDefaultLayer(const QSharedPointer<LayerElement>& defaultLayer);
+	QSharedPointer<LayerElement> defaultLayer();
+
+	void sortLayers(bool checkIfSorted = false);
+
 	friend DllCoreExport QDebug operator<< (QDebug d, const PageElement &p);
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const PageElement& p);
 	virtual QString toString() const;
@@ -332,6 +372,11 @@ protected:
 	QDateTime mDateModified;
 
 	QSharedPointer<Region> mRoot;
+	QVector<QSharedPointer<LayerElement>> mLayers;
+	QSharedPointer<LayerElement> mDefaultLayer;
+
+	static bool layerZIndexGt(const QSharedPointer<LayerElement>& l1, const QSharedPointer<LayerElement>& l2);
+
 };
 
 };

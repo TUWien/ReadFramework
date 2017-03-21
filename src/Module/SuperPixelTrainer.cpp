@@ -219,6 +219,10 @@ void SuperPixelLabeler::setLabelManager(const LabelManager & manager) {
 	mManager = manager;
 }
 
+void SuperPixelLabeler::setPage(const QSharedPointer<PageElement>& page) {
+	mPage = page;
+}
+
 QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 
 	if (mManager.isEmpty())
@@ -229,7 +233,21 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 	QImage img(imgRect.size().toQSize(), QImage::Format_RGB888);
 	img.fill(bgLabel.color());
 
-	auto allRegions = Region::allRegions(mGtRegion);
+	QVector<QSharedPointer<Region>> allRegions;
+	
+	// if there are no layers specified, the label regions are drawn in the order in which they occur in the xml source
+	if (!mPage || mPage->layers().isEmpty()) {
+		allRegions = Region::allRegions(mGtRegion);
+	}
+	// otherwise, regions are drawn in order of their layer zIndex
+	else {
+		// layers should be sorted by zIndex
+		mPage->sortLayers(true);
+		allRegions.append(mPage->defaultLayer()->regions());
+		for (const auto& layer : mPage->layers()) {
+			allRegions.append(layer->regions());
+		}
+	}
 
 	QPainter p(&img);
 	for (auto region : allRegions) {
