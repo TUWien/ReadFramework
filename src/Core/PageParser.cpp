@@ -120,6 +120,8 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	case tag_meta_created:		return "Created";
 	case tag_meta_changed:		return "LastChange";
 
+	case tag_layers:			return "Layers";
+
 	case attr_text_type:		return "type";
 	}
 	
@@ -185,6 +187,10 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 			else
 				qWarning() << "could not read image dimensions";
 		}
+		// <Layers>
+		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_layers)) {
+			parseLayers(reader, pageElement);
+		}
 		// e.g. <TextLine id="r1" type="heading">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) {
 			parseRegion(reader, root);
@@ -197,6 +203,39 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	}
 
 	pageElement->setRootRegion(root);
+
+	// find the region elements for every layer
+	QVector<QSharedPointer<Region>> regions = Region::allRegions(root);
+	QVector<QSharedPointer<Region>> layerRegions;
+	for (const auto& layer : pageElement->layers()) {
+		layerRegions.clear();
+		for (const QString& regionRefId : layer->regionRefIds()) {
+			QSharedPointer<Region> foundRegion;
+			for (const auto& region : regions) {
+				if (region->id() == regionRefId) {
+					foundRegion = region;
+					break;
+				}
+			}
+			if (foundRegion) {
+				layerRegions << foundRegion;
+			}
+			else {
+				qWarning() << "region " << regionRefId << " of layer " << layer->id() << " was not found in the document";
+			}
+		}
+
+		layer->setRegions(layerRegions);
+		
+		// subtract the current layer region set
+		for (const auto& layerRegion : layerRegions) {
+			regions.removeOne(layerRegion); // assumes that there are no duplicate ids (there shouldn't be any)
+		}
+	}
+	// add all remaining regions to the default layer
+	auto defaultLayer = QSharedPointer<LayerElement>::create();
+	defaultLayer->setRegions(regions);
+	pageElement->setDefaultLayer(defaultLayer);
 
 	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
@@ -292,6 +331,34 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 	}
 }
 
+/// <summary>
+/// Parses the layers of a PAGE XML.
+/// </summary>
+/// <param name="reader">The reader.</param>
+/// <param name="page">The page.</param>
+void PageXmlParser::parseLayers(QXmlStreamReader & reader, QSharedPointer<PageElement> page) const {
+	QVector<QSharedPointer<LayerElement>> layers;
+
+	while (!reader.atEnd()) {
+
+		reader.readNext();
+		QString tag = reader.qualifiedName().toString();
+
+		if (reader.tokenType() == QXmlStreamReader::EndElement && tag == tagName(tag_layers)) {
+			break;
+		}
+
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == "Layer") {
+			auto layer = QSharedPointer<LayerElement>::create();
+			layer->readAttributes(reader);
+			layer->readChildren(reader);
+			layers << layer;
+		}
+	}
+
+	page->setLayers(layers);
+}
+
 QByteArray PageXmlParser::writePageElement() const {
 
 	if (!mPage) {
@@ -323,6 +390,17 @@ QByteArray PageXmlParser::writePageElement() const {
 	writer.writeAttribute(tagName(attr_imageWidth), QString::number(mPage->imageSize().width()));
 	writer.writeAttribute(tagName(attr_imageHeight), QString::number(mPage->imageSize().height()));
 
+	// <Layers>
+	if (!mPage->layers().isEmpty()) {
+		writer.writeStartElement(tagName(tag_layers));
+		// (the default layer is virtual and not written to the file)
+		for (const auto& layer : mPage->layers()) {
+			layer->write(writer);
+		}
+		writer.writeEndElement(); // </Layers> 
+	}
+
+	// write regions
 	QSharedPointer<Region> root = mPage->rootRegion();
 
 	for (const QSharedPointer<Region> r : root->children()) {

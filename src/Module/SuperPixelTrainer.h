@@ -60,6 +60,7 @@ namespace rdf {
 
 // read defines
 class Region;
+class PageElement;
 
 /// <summary>
 /// FeatureCollection maps one LabelInfo to its features.
@@ -177,6 +178,7 @@ public:
 	void setBackgroundLabelName(const QString& name);
 	void setRootRegion(const QSharedPointer<Region>& region);
 	void setLabelManager(const LabelManager& manager);
+	void setPage(const QSharedPointer<PageElement>& page);
 	QImage createLabelImage(const Rect& imgRect) const;
 
 	PixelSet set() const;
@@ -184,6 +186,7 @@ public:
 private:
 	QVector<QSharedPointer<MserBlob> > mBlobs;
 	QSharedPointer<Region> mGtRegion;
+	QSharedPointer<PageElement> mPage;
 	Rect mImgRect;
 	LabelManager mManager;
 	QString mGlobalName;

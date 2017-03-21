@@ -45,6 +45,7 @@
 #include "DebugMarkus.h"
 #include "DebugFlo.h"
 #include "DebugStefan.h"
+#include "DebugThomas.h"
 #include "PageParser.h"
 #include "Shapes.h"
 
@@ -81,11 +82,11 @@ int main(int argc, char** argv) {
 	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "path");
 	parser.addOption(outputOpt);
 
-	// output image
+	// xml path
 	QCommandLineOption xmlOpt(QStringList() << "x" << "xml", QObject::tr("Path to PAGE xml."), "path");
 	parser.addOption(xmlOpt);
 
-	// output image
+	// developer
 	QCommandLineOption devOpt(QStringList() << "d" << "developer", QObject::tr("Developer name."), "name");
 	parser.addOption(devOpt);
 
@@ -96,6 +97,14 @@ int main(int argc, char** argv) {
 	// settings classifier
 	QCommandLineOption classifierOpt(QStringList() << "c" << "classifier", QObject::tr("Classifier file path."), "filepath");
 	parser.addOption(classifierOpt);
+
+	// feature cache path
+	QCommandLineOption featureCachePathOpt(QStringList() << "f" << "feature cache", QObject::tr("Feature cache path."), "filepath");
+	parser.addOption(featureCachePathOpt);
+
+	// label config path
+	QCommandLineOption labelConfigPathOpt(QStringList() << "l" << "label config", QObject::tr("Label config path."), "filepath");
+	parser.addOption(labelConfigPathOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -132,6 +141,14 @@ int main(int argc, char** argv) {
 	if (parser.isSet(classifierOpt))
 		dc.setClassifierPath(parser.value(classifierOpt));
 
+	// add feature cache path
+	if (parser.isSet(featureCachePathOpt))
+		dc.setFeatureCachePath(parser.value(featureCachePathOpt));
+
+	// add label config path
+	if (parser.isSet(labelConfigPathOpt))
+		dc.setLabelConfigPath(parser.value(labelConfigPathOpt));
+
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
 
@@ -158,6 +175,12 @@ int main(int argc, char** argv) {
 
 			rdf::LayoutTest lt(dc);
 			lt.layoutToXml();
+		}
+		// thomas
+		else if (parser.isSet(devOpt) && parser.value(devOpt) == "thomas") {
+			qDebug() << "thomas";
+			rdf::ThomasTest test(dc);
+			test.test();
 		}
 		// my section
 		else {
