@@ -782,7 +782,7 @@ bool FormFeatures::matchTemplate() {
 		//copy children
 		QVector<QSharedPointer<rdf::Region>> templateChildren = c->children();	//get children from template
 		QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
-		if (!templateChildren.isEmpty()) {
+		if (!templateChildren.isEmpty() && config()->saveChilds()) {
 			
 			for (QSharedPointer<rdf::Region> ci : templateChildren) {
 
@@ -1327,6 +1327,14 @@ cv::Size FormFeatures::sizeImg() const
 		return mSearchYOffset;
 	}
 
+	bool FormFeaturesConfig::saveChilds() const {
+		return mSaveChilds;
+	}
+
+	void FormFeaturesConfig::setSaveChilds(bool c) 	{
+		mSaveChilds = c;
+	}
+
 	QString FormFeaturesConfig::templDatabase() const {
 		return mTemplDatabase;
 	}
@@ -1341,6 +1349,7 @@ cv::Size FormFeatures::sizeImg() const
 		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
 		msg += "  mErrorThr: " + QString::number(mErrorThr);
 		msg += "  mformTemplate: " + mTemplDatabase;
+		msg += "  mSaveChilds: " + mSaveChilds;
 		return msg;
 	}
 	
@@ -1349,6 +1358,7 @@ cv::Size FormFeatures::sizeImg() const
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
 		mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
+		mSaveChilds = settings.value("saveChilds", mSaveChilds).toBool();
 	}
 
 	void FormFeaturesConfig::save(QSettings & settings) const	{
@@ -1356,5 +1366,6 @@ cv::Size FormFeatures::sizeImg() const
 		settings.setValue("distThreshold", mDistThreshold);
 		settings.setValue("errorThr", mErrorThr);
 		settings.setValue("formTemplate", mTemplDatabase);
+		settings.setValue("saveChilds", mSaveChilds);
 	}
 }

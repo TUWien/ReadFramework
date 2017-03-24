@@ -64,6 +64,9 @@ namespace rdf {
 		int searchXOffset() const;
 		int searchYOffset() const;
 
+		bool saveChilds() const;
+		void setSaveChilds(bool c);
+
 		QString templDatabase() const;
 		void setTemplDatabase(QString s);
 
@@ -80,6 +83,8 @@ namespace rdf {
 		double mThreshLineLenRatio = 0.6;
 		double mDistThreshold = 30.0;
 		double mErrorThr = 15.0;
+
+		bool mSaveChilds = false;
 
 		int mSearchXOffset = 200;
 		int mSearchYOffset = 200;

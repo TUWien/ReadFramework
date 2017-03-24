@@ -357,6 +357,8 @@ TextBlockSet LayoutAnalysis::createTextBlocks() const {
 		
 		// get (potential) text regions - from XML
 		QVector<QSharedPointer<Region> > textRegions = RegionManager::filter<Region>(mRoot, Region::type_text_region);
+		textRegions << RegionManager::filter<Region>(mRoot, Region::type_table_cell);
+
 		TextBlockSet tbs(textRegions);
 		tbs.scale(mScale);
 
