@@ -1,3 +1,12 @@
+Version 0.2
+===========
+- Layout Analysis
+	- speed-up
+	- MSER region crash fixed (by updating OpenCV)
+- Table Analysis
+	- Optional save for header elements
+- OpenCV 3.1.0 -> 3.2.0
+
 Version 0.1
 ===========
 - Layout Analysis
