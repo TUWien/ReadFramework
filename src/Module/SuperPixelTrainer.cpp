@@ -211,7 +211,7 @@ void SuperPixelLabeler::setBackgroundLabelName(const QString & name) {
 	mGlobalName = name;
 }
 
-void SuperPixelLabeler::setRootRegion(const QSharedPointer<Region>& region) {
+void SuperPixelLabeler::setRootRegion(const QSharedPointer<RootRegion>& region) {
 	mGtRegion = region;
 }
 
@@ -237,7 +237,7 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 	
 	// if there are no layers specified, the label regions are drawn in the order in which they occur in the xml source
 	if (!mPage || mPage->layers().isEmpty()) {
-		allRegions = Region::allRegions(mGtRegion);
+		allRegions = Region::allRegions(mGtRegion.data());
 	}
 	// otherwise, regions are drawn in order of their layer zIndex
 	else {

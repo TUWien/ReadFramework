@@ -13,3 +13,5 @@ buildfiles/x64
 /.project
 /CMakeUser.cmake
 CMakeUser.txt
+/x64
+*.dir

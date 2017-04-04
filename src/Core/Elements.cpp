@@ -157,6 +157,7 @@ void Region::draw(QPainter& p, const RegionTypeConfig& config) const {
 	
 	if (selected()) {
 		cp.setStyle(Qt::DashLine);
+		cp.setWidth(cp.width() + 2);
 		qDebug() << "should be dashed...";
 	}
 
@@ -247,7 +248,7 @@ QVector<QSharedPointer<Region> > Region::children() const {
 	return mChildren;
 }
 
-QVector<QSharedPointer<Region> > Region::filter(QSharedPointer<Region> root, const Region::Type& type) {
+QVector<QSharedPointer<Region> > Region::filter(const Region* root, const Region::Type& type) {
 
 	QVector<QSharedPointer<Region> > regions;
 
@@ -258,7 +259,22 @@ QVector<QSharedPointer<Region> > Region::filter(QSharedPointer<Region> root, con
 
 }
 
-QVector<QSharedPointer<Region>> Region::allRegions(QSharedPointer<Region> root) {
+QVector<QSharedPointer<Region>> Region::selectedRegions(const Region * root) {
+	
+	QVector<QSharedPointer<Region>> regions = allRegions(root);
+	QVector<QSharedPointer<Region>> sel;
+
+	for (auto r : regions) {
+		if (r && r->selected())
+			sel << r;
+	}
+	
+	qDebug() << sel.size() << "selected";
+
+	return sel;
+}
+
+QVector<QSharedPointer<Region>> Region::allRegions(const Region* root) {
 
 	QVector<QSharedPointer<Region> > regions;
 
@@ -779,7 +795,7 @@ QSize PageElement::imageSize() const {
 /// Set the root region. This is needed for writing to a PAGE XML file.
 /// </summary>
 /// <param name="region">The root region.</param>
-void PageElement::setRootRegion(QSharedPointer<Region> region) {
+void PageElement::setRootRegion(QSharedPointer<RootRegion> region) {
 	mRoot = region;
 }
 
@@ -787,7 +803,7 @@ void PageElement::setRootRegion(QSharedPointer<Region> region) {
 /// Returns the root region. This is needed if the XML is read.
 /// </summary>
 /// <returns></returns>
-QSharedPointer<Region> PageElement::rootRegion() const {
+QSharedPointer<RootRegion> PageElement::rootRegion() const {
 	return mRoot;
 }
 
@@ -1521,6 +1537,26 @@ void LayerElement::setRegions(const QVector<QSharedPointer<Region>>& regions) {
 
 QVector<QSharedPointer<Region>> LayerElement::regions() const {
 	return mRegions;
+}
+
+// RootRegion --------------------------------------------------------------------
+RootRegion::RootRegion(const Type & type) : Region(type) {
+
+	// default to text line
+	if (type == type_unknown)
+		mType = Region::type_root;
+}
+
+QVector<QSharedPointer<Region>> RootRegion::selectedRegions() const {
+	return Region::selectedRegions(this);
+}
+
+QVector<QSharedPointer<Region>> RootRegion::allRegions() const {
+	return Region::allRegions(this);
+}
+
+QVector<QSharedPointer<Region>> RootRegion::filter(const Region::Type & type) const {
+	return Region::filter(this, type);
 }
 
 }

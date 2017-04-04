@@ -60,6 +60,7 @@ namespace rdf {
 
 // read defines
 class Region;
+class RootRegion;
 class PageElement;
 
 /// <summary>
@@ -176,7 +177,7 @@ public:
 
 	void setFilePath(const QString& filePath);
 	void setBackgroundLabelName(const QString& name);
-	void setRootRegion(const QSharedPointer<Region>& region);
+	void setRootRegion(const QSharedPointer<RootRegion>& region);
 	void setLabelManager(const LabelManager& manager);
 	void setPage(const QSharedPointer<PageElement>& page);
 	QImage createLabelImage(const Rect& imgRect) const;
@@ -185,7 +186,7 @@ public:
 
 private:
 	QVector<QSharedPointer<MserBlob> > mBlobs;
-	QSharedPointer<Region> mGtRegion;
+	QSharedPointer<RootRegion> mGtRegion;
 	QSharedPointer<PageElement> mPage;
 	Rect mImgRect;
 	LabelManager mManager;

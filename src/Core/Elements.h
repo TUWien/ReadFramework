@@ -109,8 +109,9 @@ public:
 	void setChildren(const QVector<QSharedPointer<Region> >& children);
 	QVector<QSharedPointer<Region> > children() const;
 
-	static QVector<QSharedPointer<Region> > allRegions(QSharedPointer<Region> root);
-	static QVector<QSharedPointer<Region> > filter(QSharedPointer<Region> root, const Region::Type& type);
+	static QVector<QSharedPointer<Region> > selectedRegions(const Region* root);
+	static QVector<QSharedPointer<Region> > allRegions(const Region* root);
+	static QVector<QSharedPointer<Region> > filter(const Region* root, const Region::Type& type);
 
 	virtual void draw(QPainter& p, const RegionTypeConfig& config) const;
 
@@ -136,6 +137,17 @@ protected:
 
 	void collectRegions(QVector<QSharedPointer<Region> >& allRegions, const Region::Type& type = type_unknown) const;
 	virtual bool readPoints(QXmlStreamReader& reader);
+};
+
+class DllCoreExport RootRegion : public Region {
+
+public:
+	RootRegion(const Type& type = Type::type_unknown);
+
+	QVector<QSharedPointer<Region> > selectedRegions() const;
+	QVector<QSharedPointer<Region> > allRegions() const;
+	QVector<QSharedPointer<Region> > filter(const Region::Type& type) const;
+
 };
 
 class DllCoreExport TableRegion : public Region {
@@ -337,8 +349,8 @@ public:
 	void setImageSize(const QSize& size);
 	QSize imageSize() const;
 
-	void setRootRegion(QSharedPointer<Region> region);
-	QSharedPointer<Region> rootRegion() const;
+	void setRootRegion(QSharedPointer<RootRegion> region);
+	QSharedPointer<RootRegion> rootRegion() const;
 
 	void setCreator(const QString& creator);
 	QString creator() const;
@@ -371,7 +383,7 @@ protected:
 	QDateTime mDateCreated;
 	QDateTime mDateModified;
 
-	QSharedPointer<Region> mRoot;
+	QSharedPointer<RootRegion> mRoot;
 	QVector<QSharedPointer<LayerElement>> mLayers;
 	QSharedPointer<LayerElement> mDefaultLayer;
 

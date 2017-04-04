@@ -161,8 +161,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	pageElement = QSharedPointer<PageElement>(new PageElement());
 	pageElement->setXmlPath(xmlPath);
 
-	QSharedPointer<Region> root = QSharedPointer<Region>(new Region());
-	root->setType(Region::type_root);
+	QSharedPointer<RootRegion> root = QSharedPointer<RootRegion>(new RootRegion());
 
 	Timer dt;
 
@@ -205,7 +204,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	pageElement->setRootRegion(root);
 
 	// find the region elements for every layer
-	QVector<QSharedPointer<Region>> regions = Region::allRegions(root);
+	QVector<QSharedPointer<Region>> regions = Region::allRegions(root.data());
 	QVector<QSharedPointer<Region>> layerRegions;
 	for (const auto& layer : pageElement->layers()) {
 		layerRegions.clear();

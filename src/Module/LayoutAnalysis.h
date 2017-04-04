@@ -53,6 +53,7 @@ namespace rdf {
 
 // read defines
 class Region;
+class RootRegion;
 class Polygon;
 class TextLine;
 
@@ -105,7 +106,7 @@ public:
 	cv::Mat draw(const cv::Mat& img) const;
 	QString toString() const override;
 
-	void setRootRegion(const QSharedPointer<Region>& region);
+	void setRootRegion(const QSharedPointer<RootRegion>& region);
 	TextBlockSet textBlockSet() const;
 
 	double scaleFactor() const;
@@ -115,7 +116,7 @@ private:
 
 	// input
 	cv::Mat mImg;
-	QSharedPointer<Region> mRoot;
+	QSharedPointer<RootRegion> mRoot;
 
 	// params
 	double mScale = 1.0;

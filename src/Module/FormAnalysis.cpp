@@ -394,8 +394,8 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	QVector<rdf::Line> hLines;
 	QVector<rdf::Line> vLines;
 
-	QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion());// pe->rootRegion()->children();
-																						  //QVector<rdf::TableCell> cells;
+	QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
+	
 	QVector<QSharedPointer<rdf::TableCell>> cells;
 	QSharedPointer<rdf::TableRegion> region;
 

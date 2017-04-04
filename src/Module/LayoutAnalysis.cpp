@@ -306,7 +306,7 @@ QString LayoutAnalysis::toString() const {
 	return Module::toString();
 }
 
-void LayoutAnalysis::setRootRegion(const QSharedPointer<Region>& region) {
+void LayoutAnalysis::setRootRegion(const QSharedPointer<RootRegion>& region) {
 
 	mRoot = region;
 }

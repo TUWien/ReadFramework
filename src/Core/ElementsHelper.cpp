@@ -36,6 +36,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 #include <QSettings>
+#include <QPainter>
 #pragma warning(pop)
 
 namespace rdf {
@@ -125,9 +126,6 @@ void RegionTypeConfig::save(QSettings & settings) const {
 	settings.beginGroup(RegionManager::instance().typeName(mType));
 	settings.setValue("pen", mPen);
 	settings.setValue("brush", mBrush);
-	//settings.setValue("penColor", mPen.color());
-	//settings.setValue("penBrush", mPen.brush().color());
-	//settings.setValue("penWidth", mPen.width());
 	
 	settings.setValue("draw", mDraw);
 	settings.setValue("drawPoly", mDrawPoly);
@@ -238,7 +236,7 @@ QVector<QSharedPointer<RegionTypeConfig> > RegionManager::regionTypeConfig() con
 void RegionManager::selectRegions(const QVector<QSharedPointer<Region>>& selRegions, QSharedPointer<Region> rootRegion) const {
 
 	if (rootRegion) {
-		QVector<QSharedPointer<Region> > regions = Region::allRegions(rootRegion);
+		QVector<QSharedPointer<Region> > regions = Region::allRegions(rootRegion.data());
 
 		// deselect all
 		for (auto r : regions)
@@ -346,7 +344,8 @@ void RegionManager::drawRegion(
 	QPainter & p, 
 	QSharedPointer<rdf::Region> region, 
 	const QVector<QSharedPointer<RegionTypeConfig> >& config, 
-	bool recursive) const {
+	bool recursive,
+	bool activeSelection) const {
 
 	if (!region) {
 		qWarning() << "I cannot draw a NULL region";
@@ -354,7 +353,6 @@ void RegionManager::drawRegion(
 	}
 
 	QVector<QSharedPointer<RegionTypeConfig> > c = config.empty() ? mTypeConfig : config;
-
 
 	// do not draw this kind of region
 	if (region->type() < 0 || region->type() > c.size()) {
@@ -365,12 +363,17 @@ void RegionManager::drawRegion(
 	if (!c[region->type()]->draw())
 		return;
 
+	if (activeSelection && !region->selected())
+		p.setOpacity(0.2);
+	else
+		p.setOpacity(1.0);
+
 	region->draw(p, *c[region->type()]);
 
 	if (recursive) {
 
 		for (auto r : region->children())
-			drawRegion(p, r, c, recursive);
+			drawRegion(p, r, c, recursive, activeSelection);
 	}
 
 }
@@ -385,7 +388,7 @@ QVector<QSharedPointer<rdf::Region> > RegionManager::regionsAt(
 	if (!root)
 		return sRegions;
 
-	QVector<QSharedPointer<Region> > regions = rdf::Region::allRegions(root);
+	QVector<QSharedPointer<Region> > regions = rdf::Region::allRegions(root.data());
 
 	for (auto r : regions) {
 

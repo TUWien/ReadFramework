@@ -163,7 +163,8 @@ public:
 		QPainter& p, 
 		QSharedPointer<rdf::Region> region, 
 		const QVector<QSharedPointer<RegionTypeConfig> >& config = QVector<QSharedPointer<RegionTypeConfig> >(), 
-		bool recursive = true) const;
+		bool recursive = true,
+		bool activeSelection = false) const;
 
 	QVector<QSharedPointer<rdf::Region> > regionsAt(
 		QSharedPointer<rdf::Region> root, 
@@ -182,7 +183,7 @@ public:
 		const Region::Type& type, 
 		bool removeChildren = true) {
 		
-		QVector<QSharedPointer<Region> > regions = Region::allRegions(root);
+		QVector<QSharedPointer<Region> > regions = Region::allRegions(root.data());
 		QVector<QSharedPointer<T> > filteredRegions;
 
 		for (auto r : regions) {
