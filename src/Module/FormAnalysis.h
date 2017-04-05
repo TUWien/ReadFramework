@@ -81,7 +81,8 @@ namespace rdf {
 		QString mTemplDatabase = QString("D:\\projects\\READ\\formTest\\form-gt\\Table_Template_M_Aigen-am-Inn_003_01\\page\\M_Aigen_am_Inn_003-01_0001.xml");
 
 		double mThreshLineLenRatio = 0.6;
-		double mDistThreshold = 30.0;
+		//double mDistThreshold = 30.0;
+		double mDistThreshold = 100.0;
 		double mErrorThr = 15.0;
 
 		bool mSaveChilds = false;
@@ -147,6 +148,7 @@ namespace rdf {
 		double error() const;
 
 		QSharedPointer<FormFeaturesConfig> config() const;
+		void setConfig(QSharedPointer<FormFeaturesConfig> c);
 
 		cv::Mat binaryImage() const;
 		void setEstimateSkew(bool s);

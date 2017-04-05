@@ -753,22 +753,25 @@ bool FormFeatures::matchTemplate() {
 
 		bool found = false;
 		QString customTmp;
-		tL = findLine(tL, 100, found);
+
+		double thr = config()->distThreshold();
+		//tL = findLine(tL, 100, found);
+		tL = findLine(tL, thr, found);
 		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
 		//if (newCell->topBorderVisible())
 		//	newCell->setTopBorderVisible(found);
 
-		lL = findLine(lL, 100, found, false);
+		lL = findLine(lL, thr, found, false);
 		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
 		//if (newCell->leftBorderVisible())
 		//	newCell->setLeftBorderVisible(found);
 
-		rL = findLine(rL, 100, found, false);
+		rL = findLine(rL, thr, found, false);
 		customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
 		//if (newCell->rightBorderVisible())
 		//	newCell->setRightBorderVisible(found);
 
-		bL = findLine(bL, 100, found);
+		bL = findLine(bL, thr, found);
 		customTmp = customTmp + (found ? QString("true") : QString("false"));
 		//if (newCell->bottomBorderVisible())
 		//	newCell->setBottomBorderVisible(found);
@@ -836,6 +839,7 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool &found,
 			}
 		}
 	}
+
 
 	if (distance > distThreshold)
 		index = -1;
@@ -1124,6 +1128,10 @@ cv::Size FormFeatures::sizeImg() const
 		return qSharedPointerDynamicCast<FormFeaturesConfig>(mConfig);
 	}
 
+	void FormFeatures::setConfig(QSharedPointer<FormFeaturesConfig> c) 	{
+		mConfig = c;
+	}
+
 	cv::Mat FormFeatures::binaryImage() const	{
 		return mBwImg;
 	}
@@ -1341,7 +1349,7 @@ cv::Size FormFeatures::sizeImg() const
 
 	void FormFeaturesConfig::setTemplDatabase(QString s) {
 		mTemplDatabase = s;
-	}
+	} 
 
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
@@ -1367,5 +1375,6 @@ cv::Size FormFeatures::sizeImg() const
 		settings.setValue("errorThr", mErrorThr);
 		settings.setValue("formTemplate", mTemplDatabase);
 		settings.setValue("saveChilds", mSaveChilds);
+
 	}
 }
