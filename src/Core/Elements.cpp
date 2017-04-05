@@ -268,8 +268,6 @@ QVector<QSharedPointer<Region>> Region::selectedRegions(const Region * root) {
 		if (r && r->selected())
 			sel << r;
 	}
-	
-	qDebug() << sel.size() << "selected";
 
 	return sel;
 }
