@@ -370,10 +370,29 @@ QColor ColorManager::red(double alpha) {
 	return QColor(200, 50, 50, qRound(alpha*255));
 }
 
+/// <summary>
+/// Returns the TU Wien blue.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
 QColor ColorManager::blue(double alpha) {
 	return QColor(0, 102, 153, qRound(alpha*255));
 }
 
+/// <summary>
+/// Returns a pink color - not the artist.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::pink(double alpha) {
+	return QColor(255, 0, 127, qRound(alpha*255));
+}
+
+/// <summary>
+/// Returns white - yes it's #fff.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
 QColor ColorManager::white(double alpha) {
 	return QColor(255,255,255, qRound(alpha*255));
 }

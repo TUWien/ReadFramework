@@ -1203,20 +1203,12 @@ void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::Draw
 
 	PixelSet::draw(p, options, pixelOptions);
 
-	// draw baseline
-	QPen oPen = p.pen();
-	QPen pen = oPen;
-	pen.setColor(pen.color().darker());
-	p.setPen(pen);
-
 	Line tLine = mLine;
 	tLine.draw(p);
 	
 	Line bLine = fitLine(0);
 	bLine.setThickness(3);
 	bLine.draw(p);
-
-	p.setPen(oPen);
 }
 
 Line TextLineSet::line() const {

@@ -126,6 +126,11 @@ bool LayoutAnalysis::compute() {
 
 	mScale = scaleFactor();
 
+	// if you stumble upon this line:
+	// microfilm images are binary with havey noise
+	// a small median filter fixes this issue...
+	cv::medianBlur(mImg, mImg, 3);
+
 	// resize if necessary
 	if (mScale != 1.0) {
 		cv::resize(mImg, mImg, cv::Size(), mScale, mScale, CV_INTER_LINEAR);
@@ -243,10 +248,18 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 		QVector<QSharedPointer<PixelSet> > s = tb->pixelSet().splitScales();
 		for (int idx = s.size()-1; idx >= 0; idx--) {
 			p.setPen(ColorManager::getColor());
+			p.setOpacity(0.3);
 			s[idx]->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats | Pixel::draw_ellipse));
 			//qDebug() << "scale" << idx << ":" << *s[idx];
 
 		}
+				
+		p.setOpacity(1.0);
+		
+		QPen tp(ColorManager::pink());
+		tp.setWidth(5);
+		p.setPen(tp);
+
 		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines));
 	}
 
