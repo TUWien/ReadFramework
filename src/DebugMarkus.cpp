@@ -208,8 +208,11 @@ void LayoutTest::layoutToXml() const {
 	//pe->setRootRegion(la.textBlockSet().toTextRegion());
 
 	auto root = la.textBlockSet().toTextRegion();
+	
 	for (const QSharedPointer<rdf::Region>& r : root->children()) {
-		pe->rootRegion()->addUniqueChild(r, true);
+		
+		if (!pe->rootRegion()->reassignChild(r))
+			pe->rootRegion()->addUniqueChild(r, true);
 	}
 
 	parser.write(mConfig.xmlPath(), pe);

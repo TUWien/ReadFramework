@@ -1272,7 +1272,7 @@ void TextLineSet::updateLine() {
 }
 
 // TextBlock --------------------------------------------------------------------
-TextBlock::TextBlock(const Polygon & poly) {
+TextBlock::TextBlock(const Polygon & poly, const QString& id) : BaseElement(id) {
 	mPoly = poly;
 }
 
@@ -1339,7 +1339,7 @@ bool TextBlock::remove(const QSharedPointer<TextLineSet>& tl) {
 
 QSharedPointer<Region> TextBlock::toTextRegion() const {
 
-	QSharedPointer<Region> r(new Region(Region::type_text_region));
+	QSharedPointer<Region> r(new Region(Region::type_text_region, id()));
 	r->setPolygon(mPoly);
 
 	for (auto tl : mTextLines)
@@ -1377,7 +1377,7 @@ TextBlockSet::TextBlockSet(const QVector<Polygon>& regions) {
 TextBlockSet::TextBlockSet(const QVector<QSharedPointer<Region>>& regions) {
 
 	for (auto r : regions)
-		mTextBlocks << QSharedPointer<TextBlock>(new TextBlock(r->polygon()));
+		mTextBlocks << QSharedPointer<TextBlock>(new TextBlock(r->polygon(), r->id()));
 }
 
 void TextBlockSet::operator<<(const TextBlock & block) {
@@ -1421,7 +1421,7 @@ QSharedPointer<Region> TextBlockSet::toTextRegion() const {
 	Rect bb = Rect::fromPoints(pts);
 
 	// create the XML-ready region
-	QSharedPointer<Region> region(new Region(Region::type_text_region));
+	QSharedPointer<Region> region(new Region(Region::type_text_region, id()));
 	region->setPolygon(Polygon::fromRect(bb));
 
 	// add all text blocks

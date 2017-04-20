@@ -51,8 +51,8 @@ namespace rdf {
 /// The Region is the base class for all Region elements that 
 /// are contained in the extended PAGE XML.
 /// </summary>
-Region::Region(const Type& type) {
-	mId = "CVL-" + QUuid::createUuid().toString();
+Region::Region(const Type& type, const QString& id) {
+	mId = id.isEmpty() ? "CVL-" + QUuid::createUuid().toString() : id;
 	mType = type;
 }
 
@@ -184,6 +184,42 @@ void Region::addChild(QSharedPointer<Region> child) {
 }
 
 /// <summary>
+/// Reassigns the child w.r.t its ID.
+/// This function is needed if an element was
+/// converted (e.g. table cell to text block) but needs to 
+/// be updated.
+/// If the child ID is found, the children of the existing
+/// region are replaced by those of child and true is returned.
+/// </summary>
+/// <param name="child">A region that was potentially created from an existing region.</param>
+/// <returns>false if the child cannot be reassigned</returns>
+bool Region::reassignChild(QSharedPointer<Region> child) {
+
+	if (!child) {
+		qWarning() << "reassignChild: child is NULL where it should not be";
+		return false;
+	}
+
+	QVector<QSharedPointer<Region> > children = Region::allRegions(this);
+
+	int childIdx = -1;
+	for (auto c : children) {
+
+		if (!c)
+			continue;
+
+		if (c->id() == child->id()) {
+
+			// NOTE: currently we delete possible children of ci
+			c->setChildren(child->children());
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/// <summary>
 /// Adds the child if it does not exist already.
 /// If update is true, the duplicate element is updated, otherwise
 /// nothing happens if the child exists already.
@@ -202,7 +238,21 @@ void Region::addUniqueChild(QSharedPointer<Region> child, bool update) {
 
 		auto ci = mChildren[idx];
 
-		if (ci && *ci == *child) {
+		if (!ci)
+			continue;
+
+		// if we identify our 'original' id with a different tag - just update it's children
+		// usecase: tablecells are converted to textblocks (in the LA module) - here we enrich 
+		// them with e.g. baselines
+		// if you just need this - see reassignChild()
+		if (ci->type() != child->type() && ci->id() == child->id() && update) {
+
+			// NOTE: currently we delete possible children of ci
+			ci->setChildren(child->children());
+			return;
+		}
+
+		if (*ci == *child) {
 			childIdx = idx;
 			break;
 		}

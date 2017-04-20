@@ -83,6 +83,9 @@ public:
 	void setMinSuperPixelsPerBlock(int minPx);
 	int minSuperixelsPerBlock() const;
 
+	void setLocalBlockOrientation(bool or);
+	bool localBlockOrientation() const;
+
 protected:
 
 	void load(const QSettings& settings) override;
@@ -92,6 +95,7 @@ protected:
 	int mScaleMode = scale_height;		// scaling mode (see ScaleSideMode)
 	bool mRemoveWeakTextLines = true;	// if true, unstable text lines are removed
 	int mMinSuperPixelsPerBlock = 15;	// the minimum number of components that are required to run the text line segmentation
+	bool mLocalBlockOrientation = true;	// local orientation is estimated per text block
 };
 
 class DllCoreExport LayoutAnalysis : public Module {

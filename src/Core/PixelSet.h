@@ -271,7 +271,7 @@ namespace TextLineHelper {
 class DllCoreExport TextBlock : public BaseElement {
 
 public:
-	TextBlock(const Polygon& poly = Polygon());
+	TextBlock(const Polygon& poly = Polygon(), const QString& id = "");
 
 	enum DrawFlag {
 		draw_nothing = 0x0,

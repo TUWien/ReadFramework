@@ -226,8 +226,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
 		//dc.setImagePath("D:/read/test/56_csrc.jpg");
-		dc.setImagePath("D:/read/test/102_csrc.jpg");
-		dc.setImagePath("D:/read/test/00000001-6.jpg");
+		//dc.setImagePath("D:/read/test/102_csrc.jpg");
+		//dc.setImagePath("D:/read/test/00000001-6.jpg");
 
 		// debug images
 		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
@@ -236,7 +236,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
 		//dc.setImagePath("D:/read/test/debug-tiny[printed].png");
-		//dc.setImagePath("D:/read/test/00000003.jpg");
+		dc.setImagePath("D:/read/test/temp/M_Aigen_am_Inn_003-01_0004.jpg");
 	
 		//dc.setImagePath("D:/read/test/sp-classification/00000158.tif");
 		qInfo() << dc.imagePath() << "added as image path";

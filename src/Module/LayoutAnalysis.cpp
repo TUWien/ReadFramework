@@ -88,12 +88,21 @@ int LayoutAnalysisConfig::minSuperixelsPerBlock() const {
 	return ModuleConfig::checkParam(mMinSuperPixelsPerBlock, 0, INT_MAX, "minSuperPixelsPerBlock");
 }
 
+void LayoutAnalysisConfig::setLocalBlockOrientation(bool or) {
+	mLocalBlockOrientation = or ;
+}
+
+bool LayoutAnalysisConfig::localBlockOrientation() const {
+	return mLocalBlockOrientation;
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
 	mMaxImageSide			= settings.value("maxImageSide", maxImageSide()).toInt();
 	mScaleMode				= settings.value("scaleMode", scaleMode()).toInt();
 	mMinSuperPixelsPerBlock	= settings.value("minSuperPixelsPerBlock", minSuperixelsPerBlock()).toInt();
 	mRemoveWeakTextLines	= settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
+	mLocalBlockOrientation	= settings.value("localBlockOrientation", localBlockOrientation()).toBool();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
@@ -102,6 +111,7 @@ void LayoutAnalysisConfig::save(QSettings & settings) const {
 	settings.setValue("scaleMode", scaleMode());
 	settings.setValue("minSuperPixelsPerBlock", minSuperixelsPerBlock());
 	settings.setValue("removeWeakTextLines", removeWeakTextLines());
+	settings.setValue("localBlockOrientation", localBlockOrientation());
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -165,6 +175,23 @@ bool LayoutAnalysis::compute() {
 
 	Timer dtTl;
 
+	if (!config()->localBlockOrientation()) {
+		// find local orientation per pixel
+		rdf::LocalOrientation lo(pixels);
+		if (!lo.compute()) {
+			qWarning() << "could not compute local orientation";
+			return false;
+		}
+
+		// smooth estimation
+		rdf::GraphCutOrientation pse(pixels);
+
+		if (!pse.compute()) {
+			qWarning() << "could not compute set orientation";
+			return false;
+		}
+	}
+
 	// compute text lines for each text block
 	for (QSharedPointer<TextBlock> tb : mTextBlockSet.textBlocks()) {
 
@@ -175,19 +202,21 @@ bool LayoutAnalysis::compute() {
 			continue;
 		}
 
-		// find local orientation per pixel
-		rdf::LocalOrientation lo(sp);
-		if (!lo.compute()) {
-			qWarning() << "could not compute local orientation";
-			return false;
-		}
+		if (config()->localBlockOrientation()) {
+			// find local orientation per pixel
+			rdf::LocalOrientation lo(sp);
+			if (!lo.compute()) {
+				qWarning() << "could not compute local orientation";
+				return false;
+			}
 
-		// smooth estimation
-		rdf::GraphCutOrientation pse(sp);
+			// smooth estimation
+			rdf::GraphCutOrientation pse(sp);
 
-		if (!pse.compute()) {
-			qWarning() << "could not compute set orientation";
-			return false;
+			if (!pse.compute()) {
+				qWarning() << "could not compute set orientation";
+				return false;
+			}
 		}
 
 		//// find tab stops
@@ -374,6 +403,7 @@ TextBlockSet LayoutAnalysis::createTextBlocks() const {
 
 		TextBlockSet tbs(textRegions);
 		tbs.scale(mScale);
+
 
 		return tbs;
 	}

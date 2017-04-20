@@ -82,7 +82,7 @@ public:
 		type_end
 	};
 
-	Region(const Type& type = Type::type_unknown);
+	Region(const Type& type = Type::type_unknown, const QString& id = "");
 
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
@@ -103,6 +103,7 @@ public:
 	Polygon polygon() const;
 
 	void addChild(QSharedPointer<Region> child);
+	bool reassignChild(QSharedPointer<Region> child);
 	void addUniqueChild(QSharedPointer<Region> child, bool update = false);
 	void removeChild(QSharedPointer<Region> child);
 	void removeAllChildren();
