@@ -202,7 +202,6 @@ bool Region::reassignChild(QSharedPointer<Region> child) {
 
 	QVector<QSharedPointer<Region> > children = Region::allRegions(this);
 
-	int childIdx = -1;
 	for (auto c : children) {
 
 		if (!c)
@@ -210,7 +209,7 @@ bool Region::reassignChild(QSharedPointer<Region> child) {
 
 		if (c->id() == child->id()) {
 
-			// NOTE: currently we delete possible children of ci
+			// NOTE: currently we delete possible children of c
 			c->setChildren(child->children());
 			return true;
 		}

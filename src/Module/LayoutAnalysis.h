@@ -83,7 +83,7 @@ public:
 	void setMinSuperPixelsPerBlock(int minPx);
 	int minSuperixelsPerBlock() const;
 
-	void setLocalBlockOrientation(bool or);
+	void setLocalBlockOrientation(bool lor);
 	bool localBlockOrientation() const;
 
 protected:

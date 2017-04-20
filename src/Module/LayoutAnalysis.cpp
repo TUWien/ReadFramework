@@ -88,8 +88,8 @@ int LayoutAnalysisConfig::minSuperixelsPerBlock() const {
 	return ModuleConfig::checkParam(mMinSuperPixelsPerBlock, 0, INT_MAX, "minSuperPixelsPerBlock");
 }
 
-void LayoutAnalysisConfig::setLocalBlockOrientation(bool or) {
-	mLocalBlockOrientation = or ;
+void LayoutAnalysisConfig::setLocalBlockOrientation(bool lor) {
+	mLocalBlockOrientation = lor;
 }
 
 bool LayoutAnalysisConfig::localBlockOrientation() const {
