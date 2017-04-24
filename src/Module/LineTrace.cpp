@@ -35,18 +35,124 @@
 #include "GradientVector.h"
 #include "Blobs.h"
 #include "Algorithms.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QDebug>
 #include <QSettings>
+#include <QPainter>
 #include <qmath.h>
 #include "opencv2/imgproc/imgproc.hpp"
+#include "lsd/LSDDetector.h"
 #pragma warning(pop)
 
 
 
 namespace rdf {
+
+	// LineFilterConfig --------------------------------------------------------------------
+	LineFilterConfig::LineFilterConfig() : ModuleConfig("LineFilterConfig") {
+	}
+
+	double LineFilterConfig::maxSlopeRotat() const {
+		return mMaxSlopeRotat;
+	}
+
+	void LineFilterConfig::setMaxSlopeRotat(double s) {
+		mMaxSlopeRotat = s;
+	}
+
+	int LineFilterConfig::maxLen() const {
+		return mMaxLen;
+	}
+
+	void LineFilterConfig::setMaxLen(int l) {
+		mMaxLen = l;
+	}
+
+	int LineFilterConfig::minArea() const {
+		return mMinArea;
+	}
+
+	void LineFilterConfig::setMinArea(int a) {
+		mMinArea = a;
+	}
+
+	//int LineFilterConfig::rippleLen() const {
+	//	return mRippleLen;
+	//}
+
+	//void LineFilterConfig::setRippleLen(int r) {
+	//	mRippleLen = r;
+	//}
+
+	//double LineFilterConfig::rippleArea() const {
+	//	return mRippleArea;
+	//}
+
+	//void LineFilterConfig::setRippleArea(double a) {
+	//	mRippleArea = a;
+	//}
+
+	int LineFilterConfig::minLength() const {
+		return mMinLength;
+	}
+
+	void LineFilterConfig::setMinLength(int l) {
+		mMinLength = l;
+	}
+
+	double LineFilterConfig::maxGap() const {
+		return mMaxGap;
+	}
+
+	void LineFilterConfig::setMaxGap(double g) {
+		mMaxGap = g;
+	}
+
+	double LineFilterConfig::maxAngleDiff() const {
+		return mMaxAngleDiff;
+	}
+
+	void LineFilterConfig::setMaxAngleDiff(double a) {
+		mMaxAngleDiff = a;
+	}
+
+	QString LineFilterConfig::toString() const {
+
+		QString msg;
+		msg += "  mMaxSlopeRotat: " + QString::number(mMaxSlopeRotat);
+		msg += "  mMaxLen: " + QString::number(mMaxLen);
+		msg += "  mMaxGap: " + QString::number(mMaxGap);
+
+		return msg;
+	}
+
+	void LineFilterConfig::load(const QSettings & settings) {
+
+		mMaxSlopeRotat = settings.value("maxSlopeRotat", mMaxSlopeRotat).toFloat();
+		mMaxLen = settings.value("maxLen", mMaxLen).toInt();
+		mMinLength = settings.value("minLength", mMinLength).toInt();
+		mMinArea = settings.value("minArea", mMinArea).toInt();
+		//mRippleLen = settings.value("rippleLen", mRippleLen).toInt();
+		//mRippleArea = settings.value("rippleArea", mRippleArea).toFloat();
+		mMaxGap = settings.value("maxGap", mMaxGap).toFloat();
+		mMaxAngleDiff = settings.value("maxAngleDiff", mMaxAngleDiff).toFloat();
+
+	}
+
+	void LineFilterConfig::save(QSettings & settings) const {
+
+		settings.setValue("maxSlopeRotat", mMaxSlopeRotat);
+		settings.setValue("maxLen", mMaxLen);
+		settings.setValue("minLength", mMinLength);
+		settings.setValue("minArea", mMinArea);
+		//settings.setValue("rippleLen", mRippleLen);
+		//settings.setValue("rippleArea", mRippleArea);
+		settings.setValue("maxGap", mMaxGap);
+		settings.setValue("maxAngleDiff", mMaxAngleDiff);
+	}
 
 
 	// LineTrace--------------------------------------------------------------------
@@ -170,16 +276,16 @@ namespace rdf {
 			tmp.append(hLines);
 			tmp.append(vLines);
 
-			hLines = filterLineAngle(tmp, (float)mAngle, config()->maxSlopeRotat());
-			vLines = filterLineAngle(tmp, (float)(mAngle+CV_PI*0.5f), config()->maxSlopeRotat());
+			hLines = mLineFilter.filterLineAngle(tmp, mAngle);
+			vLines = mLineFilter.filterLineAngle(tmp, (mAngle+CV_PI*0.5f));
 		}
 
 		//Image::save(hDSCCImg, "D:\\tmp\\hdscc.tif");
 		//Image::save(vDSCCImg, "D:\\tmp\\vdscc.tif");
 
 		QVector<rdf::Line> gapLines;
-		gapLines      = mergeLines(hLines);
-		gapLines.append(mergeLines(vLines));
+		hLines = mLineFilter.mergeLines(hLines, &gapLines);
+		vLines = mLineFilter.mergeLines(vLines, &gapLines);
 		drawGapLines(mLineImg, gapLines);
 
 		filterLines();
@@ -193,25 +299,6 @@ namespace rdf {
 
 		return true;
 	}
-
-
-	///// <summary>
-	///// Sets the minimum length for the final line filtering.
-	//// Default value = 60;
-	///// </summary>
-	///// <param name="len">The minimum length threshold in pixel.</param>
-	//void LineTrace::setMinLenSecondRun(int len) {
-	//	mMinLenSecondRun = len;
-	//}
-
-	///// <summary>
-	///// Sets the maximum aspect ratio allowed for the minimum area rectangle of a line.
-	//// Default value = 0.3.
-	///// </summary>
-	///// <param name="ratio">The max aspect ratio of a MAR of a line.</param>
-	//void LineTrace::setMaxAspectRatio(float ratio) {
-	//	mMaxAspectRatio = ratio;
-	//}
 
 	/// <summary>
 	/// Generates the line image based on the synthetic line vector.
@@ -243,8 +330,7 @@ namespace rdf {
 		return synLinImg;
 	}
 
-	void LineTrace::generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat & img, cv::Scalar hCol, cv::Scalar vCol, cv::Point2d offset)
-	{
+	void LineTrace::generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat & img, cv::Scalar hCol, cv::Scalar vCol, cv::Point2d offset) {
 		if (hline.empty() && vline.empty())
 			return;
 
@@ -270,118 +356,6 @@ namespace rdf {
 
 			cv::line(img, pStart, pEnd, vCol, (int)l.thickness(), 8, 0);
 		}
-	}
-
-	QVector<rdf::Line> LineTrace::mergeLines(QVector<rdf::Line>& lines) {
-
-		QVector<rdf::Line>::iterator lineIter, lineIterCmp;
-		QVector<rdf::Line> gapLines;
-
-		int lineIdx, lineCmpIdx;
-		for (lineIter = lines.begin(), lineIdx = 0; lineIter != lines.end(); ) {
-			rdf::Line cLine = *lineIter;
-
-			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
-				if (lineIterCmp == lineIter) {
-					continue;
-				}
-
-				rdf::Line cmpLine = *lineIterCmp;
-				double dist = cLine.minDistance(cmpLine);
-
-				if (dist > config()->maxGap()) continue;
-
-				double diffAngle = cLine.diffAngle(cmpLine);
-				if (diffAngle > qDegreesToRadians(config()->maxSlopeDiff())) continue;
-				
-				//orientation of new line differ in orientation with connecting lines by maxSlopeDiff degree
-				//difference in orientation between gapline and cline/cmpline. the larger deviation is taken
-				rdf::Line newLine, gapLine;
-				newLine = cLine.merge(cmpLine);
-
-				double angle1 = newLine.diffAngle(cLine);
-				double angle2 = newLine.diffAngle(cmpLine);
-				double angle = angle1 > angle2 ? angle1 : angle2;
-
-				double weight = 1.0f - (dist / config()->maxGap());
-				if (angle > (weight * qDegreesToRadians(config()->maxAngleDiff()))) continue;
-
-				gapLine = cLine.gapLine(cmpLine);
-				angle1 = gapLine.diffAngle(cLine);
-				angle2 = gapLine.diffAngle(cmpLine);
-				angle = angle1 > angle2 ? angle1 : angle2;
-
-				weight = 1.0f - (dist / config()->maxGap())*(dist / config()->maxGap());
-				if (dist > 5 && angle > weight * qDegreesToRadians(20.0f)) continue;
-
-				gapLines.append(gapLine);
-
-				*lineIterCmp = newLine;
-
-				lineIter = lines.erase(lineIter);
-				break;
-			}
-
-			if (lineCmpIdx == (int)lines.size()) {
-				lineIter++;
-				lineIdx++;
-			}
-		}
-
-
-
-		QVector<int> eraseIdx;
-
-		// now remove small lines 'within' large lines
-		for (lineIter = lines.begin(), lineIdx = 0, lineIdx = 0; lineIter != lines.end(); ) {
-			rdf::Line cLine = *lineIter;
-
-			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != lines.end(); lineIterCmp++, lineCmpIdx++) {
-
-				if (lineIterCmp == lineIter) {
-					continue;
-				}
-
-				rdf::Line cmpLine = *lineIterCmp;
-
-				if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
-					continue;
-
-				if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
-					eraseIdx.push_back(lineIdx);
-				}
-				else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
-					eraseIdx.push_back(lineCmpIdx);
-				}
-			}
-
-			if (lineCmpIdx == (int)lines.size()) {
-				lineIter++;
-				lineIdx++;
-			}
-		}
-
-		qSort(eraseIdx.begin(), eraseIdx.end());
-
-		//dout << "size: " << (int)lineVector.size() << dkendl;
-		//use tmIdx to avoid double entries... deletes additional lines and can cause an exception!
-		int tmpIdx = -1;
-
-		for (int idx = ((int)eraseIdx.size()) - 1; idx >= 0; idx--) {
-			lineIter = lines.begin();
-			lineIter += eraseIdx[idx];
-
-			if (tmpIdx == eraseIdx[idx])
-				continue;
-			//dout << "idx: " << eraseIdx[idx] << dkendl;
-			lines.erase(lineIter);
-			tmpIdx = eraseIdx[idx];
-		}
-
-
-
-
-		return gapLines;
 	}
 
 	void LineTrace::drawGapLines(cv::Mat& img, QVector<rdf::Line> lines) {
@@ -412,32 +386,6 @@ namespace rdf {
 		}
 		vLines = tmp;
 
-	}
-
-	/// <summary>
-	/// Filters all lines accordinge a specified angle and the allowed angle difference angleDiff.
-	/// </summary>
-	/// <param name="lines">The line vector.</param>
-	/// <param name="angle">The angle in rad.</param>
-	/// <param name="angleDiff">The maximal allowed angle difference in degree.</param>
-	/// <returns>The filtered line vector.</returns>
-	QVector<rdf::Line> LineTrace::filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const {
-
-		QVector<rdf::Line> resultLines;
-
-		for (auto l : lines) {
-			
-			double a = Algorithms::normAngleRad(angle, 0.0, CV_PI);
-			double angleNewLine = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
-
-			double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
-				, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
-
-			if (diffangle < angleDiff / 180.0*CV_PI)
-				resultLines.append(l);
-
-		}
-		return resultLines;
 	}
 
 	cv::Mat LineTrace::hDSCC(const cv::Mat& bwImg) const {
@@ -600,7 +548,7 @@ namespace rdf {
 							}
 						}
 						//runlength greater maximal alloewd
-						if (runlen > config()->maxLen()) {
+						if (runlen > mLineFilter.config()->maxLen()) {
 							invalidLabels[(int)(*ptrBw) - 1] = col;
 						}
 
@@ -649,9 +597,9 @@ namespace rdf {
 		binBlobsH.setImage(hDSCCImg);
 		binBlobsH.compute();
 
-		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsH));
+		binBlobsH.setBlobs(rdf::BlobManager::instance().filterMar((float)config()->maxAspectRatio(), config()->minWidth(), binBlobsH));
 		if (!std::isinf(mAngle)) 
-			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsH));
+			binBlobsH.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mLineFilter.config()->maxSlopeRotat(), binBlobsH));
 
 		hLines = rdf::BlobManager::instance().lines(binBlobsH);
 		hDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsH);
@@ -661,9 +609,9 @@ namespace rdf {
 		binBlobsV.setImage(vDSCCImg);
 		binBlobsV.compute();
 
-		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar(config()->maxAspectRatio(), config()->minWidth(), binBlobsV));
+		binBlobsV.setBlobs(rdf::BlobManager::instance().filterMar((float)config()->maxAspectRatio(), config()->minWidth(), binBlobsV));
 		if (!std::isinf(mAngle))
-			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, config()->maxSlopeRotat(), binBlobsV));
+			binBlobsV.setBlobs(rdf::BlobManager::instance().filterAngle((float)mAngle, mLineFilter.config()->maxSlopeRotat(), binBlobsV));
 
 		vLines = rdf::BlobManager::instance().lines(binBlobsV);
 		vDSCCImg = rdf::BlobManager::instance().drawBlobs(binBlobsV);
@@ -708,31 +656,15 @@ namespace rdf {
 		mModuleName = "LineTrace";
 	}
 
-	float LineTraceConfig::maxSlopeRotat() const {
-		return mMaxSlopeRotat;
-	}
-
-	void LineTraceConfig::setMaxSlopeRotat(float s) {
-		mMaxSlopeRotat = s;
-	}
-
-	float LineTraceConfig::maxLenDiff() const {
-		return mMaxLenDiff;
-	}
-
-	void LineTraceConfig::setMaxLenDiff(float l) {
-		mMaxLenDiff = l;
-	}
-
-	float LineTraceConfig::maxAspectRatio() const {
+	double LineTraceConfig::maxAspectRatio() const {
 		return mMaxAspectRatio;
 	}
 
-	void LineTraceConfig::setMaxAspectRatio(float a) {
+	void LineTraceConfig::setMaxAspectRatio(double a) {
 		mMaxAspectRatio = a;
 	}
 
-	int LineTraceConfig::minWidth() const	{
+	int LineTraceConfig::minWidth() const {
 		return mMinWidth;
 	}
 
@@ -740,68 +672,19 @@ namespace rdf {
 		mMinWidth = w;
 	}
 
-	int LineTraceConfig::maxLen() const {
-		return mMaxLen;
+	double LineTraceConfig::maxLenDiff() const {
+		return mMaxLenDiff;
 	}
 
-	void LineTraceConfig::setMaxLen(int l)	{
-		mMaxLen = l;
-	}
-
-	int LineTraceConfig::minArea() const {
-		return mMinArea;
-	}
-
-	void LineTraceConfig::setMinArea(int a) {
-		mMinArea = a;
-	}
-
-	int LineTraceConfig::rippleLen() const 	{
-		return mRippleLen;
-	}
-
-	void LineTraceConfig::setRippleLen(int r) {
-		mRippleLen = r;
-	}
-
-	float LineTraceConfig::rippleArea() const {
-		return mRippleArea;
-	}
-
-	void LineTraceConfig::setRippleArea(float a) {
-		mRippleArea = a;
-	}
-
-	float LineTraceConfig::maxGap() const {
-		return mMaxGap;
-	}
-
-	void LineTraceConfig::setMaxGap(float g) {
-		mMaxGap = g;
-	}
-
-	float LineTraceConfig::maxSlopeDiff() const {
-		return mMaxSlopeDiff;
-	}
-
-	void LineTraceConfig::setMaxSlopeDiff(float s)	{
-		mMaxSlopeDiff = s;
-	}
-
-	float LineTraceConfig::maxAngleDiff() const {
-		return mMaxAngleDiff;
-	}
-
-	void LineTraceConfig::setMaxAngleDiff(float a)	{
-		mMaxAngleDiff = a;
+	void LineTraceConfig::setMaxLenDiff(double l) {
+		mMaxLenDiff = l;
 	}
 
 	int LineTraceConfig::minLenSecondRun() const {
 		return mMinLenSecondRun;
 	}
 
-	void LineTraceConfig::setMinLenSecondRun(int r)
-	{
+	void LineTraceConfig::setMinLenSecondRun(int r) {
 		mMinLenSecondRun = r;
 	}
 
@@ -823,50 +706,30 @@ namespace rdf {
 
 	QString LineTraceConfig::toString() const {
 		QString msg;
-		msg += "  mMaxSlopeRotat: " + QString::number(mMaxSlopeRotat);
-		msg += "  mMaxAspectRatio: " + QString::number(mMaxAspectRatio);
 		msg += "  mMinWidth: " + QString::number(mMinWidth);
-		msg += "  mMaxLen: " + QString::number(mMaxLen);
-		msg += "  mMaxGap: " + QString::number(mMaxGap);
-		msg += "  mMaxSlopeDiff: " + QString::number(mMaxSlopeDiff);
+		msg += "  mMaxAspectRatio: " + QString::number(mMaxAspectRatio);
 		msg += "  mMinLenSecondRun: " + QString::number(mMinLenSecondRun);
 
 		return msg;
 	}
 
 	void LineTraceConfig::load(const QSettings & settings) 	{
-		
-		mMaxSlopeRotat = settings.value("maxSlopeRotat", mMaxSlopeRotat).toFloat();
-		mMaxLenDiff = settings.value("maxLenDiff", mMaxLenDiff).toFloat();
+
 		mMaxAspectRatio = settings.value("maxAspectRatio", mMaxAspectRatio).toFloat();
 		mMinWidth = settings.value("minWidth", mMinWidth).toInt();
-		mMaxLen = settings.value("maxLen", mMaxLen).toInt();
-		mMinArea = settings.value("minArea", mMinArea).toInt();
-		mRippleLen = settings.value("rippleLen", mRippleLen).toInt();
-		mRippleArea = settings.value("rippleArea", mRippleArea).toFloat();
-		mMaxGap = settings.value("maxGap", mMaxGap).toFloat();
-		mMaxSlopeDiff = settings.value("maxSlopeDiff", mMaxSlopeDiff).toFloat();
-		mMaxAngleDiff = settings.value("maxAngleDiff", mMaxAngleDiff).toFloat();
 		mMinLenSecondRun = settings.value("minLenSecondRun", mMinLenSecondRun).toInt();
+		mMaxLenDiff = settings.value("maxLenDiff", mMaxLenDiff).toFloat();
 
 		mMaxDistExtern = settings.value("maxDistExtern", mMaxDistExtern).toFloat();
 		mMaxAngleDiffExtern = settings.value("maxAngleDiffExtern", mMaxAngleDiffExtern).toFloat();
 	}
 
 	void LineTraceConfig::save(QSettings & settings) const	{
-		
-		settings.setValue("maxSlopeRotat", mMaxSlopeRotat);
-		settings.setValue("maxLenDiff", mMaxLenDiff);
+
 		settings.setValue("maxAspectRatio", mMaxAspectRatio);
 		settings.setValue("minWidth", mMinWidth);
-		settings.setValue("maxLen", mMaxLen);
-		settings.setValue("minArea", mMinArea);
-		settings.setValue("rippleLen", mRippleLen);
-		settings.setValue("rippleArea", mRippleArea);
-		settings.setValue("maxGap", mMaxGap);
-		settings.setValue("maxSlopeDiff", mMaxSlopeDiff);
-		settings.setValue("maxAngleDiff", mMaxAngleDiff);
 		settings.setValue("minLenSecondRun", mMinLenSecondRun);
+		settings.setValue("maxLenDiff", mMaxLenDiff);
 
 		settings.setValue("maxDistExtern", mMaxDistExtern);
 		settings.setValue("maxAngleDiffExtern", mMaxAngleDiffExtern);
@@ -1862,6 +1725,290 @@ namespace rdf {
 		settings.setValue("densityThr", mDensityThr);
 		settings.setValue("nBins", mNBins);
 		settings.setValue("quant", mQuant);
+	}
+
+	// LineDetectorLSDConfig --------------------------------------------------------------------
+	LineDetectorLSDConfig::LineDetectorLSDConfig() : ModuleConfig("LineDetectorLSD") {
+	}
+
+	void LineDetectorLSDConfig::setScale(double scale) {
+		mScale = scale;
+	}
+
+	double LineDetectorLSDConfig::scale() const {
+		return ModuleConfig::checkParam(mScale, 0.001, 1.0, "Scale");
+	}
+
+	QString LineDetectorLSDConfig::toString() const {
+		return ModuleConfig::toString();
+	}
+
+	void LineDetectorLSDConfig::load(const QSettings & settings) {
+
+		mScale = settings.value("scale", scale()).toDouble();
+	}
+
+	void LineDetectorLSDConfig::save(QSettings & settings) const {
+
+		settings.setValue("scale", scale());
+	}
+
+	// LineDetectorLSD --------------------------------------------------------------------
+	LineDetectorLSD::LineDetectorLSD(const cv::Mat & img) {
+		mConfig = QSharedPointer<LineDetectorLSDConfig>::create();
+		mImg = img;
+	}
+
+	bool LineDetectorLSD::isEmpty() const {
+		return mImg.empty();
+	}
+
+	bool LineDetectorLSD::compute() {
+
+		if (!checkInput())
+			return false;
+
+		Timer dt;
+
+		double scale = config()->scale();
+
+		cv::Mat lImg = mImg;
+
+		if (scale != 1.0)
+			cv::resize(mImg, lImg, cv::Size(), scale, scale);
+
+		// create the detector
+		auto lsdd = lsd::LSDDetector::createLSDDetector();
+
+		Timer ddt;
+
+		std::vector<lsd::KeyLine> kls;
+		lsdd->detect(lImg, kls, 2, 1);
+
+		qDebug() << "pure detection time: " << ddt;
+
+		for (auto kl : kls) {
+			
+			Line l(kl.getStartPoint(), kl.getEndPoint());
+			l.scale(1.0/scale);
+			mLines << l;
+		}
+
+		qDebug() << mLines.size() << "before merging";
+
+		mLines = mLineFilter.mergeLines(mLines);
+		qDebug() << mLines.size() << "after merging";
+
+		mInfo << mLines.size() << "detected in" << dt;
+
+		return true;
+	}
+
+	QVector<Line> LineDetectorLSD::lines() const {
+		return mLines;
+	}
+
+	QSharedPointer<LineDetectorLSDConfig> LineDetectorLSD::config() const {
+		return qSharedPointerDynamicCast<LineDetectorLSDConfig>(Module::config());
+	}
+
+	QString LineDetectorLSD::toString() const {
+		return Module::toString();
+	}
+
+	cv::Mat LineDetectorLSD::draw(const cv::Mat & img) const {
+		
+		QPixmap pm = Image::mat2QPixmap(img);
+		QPainter p(&pm);
+
+		p.setPen(ColorManager::pink());
+
+		for (auto l : mLines)
+			l.draw(p);
+		
+		return Image::qPixmap2Mat(pm);
+	}
+
+	bool LineDetectorLSD::checkInput() const {
+		return !mImg.empty();
+	}
+
+	// LineFilter --------------------------------------------------------------------
+	LineFilter::LineFilter() {
+		mConfig = QSharedPointer<LineFilterConfig>::create();
+	}
+
+	/// <summary>
+	/// Filters all lines accordinge a specified angle and the allowed angle difference angleDiff.
+	/// </summary>
+	/// <param name="lines">The line vector.</param>
+	/// <param name="angle">The angle in radians.</param>
+	/// <param name="angleDiff">The maximal allowed angle difference in radians.</param>
+	/// <returns>The filtered line vector.</returns>
+	QVector<rdf::Line> LineFilter::filterLineAngle(const QVector<rdf::Line>& lines, double angle, double angleDiff) const {
+
+		if (angleDiff = DBL_MAX)
+			angleDiff = mConfig->maxSlopeRotat() * DK_DEG2RAD;
+
+		QVector<rdf::Line> resultLines;
+
+		for (auto l : lines) {
+
+			double a = Algorithms::normAngleRad(angle, 0.0, CV_PI);
+			double angleNewLine = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
+
+			double diffangle = cv::min(fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI))
+				, CV_PI - fabs(Algorithms::normAngleRad(a, 0, CV_PI) - Algorithms::normAngleRad(angleNewLine, 0, CV_PI)));
+
+			if (diffangle < angleDiff)
+				resultLines.append(l);
+		}
+
+		return resultLines;
+	}
+
+	/// <summary>
+	/// Merges the lines.
+	/// </summary>
+	/// <param name="lines">Some lines.</param>
+	/// <param name="maxGap">The maximum gap.</param>
+	/// <param name="maxSlopeDiff">The maximum slope difference in radians.</param>
+	/// <param name="maxAngleDiff">The maximum angle difference in radians.</param>
+	/// <returns>The merged lines</returns>
+	QVector<rdf::Line> LineFilter::mergeLines(const QVector<rdf::Line>& lines, QVector<rdf::Line>* gaps, double maxGap, double maxAngleDiff) const {
+
+		if (maxGap == DBL_MAX)
+			maxGap = mConfig->maxGap();
+		if (maxAngleDiff == DBL_MAX)
+			maxAngleDiff = mConfig->maxAngleDiff() * DK_DEG2RAD;
+
+		QVector<rdf::Line> cLines = lines;
+		QVector<rdf::Line>::iterator lineIter, lineIterCmp;
+
+		int lineIdx, lineCmpIdx;
+
+		for (lineIter = cLines.begin(), lineIdx = 0; lineIter != cLines.end(); ) {
+			rdf::Line cLine = *lineIter;
+
+			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != cLines.end(); lineIterCmp++, lineCmpIdx++) {
+
+				if (lineIterCmp == lineIter)
+					continue;
+
+				rdf::Line cmpLine = *lineIterCmp;
+				double dist = cLine.minDistance(cmpLine);
+
+				if (dist > maxGap)
+					continue;
+
+				double diffAngle = cLine.diffAngle(cmpLine);
+				if (diffAngle > maxAngleDiff)
+					continue;
+
+				//orientation of new line differ in orientation with connecting lines by maxSlopeDiff degree
+				//difference in orientation between gapline and cline/cmpline. the larger deviation is taken
+				rdf::Line newLine, gapLine;
+				newLine = cLine.merge(cmpLine);
+
+				double angle1 = newLine.diffAngle(cLine);
+				double angle2 = newLine.diffAngle(cmpLine);
+				double angle = angle1 > angle2 ? angle1 : angle2;
+
+				double weight = 1.0f - (dist / maxGap);
+				if (angle > (weight * maxAngleDiff))
+					continue;
+
+				gapLine = cLine.gapLine(cmpLine);
+				angle1 = gapLine.diffAngle(cLine);
+				angle2 = gapLine.diffAngle(cmpLine);
+				angle = angle1 > angle2 ? angle1 : angle2;
+
+				weight = 1.0f - (dist / maxGap)*(dist / maxGap);
+				if (dist > 5 && angle > weight * qDegreesToRadians(20.0))
+					continue;
+
+				if (gaps)
+					gaps->append(gapLine);
+
+				*lineIterCmp = newLine;
+
+				lineIter = cLines.erase(lineIter);
+				break;
+			}
+
+			if (lineCmpIdx == cLines.size()) {
+				lineIter++;
+				lineIdx++;
+			}
+		}
+
+		QVector<size_t> eraseIdx;
+
+		// now remove small lines 'within' large lines
+		for (lineIter = cLines.begin(), lineIdx = 0, lineIdx = 0; lineIter != cLines.end(); ) {
+			rdf::Line cLine = *lineIter;
+
+			for (lineIterCmp = lineIter, lineCmpIdx = lineIdx; lineIterCmp != cLines.end(); lineIterCmp++, lineCmpIdx++) {
+
+				if (lineIterCmp == lineIter)
+					continue;
+
+				rdf::Line cmpLine = *lineIterCmp;
+
+				if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
+					continue;
+
+				if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
+					eraseIdx.push_back(lineIdx);
+				}
+				else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
+					eraseIdx.push_back(lineCmpIdx);
+				}
+			}
+
+			if (lineCmpIdx == cLines.size()) {
+				lineIter++;
+				lineIdx++;
+			}
+		}
+
+		qSort(eraseIdx.begin(), eraseIdx.end());
+
+		//use tmIdx to avoid double entries... deletes additional lines and can cause an exception!
+		int tmpIdx = -1;
+
+		for (int idx = ((int)eraseIdx.size()) - 1; idx >= 0; idx--) {
+			lineIter = cLines.begin();
+			lineIter += eraseIdx[idx];
+
+			if (tmpIdx == eraseIdx[idx])
+				continue;
+
+			cLines.erase(lineIter);
+			tmpIdx = (int)eraseIdx[idx];
+		}
+
+		return cLines;
+	}
+
+	QVector<rdf::Line> LineFilter::removeSmall(const QVector<rdf::Line>& lines, int minLineLength) const {
+
+		if (minLineLength = INT_MAX)
+			minLineLength = config()->minLength();
+
+		QVector<rdf::Line> fLines;
+		fLines.reserve(lines.size());
+
+		for (const Line& l : lines) {
+			if (l.length() > minLineLength)
+				fLines << l;
+		}
+
+		return fLines;
+	}
+
+	QSharedPointer<LineFilterConfig> LineFilter::config() const {
+		return mConfig;
 	}
 
 }

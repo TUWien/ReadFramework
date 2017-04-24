@@ -56,22 +56,13 @@ namespace rdf {
 
 
 
-class DllCoreExport LineTraceConfig : public ModuleConfig {
+class DllCoreExport LineFilterConfig : public ModuleConfig {
 
 public:
-	LineTraceConfig();
+	LineFilterConfig();
 
-	float maxSlopeRotat() const;
-	void setMaxSlopeRotat(float s);
-
-	float maxLenDiff() const;
-	void setMaxLenDiff(float l);
-
-	float maxAspectRatio() const;
-	void setMaxAspectRatio(float a);
-
-	int minWidth() const;
-	void setMinWidth(int w);
+	double maxSlopeRotat() const;
+	void setMaxSlopeRotat(double s);
 
 	int maxLen() const;
 	void setMaxLen(int l);
@@ -79,20 +70,64 @@ public:
 	int minArea() const;
 	void setMinArea(int a);
 
-	int rippleLen() const;
-	void setRippleLen(int r);
+	//int rippleLen() const;
+	//void setRippleLen(int r);
 
-	float rippleArea() const;
-	void setRippleArea(float a);
+	//double rippleArea() const;
+	//void setRippleArea(double a);
 
-	float maxGap() const;
-	void setMaxGap(float g);
+	int minLength() const;
+	void setMinLength(int l);
 
-	float maxSlopeDiff() const;
-	void setMaxSlopeDiff(float s);
+	double maxGap() const;
+	void setMaxGap(double g);
 
-	float maxAngleDiff() const;
-	void setMaxAngleDiff(float a);
+	double maxAngleDiff() const;
+	void setMaxAngleDiff(double a);
+
+	QString toString() const override;
+
+private:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	double mMaxSlopeRotat = 10.0;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 10°)
+	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
+	int mMinArea = 20;				//filter parameter: minimum area in pixel (default: 20)
+	int mMinLength = 100;			//filter parameter: remove lines which are smaller (default: 100)
+	//double mRippleArea = 0.2;		//filter parameter: ripple area of a line (default: 0.2)
+	double mMaxGap = 100;			//filter parameter: maximal gap between two lines in pixel (default: 100)
+	double mMaxAngleDiff = 2.0;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 2.0)
+};
+
+class DllCoreExport LineFilter {
+
+public:
+	LineFilter();
+
+	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, double angle, double angleDiff = DBL_MAX) const;
+	QVector<rdf::Line> mergeLines(const QVector<rdf::Line>& lines, QVector<rdf::Line>* gaps = 0, double maxGap = DBL_MAX, double maxAngleDiff = DBL_MAX) const;
+	QVector<rdf::Line> removeSmall(const QVector<rdf::Line>& lines, int minLineLength = 0) const;
+
+	QSharedPointer<LineFilterConfig> config() const;
+
+protected:
+
+
+	QSharedPointer<LineFilterConfig> mConfig = 0;
+};
+
+
+class DllCoreExport LineTraceConfig : public ModuleConfig {
+
+public:
+	LineTraceConfig();
+
+	int minWidth() const;
+	void setMinWidth(int w);
+
+	double maxLenDiff() const;
+	void setMaxLenDiff(double l);
 
 	int minLenSecondRun() const;
 	void setMinLenSecondRun(int r);
@@ -103,6 +138,8 @@ public:
 	float maxAngleDiffExtern() const;
 	void setMaxAngleDiffExtern(float a);
 
+	double maxAspectRatio() const;
+	void setMaxAspectRatio(double a);
 
 	QString toString() const override;
 
@@ -110,22 +147,14 @@ private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	float mMaxSlopeRotat = 10.0f;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 5 deg)
-	float mMaxLenDiff = 1.5f;		//filter parameter: maximal difference in length between two successive runlengths (default: 1.5)
-	float mMaxAspectRatio = 0.3f;	//filter parameter: maximal aspect ratio of a line (default: 0.3f)
-	int mMinWidth = 20;			//filter parameter: minimal width a line in pixel (default: 30)
-	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
-	int mMinArea = 20;				//filter parameter: minimum area in pixel (default: 40)
-	int mRippleLen = 200;			//filter parameter: ripple len of a line in pixel (default: 200)
-	float mRippleArea = 0.2f;		//filter parameter: ripple area of a line (default: 0.2f)
-	float mMaxGap = 100;			//filter parameter: maximal gap between two lines in pixel (default: 250)
-	float mMaxSlopeDiff = 2.0f;		//filter parameter: maximal slope difference between two lines in degree (default: 3)
-	float mMaxAngleDiff = 2.0f;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 20)
 	int mMinLenSecondRun = 60;    //min len to filter after merge lines; was 60
+	double mMaxLenDiff = 1.5;		//filter parameter: maximal difference in length between two successive runlengths (default: 1.5)
+	double mMaxAspectRatio = 0.3;	//filter parameter: maximal aspect ratio of a line (default: 0.3f)
+	int mMinWidth = 20;				//filter parameter: minimal width a line in pixel (default: 30)
 
-								  //filter Lines parameter (compared to given line vector, see std::vector<DkLineExt> filterLines(std::vector<DkLineExt> &externLines))
+	//filter Lines parameter (compared to given line vector, see std::vector<DkLineExt> filterLines(std::vector<DkLineExt> &externLines))
 	float mMaxDistExtern = 10.0f;		//maximal Distance of the external line end points compared to a given line (default: 5 pixel)
-	float mMaxAngleDiffExtern = 20.0f / 180.0f * (float)CV_PI;;	//maximal Angle Difference of the external line compared to a given line (default: 20 deg)
+	float mMaxAngleDiffExtern = 20.0f / 180.0f * (float)CV_PI;	//maximal Angle Difference of the external line compared to a given line (default: 20 deg)
 };
 
 /// <summary>
@@ -140,7 +169,6 @@ public:
 
 	bool isEmpty() const override;
 	virtual bool compute() override;
-	QVector<rdf::Line> filterLineAngle(const QVector<rdf::Line>& lines, float angle, float angleDiff) const;
 	QVector<rdf::Line> getHLines() const;
 	QVector<rdf::Line> getVLines() const;
 	QVector<rdf::Line> getLines() const;
@@ -149,16 +177,9 @@ public:
 
 	QSharedPointer<LineTraceConfig> config() const;
 
-	/**
-	* Returns a vector with all calculated and merged lines.
-	* @return The calculated and merged lines.
-	**/
-	//QVector<DkLineExt> getLines();
 	cv::Mat lineImage() const;
 	cv::Mat generatedLineImage() const;
 	static void generateLineImage(const QVector<rdf::Line>& hline, const QVector<rdf::Line>& vline, cv::Mat& img, cv::Scalar hCol = cv::Scalar(255), cv::Scalar vCol = cv::Scalar(255), cv::Point2d offset = cv::Point(0,0));
-	//void setMinLenSecondRun(int len);
-	//void setMaxAspectRatio(float ratio);
 	virtual QString toString() const override;
 
 protected:
@@ -171,6 +192,7 @@ protected:
 	QVector<rdf::Line> hLines;
 	QVector<rdf::Line> vLines;
 
+	LineFilter mLineFilter;
 
 private:
 
@@ -179,16 +201,11 @@ private:
 	float mLineProb;
 	float mLineDistProb;
 
-	//void load(const qsettings& settings) override;
-	//void save(qsettings& settings) const override;
 	cv::Mat hDSCC(const cv::Mat& bwImg) const;
 	void filter(cv::Mat& hDSCCImg, cv::Mat& vDSCCImg);
-	QVector<rdf::Line> mergeLines(QVector<rdf::Line>& lines);
 	void filterLines();
 	void drawGapLines(cv::Mat& img, QVector<rdf::Line> lines);
 };
-
-
 
 class DllCoreExport ReadLSDConfig : public ModuleConfig {
 
@@ -308,6 +325,46 @@ private:
 	double rectImprove(rdf::LineSegment& l, cv::Mat& radImg, double logNT, double logEps);
 	double rectNfa(rdf::LineSegment& l, cv::Mat& radImg, double logNT);
 
+};
+
+class DllCoreExport LineDetectorLSDConfig : public ModuleConfig {
+
+public:
+	LineDetectorLSDConfig();
+
+	void setScale(double scale);
+	double scale() const;
+
+	QString toString() const override;
+
+private:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	double mScale = 0.5;	// initial downscaling of the image
+};
+
+class DllCoreExport LineDetectorLSD : public Module {
+
+public:
+	LineDetectorLSD(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	virtual bool compute() override;
+	
+	QVector<Line> lines() const;
+	QSharedPointer<LineDetectorLSDConfig> config() const;
+
+	virtual QString toString() const override;
+
+	cv::Mat draw(const cv::Mat& img) const;
+
+protected:
+	cv::Mat mImg;
+	QVector<Line> mLines;
+	LineFilter mLineFilter;
+
+	bool checkInput() const override;
 };
 
 };

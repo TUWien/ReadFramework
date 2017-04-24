@@ -47,6 +47,7 @@
 #include "SuperPixelClassification.h"
 #include "SuperPixelTrainer.h"
 #include "LayoutAnalysis.h"
+#include "lsd/LSDDetector.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -163,9 +164,11 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	layoutToXml();
+	//layoutToXml();
 	//layoutToXmlDebug();
-	eval();
+	testLineDetector(imgCv);
+
+	//eval();
 
 	qInfo() << "total computation time:" << dt;
 }
@@ -468,6 +471,27 @@ void LayoutTest::testTrainer() {
 		qDebug() << "the classifier I loaded is trained...";
 	
 	//qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;
+}
+
+void LayoutTest::testLineDetector(const cv::Mat & src) const {
+
+	Timer dt;
+	cv::Mat img = src.clone();
+
+	rdf::LineDetectorLSD lsd(img);
+	
+	if (!lsd.compute())
+		qDebug() << "could not compute LSD line detector";
+
+	cv::Mat rImg = img.clone();
+	rImg = lsd.draw(rImg);
+
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-lines");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	qDebug() << "line detector computed in" << dt;
+
 }
 
 void LayoutTest::testLayout(const cv::Mat & src) const {

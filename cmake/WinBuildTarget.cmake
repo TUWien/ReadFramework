@@ -29,6 +29,7 @@ add_library(
 	${CORE_SOURCES} ${CORE_HEADERS} 
 	${MODULE_SOURCES} ${MODULE_HEADERS} 	# modules
 	${GC_HEADERS} ${GC_SOURCES} 			# graph-cut
+	${LSD_HEADERS} ${LSD_SOURCES} 			# LSD
 	${RDF_RC}
 	)
 target_link_libraries(${RDF_DLL_CORE_NAME} ${VERSION_LIB} ${OpenCV_LIBS}) 
@@ -80,6 +81,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "/W4 /O2 ${CMAKE_CXX_FLAGS_RELEASE}")
 file(GLOB RDF_AUTOMOC "${CMAKE_BINARY_DIR}/*_automoc.cpp")
 source_group("Generated Files" FILES ${RDF_RC} ${RDF_QM} ${RDF_AUTOMOC})
 source_group("graphcut" FILES ${GC_HEADERS} ${GC_SOURCES})
+source_group("LSD" FILES ${LSD_HEADERS} ${LSD_SOURCES})
 
 
 # set_source_files_properties(${NOMACS_TRANSLATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)

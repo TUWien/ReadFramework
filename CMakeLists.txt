@@ -78,6 +78,10 @@ file(GLOB CORE_HEADERS "src/Core/*.h")
 file(GLOB GC_SOURCES "src/3rdparty/graphcut/*.cpp")
 file(GLOB GC_HEADERS "src/3rdparty/graphcut/*.h")
 
+# external headers
+file(GLOB LSD_SOURCES "src/3rdparty/lsd/*.cpp")
+file(GLOB LSD_HEADERS "src/3rdparty/lsd/*.hpp")
+
 # gather information for building
 include_directories (
 	${CMAKE_BINARY_DIR}
