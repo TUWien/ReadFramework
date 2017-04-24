@@ -490,6 +490,39 @@ void LayoutTest::testLineDetector(const cv::Mat & src) const {
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
+	// compute lines - old school
+
+	if (img.depth() != CV_8U) {
+		img.convertTo(img, CV_8U, 255);
+	}
+
+	if (img.channels() != 1) {
+		cv::cvtColor(img, img, CV_RGB2GRAY);
+	}
+
+	double skewAngle = 0.0;
+
+	rdf::BinarizationSuAdapted bm(img, cv::Mat());
+	bm.compute();
+	cv::Mat bwImg = bm.binaryImage();
+
+	rdf::LineTrace lt(bwImg, cv::Mat());
+
+	lt.setAngle(skewAngle);
+	lt.compute();
+
+	QVector<rdf::Line> alllines = lt.getLines();
+
+	// visualize
+	cv::Mat synLine = lt.generatedLineImage();
+
+	//visualize
+	if (synLine.channels() == 1)
+		cv::cvtColor(synLine, synLine, CV_GRAY2BGRA);
+
+	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-bw-lines", "jpg");
+	rdf::Image::save(synLine, dstPath);
+
 	qDebug() << "line detector computed in" << dt;
 
 }

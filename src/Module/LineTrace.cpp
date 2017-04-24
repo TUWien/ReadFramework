@@ -229,14 +229,13 @@ namespace rdf {
 
 		//Image::save(mLineImg, "D:\\tmp\\mLineImg.tif");
 
-		//if (mDAngle != 361.0f) {
 		if (!std::isinf(mAngle)) {
 			QVector<rdf::Line> tmp;
 			tmp.append(hLines);
 			tmp.append(vLines);
 
 			hLines = mLineFilter.filterLineAngle(tmp, mAngle);
-			vLines = mLineFilter.filterLineAngle(tmp, (mAngle+CV_PI*0.5f));
+			vLines = mLineFilter.filterLineAngle(tmp, (mAngle+CV_PI*0.5));
 		}
 
 		//Image::save(hDSCCImg, "D:\\tmp\\hdscc.tif");
@@ -245,6 +244,7 @@ namespace rdf {
 		QVector<rdf::Line> gapLines;
 		hLines = mLineFilter.mergeLines(hLines, &gapLines);
 		vLines = mLineFilter.mergeLines(vLines, &gapLines);
+
 		drawGapLines(mLineImg, gapLines);
 
 		filterLines();
@@ -1808,6 +1808,11 @@ namespace rdf {
 
 		p.setPen(ColorManager::pink());
 
+		for (auto l : separatorLines())
+			l.draw(p);
+
+		p.setOpacity(0.3);
+
 		for (auto l : mLines)
 			l.draw(p);
 		
@@ -1832,14 +1837,17 @@ namespace rdf {
 	/// <returns>The filtered line vector.</returns>
 	QVector<rdf::Line> LineFilter::filterLineAngle(const QVector<rdf::Line>& lines, double angle, double maxAngleDiff) const {
 
-		if (maxAngleDiff = DBL_MAX)
+		if (maxAngleDiff == DBL_MAX)
 			maxAngleDiff = mConfig->maxSlopeRotat() * DK_DEG2RAD;
 
 		QVector<rdf::Line> resultLines;
 
 		for (auto l : lines) {
 
-			double da = Algorithms::absAngleDiff(angle, l.angle());
+			double a = Algorithms::normAngleRad(angle, 0.0, CV_PI);
+			double al = Algorithms::normAngleRad(l.angle(), 0.0, CV_PI);
+
+			double da = cv::min(std::abs(a - al), CV_PI - std::abs(a - al));
 
 			if (da < maxAngleDiff)
 				resultLines << l;
