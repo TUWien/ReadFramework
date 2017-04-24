@@ -64,18 +64,6 @@ public:
 	double maxSlopeRotat() const;
 	void setMaxSlopeRotat(double s);
 
-	int maxLen() const;
-	void setMaxLen(int l);
-
-	int minArea() const;
-	void setMinArea(int a);
-
-	//int rippleLen() const;
-	//void setRippleLen(int r);
-
-	//double rippleArea() const;
-	//void setRippleArea(double a);
-
 	int minLength() const;
 	void setMinLength(int l);
 
@@ -92,10 +80,7 @@ private:
 	void save(QSettings& settings) const override;
 
 	double mMaxSlopeRotat = 10.0;	//filter parameter: maximal difference of line orientation compared to the result of the Rotation module (default: 10°)
-	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
-	int mMinArea = 20;				//filter parameter: minimum area in pixel (default: 20)
 	int mMinLength = 100;			//filter parameter: remove lines which are smaller (default: 100)
-	//double mRippleArea = 0.2;		//filter parameter: ripple area of a line (default: 0.2)
 	double mMaxGap = 100;			//filter parameter: maximal gap between two lines in pixel (default: 100)
 	double mMaxAngleDiff = 2.0;		//filter parameter: maximal angle difference between two compared and the inserted line (default: 2.0)
 };
@@ -113,7 +98,6 @@ public:
 
 protected:
 
-
 	QSharedPointer<LineFilterConfig> mConfig = 0;
 };
 
@@ -128,6 +112,9 @@ public:
 
 	double maxLenDiff() const;
 	void setMaxLenDiff(double l);
+
+	int maxLen() const;
+	void setMaxLen(int l);
 
 	int minLenSecondRun() const;
 	void setMinLenSecondRun(int r);
@@ -153,6 +140,7 @@ private:
 	int mMinWidth = 20;				//filter parameter: minimal width a line in pixel (default: 30)
 
 	//filter Lines parameter (compared to given line vector, see std::vector<DkLineExt> filterLines(std::vector<DkLineExt> &externLines))
+	int mMaxLen = 20;				//filter parameter: maximal length of a line in pixel (default: 20)
 	float mMaxDistExtern = 10.0f;		//maximal Distance of the external line end points compared to a given line (default: 5 pixel)
 	float mMaxAngleDiffExtern = 20.0f / 180.0f * (float)CV_PI;	//maximal Angle Difference of the external line compared to a given line (default: 20 deg)
 };
@@ -327,10 +315,10 @@ private:
 
 };
 
-class DllCoreExport LineDetectorLSDConfig : public ModuleConfig {
+class DllCoreExport LineTraceLSDConfig : public ModuleConfig {
 
 public:
-	LineDetectorLSDConfig();
+	LineTraceLSDConfig();
 
 	void setScale(double scale);
 	double scale() const;
@@ -344,16 +332,25 @@ private:
 	double mScale = 0.5;	// initial downscaling of the image
 };
 
-class DllCoreExport LineDetectorLSD : public Module {
+/// <summary>
+/// Detect lines using the LSD algorithm.
+/// This line finder implements the LSD
+/// method from OpenCV contrib. 
+/// </summary>
+/// <seealso cref="Module" />
+class DllCoreExport LineTraceLSD : public Module {
 
 public:
-	LineDetectorLSD(const cv::Mat& img);
+	LineTraceLSD(const cv::Mat& img);
 
 	bool isEmpty() const override;
 	virtual bool compute() override;
 	
 	QVector<Line> lines() const;
-	QSharedPointer<LineDetectorLSDConfig> config() const;
+	QVector<Line> separatorLines() const;
+	
+	QSharedPointer<LineTraceLSDConfig> config() const;
+	LineFilter lineFilter() const;
 
 	virtual QString toString() const override;
 

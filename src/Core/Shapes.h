@@ -124,6 +124,7 @@ protected:
 	float mThickness = 1;
 
 	cv::Mat toMat(const Line& l) const;
+
 };
 
 
@@ -254,6 +255,7 @@ public:
 	void draw(QPainter& p) const;
 
 	double angle() const;
+	double sqLength() const;
 	double length() const;
 	void rotate(double angle);
 	double theta(const Vector2D& o) const;

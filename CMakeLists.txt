@@ -80,7 +80,7 @@ file(GLOB GC_HEADERS "src/3rdparty/graphcut/*.h")
 
 # external headers
 file(GLOB LSD_SOURCES "src/3rdparty/lsd/*.cpp")
-file(GLOB LSD_HEADERS "src/3rdparty/lsd/*.hpp")
+file(GLOB LSD_HEADERS "src/3rdparty/lsd/*.h")
 
 # gather information for building
 include_directories (

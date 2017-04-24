@@ -478,7 +478,7 @@ void LayoutTest::testLineDetector(const cv::Mat & src) const {
 	Timer dt;
 	cv::Mat img = src.clone();
 
-	rdf::LineDetectorLSD lsd(img);
+	rdf::LineTraceLSD lsd(img);
 	
 	if (!lsd.compute())
 		qDebug() << "could not compute LSD line detector";

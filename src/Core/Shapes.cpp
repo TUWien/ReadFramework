@@ -574,15 +574,31 @@ Line Line::extendBorder(const Rect & box) const {
 /// <returns>The minimum distance.</returns>
 double Line::minDistance(const Line& l) const {
 
-	double dist1 = Vector2D(mLine.p1() - l.line().p1()).length();
-	double dist2 = Vector2D(mLine.p1() - l.line().p2()).length();
-	dist1 = (dist1 < dist2) ? dist1 : dist2;
-	dist2 = Vector2D(mLine.p2() - l.line().p1()).length();
-	dist1 = (dist1 < dist2) ? dist1 : dist2;
-	dist2 = Vector2D(mLine.p2() - l.line().p2()).length();
-	dist1 = (dist1 < dist2) ? dist1 : dist2;
+	// we compute the squared line length for each 
+	// of the 4 connecting lines
+	// we could use the Vector2D class here (it's nicer) - but this is faster...
 
-	return dist1;
+	// l1.p1 - l2.p1
+	double dx = (mLine.p1().x() - l.line().p1().x());
+	double dy = (mLine.p1().y() - l.line().p1().y());
+	double dist = dx*dx + dy*dy;
+
+	// l1.p1 - l2.p2
+	dx = (mLine.p1().x() - l.line().p2().x());
+	dy = (mLine.p1().y() - l.line().p2().y());
+	dist = qMin(dist, dx*dx + dy*dy);
+
+	// l1.p2 - l2.p1
+	dx = (mLine.p2().x() - l.line().p1().x());
+	dy = (mLine.p2().y() - l.line().p1().y());
+	dist = qMin(dist, dx*dx + dy*dy);
+	
+	// l1.p2 - ls2.p2
+	dx = (mLine.p2().x() - l.line().p2().x());
+	dy = (mLine.p2().y() - l.line().p2().y());
+	dist = qMin(dist, dx*dx + dy*dy);
+
+	return std::sqrt(dist);
 }
 
 void Line::translate(cv::Point offset) {
@@ -592,7 +608,7 @@ void Line::translate(cv::Point offset) {
 }
 
 void Line::scale(double s) {
-	
+
 	if (s == 1.0)
 		return;
 
@@ -601,7 +617,6 @@ void Line::scale(double s) {
 
 	mThickness *= (float)s;
 }
-
 
 /// <summary>
 /// Returns the minimal distance of point p to the current line instance.
@@ -947,6 +962,14 @@ void Vector2D::draw(QPainter & p) const {
 
 double Vector2D::angle() const {
 	return std::atan(y()/x());
+}
+
+/// <summary>
+/// Returns the vector's squared length.
+/// </summary>
+/// <returns></returns>
+double Vector2D::sqLength() const {
+	return mX*mX + mY*mY;
 }
 
 double Vector2D::length() const {
