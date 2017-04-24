@@ -40,6 +40,7 @@
 #include "Elements.h"
 #include "ElementsHelper.h"
 #include "PageParser.h"
+#include "LineTrace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
  // Qt Includes
@@ -96,6 +97,14 @@ bool LayoutAnalysisConfig::localBlockOrientation() const {
 	return mLocalBlockOrientation;
 }
 
+void LayoutAnalysisConfig::setComputeSeparators(bool cs) {
+	mComputeSeparators = cs;
+}
+
+bool LayoutAnalysisConfig::computeSeparators() const {
+	return mComputeSeparators;
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
 	mMaxImageSide			= settings.value("maxImageSide", maxImageSide()).toInt();
@@ -103,6 +112,7 @@ void LayoutAnalysisConfig::load(const QSettings & settings) {
 	mMinSuperPixelsPerBlock	= settings.value("minSuperPixelsPerBlock", minSuperixelsPerBlock()).toInt();
 	mRemoveWeakTextLines	= settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
 	mLocalBlockOrientation	= settings.value("localBlockOrientation", localBlockOrientation()).toBool();
+	mComputeSeparators		= settings.value("computeSeparators", computeSeparators()).toBool();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
@@ -112,6 +122,7 @@ void LayoutAnalysisConfig::save(QSettings & settings) const {
 	settings.setValue("minSuperPixelsPerBlock", minSuperixelsPerBlock());
 	settings.setValue("removeWeakTextLines", removeWeakTextLines());
 	settings.setValue("localBlockOrientation", localBlockOrientation());
+	settings.setValue("computeSeparators", computeSeparators());
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -171,7 +182,7 @@ bool LayoutAnalysis::compute() {
 	// scale back to original coordinates
 	mTextBlockSet.setPixels(pixels);
 
-	QVector<Line> stopLines = createStopLines();
+	mStopLines = createStopLines();
 
 	Timer dtTl;
 
@@ -229,7 +240,7 @@ bool LayoutAnalysis::compute() {
 		if (sp.size() > config()->minSuperixelsPerBlock()) {
 
 			rdf::TextLineSegmentation tlM(sp);
-			tlM.addSeparatorLines(stopLines);
+			tlM.addSeparatorLines(mStopLines);
 
 			if (!tlM.compute()) {
 				qWarning() << "could not compute text line segmentation!";
@@ -253,6 +264,9 @@ bool LayoutAnalysis::compute() {
 	// scale back to original coordinates
 	mTextBlockSet.scale(1.0 / mScale);
 
+	for (Line& l : mStopLines)
+		l.scale(1.0 / mScale);
+
 	// clean-up
 	if (config()->removeWeakTextLines()) {
 		mTextBlockSet.removeWeakTextLines();
@@ -271,7 +285,12 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
-	
+
+	p.setPen(ColorManager::pink());
+
+	for (auto l : mStopLines)
+		l.draw(p);
+
 	for (auto tb : mTextBlockSet.textBlocks()) {
 		
 		QVector<QSharedPointer<PixelSet> > s = tb->pixelSet().splitScales();
@@ -291,55 +310,6 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 
 		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines));
 	}
-
-	//// LSD OpenCV --------------------------------------------------------------------
-	//Timer dt;
-	//
-	//double scale = 4.0;
-	//cv::Mat lImg;
-	//cv::resize(mImg, lImg, cv::Size(), 1.0/scale, 1.0/scale);
-	//cv::line_descriptor::LSDDetector lsd;
-	//std::vector<cv::line_descriptor::KeyLine> lines;
-	//lsd.detect(lImg, lines, 2, 1);
-	//
-	//qDebug() << lines.size() << "lines detected in" << dt;
-
-	//p.setPen(ColorManager::red());
-	//for (auto kl : lines) {
-	//	
-	//	Line l(kl.getStartPoint(), kl.getEndPoint());
-	//	l.scale(scale);
-	//	l.draw(p);
-	//}
-
-	//// LSD Flo --------------------------------------------------------------------
-	//
-	//cv::Mat imgIn = mImg;
-	////cv::resize(imgIn, imgIn, cv::Size(), 0.5, 0.5);
-	//
-	//Timer dtl;
-	//cv::Mat imgInG = imgIn;
-	//if (imgIn.channels() != 1) 
-	//	cv::cvtColor(imgIn, imgInG, CV_RGB2GRAY);
-
-	//ReadLSD lsdr(imgInG);
-	//lsdr.config()->setScale(0.5);
-
-	//if (!lsdr.compute())
-	//	qWarning() << "could not compute LSD";
-
-	//qDebug() << "Read LSD lines computed in" << dtl;
-
-	//p.setPen(ColorManager::blue(0.4));
-
-	//for (auto ls : lsdr.lines()) {
-	//	
-	//	Line l = ls.line();
-	//	l.setThickness(1);
-	//	l.draw(p);
-	//}
-
-	//// old school --------------------------------------------------------------------
 	
 	return Image::qPixmap2Mat(pm);
 }
@@ -426,7 +396,17 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 		}
 	}
 
-	// TODO: detect lines here
+	if (stopLines.empty() &&  config()->computeSeparators()) {
+		
+		LineTraceLSD lt(mImg);
+		lt.config()->setScale(1.0);
+
+		if (!lt.compute()) {
+			qWarning() << "could not compute separators...";
+		}
+
+		stopLines << lt.separatorLines();
+	}
 
 	return stopLines;
 }

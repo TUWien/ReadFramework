@@ -767,7 +767,10 @@ namespace rdf {
 		for (auto kl : kls) {
 			
 			Line l(kl.getStartPoint(), kl.getEndPoint());
-			l.scale(1.0/scale);
+			
+			if (scale != 1.0)
+				l.scale(1.0/scale);
+
 			mLines << l;
 		}
 
@@ -775,7 +778,7 @@ namespace rdf {
 		mLines = mLineFilter.mergeLines(mLines);
 		mLines = mLineFilter.removeSmall(mLines);
 		
-		mInfo << mLines.size() << "detected in" << dt;
+		mInfo << mLines.size() << "lines detected in" << dt;
 
 		return true;
 	}

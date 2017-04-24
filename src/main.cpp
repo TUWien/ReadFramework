@@ -236,7 +236,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
 		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
 		//dc.setImagePath("D:/read/test/debug-tiny[printed].png");
-		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_003-01_0001.jpg");
+		dc.setImagePath("D:/read/test/00075751.tif");
 	
 		//dc.setImagePath("D:/read/test/sp-classification/00000158.tif");
 		qInfo() << dc.imagePath() << "added as image path";

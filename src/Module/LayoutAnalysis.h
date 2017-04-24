@@ -86,6 +86,9 @@ public:
 	void setLocalBlockOrientation(bool lor);
 	bool localBlockOrientation() const;
 
+	void setComputeSeparators(bool cs);
+	bool computeSeparators() const;
+
 protected:
 
 	void load(const QSettings& settings) override;
@@ -96,6 +99,7 @@ protected:
 	bool mRemoveWeakTextLines = true;	// if true, unstable text lines are removed
 	int mMinSuperPixelsPerBlock = 15;	// the minimum number of components that are required to run the text line segmentation
 	bool mLocalBlockOrientation = true;	// local orientation is estimated per text block
+	bool mComputeSeparators = true;		// if true, separators lines are computed
 };
 
 class DllCoreExport LayoutAnalysis : public Module {
@@ -127,6 +131,7 @@ private:
 
 	// output
 	TextBlockSet mTextBlockSet;
+	QVector<Line> mStopLines;
 
 	TextBlockSet createTextBlocks() const;
 	QVector<Line> createStopLines() const;

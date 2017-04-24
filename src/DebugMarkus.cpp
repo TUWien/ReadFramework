@@ -164,9 +164,9 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	//layoutToXml();
+	layoutToXml();
 	//layoutToXmlDebug();
-	testLineDetector(imgCv);
+	//testLineDetector(imgCv);
 
 	//eval();
 
