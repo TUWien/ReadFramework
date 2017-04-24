@@ -478,7 +478,9 @@ void SuperPixelModel::toJson(QJsonObject& jo) const {
 
 	cv::FileStorage fs(".xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
 	mModel->write(fs);
+#if CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION == 1
 	fs << "format" << 3;	// fixes bug #4402
+#endif
 	std::string data = fs.releaseAndGetString();
 
 	QByteArray ba(data.c_str(), (int)data.length());
