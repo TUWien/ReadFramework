@@ -98,7 +98,7 @@ public:
 
 protected:
 
-	QSharedPointer<LineFilterConfig> mConfig = 0;
+	QSharedPointer<LineFilterConfig> mConfig;
 };
 
 
