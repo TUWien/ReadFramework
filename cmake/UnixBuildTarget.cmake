@@ -21,7 +21,12 @@ add_library(${RDF_DLL_CORE_NAME} SHARED ${CORE_SOURCES} ${CORE_HEADERS} ${RDF_RC
 target_link_libraries(${RDF_DLL_CORE_NAME} ${OpenCV_LIBS}) 
 
 # add module
-add_library(${RDF_DLL_MODULE_NAME} SHARED ${MODULE_SOURCES} ${MODULE_HEADERS} ${GC_HEADERS} ${GC_SOURCES} ${RDF_RC})
+add_library(
+	${RDF_DLL_MODULE_NAME} SHARED 
+	${MODULE_SOURCES} ${MODULE_HEADERS} 
+	${GC_HEADERS} ${GC_SOURCES} 			# graphcut
+	${LSD_HEADERS} ${LSD_SOURCES} 			# LSD 
+	${RDF_RC})
 target_link_libraries(${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 
 add_dependencies(${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME})
