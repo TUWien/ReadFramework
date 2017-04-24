@@ -164,8 +164,8 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	layoutToXml();
-	//layoutToXmlDebug();
+	//layoutToXml();
+	layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
 	//eval();
@@ -254,114 +254,51 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 
-	// create an 'all-in' text block
-	// get (potential) text regions - from XML
-	QVector<QSharedPointer<Region> > textRegions = RegionManager::filter<Region>(pe->rootRegion(), Region::type_text_region);
-	TextBlockSet textBlocks(textRegions);
-	textBlocks.scale(scale);
-
-	if (textBlocks.isEmpty()) {
-		Rect r(Vector2D(), rImg.size());
-		textBlocks << Polygon::fromRect(r);
-	}
-
 	PixelSet pixels = spM.superPixels();
-	textBlocks.setPixels(pixels);
 
-	// TODO: add lines?
-	//QVector<Line> stopLines = createStopLines();
-
-	// compute text lines for each text block
-	for (QSharedPointer<TextBlock> tb : textBlocks.textBlocks()) {
-
-		PixelSet sp = tb->pixelSet();
-
-		// find local orientation per pixel
-		rdf::LocalOrientation lo(sp);
-		if (!lo.compute()) {
-			qWarning() << "could not compute local orientation";
-			return;
-		}
-
-		// smooth estimation
-		rdf::GraphCutOrientation pse(sp);
-
-		if (!pse.compute()) {
-			qWarning() << "could not compute set orientation";
-			return;
-		}
-
-		//// find tab stops
-		//rdf::TabStopAnalysis tabStops(sp);
-		//if (!tabStops.compute())
-		//	qWarning() << "could not compute text block segmentation!";
-
-		QVector<QSharedPointer<TextLineSet> > textLines;
-
-		if (sp.size() > 25) {
-
-			// find text lines
-			rdf::TextLineSegmentation tlM(sp);
-			//textLines.addSeparatorLines(stopLines);
-
-			if (!tlM.compute()) {
-				qWarning() << "could not compute text line segmentation!";
-				return;
-			}
-
-			// save text lines
-			textLines = tlM.textLineSets();
-		}
-
-		// paragraph is a single textline
-		if (textLines.empty()) {
-			textLines << QSharedPointer<TextLineSet>(new TextLineSet(sp.pixels()));
-		}
-		
-		tb->setTextLines(textLines);
-
-		//// drawing (per text block)
-		//textLines.scale(1.0/scale);
-		//dImg = textLines.draw(dImg);
-		//textLines.scale(scale);
+	// find local orientation per pixel
+	rdf::LocalOrientation lo(pixels);
+	if (!lo.compute()) {
+		qWarning() << "could not compute local orientation";
+		return;
 	}
 
-	// scale back to original coordinates
-	textBlocks.scale(1.0 / scale);
-	textBlocks.removeWeakTextLines();
+	// smooth estimation
+	rdf::GraphCutOrientation pse(pixels);
 
-	QVector<QSharedPointer<TextLineSet> > tls;
-	for (auto tb : textBlocks.textBlocks())
-		tls << tb->textLines();
+	if (!pse.compute()) {
+		qWarning() << "could not compute set orientation";
+		return;
+	}
+
+	//// find tab stops
+	//rdf::TabStopAnalysis tabStops(sp);
+	//if (!tabStops.compute())
+	//	qWarning() << "could not compute text block segmentation!";
+
+	QVector<QSharedPointer<TextLineSet> > textLines;
+
+	// find text lines
+	rdf::SimpleTextLineSegmentation tlM(pixels);
+	//textLines.addSeparatorLines(stopLines);
+
+	if (!tlM.compute()) {
+		qWarning() << "could not compute text line segmentation!";
+		return;
+	}
+	tlM.scale(1.0 / scale);
 
 	cv::Mat dImg = img.clone();
-	dImg = spM.draw(dImg);
-	dImg = TextLineSegmentation::draw(dImg, tls);
-
+	dImg = tlM.draw(dImg);
 	// end computing --------------------------------------------------------------------
 
 	// drawing --------------------------------------------------------------------
 
 	// save super pixel image
 	//dImg = la.draw(rImg);
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-simple-textlines");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
-
-	// write to XML --------------------------------------------------------------------
-	pe->setCreator(QString("CVL"));
-	pe->setImageSize(QSize(img.cols, img.rows));
-	pe->setImageFileName(QFileInfo(mConfig.imagePath()).fileName());
-
-	//pe->setRootRegion(la.textBlockSet().toTextRegion());
-
-	auto root = textBlocks.toTextRegion();
-	for (const QSharedPointer<rdf::Region>& r : root->children()) {
-		pe->rootRegion()->addUniqueChild(r, true);
-	}
-
-	parser.write(mConfig.xmlPath(), pe);
-	qDebug() << "results written to" << mConfig.xmlPath();
 
 	qInfo() << "layout analysis computed in" << dt;
 

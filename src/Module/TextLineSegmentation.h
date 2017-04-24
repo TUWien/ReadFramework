@@ -54,6 +54,57 @@ namespace rdf {
 
 // read defines
 
+class DllCoreExport SimpleTextLineConfig : public ModuleConfig {
+
+public:
+	SimpleTextLineConfig();
+
+	virtual QString toString() const override;
+
+	void setMaxEdgeThresh(double et); // <-- hehe E.T.
+	double maxEdgeTrhesh() const;
+
+protected:
+
+	double mMaxEdgeThresh = 20;			// maximum edge in px
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+class DllCoreExport SimpleTextLineSegmentation : public Module {
+
+public:
+	SimpleTextLineSegmentation(const PixelSet& set = PixelSet());
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	cv::Mat draw(const cv::Mat& img) const;
+	QString toString() const override;
+
+	void addSeparatorLines(const QVector<Line>& lines);
+	
+	QVector<QSharedPointer<PixelSet> > sets() const;
+	QSharedPointer<SimpleTextLineConfig> config() const;
+
+	// functions applied to the results
+	void scale(double s);
+
+private:
+	PixelSet mSet;
+	QVector<QSharedPointer<PixelSet> > mTextLines;
+	QVector<Line> mStopLines;
+
+	// debug - delete!
+	QVector<QSharedPointer<PixelEdge> > mEdges;
+
+	bool checkInput() const override;
+
+	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph, QVector<QSharedPointer<PixelEdge> >* removedEdges = 0) const;
+};
+
+
 class DllCoreExport TextLineConfig : public ModuleConfig {
 
 public:

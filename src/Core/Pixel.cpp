@@ -545,11 +545,11 @@ void PixelEdge::scale(double s) {
 void PixelEdge::draw(QPainter & p) const {
 
 	Line e = edge();
-	e.setThickness(3);
+	//e.setThickness(2);
 	e.draw(p);
 
-	first()->draw(p, 1, Pixel::draw_center);
-	second()->draw(p, 1, Pixel::draw_center);
+	//first()->draw(p, 1, Pixel::draw_center);
+	//second()->draw(p, 1, Pixel::draw_center);
 }
 
 bool PixelEdge::lessThan(const PixelEdge & e) const {

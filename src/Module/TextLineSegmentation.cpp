@@ -582,4 +582,140 @@ bool TextLineSegmentation::checkInput() const {
 	return !mSet.isEmpty();
 }
 
+// SimpleTextLineConfig --------------------------------------------------------------------
+SimpleTextLineConfig::SimpleTextLineConfig() : ModuleConfig("Simple Textline Segmentation") {
+}
+
+QString SimpleTextLineConfig::toString() const {
+	
+	QString msg;
+	msg += "maxEdgeThresh: " + QString::number(maxEdgeTrhesh());
+	return msg;
+}
+
+void SimpleTextLineConfig::setMaxEdgeThresh(double et) {
+	mMaxEdgeThresh = et;
+}
+
+double SimpleTextLineConfig::maxEdgeTrhesh() const {
+	return mMaxEdgeThresh;
+}
+
+void SimpleTextLineConfig::load(const QSettings & settings) {
+	
+	mMaxEdgeThresh = settings.value("maxEdgeThresh", maxEdgeTrhesh()).toDouble();
+}
+
+void SimpleTextLineConfig::save(QSettings & settings) const {
+	
+	settings.setValue("maxEdgeThresh", maxEdgeTrhesh());
+}
+
+// SimpleTextLineSegmentation --------------------------------------------------------------------
+SimpleTextLineSegmentation::SimpleTextLineSegmentation(const PixelSet & set) {
+	mSet = set;
+	mConfig = QSharedPointer<SimpleTextLineConfig>::create();
+}
+
+bool SimpleTextLineSegmentation::isEmpty() const {
+	return mSet.isEmpty();
+}
+
+bool SimpleTextLineSegmentation::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	// create delauney graph
+	DelauneyPixelConnector dpc;
+	dpc.setStopLines(mStopLines);
+
+	PixelGraph pg(mSet);
+	pg.connect(dpc, PixelGraph::sort_line_edges);
+
+	QVector<QSharedPointer<PixelEdge> > edges = pg.edges();
+	QVector<QSharedPointer<PixelEdge> > ef;
+
+	for (auto e : edges) {
+		
+		double d = PixelDistance::angleWeighted(e->first(), e->second());
+		if (d > config()->maxEdgeTrhesh())
+			break;
+		
+		ef << e;
+	}
+	
+	mEdges = edges; // debug only
+	mTextLines << PixelSet::fromEdges(ef);
+
+	mInfo << mTextLines.size() << "text lines computed in" << dt;
+
+	return true;
+}
+
+cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
+	
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter p(&pm);
+
+	p.setOpacity(1.0);
+
+	p.setPen(ColorManager::pink());
+
+	for (auto e : mEdges) {
+
+		double d = PixelDistance::angleWeighted(e->first(), e->second());
+		if (d > config()->maxEdgeTrhesh())
+			p.setPen(ColorManager::red(0.2));
+
+		e->draw(p);
+	}
+
+	p.setOpacity(0.4);
+
+	for (auto ps : mTextLines) {
+
+		p.setPen(ColorManager::getColor());
+		ps->draw(p, PixelSet::draw_poly);
+	}
+
+	return Image::qPixmap2Mat(pm);
+}
+
+QString SimpleTextLineSegmentation::toString() const {
+	return Module::toString();
+}
+
+void SimpleTextLineSegmentation::addSeparatorLines(const QVector<Line>& lines) {
+	mStopLines = lines;
+}
+
+QVector<QSharedPointer<PixelSet>> SimpleTextLineSegmentation::sets() const {
+	return mTextLines;
+}
+
+QSharedPointer<SimpleTextLineConfig> SimpleTextLineSegmentation::config() const {
+	return qSharedPointerDynamicCast<SimpleTextLineConfig>(mConfig);
+}
+
+void SimpleTextLineSegmentation::scale(double s) {
+
+	for (auto tl : mTextLines)
+		tl->scale(s);
+
+	for (auto e : mEdges)
+		e->scale(s);
+}
+
+bool SimpleTextLineSegmentation::checkInput() const {
+	
+	return !mSet.isEmpty();
+}
+
+QVector<QSharedPointer<TextLineSet>> SimpleTextLineSegmentation::clusterTextLines(const PixelGraph & graph, QVector<QSharedPointer<PixelEdge>>* removedEdges) const {
+	return QVector<QSharedPointer<TextLineSet>>();
+}
+
 }
