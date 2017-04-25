@@ -536,6 +536,87 @@ bool Region::operator==(const Region & r1) {
 		return false;
 }
 
+// TextEquiv --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="TextEquiv"/> class without any text (null).
+/// </summary>
+TextEquiv::TextEquiv() {
+	mIsNull = true;
+}
+
+/// <summary>
+/// Initializes a new instance of the <see cref="TextEquiv"/> class with unicode and optional plain text.
+/// </summary>
+/// <param name="text">The text.</param>
+/// <param name="plainText">The plain text.</param>
+TextEquiv::TextEquiv(const QString& text, const QString& plainText) {
+	mText = text;
+	mPlainText = plainText;
+	mIsNull = false;
+}
+
+/// <summary>
+/// Reads the TextEquiv tag. The reader must be at the position of the tag.
+/// </summary>
+/// <param name="reader">The reader.</param>
+/// <returns>TextEquiv object containing the text</returns>
+TextEquiv TextEquiv::read(QXmlStreamReader & reader) {
+	auto& rm = RegionXmlHelper::instance();
+	QString text;
+	QString plainText;
+
+	while (!reader.atEnd()) {
+		reader.readNext();
+
+		// are we done with reading the text?
+		if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv))
+			break;
+
+		// read unicode
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
+			reader.readNext();
+			text = reader.text().toUtf8().trimmed();	// add text
+		}
+		// read ASCII
+		if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
+			reader.readNext();
+			plainText = reader.text().toString().trimmed();	// add text
+		}
+	}
+
+	// Unicode text must be present for the TextEquiv element to be valid (according to schema)
+	if (text.isNull()) {
+		return TextEquiv();
+	}
+
+	return TextEquiv(text, plainText);
+}
+
+void TextEquiv::write(QXmlStreamWriter & writer) const {
+	auto& rm = RegionXmlHelper::instance();
+
+	if (!mIsNull) {
+		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
+		if (!mPlainText.isNull()) {
+			writer.writeTextElement(rm.tag(RegionXmlHelper::tag_plain_text), mPlainText);
+		}
+		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
+		writer.writeEndElement(); // </TextEquiv>
+	}
+}
+
+QString TextEquiv::text() const {
+	return mText;
+}
+
+QString TextEquiv::plainText() const {
+	return mPlainText;
+}
+
+bool TextEquiv::isNull() const {
+	return mIsNull;
+}
+
 // TextLine --------------------------------------------------------------------
 /// <summary>
 /// Initializes a new instance of the <see cref="TextLine"/> class.
@@ -569,7 +650,7 @@ BaseLine TextLine::baseLine() const {
 /// </summary>
 /// <param name="text">The text corresponding to the textline.</param>
 void TextLine::setText(const QString & text) {
-	mText = text;
+	mTextEquiv = TextEquiv(text);
 }
 
 /// <summary>
@@ -577,7 +658,7 @@ void TextLine::setText(const QString & text) {
 /// </summary>
 /// <returns></returns>
 QString TextLine::text() const {
-	return mText;
+	return mTextEquiv.text();
 }
 
 /// <summary>
@@ -594,26 +675,7 @@ bool TextLine::read(QXmlStreamReader & reader) {
 	// read <TextEquiv>
 	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
 
-		while (!reader.atEnd()) {
-			reader.readNext();
-
-			// are we done with reading the text?
-			if (reader.tokenType() == QXmlStreamReader::EndElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv))
-				break;
-
-			// read unicode
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_unicode)) {
-				reader.readNext();
-				mText = reader.text().toUtf8().trimmed();	// add text
-				mTextPresent = true;
-			}
-			// read ASCII
-			if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_plain_text)) {
-				reader.readNext();
-				mText = reader.text().toString().trimmed();	// add text
-				mTextPresent = true;
-			}
-		}
+		mTextEquiv = TextEquiv::read(reader);
 	}
 	// read baseline
 	else if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName().toString() == rm.tag(RegionXmlHelper::tag_baseline)) {
@@ -642,10 +704,8 @@ void TextLine::write(QXmlStreamWriter & writer) const {
 		writer.writeEndElement(); // </Baseline>
 	}
 
-	if (!mText.isEmpty() || mTextPresent) {
-		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
-		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
-		writer.writeEndElement(); // </TextEquiv>
+	if (!text().isEmpty()) {
+		mTextEquiv.write(writer);
 	}
 
 	writeChildren(writer);
@@ -661,10 +721,10 @@ QString TextLine::toString(bool withChildren) const {
 	
 	QString msg = Region::toString(false);
 
-	if (!mText.isEmpty()) {
+	if (!text().isEmpty()) {
 		msg += " | baseline: " + QString::number(mBaseLine.polygon().size());
 		msg += " | text: ";
-		msg += mText;
+		msg += text();
 	}
 
 	if (withChildren)
@@ -708,12 +768,119 @@ void TextLine::draw(QPainter & p, const RegionTypeConfig & config) const {
 
 	}
 
-	if (config.drawText() && !mText.isEmpty()) {
+	if (config.drawText() && !text().isEmpty()) {
 		
 		QPointF sp = mBaseLine.startPoint();
 
 		if (sp.isNull() && !mPoly.isEmpty()) {
 			sp = mPoly.polygon().first();
+			p.drawText(sp, text());
+		}
+		//else
+		//	qDebug() << "could not draw text: region has no polygon";
+	}
+
+}
+
+// TextRegion --------------------------------------------------------------------
+/// <summary>
+/// Initializes a new instance of the <see cref="TextRegion"/> class.
+/// This class represents Text regions (Region::type_text_region).
+/// </summary>
+TextRegion::TextRegion(const Type& type) : Region(type) {
+
+	// default to text line
+	if (mType == type_unknown)
+		mType = Region::type_text_region;
+}
+
+/// <summary>
+/// Set the GT/HTR text of the TextRegion.
+/// </summary>
+/// <param name="text">The text corresponding to the text region.</param>
+void TextRegion::setText(const QString & text) {
+	mTextEquiv = TextEquiv(text);
+}
+
+/// <summary>
+/// GT/HTR Text of the TextRegion.
+/// </summary>
+/// <returns>the text</returns>
+QString TextRegion::text() const {
+	return mTextEquiv.text();
+}
+
+/// <summary>
+/// Reads a TextRegion from the XML stream.
+/// The stream must be at the position of the 
+/// TextRegion's tag and is forwarded until its end
+/// </summary>
+/// <param name="reader">The XML stream.</param>
+/// <returns>true on success</returns>
+bool TextRegion::read(QXmlStreamReader & reader) {
+
+	RegionXmlHelper& rm = RegionXmlHelper::instance();
+
+	// read <TextEquiv>
+	if (reader.tokenType() == QXmlStreamReader::StartElement && reader.qualifiedName() == rm.tag(RegionXmlHelper::tag_text_equiv)) {
+		mTextEquiv = TextEquiv::read(reader);
+	}
+	else
+		return Region::read(reader);
+
+	return true;
+}
+
+/// <summary>
+/// Writes the TextRegion instance to the XML stream.
+/// </summary>
+/// <param name="writer">The XML stream.</param>
+void TextRegion::write(QXmlStreamWriter & writer) const {
+
+	Region::createElement(writer);
+	Region::writePolygon(writer);
+
+	writeChildren(writer);
+
+	if (!text().isEmpty()) {
+		mTextEquiv.write(writer);
+	}
+	writer.writeEndElement(); // </Region>
+}
+
+/// <summary>
+/// Returns a string with all important properties of the TextRegion.
+/// </summary>
+/// <param name="withChildren">if set to <c>true</c> children properties are written too.</param>
+/// <returns></returns>
+QString TextRegion::toString(bool withChildren) const {
+
+	QString msg = Region::toString(false);
+
+	if (!mTextEquiv.isNull()) {
+		msg += " | text: ";
+		msg += text();
+	}
+
+	if (withChildren)
+		msg += Region::childrenToString();
+
+	return msg;
+}
+
+/// <summary>
+/// Draws the TextRegion to the Painter.
+/// </summary>
+/// <param name="p">The painter.</param>
+/// <param name="config">The configuration (e.g. color of the Region).</param>
+void TextRegion::draw(QPainter & p, const RegionTypeConfig & config) const {
+
+	Region::draw(p, config);
+
+	if (config.drawText() && !text().isEmpty()) {
+
+		if (!mPoly.isEmpty()) {
+			QPointF sp = mPoly.polygon().first();
 			p.drawText(sp, text());
 		}
 		//else
@@ -1482,6 +1649,7 @@ bool TableCell::compareCells(const QSharedPointer<rdf::TableCell> l1, const QSha
 	return *l1 < *l2;
 }
 
+// LayerElement --------------------------------------------------------------------
 LayerElement::LayerElement() {
 }
 

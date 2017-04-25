@@ -36,7 +36,7 @@ ThomasTest::ThomasTest(const DebugConfig& config)
 }
 
 void ThomasTest::test() {
-	//testXml();
+	testXml();
 	testLayout();
 }
 
@@ -49,18 +49,6 @@ void ThomasTest::testXml() {
 		return;
 	}
 	auto pageElement = parser.page();
-
-	qDebug() << "default layer";
-	for (const auto& region : pageElement->defaultLayer()->regions()) {
-		qDebug() << "region" << region->id();
-	}
-
-	for (const auto& layer : pageElement->layers()) {
-		qDebug() << "layer with zIndex ";
-		for (const auto& region : layer->regions()) {
-			qDebug() << "region" << region->id();
-		}
-	}
 
 	auto& utils = rdf::Utils::instance();
 	QString xmlPathOut = utils.createFilePath(xmlPath, "-out");
@@ -76,7 +64,7 @@ void ThomasTest::testLayout() {
 
 	rdf::PageXmlParser parser;
 	parser.read(loadXmlPath);
-	auto pe = parser.page();
+	auto pageElement = parser.page();
 
 	// super pixels
 	
@@ -101,9 +89,9 @@ void ThomasTest::testLayout() {
 	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
 
 	// set the ground truth
-	if (parser.page()) {
-		spl.setPage(parser.page());
-		spl.setRootRegion(parser.page()->rootRegion());
+	if (pageElement) {
+		spl.setPage(pageElement);
+		spl.setRootRegion(pageElement->rootRegion());
 	}
 
 	if (!spl.compute())
@@ -123,6 +111,9 @@ void ThomasTest::testLayout() {
 
 	rdf::FeatureCollectionManager fcm(spf.features(), spf.set());
 	fcm.write(mConfig.featureCachePath());
+	
+	// read it back (test)
+	fcm.read(mConfig.featureCachePath());
 
 	// train
 
@@ -131,6 +122,15 @@ void ThomasTest::testLayout() {
 		qCritical() << "could not train data...";
 
 	spt.write(mConfig.classifierPath());
+
+	qInfo() << "classifierPath: " << mConfig.classifierPath();
+	// test - read back the model
+	auto model = rdf::SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (f && f->isTrained()) {
+		qDebug() << "the classifier I loaded is trained...";
+	}
 
 	// classify
 

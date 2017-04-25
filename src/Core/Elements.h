@@ -253,6 +253,26 @@ protected:
 	QVector<int> mCornerPts;
 };
 
+class DllCoreExport TextEquiv {
+
+public:
+	TextEquiv();
+	TextEquiv(const QString& text, const QString& plainText = QString());
+
+	static TextEquiv read(QXmlStreamReader& reader);
+
+	void write(QXmlStreamWriter& writer) const;
+
+	QString text() const;
+	QString plainText() const;
+	bool isNull() const;
+
+protected:
+	QString mPlainText; 
+	QString mText; // unicode
+	bool mIsNull = false;
+};
+
 class DllCoreExport TextLine : public Region {
 
 public:
@@ -273,10 +293,27 @@ public:
 
 protected:
 	BaseLine mBaseLine;
-	QString mText;
-	bool mTextPresent = false;
+	TextEquiv mTextEquiv;
 };
 
+class DllCoreExport TextRegion : public Region {
+	
+public:
+	TextRegion(const Type& type = Type::type_unknown);
+
+	void setText(const QString& text);
+	QString text() const;
+
+	virtual bool read(QXmlStreamReader& reader) override;
+	virtual void write(QXmlStreamWriter& writer) const override;
+
+	virtual QString toString(bool withChildren = false) const override;
+	
+	virtual void draw(QPainter& p, const RegionTypeConfig& config) const override;
+
+protected:
+	TextEquiv mTextEquiv;
+};
 
 class DllCoreExport SeparatorRegion : public Region {
 
