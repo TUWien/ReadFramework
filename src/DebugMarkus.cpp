@@ -39,6 +39,7 @@
 #include "Elements.h"
 #include "ElementsHelper.h"
 #include "Settings.h"
+#include "GraphCut.h"
 
 #include "SuperPixel.h"
 #include "TabStopAnalysis.h"
@@ -271,11 +272,6 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 
-	//// find tab stops
-	//rdf::TabStopAnalysis tabStops(sp);
-	//if (!tabStops.compute())
-	//	qWarning() << "could not compute text block segmentation!";
-
 	QVector<QSharedPointer<TextLineSet> > textLines;
 
 	// find text lines
@@ -287,18 +283,27 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 	tlM.scale(1.0 / scale);
-
-	cv::Mat dImg = img.clone();
-	dImg = tlM.draw(dImg);
 	// end computing --------------------------------------------------------------------
 
 	// drawing --------------------------------------------------------------------
 
 	// save super pixel image
 	//dImg = la.draw(rImg);
+
+	cv::Mat dImg = img.clone();
+	dImg = tlM.draw(dImg);
+
+	rImg = img.clone();
+	rImg = spM.draw(rImg);
+
 	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-simple-textlines");
 	rdf::Image::save(dImg, dstPath);
-	qDebug() << "debug image saved: " << dstPath;
+	qDebug() << "line image saved: " << dstPath;
+
+	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-local-orientation");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "orientation image saved: " << dstPath;
+
 
 	qInfo() << "layout analysis computed in" << dt;
 

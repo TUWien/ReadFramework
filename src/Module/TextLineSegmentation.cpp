@@ -412,7 +412,7 @@ void TextLineSegmentation::filterDuplicates(PixelSet & set) const {
 			if (remPixels.contains(pxi))
 				continue;
 
-			if (PixelDistance::euclidean(px, pxi) < config()->minLineLength()) {
+			if (PixelDistance::euclidean(px.data(), pxi.data()) < config()->minLineLength()) {
 
 				// remove the smaller one
 				remPixels << (px->ellipse().radius() < pxi->ellipse().radius() ? px : pxi);
@@ -640,7 +640,7 @@ bool SimpleTextLineSegmentation::compute() {
 
 	for (auto e : edges) {
 		
-		double d = PixelDistance::angleWeighted(e->first(), e->second());
+		double d = PixelDistance::angleWeighted(e->first().data(), e->second().data());
 		if (d > config()->maxEdgeTrhesh())
 			break;
 		
@@ -666,7 +666,7 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
 
 	for (auto e : mEdges) {
 
-		double d = PixelDistance::angleWeighted(e->first(), e->second());
+		double d = PixelDistance::angleWeighted(e->first().data(), e->second().data());
 		if (d > config()->maxEdgeTrhesh())
 			p.setPen(ColorManager::red(0.2));
 

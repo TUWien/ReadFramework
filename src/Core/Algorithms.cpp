@@ -1264,4 +1264,83 @@ double LineFitting::medianResiduals(const QVector<Vector2D>& pts, const Line & l
 	return Algorithms::statMoment(squaredDists, 0.5);
 }
 
+// Pixel Distances --------------------------------------------------------------------
+/// <summary>
+/// Euclidean distance between the pixel's centers.
+/// </summary>
+/// <param name="px1">The first SuperPixel.</param>
+/// <param name="px2">The second SuperPixel.</param>
+/// <returns></returns>
+double PixelDistance::euclidean(const Pixel* px1, const Pixel* px2) {
+
+	assert(!px1.isNull() && !px2.isNull());
+	return Vector2D(px2->center() - px1->center()).length();
+}
+
+/// <summary>
+/// Angle weighted pixel distance.
+/// If the pixel's local orientations are not
+/// computed, this method defaults to the euclidean distance.
+/// </summary>
+/// <param name="px1">The first SuperPixel.</param>
+/// <param name="px2">The second SuperPixel.</param>
+/// <returns></returns>
+double PixelDistance::angleWeighted(const Pixel* px1, const Pixel* px2) {
+
+	assert(!px1.isNull() && !px2.isNull());
+
+	if (!px1->stats() || !px2->stats()) {
+		qWarning() << "cannot compute angle weighted distance if stats are NULL";
+		return euclidean(px1, px2);
+	}
+
+	Vector2D edge = px2->center() - px1->center();
+	double dt1 = std::abs(edge.theta(px1->stats()->orVec()));
+	double dt2 = std::abs(edge.theta(px2->stats()->orVec()));
+
+	double a = qMin(dt1, dt2);
+
+	return edge.length() * (a + 0.01);	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+}
+
+/// <summary>
+/// Returns the edge weight normalized by the line spacing.
+/// This function returns an edge weight that is similar
+/// to the one proposed by Il Koo. Hence, it can be used
+/// for graphcuts.
+/// </summary>
+/// <param name="edge">The pixel edge.</param>
+/// <returns></returns>
+double PixelDistance::orientationWeighted(const PixelEdge * edge) {
+
+	if (!edge || edge->isNull())
+		return 0.0;
+
+
+	double beta = 1.0;
+
+	auto px1 = edge->first();
+	auto px2 = edge->second();
+
+	// this edge weight is needed for the GraphCut
+	if (px1->stats() && px2->stats()) {
+
+		double sp = px1->stats()->lineSpacing();
+		double sq = px2->stats()->lineSpacing();
+		double nl = (beta * edge->edge().squaredLength()) / (sp * sp + sq * sq);
+		double ew = 1.0 - exp(-nl);
+
+		if (ew < 0.0 || ew > 1.0) {
+			qDebug() << "illegal edge weight: " << ew;
+		}
+
+		// TODO: add mu(fp,fq) according to koo's indices
+		return ew;
+	}
+
+	qDebug() << "no stats when computing the scaled edges...";
+	return 0.0;
+}
+
+
 }

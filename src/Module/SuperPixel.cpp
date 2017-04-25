@@ -38,17 +38,11 @@
 #include "Utils.h"
 #include "Settings.h"
 
-#include "PixelSet.h"
-
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
-
-#pragma warning(disable: 4706)
-#include "GCGraph.hpp"
-#include "graphcut/GCoptimization.h"
 
 #pragma warning(pop)
 
@@ -716,158 +710,6 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	return Image::qPixmap2Mat(pm);
-}
-
-
-// GraphCutOrientation --------------------------------------------------------------------
-GraphCutOrientation::GraphCutOrientation(const PixelSet& set) {
-	mSet = set;
-}
-
-bool GraphCutOrientation::isEmpty() const {
-	return mSet.isEmpty();
-}
-
-bool GraphCutOrientation::compute() {
-	
-	if (!checkInput())
-		return false;
-
-	//Timer dt;
-
-	DelauneyPixelConnector dpc;
-
-	// build a graph for every scale
-	//for (const QSharedPointer<PixelSet>& set : mSet.splitScales()) {
-		
-		PixelGraph graph(mSet);
-		graph.connect(dpc);
-		graphCut(graph);
-	//}
-
-	//qInfo() << "[Graph Cut] computed in" << dt;
-
-	return true;
-}
-
-PixelSet GraphCutOrientation::set() const {
-	
-	return mSet;
-}
-
-cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
-
-	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
-
-	// show the graph
-	DelauneyPixelConnector dpc;
-	PixelGraph graph(mSet);
-	graph.connect(dpc);
-
-	p.setPen(ColorManager::darkGray(0.3));
-	graph.draw(p);
-
-	for (auto px : mSet.pixels()) {
-		p.setPen(ColorManager::getColor());
-		px->draw(p, 0.3, (Pixel::DrawFlag)(Pixel::draw_stats));
-	}
-
-	return Image::qPixmap2Mat(pm);
-}
-
-bool GraphCutOrientation::checkInput() const {
-	return !isEmpty();
-}
-
-void GraphCutOrientation::graphCut(const PixelGraph& graph) {
-
-	if (graph.isEmpty())
-		return;
-
-	int gcIter = 2;	// # iterations of graph-cut (expansion)
-
-	// stats must be computed already
-	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
-	assert(pixel[0]->stats());	// local orientation must be computed first
-
-	// the statistics columns == the number of possible labels
-	int nLabels = graph.set().pixels()[0]->stats()->data().cols;
-	
-	// get costs and smoothness term
-	cv::Mat c = costs(nLabels);					 // SetSize x #labels
-	cv::Mat sm = orientationDistMatrix(nLabels); // #labels x #labels
-
-	// init the graph
-	QSharedPointer<GCoptimizationGeneralGraph> graphCut(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
-	graphCut->setDataCost(c.ptr<int>());
-	graphCut->setSmoothCost(sm.ptr<int>());
-
-	// create neighbors
-	const QVector<QSharedPointer<PixelEdge> >& edges = graph.edges();
-	for (int idx = 0; idx < pixel.size(); idx++) {
-
-		for (int edgeIdx : graph.edgeIndexes(pixel.at(idx)->id())) {
-
-			assert(edgeIdx != -1);
-
-			// get vertex ID
-			const QSharedPointer<PixelEdge>& pe = edges[edgeIdx];
-			int sVtxIdx = graph.pixelIndex(pe->second()->id());
-			
-			// compute weight
-			int w = qRound((1.0-pe->edgeWeight()) * mScaleFactor);
-
-			graphCut->setNeighbors(idx, sVtxIdx, w);
-		}
-	}
-
-	// run the expansion-move
-	graphCut->expansion(gcIter);
-
-	for (int idx = 0; idx < pixel.size(); idx++) {
-
-		auto ps = pixel[idx]->stats();
-		ps->setOrientationIndex(graphCut->whatLabel(idx));
-	}
-
-}
-
-cv::Mat GraphCutOrientation::costs(int numLabels) const {
-	
-	// fill costs
-	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
-
-	for (int idx = 0; idx < mSet.size(); idx++) {
-
-		auto ps = mSet[idx]->stats();
-		assert(ps);
-
-		cv::Mat cData = ps->data(PixelStats::combined_idx);
-		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);	// TODO: check scaling
-	}
-
-	return data;
-}
-
-cv::Mat GraphCutOrientation::orientationDistMatrix(int numLabels) const {
-	
-	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
-
-	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
-
-		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
-
-		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
-
-			// set smoothness cost for orientations
-			int diff = abs(rIdx - cIdx);
-			sPtr[cIdx] = qMin(diff, numLabels - diff);
-		}
-	}
-
-	return orDist;
 }
 
 // ScaleSpaceSuperPixel --------------------------------------------------------------------

@@ -1155,7 +1155,7 @@ cv::Mat DBScanPixel::calcDists(const PixelSet& pixels) const {
 		float* dPtr = dists.ptr<float>(rIdx);
 
 		for (int cIdx = rIdx + 1; cIdx < dists.cols; cIdx++) {
-			dPtr[cIdx] = (float)mDistFnc(pixels[rIdx], pixels[cIdx]);
+			dPtr[cIdx] = (float)mDistFnc(pixels[rIdx].data(), pixels[cIdx].data());
 			dists.ptr<float>(cIdx)[rIdx] = dPtr[cIdx];	// reflect
 		}
 	}

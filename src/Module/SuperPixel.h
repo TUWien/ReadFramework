@@ -57,7 +57,6 @@
 namespace rdf {
 
 // read defines
-class PixelGraph;
 
 class DllCoreExport SuperPixelConfig : public ModuleConfig {
 
@@ -236,35 +235,6 @@ private:
 		cv::Mat& orHist,
 		float& sparsity) const;
 
-};
-
-class DllCoreExport GraphCutOrientation : public Module {
-
-public:
-	GraphCutOrientation(const PixelSet& set);
-
-	bool isEmpty() const override;
-	bool compute() override;
-
-	//QString toString() const override;
-	//QSharedPointer<LocalOrientationConfig> config() const;
-
-	// results - available after compute() is called
-	PixelSet set() const;
-
-	cv::Mat draw(const cv::Mat& img) const;
-
-private:
-
-	// input/output
-	PixelSet mSet;
-	double mScaleFactor = 1000.0;	// TODO: think about that
-
-	bool checkInput() const override;
-
-	void graphCut(const PixelGraph& graph);
-	cv::Mat costs(int numLabels) const;
-	cv::Mat orientationDistMatrix(int numLabels) const;
 };
 
 };

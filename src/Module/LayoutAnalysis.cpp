@@ -35,6 +35,7 @@
 #include "Image.h"
 
 #include "Utils.h"
+#include "GraphCut.h"
 #include "SuperPixel.h"
 #include "TextLineSegmentation.h"
 #include "Elements.h"
