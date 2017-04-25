@@ -48,13 +48,42 @@
 
 namespace rdf {
 
+// GraphCutConfig --------------------------------------------------------------------
+GraphCutConfig::GraphCutConfig() : ModuleConfig("Graph Cut") {
+}
+
+double GraphCutConfig::scaleFactor() const {
+	return mScaleFactor;
+}
+
+int GraphCutConfig::numIter() const {
+	return mGcIter;
+}
+
+void GraphCutConfig::load(const QSettings & settings) {
+
+	mGcIter = settings.value("numIter", mGcIter).toInt();
+	mScaleFactor = settings.value("scaleFactor", mScaleFactor).toDouble();
+}
+
+void GraphCutConfig::save(QSettings & settings) const {
+	settings.setValue("numIter", mGcIter);
+	settings.setValue("scaleFactor", mScaleFactor);
+}
+
 // GraphCutPixel --------------------------------------------------------------------
 GraphCutPixel::GraphCutPixel(const PixelSet & set) : mSet(set) {
 	mWeightFnc = PixelDistance::orientationWeighted;
+
+	mConfig = QSharedPointer<GraphCutConfig>::create();
 }
 
 bool GraphCutPixel::isEmpty() const {
 	return mSet.isEmpty();
+}
+
+QSharedPointer<GraphCutConfig> GraphCutPixel::config() const {
+	return qSharedPointerCast<GraphCutConfig>(mConfig);
 }
 
 PixelSet GraphCutPixel::set() const {
@@ -94,14 +123,14 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 
 			// compute weight
 			double rawWeight = mWeightFnc(pe.data());
-			int w = qRound((1.0 - rawWeight) * mScaleFactor);
+			int w = qRound((1.0 - rawWeight) * config()->scaleFactor());
 
 			gc->setNeighbors(idx, sVtxIdx, w);
 		}
 	}
 
 	// run the expansion-move
-	gc->expansion(mGcIter);
+	gc->expansion(config()->numIter());
 
 	return gc;
 }
@@ -159,7 +188,7 @@ cv::Mat GraphCutOrientation::costs(int numLabels) const {
 		assert(ps);
 
 		cv::Mat cData = ps->data(PixelStats::combined_idx);
-		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);	// TODO: check scaling
+		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());	// TODO: check scaling
 	}
 
 	return data;
@@ -227,14 +256,17 @@ bool GraphCutTextLine::compute() {
 
 	Timer dt;
 
-	int nLabels = 1;
 	DelauneyPixelConnector dpc;
 
 	PixelGraph graph(mSet);
 	graph.connect(dpc);
 	auto gc = graphCut(graph);
 
+	int ntl = mTextLines.size();
+
 	if (gc) {
+
+		// convert gc labels to text lines
 		QMap<int, PixelSet> tlMap;
 		auto pixels = mSet.pixels();
 
@@ -256,6 +288,7 @@ bool GraphCutTextLine::compute() {
 	}
 
 	mInfo << "computed in" << dt;
+	qDebug() << mTextLines.size() << "/" << ntl << "textlines after graph-cut";
 
 	return true;
 }
@@ -331,7 +364,7 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 			cPtr[tIdx] = qRound(d.length() * (a + 0.01));	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
 		}
 
-		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);
+		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());
 	}
 
 	return data;

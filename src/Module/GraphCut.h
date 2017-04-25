@@ -55,6 +55,22 @@ namespace rdf {
 // read defines
 class PixelGraph;
 
+class DllCoreExport GraphCutConfig : public ModuleConfig {
+
+public:
+	GraphCutConfig();
+
+	double scaleFactor() const;
+	int numIter() const;
+
+protected:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	double mScaleFactor = 1000.0;	// scale factor to use (faster) int instead of double
+	int mGcIter = 2;				// # iterations of graph-cut (expansion)
+};
+
 /// <summary>
 /// The base class for all graphcuts operating on pixels.
 /// </summary>
@@ -66,6 +82,8 @@ public:
 
 	virtual bool isEmpty() const override;
 
+	QSharedPointer<GraphCutConfig> config() const;
+
 	// results - available after compute() is called
 	PixelSet set() const;
 
@@ -74,8 +92,6 @@ protected:
 	// input/output
 	PixelSet mSet;
 	PixelDistance::EdgeWeightFunction mWeightFnc;
-	double mScaleFactor = 1000.0;	// TODO: think about that
-	int mGcIter = 2;				// # iterations of graph-cut (expansion)
 
 	/// <summary>
 	/// Performs the graphcut.
@@ -148,6 +164,5 @@ private:
 	cv::Mat labelDistMatrix(int numLabels) const override;
 	int numLabels() const override;
 };
-
 
 };
