@@ -486,45 +486,27 @@ bool PixelEdge::isNull() const {
 	return mIsNull;
 }
 
-double PixelEdge::edgeWeight() const {
+void PixelEdge::setEdgeWeightFunction(PixelDistance::EdgeWeightFunction & fnc) {
+	mWeightFnc = fnc;
+}
 
-	if (!mFirst || !mSecond)
-		return 0.0;
-
-
-	double beta = 1.0;
-
-	// this edge weight is needed for the GraphCut
-	if (mFirst->stats() && mSecond->stats()) {
+double PixelEdge::edgeWeightConst() const {
 	
-		double sp = mFirst->stats()->lineSpacing();
-		double sq = mSecond->stats()->lineSpacing();
-		double nl = (beta * edge().squaredLength()) / (sp * sp + sq * sq);
-		double ew = 1.0-exp(-nl);
+	if (mEdgeWeight != DBL_MAX)
+		return mEdgeWeight;
+	
+	return mWeightFnc(this);
+}
 
-		if (ew < 0.0 || ew > 1.0) {
-			qDebug() << "illegal edge weight: " << ew;
-		}
-		//else
-		//	qDebug() << "weight: " << nl;
-
-		// TODO: add mu(fp,fq) according to koo's indices
-		return ew;
-	}
-
-	qDebug() << "no stats when computing the scaled edges...";
-
-	return 0.0;
-
-	//// get minimum scale
-	//double ms = qMin(mFirst->ellipse().majorAxis(), mSecond->ellipse().majorAxis());
-	//assert(ms > 0);
-
-	//return edge().length() / ms;
+double PixelEdge::edgeWeight() {
+	
+	if (mEdgeWeight == DBL_MAX)
+		mEdgeWeight = edgeWeightConst();	// cache it
+	
+	return mEdgeWeight;
 }
 
 Line PixelEdge::edge() const {
-
 	return mEdge;
 }
 
@@ -545,15 +527,11 @@ void PixelEdge::scale(double s) {
 void PixelEdge::draw(QPainter & p) const {
 
 	Line e = edge();
-	//e.setThickness(2);
 	e.draw(p);
-
-	//first()->draw(p, 1, Pixel::draw_center);
-	//second()->draw(p, 1, Pixel::draw_center);
 }
 
 bool PixelEdge::lessThan(const PixelEdge & e) const {
-	return edgeWeight() < e.edgeWeight();
+	return edgeWeightConst() < e.edgeWeightConst();
 }
 
 // LineEdge --------------------------------------------------------------------
@@ -561,7 +539,7 @@ LineEdge::LineEdge() {
 }
 
 LineEdge::LineEdge(const PixelEdge & pe) : PixelEdge(pe) {
-	mStatsWeight = calcWeight();
+	mEdgeWeight = calcWeight();
 }
 
 LineEdge::LineEdge(
@@ -570,15 +548,15 @@ LineEdge::LineEdge(
 	const QString & id) : 
 	PixelEdge(first, second, id) {
 
-	mStatsWeight = calcWeight();
+	mEdgeWeight = calcWeight();
 }
 
 bool operator<(const QSharedPointer<LineEdge>& le1, const QSharedPointer<LineEdge>& le2) {
 	return le1->lessThan(*le2);
 }
 
-double LineEdge::edgeWeight() const {
-	return mStatsWeight;
+double LineEdge::edgeWeightConst() const {
+	return mEdgeWeight;
 }
 
 double LineEdge::calcWeight() const {

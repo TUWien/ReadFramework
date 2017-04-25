@@ -36,6 +36,7 @@
 #include "BaseImageElement.h"
 #include "Utils.h"
 #include "PixelLabel.h"
+#include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
@@ -250,21 +251,26 @@ public:
 	friend DllCoreExport bool operator<(const PixelEdge& pe1, const PixelEdge& pe2);
 	friend DllCoreExport bool operator<(const QSharedPointer<PixelEdge>& pe1, const QSharedPointer<PixelEdge>& pe2);
 
+	virtual bool lessThan(const PixelEdge& e) const;
+
 	bool isNull() const;
 
-	virtual double edgeWeight() const;
+	void setEdgeWeightFunction(PixelDistance::EdgeWeightFunction& fnc);
+	virtual double edgeWeightConst() const;
+	virtual double edgeWeight();
 	Line edge() const;
-	void draw(QPainter& p) const;
-	virtual bool lessThan(const PixelEdge& e) const;
 
 	QSharedPointer<Pixel> first() const;
 	QSharedPointer<Pixel> second() const;
 
 	void scale(double s);
+	void draw(QPainter& p) const;
 
 protected:
 	bool mIsNull = true;
+	double mEdgeWeight = DBL_MAX;
 
+	PixelDistance::EdgeWeightFunction mWeightFnc = PixelDistance::orientationWeighted;
 	QSharedPointer<Pixel> mFirst;
 	QSharedPointer<Pixel> mSecond;
 	Line mEdge;
@@ -282,10 +288,10 @@ public:
 		const QString& id = QString());
 	friend DllCoreExport bool operator<(const QSharedPointer<LineEdge>& le1, const QSharedPointer<LineEdge>& le2);
 
-	virtual double edgeWeight() const override;
+	virtual double edgeWeightConst() const override;
 
 protected:
-	double mStatsWeight = 0.0;
+	double mEdgeWeight = 0.0;
 
 	double statsWeight(const QSharedPointer<Pixel>& pixel) const;
 	double calcWeight() const;
