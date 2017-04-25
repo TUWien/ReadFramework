@@ -294,11 +294,11 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 
 	for (auto tb : mTextBlockSet.textBlocks()) {
 		
-		QVector<QSharedPointer<PixelSet> > s = tb->pixelSet().splitScales();
+		QVector<PixelSet> s = tb->pixelSet().splitScales();
 		for (int idx = s.size()-1; idx >= 0; idx--) {
 			p.setPen(ColorManager::getColor());
 			p.setOpacity(0.3);
-			s[idx]->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats | Pixel::draw_ellipse));
+			s[idx].draw(p, (PixelSet::DrawFlag)(PixelSet::draw_pixels), (Pixel::DrawFlag)(Pixel::draw_stats | Pixel::draw_ellipse));
 			//qDebug() << "scale" << idx << ":" << *s[idx];
 
 		}

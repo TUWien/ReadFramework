@@ -461,9 +461,9 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 	return connector->connect(superPixels);
 }
 
-QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges) {
+QVector<PixelSet> PixelSet::fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges) {
 
-	QVector<QSharedPointer<PixelSet> > sets;
+	QVector<PixelSet> sets;
 
 	for (const QSharedPointer<PixelEdge> e : edges) {
 
@@ -472,9 +472,9 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 
 		for (int idx = 0; idx < sets.size(); idx++) {
 
-			if (sets[idx]->contains(e->first()))
+			if (sets[idx].contains(e->first()))
 				fIdx = idx;
-			if (sets[idx]->contains(e->second()))
+			if (sets[idx].contains(e->second()))
 				sIdx = idx;
 
 			if (fIdx != -1 && sIdx != -1)
@@ -483,22 +483,22 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 
 		// none is contained in a set
 		if (fIdx == -1 && sIdx == -1) {
-			QSharedPointer<PixelSet> ps(new PixelSet());
-			ps->add(e->first());
-			ps->add(e->second());
+			PixelSet ps;
+			ps.add(e->first());
+			ps.add(e->second());
 			sets << ps;
 		}
 		// add first to the set of second
 		else if (fIdx == -1) {
-			sets[sIdx]->add(e->first());
+			sets[sIdx].add(e->first());
 		}
 		// add second to the set of first
 		else if (sIdx == -1) {
-			sets[fIdx]->add(e->second());
+			sets[fIdx].add(e->second());
 		}
 		// two different idx? - merge the sets
 		else if (fIdx != sIdx) {
-			sets[fIdx]->append(sets[sIdx]->pixels());
+			sets[fIdx].append(sets[sIdx].pixels());
 			sets.remove(sIdx);
 		}
 		// else : nothing to do - they are both already added
@@ -508,26 +508,39 @@ QVector<QSharedPointer<PixelSet> > PixelSet::fromEdges(const QVector<QSharedPoin
 	return sets;
 }
 
-QVector<QSharedPointer<PixelSet> > PixelSet::splitScales() const {
+/// <summary>
+/// Merges multiple pixel sets to one set.
+/// </summary>
+/// <param name="sets">The sets.</param>
+/// <returns></returns>
+PixelSet PixelSet::merge(const QVector<PixelSet>& sets) {
+	
+	PixelSet set;
+
+	for (const PixelSet& ps : sets)
+		set.append(ps.pixels());
+
+	return set;
+}
+
+QVector<PixelSet> PixelSet::splitScales() const {
 
 	int numScales = Config::instance().global().numScales;
 
 	// init sets
-	QVector<QSharedPointer<PixelSet> > rawSets;
+	QVector<PixelSet> rawSets;
 	rawSets.resize(numScales);
-	for (int idx = 0; idx < numScales; idx++)
-		rawSets[idx] = QSharedPointer<PixelSet>(new PixelSet());
 
 	for (const auto p : mSet) {
 		
 		assert(p->pyramidLevel() >= 0 && p->pyramidLevel() < rawSets.size());
-		rawSets[p->pyramidLevel()]->add(p);
+		rawSets[p->pyramidLevel()].add(p);
 	}
 
 	// remove empty sets
-	QVector<QSharedPointer<PixelSet> > sets;
+	QVector<PixelSet> sets;
 	for (const auto ps : rawSets) {
-		if (!ps->isEmpty())
+		if (!ps.isEmpty())
 			sets << ps;
 	}
 

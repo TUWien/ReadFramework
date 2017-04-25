@@ -177,20 +177,20 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 
 	TabStopPixelConnector connector;
 	QVector<QSharedPointer<PixelEdge> > edges = connector.connect(pixel);
-	QVector<QSharedPointer<PixelSet> > ps = PixelSet::fromEdges(edges);
+	QVector<PixelSet> ps = PixelSet::fromEdges(edges);
 
 	QVector<QSharedPointer<TabStopCluster> > tabStops;
 	mDebug << ps.size() << "initial tab stop sets";
 
-	for (const QSharedPointer<PixelSet>& set : ps) {
+	for (const PixelSet& set : ps) {
 
-		if (set->pixels().size() >= minClusterSize) {
+		if (set.pixels().size() >= minClusterSize) {
 		
 			double medAngle = medianOrientation(set);
 			updateTabStopCandidates(set, medAngle);		// removes 'illegal' candidates
 
 			// create tab stop line
-			Line line = set->fitLine(medAngle);
+			Line line = set.fitLine(medAngle);
 			//line.setThickness(4);
 
 			// // TODO: the idea here is simple: tabstops must be orthogonal to text lines - this is not true in general
@@ -204,7 +204,8 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 			//// we only find 'orthogonal' tab lines - shouldn't we remove this constraint?
 			//if (abs(cosTheta) < 0.5) {
 				
-				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(set));
+				QSharedPointer<PixelSet> ps(new PixelSet(set));
+				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(ps));
 				tabStop->setLine(line);
 				tabStop->setAngle(medAngle);
 				tabStops << tabStop;
@@ -220,11 +221,11 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 	return tabStops;
 }
 
-double TabStopAnalysis::medianOrientation(const QSharedPointer<PixelSet>& set) const {
+double TabStopAnalysis::medianOrientation(const PixelSet& set) const {
 
 
 	QList<double> angles;
-	for (const QSharedPointer<Pixel>& px : set->pixels()) {
+	for (const QSharedPointer<Pixel>& px : set.pixels()) {
 		
 		if (!px->stats()) {
 			mWarning << "stats is NULL where it should not be...";
@@ -237,9 +238,9 @@ double TabStopAnalysis::medianOrientation(const QSharedPointer<PixelSet>& set) c
 	return Algorithms::statMoment(angles, 0.5);
 }
 
-void TabStopAnalysis::updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type & newType) const {
+void TabStopAnalysis::updateTabStopCandidates(const PixelSet& set, double orientation, const PixelTabStop::Type & newType) const {
 
-	for (const QSharedPointer<Pixel>& px : set->pixels()) {
+	for (const QSharedPointer<Pixel>& px : set.pixels()) {
 
 		if (!px->stats())
 			continue;
@@ -249,7 +250,7 @@ void TabStopAnalysis::updateTabStopCandidates(const QSharedPointer<PixelSet>& se
 
 		if (d > 0.1) {
 			px->setTabStop(PixelTabStop(newType));
-			set->remove(px);
+			//set.remove(px); -> breaks constness of set?!
 		}
 	}
 }

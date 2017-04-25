@@ -85,7 +85,7 @@ public:
 
 	void addSeparatorLines(const QVector<Line>& lines);
 	
-	QVector<QSharedPointer<PixelSet> > sets() const;
+	QVector<PixelSet> sets() const;
 	QSharedPointer<SimpleTextLineConfig> config() const;
 
 	// functions applied to the results
@@ -93,15 +93,13 @@ public:
 
 private:
 	PixelSet mSet;
-	QVector<QSharedPointer<PixelSet> > mTextLines;
+	QVector<PixelSet> mTextLines;
 	QVector<Line> mStopLines;
 
 	// debug - delete!
 	QVector<QSharedPointer<PixelEdge> > mEdges;
 
 	bool checkInput() const override;
-
-	QVector<QSharedPointer<TextLineSet> > clusterTextLines(const PixelGraph& graph, QVector<QSharedPointer<PixelEdge> >* removedEdges = 0) const;
 };
 
 

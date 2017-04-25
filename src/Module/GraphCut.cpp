@@ -67,18 +67,13 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 		return QSharedPointer<GCoptimizationGeneralGraph>();
 	}
 
-	int gcIter = 2;	// # iterations of graph-cut (expansion)
+	int nLabels = numLabels();
 
-					// stats must be computed already
 	QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
-	assert(pixel[0]->stats());	// local orientation must be computed first
-
-								// the statistics columns == the number of possible labels
-	int nLabels = graph.set().pixels()[0]->stats()->data().cols;
 
 	// get costs and smoothness term
-	cv::Mat c = costs(nLabels);					 // SetSize x #labels
-	cv::Mat sm = labelDistMatrix(nLabels); // #labels x #labels
+	cv::Mat c = costs(nLabels);				// Set size x #labels
+	cv::Mat sm = labelDistMatrix(nLabels);	// #labels x #labels
 
 	// init the graph
 	QSharedPointer<GCoptimizationGeneralGraph> gc(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
@@ -106,9 +101,13 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 	}
 
 	// run the expansion-move
-	gc->expansion(gcIter);
+	gc->expansion(mGcIter);
 
 	return gc;
+}
+
+int GraphCutPixel::numLabels() const {
+	return 0;
 }
 
 
@@ -129,8 +128,11 @@ bool GraphCutOrientation::compute() {
 
 	DelauneyPixelConnector dpc;
 
+	// create graph
 	PixelGraph graph(mSet);
 	graph.connect(dpc);
+
+	// perform graphcut
 	auto gc = graphCut(graph);
 
 	if (gc) {
@@ -182,6 +184,15 @@ cv::Mat GraphCutOrientation::labelDistMatrix(int numLabels) const {
 	return orDist;
 }
 
+/// <summary>
+/// Returns the numbers of labels (states).
+/// The statistics' columns == the number of possible labels
+/// </summary>
+/// <returns></returns>
+int GraphCutOrientation::numLabels() const {
+	return mSet.isEmpty() ? 0 : mSet.pixels()[0]->stats()->data().cols;
+}
+
 cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 
 	// debug - remove
@@ -202,6 +213,152 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 	}
 
 	return Image::qPixmap2Mat(pm);
+}
+
+// GraphCutTextLine --------------------------------------------------------------------
+GraphCutTextLine::GraphCutTextLine(const QVector<PixelSet>& sets) : GraphCutPixel(PixelSet::merge(sets)) {
+	mTextLines = sets;
+}
+
+bool GraphCutTextLine::compute() {
+	
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	int nLabels = 1;
+	DelauneyPixelConnector dpc;
+
+	PixelGraph graph(mSet);
+	graph.connect(dpc);
+	auto gc = graphCut(graph);
+
+	if (gc) {
+		QMap<int, PixelSet> tlMap;
+		auto pixels = mSet.pixels();
+
+		for (int idx = 0; idx < pixels.size(); idx++) {
+
+			int cl = gc->whatLabel(idx);
+
+			// append pixel to text line
+			if (tlMap.contains(cl))
+				tlMap[cl].add(pixels[idx]);
+			else {
+				PixelSet ps;
+				ps.add(pixels[idx]);
+				tlMap.insert(cl, ps);
+			}
+		}
+
+		mTextLines = tlMap.values().toVector();
+	}
+
+	mInfo << "computed in" << dt;
+
+	return true;
+}
+
+cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
+	
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter p(&pm);
+
+	// show the graph
+	DelauneyPixelConnector dpc;
+	PixelGraph graph(mSet);
+	graph.connect(dpc);
+
+	p.setPen(ColorManager::darkGray(0.3));
+	graph.draw(p);
+
+	p.setOpacity(0.5);
+
+	for (auto tl : mTextLines) {
+
+		p.setPen(ColorManager::getColor());
+		tl.draw(p, PixelSet::draw_poly);
+	}
+
+	p.setOpacity(1.0);
+	p.setPen(ColorManager::pink());
+
+	for (auto tl : mTextLines) {
+		tl.fitLine().draw(p);
+	}
+
+	return Image::qPixmap2Mat(pm);
+}
+
+QVector<PixelSet> GraphCutTextLine::textLines() {
+	return mTextLines;
+}
+
+bool GraphCutTextLine::checkInput() const {
+	return !isEmpty();
+}
+
+cv::Mat GraphCutTextLine::costs(int numLabels) const {
+
+	// fill costs
+	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+
+	// cache text line centers
+	QVector<Vector2D> tCenters;
+	tCenters.reserve(mTextLines.size());
+	for (const PixelSet& s : mTextLines) {
+		tCenters << s.center();
+	}
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		cv::Mat cData(1, numLabels, CV_32SC1);
+		int* cPtr = cData.ptr<int>();
+
+		auto px = mSet[idx];
+
+		for (int tIdx = 0; tIdx < mTextLines.size(); tIdx++) {
+
+			Vector2D d(tCenters[tIdx] - px->center());
+
+			// local orientation weighted
+			double a = 1.0;
+			if (px->stats())
+				a = std::abs(d.theta(mSet[idx]->stats()->orVec()));
+
+			cPtr[tIdx] = qRound(d.length() * (a + 0.01));	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+		}
+
+		cData.convertTo(data.row(idx), CV_32SC1, mScaleFactor);
+	}
+
+	return data;
+}
+
+cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
+
+	// TODO: use label distances that respect the text line's centers
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+
+		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+
+			// set smoothness cost for orientations
+			int diff = abs(rIdx - cIdx);
+			sPtr[cIdx] = qMin(diff, numLabels - diff);
+		}
+	}
+
+	return orDist;
+}
+
+int GraphCutTextLine::numLabels() const {
+	return mTextLines.size();
 }
 
 }

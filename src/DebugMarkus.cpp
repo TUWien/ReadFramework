@@ -272,8 +272,6 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 
-	QVector<QSharedPointer<TextLineSet> > textLines;
-
 	// find text lines
 	rdf::SimpleTextLineSegmentation tlM(pixels);
 	//textLines.addSeparatorLines(stopLines);
@@ -283,6 +281,13 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 	tlM.scale(1.0 / scale);
+
+	rdf::GraphCutTextLine gctlM(tlM.sets());
+
+	if (!gctlM.compute())
+		qWarning() << "could not compute text line graph-cut";
+
+
 	// end computing --------------------------------------------------------------------
 
 	// drawing --------------------------------------------------------------------
@@ -293,12 +298,19 @@ void LayoutTest::layoutToXmlDebug() const {
 	cv::Mat dImg = img.clone();
 	dImg = tlM.draw(dImg);
 
+	cv::Mat gcImg = img.clone();
+	gcImg = gctlM.draw(gcImg);
+
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
 	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-simple-textlines");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
+
+	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-gc-textlines");
+	rdf::Image::save(gcImg, dstPath);
+	qDebug() << "orientation image saved: " << dstPath;
 
 	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-local-orientation");
 	rdf::Image::save(rImg, dstPath);

@@ -114,8 +114,8 @@ private:
 	// find tabs
 	QVector<QSharedPointer<Pixel> > findTabStopCandidates(const QSharedPointer<PixelGraph>& graph) const;
 	QVector<QSharedPointer<TabStopCluster> > findTabs(const QVector<QSharedPointer<Pixel> >& pixel) const;
-	double medianOrientation(const QSharedPointer<PixelSet>& set) const;
-	void updateTabStopCandidates(const QSharedPointer<PixelSet>& set, double orientation, const PixelTabStop::Type& newType = PixelTabStop::type_none) const;
+	double medianOrientation(const PixelSet& set) const;
+	void updateTabStopCandidates(const PixelSet& set, double orientation, const PixelTabStop::Type& newType = PixelTabStop::type_none) const;
 };
 
 };

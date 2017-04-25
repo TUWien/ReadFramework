@@ -214,8 +214,9 @@ public:
 		const Pixel::DrawFlag& pixelOptions = (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_label_colors)) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
-	static QVector<QSharedPointer<PixelSet> > fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
-	QVector<QSharedPointer<PixelSet> > splitScales() const;
+	static QVector<PixelSet> fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
+	static PixelSet merge(const QVector<PixelSet>& sets);
+	QVector<PixelSet> splitScales() const;
 
 	virtual QString toString() const override;
 

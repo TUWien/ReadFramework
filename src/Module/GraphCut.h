@@ -75,10 +75,38 @@ protected:
 	PixelSet mSet;
 	PixelDistance::EdgeWeightFunction mWeightFnc;
 	double mScaleFactor = 1000.0;	// TODO: think about that
+	int mGcIter = 2;				// # iterations of graph-cut (expansion)
 
+	/// <summary>
+	/// Performs the graphcut.
+	/// The graphcut globally optimizes the pixel states
+	/// w.r.t. the costs given
+	/// </summary>
+	/// <param name="graph">The pixel graph.</param>
+	/// <returns></returns>
 	QSharedPointer<GCoptimizationGeneralGraph> graphCut(const PixelGraph& graph) const;
+	
+	/// <summary>
+	/// Returns a matrix with the costs for each state.
+	/// The matrix must be mSet.size() x numLabels 32SC1.
+	/// It contains cost values for each element given a state.
+	/// Normalized costs are usually multiplied by mScaleFactor
+	/// to fit the data format.
+	/// </summary>
+	/// <param name="numLabels">The number labels.</param>
+	/// <returns></returns>
 	virtual cv::Mat costs(int numLabels) const = 0;
+
+	/// <summary>
+	/// Indicates the costs to move from one label to another.
+	/// High values indicate high costs.
+	/// Usually this matrix is symmetric.
+	/// </summary>
+	/// <param name="numLabels">The number labels.</param>
+	/// <returns>A numLabels x numLabels 32SC1 matrix.</returns>
 	virtual cv::Mat labelDistMatrix(int numLabels) const = 0;
+
+	virtual int numLabels() const = 0;
 };
 
 class DllCoreExport GraphCutOrientation : public GraphCutPixel {
@@ -96,6 +124,29 @@ private:
 
 	cv::Mat costs(int numLabels) const override;
 	cv::Mat labelDistMatrix(int numLabels) const override;
+	int numLabels() const override;
+};
+
+class DllCoreExport GraphCutTextLine : public GraphCutPixel {
+
+public:
+	GraphCutTextLine(const QVector<PixelSet>& sets);
+
+	virtual bool compute() override;
+
+	cv::Mat draw(const cv::Mat& img) const;
+
+	QVector<PixelSet> textLines();
+
+private:
+
+	QVector<PixelSet> mTextLines;
+
+	bool checkInput() const override;
+
+	cv::Mat costs(int numLabels) const override;
+	cv::Mat labelDistMatrix(int numLabels) const override;
+	int numLabels() const override;
 };
 
 

@@ -678,7 +678,7 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
 	for (auto ps : mTextLines) {
 
 		p.setPen(ColorManager::getColor());
-		ps->draw(p, PixelSet::draw_poly);
+		ps.draw(p, PixelSet::draw_poly);
 	}
 
 	return Image::qPixmap2Mat(pm);
@@ -692,7 +692,7 @@ void SimpleTextLineSegmentation::addSeparatorLines(const QVector<Line>& lines) {
 	mStopLines = lines;
 }
 
-QVector<QSharedPointer<PixelSet>> SimpleTextLineSegmentation::sets() const {
+QVector<PixelSet> SimpleTextLineSegmentation::sets() const {
 	return mTextLines;
 }
 
@@ -702,8 +702,8 @@ QSharedPointer<SimpleTextLineConfig> SimpleTextLineSegmentation::config() const 
 
 void SimpleTextLineSegmentation::scale(double s) {
 
-	for (auto tl : mTextLines)
-		tl->scale(s);
+	for (PixelSet& tl : mTextLines)
+		tl.scale(s);
 
 	for (auto e : mEdges)
 		e->scale(s);
@@ -712,10 +712,6 @@ void SimpleTextLineSegmentation::scale(double s) {
 bool SimpleTextLineSegmentation::checkInput() const {
 	
 	return !mSet.isEmpty();
-}
-
-QVector<QSharedPointer<TextLineSet>> SimpleTextLineSegmentation::clusterTextLines(const PixelGraph & graph, QVector<QSharedPointer<PixelEdge>>* removedEdges) const {
-	return QVector<QSharedPointer<TextLineSet>>();
 }
 
 }
