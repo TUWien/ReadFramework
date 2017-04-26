@@ -75,6 +75,7 @@ void GraphCutConfig::save(QSettings & settings) const {
 // GraphCutPixel --------------------------------------------------------------------
 GraphCutPixel::GraphCutPixel(const PixelSet & set) : mSet(set) {
 	mWeightFnc = PixelDistance::orientationWeighted;
+	mConnector = QSharedPointer<DelauneyPixelConnector>::create();
 
 	mConfig = QSharedPointer<GraphCutConfig>::create();
 }
@@ -109,7 +110,7 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 	QSharedPointer<GCoptimizationGeneralGraph> gc(new GCoptimizationGeneralGraph(pixel.size(), nLabels));
 	gc->setDataCost(c.ptr<int>());
 	gc->setSmoothCost(sm.ptr<int>());
-
+	
 	// create neighbors
 	const QVector<QSharedPointer<PixelEdge> >& edges = graph.edges();
 	for (int idx = 0; idx < pixel.size(); idx++) {
@@ -132,7 +133,10 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 
 	// run the expansion-move
 	try {
-		gc->expansion(config()->numIter());
+		//gc->expansion(config()->numIter());
+		qDebug() << "energy before:" << gc->compute_energy();
+		gc->swap(config()->numIter());
+		qDebug() << "energy after:" << gc->compute_energy();
 	}
 	catch (GCException gce) {
 
@@ -164,11 +168,9 @@ bool GraphCutOrientation::compute() {
 
 	Timer dt;
 
-	DelauneyPixelConnector dpc;
-
 	// create graph
 	PixelGraph graph(mSet);
-	graph.connect(dpc);
+	graph.connect(*mConnector);
 
 	// perform graphcut
 	auto gc = graphCut(graph);
@@ -239,9 +241,8 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 	// show the graph
-	DelauneyPixelConnector dpc;
 	PixelGraph graph(mSet);
-	graph.connect(dpc);
+	graph.connect(*mConnector);
 
 	p.setPen(ColorManager::darkGray(0.3));
 	graph.draw(p);
@@ -256,6 +257,8 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 
 // GraphCutTextLine --------------------------------------------------------------------
 GraphCutTextLine::GraphCutTextLine(const QVector<PixelSet>& sets) : GraphCutPixel(PixelSet::merge(sets)) {
+	mWeightFnc = PixelDistance::euclidean;
+	
 	mTextLines = sets;
 }
 
@@ -266,10 +269,15 @@ bool GraphCutTextLine::compute() {
 
 	Timer dt;
 
-	DelauneyPixelConnector dpc;
+	// remove small text lines
+	QVector<PixelSet> tlf;
+	for (auto tl : mTextLines)
+		if (tl.size() > 5)
+			tlf << tl;
+	mTextLines = tlf;
 
 	PixelGraph graph(mSet);
-	graph.connect(dpc);
+	graph.connect(*mConnector);
 	auto gc = graphCut(graph);
 
 	int ntl = mTextLines.size();
@@ -310,9 +318,8 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 	QPainter p(&pm);
 
 	// show the graph
-	DelauneyPixelConnector dpc;
 	PixelGraph graph(mSet);
-	graph.connect(dpc);
+	graph.connect(*mConnector);
 
 	p.setPen(ColorManager::darkGray(0.3));
 	graph.draw(p);
@@ -321,7 +328,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 
 	for (auto tl : mTextLines) {
 
-		p.setPen(ColorManager::getColor());
+		p.setPen(ColorManager::darkGray());
 		tl.draw(p, PixelSet::draw_poly);
 	}
 
@@ -350,7 +357,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 	////tl.fitEllipse().draw(p, 0.1);
 	//tl.draw(p, PixelSet::draw_poly);
 
-	//saveDistsDebug("C:/temp/lines-a/line.jpg", img);
+	//saveDistsDebug("C:/temp/line-dists/line.jpg", img);
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -366,7 +373,7 @@ bool GraphCutTextLine::checkInput() const {
 cv::Mat GraphCutTextLine::costs(int numLabels) const {
 
 	// fill costs
-	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+	cv::Mat data(mSet.size(), numLabels, CV_64FC1);
 
 	//  -------------------------------------------------------------------- compute mahalnobis dists
 	// convert centers
@@ -375,12 +382,20 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 	for (int idx = 0; idx < mTextLines.size(); idx++) {
 		cv::Mat md = mahalanobisDists(mTextLines[idx], centers);
 		//cv::normalize(md, md, 1, 0, cv::NORM_MINMAX);
-		md *= 20000;
+		//md *= 10000;
+		//cv::exp(md, md);
+		//md -= 1;
 		md.copyTo(data.col(idx));
 	}
 
-	//  -------------------------------------------------------------------- compute euclidean dists
-	// convert centers
+	//cv::normalize(data, data, 1.0, 0.0, cv::NORM_MINMAX);
+	//data = IP::invert(data);
+
+	//cv::normalize(data, data, 300000.0, 0.0, cv::NORM_MINMAX);
+	//data *= config()->scaleFactor() * 100;
+
+	////  -------------------------------------------------------------------- compute euclidean dists
+	//// convert centers
 	//cv::Mat centers = pixelSetCentersToMat(mSet);
 
 	//for (int idx = 0; idx < mTextLines.size(); idx++) {
@@ -389,6 +404,8 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 	//	//cv::normalize(md, md, 1, 0, cv::NORM_MINMAX);
 	//	md.copyTo(data.col(idx));
 	//}
+
+	//cv::normalize(data, data, 300000.0, 0.0, cv::NORM_MINMAX);
 
 	//cv::Mat s = data.clone();
 	////s.convertTo(s, CV_32FC1);
@@ -439,68 +456,68 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 
 cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 
-	//cv::Mat centers(mTextLines.size(), 2, CV_64FC1);
-	//double* cp = centers.ptr<double>();
+	cv::Mat labelDist(numLabels, numLabels, CV_32FC1);
 
-	//for (int idx = 0; idx < mTextLines.size(); idx++) {
+	//// labels using bhattacharyya distance --------------------------------------------------------------------
 
-	//	*cp = mTextLines[idx].center().x(); cp++;
-	//	*cp = mTextLines[idx].center().y(); cp++;
+	//for (int rIdx = 0; rIdx < numLabels; rIdx++) {
+
+	//	float* lp = labelDist.ptr<float>(rIdx);
+	//	Pixel px(mTextLines[rIdx].fitEllipse(), mTextLines[rIdx].boundingBox(), mTextLines[rIdx].id());
+
+	//	for (int cIdx = 0; cIdx < numLabels; cIdx++) {
+
+	//		Pixel cpx(mTextLines[cIdx].fitEllipse(), mTextLines[cIdx].boundingBox(), mTextLines[cIdx].id());
+	//		lp[cIdx] = PixelDistance::bhattacharyya(&px, &cpx);
+	//	}
 	//}
 
-	cv::Mat labelDist(numLabels, numLabels, CV_32SC1);
-
+	double mthr = 5;
+	
 	for (int rIdx = 0; rIdx < numLabels; rIdx++) {
 
-		int* lp = labelDist.ptr<int>(rIdx);
+		float* lp = labelDist.ptr<float>(rIdx);
+		cv::Mat icov = mTextLines[rIdx].fitEllipse().toCov();
+		icov = icov.mul(icov);	// square the covariance - to prefer 'horizontally' aligned text lines
+		cv::invert(icov, icov, cv::DECOMP_SVD);
 
 		for (int cIdx = 0; cIdx < numLabels; cIdx++) {
 
+			// compute the mahalnobis distance
 			Vector2D vec(mTextLines[rIdx].center() - mTextLines[cIdx].center());
-			lp[cIdx] = qRound(std::sqrt(vec.length()));
+			cv::Mat nm = vec.toMatCol();
+			nm = nm*icov*nm.t();
+
+			double d = /*std::sqrt*/(nm.at<double>(0, 0));
+
+			lp[cIdx] = d < mthr ? (float)d : mthr;
+
+			//Vector2D vec(mTextLines[rIdx].center() - mTextLines[cIdx].center());
+			//lp[cIdx] = (float)std::sqrt(vec.length());
+
+			//if (lp[cIdx] > mthr)
+			//	lp[cIdx] = mthr;
 		}
 	}
 
+	//cv::normalize(labelDist, labelDist, config()->scaleFactor(), 0.0, cv::NORM_MINMAX);
+	labelDist.convertTo(labelDist, CV_32SC1);
 
-	//cv::normalize(labelDist, labelDist, 0.0, numLabels*2, cv::NORM_MINMAX);
+	// make it a metric (symmetric)
+	int* lp = labelDist.ptr<int>();
 
+	for (int rIdx = 0; rIdx < numLabels; rIdx++) {
 
-	// mahalanobis --------------------------------------------------------------------
-	//for (int idx = 0; idx < mTextLines.size(); idx++) {
-	//	mahalanobisDists(mTextLines[idx], centers).copyTo(labelDist.col(idx));
-	//}
+		for (int cIdx = rIdx+1; cIdx < numLabels; cIdx++) {
+		
+			int* rl = lp + (rIdx * numLabels + cIdx);	// row label
+			int* cl = lp + (rIdx + cIdx * numLabels);	// col label
 
-
-	//int* lp = labelDist.ptr<int>();
-
-	//// make it a metric (symmetric)
-	//for (int rIdx = 0; rIdx < numLabels; rIdx++) {
-
-	//	for (int cIdx = rIdx+1; cIdx < numLabels; cIdx++) {
-	//	
-	//		int* rl = lp + (rIdx * numLabels + cIdx);	// row label
-	//		int* cl = lp + (rIdx + cIdx * numLabels);	// col label
-
-	//		int val = qMin(*rl, *cl);
-	//		*rl = val;
-	//		*cl = val;
-	//	}
-	//}
-	// mahalanobis --------------------------------------------------------------------
-
-	//qDebug().noquote() << Image::printImage(labelDist, "labelDist");
-
-	//for (int rIdx = 0; rIdx < labelDist.rows; rIdx++) {
-
-	//	unsigned int* sPtr = labelDist.ptr<unsigned int>(rIdx);
-
-	//	for (int cIdx = 0; cIdx < labelDist.cols; cIdx++) {
-
-	//		// set smoothness cost for orientations
-	//		int diff = abs(rIdx - cIdx);
-	//		sPtr[cIdx] = qMin(diff, numLabels - diff);
-	//	}
-	//}
+			int val = qMin(*rl, *cl);
+			*rl = val;
+			*cl = val;
+		}
+	}
 
 	Image::imageInfo(labelDist, "label costs");
 
@@ -514,12 +531,15 @@ int GraphCutTextLine::numLabels() const {
 
 cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& centers) const {
 	
+	double mthr = 150000;
+
 	cv::Mat dists(centers.rows, 1, CV_64FC1);
 	double* dp = dists.ptr<double>();
 
 	// get the textlines mean & cov
 	cv::Mat c = tl.center().toMatCol();
 	cv::Mat icov = tl.fitEllipse().toCov();
+	//icov = icov.mul(icov);
 	cv::invert(icov, icov, cv::DECOMP_SVD);
 
 	for (int idx = 0; idx < centers.rows; idx++) {
@@ -528,9 +548,8 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 		cv::Mat nm = centers.row(idx) - c;
 		nm = nm*icov*nm.t();
 
-		double d = nm.at<double>(0, 0);
-
-		dp[idx] = std::sqrt(d);
+		double d = /*std::exp*/(nm.at<double>(0, 0));
+		dp[idx] = d < mthr ? d : mthr;
 	}
 
 	return dists;
@@ -584,11 +603,59 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 
 	// sort w.r.t y
 	QVector<PixelSet> tls = mTextLines;
-	std::sort(tls.begin(), tls.end(),
-		[](const PixelSet& ps1, const PixelSet& ps2) {
-		return ps1.center().y() < ps2.center().y();
+	//std::sort(tls.begin(), tls.end(),
+	//	[](const PixelSet& ps1, const PixelSet& ps2) {
+	//	return ps1.center().y() < ps2.center().y();
+	//}
+	//);
+
+
+	cv::Mat labelDist(numLabels(), numLabels(), CV_32FC1);
+
+	//for (int rIdx = 0; rIdx < numLabels(); rIdx++) {
+
+	//	float* lp = labelDist.ptr<float>(rIdx);
+	//	Ellipse e = tls[rIdx].fitEllipse();
+	//	//Vector2D a = e.axis();
+	//	//a.setX(a.x()*a.x());
+	//	//e.setAxis(a);
+
+	//	cv::Mat icov = e.toCov();
+	//	icov = icov.mul(icov);
+	//	cv::invert(icov, icov, cv::DECOMP_SVD);
+
+	//	for (int cIdx = 0; cIdx < numLabels(); cIdx++) {
+
+	//		//cv::Mat ccov = mTextLines[cIdx].fitEllipse().toCov();
+	//		//ccov += rcov;
+	//		//ccov /= 2.0;
+
+
+	//		// compute the mahalnobis distance
+	//		//cv::Mat nm = centers.row(idx) - c;
+	//		Vector2D vec(mTextLines[rIdx].center() - mTextLines[cIdx].center());
+	//		cv::Mat nm = vec.toMatCol();
+	//		nm = nm*icov*nm.t();
+
+	//		double d = nm.at<double>(0, 0);
+
+	//		lp[cIdx] = (float)std::sqrt(d);
+	//		//Vector2D vec(tls[rIdx].center() - tls[cIdx].center());
+	//		//lp[cIdx] = (float)std::sqrt(vec.length())*2;
+	//	}
+	//}
+
+	for (int rIdx = 0; rIdx < numLabels(); rIdx++) {
+
+		float* lp = labelDist.ptr<float>(rIdx);
+		Pixel px(mTextLines[rIdx].fitEllipse(), mTextLines[rIdx].boundingBox(), mTextLines[rIdx].id());
+
+		for (int cIdx = 0; cIdx < numLabels(); cIdx++) {
+
+			Pixel cpx(mTextLines[cIdx].fitEllipse(), mTextLines[cIdx].boundingBox(), mTextLines[cIdx].id());
+			lp[cIdx] = PixelDistance::bhattacharyya(&px, &cpx);
+		}
 	}
-	);
 
 	int idx = 0;
 	for (auto tl : tls) {
@@ -598,21 +665,31 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 
 		// the next lines show the mahalanobis distance
 		//cv::Mat d = mahalanobisDists(tl, pixelSetCentersToMat(mSet));
-		cv::Mat d = euclideanDists(tl);
+		//cv::Mat d = euclideanDists(tl);
+		cv::Mat d = labelDist.row(idx);
+		cv::Mat ds = d.clone();
+		cv::sort(ds, ds, CV_SORT_ASCENDING);
+		double v5 = ds.at<float>(0, 2);
 
-		double* dp = d.ptr<double>();
+		float* dp = d.ptr<float>();
 
-		for (int idx = 0; idx < d.rows; idx++) {
-			int v = qMin(qRound(dp[idx] * 40), 255);
-			p.setPen(QColor(v, 0, 0));
-			mSet.pixels()[idx]->draw(p);
+		for (int i = 0; i < d.cols; i++) {
+			int v = qMin(qRound(dp[i]*5), 255);
+
+			if (dp[i] > v5)
+				p.setPen(QColor(v, 0, 0));
+			else
+				p.setPen(ColorManager::pink());
+
+			//mSet.pixels()[i]->draw(p);
+			tls[i].draw(p);
 		}
 
 		// draw currently selected text line
 		p.setOpacity(1.0);
-		p.setPen(ColorManager::pink());
+		p.setPen(ColorManager::blue());
 		//tl.fitEllipse().draw(p, 0.1);
-		tl.draw(p, PixelSet::draw_poly);
+		tls[idx].draw(p, PixelSet::draw_poly);
 
 		QString sp = rdf::Utils::instance().createFilePath(filePath, QString::number(idx));
 		Image::save(Image::qPixmap2Mat(pm), sp);

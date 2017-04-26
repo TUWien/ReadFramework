@@ -1293,6 +1293,32 @@ double PixelDistance::mahalanobis(const Pixel * px1, const Pixel * px2) {
 	return s;
 }
 
+double PixelDistance::bhattacharyya(const Pixel * px1, const Pixel * px2) {
+	
+	assert(px1 && px2);
+	cv::Mat cov1 = px1->ellipse().toCov();
+	cv::Mat cov2 = px2->ellipse().toCov();
+	cv::Mat cov = (cov1 + cov2) / 2.0;
+	cv::Mat icov;
+	cv::invert(cov, icov, cv::DECOMP_SVD);
+
+	// normalization
+	double d1 = cv::determinant(cov1);
+	double d2 = cv::determinant(cov2);
+	double d = cv::determinant(cov);
+	double n = std::log(d / std::sqrt(d1*d2))/2.0;
+
+	// (mu2 - mu1)
+	Vector2D xm(px2->center() - px1->center());
+	cv::Mat xmm = xm.toMatRow();
+
+	// (mu2 - mu1)T S-1 (mu2 - mu1) <- yes it's the generalization of the mahalnobis distance
+	double m = *cv::Mat(xmm.t()*icov*xmm).ptr<double>();
+	m /= 8.0;
+
+	return m + n;
+}
+
 /// <summary>
 /// Angle weighted pixel distance.
 /// If the pixel's local orientations are not
@@ -1356,6 +1382,12 @@ double PixelDistance::orientationWeighted(const PixelEdge * edge) {
 
 	qDebug() << "no stats when computing the scaled edges...";
 	return 0.0;
+}
+
+double PixelDistance::euclidean(const PixelEdge * edge) {
+	
+	assert(edge);
+	return 1.0 - exp(-edge->edge().length());
 }
 
 

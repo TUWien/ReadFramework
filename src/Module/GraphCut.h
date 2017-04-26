@@ -92,6 +92,7 @@ protected:
 	// input/output
 	PixelSet mSet;
 	PixelDistance::EdgeWeightFunction mWeightFnc;
+	QSharedPointer<PixelConnector> mConnector;
 
 	/// <summary>
 	/// Performs the graphcut.

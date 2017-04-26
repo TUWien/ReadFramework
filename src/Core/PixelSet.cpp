@@ -1033,6 +1033,7 @@ void TabStopPixelConnector::setLineSpacingMultiplier(double multiplier) {
 }
 // DBScanPixelConnector --------------------------------------------------------------------
 DBScanPixelConnector::DBScanPixelConnector() {
+	mDistanceFnc = PixelDistance::angleWeighted;
 }
 
 QVector<QSharedPointer<PixelEdge>> DBScanPixelConnector::connect(const QVector<QSharedPointer<Pixel>>& pixels) const {
