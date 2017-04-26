@@ -217,6 +217,7 @@ protected:
 // pixel distance functions
 namespace PixelDistance {
 	DllCoreExport double euclidean(const Pixel* px1, const Pixel* px2);
+	DllCoreExport double mahalanobis(const Pixel* px1, const Pixel* px2);
 	DllCoreExport double angleWeighted(const Pixel* px1, const Pixel* px2);
 
 	DllCoreExport typedef  double (*PixelDistanceFunction)(const Pixel* px1, const Pixel* px2);

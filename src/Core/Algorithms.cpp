@@ -1273,8 +1273,24 @@ double LineFitting::medianResiduals(const QVector<Vector2D>& pts, const Line & l
 /// <returns></returns>
 double PixelDistance::euclidean(const Pixel* px1, const Pixel* px2) {
 
-	assert(!px1.isNull() && !px2.isNull());
+	assert(px1 && px2);
 	return Vector2D(px2->center() - px1->center()).length();
+}
+
+double PixelDistance::mahalanobis(const Pixel * px1, const Pixel * px2) {
+	
+	// untested
+	assert(px1 && px2);
+	cv::Mat icov = px1->ellipse().toCov();
+	cv::invert(icov, icov, cv::DECOMP_SVD);
+
+	Vector2D xm(px2->center() - px1->center());
+	cv::Mat xmm = xm.toMatRow();
+
+	cv::Mat m = (xmm.t()*icov*xmm);
+	double s = std::sqrt(m.at<double>(0,0));
+
+	return s;
 }
 
 /// <summary>
@@ -1287,7 +1303,7 @@ double PixelDistance::euclidean(const Pixel* px1, const Pixel* px2) {
 /// <returns></returns>
 double PixelDistance::angleWeighted(const Pixel* px1, const Pixel* px2) {
 
-	assert(!px1.isNull() && !px2.isNull());
+	assert(px1 && px2);
 
 	if (!px1->stats() || !px2->stats()) {
 		qWarning() << "cannot compute angle weighted distance if stats are NULL";

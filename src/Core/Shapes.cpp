@@ -949,6 +949,34 @@ cv::Size Vector2D::toCvSize() const {
 	return cv::Size(qRound(x()), qRound(y()));
 }
 
+/// <summary>
+/// Converts the vector into a row cv::Mat.
+/// </summary>
+/// <returns>a 2 x 1 CV_64FC1 mat.</returns>
+cv::Mat Vector2D::toMatRow() const {
+
+	cv::Mat m(2, 1, CV_64FC1);
+	double* mp = m.ptr<double>();
+	mp[0] = mX;
+	mp[1] = mY;
+
+	return m;
+}
+
+/// <summary>
+/// Converts the vector into a column cv::Mat.
+/// </summary>
+/// <returns>a 1 x 2 CV_64FC2 mat.</returns>
+cv::Mat Vector2D::toMatCol() const {
+
+	cv::Mat m(1, 2, CV_64FC1);
+	double* mp = m.ptr<double>();
+	mp[0] = mX;
+	mp[1] = mY;
+
+	return m;
+}
+
 QString Vector2D::toString() const {
 
 	QString msg;
@@ -1467,6 +1495,34 @@ double Ellipse::minorAxis() const {
 /// <returns></returns>
 double Ellipse::radius() const {
 	return (mAxis.x() + mAxis.y()) / 2.0;
+}
+
+/// <summary>
+/// Converts the convidence ellipse to a covariance matrix.
+/// </summary>
+/// <returns>The covariance matrix (2 x 2 CV_64FC1)</returns>
+cv::Mat Ellipse::toCov() const {
+
+	// eigen values
+	double ev1 = mAxis.x();
+	double ev2 = mAxis.y();
+
+	// compute eigenvectors
+	Vector2D v1(ev1, 0);
+	Vector2D v2(0, ev2);
+
+	// NOTE possible speed-up: create unit rotation vector, then scale it
+	v1.rotate(-mAngle);
+	v2.rotate(-mAngle);
+
+	cv::Mat e1 = v1.toMatRow();
+	cv::Mat e2 = v2.toMatRow();
+
+	// derived from : https://math.stackexchange.com/a/1119677
+	cv::Mat cov = ev1*(e1*e1.t()) / (e1.t()*e1) + ev2*(e2*e2.t()) / (e2.t()*e2);
+	cov = cov.mul(cov);	// we need to square the cov
+
+	return cov;
 }
 
 void Ellipse::setAngle(double angle) {

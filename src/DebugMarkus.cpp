@@ -317,6 +317,20 @@ void LayoutTest::layoutToXmlDebug() const {
 	qDebug() << "orientation image saved: " << dstPath;
 
 
+	//% ellipse param
+	//	longAxis = 20;
+	//shortAxis = 10;
+	//phi = 0;
+
+	//% eigenvalues(this may vary from usecase to usecase)
+	//	eVal1 = longAxis;
+	//eVal2 = shortAxis;
+
+	Ellipse e(Vector2D(0, 0), Vector2D(20, 10), 10*DK_DEG2RAD);
+	cv::Mat cov = e.toCov();
+	
+	qDebug().noquote() << Image::printMat<double>(cov, "cov");
+
 	qInfo() << "layout analysis computed in" << dt;
 
 }

@@ -249,6 +249,8 @@ public:
 	cv::Point2d toCvPoint2d() const;
 	cv::Point2f toCvPoint2f() const;
 	cv::Size toCvSize() const;
+	cv::Mat toMatRow() const;
+	cv::Mat toMatCol() const;
 
 	QString toString() const;
 
@@ -433,6 +435,8 @@ public:
 	double majorAxis() const;
 	double minorAxis() const;
 	double radius() const;
+
+	cv::Mat toCov() const;
 
 	void setAngle(double angle);
 	double angle() const;

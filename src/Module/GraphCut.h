@@ -125,6 +125,10 @@ protected:
 	virtual int numLabels() const = 0;
 };
 
+/// <summary>
+/// Graph cut for local orientation estimation.
+/// </summary>
+/// <seealso cref="GraphCutPixel" />
 class DllCoreExport GraphCutOrientation : public GraphCutPixel {
 
 public:
@@ -143,6 +147,10 @@ private:
 	int numLabels() const override;
 };
 
+/// <summary>
+/// Textline clustering using graph-cut.
+/// </summary>
+/// <seealso cref="GraphCutPixel" />
 class DllCoreExport GraphCutTextLine : public GraphCutPixel {
 
 public:
@@ -163,6 +171,12 @@ private:
 	cv::Mat costs(int numLabels) const override;
 	cv::Mat labelDistMatrix(int numLabels) const override;
 	int numLabels() const override;
+
+	cv::Mat mahalanobisDists(const PixelSet& tl, const cv::Mat& centers) const;
+	cv::Mat euclideanDists(const PixelSet& tl) const;
+	cv::Mat pixelSetCentersToMat(const PixelSet& set) const;
+
+	void saveDistsDebug(const QString& filePath, const cv::Mat& img) const;
 };
 
 };

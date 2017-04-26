@@ -284,6 +284,8 @@ QString Image::printImage(const cv::Mat& img, const QString name) {
 		imgInfo = rdf::Image::printMat<float>(img, name);
 	else if (img.depth() == CV_64FC1)
 		imgInfo = rdf::Image::printMat<double>(img, name);
+	else if (img.depth() == CV_32SC1)
+		imgInfo = rdf::Image::printMat<int>(img, name);
 	else if (img.depth() == CV_8UC1) {
 		cv::Mat tmp;
 		img.convertTo(tmp, CV_32FC1);

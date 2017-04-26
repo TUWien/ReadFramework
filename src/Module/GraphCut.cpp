@@ -34,6 +34,7 @@
 
 // read includes
 #include "Image.h"
+#include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 
@@ -130,7 +131,15 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 	}
 
 	// run the expansion-move
-	gc->expansion(config()->numIter());
+	try {
+		gc->expansion(config()->numIter());
+	}
+	catch (GCException gce) {
+
+		mWarning << "exception while performing graph-cut";
+		mWarning << QString::fromUtf8(gce.message);
+		return QSharedPointer<GCoptimizationGeneralGraph>();
+	}
 
 	return gc;
 }
@@ -172,7 +181,8 @@ bool GraphCutOrientation::compute() {
 			ps->setOrientationIndex(gc->whatLabel(idx));
 		}
 	}
-	mInfo << "[Graph Cut] computed in" << dt;
+
+	mInfo << "computed in" << dt;
 
 	return true;
 }
@@ -315,12 +325,32 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 		tl.draw(p, PixelSet::draw_poly);
 	}
 
+	// draw baselines
 	p.setOpacity(1.0);
 	p.setPen(ColorManager::pink());
 
 	for (auto tl : mTextLines) {
 		tl.fitLine().draw(p);
 	}
+
+	//// the next lines show the mahalanobis distance
+	//const PixelSet& tl = mTextLines[10];
+
+	//cv::Mat d = mahalanobisDists(tl, pixelSetCentersToMat(mSet));
+	//int* dp = d.ptr<int>();
+
+	//for (int idx = 0; idx < d.rows; idx++) {
+	//	p.setPen(QColor(qMin(dp[idx]/25, 255), 0, 0));
+	//	mSet.pixels()[idx]->draw(p);
+	//}
+
+	//// draw currently selected text line
+	//p.setOpacity(1.0);
+	//p.setPen(ColorManager::pink());
+	////tl.fitEllipse().draw(p, 0.1);
+	//tl.draw(p, PixelSet::draw_poly);
+
+	//saveDistsDebug("C:/temp/lines-a/line.jpg", img);
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -338,60 +368,258 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 	// fill costs
 	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
 
-	// cache text line centers
-	QVector<Vector2D> tCenters;
-	tCenters.reserve(mTextLines.size());
-	for (const PixelSet& s : mTextLines) {
-		tCenters << s.center();
+	//  -------------------------------------------------------------------- compute mahalnobis dists
+	// convert centers
+	cv::Mat centers = pixelSetCentersToMat(mSet);
+
+	for (int idx = 0; idx < mTextLines.size(); idx++) {
+		cv::Mat md = mahalanobisDists(mTextLines[idx], centers);
+		//cv::normalize(md, md, 1, 0, cv::NORM_MINMAX);
+		md *= 20000;
+		md.copyTo(data.col(idx));
 	}
 
-	for (int idx = 0; idx < mSet.size(); idx++) {
+	//  -------------------------------------------------------------------- compute euclidean dists
+	// convert centers
+	//cv::Mat centers = pixelSetCentersToMat(mSet);
 
-		cv::Mat cData(1, numLabels, CV_32SC1);
-		int* cPtr = cData.ptr<int>();
+	//for (int idx = 0; idx < mTextLines.size(); idx++) {
+	//	cv::Mat md = euclideanDists(mTextLines[idx]);
+	//	md *= config()->scaleFactor();
+	//	//cv::normalize(md, md, 1, 0, cv::NORM_MINMAX);
+	//	md.copyTo(data.col(idx));
+	//}
 
-		auto px = mSet[idx];
+	//cv::Mat s = data.clone();
+	////s.convertTo(s, CV_32FC1);
+	//cv::reduce(s, s, 0, CV_REDUCE_SUM);
 
-		for (int tIdx = 0; tIdx < mTextLines.size(); tIdx++) {
+	//Image::imageInfo(s, "s");
+	//qDebug().noquote() << Image::printMat<double>(s, "costSums");
 
-			Vector2D d(tCenters[tIdx] - px->center());
+	// euclidean - manual --------------------------------------------------------------------
+	//// cache text line centers
+	//QVector<Vector2D> tCenters;
+	//tCenters.reserve(mTextLines.size());
+	//for (const PixelSet& s : mTextLines) {
+	//	tCenters << s.center();
+	//}
 
-			// local orientation weighted
-			double a = 1.0;
-			if (px->stats())
-				a = std::abs(d.theta(mSet[idx]->stats()->orVec()));
+	//for (int idx = 0; idx < mSet.size(); idx++) {
 
-			cPtr[tIdx] = qRound(d.length() * (a + 0.01));	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
-		}
+	//	cv::Mat cData(1, numLabels, CV_32SC1);
+	//	int* cPtr = cData.ptr<int>();
 
-		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());
-	}
+	//	auto px = mSet[idx];
+
+	//	for (int tIdx = 0; tIdx < mTextLines.size(); tIdx++) {
+
+	//		Vector2D d(tCenters[tIdx] - px->center());
+
+	//		// local orientation weighted
+	//		double a = 1.0;
+	//		if (px->stats())
+	//			a = std::abs(d.theta(mSet[idx]->stats()->orVec()));
+
+	//		cPtr[tIdx] = qRound(d.length() * (a + 0.01));	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+	//	}
+
+	//	cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());
+	//}
+
+	//cv::normalize(data, data, 10000, 0, cv::NORM_MINMAX);
+
+	
+	data.convertTo(data, CV_32SC1);
+
+	Image::imageInfo(data, "costs");
 
 	return data;
 }
 
 cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 
-	// TODO: use label distances that respect the text line's centers
-	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+	//cv::Mat centers(mTextLines.size(), 2, CV_64FC1);
+	//double* cp = centers.ptr<double>();
 
-	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+	//for (int idx = 0; idx < mTextLines.size(); idx++) {
 
-		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+	//	*cp = mTextLines[idx].center().x(); cp++;
+	//	*cp = mTextLines[idx].center().y(); cp++;
+	//}
 
-		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+	cv::Mat labelDist(numLabels, numLabels, CV_32SC1);
 
-			// set smoothness cost for orientations
-			int diff = abs(rIdx - cIdx);
-			sPtr[cIdx] = qMin(diff, numLabels - diff);
+	for (int rIdx = 0; rIdx < numLabels; rIdx++) {
+
+		int* lp = labelDist.ptr<int>(rIdx);
+
+		for (int cIdx = 0; cIdx < numLabels; cIdx++) {
+
+			Vector2D vec(mTextLines[rIdx].center() - mTextLines[cIdx].center());
+			lp[cIdx] = qRound(std::sqrt(vec.length()));
 		}
 	}
 
-	return orDist;
+
+	//cv::normalize(labelDist, labelDist, 0.0, numLabels*2, cv::NORM_MINMAX);
+
+
+	// mahalanobis --------------------------------------------------------------------
+	//for (int idx = 0; idx < mTextLines.size(); idx++) {
+	//	mahalanobisDists(mTextLines[idx], centers).copyTo(labelDist.col(idx));
+	//}
+
+
+	//int* lp = labelDist.ptr<int>();
+
+	//// make it a metric (symmetric)
+	//for (int rIdx = 0; rIdx < numLabels; rIdx++) {
+
+	//	for (int cIdx = rIdx+1; cIdx < numLabels; cIdx++) {
+	//	
+	//		int* rl = lp + (rIdx * numLabels + cIdx);	// row label
+	//		int* cl = lp + (rIdx + cIdx * numLabels);	// col label
+
+	//		int val = qMin(*rl, *cl);
+	//		*rl = val;
+	//		*cl = val;
+	//	}
+	//}
+	// mahalanobis --------------------------------------------------------------------
+
+	//qDebug().noquote() << Image::printImage(labelDist, "labelDist");
+
+	//for (int rIdx = 0; rIdx < labelDist.rows; rIdx++) {
+
+	//	unsigned int* sPtr = labelDist.ptr<unsigned int>(rIdx);
+
+	//	for (int cIdx = 0; cIdx < labelDist.cols; cIdx++) {
+
+	//		// set smoothness cost for orientations
+	//		int diff = abs(rIdx - cIdx);
+	//		sPtr[cIdx] = qMin(diff, numLabels - diff);
+	//	}
+	//}
+
+	Image::imageInfo(labelDist, "label costs");
+
+	return labelDist;
 }
 
 int GraphCutTextLine::numLabels() const {
+
 	return mTextLines.size();
+}
+
+cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& centers) const {
+	
+	cv::Mat dists(centers.rows, 1, CV_64FC1);
+	double* dp = dists.ptr<double>();
+
+	// get the textlines mean & cov
+	cv::Mat c = tl.center().toMatCol();
+	cv::Mat icov = tl.fitEllipse().toCov();
+	cv::invert(icov, icov, cv::DECOMP_SVD);
+
+	for (int idx = 0; idx < centers.rows; idx++) {
+
+		// compute the mahalnobis distance
+		cv::Mat nm = centers.row(idx) - c;
+		nm = nm*icov*nm.t();
+
+		double d = nm.at<double>(0, 0);
+
+		dp[idx] = std::sqrt(d);
+	}
+
+	return dists;
+}
+
+cv::Mat GraphCutTextLine::euclideanDists(const PixelSet & tl) const {
+	
+	cv::Mat dists(mSet.size(), 1, CV_64FC1);
+	double* dp = dists.ptr<double>();
+
+	Vector2D c = tl.center();
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		auto px = mSet[idx];
+		Vector2D d(c - px->center());
+
+		// local orientation weighted
+		double a = 1.0;
+		if (px->stats())
+			a = std::abs(d.theta(mSet[idx]->stats()->orVec()));
+
+		dp[idx] = qRound(d.length() * (a + 0.01));	// + 0.01 -> we don't want to map all 'aligned' pixels to 0
+	}
+
+	return dists;
+}
+
+/// <summary>
+/// Converts the pixel centers into a mat.
+/// </summary>
+/// <param name="set">The pixel set.</param>
+/// <returns>a N x 2 CV_64FC1 center mat.</returns>
+cv::Mat GraphCutTextLine::pixelSetCentersToMat(const PixelSet & set) const {
+	
+	cv::Mat centers(set.size(), 2, CV_64FC1);
+	double* cp = centers.ptr<double>();
+
+	auto pixels = set.pixels();
+
+	for (int idx = 0; idx < pixels.size(); idx++) {
+		
+		*cp = pixels[idx]->center().x(); cp++;
+		*cp = pixels[idx]->center().y(); cp++;
+	}
+
+	return centers;
+}
+
+void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& img) const {
+
+	// sort w.r.t y
+	QVector<PixelSet> tls = mTextLines;
+	std::sort(tls.begin(), tls.end(),
+		[](const PixelSet& ps1, const PixelSet& ps2) {
+		return ps1.center().y() < ps2.center().y();
+	}
+	);
+
+	int idx = 0;
+	for (auto tl : tls) {
+
+		QPixmap pm = Image::mat2QPixmap(img);
+		QPainter p(&pm);
+
+		// the next lines show the mahalanobis distance
+		//cv::Mat d = mahalanobisDists(tl, pixelSetCentersToMat(mSet));
+		cv::Mat d = euclideanDists(tl);
+
+		double* dp = d.ptr<double>();
+
+		for (int idx = 0; idx < d.rows; idx++) {
+			int v = qMin(qRound(dp[idx] * 40), 255);
+			p.setPen(QColor(v, 0, 0));
+			mSet.pixels()[idx]->draw(p);
+		}
+
+		// draw currently selected text line
+		p.setOpacity(1.0);
+		p.setPen(ColorManager::pink());
+		//tl.fitEllipse().draw(p, 0.1);
+		tl.draw(p, PixelSet::draw_poly);
+
+		QString sp = rdf::Utils::instance().createFilePath(filePath, QString::number(idx));
+		Image::save(Image::qPixmap2Mat(pm), sp);
+		idx++;
+		qDebug() << "writing" << sp;
+	}
+
 }
 
 }

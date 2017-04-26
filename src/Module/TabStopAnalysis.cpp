@@ -204,8 +204,8 @@ QVector<QSharedPointer<TabStopCluster> > TabStopAnalysis::findTabs(const QVector
 			//// we only find 'orthogonal' tab lines - shouldn't we remove this constraint?
 			//if (abs(cosTheta) < 0.5) {
 				
-				QSharedPointer<PixelSet> ps(new PixelSet(set));
-				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(ps));
+				QSharedPointer<PixelSet> psp(new PixelSet(set));
+				QSharedPointer<TabStopCluster> tabStop(new TabStopCluster(psp));
 				tabStop->setLine(line);
 				tabStop->setAngle(medAngle);
 				tabStops << tabStop;
