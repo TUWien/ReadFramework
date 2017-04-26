@@ -1352,7 +1352,8 @@ bool TextBlock::remove(const QSharedPointer<TextLineSet>& tl) {
 
 QSharedPointer<Region> TextBlock::toTextRegion() const {
 
-	QSharedPointer<Region> r(new Region(Region::type_text_region, id()));
+	QSharedPointer<TextRegion> r(new TextRegion(Region::type_text_region));
+	r->setId(id());
 	r->setPolygon(mPoly);
 
 	for (auto tl : mTextLines)

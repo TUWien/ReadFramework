@@ -305,6 +305,7 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	case Region::type_separator:
 		return QSharedPointer<SeparatorRegion>::create(type);
 	case Region::type_text_region:
+		return QSharedPointer<TextRegion>::create(type);
 	case Region::type_text_line:
 	case Region::type_word:
 		return QSharedPointer<TextLine>::create(type);
