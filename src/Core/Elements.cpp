@@ -545,13 +545,11 @@ TextEquiv::TextEquiv() {
 }
 
 /// <summary>
-/// Initializes a new instance of the <see cref="TextEquiv"/> class with unicode and optional plain text.
+/// Initializes a new instance of the <see cref="TextEquiv" /> class with some text.
 /// </summary>
 /// <param name="text">The text.</param>
-/// <param name="plainText">The plain text.</param>
-TextEquiv::TextEquiv(const QString& text, const QString& plainText) {
+TextEquiv::TextEquiv(const QString& text) {
 	mText = text;
-	mPlainText = plainText;
 	mIsNull = false;
 }
 
@@ -584,12 +582,17 @@ TextEquiv TextEquiv::read(QXmlStreamReader & reader) {
 		}
 	}
 
-	// Unicode text must be present for the TextEquiv element to be valid (according to schema)
+	// use plain text only if unicode is missing (according to schema, unicode should always be present)
+	if (text.isEmpty() && !plainText.isEmpty()) {
+		text = plainText;
+	}
+
+	// if the element contains no text at all, it is null / invalid
 	if (text.isNull()) {
 		return TextEquiv();
 	}
 
-	return TextEquiv(text, plainText);
+	return TextEquiv(text);
 }
 
 void TextEquiv::write(QXmlStreamWriter & writer) const {
@@ -597,9 +600,6 @@ void TextEquiv::write(QXmlStreamWriter & writer) const {
 
 	if (!mIsNull) {
 		writer.writeStartElement(rm.tag(RegionXmlHelper::tag_text_equiv));
-		if (!mPlainText.isNull()) {
-			writer.writeTextElement(rm.tag(RegionXmlHelper::tag_plain_text), mPlainText);
-		}
 		writer.writeTextElement(rm.tag(RegionXmlHelper::tag_unicode), mText);
 		writer.writeEndElement(); // </TextEquiv>
 	}
@@ -607,10 +607,6 @@ void TextEquiv::write(QXmlStreamWriter & writer) const {
 
 QString TextEquiv::text() const {
 	return mText;
-}
-
-QString TextEquiv::plainText() const {
-	return mPlainText;
 }
 
 bool TextEquiv::isNull() const {

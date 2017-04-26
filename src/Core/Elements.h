@@ -257,18 +257,16 @@ class DllCoreExport TextEquiv {
 
 public:
 	TextEquiv();
-	TextEquiv(const QString& text, const QString& plainText = QString());
+	TextEquiv(const QString& text);
 
 	static TextEquiv read(QXmlStreamReader& reader);
 
 	void write(QXmlStreamWriter& writer) const;
 
 	QString text() const;
-	QString plainText() const;
 	bool isNull() const;
 
 protected:
-	QString mPlainText; 
 	QString mText; // unicode
 	bool mIsNull = false;
 };
