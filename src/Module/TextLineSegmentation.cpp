@@ -518,7 +518,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 		Drawer::instance().setColor(ColorManager::getColor());
 		p.setPen(Drawer::instance().pen());
 
-		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly /*| PixelSet::draw_pixels*/), (Pixel::DrawFlag)(Pixel::draw_stats));
+		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_poly /*| PixelSet::draw_pixels*/), (Pixel::DrawFlags)(Pixel::draw_stats));
 
 		Vector2D c = tl->center();
 		c.setX(c.x() + 20);
@@ -531,7 +531,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 
 	for (const auto tl : TextLineHelper::filterAngle(textLines)) {
 
-		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_rect | PixelSet::draw_pixels), (Pixel::DrawFlag)(/*Pixel::draw_ellipse |*/ Pixel::draw_stats));
+		tl->draw(p, (PixelSet::DrawFlag)(PixelSet::draw_rect | PixelSet::draw_pixels), (Pixel::DrawFlags)(/*Pixel::draw_ellipse |*/ Pixel::draw_stats));
 	}
 
 	//Drawer::instance().setColor(ColorManager::red());
@@ -674,10 +674,11 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
 	}
 
 	p.setOpacity(0.4);
+	p.setPen(ColorManager::blue());
 
 	for (auto ps : mTextLines) {
 
-		p.setPen(ColorManager::getColor());
+		//p.setPen(ColorManager::getColor());
 		ps.draw(p, PixelSet::draw_poly);
 	}
 

@@ -249,7 +249,7 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 
 	for (auto px : mSet.pixels()) {
 		p.setPen(ColorManager::getColor());
-		px->draw(p, 0.3, (Pixel::DrawFlag)(Pixel::draw_stats));
+		px->draw(p, 0.3, (Pixel::DrawFlags)(Pixel::draw_stats));
 	}
 
 	return Image::qPixmap2Mat(pm);
@@ -333,7 +333,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 	p.setPen(ColorManager::darkGray(0.3));
 	graph.draw(p);
 
-	p.setOpacity(0.5);
+	//p.setOpacity(0.5);
 
 	for (auto tl : mTextLines) {
 

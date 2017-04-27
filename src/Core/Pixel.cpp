@@ -386,7 +386,7 @@ cv::KeyPoint Pixel::toKeyPoint() const {
 	return kp;
 }
 
-void Pixel::draw(QPainter & p, double alpha, const DrawFlag & df) const {
+void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	
 	QPen oldPen = p.pen();
 

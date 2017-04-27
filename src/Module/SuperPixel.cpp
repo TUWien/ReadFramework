@@ -272,7 +272,7 @@ cv::Mat SuperPixel::draw(const cv::Mat & img) const {
 
 		// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->draw(p, 0.2, (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops));
+		mPixels[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
 		//qDebug() << mPixels[idx].ellipse();
 	}
 
@@ -677,7 +677,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		
 		if (ec.isNeighbor(p->center(), radius)) {
 			neighbors << p.data();
-			p->draw(painter, 0.3, (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_stats));
+			p->draw(painter, 0.3, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats);
 		}
 	}
 
@@ -796,9 +796,10 @@ cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
+	p.setPen(ColorManager::blue());
+
 	for (auto px : mSet.pixels()) {
-		p.setPen(ColorManager::getColor());
-		px->draw(p, 0.3, (Pixel::DrawFlag)(Pixel::draw_center | Pixel::draw_stats));
+		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_center | Pixel::draw_stats);
 	}
 
 	return Image::qPixmap2Mat(pm);

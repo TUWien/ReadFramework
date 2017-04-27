@@ -146,4 +146,68 @@ protected:
 	QTime mTimer;
 };
 
+/// <summary>
+/// Flags turns enums into typesave flags
+/// It is strongly related (copied) from 
+/// Useage:
+/// 	enum DrawFlags_ {
+///			draw_none				= 0x00,
+///			draw_ellipse			= 0x01,
+///			draw_stats				= 0x02,
+///			draw_center				= 0x04,
+///			};
+///		typedef Flags<DrawFlags_> DrawFlags;
+///
+/// http://stackoverflow.com/questions/1448396/how-to-use-enums-as-flags-in-c/33971769#33971769
+/// thanks @Fabio A.
+/// </summary>
+template <typename EnumType, typename Underlying = int>
+class Flags {
+    typedef Underlying Flags::* RestrictedBool;
+
+public:
+	Flags() : mFlags(Underlying()) {}
+
+    Flags(EnumType f) :
+        mFlags(1 << f) {}
+
+    Flags(const Flags& o):
+        mFlags(o.mFlags) {}
+
+    Flags& operator |=(const Flags& f) {
+        mFlags |= f.mFlags;
+        return *this;
+    }
+
+    Flags& operator &=(const Flags& f) {
+        mFlags &= f.mFlags;
+        return *this;
+    }
+
+    friend Flags operator |(const Flags& f1, const Flags& f2) {
+        return Flags(f1) |= f2;
+    }
+
+    friend Flags operator &(const Flags& f1, const Flags& f2) {
+        return Flags(f1) &= f2;
+    }
+
+    Flags operator ~() const {
+        Flags result(*this);
+        result.mFlags = ~result.mFlags;
+        return result;
+    }
+
+    operator RestrictedBool() const {
+        return mFlags ? &Flags::mFlags : 0;
+    }
+
+    Underlying value() const {
+        return mFlags;
+    }
+
+protected:
+    Underlying  mFlags;
+};
+
 };

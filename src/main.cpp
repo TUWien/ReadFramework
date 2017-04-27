@@ -207,38 +207,9 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
-		//dc.setImagePath("D:/read/test/Best. 901 Nr. 112 00147.jpg");
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336.jpg");
-		//dc.setImagePath("D:/read/test/00000197.jpg");
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_003-01_0001.jpg");
 		//dc.setImagePath("D:/read/test/00075751.tif");
-		//dc.setImagePath("D:/read/test/M_Freyung_012_0053.jpg");
-		//dc.setImagePath("D:/read/baseline-competition/dataset/test-new/Baseline Competition - Simple Documents/ABP_FirstTestCollection/M_Freyung_010_0022.jpg");
-		//dc.setImagePath("D:/read/test/cBAD/M_Aigen_am_Inn_007_0210.jpg");
-		//dc.setImagePath("D:/read/test/cBAD/010_023_001.jpg");
-		//dc.setImagePath("D:/read/test/cBAD/00000008.jpg");
-		
-
-		
-		//dc.setImagePath("D:/read/test/synthetic-test.png");
-		//dc.setImagePath("D:/read/test/synthetic-test-single-line.png");
-		//dc.setImagePath("D:/read/data/Herbarium/George_Forrest_Herbarium_Specimens/E00000017-c.jpg");
-	
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
-		//dc.setImagePath("D:/read/test/56_csrc.jpg");
-		//dc.setImagePath("D:/read/test/102_csrc.jpg");
-		//dc.setImagePath("D:/read/test/00000001-6.jpg");
-
-		// debug images
-		//dc.setImagePath("D:/read/test/two-lines-connected.jpg");
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0336-crop.jpg");
-		//dc.setImagePath("D:/read/test/00075751-crop.tif");
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0084-crop.jpg");
-		//dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_00842-crop.jpg");
-		//dc.setImagePath("D:/read/test/debug-tiny[printed].png");
-		dc.setImagePath("D:/read/test/00075751-crop.tif");
-	
-		//dc.setImagePath("D:/read/test/sp-classification/00000158.tif");
+		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop.tif");
+		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop1.tif");
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 

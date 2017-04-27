@@ -211,7 +211,7 @@ public:
 
 	cv::KeyPoint toKeyPoint() const;
 
-	enum DrawFlag {
+	enum mDrawFlag {
 		draw_none				= 0x00,
 		draw_ellipse			= 0x01,
 		draw_stats				= 0x02,
@@ -224,8 +224,9 @@ public:
 
 		draw_end
 	};
+	typedef Flags<mDrawFlag> DrawFlags;
 
-	void draw(QPainter& p, double alpha = 0.3, const DrawFlag& df = (DrawFlag)(draw_stats | draw_ellipse | draw_label_colors)) const;
+	void draw(QPainter& p, double alpha = 0.3, const DrawFlags& df = DrawFlags() | draw_stats | draw_ellipse | draw_label_colors) const;
 
 protected:
 	bool mIsNull = true;

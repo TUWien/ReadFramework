@@ -211,7 +211,7 @@ public:
 	virtual void draw(
 		QPainter& p, 
 		const DrawFlag& options = (DrawFlag)(draw_pixels | draw_poly),
-		const Pixel::DrawFlag& pixelOptions = (Pixel::DrawFlag)(Pixel::draw_ellipse | Pixel::draw_label_colors)) const;
+		const Pixel::DrawFlags& pixelOptions = Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_label_colors) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
 	static QVector<PixelSet> fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
@@ -240,7 +240,7 @@ public:
 	void update();
 
 	void draw(QPainter& p, const DrawFlag& options = PixelSet::draw_poly, 
-		const Pixel::DrawFlag& pixelOptions = Pixel::draw_ellipse) const override;
+		const Pixel::DrawFlags& pixelOptions = Pixel::draw_ellipse) const override;
 
 	Line line() const;
 	double error() const;
