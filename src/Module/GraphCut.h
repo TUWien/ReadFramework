@@ -137,7 +137,7 @@ public:
 
 	virtual bool compute() override;
 
-	cv::Mat draw(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 
 private:
 
@@ -159,7 +159,7 @@ public:
 
 	virtual bool compute() override;
 
-	cv::Mat draw(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 
 	QVector<PixelSet> textLines();
 

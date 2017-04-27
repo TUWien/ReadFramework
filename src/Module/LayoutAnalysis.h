@@ -111,7 +111,7 @@ public:
 	bool compute() override;
 	QSharedPointer<LayoutAnalysisConfig> config() const;
 
-	cv::Mat draw(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 	QString toString() const override;
 
 	void setRootRegion(const QSharedPointer<RootRegion>& region);

@@ -244,7 +244,7 @@ QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
 	return qSharedPointerDynamicCast<SuperPixelConfig>(mConfig);
 }
 
-cv::Mat SuperPixel::draw(const cv::Mat & img) const {
+cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 	// draw super pixels
 	Timer dtf;
@@ -264,11 +264,13 @@ cv::Mat SuperPixel::draw(const cv::Mat & img) const {
 	//	s.draw(p);
 	//}
 
+	p.setPen(col);
+
 	for (int idx = 0; idx < mBlobs.size(); idx++) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		QPen pen = Drawer::instance().pen();
-		pen.setWidth(2);
-		p.setPen(pen);
+	
+		
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 
 		// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
@@ -280,16 +282,18 @@ cv::Mat SuperPixel::draw(const cv::Mat & img) const {
 	return Image::qPixmap2Mat(pm);
 }
 
-cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img) const {
+cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img, const QColor& col) const {
 
 	// draw mser blobs
 	Timer dtf;
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
+	p.setPen(col);
 
 	for (auto b : mBlobs) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		p.setPen(Drawer::instance().pen());
+
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 
 		b->draw(p);
 	}

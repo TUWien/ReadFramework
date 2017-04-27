@@ -234,7 +234,7 @@ int GraphCutOrientation::numLabels() const {
 	return mSet.isEmpty() ? 0 : mSet.pixels()[0]->stats()->data().cols;
 }
 
-cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
+cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const {
 
 	// debug - remove
 	QPixmap pm = Image::mat2QPixmap(img);
@@ -247,8 +247,12 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img) const {
 	p.setPen(ColorManager::darkGray(0.3));
 	graph.draw(p);
 
+	p.setPen(col);
+
 	for (auto px : mSet.pixels()) {
-		p.setPen(ColorManager::getColor());
+
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 		px->draw(p, 0.3, (Pixel::DrawFlags)(Pixel::draw_stats));
 	}
 
@@ -320,7 +324,7 @@ bool GraphCutTextLine::compute() {
 	return true;
 }
 
-cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
+cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 	
 	// debug - remove
 	QPixmap pm = Image::mat2QPixmap(img);
@@ -335,9 +339,12 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img) const {
 
 	//p.setOpacity(0.5);
 
+	p.setPen(col);
+
 	for (auto tl : mTextLines) {
 
-		p.setPen(ColorManager::blue());
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 		tl.draw(p, PixelSet::draw_poly);
 	}
 

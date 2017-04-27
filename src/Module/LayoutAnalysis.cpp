@@ -282,7 +282,7 @@ QSharedPointer<LayoutAnalysisConfig> LayoutAnalysis::config() const {
 	return qSharedPointerDynamicCast<LayoutAnalysisConfig>(mConfig);
 }
 
-cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
+cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
@@ -292,11 +292,15 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 	for (auto l : mStopLines)
 		l.draw(p);
 
+	p.setPen(col);
+
 	for (auto tb : mTextBlockSet.textBlocks()) {
 		
 		QVector<PixelSet> s = tb->pixelSet().splitScales();
 		for (int idx = s.size()-1; idx >= 0; idx--) {
-			p.setPen(ColorManager::getColor());
+			
+			if (!col.isValid())
+				p.setPen(ColorManager::getColor());
 			p.setOpacity(0.3);
 			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
 			//qDebug() << "scale" << idx << ":" << *s[idx];

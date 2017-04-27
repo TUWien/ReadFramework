@@ -299,7 +299,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	dImg = tlM.draw(dImg);
 
 	cv::Mat gcImg = img.clone();
-	gcImg = gctlM.draw(gcImg);
+	gcImg = gctlM.draw(gcImg, ColorManager::blue());
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);

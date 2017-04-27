@@ -490,33 +490,23 @@ void TextLineSegmentation::mergeUnstableTextLines(QVector<QSharedPointer<TextLin
 
 }
 
-cv::Mat TextLineSegmentation::draw(const cv::Mat& img) const {
+cv::Mat TextLineSegmentation::draw(const cv::Mat& img, const QColor& col) const {
 
-	//QPixmap pm = Image::mat2QPixmap(img);
-
-	//QPainter p(&pm);
-
-	//// show the stop lines
-	//Drawer::instance().setColor(ColorManager::red(0.4));
-	//p.setPen(Drawer::instance().pen());
-
-	//for (auto l : mStopLines)
-	//	l.draw(p);
-	//p.end();
-
-	return draw(img, mTextLines);
+	return draw(img, mTextLines, col);
 }
 
-cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPointer<TextLineSet> >& textLines) {
+cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPointer<TextLineSet> >& textLines, const QColor& col) {
 
 	QPixmap pm = Image::mat2QPixmap(img);
 
 	QPainter p(&pm);
-	
+	p.setPen(col);
+
 	// draw text lines
 	for (const QSharedPointer<TextLineSet>& tl : textLines) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		p.setPen(Drawer::instance().pen());
+		
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 
 		tl->draw(p, PixelSet::DrawFlags() | PixelSet::draw_poly /*| PixelSet::draw_pixels*/, Pixel::draw_stats);
 
@@ -533,13 +523,6 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 
 		tl->draw(p, PixelSet::DrawFlags() | PixelSet::draw_rect | PixelSet::draw_pixels, Pixel::draw_stats);
 	}
-
-	//Drawer::instance().setColor(ColorManager::red());
-	//p.setPen(Drawer::instance().pen());
-
-	//for (const auto e : mRemovedEdges)
-	//	e->draw(p);
-
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -655,7 +638,7 @@ bool SimpleTextLineSegmentation::compute() {
 	return true;
 }
 
-cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
+cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img, const QColor& col) const {
 	
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
@@ -673,12 +656,13 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img) const {
 		e->draw(p);
 	}
 
-	p.setOpacity(0.4);
-	p.setPen(ColorManager::blue());
+	p.setOpacity(0.6);
+	p.setPen(col);
 
 	for (auto ps : mTextLines) {
 
-		//p.setPen(ColorManager::getColor());
+		if (!col.isValid())
+			p.setPen(ColorManager::getColor());
 		ps.draw(p, PixelSet::draw_poly);
 	}
 

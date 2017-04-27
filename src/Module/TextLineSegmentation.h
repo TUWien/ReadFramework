@@ -80,7 +80,7 @@ public:
 	bool isEmpty() const override;
 	bool compute() override;
 
-	cv::Mat draw(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 	QString toString() const override;
 
 	void addSeparatorLines(const QVector<Line>& lines);
@@ -142,16 +142,16 @@ public:
 	bool compute(const cv::Mat& img);
 	QSharedPointer<TextLineConfig> config() const;
 
-	cv::Mat draw(const cv::Mat& img) const;
-	static cv::Mat draw(const cv::Mat& img, const QVector<QSharedPointer<TextLineSet> >& textLines);
-	QString toString() const override;
-
 	void addSeparatorLines(const QVector<Line>& lines);
 	QVector<QSharedPointer<TextLine> > textLines() const;
 	QVector<QSharedPointer<TextLineSet> > textLineSets() const;
 
 	// functions applied to the results
 	void scale(double s);
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+	static cv::Mat draw(const cv::Mat& img, const QVector<QSharedPointer<TextLineSet> >& textLines, const QColor& col = QColor());
+	QString toString() const override;
 
 private:
 	PixelSet mSet;

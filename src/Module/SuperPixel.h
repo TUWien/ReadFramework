@@ -113,8 +113,8 @@ public:
 	QVector<QSharedPointer<MserBlob> > getMserBlobs() const;
 	PixelSet pixelSet() const;
 
-	cv::Mat draw(const cv::Mat& img) const;
-	cv::Mat drawMserBlobs(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+	cv::Mat drawMserBlobs(const cv::Mat& img, const QColor& col = QColor()) const;
 
 private:
 	cv::Mat mSrcImg;
