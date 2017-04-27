@@ -341,7 +341,7 @@ namespace rdf {
 			hardPerc.push_back(hard[i] / (float)(tp + fp));
 		}
 
-		QVector<int> softCriteria({ 1, 2, 5, 7 });
+		QVector<int> softCriteria({ 1, 2, 5, 7, 10 });
 		QString softOutputHeader = "soft evaluation\n";
 		QString softOutput = "";
 		for(int i = 0; i < softCriteria.size(); i++) {
