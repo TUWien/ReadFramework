@@ -298,7 +298,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 		for (int idx = s.size()-1; idx >= 0; idx--) {
 			p.setPen(ColorManager::getColor());
 			p.setOpacity(0.3);
-			s[idx].draw(p, (PixelSet::DrawFlag)(PixelSet::draw_pixels), Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
+			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
 			//qDebug() << "scale" << idx << ":" << *s[idx];
 
 		}
@@ -309,7 +309,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img) const {
 		tp.setWidth(5);
 		p.setPen(tp);
 
-		tb->draw(p, (TextBlock::DrawFlag)(TextBlock::draw_text_lines));
+		tb->draw(p, TextBlock::draw_text_lines);
 	}
 	
 	return Image::qPixmap2Mat(pm);

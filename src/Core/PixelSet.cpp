@@ -567,7 +567,7 @@ QSharedPointer<TextLine> PixelSet::toTextLine() const {
 	return textLine;
 }
 
-void PixelSet::draw(QPainter& p, const DrawFlag& options, const Pixel::DrawFlags& pixelOptions) const {
+void PixelSet::draw(QPainter& p, const DrawFlags& options, const Pixel::DrawFlags& pixelOptions) const {
 
 	// NOTE: that int cast is not needed - but gcc is confused otherwise
 	if (options & draw_pixels) {
@@ -1213,7 +1213,7 @@ void TextLineSet::update() {
 	updateLine();
 }
 
-void TextLineSet::draw(QPainter & p, const DrawFlag & options, const Pixel::DrawFlags& pixelOptions) const {
+void TextLineSet::draw(QPainter & p, const DrawFlags & options, const Pixel::DrawFlags& pixelOptions) const {
 
 	PixelSet::draw(p, options, pixelOptions);
 
@@ -1363,7 +1363,7 @@ QSharedPointer<Region> TextBlock::toTextRegion() const {
 	return r;
 }
 
-void TextBlock::draw(QPainter & p, const DrawFlag & df) {
+void TextBlock::draw(QPainter & p, const DrawFlags & df) {
 
 	if (df & draw_pixels)
 		mSet.draw(p);

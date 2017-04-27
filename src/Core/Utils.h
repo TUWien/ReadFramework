@@ -150,13 +150,13 @@ protected:
 /// Flags turns enums into typesave flags
 /// It is strongly related (copied) from 
 /// Useage:
-/// 	enum DrawFlags_ {
+/// 	enum mDrawFlags {
 ///			draw_none				= 0x00,
 ///			draw_ellipse			= 0x01,
 ///			draw_stats				= 0x02,
 ///			draw_center				= 0x04,
 ///			};
-///		typedef Flags<DrawFlags_> DrawFlags;
+///		typedef Flags<mDrawFlags> DrawFlags;
 ///
 /// http://stackoverflow.com/questions/1448396/how-to-use-enums-as-flags-in-c/33971769#33971769
 /// thanks @Fabio A.

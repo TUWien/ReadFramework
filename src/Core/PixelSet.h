@@ -166,14 +166,15 @@ public:
 		connect_end
 	};
 
-	enum DrawFlag {
-		draw_nothing = 0x0,
-		draw_pixels = 0x1,
-		draw_poly = 0x2,
-		draw_rect = 0x4,
+	enum mDrawFlags {
+		draw_nothing	= 0x0,
+		draw_pixels		= 0x1,
+		draw_poly		= 0x2,
+		draw_rect		= 0x4,
 
 		draw_end
 	};
+	typedef Flags<mDrawFlags> DrawFlags;
 
 	void operator+=(const PixelSet& set);
 
@@ -210,7 +211,7 @@ public:
 
 	virtual void draw(
 		QPainter& p, 
-		const DrawFlag& options = (DrawFlag)(draw_pixels | draw_poly),
+		const DrawFlags& options = DrawFlags() | draw_pixels | draw_poly,
 		const Pixel::DrawFlags& pixelOptions = Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_label_colors) const;
 
 	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
@@ -239,7 +240,7 @@ public:
 	void scale(double factor) override;
 	void update();
 
-	void draw(QPainter& p, const DrawFlag& options = PixelSet::draw_poly, 
+	void draw(QPainter& p, const DrawFlags& options = PixelSet::draw_poly, 
 		const Pixel::DrawFlags& pixelOptions = Pixel::draw_ellipse) const override;
 
 	Line line() const;
@@ -274,7 +275,7 @@ class DllCoreExport TextBlock : public BaseElement {
 public:
 	TextBlock(const Polygon& poly = Polygon(), const QString& id = "");
 
-	enum DrawFlag {
+	enum mDrawFlags {
 		draw_nothing = 0x0,
 		draw_poly = 0x1,
 		draw_text_lines = 0x2,
@@ -282,6 +283,8 @@ public:
 
 		draw_end
 	};
+
+	typedef Flags<mDrawFlags> DrawFlags;
 
 	void addPixels(const PixelSet& ps);
 	PixelSet pixelSet() const;
@@ -296,7 +299,7 @@ public:
 
 	QSharedPointer<Region> toTextRegion() const;
 
-	void draw(QPainter& p, const DrawFlag& df = (DrawFlag)(draw_poly | draw_text_lines));
+	void draw(QPainter& p, const DrawFlags& df = DrawFlags() | draw_poly | draw_text_lines);
 	virtual QString toString() const override;
 
 private:
