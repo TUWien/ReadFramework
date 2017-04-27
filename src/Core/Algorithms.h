@@ -223,6 +223,7 @@ namespace PixelDistance {
 
 	DllCoreExport typedef  double (*PixelDistanceFunction)(const Pixel* px1, const Pixel* px2);
 
+	DllCoreExport double spacingWeighted(const PixelEdge* edge);
 	DllCoreExport double orientationWeighted(const PixelEdge* edge);
 	DllCoreExport double euclidean(const PixelEdge* edge);
 	DllCoreExport typedef  double(*EdgeWeightFunction)(const PixelEdge* edge);

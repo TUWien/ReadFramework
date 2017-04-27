@@ -74,7 +74,7 @@ void GraphCutConfig::save(QSettings & settings) const {
 
 // GraphCutPixel --------------------------------------------------------------------
 GraphCutPixel::GraphCutPixel(const PixelSet & set) : mSet(set) {
-	mWeightFnc = PixelDistance::orientationWeighted;
+	mWeightFnc = PixelDistance::spacingWeighted;
 	mConnector = QSharedPointer<DelauneyPixelConnector>::create();
 
 	mConfig = QSharedPointer<GraphCutConfig>::create();
@@ -261,7 +261,7 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const
 
 // GraphCutTextLine --------------------------------------------------------------------
 GraphCutTextLine::GraphCutTextLine(const QVector<PixelSet>& sets) : GraphCutPixel(PixelSet::merge(sets)) {
-	mWeightFnc = PixelDistance::euclidean;
+	mWeightFnc = PixelDistance::orientationWeighted;
 	
 	mTextLines = sets;
 }
@@ -330,15 +330,23 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
-	// show the graph
+	//  -------------------------------------------------------------------- show the graph
+	p.setOpacity(1.0);
 	PixelGraph graph(mSet);
 	graph.connect(*mConnector);
 
-	p.setPen(ColorManager::darkGray(0.3));
-	graph.draw(p);
+	//p.setPen(ColorManager::darkGray(0.3));
+	p.setPen(ColorManager::pink());
+	auto wf = PixelDistance::orientationWeighted;
+	graph.draw(p, &wf, 0.1);
 
-	//p.setOpacity(0.5);
+	//  -------------------------------------------------------------------- draw pixels
+	p.setPen(ColorManager::blue());
+	for (auto px : mSet.pixels())
+		px->draw(p, 0.3, Pixel::draw_stats);
 
+	//  -------------------------------------------------------------------- draw text lines
+	p.setOpacity(0.3);
 	p.setPen(col);
 
 	for (auto tl : mTextLines) {
@@ -348,32 +356,15 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 		tl.draw(p, PixelSet::draw_poly);
 	}
 
-	// draw baselines
-	p.setOpacity(1.0);
-	p.setPen(ColorManager::pink());
+	//  -------------------------------------------------------------------- draw baselines
+	p.setOpacity(0.3);
+	p.setPen(ColorManager::pink().darker());
 
 	for (auto tl : mTextLines) {
 		tl.fitLine().draw(p);
 	}
 
-	//// the next lines show the mahalanobis distance
-	//const PixelSet& tl = mTextLines[10];
-
-	//cv::Mat d = mahalanobisDists(tl, pixelSetCentersToMat(mSet));
-	//int* dp = d.ptr<int>();
-
-	//for (int idx = 0; idx < d.rows; idx++) {
-	//	p.setPen(QColor(qMin(dp[idx]/25, 255), 0, 0));
-	//	mSet.pixels()[idx]->draw(p);
-	//}
-
-	//// draw currently selected text line
-	//p.setOpacity(1.0);
-	//p.setPen(ColorManager::pink());
-	////tl.fitEllipse().draw(p, 0.1);
-	//tl.draw(p, PixelSet::draw_poly);
-
-	//saveDistsDebug("C:/temp/line-dists/line.jpg", img);
+	//saveDistsDebug("C:/temp/lines/line.jpg", img);
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -400,7 +391,7 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 		md.copyTo(data.col(idx));
 	}
 
-	data *= 150000;
+	data *= 5000;
 	data.convertTo(data, CV_32SC1);
 
 	Image::imageInfo(data, "costs");
@@ -436,7 +427,7 @@ cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 	cv::sortIdx(labelDist, labelIdx, CV_SORT_EVERY_ROW + CV_SORT_ASCENDING);
 
 	int numNeighbors = 5;
-	double maxDist = 100;	// turned off 2
+	//double maxDist = 0.1;	// turned off 2
 
 	cv::Mat labelCosts(labelDist.size(), CV_32SC1, cv::Scalar(numNeighbors));
 	for (int rIdx = 0; rIdx < labelCosts.rows; rIdx++) {
@@ -451,8 +442,9 @@ cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 			// look-up the nth nearest neighbor
 			int lIdx = lIdxPtr[cIdx];
 
-			if (dPtr[lIdx] < maxDist)
+			//if (dPtr[lIdx] < maxDist)
 				lcPtr[lIdx] = cIdx;
+				//lcPtr[lIdx] = dPtr[lIdx];		// we could use the distance here too
 		}
 	}
 
@@ -477,10 +469,10 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 	// get the textlines mean & cov
 	cv::Mat c = tl.center().toMatCol();
 	cv::Mat icov = tl.fitEllipse().toCov();
-	icov = icov.mul(icov);
+	//icov = icov.mul(icov);
 	cv::invert(icov, icov, cv::DECOMP_SVD);
 
-	double mthr = 0.25;
+	double mthr = 500.0;
 
 	for (int idx = 0; idx < centers.rows; idx++) {
 
@@ -489,7 +481,7 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 		nm = nm*icov*nm.t();
 
 		double d = std::sqrt(nm.at<double>(0, 0));
-		dp[idx] = (d < mthr) ? d : mthr;
+		dp[idx] = d;// (d < mthr) ? d : mthr;
 	}
 
 	//cv::normalize(dists, dists, 1.0, cv::NORM_MINMAX);
@@ -499,6 +491,7 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 
 cv::Mat GraphCutTextLine::euclideanDists(const PixelSet & tl) const {
 	
+	// not in use
 	cv::Mat dists(mSet.size(), 1, CV_64FC1);
 	double* dp = dists.ptr<double>();
 
@@ -584,7 +577,7 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 
 		int i = 0;
 		for (auto px : mSet.pixels()) {
-			int v = qMin(qRound(dp[i]*1.0/0.2*255), 255);
+			int v = qMin(qRound(dp[i]*20), 255);
 
 			p.setPen(QColor(v, 0, 0));
 			px->draw(p);
@@ -596,9 +589,17 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 		p.setPen(ColorManager::blue());
 		//tl.fitEllipse().draw(p, 0.1);
 		tls[idx].draw(p, PixelSet::draw_poly);
+		
+		QPen pen(ColorManager::pink());
+		pen.setWidth(3);
+		p.setPen(pen);
+		auto e = tls[idx].fitEllipse();
+		e.draw(p);
 
 		QString sp = rdf::Utils::createFilePath(filePath, QString::number(idx));
-		Image::save(Image::qPixmap2Mat(pm), sp);
+		cv::Mat rImg = Image::qPixmap2Mat(pm);
+		//rImg = rImg.t();
+		Image::save(rImg, sp);
 		idx++;
 		qDebug() << "writing" << sp;
 	}

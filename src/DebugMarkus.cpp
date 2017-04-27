@@ -296,7 +296,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	//dImg = la.draw(rImg);
 
 	cv::Mat dImg = img.clone();
-	dImg = tlM.draw(dImg);
+	dImg = tlM.draw(dImg, ColorManager::blue());
 
 	cv::Mat gcImg = img.clone();
 	gcImg = gctlM.draw(gcImg, ColorManager::blue());
@@ -304,7 +304,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-simple-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 

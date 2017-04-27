@@ -281,35 +281,19 @@ Ellipse PixelSet::fitEllipse() const {
 	
 	double angle = orientation() + CV_PI*0.5;
 
-	Vector2D c = center();
-	Vector2D majorAxis(1, 0);
-	Vector2D minorAxis(1, 0);
-
-	majorAxis.rotate(angle);
-	minorAxis.rotate(angle - CV_PI*0.5);
-
-	double maxWidth = 0.0;
-	double maxHeight = 0.0;
-
+	QVector<Vector2D> pts;
+	// aproximate ellipses with 4 points each
 	for (auto px : pixels()) {
 		assert(px);
 		
-		Vector2D orH = px->ellipse().getPoint(angle) - c;
-		Vector2D orV = px->ellipse().getPoint(angle + CV_PI*0.5) - c;
-		double w = orH*majorAxis;
-		double h = orV*minorAxis;
-
-		if (w > maxWidth)
-			maxWidth = w;
-		if (h > maxHeight)
-			maxHeight = h;
+		Ellipse e = px->ellipse();
+		pts << e.getPoint(0);
+		pts << e.getPoint(CV_PI*0.5);
+		pts << e.getPoint(CV_PI);
+		pts << e.getPoint(CV_PI*0.75);
 	}
 
-	Ellipse el;
-	el.setAngle(angle);
-	el.setCenter(c);
-	el.setAxis(Vector2D(maxWidth, maxHeight));
-
+	Ellipse el = Ellipse::fromData(pts);
 	return el;
 }
 
@@ -602,16 +586,26 @@ bool PixelGraph::isEmpty() const {
 	return mSet.isEmpty();
 }
 
-void PixelGraph::draw(QPainter& p) const {
+void PixelGraph::draw(QPainter& p, const PixelDistance::EdgeWeightFunction* weightFnc, double dynamicRange) const {
 
-	//p.setPen(ColorManager::colors()[0]);
-	//for (auto px : mSet.pixels())
-	//	px->draw(p, 0.3, Pixel::draw_ellipse);
+	QColor c = p.pen().color();
 
-	p.setPen(ColorManager::darkGray(.4));
-	for (auto e : edges())
+	for (auto e : edges()) {
+		
+		// code alpha into the edge weight
+		if (weightFnc) {
+
+			// compute the edge weight with the weighting function provided
+			double alpha = (*weightFnc)(e.data());
+			alpha = 1.0 - qMin(alpha, dynamicRange) / dynamicRange;
+
+			int ia = Utils::clamp(qRound(alpha*255), 0, 255);
+			
+			c.setAlpha(ia);
+			p.setPen(c);
+		}
 		e->draw(p);
-
+	}
 }
 
 void PixelGraph::connect(const PixelConnector& connector, const SortMode& sort) {

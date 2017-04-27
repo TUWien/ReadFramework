@@ -1353,7 +1353,7 @@ double PixelDistance::angleWeighted(const Pixel* px1, const Pixel* px2) {
 /// </summary>
 /// <param name="edge">The pixel edge.</param>
 /// <returns></returns>
-double PixelDistance::orientationWeighted(const PixelEdge * edge) {
+double PixelDistance::spacingWeighted(const PixelEdge * edge) {
 
 	if (!edge || edge->isNull())
 		return 0.0;
@@ -1381,6 +1381,38 @@ double PixelDistance::orientationWeighted(const PixelEdge * edge) {
 	}
 
 	qDebug() << "no stats when computing the scaled edges...";
+	return 0.0;
+}
+
+double PixelDistance::orientationWeighted(const PixelEdge * edge) {
+	
+	if (!edge || edge->isNull())
+		return 0.0;
+
+
+	double beta = 1.0;
+	
+	auto px1 = edge->first();
+	auto px2 = edge->second();
+
+	// this edge weight is needed for the GraphCut
+	if (px1->stats() && px2->stats()) {
+
+		double sp = px1->stats()->lineSpacing();
+		double sq = px2->stats()->lineSpacing();
+		double nl = (beta * PixelDistance::angleWeighted(px1.data(), px2.data())) / (sp * sp + sq * sq);
+		
+		double ew = 1.0 - exp(-nl);
+
+		if (ew < 0.0 || ew > 1.0) {
+			qDebug() << "illegal edge weight: " << ew;
+		}
+
+		// TODO: add mu(fp,fq) according to koo's indices
+		return ew;
+	}
+
+	qDebug() << "no stats when computing the oriented edges...";
 	return 0.0;
 }
 

@@ -1414,6 +1414,12 @@ Ellipse Ellipse::fromData(const QVector<Vector2D>& pts) {
 	return fromData(cPointsMat, center);
 }
 
+/// <summary>
+/// Returns the best fitting ellipse.
+/// </summary>
+/// <param name="pts">a N x 2 CV_32FC1 matrix representing the 2D points.</param>
+/// <param name="center">The ellipses center.</param>
+/// <returns></returns>
 Ellipse Ellipse::fromData(const cv::Mat & pts, const Vector2D & center) {
 	
 	// find the angle
@@ -1504,8 +1510,10 @@ double Ellipse::radius() const {
 cv::Mat Ellipse::toCov() const {
 
 	// eigen values
-	double ev1 = mAxis.x();
-	double ev2 = mAxis.y();
+	Vector2D a = mAxis;
+	
+	double ev1 = a.x();
+	double ev2 = a.y();
 
 	// compute eigenvectors
 	Vector2D v1(ev1, 0);

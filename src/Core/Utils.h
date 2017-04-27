@@ -85,6 +85,18 @@ public:
 	static int64 writeJson(const QString& filePath, const QJsonObject& jo);
 	static void initDefaultFramework();
 
+	// little number thingies
+	template<typename num>
+	static num clamp(num val, num min, num max) {
+	
+		if (val < min)
+			val = min;
+		if (val > max)
+			val = max;
+
+		return val;
+	};
+
 private:
 	Utils();
 	Utils(const Utils&);

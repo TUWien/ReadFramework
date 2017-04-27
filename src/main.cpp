@@ -209,7 +209,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.imagePath().isEmpty()) {
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop.tif");
-		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop1.tif");
+		//dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop1.tif");
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 

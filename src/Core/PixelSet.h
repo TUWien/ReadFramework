@@ -362,7 +362,7 @@ public:
 
 	bool isEmpty() const;
 
-	void draw(QPainter& p) const;
+	void draw(QPainter& p, const PixelDistance::EdgeWeightFunction* weightFnc = 0, double dynamicRange = 1.0) const;
 	void connect(const PixelConnector& connector = DelauneyPixelConnector(), const SortMode& sort = sort_none);
 
 	PixelSet set() const;

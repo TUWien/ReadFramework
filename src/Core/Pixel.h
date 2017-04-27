@@ -226,7 +226,7 @@ public:
 	};
 	typedef Flags<mDrawFlags> DrawFlags;
 
-	void draw(QPainter& p, double alpha = 0.3, const DrawFlags& df = DrawFlags() | draw_stats | draw_ellipse | draw_label_colors) const;
+	void draw(QPainter& p, double alpha = 0.3, const DrawFlags& df = DrawFlags() | /*draw_stats |*/ draw_ellipse | draw_label_colors) const;
 
 protected:
 	bool mIsNull = true;
@@ -271,7 +271,7 @@ protected:
 	bool mIsNull = true;
 	double mEdgeWeight = DBL_MAX;
 
-	PixelDistance::EdgeWeightFunction mWeightFnc = PixelDistance::orientationWeighted;
+	PixelDistance::EdgeWeightFunction mWeightFnc = PixelDistance::spacingWeighted;
 	QSharedPointer<Pixel> mFirst;
 	QSharedPointer<Pixel> mSecond;
 	Line mEdge;
