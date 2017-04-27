@@ -178,6 +178,31 @@ private:
 	cv::Mat pixelSetCentersToMat(const PixelSet& set) const;
 
 	void saveDistsDebug(const QString& filePath, const cv::Mat& img) const;
+
+	template <typename num>
+	cv::Mat makeSymmetric(const cv::Mat& m) const {
+
+		assert(m.cols == m.rows);
+		cv::Mat s = m.clone();
+
+		// make it a metric (symmetric)
+		num* lp = s.ptr<num>();
+
+		for (int rIdx = 0; rIdx < s.rows; rIdx++) {
+
+			for (int cIdx = rIdx+1; cIdx < s.cols; cIdx++) {
+			
+				num* rl = lp + (rIdx * s.rows + cIdx);	// row label
+				num* cl = lp + (rIdx + cIdx * s.cols);	// col label
+
+				num val = qMin(*rl, *cl);
+				*rl = val;
+				*cl = val;
+			}
+		}
+
+		return s;
+	}
 };
 
 };

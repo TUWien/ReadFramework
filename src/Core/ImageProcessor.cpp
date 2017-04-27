@@ -52,7 +52,7 @@ namespace rdf {
 
 cv::Mat IP::invert(const cv::Mat & src) {
 	
-	assert(src.depth() == CV_8U || src.depth() == CV_32F || src.depth() == CV_64F);
+	assert(src.depth() == CV_8U || src.depth() == CV_32S || src.depth() == CV_32F || src.depth() == CV_64F);
 
 	double sMin, sMax;
 	cv::minMaxLoc(src, &sMin, &sMax);
