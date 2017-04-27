@@ -32,8 +32,10 @@
 
 #pragma once
 
-#include "Utils.h"
+#include "Drawer.h"
 #include "BaseImageElement.h"
+
+#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>

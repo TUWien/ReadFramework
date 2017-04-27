@@ -506,7 +506,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 	for (const QSharedPointer<TextLineSet>& tl : textLines) {
 		
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 
 		tl->draw(p, PixelSet::DrawFlags() | PixelSet::draw_poly /*| PixelSet::draw_pixels*/, Pixel::draw_stats);
 
@@ -516,11 +516,9 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 	}
 
 	// draw errored/crucial text lines
-	Drawer::instance().setColor(ColorManager::red());
-	p.setPen(Drawer::instance().pen());
+	p.setPen(ColorManager::red());
 
 	for (const auto tl : TextLineHelper::filterAngle(textLines)) {
-
 		tl->draw(p, PixelSet::DrawFlags() | PixelSet::draw_rect | PixelSet::draw_pixels, Pixel::draw_stats);
 	}
 
@@ -662,7 +660,7 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img, const QColor& col)
 	for (auto ps : mTextLines) {
 
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 		ps.draw(p, PixelSet::draw_poly);
 	}
 

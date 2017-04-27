@@ -31,7 +31,7 @@
  *******************************************************************************************************/
 
 #include "Image.h"
-#include "Utils.h"
+#include "Drawer.h"
 #include "Shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes

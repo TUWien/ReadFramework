@@ -258,8 +258,6 @@ cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	//qDebug() << "dbscan found" << sets.size() << "clusters in" << dtf;
 
 	//for (auto s : sets) {
-	//	Drawer::instance().setColor(ColorManager::getColor());
-	//	QPen pen = Drawer::instance().pen();
 	//	p.setPen(pen);
 	//	s.draw(p);
 	//}
@@ -270,7 +268,7 @@ cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	
 		
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 
 		// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
@@ -293,7 +291,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img, const QColor& col) const 
 	for (auto b : mBlobs) {
 
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 
 		b->draw(p);
 	}

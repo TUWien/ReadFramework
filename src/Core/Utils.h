@@ -78,8 +78,8 @@ public:
 	static double rand();
 
 	static QString appDataPath();
-	QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString()) const;
-	QString baseName(const QString& filePath) const;
+	static QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString());
+	static QString baseName(const QString& filePath);
 
 	static QJsonObject readJson(const QString& filePath);
 	static int64 writeJson(const QString& filePath, const QJsonObject& jo);
@@ -89,21 +89,6 @@ private:
 	Utils();
 	Utils(const Utils&);
 };
-
-class DllCoreExport ColorManager {
-
-public:
-	static QColor getColor(int idx = -1, double alpha = 1.0);
-	static QVector<QColor> colors();
-
-	static QColor lightGray(double alpha = 1.0);
-	static QColor darkGray(double alpha = 1.0);
-	static QColor red(double alpha = 1.0);
-	static QColor blue(double alpha = 1.0);
-	static QColor pink(double alpha = 1.0);
-	static QColor white(double alpha = 1.0);
-};
-
 
 class DllCoreExport Converter {
 

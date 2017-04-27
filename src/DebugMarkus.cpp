@@ -200,7 +200,7 @@ void LayoutTest::layoutToXml() const {
 	//rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
 	rImg = la.draw(rImg);
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textlines");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
@@ -304,19 +304,22 @@ void LayoutTest::layoutToXmlDebug() const {
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-simple-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-simple-textlines");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 
-	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-gc-textlines");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 
-	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-local-orientation");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-orientation");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 
 
+	if (dstPath.contains(WHO_IS_CUTE, Qt::CaseInsensitive))
+		qDebug() << "b.t.w. best image name ever...";
+	
 	//% ellipse param
 	//	longAxis = 20;
 	//shortAxis = 10;
@@ -390,7 +393,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	//rImg = tabStops.draw(rImg);
 	rImg = spl.draw(rImg);
 	rImg = spf.draw(rImg);
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textlines");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
@@ -454,7 +457,7 @@ void LayoutTest::testLineDetector(const cv::Mat & src) const {
 	cv::Mat rImg = img.clone();
 	rImg = lsd.draw(rImg);
 
-	QString dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-lines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-lines");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
@@ -488,7 +491,7 @@ void LayoutTest::testLineDetector(const cv::Mat & src) const {
 	if (synLine.channels() == 1)
 		cv::cvtColor(synLine, synLine, CV_GRAY2BGRA);
 
-	dstPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-bw-lines", "jpg");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-bw-lines", "jpg");
 	rdf::Image::save(synLine, dstPath);
 
 	qDebug() << "line detector computed in" << dt;
@@ -543,7 +546,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	nImg = superPixel.draw(nImg);
 	//rImg = tabStops.draw(rImg);
 	//rImg = spc.draw(rImg);
-	QString imgPathN = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-nomacs", "png");
+	QString imgPathN = rdf::Utils::createFilePath(mConfig.outputPath(), "-nomacs", "png");
 	rdf::Image::save(nImg, imgPathN);
 	qDebug() << "debug image added" << imgPathN;
 
@@ -582,7 +585,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = tabStops.draw(rImg);
 	rImg = spc.draw(rImg);
 	rImg = textLines.draw(rImg);
-	QString imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-tlc");
+	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-tlc");
 	rdf::Image::save(rImg, imgPath);
 	qDebug() << "debug image added" << imgPath;
 
@@ -590,7 +593,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	rImg = img.clone();
 
 	rImg = spc.draw(rImg);
-	imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-sp");
+	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-sp");
 	rdf::Image::save(rImg, imgPath);
 	qDebug() << "debug image added" << imgPath;
 
@@ -656,7 +659,7 @@ void LayoutTest::pageSegmentation(const cv::Mat & src) const {
 
 	// save super pixel image
 	rImg = pageSeg.draw(rImg);
-	QString maskPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-page-seg");
+	QString maskPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-page-seg");
 	rdf::Image::save(rImg, maskPath);
 	qDebug() << "debug image added" << maskPath;
 }

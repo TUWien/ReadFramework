@@ -252,7 +252,7 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const
 	for (auto px : mSet.pixels()) {
 
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 		px->draw(p, 0.3, (Pixel::DrawFlags)(Pixel::draw_stats));
 	}
 
@@ -344,7 +344,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 	for (auto tl : mTextLines) {
 
 		if (!col.isValid())
-			p.setPen(ColorManager::getColor());
+			p.setPen(ColorManager::randColor());
 		tl.draw(p, PixelSet::draw_poly);
 	}
 
@@ -597,7 +597,7 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 		//tl.fitEllipse().draw(p, 0.1);
 		tls[idx].draw(p, PixelSet::draw_poly);
 
-		QString sp = rdf::Utils::instance().createFilePath(filePath, QString::number(idx));
+		QString sp = rdf::Utils::createFilePath(filePath, QString::number(idx));
 		Image::save(Image::qPixmap2Mat(pm), sp);
 		idx++;
 		qDebug() << "writing" << sp;

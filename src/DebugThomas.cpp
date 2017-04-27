@@ -74,7 +74,7 @@ void ThomasTest::testLayout() {
 	}
 
 	cv::Mat imgOut = sp.drawMserBlobs(img);
-	QString imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-sp");
+	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-sp");
 	rdf::Image::save(imgOut, imgPath);
 	qDebug() << "sp debug image added" << imgPath;
 
@@ -99,7 +99,7 @@ void ThomasTest::testLayout() {
 
 	imgOut = img.clone();
 	imgOut = spl.draw(imgOut);
-	imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-spl");
+	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-spl");
 	rdf::Image::save(imgOut, imgPath);
 	qDebug() << "spl debug image added " << imgPath;
 
@@ -142,7 +142,7 @@ void ThomasTest::testLayout() {
 
 	imgOut = img.clone();
 	imgOut = spc.draw(imgOut);
-	imgPath = rdf::Utils::instance().createFilePath(mConfig.outputPath(), "-spc");
+	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-spc");
 	rdf::Image::save(imgOut, imgPath);
 	qDebug() << "spc (classified features) debug image added " << imgPath;
 }

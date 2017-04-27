@@ -36,6 +36,7 @@
 #include "Elements.h"
 #include "ElementsHelper.h"
 #include "Image.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QJsonObject>		// needed for LabelInfo

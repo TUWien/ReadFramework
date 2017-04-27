@@ -47,31 +47,18 @@ namespace rdf {
 
 
 // Drawer --------------------------------------------------------------------
-Drawer::Drawer() {
+//cv::Mat Drawer::drawPoints(const cv::Mat & img, const std::vector<cv::Point> & pts, const QColor& col) {
+//
+//	// convert image
+//	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
+//	QPainter p(&pm);
+//
+//	drawPoints(p, pts);
+//
+//	return Image::qImage2Mat(pm.toImage());
+//}
 
-	mPen.setColor(QColor(255, 153, 51));
-}
-
-Drawer& Drawer::instance() {
-
-	static QSharedPointer<Drawer> inst;
-	if (!inst)
-		inst = QSharedPointer<Drawer>(new Drawer());
-	return *inst;
-}
-
-cv::Mat Drawer::drawPoints(const cv::Mat & img, const std::vector<cv::Point> & pts) const {
-
-	// convert image
-	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
-	QPainter p(&pm);
-
-	drawPoints(p, pts);
-
-	return Image::qImage2Mat(pm.toImage());
-}
-
-void Drawer::drawPoints(QPainter & p, const std::vector<cv::Point>& pts) const {
+void Drawer::drawPoints(QPainter & p, const std::vector<cv::Point>& pts) {
 
 	// convert points
 	QVector<QPointF> qPts;
@@ -82,63 +69,147 @@ void Drawer::drawPoints(QPainter & p, const std::vector<cv::Point>& pts) const {
 	drawPoints(p, qPts);
 }
 
-void Drawer::drawPoints(QPainter & p, const QVector<QPointF>& pts) const {
-
-	p.setPen(mPen);
+void Drawer::drawPoints(QPainter & p, const QVector<QPointF>& pts) {
 
 	for (const QPointF& cp : pts)
 		p.drawPoint(cp);
 }
 
-void Drawer::drawPoint(QPainter & p, const QPointF & pt) const {
-	
-	p.setPen(mPen);
-	p.drawPoint(pt);
-}
+//cv::Mat Drawer::drawRects(const cv::Mat & img, const std::vector<cv::Rect>& rects) {
+//	
+//	// convert image
+//	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
+//	QPainter p(&pm);
+//
+//	// convert points
+//	QVector<QRectF> qRects;
+//
+//	for (const cv::Rect& r : rects)
+//		qRects << Converter::cvRectToQt(r);
+//
+//	drawRects(p, qRects);
+//
+//	return Image::qImage2Mat(pm.toImage());
+//}
 
-cv::Mat Drawer::drawRects(const cv::Mat & img, const std::vector<cv::Rect>& rects) const {
-	
-	// convert image
-	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
-	QPainter p(&pm);
-
-	// convert points
-	QVector<QRectF> qRects;
-
-	for (const cv::Rect& r : rects)
-		qRects << Converter::cvRectToQt(r);
-
-	drawRects(p, qRects);
-
-	return Image::qImage2Mat(pm.toImage());
-}
-
-void Drawer::drawRects(QPainter & p, const QVector<QRectF>& rects) const {
+void Drawer::drawRects(QPainter & p, const QVector<QRectF>& rects) {
 
 	for (const QRectF& r : rects)
-		drawRect(p, r);
+		p.drawRect(r);
+
 }
 
-void Drawer::drawRect(QPainter & p, const QRectF& rect) const {
+// ColorManager --------------------------------------------------------------------
+/// <summary>
+/// Returns a pleasent color.
+/// </summary>
+/// <param name="idx">If idx != -1 a specific color is chosen from the palette.</param>
+/// <returns></returns>
+QColor ColorManager::randColor(double alpha) {
 
-	p.setPen(mPen);
-	p.drawRect(rect);
+	QVector<QColor> cols = colors();
+	int maxCols = cols.size();
+	
+	int	idx = qRound(Utils::rand()*maxCols * 3);
+
+	return getColor(idx, alpha);
 }
 
-void Drawer::setColor(const QColor & col) {
-	mPen.setColor(col);
+/// <summary>
+/// Returns a pleasent color.
+/// </summary>
+/// <param name="idx">If idx != -1 a specific color is chosen from the palette.</param>
+/// <returns></returns>
+QColor ColorManager::getColor(int idx, double alpha) {
+	
+	assert(idx >= 0);
+
+	QVector<QColor> cols = colors();
+	assert(cols.size() > 0);
+	
+	QColor col = cols[idx % cols.size()];
+
+	// currently not hit
+	if (idx > 2 * cols.size())
+		col = col.darker();
+	else if (idx > cols.size())
+		col = col.lighter();
+
+	col.setAlpha(qRound(alpha * 255));
+
+	return col;
 }
 
-void Drawer::setStrokeWidth(int strokeWidth) {
-	mPen.setWidth(strokeWidth);
+/// <summary>
+/// Returns our color palette.
+/// </summary>
+/// <returns></returns>
+QVector<QColor> ColorManager::colors() {
+
+	static QVector<QColor> cols;
+
+	if (cols.empty()) {
+		cols << QColor(238, 120, 34);
+		cols << QColor(240, 168, 47);
+		cols << QColor(120, 192, 167);
+		cols << QColor(251, 234, 181);
+	}
+
+	return cols;
 }
 
-void Drawer::setPen(const QPen& pen) {
-	mPen = pen;
+/// <summary>
+/// Returns a light gray.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::lightGray(double alpha) {
+	return QColor(200, 200, 200, qRound(alpha * 255));
 }
 
-QPen Drawer::pen() const {
-	return mPen;
+/// <summary>
+/// Returns a dark gray.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::darkGray(double alpha) {
+	return QColor(66, 66, 66, qRound(alpha * 255));
+}
+
+/// <summary>
+/// Returns a dark red.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::red(double alpha) {
+	return QColor(200, 50, 50, qRound(alpha * 255));
+}
+
+/// <summary>
+/// Returns the TU Wien blue.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::blue(double alpha) {
+	return QColor(0, 102, 153, qRound(alpha * 255));
+}
+
+/// <summary>
+/// Returns a pink color - not the artist.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::pink(double alpha) {
+	return QColor(255, 0, 127, qRound(alpha * 255));
+}
+
+/// <summary>
+/// Returns white - yes it's #fff.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+QColor ColorManager::white(double alpha) {
+	return QColor(255, 255, 255, qRound(alpha * 255));
 }
 
 }

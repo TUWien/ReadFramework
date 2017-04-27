@@ -96,9 +96,7 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	QPainter p(&pm);
 
 	//// uncomment to see rejected tabstops
-	//QColor col = ColorManager::darkGray();
-	//Drawer::instance().setColor(col);
-	//p.setPen(Drawer::instance().pen());
+	//p.setPen(ColorManager::darkGray());
 
 	//p.setPen(ColorManager::colors()[2]);
 	//for (auto px : mSuperPixels)
@@ -106,8 +104,7 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	//		px->draw(p, 0.4, Pixel::draw_ellipse_stats);
 
 	for (auto ts : mTabStops) {
-		Drawer::instance().setColor(ColorManager::getColor());
-		p.setPen(Drawer::instance().pen());
+		p.setPen(ColorManager::randColor());
 		ts->draw(p);
 	}
 

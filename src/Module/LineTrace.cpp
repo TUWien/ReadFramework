@@ -36,6 +36,7 @@
 #include "Blobs.h"
 #include "Algorithms.h"
 #include "Utils.h"
+#include "Drawer.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -46,8 +47,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "lsd/LSDDetector.h"
 #pragma warning(pop)
-
-
 
 namespace rdf {
 

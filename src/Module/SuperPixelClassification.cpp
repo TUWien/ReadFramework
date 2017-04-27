@@ -245,8 +245,7 @@ cv::Mat SuperPixelFeature::draw(const cv::Mat & img) const {
 	// draw labeled pixels
 	mSet.draw(p);
 
-	Drawer::instance().setColor(ColorManager::getColor(0, 0.3));
-	p.setPen(Drawer::instance().pen());
+	p.setPen(ColorManager::getColor(0, 0.3));
 
 	Histogram hist(avg);
 	hist.draw(p, Rect(10, 10, mDescriptors.cols*3, 100));

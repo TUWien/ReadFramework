@@ -300,7 +300,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 		for (int idx = s.size()-1; idx >= 0; idx--) {
 			
 			if (!col.isValid())
-				p.setPen(ColorManager::getColor());
+				p.setPen(ColorManager::randColor());
 			p.setOpacity(0.3);
 			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
 			//qDebug() << "scale" << idx << ":" << *s[idx];

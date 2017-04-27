@@ -214,7 +214,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath(rdf::Utils::instance().createFilePath(dc.imagePath(), "-result", "tif"));
+		dc.setOutputPath(rdf::Utils::createFilePath(dc.imagePath(), "-result", "tif"));
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 
@@ -236,7 +236,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.xmlPath().isEmpty()) {
 		QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(dc.imagePath());
 		//dc.setXmlPath(xmlPath);		// overwrite
-		dc.setXmlPath(rdf::Utils::instance().createFilePath(xmlPath, "-result"));
+		dc.setXmlPath(rdf::Utils::createFilePath(xmlPath, "-result"));
 
 		//dc.setXmlPath("C:/temp/T_Aigen_am_Inn_001_0056.xml");
 		qInfo() << dc.xmlPath() << "added as XML path";
