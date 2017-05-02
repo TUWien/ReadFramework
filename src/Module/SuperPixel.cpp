@@ -808,7 +808,7 @@ cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
 	p.setPen(ColorManager::blue());
 
 	for (auto px : mSet.pixels()) {
-		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_center | Pixel::draw_stats);
+		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_center | Pixel::draw_stats);
 	}
 
 	return Image::qPixmap2Mat(pm);

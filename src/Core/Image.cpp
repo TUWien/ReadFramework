@@ -381,13 +381,13 @@ cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
 	return Image::qPixmap2Mat(pm);
 }
 
-void Histogram::draw(QPainter & p) {
+void Histogram::draw(QPainter & p) const {
 
 	Rect r(0, 0, p.device()->width(), p.device()->height());
 	draw(p, r);
 }
 
-void Histogram::draw(QPainter & p, const Rect& r) {
+void Histogram::draw(QPainter & p, const Rect& r) const {
 
 	if (mHist.empty())
 		return;
@@ -397,30 +397,49 @@ void Histogram::draw(QPainter & p, const Rect& r) {
 	p.setBrush(oP.color());
 	p.setPen(Qt::NoPen);
 
-	double mVal = max();
+	double maxVal = max();
+	double minVal = min();
 	double binWidth = r.width() / mHist.cols;
 	double gap = (binWidth >= 2) ? 1.0 : 0.0;
 
-	float* hPtr = mHist.ptr<float>();
+	const float* hPtr = mHist.ptr<float>();
 	for (int idx = 0; idx < mHist.cols; idx++) {
 
-		double x = idx*binWidth + r.left();
-		QPointF p1(x, r.bottom() - qRound((double)hPtr[idx] / mVal * r.height()));
-		QPointF p2(x + binWidth-gap, r.bottom());
+		double x = transformX(idx, r);
+		QPointF p1(x, transformY((double)hPtr[idx], minVal, maxVal, r));
+		QPointF p2(x + binWidth-gap, transformY(0, minVal, maxVal, r));
 
 		QRectF cr(p1, p2);
 		p.drawRect(cr);
 	}
 	
+	// draw 0 line
+	double tz = transformY(0, minVal, maxVal, r);
+	QLineF zeroLine(QPointF(r.left(), tz), QPointF(r.right(), tz));
+
+	p.setPen(oP.color().darker());
+	p.setOpacity(0.5);
+	p.drawLine(zeroLine);
+	p.setOpacity(1.0);
+
 	// reset painter
 	p.setPen(oP);
 	p.setBrush(oB);
+}
 
-	//Line l(r.topLeft(), r.topRight());
-	//l.draw(p);
+double Histogram::transformY(double val, double minV, double maxV, const Rect & r) const {
+	
+	double tVal = r.bottom() - qRound((double)(val - minV) / (maxV - minV) * r.height());
+	
+	return tVal;
+}
 
-	//l = Line(r.bottomLeft(), r.bottomRight());
-	//l.draw(p);
+double Histogram::transformX(double val, const Rect & r) const {
+	
+	double binWidth = r.width() / mHist.cols;
+	double tVal = val*binWidth + r.left();
+
+	return tVal;
 }
 
 cv::Mat Histogram::hist() const {

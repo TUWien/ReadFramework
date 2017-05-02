@@ -249,8 +249,8 @@ int PixelStats::lineSpacingIndex() const {
 
 double PixelStats::lineSpacing() const {
 
-	// * 2.0 -> radius vs. diameter
-	return (double)lineSpacingIndex()/mHistSize * mHistSize/scale() * scale() * 2.0;
+	double sr = (256 / scale());	// sampling rate
+	return (double)lineSpacingIndex() * sr;
 }
 
 int PixelStats::numOrientations() const {

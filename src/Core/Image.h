@@ -66,14 +66,16 @@ public:
 	Histogram(const QVector<int>& values);
 
 	cv::Mat draw(const QPen& pen = QPen(), const QColor& bgCol = QColor(255, 255, 255));
-	void draw(QPainter& p, const Rect& r);
+	void draw(QPainter& p, const Rect& r) const;
 
 	cv::Mat hist() const;
 	double max() const;
 	double min() const;
 
 protected:
-	void draw(QPainter& p);
+	void draw(QPainter& p) const;
+	double transformX(double val, const Rect& r) const;
+	double transformY(double val, double minV, double maxV, const Rect& r) const;
 
 	cv::Mat mHist;
 };

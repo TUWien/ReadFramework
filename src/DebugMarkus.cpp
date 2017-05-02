@@ -319,8 +319,8 @@ void LayoutTest::layoutToXmlDebug() const {
 	//dImg = tlM.draw(dImg, ColorManager::blue());
 
 	cv::Mat gcImg;
-	gcImg = gctlM.draw(img, ColorManager::blue());
-	//gcImg = lo.draw(img, pixels.pixels()[700]->id(), 256);
+	//gcImg = gctlM.draw(img, ColorManager::blue());
+	gcImg = lo.draw(img, pixels.pixels()[700]->id(), 256);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
@@ -330,8 +330,8 @@ void LayoutTest::layoutToXmlDebug() const {
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 
-	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
-	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
+	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 
