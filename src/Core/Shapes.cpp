@@ -1503,6 +1503,10 @@ double Ellipse::radius() const {
 	return (mAxis.x() + mAxis.y()) / 2.0;
 }
 
+double Ellipse::area() const {
+	return CV_PI*mAxis.x()*mAxis.y();
+}
+
 /// <summary>
 /// Converts the convidence ellipse to a covariance matrix.
 /// </summary>

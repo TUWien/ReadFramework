@@ -331,7 +331,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 	QPainter p(&pm);
 
 	//  -------------------------------------------------------------------- show the graph
-	p.setOpacity(1.0);
+	p.setOpacity(0.3);
 	PixelGraph graph(mSet);
 	graph.connect(*mConnector);
 
@@ -346,7 +346,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 		px->draw(p, 0.3, Pixel::draw_stats);
 
 	//  -------------------------------------------------------------------- draw text lines
-	p.setOpacity(0.3);
+	p.setOpacity(0.7);
 	p.setPen(col);
 
 	for (auto tl : mTextLines) {
@@ -382,12 +382,13 @@ cv::Mat GraphCutTextLine::costs(int numLabels) const {
 	// fill costs
 	cv::Mat data(mSet.size(), numLabels, CV_64FC1);
 
-	//  -------------------------------------------------------------------- compute mahalnobis dists
+	//  -------------------------------------------------------------------- compute mahalanobis dists
 	// convert centers
 	cv::Mat centers = pixelSetCentersToMat(mSet);
 
 	for (int idx = 0; idx < mTextLines.size(); idx++) {
 		cv::Mat md = mahalanobisDists(mTextLines[idx], centers);
+		//md *= 1.0/mTextLines[idx].area();
 		md.copyTo(data.col(idx));
 	}
 
@@ -426,7 +427,7 @@ cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 	cv::Mat labelIdx;
 	cv::sortIdx(labelDist, labelIdx, CV_SORT_EVERY_ROW + CV_SORT_ASCENDING);
 
-	int numNeighbors = 5;
+	int numNeighbors = 3;
 	//double maxDist = 0.1;	// turned off 2
 
 	cv::Mat labelCosts(labelDist.size(), CV_32SC1, cv::Scalar(numNeighbors));
@@ -472,7 +473,7 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 	//icov = icov.mul(icov);
 	cv::invert(icov, icov, cv::DECOMP_SVD);
 
-	double mthr = 500.0;
+	//double mthr = 7.0;
 
 	for (int idx = 0; idx < centers.rows; idx++) {
 
@@ -483,8 +484,6 @@ cv::Mat GraphCutTextLine::mahalanobisDists(const PixelSet & tl, const cv::Mat& c
 		double d = std::sqrt(nm.at<double>(0, 0));
 		dp[idx] = d;// (d < mthr) ? d : mthr;
 	}
-
-	//cv::normalize(dists, dists, 1.0, cv::NORM_MINMAX);
 
 	return dists;
 }

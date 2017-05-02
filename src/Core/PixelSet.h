@@ -206,7 +206,8 @@ public:
 	Vector2D meanCenter() const;
 	double orientation(double statMoment = 0.5) const;
 	double lineSpacing(double statMoment = 0.5) const;
-	
+	double area() const;
+
 	QSharedPointer<TextLine> toTextLine() const;
 
 	virtual void draw(

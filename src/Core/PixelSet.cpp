@@ -362,6 +362,16 @@ double PixelSet::lineSpacing(double statMoment) const {
 	return Algorithms::statMoment(spacings, statMoment);
 }
 
+double PixelSet::area() const {
+	
+	double area = 0.0;
+	for (const QSharedPointer<Pixel>& px : mSet) {
+		area += px->ellipse().area();
+	}
+	
+	return area;
+}
+
 void PixelSet::append(const QVector<QSharedPointer<Pixel>>& set) {
 	
 	mSet << set;

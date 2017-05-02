@@ -435,6 +435,7 @@ public:
 	double majorAxis() const;
 	double minorAxis() const;
 	double radius() const;
+	double area() const;
 
 	cv::Mat toCov() const;
 
