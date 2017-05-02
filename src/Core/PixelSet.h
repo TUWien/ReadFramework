@@ -208,6 +208,8 @@ public:
 	double lineSpacing(double statMoment = 0.5) const;
 	double area() const;
 
+	QSharedPointer<Pixel> find(const QString& id) const;
+
 	QSharedPointer<TextLine> toTextLine() const;
 
 	virtual void draw(

@@ -267,10 +267,10 @@ void LayoutTest::layoutToXmlDebug() const {
 	// smooth estimation
 	rdf::GraphCutOrientation pse(pixels);
 
-	if (!pse.compute()) {
-		qWarning() << "could not compute set orientation";
-		return;
-	}
+	//if (!pse.compute()) {
+	//	qWarning() << "could not compute set orientation";
+	//	return;
+	//}
 
 	// find text lines
 	rdf::SimpleTextLineSegmentation tlM(pixels);
@@ -320,7 +320,8 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	cv::Mat gcImg;
 	//gcImg = gctlM.draw(img, ColorManager::blue());
-	gcImg = lo.draw(img, pixels.pixels()[700]->id(), 256);
+
+	gcImg = lo.draw(img, "252", 128);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);

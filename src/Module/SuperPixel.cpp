@@ -388,6 +388,7 @@ QVector<QSharedPointer<MserBlob>> MserContainer::toBlobs() const {
 	QVector<QSharedPointer<MserBlob> > blobs;
 	for (unsigned int idx = 0; idx < pixels.size(); idx++) {
 
+		// TODO: this ID is not unique (e.g. multiple erosion scales)
 		QSharedPointer<MserBlob> b(new MserBlob(pixels[idx], boxes[idx], QString::number(idx)));
 		blobs << b;
 	}
@@ -557,7 +558,11 @@ void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& se
 	// compute all orientations
 	int nOr = config()->numOrientations();
 	int histSize = config()->histSize();
-	cv::Mat orHist(nOr, histSize, CV_32FC1, cv::Scalar(0));
+
+	// setting the orientation histogram default to 1 
+	// gives better estimations if the hist is sparse (lots of 0 entries)
+	// due to the dft
+	cv::Mat orHist(nOr, histSize, CV_32FC1, cv::Scalar(1));
 	cv::Mat sparsity(1, nOr, CV_32FC1);
 
 	for (int k = 0; k < nOr; k++) {
@@ -655,13 +660,7 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
 
-	QSharedPointer<Pixel> pixel;
-	for (auto p : mSet.pixels()) {
-		if (p->id() == id) {
-			pixel = p;
-			break;
-		}
-	}
+	QSharedPointer<Pixel> pixel = mSet.find(id);
 
 	if (!pixel) {
 		qInfo() << "cannot draw local orientation for" << id << "because I did not find it...";
@@ -690,13 +689,14 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 
 	// draw the selected pixel in a different color
 	painter.setPen(ColorManager::colors()[0]);
-	pixel->draw(painter, 0.3, Pixel::draw_all);
+	pixel->draw(painter, 0.3, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_id);
 
 	// compute all orientations
 	int histSize = config()->histSize();
 	int nOr = config()->numOrientations();
 	cv::Mat orHist(nOr, histSize, CV_32FC1, cv::Scalar(0));
-	
+	Histogram dominantHist;
+
 	for (int k = 0; k < nOr; k++) {
 
 		// create orientation vector
@@ -712,11 +712,17 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
 		h.draw(painter, r);
 
+		if (k == pixel->stats()->orientationIndex())
+			dominantHist = h;
+
 		// draw angle
 		Vector2D tp = r.topLeft();
 		tp.setY(tp.y() - (r.height() / 2.0 + 5));
 		painter.drawText(tp.toQPoint(), QString::number(cAngle * DK_RAD2DEG));
 	}
+
+	Rect r(30, pixel->center().y() - radius, histSize, 50);
+	dominantHist.draw(painter, r);
 
 	return Image::qPixmap2Mat(pm);
 }
@@ -808,7 +814,7 @@ cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
 	p.setPen(ColorManager::blue());
 
 	for (auto px : mSet.pixels()) {
-		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_center | Pixel::draw_stats);
+		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_center | Pixel::draw_stats);
 	}
 
 	return Image::qPixmap2Mat(pm);

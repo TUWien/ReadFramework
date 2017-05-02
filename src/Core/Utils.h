@@ -196,7 +196,7 @@ public:
     }
 
     operator RestrictedBool() const {
-        return mFlags ? &Flags::mFlags : 0;
+		return mFlags ? &Flags::mFlags : 0;
     }
 
     Underlying value() const {
@@ -204,7 +204,7 @@ public:
     }
 
 protected:
-    Underlying  mFlags;
+    Underlying mFlags;
 };
 
 };

@@ -349,7 +349,9 @@ cv::Mat Image::jsonToMat(const QJsonObject & jo) {
 
 // Histogram --------------------------------------------------------------------
 Histogram::Histogram(const cv::Mat & values) {
-	assert(values.depth() == CV_32FC1 && values.rows == 1);
+	
+	if (!values.empty())
+		assert(values.depth() == CV_32FC1 && values.rows == 1);
 	mHist = values;
 }
 

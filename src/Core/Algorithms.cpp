@@ -1370,7 +1370,7 @@ double PixelDistance::spacingWeighted(const PixelEdge * edge) {
 		double sp = px1->stats()->lineSpacing();
 		double sq = px2->stats()->lineSpacing();
 		double nl = (beta * edge->edge().squaredLength()) / (sp * sp + sq * sq);
-		double ew = 1.0 - exp(-nl);
+		double ew = exp(-nl);
 
 		if (ew < 0.0 || ew > 1.0) {
 			qDebug() << "illegal edge weight: " << ew;
@@ -1402,7 +1402,7 @@ double PixelDistance::orientationWeighted(const PixelEdge * edge) {
 		double sq = px2->stats()->lineSpacing();
 		double nl = (beta * PixelDistance::angleWeighted(px1.data(), px2.data())) / (sp * sp + sq * sq);
 		
-		double ew = 1.0 - exp(-nl);
+		double ew = exp(-nl);
 
 		if (ew < 0.0 || ew > 1.0) {
 			qDebug() << "illegal edge weight: " << ew;
@@ -1419,7 +1419,7 @@ double PixelDistance::orientationWeighted(const PixelEdge * edge) {
 double PixelDistance::euclidean(const PixelEdge * edge) {
 	
 	assert(edge);
-	return 1.0 - exp(-edge->edge().length());
+	return exp(-edge->edge().length());
 }
 
 

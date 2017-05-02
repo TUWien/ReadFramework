@@ -132,6 +132,8 @@ public:
 	double minVal() const;
 	cv::Mat data(const DataIndex& dIdx = all_data);
 
+	QString toString() const;
+
 protected:
 	cv::Mat mData;	// MxN orientation histograms M ... idx_end and N ... number of orientations
 	double mScale = 0.0;
@@ -216,13 +218,11 @@ public:
 		draw_ellipse			= 0x01,
 		draw_stats				= 0x02,
 		draw_center				= 0x04,
-		draw_label_colors		= 0x08,
-		draw_tab_stops			= 0x10,
-		draw_id					= 0x20,
+		draw_id					= 0x08,
+		draw_label_colors		= 0x10,
+		draw_tab_stops			= 0x20,
 
-		draw_all				= 0xFF,
-
-		draw_end
+		draw_all				= 0x3f,
 	};
 	typedef Flags<mDrawFlags> DrawFlags;
 

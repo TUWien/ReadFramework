@@ -189,7 +189,7 @@ void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
 	float* cbP = mData.ptr<float>(combined_idx);
 
 	for (int rIdx = 0; rIdx < orHist.rows; rIdx++) {
-
+		
 		double minVal = 0;
 		cv::Point minIdx;
 		cv::minMaxLoc(orHist.row(rIdx), &minVal, 0, &minIdx);
@@ -275,6 +275,18 @@ cv::Mat PixelStats::data(const DataIndex& dIdx) {
 
 	assert(dIdx >= 0 && dIdx <= mData.cols);
 	return mData.row(dIdx);
+}
+
+QString PixelStats::toString() const {
+	
+	QString msg;
+	msg += id();
+	msg += " or idx " + QString::number(mOrIdx);
+	msg += " or " + QString::number(orientation());
+	msg += " spacing idx " + QString::number(lineSpacingIndex());
+	//msg += " spacing " + QString::number(lineSpacing());
+	
+	return msg;
 }
 
 // Pixel --------------------------------------------------------------------
@@ -389,11 +401,8 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	QPen oldPen = p.pen();
 
 	// show pixel id
-	if (df & draw_id) {
-		p.setPen(ColorManager::red());
+	if (df & draw_id)
 		p.drawText(center().toQPoint(), id());
-		p.setPen(oldPen);
-	}
 
 	// colorize according to labels
 	if (df & draw_label_colors) {

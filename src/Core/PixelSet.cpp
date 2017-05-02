@@ -370,6 +370,36 @@ double PixelSet::area() const {
 	return area;
 }
 
+/// <summary>
+/// Returns the pixel having the id specified.
+/// If no pixel with this ID exists, a null pointer is returned.
+/// </summary>
+/// <param name="id">The pixel id.</param>
+/// <returns></returns>
+QSharedPointer<Pixel> PixelSet::find(const QString & id) const {
+	
+	int cnt = 0;
+	for (const QSharedPointer<Pixel>& px : mSet) {
+
+		if (px->id() == id) {
+			//if (cnt != 0)
+			//	return px;
+			
+			cnt++;
+		}
+	}
+
+	qDebug() << id << "exists" << cnt << "times";
+
+	for (const QSharedPointer<Pixel>& px : mSet) {
+
+		if (px->id() == id)
+			return px;
+	}
+	
+	return QSharedPointer<Pixel>();
+}
+
 void PixelSet::append(const QVector<QSharedPointer<Pixel>>& set) {
 	
 	mSet << set;

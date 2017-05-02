@@ -125,7 +125,7 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 
 			// compute weight
 			double rawWeight = mWeightFnc(pe.data());
-			int w = qRound((1.0 - rawWeight) * config()->scaleFactor());
+			int w = qRound(rawWeight * config()->scaleFactor());
 
 			gc->setNeighbors(idx, sVtxIdx, w);
 		}
