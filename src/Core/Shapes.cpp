@@ -1558,7 +1558,7 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	QBrush b = p.brush();	// backup
 
 	QColor col = p.pen().brush().color();
-	col.setAlpha(qRound(alpha*100));
+	col.setAlpha(qRound(alpha*255));
 	p.setBrush(col);
 
 	p.translate(mCenter.toQPointF());

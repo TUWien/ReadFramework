@@ -290,25 +290,48 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	// end computing --------------------------------------------------------------------
 
+	// debug visualizations --------------------------------------------------------------------
+
+	cv::Mat ei(img.size(), CV_8UC1, cv::Scalar(0));
+	QPixmap pm = Image::mat2QPixmap(ei);
+	QPainter p(&pm);
+	p.setPen(ColorManager::white());
+	p.setOpacity(0.2);
+
+	for (auto px : pixels.pixels()) {
+
+		Vector2D sVec(px->stats()->lineSpacing()*0.5, 100);
+		Ellipse e(px->center(), sVec, -px->stats()->orientation());
+		e.draw(p, 1.0);
+	}
+
+	cv::Mat dImg = Image::qPixmap2Mat(pm);
+
+
+	// debug visualizations --------------------------------------------------------------------
+
 	// drawing --------------------------------------------------------------------
 
 	// save super pixel image
 	//dImg = la.draw(rImg);
 
-	cv::Mat dImg = img.clone();
-	dImg = tlM.draw(dImg, ColorManager::blue());
+	//cv::Mat dImg = img.clone();
+	//dImg = tlM.draw(dImg, ColorManager::blue());
 
-	cv::Mat gcImg = img.clone();
-	gcImg = gctlM.draw(gcImg, ColorManager::blue());
+	cv::Mat gcImg;
+	gcImg = gctlM.draw(img, ColorManager::blue());
+	//gcImg = lo.draw(img, pixels.pixels()[700]->id(), 256);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
+	//QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 
 	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
+	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 

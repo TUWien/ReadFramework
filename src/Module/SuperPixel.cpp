@@ -635,12 +635,16 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 
 	for (int cIdx = 0; cIdx < orHist.cols; cIdx++) {
 		
-		if (cIdx >= 10) {
-			// see Koo16: val = -log( (val*val) / (hist[0]*hist[0]) + 1.0);
-			orPtr[cIdx] *= orPtr[cIdx];
-			orPtr[cIdx] /= normValSq;
-			orPtr[cIdx] += 1.0f;	// for log
-			orPtr[cIdx] = std::log(orPtr[cIdx]) * -1.0f;
+		// >= 3 -> remove low frequencies
+		if (cIdx >= 3) {
+
+			// see Koo16:								val = -log( (val*val) / (hist[0]*hist[0]));
+			// I changed it (for numerical stability):	val = -log( (val*val) / (hist[0]*hist[0]) + 1.0);
+			double v = orPtr[cIdx];
+			v *= v;
+			v /= normValSq;
+			v += 1.0;	// scale log
+			orPtr[cIdx] = (float)-std::log(v);
 		}
 		else {
 			// remove very low frequencies - they might create larger peaks than the recurring frequency
@@ -652,11 +656,12 @@ void LocalOrientation::computeOrHist(const Pixel* pixel,
 cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double radius) const {
 
 	QSharedPointer<Pixel> pixel;
-	for (auto p : mSet.pixels())
+	for (auto p : mSet.pixels()) {
 		if (p->id() == id) {
 			pixel = p;
 			break;
 		}
+	}
 
 	if (!pixel) {
 		qInfo() << "cannot draw local orientation for" << id << "because I did not find it...";
@@ -703,12 +708,14 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 		cv::Mat cRow = orHist.row(k);
 		computeOrHist(pixel.data(), neighbors, orVec, cRow, sp);
 
-		//qDebug().noquote() << Image::printImage(cRow, "row" + QString::number(cAngle * DK_RAD2DEG));
-
 		rdf::Histogram h(cRow);
 		Rect r(30 + k * (histSize+5), pixel->center().y()-radius-150, histSize, 50);
 		h.draw(painter, r);
-		painter.drawText(r.bottomLeft().toQPoint(), QString::number(cAngle * DK_RAD2DEG));
+
+		// draw angle
+		Vector2D tp = r.topLeft();
+		tp.setY(tp.y() - (r.height() / 2.0 + 5));
+		painter.drawText(tp.toQPoint(), QString::number(cAngle * DK_RAD2DEG));
 	}
 
 	return Image::qPixmap2Mat(pm);

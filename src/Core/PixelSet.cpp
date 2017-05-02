@@ -279,8 +279,6 @@ Line PixelSet::fitLine(double offsetAngle) const {
 
 Ellipse PixelSet::fitEllipse() const {
 	
-	double angle = orientation() + CV_PI*0.5;
-
 	QVector<Vector2D> pts;
 	// aproximate ellipses with 4 points each
 	for (auto px : pixels()) {

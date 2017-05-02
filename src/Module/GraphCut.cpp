@@ -131,6 +131,9 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 		}
 	}
 
+	//Image::imageInfo(c, "cost");
+	//Image::imageInfo(sm, "labelDist");
+
 	// run the expansion-move
 	try {
 		qDebug() << "energy before:" << gc->compute_energy();
@@ -144,7 +147,7 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 		mWarning << QString::fromUtf8(gce.message);
 		return QSharedPointer<GCoptimizationGeneralGraph>();
 	}
-
+	
 	return gc;
 }
 
@@ -200,7 +203,7 @@ cv::Mat GraphCutOrientation::costs(int numLabels) const {
 		assert(ps);
 
 		cv::Mat cData = ps->data(PixelStats::combined_idx);
-		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());	// TODO: check scaling
+		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor()*100);	// TODO: check scaling
 	}
 
 	return data;
@@ -434,7 +437,7 @@ cv::Mat GraphCutTextLine::labelDistMatrix(int numLabels) const {
 	for (int rIdx = 0; rIdx < labelCosts.rows; rIdx++) {
 
 		const int* lIdxPtr = labelIdx.ptr<int>(rIdx);
-		const float* dPtr = labelDist.ptr<float>(rIdx);
+		//const float* dPtr = labelDist.ptr<float>(rIdx);
 
 		int* lcPtr = labelCosts.ptr<int>(rIdx);
 

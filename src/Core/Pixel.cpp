@@ -165,13 +165,13 @@ void MserBlob::draw(QPainter & p) {
 
 // PixelStats --------------------------------------------------------------------
 PixelStats::PixelStats(const cv::Mat& orHist, 
+
 	const cv::Mat& sparsity, 
 	double scale, 
 	const QString& id) : BaseElement(id) {
 
 	mScale = scale;
 	convertData(orHist, sparsity);
-
 }
 
 void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
