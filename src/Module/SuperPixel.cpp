@@ -388,7 +388,6 @@ QVector<QSharedPointer<MserBlob>> MserContainer::toBlobs() const {
 	QVector<QSharedPointer<MserBlob> > blobs;
 	for (unsigned int idx = 0; idx < pixels.size(); idx++) {
 
-		// TODO: this ID is not unique (e.g. multiple erosion scales)
 		QSharedPointer<MserBlob> b(new MserBlob(pixels[idx], boxes[idx], QString::number(idx)));
 		blobs << b;
 	}
@@ -750,6 +749,8 @@ bool ScaleSpaceSuperPixel::compute() {
 
 	Config::instance().global().numScales = config()->numLayers();
 
+	int idCnt = 0;
+
 	for (int idx = 0; idx < config()->numLayers(); idx++) {
 	
 		// compute super pixel
@@ -769,11 +770,15 @@ bool ScaleSpaceSuperPixel::compute() {
 
 			PixelSet set = spm.getSuperPixels();
 
-			if (idx > 0) {
+			// assign the pyramid level
+			for (auto p : set.pixels()) {
+				p->setPyramidLevel(idx);
+				// make ID unique for scale space
+				p->setId(QString::number(idCnt));
+				idCnt++;
+			}
 
-				// assign the pyramid level
-				for (auto p : set.pixels())
-					p->setPyramidLevel(idx);
+			if (idx > 0) {
 
 				// re-scale
 				double sf = std::pow(2, idx);
@@ -814,7 +819,7 @@ cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
 	p.setPen(ColorManager::blue());
 
 	for (auto px : mSet.pixels()) {
-		px->draw(p, 0.3, Pixel::DrawFlags() | Pixel::draw_center | Pixel::draw_stats);
+		px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
 	}
 
 	return Image::qPixmap2Mat(pm);

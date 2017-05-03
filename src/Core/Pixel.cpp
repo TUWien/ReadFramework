@@ -165,7 +165,6 @@ void MserBlob::draw(QPainter & p) {
 
 // PixelStats --------------------------------------------------------------------
 PixelStats::PixelStats(const cv::Mat& orHist, 
-
 	const cv::Mat& sparsity, 
 	double scale, 
 	const QString& id) : BaseElement(id) {
@@ -249,22 +248,23 @@ int PixelStats::lineSpacingIndex() const {
 
 double PixelStats::lineSpacing() const {
 
-	double sr = (256 / scale());	// sampling rate
+	double sr = (256 / scaleFactor());	// sampling rate
 	return (double)lineSpacingIndex() * sr;
 }
 
 int PixelStats::numOrientations() const {
-
 	return mData.cols;
 }
 
 double PixelStats::minVal() const {
-	
 	return mMinVal;
 }
 
-double PixelStats::scale() const {
-	
+void PixelStats::scale(double factor) {
+	mScale *= factor;
+}
+
+double PixelStats::scaleFactor() const {
 	return mScale;
 }
 
@@ -320,6 +320,9 @@ Ellipse Pixel::ellipse() const {
 void Pixel::scale(double factor) {
 	mEllipse.scale(factor);
 	mBBox.scale(factor);
+	
+	for (auto s : mStats)
+		s->scale(factor);
 }
 
 void Pixel::addStats(const QSharedPointer<PixelStats>& stats) {
@@ -401,8 +404,10 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	QPen oldPen = p.pen();
 
 	// show pixel id
-	if (df & draw_id)
-		p.drawText(center().toQPoint(), id());
+	if (df & draw_id) {
+		Vector2D c = center() + Vector2D(5, 3);
+		p.drawText(c.toQPoint(), id());
+	}
 
 	// colorize according to labels
 	if (df & draw_label_colors) {
@@ -438,6 +443,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 			p.setPen(ColorManager::red());
 			p.drawLine(Line(center(), center() + vec).line());
 			p.setPen(oPen);
+			
 		}
 	}
 
@@ -454,8 +460,9 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 
 	if (df & draw_center) {
 
+		p.setRenderHint(QPainter::HighQualityAntialiasing);
 		Ellipse e = mEllipse;
-		e.setAxis(Vector2D(3, 3));
+		e.setAxis(Vector2D(1, 1));
 		e.draw(p, alpha);
 	}
 

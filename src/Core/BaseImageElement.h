@@ -61,6 +61,7 @@ public:
 	DllCoreExport friend QDataStream& operator<<(QDataStream& s, const BaseElement& e);
 	DllCoreExport friend QDebug operator<< (QDebug d, const BaseElement &e);
 
+	void setId(const QString& id);
 	QString id() const;
 	virtual QString toString() const;
 

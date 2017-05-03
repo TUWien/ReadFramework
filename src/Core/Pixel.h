@@ -125,7 +125,8 @@ public:
 	double orientation() const;
 	Vector2D orVec() const;
 	
-	double scale() const;
+	void scale(double factor);
+	double scaleFactor() const;
 	int lineSpacingIndex() const;
 	double lineSpacing() const;
 

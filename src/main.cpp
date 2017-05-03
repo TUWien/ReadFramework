@@ -212,6 +212,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop1.tif");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/102_csrc-crop.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/M_Aigen_am_Inn_007_0084-crop.jpg");
+		dc.setImagePath("D:/read/test/graph-cut-textlines/line-spacing.png");
+
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 

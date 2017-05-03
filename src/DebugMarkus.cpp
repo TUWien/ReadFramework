@@ -321,7 +321,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	cv::Mat gcImg;
 	//gcImg = gctlM.draw(img, ColorManager::blue());
 
-	gcImg = lo.draw(img, "252", 128);
+	gcImg = lo.draw(img, "1163", 256);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);

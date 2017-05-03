@@ -92,6 +92,15 @@ QDebug operator<<(QDebug d, const BaseElement& e) {
 }
 
 /// <summary>
+/// Sets the (preferably unique) ID.
+/// If no ID is set, a unqiue ID is generated and assigned.
+/// </summary>
+/// <param name="id">The identifier.</param>
+void BaseElement::setId(const QString & id) {
+	mId = id;
+}
+
+/// <summary>
 /// Returns the elment's id.
 /// </summary>
 /// <returns></returns>
