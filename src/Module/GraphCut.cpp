@@ -50,7 +50,7 @@
 namespace rdf {
 
 // GraphCutConfig --------------------------------------------------------------------
-GraphCutConfig::GraphCutConfig() : ModuleConfig("Graph Cut") {
+GraphCutConfig::GraphCutConfig(const QString& name) : ModuleConfig(name) {
 }
 
 double GraphCutConfig::scaleFactor() const {
@@ -614,6 +614,196 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 		qDebug() << "writing" << sp;
 	}
 
+}
+
+// GraphCutLineSpacing --------------------------------------------------------------------
+GraphCutLineSpacing::GraphCutLineSpacing(const PixelSet & set) : GraphCutPixel(set) {
+	mConfig = QSharedPointer<GraphCutLineSpacingConfig>::create();
+}
+
+bool GraphCutLineSpacing::checkInput() const {
+	return !isEmpty();
+}
+
+bool GraphCutLineSpacing::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	// compute scaling hist
+	mSpaceHist = spacingHist();
+
+	// create graph
+	PixelGraph graph(mSet);
+	graph.connect(*mConnector);
+
+	// perform graphcut
+	auto gc = graphCut(graph);
+
+	if (gc) {
+
+		QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
+		for (int idx = 0; idx < pixel.size(); idx++) {
+
+			auto ps = pixel[idx]->stats();
+			double ls = mSpaceHist.value(gc->whatLabel(idx));
+
+			ps->setLineSpacing(qRound(ls));
+		}
+	}
+
+	mInfo << "computed in" << dt;
+
+	return true;
+}
+
+QSharedPointer<GraphCutLineSpacingConfig> GraphCutLineSpacing::config() const {
+	return qSharedPointerDynamicCast<GraphCutLineSpacingConfig>(mConfig);
+}
+
+cv::Mat GraphCutLineSpacing::costs(int numLabels) const {
+
+	// fill costs
+	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		auto ps = mSet[idx]->stats();
+		assert(ps);
+
+		// get the current histogram bin index
+		int bIdx = mSpaceHist.binIdx(ps->lineSpacing());
+		
+		cv::Mat cl(1, numLabels, CV_32SC1);
+		unsigned int* clp = cl.ptr<unsigned int>();
+
+		for (int lIdx = 0; lIdx < numLabels; lIdx++) {
+			clp[lIdx] = abs(bIdx - lIdx);
+		}
+
+		cl.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor());	// TODO: check scaling
+	}
+
+	return data;
+}
+
+cv::Mat GraphCutLineSpacing::labelDistMatrix(int numLabels) const {
+
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+
+		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+
+			// set smoothness cost for orientations
+			sPtr[cIdx] = abs(rIdx - cIdx);
+		}
+	}
+
+	return orDist;
+}
+
+/// <summary>
+/// Returns the numbers of labels (states).
+/// The statistics' columns == the number of possible labels
+/// </summary>
+/// <returns></returns>
+int GraphCutLineSpacing::numLabels() const {
+	return config()->numLabels();
+}
+
+Histogram GraphCutLineSpacing::spacingHist() const {
+	
+	cv::Mat scales(1, mSet.size(), CV_32FC1);
+	float* sp = scales.ptr<float>();
+	
+	for (int cIdx = 0; cIdx < scales.cols; cIdx++) {
+	
+		float v = (float)mSet[cIdx]->stats()->lineSpacing();
+		sp[cIdx] = v;
+	}
+
+	return Histogram::fromData<float>(scales, numLabels());
+}
+
+//cv::Mat GraphCutLineSpacing::spacingHist() const {
+//	
+//	cv::Mat scales(1, mSet.size(), CV_32FC1);
+//	float* sp = scales.ptr<float>();
+//	float minVal = FLT_MAX;
+//	float maxVal = FLT_MIN;
+//
+//	for (int cIdx = 0; cIdx < scales.cols; cIdx++) {
+//
+//		float v = (float)mSet[cIdx]->stats()->lineSpacing();
+//		sp[cIdx] = v;
+//
+//		if (v > maxVal)
+//			maxVal = v;
+//		if (v < minVal)
+//			minVal = v;
+//	}
+//
+//	int histSize = numLabels();
+//	float range[] = { minVal, maxVal };
+//	const float* histRange = { range };
+//
+//	cv::Mat hist;
+//	cv::calcHist(&scales, 1, 0, cv::Mat(), hist, 1, &histSize, &histRange);
+//
+//	return hist;
+//}
+
+cv::Mat GraphCutLineSpacing::draw(const cv::Mat & img, const QColor & col) const {
+
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter p(&pm);
+
+	// show the graph
+	PixelGraph graph(mSet);
+	graph.connect(*mConnector);
+
+	p.setPen(ColorManager::darkGray(0.3));
+	graph.draw(p);
+
+	p.setPen(col);
+
+	for (auto px : mSet.pixels()) {
+
+		if (!col.isValid())
+			p.setPen(ColorManager::randColor());
+		px->draw(p, 0.3, (Pixel::DrawFlags)(Pixel::draw_stats));
+	}
+
+	Rect r(Vector2D(10, 10), Vector2D(100, 100));
+	mSpaceHist.draw(p, r);
+
+	return Image::qPixmap2Mat(pm);
+}
+
+// GraphCutLineSpacingConfig --------------------------------------------------------------------
+GraphCutLineSpacingConfig::GraphCutLineSpacingConfig() : GraphCutConfig("GraphCutLineSpacingConfig") {
+}
+
+int GraphCutLineSpacingConfig::numLabels() const {
+	return mNumLabels;
+}
+
+void GraphCutLineSpacingConfig::load(const QSettings & settings) {
+	
+	GraphCutConfig::load(settings);
+	mNumLabels = settings.value("numLabels", mNumLabels).toInt();
+}
+
+void GraphCutLineSpacingConfig::save(QSettings & settings) const {
+
+	GraphCutConfig::save(settings);
+	settings.setValue("numLabels", numLabels());
 }
 
 }

@@ -216,6 +216,10 @@ void PixelStats::setOrientationIndex(int orIdx) {
 	mOrIdx = orIdx;
 }
 
+void PixelStats::setLineSpacing(int ls) {
+	mLineSpacing = ls;
+}
+
 int PixelStats::orientationIndex() const {
 
 	return mOrIdx;
@@ -239,7 +243,7 @@ Vector2D PixelStats::orVec() const {
 }
 
 int PixelStats::lineSpacingIndex() const {
-
+	
 	if (mData.rows < spacing_idx || mOrIdx < 0 || mOrIdx >= mData.cols)
 		return 0;
 
@@ -248,8 +252,12 @@ int PixelStats::lineSpacingIndex() const {
 
 double PixelStats::lineSpacing() const {
 
+	// is a specific line spacing set? (usually from the graph-cut)
+	if (mLineSpacing != -1)
+		return mLineSpacing;
+
 	double sr = (256 / scaleFactor());	// sampling rate
-	return (double)lineSpacingIndex() * sr;
+	return qMax((double)lineSpacingIndex() * sr, 20.0);	// assume some minimum line spacing
 }
 
 int PixelStats::numOrientations() const {

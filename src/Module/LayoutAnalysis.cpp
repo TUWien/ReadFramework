@@ -188,20 +188,8 @@ bool LayoutAnalysis::compute() {
 	Timer dtTl;
 
 	if (!config()->localBlockOrientation()) {
-		// find local orientation per pixel
-		rdf::LocalOrientation lo(pixels);
-		if (!lo.compute()) {
-			qWarning() << "could not compute local orientation";
+		if (!computeLocalStats(pixels))
 			return false;
-		}
-
-		// smooth estimation
-		rdf::GraphCutOrientation pse(pixels);
-
-		if (!pse.compute()) {
-			qWarning() << "could not compute set orientation";
-			return false;
-		}
 	}
 
 	// compute text lines for each text block
@@ -215,20 +203,9 @@ bool LayoutAnalysis::compute() {
 		}
 
 		if (config()->localBlockOrientation()) {
-			// find local orientation per pixel
-			rdf::LocalOrientation lo(sp);
-			if (!lo.compute()) {
-				qWarning() << "could not compute local orientation";
-				return false;
-			}
 
-			// smooth estimation
-			rdf::GraphCutOrientation pse(sp);
-
-			if (!pse.compute()) {
-				qWarning() << "could not compute set orientation";
+			if (!computeLocalStats(sp))
 				return false;
-			}
 		}
 
 		//// find tab stops
@@ -414,6 +391,34 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 	}
 
 	return stopLines;
+}
+
+bool LayoutAnalysis::computeLocalStats(PixelSet & pixels) const {
+
+	// find local orientation per pixel
+	rdf::LocalOrientation lo(pixels);
+	if (!lo.compute()) {
+		qWarning() << "could not compute local orientation";
+		return false;
+	}
+
+	// smooth orientation
+	rdf::GraphCutOrientation pse(pixels);
+
+	if (!pse.compute()) {
+		qWarning() << "could not smooth orientation";
+		return false;
+	}
+
+	// smooth line spacing
+	rdf::GraphCutLineSpacing pls(pixels);
+
+	if (!pls.compute()) {
+		qWarning() << "could not smooth line spacing";
+		return false;
+	}
+
+	return true;
 }
 
 

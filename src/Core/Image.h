@@ -63,21 +63,58 @@ class DllCoreExport Histogram {
 
 public:
 	Histogram(const cv::Mat& values = cv::Mat());
-	Histogram(const QVector<int>& values);
+	Histogram(double minVal, double maxVal, int numBins = 256);
 
 	cv::Mat draw(const QPen& pen = QPen(), const QColor& bgCol = QColor(255, 255, 255));
 	void draw(QPainter& p, const Rect& r) const;
 
+	bool isEmpty() const;
+
 	cv::Mat hist() const;
-	double max() const;
-	double min() const;
+	double maxBin() const;
+	double minBin() const;
+	int numBins() const;
+	int binIdx(double val) const;
+	double value(int binIdx) const;
+
+	template <typename Num>
+	static Histogram fromData(const cv::Mat& data, int numBins = 256) {
+
+		double minV = 0, maxV = 0;
+		cv::minMaxLoc(data, &minV, &maxV);
+
+		if (minV == maxV) {
+			qWarning() << "min == max that's not good for creating a histogram - aborting";
+			return Histogram();
+		}
+
+		Histogram h(minV, maxV, numBins);
+		float* hmp = h.hist().ptr<float>();
+		
+		for (int rIdx = 0; rIdx < data.rows; rIdx++) {
+
+			const Num* ptr = data.ptr<Num>(rIdx);
+
+			for (int cIdx = 0; cIdx < data.cols; cIdx++) {
+
+				// this is inherently dangerous & fast
+				// it relies on the fact that binIdx is always within the range
+				int bin = h.binIdx(ptr[cIdx]);
+				hmp[bin]++;
+			}
+		}
+
+		return h;
+	}
 
 protected:
 	void draw(QPainter& p) const;
 	double transformX(double val, const Rect& r) const;
 	double transformY(double val, double minV, double maxV, const Rect& r) const;
-
+	
 	cv::Mat mHist;
+	double mMinVal = 0;
+	double mMaxVal = 0; 
 };
 
 // read defines

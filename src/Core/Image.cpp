@@ -33,6 +33,7 @@
 #include "Image.h"
 #include "Drawer.h"
 #include "Shapes.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -355,13 +356,10 @@ Histogram::Histogram(const cv::Mat & values) {
 	mHist = values;
 }
 
-Histogram::Histogram(const QVector<int>& values) {
-
-	mHist = cv::Mat(1, values.size(), CV_32FC1);
-	unsigned int* hPtr = mHist.ptr<unsigned int>();
-
-	for (int idx = 0; idx < values.size(); idx++)
-		hPtr[idx] = values[idx];
+Histogram::Histogram(double minVal, double maxVal, int numBins) {
+	mMinVal = minVal;
+	mMaxVal = maxVal;
+	mHist = cv::Mat(1, numBins, CV_32FC1, cv::Scalar(0));
 }
 
 cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
@@ -399,8 +397,8 @@ void Histogram::draw(QPainter & p, const Rect& r) const {
 	p.setBrush(oP.color());
 	p.setPen(Qt::NoPen);
 
-	double maxVal = max();
-	double minVal = min();
+	double maxVal = maxBin();
+	double minVal = minBin();
 	double binWidth = r.width() / mHist.cols;
 	double gap = (binWidth >= 2) ? 1.0 : 0.0;
 
@@ -429,6 +427,10 @@ void Histogram::draw(QPainter & p, const Rect& r) const {
 	p.setBrush(oB);
 }
 
+bool Histogram::isEmpty() const {
+	return hist().empty();
+}
+
 double Histogram::transformY(double val, double minV, double maxV, const Rect & r) const {
 	
 	double tVal = r.bottom() - qRound((double)(val - minV) / (maxV - minV) * r.height());
@@ -448,16 +450,44 @@ cv::Mat Histogram::hist() const {
 	return mHist;
 }
 
-double Histogram::max() const {
+double Histogram::maxBin() const {
+	
 	double mVal = 0;
 	cv::minMaxLoc(mHist, 0, &mVal);
 	return mVal;
 }
 
-double Histogram::min() const {
+double Histogram::minBin() const {
 	double mVal = 0;
 	cv::minMaxLoc(mHist, &mVal);
 	return mVal;
+}
+
+int Histogram::numBins() const {
+	return mHist.cols;
+}
+
+int Histogram::binIdx(double val) const {
+	
+	double bIdx = (val - mMinVal)/(mMaxVal-mMinVal);
+	bIdx = Utils::clamp<double>(bIdx, 0, 1);
+	bIdx *= numBins();
+	int bIdxR = cvFloor(bIdx);
+
+	// reduce if the value is exactly one
+	if (bIdxR == numBins())
+		bIdxR--;
+
+	return bIdxR;
+}
+
+double Histogram::value(int binIdx) const {
+	
+	double val = (double)binIdx / numBins();
+	val *= (mMaxVal - mMinVal);
+	val += mMinVal;
+	
+	return val;
 }
 
 

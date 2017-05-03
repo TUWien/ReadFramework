@@ -705,6 +705,7 @@ cv::Mat Algorithms::preFilterArea(const cv::Mat& img, int minArea, int maxArea) 
 /// <param name="mask">The mask CV_8UC1 or CV_32FC1.</param>
 /// <returns>The histogram of the img as cv::mat CV_32FC1.</returns>
 cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) {
+	
 	if (img.channels() > 1) {
 		qDebug() << "the image needs to have 1 channel";
 		return cv::Mat();
@@ -725,7 +726,6 @@ cv::Mat Algorithms::computeHist(const cv::Mat img, const cv::Mat mask) {
 		return cv::Mat();
 	}
 
-	// compute gradient magnitude
 	int cols = img.cols;
 	int rows = img.rows;
 

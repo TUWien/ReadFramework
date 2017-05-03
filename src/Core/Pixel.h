@@ -120,6 +120,7 @@ public:
 	bool isEmpty() const;
 
 	void setOrientationIndex(int orIdx);
+	void setLineSpacing(int ls);
 	int orientationIndex() const;
 	int numOrientations() const;
 	double orientation() const;
@@ -142,6 +143,7 @@ protected:
 
 	int mHistSize = 0;
 	int mOrIdx = -1;
+	int mLineSpacing = -1;
 
 	void convertData(const cv::Mat& orHist, const cv::Mat& sparsity);
 };

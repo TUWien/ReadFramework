@@ -264,11 +264,19 @@ void LayoutTest::layoutToXmlDebug() const {
 		return;
 	}
 
-	// smooth estimation
+	// smooth orientation
 	rdf::GraphCutOrientation pse(pixels);
 
 	if (!pse.compute()) {
 		qWarning() << "could not compute set orientation";
+		return;
+	}
+
+	// smooth line spacing
+	rdf::GraphCutLineSpacing psl(pixels);
+
+	if (!psl.compute()) {
+		qWarning() << "could not smooth text lines";
 		return;
 	}
 
@@ -319,9 +327,9 @@ void LayoutTest::layoutToXmlDebug() const {
 	//dImg = tlM.draw(dImg, ColorManager::blue());
 
 	cv::Mat gcImg;
-	//gcImg = gctlM.draw(img, ColorManager::blue());
+	gcImg = psl.draw(img, ColorManager::blue());
 
-	gcImg = lo.draw(img, "1163", 256);
+	//gcImg = lo.draw(img, "1163", 256);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
@@ -331,8 +339,8 @@ void LayoutTest::layoutToXmlDebug() const {
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 
-	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
-	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
+	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 

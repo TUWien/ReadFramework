@@ -135,6 +135,7 @@ private:
 
 	TextBlockSet createTextBlocks() const;
 	QVector<Line> createStopLines() const;
+	bool computeLocalStats(PixelSet& pixels) const;
 
 };
 

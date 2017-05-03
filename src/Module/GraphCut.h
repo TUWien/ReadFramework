@@ -34,6 +34,7 @@
 
 #include "BaseModule.h"
 #include "PixelSet.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -58,7 +59,7 @@ class PixelGraph;
 class DllCoreExport GraphCutConfig : public ModuleConfig {
 
 public:
-	GraphCutConfig();
+	GraphCutConfig(const QString& name = "Graph Cut");
 
 	double scaleFactor() const;
 	int numIter() const;
@@ -146,6 +147,50 @@ private:
 	cv::Mat costs(int numLabels) const override;
 	cv::Mat labelDistMatrix(int numLabels) const override;
 	int numLabels() const override;
+};
+
+class DllCoreExport GraphCutLineSpacingConfig : public GraphCutConfig {
+
+public:
+	GraphCutLineSpacingConfig();
+
+	int numLabels() const;
+
+protected:
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+
+	int mNumLabels = 15;		// number of scale bins (empirically set to 15)
+};
+
+
+/// <summary>
+/// Graph cut for line spacing.
+/// </summary>
+/// <seealso cref="GraphCutPixel" />
+class DllCoreExport GraphCutLineSpacing : public GraphCutPixel {
+
+public:
+	GraphCutLineSpacing(const PixelSet& set);
+
+	virtual bool compute() override;
+
+	QSharedPointer<GraphCutLineSpacingConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+
+private:
+
+	bool checkInput() const override;
+
+	cv::Mat costs(int numLabels) const override;
+	cv::Mat labelDistMatrix(int numLabels) const override;
+	int numLabels() const override;
+
+	Histogram spacingHist() const;
+	//cv::Mat spacingHist() const;
+
+	Histogram mSpaceHist;
 };
 
 /// <summary>

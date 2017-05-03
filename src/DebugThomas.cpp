@@ -50,8 +50,8 @@ void ThomasTest::testXml() {
 	}
 	auto pageElement = parser.page();
 
-	auto& utils = rdf::Utils::instance();
-	QString xmlPathOut = utils.createFilePath(xmlPath, "-out");
+	//auto& utils = rdf::Utils::instance();	// diem: warning c4189
+	QString xmlPathOut = rdf::Utils::instance().createFilePath(xmlPath, "-out");
 	parser.write(xmlPathOut, pageElement);
 }
 
