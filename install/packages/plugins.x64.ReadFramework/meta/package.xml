@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Package>
-	<DisplayName>ReadFramework [x64]</DisplayName>
-	<Description>READ Framework for x64 systems (v0.3).</Description>
-	<Version>0.3</Version>
-	<ReleaseDate>2017-04-24</ReleaseDate>
-	<Default>true</Default>
-</Package>
