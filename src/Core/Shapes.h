@@ -436,6 +436,7 @@ public:
 	double minorAxis() const;
 	double radius() const;
 	double area() const;
+	Rect bbox(bool squared = false) const;
 
 	cv::Mat toCov() const;
 
@@ -445,6 +446,8 @@ public:
 	void move(const Vector2D& vec);
 
 	void draw(QPainter& p, double alpha = 0.0) const;
+	void pdf(cv::Mat& img, const Rect& box = Rect()) const;
+
 	Vector2D getPoint(double angle) const;
 
 protected:

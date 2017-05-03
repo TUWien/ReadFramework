@@ -787,7 +787,7 @@ cv::Mat GraphCutLineSpacing::draw(const cv::Mat & img, const QColor & col) const
 }
 
 // GraphCutLineSpacingConfig --------------------------------------------------------------------
-GraphCutLineSpacingConfig::GraphCutLineSpacingConfig() : GraphCutConfig("GraphCutLineSpacingConfig") {
+GraphCutLineSpacingConfig::GraphCutLineSpacingConfig() : GraphCutConfig("Line Spacing Graph-Cut") {
 }
 
 int GraphCutLineSpacingConfig::numLabels() const {

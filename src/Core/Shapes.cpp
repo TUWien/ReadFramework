@@ -1282,14 +1282,18 @@ Rect Rect::clipped(const Vector2D & size) const {
 
 	Rect c(*this);
 
-	if (left() < 0)
+	if (left() < 0) {
+		c.mSize.setX(mSize.x() + left());
 		c.mTopLeft.setX(0);
-	if (top() < 0)
+	}
+	if (top() < 0) {
+		c.mSize.setY(mSize.y() + top());
 		c.mTopLeft.setY(0);
-	if (right() > size.x())
-		c.mSize.setX(qMax(size.x()-left(), 0.0));
-	if (bottom() > size.y())
-		c.mSize.setY(qMax(size.y()-top(), 0.0));
+	}
+	if (c.right() > size.x())
+		c.mSize.setX(qMax(size.x()-c.left(), 0.0));
+	if (c.bottom() > size.y())
+		c.mSize.setY(qMax(size.y()-c.top(), 0.0));
 
 	return c;
 }
@@ -1508,6 +1512,40 @@ double Ellipse::area() const {
 }
 
 /// <summary>
+/// Returns the ellipse's axis aligned bounding box.
+/// </summary>
+/// <param name="squared">if set to <c>true</c>, the bounding box is squared (e.g. for pdfs).</param>
+/// <returns></returns>
+Rect Ellipse::bbox(bool squared) const {
+	
+	Vector2D a = mAxis;
+
+	double ev1 = a.x();
+	double ev2 = a.y();
+
+	if (squared) {
+		ev1 *= ev1;
+		ev2 *= ev2;
+	}
+
+	// compute eigenvectors
+	Vector2D v1(ev1, 0);
+	Vector2D v2(0, ev2);
+
+	// NOTE possible speed-up: create unit rotation vector, then scale it
+	v1.rotate(-mAngle);
+	v2.rotate(-mAngle);
+
+	double mW = qMax(std::abs(v1.x()), std::abs(v2.x()));
+	double mH = qMax(std::abs(v1.y()), std::abs(v2.y()));
+
+	Rect r(Vector2D(-mW, -mH), Vector2D(mW * 2, mH * 2));
+	r.move(center());
+
+	return r;
+}
+
+/// <summary>
 /// Converts the convidence ellipse to a covariance matrix.
 /// </summary>
 /// <returns>The covariance matrix (2 x 2 CV_64FC1)</returns>
@@ -1571,6 +1609,51 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	// draw center
 	p.drawPoint(mCenter.toQPointF());
 	p.setBrush(b);
+}
+
+void Ellipse::pdf(cv::Mat & img, const Rect& box) const {
+
+	// the provided image has to correspond with the bbox size
+	assert(img.depth() == CV_32FC1);
+
+	// allocate the area to draw
+	Rect bbc = box;
+	if (bbc.isNull())
+		bbc = bbox(true);	// squared bounding box
+	
+	bbc = bbc.clipped(img.size()-Vector2D(1,1));	// -(1,1) to account for rounding
+	cv::Mat imgR = img(bbc.toCvRect());
+	
+	double st = sin(2*mAngle);
+	double c2t = cos(mAngle);
+	c2t *= c2t;
+	double s2t = sin(mAngle);
+	s2t *= s2t;
+
+	double s2x = mAxis.x()*mAxis.x();
+	double s2y = mAxis.y()*mAxis.y();
+
+	// cache coefficients
+	double a = c2t / (2 * s2x) + s2t / (2 * s2y);
+	double b = -st/(4*s2x) + st/(4*s2y);
+	double c = s2t / (2 * s2x) + c2t / (2 * s2y);
+
+	double y = bbc.top()-center().y();
+	for (int rIdx = 0; rIdx < imgR.rows; rIdx++, y++) {
+
+		// img pointer
+		float* ptr = imgR.ptr<float>(rIdx);
+		double cy = c*(y*y);
+
+		double x = bbc.left()-center().x();
+		for (int cIdx = 0; cIdx < imgR.cols; cIdx++, x++) {
+
+			double ax = a*(x*x);
+			double bxy = 2.0 * b*(x*y);
+
+			ptr[cIdx] += (float)exp(-(ax - bxy + cy));
+		}
+	}
 }
 
 /// <summary>
