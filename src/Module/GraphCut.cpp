@@ -218,10 +218,18 @@ cv::Mat GraphCutOrientation::labelDistMatrix(int numLabels) const {
 		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
 
 		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
-
+			
 			// set smoothness cost for orientations
 			int diff = abs(rIdx - cIdx);
 			sPtr[cIdx] = qMin(diff, numLabels - diff);
+
+			// Il Koo proposed this:
+			//// set smoothness cost for orientations
+			//if (rIdx == cIdx)
+			//	sPtr[cIdx] = 0;
+
+			//int diff = abs(rIdx - cIdx);
+			//sPtr[cIdx] = diff <= 3 ? 1 : 12; // Il Koo: 0.4 : 5
 		}
 	}
 

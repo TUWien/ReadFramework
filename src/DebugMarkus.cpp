@@ -267,10 +267,10 @@ void LayoutTest::layoutToXmlDebug() const {
 	// smooth estimation
 	rdf::GraphCutOrientation pse(pixels);
 
-	//if (!pse.compute()) {
-	//	qWarning() << "could not compute set orientation";
-	//	return;
-	//}
+	if (!pse.compute()) {
+		qWarning() << "could not compute set orientation";
+		return;
+	}
 
 	// find text lines
 	rdf::SimpleTextLineSegmentation tlM(pixels);
@@ -280,7 +280,7 @@ void LayoutTest::layoutToXmlDebug() const {
 		qWarning() << "could not compute text line segmentation!";
 		return;
 	}
-	tlM.scale(1.0 / scale);
+	tlM.scale(1.0 / scale); 
 
 	rdf::GraphCutTextLine gctlM(tlM.sets());
 

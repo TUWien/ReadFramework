@@ -479,21 +479,12 @@ bool LocalOrientation::compute() {
 	if (!checkInput())
 		return false;
 	
-	//Timer dt;
+	QVector<Pixel*> ptrSet;
+	for (const QSharedPointer<Pixel>& p : mSet.pixels())
+		ptrSet << p.data();
 
-	// estimate orientation per scale pyramid
-	//for (const QSharedPointer<PixelSet>& set : mSet.splitScales()) {
-		
-		QVector<Pixel*> ptrSet;
-		for (const QSharedPointer<Pixel>& p : mSet.pixels())
-			ptrSet << p.data();
-
-		for (Pixel* p : ptrSet)
-			computeScales(p, ptrSet);
-	//}
-
-	//mDebug << config()->toString();
-	//mDebug << "computed in" << dt;
+	for (Pixel* p : ptrSet)
+		computeScales(p, ptrSet);
 
 	return true;
 }
