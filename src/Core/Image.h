@@ -84,7 +84,7 @@ public:
 		cv::minMaxLoc(data, &minV, &maxV);
 
 		if (minV == maxV) {
-			qWarning() << "min == max that's not good for creating a histogram - aborting";
+			qWarning() << QString("min == max that's not good for creating a histogram - aborting");
 			return Histogram();
 		}
 
