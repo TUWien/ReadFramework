@@ -38,6 +38,7 @@
 #include <QString>
 #include <QColor>
 #include <QPen>
+#include <QDebug>
 
 #include "opencv2/core/core.hpp"
 #pragma warning(pop)
@@ -84,7 +85,7 @@ public:
 		cv::minMaxLoc(data, &minV, &maxV);
 
 		if (minV == maxV) {
-			qWarning() << QString("min == max that's not good for creating a histogram - aborting");
+			qWarning() << "min == max that's not good for creating a histogram - aborting";
 			return Histogram();
 		}
 
