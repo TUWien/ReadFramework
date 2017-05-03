@@ -115,8 +115,10 @@ public:
 	QString toString() const override;
 
 	void setRootRegion(const QSharedPointer<RootRegion>& region);
+	
+	
 	TextBlockSet textBlockSet() const;
-
+	PixelSet pixels() const;
 	double scaleFactor() const;
 
 private:

@@ -309,6 +309,15 @@ TextBlockSet LayoutAnalysis::textBlockSet() const {
 	return mTextBlockSet;
 }
 
+PixelSet LayoutAnalysis::pixels() const {
+	
+	PixelSet set;
+	for (auto tb : mTextBlockSet.textBlocks())
+		set.append(tb->pixelSet().pixels());
+	
+	return set;
+}
+
 double LayoutAnalysis::scaleFactor() const {
 
 	int cms = config()->maxImageSide();
