@@ -1069,7 +1069,7 @@ void PageElement::setLayers(const QVector<QSharedPointer<LayerElement>>& layers)
 	mLayers = QVector<QSharedPointer<LayerElement>>(layers);
 }
 
-QVector<QSharedPointer<LayerElement>> PageElement::layers() {
+QVector<QSharedPointer<LayerElement>> PageElement::layers() const {
 	return mLayers;
 }
 
@@ -1077,10 +1077,53 @@ void PageElement::setDefaultLayer(const QSharedPointer<LayerElement>& defaultLay
 	mDefaultLayer = defaultLayer;
 }
 
-QSharedPointer<LayerElement> PageElement::defaultLayer() {
+QSharedPointer<LayerElement> PageElement::defaultLayer() const {
 	return mDefaultLayer;
 }
 
+/// <summary>
+/// Redefine the layers of the page by assigning all regions of the same type to the same layer.
+/// Region types not specified in layerTypeAssignment are assigned to the default layer.
+/// The zIndex is set according to the order of layerTypeAssignment.
+/// </summary>
+/// <param name="layerTypeAssignment">The type-to-layer assignments.</param>
+void PageElement::redefineLayersByType(const QVector<Region::Type>& layerTypeAssignment) {
+	// collect and assign regions
+	QMap<Region::Type, QVector<QSharedPointer<Region>>> assignmentMap;
+	for (Region::Type type : layerTypeAssignment) {
+		assignmentMap[type] = QVector<QSharedPointer<Region>>();
+	}
+	auto defaultLayerRegions = QVector<QSharedPointer<Region>>();
+	for (const auto& region : Region::allRegions(mRoot.data())) {
+		if (assignmentMap.contains(region->type())) {
+			assignmentMap[region->type()] << region;
+		}
+		else {
+			defaultLayerRegions << region;
+		}
+	}
+
+	// create layer elements and add them to the page
+	auto defaultLayer = QSharedPointer<LayerElement>::create();
+	defaultLayer->setRegions(defaultLayerRegions);
+	int zIndex = 1;
+	QVector<QSharedPointer<LayerElement>> layers;
+	for (Region::Type type : layerTypeAssignment) {
+		if (!assignmentMap[type].isEmpty()) {
+			auto layer = QSharedPointer<LayerElement>::create();
+			layer->setRegions(assignmentMap[type]);
+			layer->setZIndex(zIndex++);
+			layers << layer;
+		}
+	}
+	setDefaultLayer(defaultLayer);
+	setLayers(layers);
+}
+
+/// <summary>
+/// Sorts the layers by their zIndex in ascending order.
+/// </summary>
+/// <param name="checkIfSorted">if set to <c>true</c> [only sort if not already sorted].</param>
 void PageElement::sortLayers(bool checkIfSorted) {
 	if (checkIfSorted && std::is_sorted(mLayers.begin(), mLayers.end(), PageElement::layerZIndexGt)) {
 		return;
