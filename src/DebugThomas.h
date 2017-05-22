@@ -9,8 +9,10 @@ public:
 	ThomasTest(const DebugConfig& config);
 
 	void test();
-	void testLayout();
 	void testXml();
+	void testFeatureCollection();
+	void testTraining();
+	void testClassification();
 
 private:
 	DebugConfig mConfig;

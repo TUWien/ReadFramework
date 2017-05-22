@@ -36,13 +36,16 @@ ThomasTest::ThomasTest(const DebugConfig& config)
 }
 
 void ThomasTest::test() {
-	testXml();
-	testLayout();
+	//testXml();
+	testFeatureCollection();
+	testTraining();
+	//testClassification();
 }
 
 void ThomasTest::testXml() {
-	QString xmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
-	rdf::PageXmlParser parser;
+	QString xmlPath = PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+	PageXmlParser parser;
+
 	bool success = parser.read(xmlPath);
 	if (!success) {
 		qDebug() << "failed to read xml file";
@@ -50,45 +53,64 @@ void ThomasTest::testXml() {
 	}
 	auto pageElement = parser.page();
 
-	//auto& utils = rdf::Utils::instance();	// diem: warning c4189
-	QString xmlPathOut = rdf::Utils::instance().createFilePath(xmlPath, "-out");
+	//auto& utils = Utils::instance();	// diem: warning c4189
+	QString xmlPathOut = Utils::createFilePath(xmlPath, "-out");
 	parser.write(xmlPathOut, pageElement);
 }
 
-void ThomasTest::testLayout() {
+void ThomasTest::testFeatureCollection() {
 	QImage imgQt(mConfig.imagePath());
 	cv::Mat img = Image::qImage2Mat(imgQt);
 
 	Timer dt;
-	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+	QString loadXmlPath = PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 
-	rdf::PageXmlParser parser;
-	parser.read(loadXmlPath);
+	PageXmlParser parser;
+	parser.read(loadXmlPath, true);
 	auto pageElement = parser.page();
 
+	qDebug() << "layers: ";
+	for (const auto& layer : pageElement->layers()) {
+		qDebug() << "zIndex = " << layer->zIndex() << ", size = " << layer->regions().size();
+	}
+
+	// define layers
+	QVector<Region::Type> layerTypeAssignment{
+		Region::type_text_region,
+		Region::type_image,
+		Region::type_graphic,
+		Region::type_chart,
+		Region::type_table_region
+	};
+	pageElement->redefineLayersByType(layerTypeAssignment);
+
+	qDebug() << "layers: ";
+	for (const auto& layer : pageElement->layers()) {
+		qDebug() << "zIndex = " << layer->zIndex() << ", size = " << layer->regions().size();
+	}
+
 	// super pixels
-	
-	rdf::SuperPixel sp(img);
+
+	SuperPixel sp(img);
 	if (!sp.compute()) {
 		qDebug() << "error during SuperPixel computation";
 	}
 
 	cv::Mat imgOut = sp.drawMserBlobs(img);
-	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-sp");
-	rdf::Image::save(imgOut, imgPath);
+	QString imgPath = Utils::createFilePath(mConfig.outputPath(), "-sp");
+	Image::save(imgOut, imgPath);
 	qDebug() << "sp debug image added" << imgPath;
 
 	// collect features
 
-	rdf::LabelManager lm = rdf::LabelManager::read(mConfig.labelConfigPath());
+	LabelManager lm = LabelManager::read(mConfig.labelConfigPath());
 	qInfo().noquote() << lm.toString();
 
 	// feed the label lookup
-	rdf::SuperPixelLabeler spl(sp.getMserBlobs(), rdf::Rect(img));
+	SuperPixelLabeler spl(sp.getMserBlobs(), Rect(img));
 	spl.setLabelManager(lm);
 	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
 
-	// set the ground truth
 	if (pageElement) {
 		spl.setPage(pageElement);
 		spl.setRootRegion(pageElement->rootRegion());
@@ -99,23 +121,25 @@ void ThomasTest::testLayout() {
 
 	imgOut = img.clone();
 	imgOut = spl.draw(imgOut);
-	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-spl");
-	rdf::Image::save(imgOut, imgPath);
+	imgPath = Utils::createFilePath(mConfig.outputPath(), "-spl");
+	Image::save(imgOut, imgPath);
 	qDebug() << "spl debug image added " << imgPath;
 
 	// compute features
 
-	rdf::SuperPixelFeature spf(img, spl.set());
+	SuperPixelFeature spf(img, spl.set());
 	if (!spf.compute())
 		qCritical() << "could not compute SuperPixel features!";
 
-	rdf::FeatureCollectionManager fcm(spf.features(), spf.set());
+	FeatureCollectionManager fcm(spf.features(), spf.set());
 	fcm.write(mConfig.featureCachePath());
-	
-	// read it back (test)
-	fcm.read(mConfig.featureCachePath());
 
-	// train
+	// read it back (test)
+	//fcm.read(mConfig.featureCachePath());
+}
+
+void ThomasTest::testTraining() {
+	auto fcm = FeatureCollectionManager::read(mConfig.featureCachePath());
 
 	SuperPixelTrainer spt(fcm);
 	if (!spt.compute())
@@ -125,7 +149,24 @@ void ThomasTest::testLayout() {
 
 	qInfo() << "classifierPath: " << mConfig.classifierPath();
 	// test - read back the model
-	auto model = rdf::SuperPixelModel::read(mConfig.classifierPath());
+	auto model = SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (f && f->isTrained()) {
+		qDebug() << "the classifier I loaded is trained...";
+	}
+}
+
+void ThomasTest::testClassification() {
+	QImage imgQt(mConfig.imagePath());
+	cv::Mat img = Image::qImage2Mat(imgQt);
+
+	SuperPixel sp(img);
+	if (!sp.compute()) {
+		qDebug() << "error during SuperPixel computation";
+	}
+
+	auto model = SuperPixelModel::read(mConfig.classifierPath());
 
 	auto f = model->model();
 	if (f && f->isTrained()) {
@@ -135,15 +176,15 @@ void ThomasTest::testLayout() {
 	// classify
 
 	SuperPixelClassifier spc(img, sp.pixelSet());
-	spc.setModel(spt.model());
+	spc.setModel(model);
 
 	if (!spc.compute())
 		qWarning() << "could not classify SuperPixels";
 
-	imgOut = img.clone();
+	cv::Mat imgOut = img.clone();
 	imgOut = spc.draw(imgOut);
-	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-spc");
-	rdf::Image::save(imgOut, imgPath);
+	QString imgPath = Utils::createFilePath(mConfig.outputPath(), "-spc");
+	Image::save(imgOut, imgPath);
 	qDebug() << "spc (classified features) debug image added " << imgPath;
 }
 

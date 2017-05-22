@@ -398,10 +398,12 @@ public:
 	QDateTime dateModified() const;
 
 	void setLayers(const QVector<QSharedPointer<LayerElement>>& layers);
-	QVector<QSharedPointer<LayerElement>> layers();
+	QVector<QSharedPointer<LayerElement>> layers() const;
 
 	void setDefaultLayer(const QSharedPointer<LayerElement>& defaultLayer);
-	QSharedPointer<LayerElement> defaultLayer();
+	QSharedPointer<LayerElement> defaultLayer() const;
+
+	void redefineLayersByType(const QVector<Region::Type>& layerTypeAssignment);
 
 	void sortLayers(bool checkIfSorted = false);
 

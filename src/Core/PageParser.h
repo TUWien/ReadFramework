@@ -82,7 +82,7 @@ public:
 		tag_end
 	};
 
-	bool read(const QString& xmlPath);
+	bool read(const QString& xmlPath, bool ignoreLayers = false);
 	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
 
 	QString tagName(const RootTags& tag) const;
@@ -96,10 +96,10 @@ protected:
 
 	QSharedPointer<PageElement> mPage;
 
-	virtual QSharedPointer<PageElement> parse(const QString& xmlPath) const;
+	virtual QSharedPointer<PageElement> parse(const QString& xmlPath, bool ignoreLayers = false) const;
 	virtual void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 	virtual void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
-	virtual void parseLayers(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
+	virtual void parseLayers(QXmlStreamReader& reader, QSharedPointer<PageElement> page, bool ignoreLayers = false) const;
 
 	QByteArray writePageElement() const;
 	void writeMetaData(QXmlStreamWriter& writer) const;

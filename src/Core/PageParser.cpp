@@ -50,9 +50,9 @@ PageXmlParser::PageXmlParser() {
 
 }
 
-bool PageXmlParser::read(const QString & xmlPath) {
+bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
 
-	mPage = parse(xmlPath);
+	mPage = parse(xmlPath, ignoreLayers);
 
 	// create an empty page if we could not read the XML
 	if (!mPage) {
@@ -132,7 +132,7 @@ void PageXmlParser::setPage(QSharedPointer<PageElement> page) {
 	mPage = page;
 }
 
-QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
+QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, bool ignoreLayers) const {
 
 	if (!QFileInfo(xmlPath).exists()) {
 		qCritical() << "cannot read XML from non-existing file:" << xmlPath;
@@ -156,7 +156,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 	QString metaTag = tagName(tag_meta);
 
 	RegionManager& rm = RegionManager::instance();
-	
+
 	// ok - we can initialize our page element
 	pageElement = QSharedPointer<PageElement>(new PageElement());
 	pageElement->setXmlPath(xmlPath);
@@ -188,7 +188,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 		}
 		// <Layers>
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && tag == tagName(tag_layers)) {
-			parseLayers(reader, pageElement);
+			parseLayers(reader, pageElement, ignoreLayers);
 		}
 		// e.g. <TextLine id="r1" type="heading">
 		else if (reader.tokenType() == QXmlStreamReader::StartElement && rm.isValidTypeName(tag)) {
@@ -203,38 +203,40 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath) const {
 
 	pageElement->setRootRegion(root);
 
-	// find the region elements for every layer
-	QVector<QSharedPointer<Region>> regions = Region::allRegions(root.data());
-	QVector<QSharedPointer<Region>> layerRegions;
-	for (const auto& layer : pageElement->layers()) {
-		layerRegions.clear();
-		for (const QString& regionRefId : layer->regionRefIds()) {
-			QSharedPointer<Region> foundRegion;
-			for (const auto& region : regions) {
-				if (region->id() == regionRefId) {
-					foundRegion = region;
-					break;
+	if (!ignoreLayers) {
+		// find the region elements for every layer
+		QVector<QSharedPointer<Region>> regions = Region::allRegions(root.data());
+		QVector<QSharedPointer<Region>> layerRegions;
+		for (const auto& layer : pageElement->layers()) {
+			layerRegions.clear();
+			for (const QString& regionRefId : layer->regionRefIds()) {
+				QSharedPointer<Region> foundRegion;
+				for (const auto& region : regions) {
+					if (region->id() == regionRefId) {
+						foundRegion = region;
+						break;
+					}
+				}
+				if (foundRegion) {
+					layerRegions << foundRegion;
+				}
+				else {
+					qWarning() << "region " << regionRefId << " of layer " << layer->id() << " was not found in the document";
 				}
 			}
-			if (foundRegion) {
-				layerRegions << foundRegion;
-			}
-			else {
-				qWarning() << "region " << regionRefId << " of layer " << layer->id() << " was not found in the document";
-			}
-		}
 
-		layer->setRegions(layerRegions);
-		
-		// subtract the current layer region set
-		for (const auto& layerRegion : layerRegions) {
-			regions.removeOne(layerRegion); // assumes that there are no duplicate ids (there shouldn't be any)
+			layer->setRegions(layerRegions);
+
+			// subtract the current layer region set
+			for (const auto& layerRegion : layerRegions) {
+				regions.removeOne(layerRegion); // assumes that there are no duplicate ids (there shouldn't be any)
+			}
 		}
+		// add all remaining regions to the default layer
+		auto defaultLayer = QSharedPointer<LayerElement>::create();
+		defaultLayer->setRegions(regions);
+		pageElement->setDefaultLayer(defaultLayer);
 	}
-	// add all remaining regions to the default layer
-	auto defaultLayer = QSharedPointer<LayerElement>::create();
-	defaultLayer->setRegions(regions);
-	pageElement->setDefaultLayer(defaultLayer);
 
 	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
@@ -335,7 +337,7 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 /// </summary>
 /// <param name="reader">The reader.</param>
 /// <param name="page">The page.</param>
-void PageXmlParser::parseLayers(QXmlStreamReader & reader, QSharedPointer<PageElement> page) const {
+void PageXmlParser::parseLayers(QXmlStreamReader & reader, QSharedPointer<PageElement> page, bool ignoreLayers) const {
 	QVector<QSharedPointer<LayerElement>> layers;
 
 	while (!reader.atEnd()) {
@@ -347,7 +349,7 @@ void PageXmlParser::parseLayers(QXmlStreamReader & reader, QSharedPointer<PageEl
 			break;
 		}
 
-		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == "Layer") {
+		if (reader.tokenType() == QXmlStreamReader::StartElement && tag == "Layer" && !ignoreLayers) {
 			auto layer = QSharedPointer<LayerElement>::create();
 			layer->readAttributes(reader);
 			layer->readChildren(reader);
