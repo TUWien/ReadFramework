@@ -291,66 +291,66 @@ void LayoutTest::layoutToXmlDebug() const {
 	tlM.scale(1.0 / scale); 
 
 	// TODO
-	//rdf::GraphCutTextLine gctlM(tlM.sets());
+	rdf::GraphCutTextLine gctlM(tlM.sets());
 
-	//if (!gctlM.compute())
-	//	qWarning() << "could not compute text line graph-cut";
+	if (!gctlM.compute())
+		qWarning() << "could not compute text line graph-cut";
 
 	// end computing --------------------------------------------------------------------
 
-	// debug visualizations --------------------------------------------------------------------
+	//// debug visualizations --------------------------------------------------------------------
 
-	Timer dte;
-	cv::Mat ei(img.size(), CV_32FC1, cv::Scalar(0));
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
-	p.setPen(ColorManager::white());
-	p.setOpacity(0.1);
+	//Timer dte;
+	//cv::Mat ei(img.size(), CV_32FC1, cv::Scalar(0));
+	//QPixmap pm = Image::mat2QPixmap(img);
+	//QPainter p(&pm);
+	//p.setPen(ColorManager::white());
+	//p.setOpacity(0.1);
 
-	for (auto px : pixels.pixels()) {
+	//for (auto px : pixels.pixels()) {
 
-		double ls = px->stats()->lineSpacing();
-		double lr = px->ellipse().radius();
-		Vector2D sVec(std::sqrt(ls), lr*3);
-		Ellipse e(px->center(), sVec, -px->stats()->orientation());
-		//Ellipse e(px->ellipse());
-		e.draw(p, 1.0);
-		e.pdf(ei);
-	}
+	//	double ls = px->stats()->lineSpacing();
+	//	double lr = px->ellipse().radius();
+	//	Vector2D sVec(std::sqrt(ls), lr*3);
+	//	Ellipse e(px->center(), sVec, -px->stats()->orientation());
+	//	//Ellipse e(px->ellipse());
+	//	e.draw(p, 1.0);
+	//	e.pdf(ei);
+	//}
 
-	qDebug() << "line map created in" << dte;
+	//qDebug() << "line map created in" << dte;
 
-	cv::normalize(ei, ei, 1.0, 0.0, cv::NORM_MINMAX);
-	cv::Mat dImg = ei;
-	cv::Mat gcImg = Image::qPixmap2Mat(pm);
+	//cv::normalize(ei, ei, 1.0, 0.0, cv::NORM_MINMAX);
+	//cv::Mat dImg = ei;
+	//cv::Mat gcImg = Image::qPixmap2Mat(pm);
 
 
-	// debug visualizations --------------------------------------------------------------------
+	//// debug visualizations --------------------------------------------------------------------
 
 	// drawing --------------------------------------------------------------------
 
 	// save super pixel image
 	//dImg = la.draw(rImg);
 
-	//cv::Mat dImg = img.clone();
-	//dImg = tlM.draw(dImg, ColorManager::blue());
+	cv::Mat dImg = img.clone();
+	dImg = tlM.draw(dImg, ColorManager::blue());
 
-	//cv::Mat gcImg;
-	//gcImg = psl.draw(img, ColorManager::blue());
+	cv::Mat gcImg;
+	gcImg = gctlM.draw(img, ColorManager::blue());
 
 	//gcImg = lo.draw(img, "1163", 256);
 
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
-	//QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
+	//QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
 
-	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
 	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
-	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf-e");
+	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf-e");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "orientation image saved: " << dstPath;
 

@@ -279,6 +279,14 @@ Line PixelSet::fitLine(double offsetAngle) const {
 
 Ellipse PixelSet::fitEllipse() const {
 	
+	if (isEmpty()) {
+		qWarning() << "cannot fit ellipse to an empty PixelSet";
+		return Ellipse();
+	}
+
+	if (size() == 1)
+		return mSet[0]->ellipse();
+
 	QVector<Vector2D> pts;
 	// aproximate ellipses with 4 points each
 	for (auto px : pixels()) {
