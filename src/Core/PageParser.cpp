@@ -52,10 +52,10 @@ PageXmlParser::PageXmlParser() {
 
 bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
 
-	mPage = parse(xmlPath, ignoreLayers);
+	mPage = parse(xmlPath, mStatus, ignoreLayers);
 
 	// create an empty page if we could not read the XML
-	if (!mPage) {
+	if (!mPage || mStatus != status_ok) {
 		mPage = mPage.create();
 		return false;
 	}
@@ -97,6 +97,31 @@ void PageXmlParser::write(const QString & xmlPath, const QSharedPointer<PageElem
 		qDebug() << "could not write to" << xmlPath;
 }
 
+PageXmlParser::LoadStatus PageXmlParser::loadStatus() const {
+	return mStatus;
+}
+
+QString PageXmlParser::loadStatusMessage() const {
+
+	switch (mStatus) {
+
+	case PageXmlParser::status_file_not_found:
+		return QObject::tr("XML does not exist");
+	case rdf::PageXmlParser::status_file_locked:
+		return QObject::tr("XML file is not readable (locked?)");
+	case rdf::PageXmlParser::status_not_loaded:
+		return QObject::tr("XML was not loaded");
+	case rdf::PageXmlParser::status_file_empty:
+		return QObject::tr("XML is empty");
+	case rdf::PageXmlParser::status_ok:
+		return QObject::tr("OK");
+
+	default:
+		return QObject::tr("unspecified error, code: %1").arg(QString::number((int)mStatus));
+	}
+	
+}
+
 QSharedPointer<PageElement> PageXmlParser::page() const {
 	return mPage;
 }
@@ -132,10 +157,11 @@ void PageXmlParser::setPage(QSharedPointer<PageElement> page) {
 	mPage = page;
 }
 
-QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, bool ignoreLayers) const {
+QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, LoadStatus& status, bool ignoreLayers) const {
 
 	if (!QFileInfo(xmlPath).exists()) {
 		qCritical() << "cannot read XML from non-existing file:" << xmlPath;
+		status = status_file_not_found;
 		return QSharedPointer<PageElement>();
 	}
 
@@ -144,6 +170,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, bool ig
 
 	if (!f.open(QIODevice::ReadOnly)) {
 		qWarning() << "Sorry, I could not open " << xmlPath << " for reading...";
+		status = status_file_locked;
 		return pageElement;
 	}
 
@@ -240,6 +267,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, bool ig
 
 	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
 	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
+	status = !pageElement || pageElement->imageFileName().isEmpty() ? status_file_empty : status_ok;
 
 	return pageElement;
 }

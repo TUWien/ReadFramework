@@ -82,8 +82,21 @@ public:
 		tag_end
 	};
 
+	enum LoadStatus {
+		status_not_loaded = 0,		// ::load was not called
+		status_file_not_found,		// xml file does not exist
+		status_file_locked,			// file is not readable
+		status_file_empty,			// file is empty - empty xml?!
+		status_ok,					// we could parse the xml (now that's good news : )
+
+		status_end
+	};
+
 	bool read(const QString& xmlPath, bool ignoreLayers = false);
 	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
+
+	LoadStatus loadStatus() const;
+	QString loadStatusMessage() const;
 
 	QString tagName(const RootTags& tag) const;
 
@@ -91,12 +104,13 @@ public:
 	QSharedPointer<PageElement> page() const;
 
 	static QString imagePathToXmlPath(const QString& path);
-
+	
 protected:
 
 	QSharedPointer<PageElement> mPage;
+	LoadStatus mStatus = status_not_loaded;
 
-	virtual QSharedPointer<PageElement> parse(const QString& xmlPath, bool ignoreLayers = false) const;
+	virtual QSharedPointer<PageElement> parse(const QString& xmlPath, LoadStatus& status, bool ignoreLayers = false) const;
 	virtual void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 	virtual void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
 	virtual void parseLayers(QXmlStreamReader& reader, QSharedPointer<PageElement> page, bool ignoreLayers = false) const;

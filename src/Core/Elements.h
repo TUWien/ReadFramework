@@ -87,6 +87,8 @@ public:
 	friend DllCoreExport QDataStream& operator<<(QDataStream& s, const Region& r);
 	friend DllCoreExport QDebug operator<< (QDebug d, const Region &r);
 
+	bool isEmpty() const;
+
 	void setSelected(bool select);
 	bool selected() const;
 

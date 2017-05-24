@@ -81,6 +81,14 @@ QDebug operator<<(QDebug d, const Region& r) {
 	return d;
 }
 
+bool Region::isEmpty() const {
+	
+	if (mType == Type::type_unknown || mPoly.isEmpty() && mChildren.isEmpty())
+		return true;
+	else
+		return false;
+}
+
 void Region::setSelected(bool select) {
 	mSelected = select;
 }
