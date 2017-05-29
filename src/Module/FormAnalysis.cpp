@@ -754,6 +754,9 @@ bool FormFeatures::matchTemplate() {
 		bool found = false;
 		QString customTmp;
 
+		//orientation of cornerpts stored by Transkribus:
+		// topleft: 0, bottomleft: 1, bottomright: 2, topright: 3 
+		QVector<int> cornerPts;
 		double thr = config()->distThreshold();
 		//tL = findLine(tL, 100, found);
 		tL = findLine(tL, thr, found);
@@ -779,6 +782,12 @@ bool FormFeatures::matchTemplate() {
 		rdf::Polygon p = createPolygon(tL, lL, rL, bL);
 		newCell->setPolygon(p);
 		newCell->setCustom(customTmp);
+		if (p.size() == 4) {
+			cornerPts << 0 << 1 << 2 << 3;
+			newCell->setCornerPts(cornerPts);
+		} else {
+			qWarning() << "Wrong number of corners for tablecell...";
+		}
 
 		rdf::Vector2D offSet = newCell->upperLeft() - c->upperLeft();
 		

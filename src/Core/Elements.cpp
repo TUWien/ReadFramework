@@ -1683,6 +1683,14 @@ bool TableCell::header() const {
 	return mHeader;
 }
 
+void TableCell::setCornerPts(QVector<int>& cPts) {
+	mCornerPts = cPts;
+}
+
+QVector<int> TableCell::cornerPty() const {
+	return mCornerPts;
+}
+
 bool TableCell::operator<(const TableCell & cell) const {
 
 	if (row() == cell.row()) {
