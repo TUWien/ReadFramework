@@ -1964,4 +1964,69 @@ double LineSegment::interHigh(double x, double x1, double y1, double x2, double 
 	return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 }
 
+LineCandidates::LineCandidates() {
+}
+
+LineCandidates::LineCandidates(Line referenceLine) {
+	mReferenceLine = referenceLine;
+	if (mReferenceLine.isHorizontal())
+		mReferenceLine.sortEndpoints(true);
+	else
+		mReferenceLine.sortEndpoints(false);
+}
+
+void LineCandidates::setReferenceLine(Line referenceLine) {
+	mReferenceLine = referenceLine;
+	if (mReferenceLine.isHorizontal()) 
+		mReferenceLine.sortEndpoints(true);
+	else
+		mReferenceLine.sortEndpoints(false);
+}
+
+Line LineCandidates::referenceLine() const {
+	return mReferenceLine;
+}
+
+void LineCandidates::addCandidate(Line c, double o, double d) {
+	mLCandidates.push_back(c);
+	mOverlaps.push_back(o);
+	mDistances.push_back(d);
+}
+
+void LineCandidates::addCandidate(Line c) {
+
+	if (mReferenceLine.isEmpty()) {
+		qWarning() << "reference line is empty - candidate not added";
+		return;
+	}
+
+	mLCandidates.push_back(c);
+
+	
+	double overlap;
+	if (mReferenceLine.isHorizontal()) {
+		c.sortEndpoints(true);
+		double overlap = mReferenceLine.horizontalOverlap(c);
+	}
+	else {
+		c.sortEndpoints(false);
+		overlap = mReferenceLine.verticalOverlap(c);
+	}
+	mOverlaps.push_back(overlap);
+	double dist = c.distance(mReferenceLine.center());
+	mDistances.push_back(dist);
+}
+
+QVector<Line> LineCandidates::candidates() const {
+	return mLCandidates;
+}
+
+QVector<double> LineCandidates::overlaps() const {
+	return mOverlaps;
+}
+
+QVector<double> LineCandidates::distances() const {
+	return mDistances;
+}
+
 }

@@ -119,6 +119,7 @@ namespace rdf {
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
+		QVector<rdf::Line> findLineCandidates(rdf::Line l, /*double borderCellDist1, double borderCellDist2,*/ bool horizontal = true);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;

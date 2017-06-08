@@ -127,6 +127,32 @@ protected:
 
 };
 
+class DllCoreExport LineCandidates {
+
+public:
+	LineCandidates();
+	LineCandidates(Line referenceLine);
+
+	void setReferenceLine(Line referenceLine);
+	Line referenceLine() const;
+
+	void addCandidate(Line c, double o, double d);
+	void addCandidate(Line c);
+
+	QVector<Line> candidates() const;
+	QVector<double> overlaps() const;
+	QVector<double> distances() const;
+
+
+protected:
+
+	Line mReferenceLine;
+	QVector<Line> mLCandidates;
+	QVector<double> mOverlaps;
+	QVector<double> mDistances;
+
+};
+
 
 class DllCoreExport Vector2D {
 

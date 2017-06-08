@@ -875,6 +875,12 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool &found,
 	}
 }
 
+QVector<rdf::Line> FormFeatures::findLineCandidates(rdf::Line l, bool horizontal) {
+
+	return QVector<rdf::Line>();
+
+}
+
 rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl) {
 
 
