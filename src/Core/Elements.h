@@ -202,6 +202,9 @@ public:
 	rdf::Vector2D downLeft() const;
 	rdf::Vector2D downRight() const;
 
+	double width() const;
+	double height() const;
+
 	virtual void readAttributes(QXmlStreamReader& reader) override;
 	virtual bool read(QXmlStreamReader& reader) override;
 	virtual void write(QXmlStreamWriter& writer) const override;

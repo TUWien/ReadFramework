@@ -1502,6 +1502,22 @@ rdf::Vector2D TableCell::downRight() const {
 	return rdf::Vector2D();
 }
 
+double TableCell::width() const {
+
+	Line l = leftBorder();
+	Line r = rightBorder();
+
+	return l.distance(r.center());
+}
+
+double TableCell::height() const {
+	
+	Line t = topBorder();
+	Line b = bottomBorder();
+
+	return t.distance(b.center());
+}
+
 void TableCell::readAttributes(QXmlStreamReader & reader) {
 
 	Region::readAttributes(reader);

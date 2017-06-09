@@ -35,6 +35,8 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QPolygon>
 #include <QLine>
+#include <QVector>
+#include <QSharedPointer>
 
 #include "opencv2/core/core.hpp"
 #pragma warning(pop)
@@ -126,33 +128,6 @@ protected:
 	cv::Mat toMat(const Line& l) const;
 
 };
-
-class DllCoreExport LineCandidates {
-
-public:
-	LineCandidates();
-	LineCandidates(Line referenceLine);
-
-	void setReferenceLine(Line referenceLine);
-	Line referenceLine() const;
-
-	void addCandidate(Line c, double o, double d);
-	void addCandidate(Line c);
-
-	QVector<Line> candidates() const;
-	QVector<double> overlaps() const;
-	QVector<double> distances() const;
-
-
-protected:
-
-	Line mReferenceLine;
-	QVector<Line> mLCandidates;
-	QVector<double> mOverlaps;
-	QVector<double> mDistances;
-
-};
-
 
 class DllCoreExport Vector2D {
 
@@ -547,6 +522,120 @@ public:
 protected:
 	QPolygonF mPoly;
 
+};
+
+class DllCoreExport LineCandidates {
+
+public:
+	LineCandidates();
+	LineCandidates(Line referenceLine);
+
+	void setReferenceLine(Line referenceLine);
+	Line referenceLine() const;
+
+	void addCandidate(Line c, double o, double d);
+	void addCandidate(Line c);
+
+	QVector<Line> candidates() const;
+	QVector<double> overlaps() const;
+	QVector<double> distances() const;
+
+
+protected:
+
+	Line mReferenceLine;
+	QVector<Line> mLCandidates;
+	QVector<double> mOverlaps;
+	QVector<double> mDistances;
+
+};
+
+class DllCoreExport TableCellRaw {
+
+public:
+	TableCellRaw();
+
+	void setId(const QString& id);
+	QString id() const;
+
+	void setRow(int r);
+	int row() const;
+	void setCol(int c);
+	int col() const;
+
+	void setRowSpan(int r);
+	int rowSpan() const;
+	void setColSpan(int c);
+	int colSpan() const;
+
+	void setLeftBorderVisible(bool b);
+	bool leftBorderVisible() const;
+
+	void setRightBorderVisible(bool b);
+	bool rightBorderVisible() const;
+
+	void setTopBorderVisible(bool b);
+	bool topBorderVisible() const;
+
+	void setBottomBorderVisible(bool b);
+	bool bottomBorderVisible() const;
+
+	void setLeftIdx(int i);
+	QVector<int> leftIdx() const;
+
+	void setRightIdx(int i);
+	QVector<int> rightIdx() const;
+
+	void setTopIdx(int i);
+	QVector<int> topIdx() const;
+
+	void setBottomIdx(int i);
+	QVector<int> bottomIdx() const;
+
+	void setHeader(bool b);
+	bool header() const;
+
+	void setPolygon(const Polygon& polygon);
+	Polygon polygon() const;
+	void setCornerPts(QVector<int> &cPts);
+	QVector<int> cornerPty() const;
+
+	//sorts Cells according row and cell
+	bool operator< (const TableCellRaw& cell) const;
+	static bool compareCells(const QSharedPointer<rdf::TableCellRaw> l1, const QSharedPointer<rdf::TableCellRaw> l2);
+
+protected:
+
+	int mCellIdx = -1;
+
+	int mRow = -1;
+	int mCol = -1;
+
+	int mRowSpan = -1;
+	int mColSpan = -1;
+
+	QString mId;
+
+	bool mLeftBorderVisible = false;
+	QVector<int> mLeftIdx;
+	bool mRightBorderVisible = false;
+	QVector<int> mRightIdx;
+	bool mTopBorderVisible = false;
+	QVector<int> mTopIdx;
+	bool mBottomBorderVisible = false;
+	QVector<int> mBottomIdx;
+
+	bool mHeader = false;
+
+	// topleft: 0, bottomleft: 1, bottomright: 2, topright: 3
+	//reference CornerPts of the reference Cell
+	Polygon mRefPoly;
+	QVector<int> mRefCornerPts;
+
+	LineCandidates mLeftLine;
+	LineCandidates mRightLine;
+	LineCandidates mTopLine;
+	LineCandidates mBottomLine;
 };
 
 };

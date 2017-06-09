@@ -2006,7 +2006,7 @@ void LineCandidates::addCandidate(Line c) {
 	double overlap;
 	if (mReferenceLine.isHorizontal()) {
 		c.sortEndpoints(true);
-		double overlap = mReferenceLine.horizontalOverlap(c);
+		overlap = mReferenceLine.horizontalOverlap(c);
 	}
 	else {
 		c.sortEndpoints(false);
@@ -2027,6 +2027,150 @@ QVector<double> LineCandidates::overlaps() const {
 
 QVector<double> LineCandidates::distances() const {
 	return mDistances;
+}
+
+TableCellRaw::TableCellRaw() {
+}
+
+void TableCellRaw::setId(const QString & id) {
+	mId = id;
+}
+
+QString TableCellRaw::id() const {
+	return mId;
+}
+
+void TableCellRaw::setRow(int r) {
+	mRow = r;
+}
+
+int TableCellRaw::row() const {
+	return mRow;
+}
+
+void TableCellRaw::setCol(int c) {
+	mCol = c;
+}
+
+int TableCellRaw::col() const {
+	return mCol;
+}
+
+void TableCellRaw::setPolygon(const Polygon & polygon) {
+	mRefPoly = polygon;
+}
+
+Polygon TableCellRaw::polygon() const{
+	return mRefPoly;
+}
+
+void TableCellRaw::setRowSpan(int r) {
+	mRowSpan = r;
+}
+
+int TableCellRaw::rowSpan() const {
+	return mRowSpan;
+}
+
+void TableCellRaw::setColSpan(int c) {
+	mColSpan = c;
+}
+
+int TableCellRaw::colSpan() const {
+	return mColSpan;
+}
+
+void TableCellRaw::setLeftBorderVisible(bool b) {
+	mLeftBorderVisible = b;
+}
+
+bool TableCellRaw::leftBorderVisible() const {
+	return mLeftBorderVisible;
+}
+
+void TableCellRaw::setRightBorderVisible(bool b) {
+	mRightBorderVisible = b;
+}
+
+bool TableCellRaw::rightBorderVisible() const {
+	return mRightBorderVisible;
+}
+
+void TableCellRaw::setTopBorderVisible(bool b) {
+	mTopBorderVisible = b;
+}
+
+bool TableCellRaw::topBorderVisible() const {
+	return mTopBorderVisible;
+}
+
+void TableCellRaw::setBottomBorderVisible(bool b) {
+	mBottomBorderVisible = b;
+}
+
+bool TableCellRaw::bottomBorderVisible() const {
+	return mBottomBorderVisible;
+}
+
+void TableCellRaw::setLeftIdx(int i) {
+	mLeftIdx.push_back(i);
+}
+
+QVector<int> TableCellRaw::leftIdx() const {
+	return mLeftIdx;
+}
+
+void TableCellRaw::setRightIdx(int i) {
+	mRightIdx.push_back(i);
+}
+
+QVector<int> TableCellRaw::rightIdx() const {
+	return mRightIdx;
+}
+
+void TableCellRaw::setTopIdx(int i) {
+	mTopIdx.push_back(i);
+}
+
+QVector<int> TableCellRaw::topIdx() const {
+	return mTopIdx;
+}
+
+void TableCellRaw::setBottomIdx(int i) {
+	mBottomIdx.push_back(i);
+}
+
+QVector<int> TableCellRaw::bottomIdx() const {
+	return mBottomIdx;
+}
+
+void TableCellRaw::setHeader(bool b) {
+	mHeader = b;
+}
+
+bool TableCellRaw::header() const {
+	return mHeader;
+}
+
+void TableCellRaw::setCornerPts(QVector<int>& cPts) {
+	mRefCornerPts = cPts;
+}
+
+QVector<int> TableCellRaw::cornerPty() const {
+	return mRefCornerPts;
+}
+
+bool TableCellRaw::operator<(const TableCellRaw & cell) const {
+	if (row() == cell.row()) {
+		return col() < cell.col();
+	}
+	else {
+		return row() < cell.row();
+	}
+}
+
+bool TableCellRaw::compareCells(const QSharedPointer<rdf::TableCellRaw> l1, const QSharedPointer<rdf::TableCellRaw> l2) {
+	return *l1 < *l2;
 }
 
 }
