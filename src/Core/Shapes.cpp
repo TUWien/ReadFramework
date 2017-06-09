@@ -1987,20 +1987,21 @@ Line LineCandidates::referenceLine() const {
 	return mReferenceLine;
 }
 
-void LineCandidates::addCandidate(Line c, double o, double d) {
-	mLCandidates.push_back(c);
+void LineCandidates::addCandidate(int lIdx, double o, double d) {
+	mLCandidatesIdx.push_back(lIdx);
 	mOverlaps.push_back(o);
 	mDistances.push_back(d);
 }
 
-void LineCandidates::addCandidate(Line c) {
+void LineCandidates::addCandidate(Line c, int lIdx) {
 
 	if (mReferenceLine.isEmpty()) {
 		qWarning() << "reference line is empty - candidate not added";
 		return;
 	}
 
-	mLCandidates.push_back(c);
+	mLCandidatesIdx.push_back(lIdx);
+	//mLCandidates.push_back(c);
 
 	
 	double overlap;
@@ -2017,8 +2018,38 @@ void LineCandidates::addCandidate(Line c) {
 	mDistances.push_back(dist);
 }
 
-QVector<Line> LineCandidates::candidates() const {
-	return mLCandidates;
+QVector<int> LineCandidates::sortByOverlap() {
+
+	if (mLCandidatesIdx.size() == mOverlaps.size()) {
+
+		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mOverlaps[i1] < mOverlaps[i2];  } );
+		return mLCandidatesIdx;
+
+	} else {
+		qWarning() << "sortByOverlap different length of idx and overlap - return emtpy vector";
+		return QVector<int>();
+	}
+}
+
+QVector<int> LineCandidates::sortByDistance() {
+	if (mLCandidatesIdx.size() == mDistances.size()) {
+
+		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mDistances[i1] < mDistances[i2];  });
+		return mLCandidatesIdx;
+
+	}
+	else {
+		qWarning() << "sortByDistance different length of idx and overlap - return emtpy vector";
+		return QVector<int>();
+	}
+}
+
+//QVector<Line> LineCandidates::candidates() const {
+//	return mLCandidates;
+//}
+
+QVector<int> LineCandidates::candidatesIdx() const {
+	return mLCandidatesIdx;
 }
 
 QVector<double> LineCandidates::overlaps() const {

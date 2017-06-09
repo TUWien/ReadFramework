@@ -533,10 +533,14 @@ public:
 	void setReferenceLine(Line referenceLine);
 	Line referenceLine() const;
 
-	void addCandidate(Line c, double o, double d);
-	void addCandidate(Line c);
+	void addCandidate(int lIdx, double o, double d);
+	void addCandidate(Line c, int lIdx);
 
-	QVector<Line> candidates() const;
+	QVector<int> sortByOverlap();
+	QVector<int> sortByDistance();
+
+	//QVector<Line> candidates() const;
+	QVector<int> candidatesIdx() const;
 	QVector<double> overlaps() const;
 	QVector<double> distances() const;
 
@@ -544,7 +548,8 @@ public:
 protected:
 
 	Line mReferenceLine;
-	QVector<Line> mLCandidates;
+	//QVector<Line> mLCandidates;
+	QVector<int> mLCandidatesIdx;
 	QVector<double> mOverlaps;
 	QVector<double> mDistances;
 

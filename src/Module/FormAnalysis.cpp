@@ -816,6 +816,56 @@ bool FormFeatures::matchTemplate() {
 	//	}
 	//}
 
+	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
+
+	//	qDebug() << "try to match cell : " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
+
+	//	//shift cell lines according offset
+	//	rdf::Line tL = cells[cellIdx]->topBorder();
+	//	tL.translate(mOffset);
+	//	rdf::Line lL = cells[cellIdx]->leftBorder();
+	//	lL.translate(mOffset);
+	//	rdf::Line rL = cells[cellIdx]->rightBorder();
+	//	rL.translate(mOffset);
+	//	rdf::Line bL = cells[cellIdx]->bottomBorder();
+	//	bL.translate(mOffset);
+
+	//	//find all line candidates width a minimum distance of cell width/height /2
+	//	//overlap can also be 0 for a line candidate
+	//	//0: left 1: right 2; upper 3: bottom
+	//	double d=0;
+	//	d = findMinWidth(cellsR, cells, cellIdx, 2); //if no neighbours are found, threshold is based on the config value
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates topL = findLineCandidates(tL, d, true);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 0);
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates leftL = findLineCandidates(lL, d, false);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 1);
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates rightL = findLineCandidates(rL, d, false);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 3);
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates bottomL = findLineCandidates(bL, d, true);
+
+	//	//for every line candidate:
+	//	//minimize distance offset to borderline, minimize offset to line + maximize overlap
+
+	//	
+	//	bool found = false;
+	//	QString customTmp;
+
+	//	
+
+	//	QVector<int> cornerPts;
+	//	double thr = config()->distThreshold();
+	//	//tL = findLine(tL, 100, found);
+	//	tL = findLine(tL, thr, found);
+
+	//}
+
 	//generate cells
 	for (auto c : cells) {
 		
@@ -969,11 +1019,72 @@ rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool &found,
 	}
 }
 
-//QVector<rdf::Line> FormFeatures::findLineCandidates(rdf::Line l, bool horizontal) {
-//
-//	return QVector<rdf::Line>();
-//
-//}
+rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThreshold, bool horizontal) {
+	
+	LineCandidates lC;
+	lC.setReferenceLine(l);
+
+	if (horizontal) {
+
+		l.sortEndpoints(true);
+		for (int lidx = 0; lidx < mHorLines.size(); lidx++) {
+
+			rdf::Line cLine = mHorLines[lidx];
+			cLine.sortEndpoints(true);
+			double distance = cLine.distance(l.center());
+
+			if (distance < distThreshold) {
+				double overlap = l.horizontalOverlap(cLine);
+				lC.addCandidate(lidx, overlap, distance);
+			}
+		}
+
+	} else {
+
+		l.sortEndpoints(false);
+		for (int lidx = 0; lidx < mVerLines.size(); lidx++) {
+
+			rdf::Line cLine = mVerLines[lidx];
+			cLine.sortEndpoints(false);
+		
+			double distance = cLine.distance(l.center());
+
+			if (distance < distThreshold) {
+				double overlap = l.verticalOverlap(cLine);
+				lC.addCandidate(lidx, overlap, distance);
+			}
+		}
+	}
+
+	return lC;
+}
+
+double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, QVector<QSharedPointer<rdf::TableCell>> cells, int cellIdx, int neighbour) {
+	QVector<int> l;
+	double width = std::numeric_limits<double>::max();
+
+	//0: left 1: right 2; upper 3: bottom
+	switch (neighbour) {
+
+	case 0: l = cellsR[cellIdx]->leftIdx(); break;
+	case 1: l = cellsR[cellIdx]->rightIdx(); break;
+	case 2: l = cellsR[cellIdx]->topIdx(); break;
+	case 3: l = cellsR[cellIdx]->bottomIdx(); break;
+	default:
+		break;
+	}
+
+	for (int i = 0; i < l.size(); i++) {
+
+		double w = cells[l[i]]->width();
+		if (w < width) {
+			width = w/2;
+		}
+	}
+
+	return width;
+}
+
 
 rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl) {
 
