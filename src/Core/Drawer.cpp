@@ -186,6 +186,16 @@ QColor ColorManager::red(double alpha) {
 }
 
 /// <summary>
+/// Returns a light green.
+/// </summary>
+/// <param name="alpha">Optional alpha [0 1].</param>
+/// <returns></returns>
+DllCoreExport QColor ColorManager::green(double alpha) {
+	
+	return QColor(120, 192, 167, qRound(alpha*255)); 
+}
+
+/// <summary>
 /// Returns the TU Wien blue.
 /// </summary>
 /// <param name="alpha">Optional alpha [0 1].</param>

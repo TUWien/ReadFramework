@@ -209,6 +209,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.imagePath().isEmpty()) {
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop.tif");
+		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-rcrop.tif");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/102_csrc-crop.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/M_Aigen_am_Inn_007_0084-crop.jpg");

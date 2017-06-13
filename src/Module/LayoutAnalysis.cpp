@@ -264,10 +264,12 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
-	p.setPen(ColorManager::pink());
+	p.setPen(ColorManager::blue());
 
-	for (auto l : mStopLines)
+	for (auto l : mStopLines) {
+		l.setThickness(3);
 		l.draw(p);
+	}
 
 	p.setPen(col);
 
@@ -278,7 +280,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 			
 			if (!col.isValid())
 				p.setPen(ColorManager::randColor());
-			p.setOpacity(0.3);
+			p.setOpacity(0.5);
 			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
 			//qDebug() << "scale" << idx << ":" << *s[idx];
 

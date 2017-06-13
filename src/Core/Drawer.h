@@ -83,6 +83,7 @@ namespace ColorManager {
 	DllCoreExport QColor lightGray(double alpha = 1.0);
 	DllCoreExport QColor darkGray(double alpha = 1.0);
 	DllCoreExport QColor red(double alpha = 1.0);
+	DllCoreExport QColor green(double alpha = 1.0);
 	DllCoreExport QColor blue(double alpha = 1.0);
 	DllCoreExport QColor pink(double alpha = 1.0);
 	DllCoreExport QColor white(double alpha = 1.0);

@@ -1512,7 +1512,7 @@ void TextBlockSet::removeWeakTextLines() const {
 // TextLine Helper functions --------------------------------------------------------------------
 /// <summary>
 /// Detects low density text lines and returns them.
-/// 'Low density' text lines are thosw whose density is below q5-(q75-q25) (median - interquartile distances).
+/// 'Low density' text lines are those whose density is below q5-(q75-q25) (median - interquartile distances).
 /// </summary>
 /// <param name="textLines">The text lines.</param>
 /// <returns>Low density (weak) textlines</returns>
