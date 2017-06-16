@@ -722,99 +722,118 @@ bool FormFeatures::matchTemplate() {
 
 	mRegion = region;
 	
-	//QVector<QSharedPointer<rdf::TableCellRaw>> cellsR;
-	////generate cells
-	////build raw table from template
-	////new structure is initialised including the search for all cell neighbours of a cell
-	//for (int cellIdx=0; cellIdx < cells.size(); cellIdx++) {
-	//	QSharedPointer<rdf::TableCellRaw> newCellR(new rdf::TableCellRaw());
+	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR;
+	//generate cells
+	//build raw table from template
+	//new structure is initialised including the search for all cell neighbours of a cell
+	for (int cellIdx=0; cellIdx < cells.size(); cellIdx++) {
+		QSharedPointer<rdf::TableCellRaw> newCellR(new rdf::TableCellRaw());
 
-	//	//set cell information (a priori known structure)
-	//	newCellR->setHeader(cells[cellIdx]->header());
-	//	newCellR->setId(cells[cellIdx]->id());
-	//	newCellR->setCol(cells[cellIdx]->col());
-	//	newCellR->setRow(cells[cellIdx]->row());
-	//	newCellR->setColSpan(cells[cellIdx]->colSpan());
-	//	newCellR->setRowSpan(cells[cellIdx]->rowSpan());
-	//	newCellR->setTopBorderVisible(cells[cellIdx]->topBorderVisible());
-	//	newCellR->setBottomBorderVisible(cells[cellIdx]->bottomBorderVisible());
-	//	newCellR->setLeftBorderVisible(cells[cellIdx]->leftBorderVisible());
-	//	newCellR->setRightBorderVisible(cells[cellIdx]->rightBorderVisible());
+		//set cell information (a priori known structure)
+		newCellR->setHeader(cells[cellIdx]->header());
+		newCellR->setId(cells[cellIdx]->id());
+		newCellR->setCol(cells[cellIdx]->col());
+		newCellR->setRow(cells[cellIdx]->row());
+		newCellR->setColSpan(cells[cellIdx]->colSpan());
+		newCellR->setRowSpan(cells[cellIdx]->rowSpan());
+		newCellR->setTopBorderVisible(cells[cellIdx]->topBorderVisible());
+		newCellR->setBottomBorderVisible(cells[cellIdx]->bottomBorderVisible());
+		newCellR->setLeftBorderVisible(cells[cellIdx]->leftBorderVisible());
+		newCellR->setRightBorderVisible(cells[cellIdx]->rightBorderVisible());
 
-	//	cellsR.push_back(newCellR);
+		cellsR.push_back(newCellR);
 
-	//	//set left Neighbour and vice versa (multiple neighbours are possible
-	//	//cells are sorted -> previous cell is left neighbour if it is the same row,
-	//	//otherwise find previous cell of the same row (happens if rowspan is active)
-	//	if (cellIdx > 0 && newCellR->col() > 0) {
-	//		//due to sorting: if row index is the same of the current and the previous element,
-	//		//the previous element is the left neighbour
-	//		if (cellsR[cellIdx - 1]->row() == newCellR->row()) {
-	//			newCellR->setLeftIdx(cellIdx - 1);
-	//			cellsR[cellIdx - 1]->setRightIdx(cellIdx);
-	//			//check if mutiple left cells exist...
-	//			if (newCellR->rowSpan() > 1) {
-	//				int tmpIdx = cellIdx+1;
-	//				for (; tmpIdx < cells.size(); tmpIdx++) {
-	//					if (cells[tmpIdx]->col() + cells[tmpIdx]->colSpan() == newCellR->col()) {
-	//						//it is left neighbour
-	//						if (cells[tmpIdx]->row() < newCellR->row() + newCellR->rowSpan() && cells[tmpIdx]->row() > newCellR->row()) {
-	//							newCellR->setLeftIdx(tmpIdx);
-	//							//cannot set leftIdx of cell, since raw cell doesn't exist at this moment....
-	//							//-> no solution yet (current cell missing as right neighbour)
-	//						}
-	//					}
-	//				}
-	//			}
+		//set left Neighbour and vice versa (multiple neighbours are possible
+		//cells are sorted -> previous cell is left neighbour if it is the same row,
+		//otherwise find previous cell of the same row (happens if rowspan is active)
+		if (cellIdx > 0 && newCellR->col() > 0) {
+			//due to sorting: if row index is the same of the current and the previous element,
+			//the previous element is the left neighbour
+			if (cellsR[cellIdx - 1]->row() == newCellR->row()) {
+				newCellR->setLeftIdx(cellIdx - 1);
+				//cellsR[cellIdx - 1]->setRightIdx(cellIdx);
+				//check if mutiple left cells exist...
+				if (newCellR->rowSpan() > 1) {
+					int tmpIdx = cellIdx+1;
+					for (; tmpIdx < cells.size(); tmpIdx++) {
+						if (cells[tmpIdx]->col() + cells[tmpIdx]->colSpan() == newCellR->col()) {
+							//it is left neighbour
+							if (cells[tmpIdx]->row() < newCellR->row() + newCellR->rowSpan() && cells[tmpIdx]->row() > newCellR->row()) {
+								newCellR->setLeftIdx(tmpIdx);
+								//cannot set leftIdx of cell, since raw cell doesn't exist at this moment....
+								//-> no solution yet (current cell missing as right neighbour)
+								//solved with second loop to set right and top neighbour after detecting left and top leighbour
+								//right/bottom neighbour are not set directly
+							}
+						}
+					}
+				}
 
-	//		} else { //search for left neighbour (backwards until colIdx = currentColIdx-1)
-	//			int tmpIdx = cellIdx-1;
-	//			for (; tmpIdx >= 0; tmpIdx--) {
-	//				if (cells[tmpIdx]->col() == (newCellR->col() - 1)) {
-	//					newCellR->setLeftIdx(tmpIdx);
-	//					cellsR[tmpIdx]->setRightIdx(cellIdx);
-	//					break;
-	//				}
-	//			}
-	//		}
-	//	}
+			} else { //search for left neighbour (backwards until colIdx = currentColIdx-1)
+				int tmpIdx = cellIdx-1;
+				for (; tmpIdx >= 0; tmpIdx--) {
+					if (cells[tmpIdx]->col() == (newCellR->col() - 1)) {
+						newCellR->setLeftIdx(tmpIdx);
+						//cellsR[tmpIdx]->setRightIdx(cellIdx);
+						break;
+					}
+				}
+			}
+		}
 
-	//	//set upper Neighbour  and vice versa
-	//	if (cellIdx > 0 && newCellR->row() > 0) {
-	//		int tmpIdx = cellIdx - 1;
+		//set upper Neighbour  and vice versa
+		if (cellIdx > 0 && newCellR->row() > 0) {
+			int tmpIdx = cellIdx - 1;
 
-	//		for (; tmpIdx >= 0; tmpIdx--) {
-	//			//if row+rowspan of current cell equals the current row, the previous row is detected
-	//			if ((cellsR[tmpIdx]->row() + cellsR[tmpIdx]->rowSpan()) == newCellR->row()) {
-	//				//collIdx is the same as current cell -> it is upper Neighbour
-	//				if (newCellR->col() == cellsR[tmpIdx]->col()) {
-	//					//if current colSpan > 1 -> add neighbour for all spanned cells, happens in the following case:
-	//					//          +------+----------+
-	//					//          |  X   | add also |
-	//					//          +------+----------+
-	//					//          |   cellIdx       |
-	//					//			+-----------------+
-	//					for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
-	//						int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
-	//						newCellR->setTopIdx(tmpIdx+ cellIdxTmp);
-	//						cellsR[tmpIdx+ cellIdxTmp]->setBottomIdx(cellIdx);
-	//					}
-	//				}
+			for (; tmpIdx >= 0; tmpIdx--) {
+				//if row+rowspan of current cell equals the current row, the previous row is detected
+				if ((cellsR[tmpIdx]->row() + cellsR[tmpIdx]->rowSpan()) == newCellR->row()) {
+					//collIdx is the same as current cell -> it is upper Neighbour
+					if (newCellR->col() == cellsR[tmpIdx]->col()) {
+						//newCellR->setTopIdx(tmpIdx);
+						//if current colSpan > 1 -> add neighbour for all spanned cells, happens in the following case:
+						//          +------+----------+
+						//          |  X   | add also |
+						//          +------+----------+
+						//          |   cellIdx       |
+						//			+-----------------+
+						for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
+							int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
+							newCellR->setTopIdx(tmpIdx+ cellIdxTmp);
+							//cellsR[tmpIdx+ cellIdxTmp]->setBottomIdx(cellIdx);
+						}
+					}
 
-	//				//if upperColIdx doesn't exist because of colSpan - check if the cell spans the current cell: happens in the following case:
-	//				//			+-----------------+
-	//				//          |                 |
-	//				//          +------+----------+
-	//				//          |      |  cellIdx |
-	//				//          +------+----------+
-	//				if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
-	//					newCellR->setTopIdx(tmpIdx);
-	//					cellsR[tmpIdx]->setBottomIdx(cellIdx);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+					//if upperColIdx doesn't exist because of colSpan - check if the cell spans the current cell: happens in the following case:
+					//			+-----------------+
+					//          |                 |
+					//          +------+----------+
+					//          |      |  cellIdx |
+					//          +------+----------+
+					if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
+						newCellR->setTopIdx(tmpIdx);
+						//cellsR[tmpIdx]->setBottomIdx(cellIdx);
+					}
+				}
+			}
+		}
+	}
+
+	//set also right and bottom neighbour
+	//could not be done within the first loop, since possible e.g. left cells doesb
+	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
+
+		QVector<int> tmpleft = cellsR[cellIdx]->leftIdx();
+		for (auto leftIdx : tmpleft) {
+			cellsR[leftIdx]->setRightIdx(cellIdx);
+		}
+
+		QVector<int> tmpTop = cellsR[cellIdx]->topIdx();
+		for (auto topIdx : tmpTop) {
+			cellsR[topIdx]->setBottomIdx(cellIdx);
+		}
+
+	}
 
 	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
 
