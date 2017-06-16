@@ -539,6 +539,8 @@ public:
 	QVector<int> sortByOverlap();
 	QVector<int> sortByDistance();
 
+	//int bestLineMatch(/*QSharedPointer<QVector<rdf::Line>> lines*/);
+
 	//QVector<Line> candidates() const;
 	QVector<int> candidatesIdx() const;
 	QVector<double> overlaps() const;
@@ -599,6 +601,18 @@ public:
 
 	void setHeader(bool b);
 	bool header() const;
+
+	void setLineCandidatesLeftLine(LineCandidates l);
+	LineCandidates leftLineC() const;
+
+	void setLineCandidatesRightLine(LineCandidates l);
+	LineCandidates rightLineC() const;
+
+	void setLineCandidatesTopLine(LineCandidates l);
+	LineCandidates topLineC() const;
+
+	void setLineCandidatesBottomLine(LineCandidates l);
+	LineCandidates bottomLineC() const;
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;

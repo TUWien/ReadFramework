@@ -2044,6 +2044,30 @@ QVector<int> LineCandidates::sortByDistance() {
 	}
 }
 
+//int LineCandidates::bestLineMatch(/*QSharedPointer<QVector<rdf::Line>> lines*/) {
+//
+//	double distance = std::numeric_limits<double>::max();
+//
+//	if (mReferenceLine.isEmpty() || mLCandidatesIdx.isEmpty())
+//		return -1;
+//
+//	for (int idx = 0; idx < mLCandidatesIdx.size(); idx++) {
+//
+//		//rdf::Line testLine = (*lines)[mLCandidatesIdx[idx]];
+//		
+//		double currOverlap = mOverlaps[idx];
+//		double currDistance = mDistances[idx];
+//
+//		
+//
+//
+//	}
+//
+//
+//
+//	return -1;
+//}
+
 //QVector<Line> LineCandidates::candidates() const {
 //	return mLCandidates;
 //}
@@ -2181,6 +2205,38 @@ void TableCellRaw::setHeader(bool b) {
 
 bool TableCellRaw::header() const {
 	return mHeader;
+}
+
+void TableCellRaw::setLineCandidatesLeftLine(LineCandidates l) {
+	mLeftLine = l;
+}
+
+LineCandidates TableCellRaw::leftLineC() const {
+	return mLeftLine;
+}
+
+void TableCellRaw::setLineCandidatesRightLine(LineCandidates l) {
+	mRightLine = l;
+}
+
+LineCandidates TableCellRaw::rightLineC() const {
+	return mRightLine;
+}
+
+void TableCellRaw::setLineCandidatesTopLine(LineCandidates l) {
+	mTopLine = l;
+}
+
+LineCandidates TableCellRaw::topLineC() const {
+	return mTopLine;
+}
+
+void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
+	mBottomLine = l;
+}
+
+LineCandidates TableCellRaw::bottomLineC() const {
+	return mBottomLine;
 }
 
 void TableCellRaw::setCornerPts(QVector<int>& cPts) {
