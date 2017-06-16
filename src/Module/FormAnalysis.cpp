@@ -725,8 +725,8 @@ bool FormFeatures::matchTemplate() {
 	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR;
 	//generate cells
 	//build raw table from template
-	//new structure is initialised including the search for all cell neighbours of a cell
-	for (int cellIdx=0; cellIdx < cells.size(); cellIdx++) {
+	//new structure is initialised
+	for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
 		QSharedPointer<rdf::TableCellRaw> newCellR(new rdf::TableCellRaw());
 
 		//set cell information (a priori known structure)
@@ -742,6 +742,12 @@ bool FormFeatures::matchTemplate() {
 		newCellR->setRightBorderVisible(cells[cellIdx]->rightBorderVisible());
 
 		cellsR.push_back(newCellR);
+	}
+
+	//search for all cell neighbours of a cell
+	for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
+		QSharedPointer<rdf::TableCellRaw> newCellR;
+		newCellR = cellsR[cellIdx];
 
 		//set left Neighbour and vice versa (multiple neighbours are possible
 		//cells are sorted -> previous cell is left neighbour if it is the same row,
@@ -751,7 +757,7 @@ bool FormFeatures::matchTemplate() {
 			//the previous element is the left neighbour
 			if (cellsR[cellIdx - 1]->row() == newCellR->row()) {
 				newCellR->setLeftIdx(cellIdx - 1);
-				//cellsR[cellIdx - 1]->setRightIdx(cellIdx);
+				cellsR[cellIdx - 1]->setRightIdx(cellIdx);
 				//check if mutiple left cells exist...
 				if (newCellR->rowSpan() > 1) {
 					int tmpIdx = cellIdx+1;
@@ -760,10 +766,7 @@ bool FormFeatures::matchTemplate() {
 							//it is left neighbour
 							if (cells[tmpIdx]->row() < newCellR->row() + newCellR->rowSpan() && cells[tmpIdx]->row() > newCellR->row()) {
 								newCellR->setLeftIdx(tmpIdx);
-								//cannot set leftIdx of cell, since raw cell doesn't exist at this moment....
-								//-> no solution yet (current cell missing as right neighbour)
-								//solved with second loop to set right and top neighbour after detecting left and top leighbour
-								//right/bottom neighbour are not set directly
+								cellsR[tmpIdx]->setRightIdx(cellIdx);
 							}
 						}
 					}
@@ -774,7 +777,7 @@ bool FormFeatures::matchTemplate() {
 				for (; tmpIdx >= 0; tmpIdx--) {
 					if (cells[tmpIdx]->col() == (newCellR->col() - 1)) {
 						newCellR->setLeftIdx(tmpIdx);
-						//cellsR[tmpIdx]->setRightIdx(cellIdx);
+						cellsR[tmpIdx]->setRightIdx(cellIdx);
 						break;
 					}
 				}
@@ -800,7 +803,7 @@ bool FormFeatures::matchTemplate() {
 						for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
 							int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
 							newCellR->setTopIdx(tmpIdx+ cellIdxTmp);
-							//cellsR[tmpIdx+ cellIdxTmp]->setBottomIdx(cellIdx);
+							cellsR[tmpIdx+ cellIdxTmp]->setBottomIdx(cellIdx);
 						}
 					}
 
@@ -812,28 +815,13 @@ bool FormFeatures::matchTemplate() {
 					//          +------+----------+
 					if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
 						newCellR->setTopIdx(tmpIdx);
-						//cellsR[tmpIdx]->setBottomIdx(cellIdx);
+						cellsR[tmpIdx]->setBottomIdx(cellIdx);
 					}
 				}
 			}
 		}
 	}
 
-	//set also right and bottom neighbour
-	//could not be done within the first loop, since possible e.g. left cells doesb
-	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
-
-		QVector<int> tmpleft = cellsR[cellIdx]->leftIdx();
-		for (auto leftIdx : tmpleft) {
-			cellsR[leftIdx]->setRightIdx(cellIdx);
-		}
-
-		QVector<int> tmpTop = cellsR[cellIdx]->topIdx();
-		for (auto topIdx : tmpTop) {
-			cellsR[topIdx]->setBottomIdx(cellIdx);
-		}
-
-	}
 
 	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
 
