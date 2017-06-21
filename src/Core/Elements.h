@@ -341,6 +341,8 @@ public:
 	//virtual bool operator==(const SeparatorRegion& sr1);
 	virtual bool operator==(const Region& sr1);
 
+	static SeparatorRegion fromLine(const Line& l);
+
 protected:
 	Line mLine;
 };

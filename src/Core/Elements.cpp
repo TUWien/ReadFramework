@@ -1190,6 +1190,14 @@ bool SeparatorRegion::operator==(const Region & sr1) {
 
 }
 
+SeparatorRegion SeparatorRegion::fromLine(const Line & l) {
+	
+	SeparatorRegion sr;
+	sr.setLine(l);
+
+	return sr;
+}
+
 TableRegion::TableRegion(const Type & type) : Region(type) {
 
 	// default to text line

@@ -311,6 +311,16 @@ TextBlockSet LayoutAnalysis::textBlockSet() const {
 	return mTextBlockSet;
 }
 
+QVector<SeparatorRegion> LayoutAnalysis::stopLines() const {
+	
+	QVector<SeparatorRegion> sps;
+	for (auto l : mStopLines) {
+		sps << SeparatorRegion::fromLine(l);
+	}
+	
+	return sps;
+}
+
 PixelSet LayoutAnalysis::pixels() const {
 	
 	PixelSet set;

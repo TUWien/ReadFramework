@@ -54,6 +54,7 @@ namespace rdf {
 // read defines
 class Region;
 class RootRegion;
+class SeparatorRegion;
 class Polygon;
 class TextLine;
 
@@ -116,8 +117,8 @@ public:
 
 	void setRootRegion(const QSharedPointer<RootRegion>& region);
 	
-	
 	TextBlockSet textBlockSet() const;
+	QVector<SeparatorRegion> stopLines() const;
 	PixelSet pixels() const;
 	double scaleFactor() const;
 
