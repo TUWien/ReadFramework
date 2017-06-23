@@ -7,12 +7,17 @@ project(ReadFramework)
 set(RDF_FRAMEWORK_VERSION 0.3)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
+# Codecov
+if(CMAKE_COMPILER_IS_GNUCXX)
+    include("cmake/CodeCoverage.cmake")
+    setup_target_for_coverage(${PROJECT_NAME}_coverage tests coverage)
+endif()
+
 if(CMAKE_CL_64)
 	SET(RDF_ARCHITECTURE "x64")
 else()
 	SET(RDF_ARCHITECTURE "x86")
 endif()
-
 
 if(DEFINED GLOBAL_READ_BUILD)
 	# set output path when building for READ
@@ -39,6 +44,11 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/CMakeUser.cmake)
 endif()
 
 RDF_CHECK_COMPILER()
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+	# Codecov
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -pthread -g -O0 -fprofile-arcs -ftest-coverage")
+endif()
 
 # find Qt
 RDF_FIND_QT()

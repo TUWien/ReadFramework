@@ -54,8 +54,6 @@
 
 namespace rdf {
 
-
-
 class DllCoreExport LineFilterConfig : public ModuleConfig {
 
 public:
