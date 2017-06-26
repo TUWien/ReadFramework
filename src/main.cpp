@@ -106,6 +106,10 @@ int main(int argc, char** argv) {
 	QCommandLineOption labelConfigPathOpt(QStringList() << "l" << "label config", QObject::tr("Label config path."), "filepath");
 	parser.addOption(labelConfigPathOpt);
 
+	// label config path
+	QCommandLineOption testOpt(QStringList() << "t" << "tests", QObject::tr("Perform tests."));
+	parser.addOption(testOpt);
+
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
 
@@ -193,6 +197,11 @@ int main(int argc, char** argv) {
 			lt.testComponents();
 		}
 
+	}
+	else if (parser.isSet(testOpt)) {
+		parser.showHelp();
+		// TODO: add testing htere
+		return 0;
 	}
 	else {
 		qInfo() << "Please specify an input image...";
