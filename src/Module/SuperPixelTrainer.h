@@ -251,4 +251,4 @@ private:
 	bool checkInput() const override;
 };
 
-};
+}

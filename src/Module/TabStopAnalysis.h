@@ -118,4 +118,4 @@ private:
 	void updateTabStopCandidates(const PixelSet& set, double orientation, const PixelTabStop::Type& newType = PixelTabStop::type_none) const;
 };
 
-};
+}

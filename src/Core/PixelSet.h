@@ -432,4 +432,4 @@ protected:
 	cv::Mat calcDists(const PixelSet& pixels) const;
 };
 
-};
+}

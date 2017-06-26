@@ -207,4 +207,4 @@ protected:
     Underlying mFlags;
 };
 
-};
+}

@@ -301,4 +301,4 @@ protected:
 	double calcWeight() const;
 };
 
-};
+}

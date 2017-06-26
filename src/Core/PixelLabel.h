@@ -188,4 +188,4 @@ protected:
 	void toJson(QJsonObject& jo) const;
 };
 
-};
+}

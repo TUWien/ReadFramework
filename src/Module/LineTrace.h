@@ -242,4 +242,4 @@ protected:
 	bool checkInput() const override;
 };
 
-};
+}

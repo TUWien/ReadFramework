@@ -213,4 +213,4 @@ namespace rdf {
 		//void save(QSettings& settings) const override;
 	};
 
-};
+}

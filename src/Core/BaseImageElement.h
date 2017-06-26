@@ -69,4 +69,4 @@ protected:
 	QString mId;
 };
 
-};
+}

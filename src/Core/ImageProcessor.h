@@ -70,4 +70,4 @@ public:
 	static void normalize(cv::Mat& src);
 };
 
-};
+}

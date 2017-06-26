@@ -83,4 +83,4 @@ protected:
 	DebugConfig mConfig;
 };
 
-};
+}

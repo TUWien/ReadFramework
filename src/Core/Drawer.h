@@ -91,4 +91,4 @@ namespace ColorManager {
 	// add your favorite colors here
 };
 
-};
+}

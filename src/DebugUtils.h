@@ -75,4 +75,4 @@ protected:
 	QString mLabelConfigPath;
 };
 
-};
+}
