@@ -197,4 +197,4 @@ namespace rdf {
 		QVector<cv::Mat> mDescriptors;
 		WriterVocabulary mVocabulary = WriterVocabulary();
 	};
-};
+}

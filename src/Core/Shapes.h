@@ -657,4 +657,4 @@ protected:
 	LineCandidates mBottomLine;
 };
 
-};
+}

@@ -142,4 +142,4 @@ private:
 	BlobManager(const BlobManager&);
 };
 
-};
+}
