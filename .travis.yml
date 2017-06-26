@@ -38,6 +38,7 @@ before_script:
 script:
 - cmake $CMAKE_ARGS ../.
 - make -j8
+- ctest
 
 after_success:
 # Creating report
