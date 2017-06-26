@@ -124,6 +124,9 @@ endif()
 
 RDF_ADD_INSTALL()
 
+include(CTest)
+enable_testing()
+
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)
 # foreach (_variableName ${_variableNames})

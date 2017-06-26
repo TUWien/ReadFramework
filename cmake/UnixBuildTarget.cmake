@@ -8,7 +8,7 @@ set(RDF_DLL_MODULE_NAME ${PROJECT_NAME}Module)
 #binary
 link_directories(${OpenCV_LIBRARY_DIRS})
 set(CHANGLOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/changelog.txt)
-add_executable(${RDF_BINARY_NAME} WIN32  MACOSX_BUNDLE ${MAIN_SOURCES} ${MAIN_HEADERS} ${RDF_TRANSLATIONS} ${RDF_RC} ${CHANGLOG_FILE}) #changelog is added here, so that i appears in visual studio
+add_executable(${RDF_BINARY_NAME} WIN32  MACOSX_BUNDLE ${MAIN_SOURCES} ${MAIN_HEADERS} ${RDF_TRANSLATIONS} ${RDF_RC} ${CHANGLOG_FILE}) #changelog is added here, so that it appears in visual studio
 set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) # define that changelog should not be compiled
 target_link_libraries(${RDF_BINARY_NAME} ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME} ${OpenCV_LIBS}) 
 		
@@ -74,6 +74,9 @@ install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} D
 #install(FILES Readme/nomacs.1 DESTINATION share/man/man1)
 #  appdata
 #install(FILES nomacs.appdata.xml DESTINATION /usr/share/appdata/)
+
+# tests
+add_test(NAME framework_test COMMAND ${RDF_BINARY_NAME})
 
 
 # "make dist" target
