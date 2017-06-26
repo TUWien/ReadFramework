@@ -76,7 +76,7 @@ install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} D
 #install(FILES nomacs.appdata.xml DESTINATION /usr/share/appdata/)
 
 # tests
-add_test(NAME framework_test COMMAND ${RDF_BINARY_NAME})
+add_test(NAME FrameworkTest COMMAND ${RDF_BINARY_NAME} "-tests")
 
 
 # "make dist" target

@@ -8,10 +8,10 @@ set(RDF_FRAMEWORK_VERSION 0.3)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
 # Codecov
-if(CMAKE_COMPILER_IS_GNUCXX)
-    include("cmake/CodeCoverage.cmake")
-    setup_target_for_coverage(${PROJECT_NAME}_coverage tests coverage)
-endif()
+# if(CMAKE_COMPILER_IS_GNUCXX)
+    # include("cmake/CodeCoverage.cmake")
+    # setup_target_for_coverage(${PROJECT_NAME}_coverage ${RDF_BINARY_NAME} coverage)
+# endif()
 
 if(CMAKE_CL_64)
 	SET(RDF_ARCHITECTURE "x64")
@@ -123,6 +123,13 @@ else()
 endif()
 
 RDF_ADD_INSTALL()
+
+# Codecov
+if(CMAKE_COMPILER_IS_GNUCXX)
+	include("cmake/CodeCoverage.cmake")
+    setup_target_for_coverage(${PROJECT_NAME}_coverage ${RDF_BINARY_NAME} coverage)
+endif()
+
 
 include(CTest)
 enable_testing()
