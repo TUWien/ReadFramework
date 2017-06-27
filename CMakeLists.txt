@@ -116,6 +116,11 @@ if(MSVC)
 elseif(APPLE)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacBuildTarget.cmake)
 elseif(UNIX)
+
+	# enable CTest
+	include(CTest)
+	enable_testing()
+
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
@@ -131,8 +136,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 
-include(CTest)
-enable_testing()
 
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)
