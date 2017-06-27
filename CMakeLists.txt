@@ -122,6 +122,8 @@ elseif(UNIX)
 	enable_testing()
 
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
+	
+	add_subdirectory(src)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
