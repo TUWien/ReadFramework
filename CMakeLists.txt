@@ -115,19 +115,16 @@ QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 # file(GLOB RDF_TRANSLATIONS "translations/*.ts")
 # QT5_ADD_TRANSLATION(RDF_QM ${RDF_TRANSLATIONS})
 
-if(MSVC)
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
-elseif(UNIX)
+if(UNIX)
 
 	# enable CTest
 	include(CTest)
 	enable_testing()
 
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
-else()
-	message(STATUS "build system unkown ... fallback to unix")
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
 endif()
+
+# create build targets
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/BuildTargets.cmake)
 
 RDF_ADD_INSTALL()
 
