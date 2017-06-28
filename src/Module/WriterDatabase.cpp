@@ -689,7 +689,10 @@ namespace rdf {
 	/// </summary>
 	/// <returns></returns>
 	bool WriterVocabulary::isEmpty() const {
-		if(mVocabulary.empty() && mType == WI_BOW || mEM.empty() && mType == WI_GMM || mNumberOfClusters <= 0 || mType == WI_UNDEFINED) {
+		
+		if ((mVocabulary.empty() && mType == WI_BOW) || 
+			(mEM.empty() && mType == WI_GMM) || 
+			mNumberOfClusters <= 0 || mType == WI_UNDEFINED) {
 			return true;
 		}
 		return false;
@@ -1080,7 +1083,7 @@ namespace rdf {
 			cv::Mat probs, means;
 			std::vector<cv::Mat> covs;
 
-			cv::Vec2d emOut = em->predict2(feature, probs);
+			//cv::Vec2d emOut = em->predict2(feature, probs);
 			probs.convertTo(probs, CV_32F);
 			em->getCovs(covs);
 			means = em->getMeans();

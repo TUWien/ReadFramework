@@ -135,7 +135,7 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) {
 		se = 1;
 		break;
 	case Algorithms::DISK:
-
+	{
 		se.setTo(0);
 
 		int c = seSize << 1;   //DkMath::halfInt(seSize);	// radius
@@ -156,6 +156,9 @@ cv::Mat Algorithms::createStructuringElement(int seSize, int shape) {
 			}
 		}
 		break;
+	}
+	default:;
+		// do nothing
 	}
 
 	return se;
@@ -791,7 +794,6 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) {
 	int i, count;
 	const float* h;
 	double sum = 0, mu = 0;
-	bool uniform = false;
 	double low = 0, high = 0, delta = 0;
 	double mu1 = 0, q1 = 0;
 	double max_sigma = 0;
@@ -804,7 +806,6 @@ double Algorithms::getThreshOtsu(const cv::Mat& hist, const double otsuThresh) {
 
 	delta = (high - low) / count;
 	low += delta*0.5;
-	uniform = true;
 
 	for (i = 0; i < count; i++) {
 		sum += h[i];

@@ -167,7 +167,7 @@ public:
 				if (mPtr[cIdx] == 0) srcPtr[cIdx] = 0;
 			}
 		}
-	};
+	}
 
 	template<typename sFmt>
 	static void setBorderConstIntern(cv::Mat src, sFmt val) {
@@ -186,7 +186,7 @@ public:
 			srcPtr[0] = val;
 			srcPtr[src.cols - 1] = val;
 		}
-	};
+	}
 
 };
 
@@ -221,13 +221,12 @@ namespace PixelDistance {
 	DllCoreExport double bhattacharyya(const Pixel* px1, const Pixel* px2);
 	DllCoreExport double angleWeighted(const Pixel* px1, const Pixel* px2);
 
-	DllCoreExport typedef  double (*PixelDistanceFunction)(const Pixel* px1, const Pixel* px2);
+	DllCoreExport typedef double (*PixelDistanceFunction)(const Pixel* px1, const Pixel* px2);
 
 	DllCoreExport double spacingWeighted(const PixelEdge* edge);
 	DllCoreExport double orientationWeighted(const PixelEdge* edge);
 	DllCoreExport double euclidean(const PixelEdge* edge);
-	DllCoreExport typedef  double(*EdgeWeightFunction)(const PixelEdge* edge);
-};
-
+	DllCoreExport typedef double (*EdgeWeightFunction)(const PixelEdge* edge);
+}
 
 }

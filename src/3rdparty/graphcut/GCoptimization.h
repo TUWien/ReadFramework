@@ -105,6 +105,16 @@
 #error Requires Visual C++ 2005 (VC8) compiler or later.
 #endif
 
+// diem: compiler warnings
+#ifdef _MSC_VER
+#pragma warning(push, 0)	// no warnings from includes
+#pragma warning(disable: 4706)	// assignment within conditional expression 
+#pragma warning(disable:4701)		// potentially uninitialized local variable used
+#elif __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreorder"
+#endif
+
 #include <cstddef>
 #include "energy.h"
 #include "graph.cpp"
@@ -624,5 +634,12 @@ OLGA_INLINE GCoptimization::LabelID GCoptimization::whatLabel(SiteID site)
 	assert(site >= 0 && site < m_num_sites);
 	return m_labeling[site];
 }
+
+// diem: compiler warnings
+#ifdef _MSC_VER
+#pragma warning(pop)	// no warnings from includes
+#elif __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #endif

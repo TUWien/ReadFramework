@@ -13,7 +13,7 @@
 // GCLL_BLOCKSIZE should "fit" into the type BlockType. That is 
 // if GCLL_BLOCKSIZE is larger than 255 but smaller than largest short integer
 // then  BlockType should be set to short
-typedef char BlockType;
+typedef unsigned char BlockType;	// diem: unsigned for we use it as number
 
 //The type of data stored in the linked list
 typedef void * ListType;

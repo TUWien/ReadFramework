@@ -95,7 +95,7 @@ public:
 			val = max;
 
 		return val;
-	};
+	}
 
 private:
 	Utils();

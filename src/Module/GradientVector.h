@@ -131,25 +131,7 @@ private:
 	cv::Point mAnchor = cv::Point(-1, -1);
 	cv::Mat mDxKernel;
 	cv::Mat mDyKernel;
-	
-	/**
-	 * Returns the smoothed image.
-	 * @return a blurred 2D image 32F (the Gaussian derivative
-	 * corresponds to sigma)
-	 **/
-	 /**
-	  * Computes and returns the gradient magnitude image.
-	  * The gradient magnitude is - in other words - the gradient
-	  * vector's scale.
-	  * @return the gradient magnitude of the given input image img
-	  */
-	  /**
-	   * Computes and returns the gradient orientation image.
-	   * Each pixel corresponds to the gradient angle in radians.
-	   * @return the gradient orientation of the given input image img
-	   */
-};
-
-
 
 };
+
+}

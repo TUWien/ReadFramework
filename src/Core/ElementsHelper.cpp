@@ -147,6 +147,7 @@ void RegionTypeConfig::assignDefaultColor(const Region::Type & type) {
 	case Region::type_graphic:		col = QColor(100, 74, 0);	break;
 	case Region::type_chart:		col = QColor(0, 108, 255);	break;
 	case Region::type_noise:		col = QColor(204, 204, 204);break;
+	default:;	// default is gray
 	}
 
 	// assign default color
@@ -203,6 +204,7 @@ QString RegionXmlHelper::tag(const XmlTags& tagId) const {
 	case attr_rightVisible:	return "rightBorderVisible";
 	case attr_topVisible:	return "topBorderVisible";
 	case attr_bottomVisible:return "bottomBorderVisible";
+	default:;
 	}
 
 	qWarning() << "unknown tag: " << tagId;
@@ -276,6 +278,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_graphic:		return "GraphicRegion";
 	case Region::type_chart:		return "ChartRegion";
 	case Region::type_noise:		return "NoiseRegion";
+	default:;
 	}
 
 	return "Unknown";

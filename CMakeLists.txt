@@ -47,7 +47,7 @@ RDF_CHECK_COMPILER()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	# Codecov
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wno-unknown-pragmas -pthread -g -O0 -fprofile-arcs -ftest-coverage")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wno-attributes -Wno-unknown-pragmas -pthread -g -O0 -fprofile-arcs -ftest-coverage")
 endif()
 
 # find Qt
@@ -122,8 +122,6 @@ elseif(UNIX)
 	enable_testing()
 
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
-	
-	add_subdirectory(src)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)

@@ -482,12 +482,12 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 		connector = QSharedPointer<PixelConnector>(new RegionPixelConnector());
 		break;
 	}
-	}
-
-	if (!connector) {
+	default: {
 		qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
 		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector());
 	}
+	}
+
 	return connector->connect(superPixels);
 }
 
@@ -743,7 +743,7 @@ QVector<QSharedPointer<PixelEdge> > PixelGraph::edges(const QVector<int>& edgeID
 /// <returns>The current vector position.</returns>
 int PixelGraph::pixelIndex(const QString & pixelID) const {
 	return mPixelLookup.value(pixelID);
-};
+}
 
 /// <summary>
 /// Returns all edges indexes of the current pixel.
@@ -755,7 +755,7 @@ int PixelGraph::pixelIndex(const QString & pixelID) const {
 /// <returns>A vector with edge indexes.</returns>
 QVector<int> PixelGraph::edgeIndexes(const QString & pixelID) const {
 	return mPixelEdges.value(pixelID);
-};
+}
 
 // PixelTabStop --------------------------------------------------------------------
 PixelTabStop::PixelTabStop(const Type & type) {

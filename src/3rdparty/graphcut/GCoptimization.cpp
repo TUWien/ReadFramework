@@ -1,6 +1,22 @@
 #ifdef MATLAB_MEX_FILE
 #include <mex.h>
 #endif
+
+// diem: compiler warnings
+#ifdef _MSC_VER
+#pragma warning(push, 0)	// no warnings from includes
+#pragma warning(disable: 4706)	// assignment within conditional expression 
+#pragma warning(disable:4701)		// potentially uninitialized local variable used
+#elif __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreorder"
+#pragma GCC diagnostic ignored "-Wchar-subscripts"
+#pragma GCC diagnostic ignored "-Wparentheses"
+#pragma GCC diagnostic ignored "-Woverflow"
+#pragma GCC diagnostic ignored "-Wpedantic"
+#pragma GCC diagnostic ignored "-Wchar-subscripts"
+#endif
+
 #include "GCoptimization.h"
 #include "LinkedBlockList.h"
 #include <stdio.h>
@@ -10,8 +26,6 @@
 
 // will leave this one just for the laughs :)
 //#define olga_assert(expr) assert(!(expr))
-
-#pragma warning(disable:4701)		// potentially uninitialized local variable used
 
 // Choose reasonably high-precision timer (sub-millisec resolution if possible).
 #ifdef _WIN32
@@ -1879,3 +1893,9 @@ GCoptimization::SiteID GCoptimization::DataCostFnSparse::queryActiveSitesExpansi
 	return count;
 }
 
+// diem: compiler warnings
+#ifdef _MSC_VER
+#pragma warning(pop)	// no warnings from includes
+#elif __GNUC__
+#pragma GCC diagnostic pop
+#endif

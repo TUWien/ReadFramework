@@ -199,7 +199,7 @@ public:
 		}
 
 		return filteredRegions;
-	};
+	}
 
 private:
 	RegionManager();
@@ -213,4 +213,4 @@ private:
 };
 
 
-};
+}

@@ -263,7 +263,7 @@ namespace TextLineHelper {
 	QVector<QSharedPointer<TextLineSet> > filterLowDensity(const QVector<QSharedPointer<TextLineSet> >& textLines);
 	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD);
 
-};
+}
 
 /// <summary>
 /// Represents a text block.

@@ -980,7 +980,7 @@ namespace rdf {
 			lineIter = cLines.begin();
 			lineIter += eraseIdx[idx];
 
-			if (tmpIdx == eraseIdx[idx])
+			if (tmpIdx == (int)eraseIdx[idx])
 				continue;
 
 			cLines.erase(lineIter);

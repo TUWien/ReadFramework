@@ -61,7 +61,7 @@ LinkedBlockList::~LinkedBlockList()
 		m_head = m_head->m_next;
 		delete tmp;
 	}
-};
+}
 
 /*********************************************************************/
 

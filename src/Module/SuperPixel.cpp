@@ -93,11 +93,11 @@ QSharedPointer<MserContainer> SuperPixel::mser(const cv::Mat & img) const {
 	assert(blobs->pixels.size() == blobs->boxes.size());
 
 	Timer dtf;
-	int nF = filterDuplicates(*blobs, 7, 10);
+	/*int nF = */filterDuplicates(*blobs, 7, 10);
 	//qDebug() << "[duplicates filter]\tremoves" << nF << "blobs in" << dtf;
 
 	dtf.start();
-	nF = filterAspectRatio(*blobs);
+	/*nF = */filterAspectRatio(*blobs);
 	//qDebug() << "[aspect ratio filter]\tremoves" << nF << "blobs in" << dtf;
 
 	return blobs;

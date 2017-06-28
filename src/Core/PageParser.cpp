@@ -148,6 +148,7 @@ QString PageXmlParser::tagName(const RootTags & tag) const {
 	case tag_layers:			return "Layers";
 
 	case attr_text_type:		return "type";
+	default:;
 	}
 	
 	return "";

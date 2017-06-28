@@ -337,13 +337,13 @@ cv::Mat Image::jsonToMat(const QJsonObject & jo) {
 	if (compressed)
 		ba = qUncompress(ba);
 
-	if (ba.length() != rows*cols*cv::Mat(1, 1, type).elemSize()) {
+	if ((size_t)ba.length() != rows*cols*cv::Mat(1, 1, type).elemSize()) {
 		qCritical() << "illegal buffer length when decoding cv::Mat from json";
 		return cv::Mat();
 	}
 
 	cv::Mat img(rows, cols, type, ba.data());
-	img = img.clone();	// then we definitely own the data
+	img = img.clone();	// then we definitely own the data 
 
 	return img;
 }

@@ -119,4 +119,4 @@ protected:
 	void writeMetaData(QXmlStreamWriter& writer) const;
 };
 
-};
+}

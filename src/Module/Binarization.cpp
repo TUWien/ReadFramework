@@ -335,12 +335,9 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 
 	cv::Mat sHist = vec;
 
-	double sMin, sMax;
-	cv::Point pMinIdx, pMaxIdx;
-	int minIdx, maxIdx;
-	cv::minMaxLoc(sHist, &sMin, &sMax, &pMinIdx, &pMaxIdx);
-	minIdx = pMinIdx.x;
-	maxIdx = pMaxIdx.x;
+	cv::Point pMaxIdx;
+	cv::minMaxLoc(sHist, 0, 0, 0, &pMaxIdx);
+	int maxIdx = pMaxIdx.x;
 
 	strokeWidth = 1.0f + (float)maxIdx;  //offset since idx starts with 0
 

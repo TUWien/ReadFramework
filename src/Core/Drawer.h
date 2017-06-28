@@ -72,7 +72,7 @@ namespace Drawer {
 
 	// add general drawing functions here
 
-};
+}
 
 namespace ColorManager {
 
@@ -89,6 +89,6 @@ namespace ColorManager {
 	DllCoreExport QColor white(double alpha = 1.0);
 
 	// add your favorite colors here
-};
+}
 
 }

@@ -97,7 +97,7 @@ protected:
 		}
 
 		return param;
-	};
+	}
 
 };
 
@@ -156,4 +156,4 @@ protected:
 
 };
 
-};
+}

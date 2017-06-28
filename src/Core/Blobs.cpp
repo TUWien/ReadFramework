@@ -130,7 +130,7 @@ QVector<cv::Vec4i> Blob::hierarchy() const {
 /// <returns>The orientation of the blob in rad.</returns>
 float Blob::blobOrientation() const {
 
-	double u00, u11, u01, u10, u20, u02, num, den;
+	double u00, u11, u20, u02, num, den;
 	float o = 0.0f;
 	cv::Moments m;
 
@@ -142,8 +142,8 @@ float Blob::blobOrientation() const {
 			o = 0;
 		else {
 
-			u10 = m.m10 / u00;
-			u01 = m.m01 / u00;
+			//u10 = m.m10 / u00;
+			//u01 = m.m01 / u00;
 
 			u11 = -(m.m11 - m.m10 * m.m01 / u00) / u00;
 			u20 = (m.m20 - m.m10 * m.m10 / u00) / u00;

@@ -211,8 +211,8 @@ double IP::statMomentMat(const cv::Mat& src, const cv::Mat& mask, double momentV
 			for (int cIdx = 0; cIdx < src.cols; cIdx++) {
 
 				// skip mask pixel
-				if (mask.depth() == CV_32FC1 && ((float*)maskPtr)[cIdx] != 0.0f ||
-					mask.depth() == CV_8U && ((uchar*)maskPtr)[cIdx] != 0) {
+				if ((mask.depth() == CV_32FC1 && ((float*)maskPtr)[cIdx] != 0.0f) ||
+					(mask.depth() == CV_8U && ((uchar*)maskPtr)[cIdx] != 0)) {
 
 					if (cStep >= step) {
 						samples.push_back(srcPtr[cIdx]);

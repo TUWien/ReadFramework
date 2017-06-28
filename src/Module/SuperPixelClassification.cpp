@@ -41,6 +41,7 @@
 #include "ElementsHelper.h"
 
 #pragma warning(push, 0)	// no warnings from includes
+
 #include <QDebug>
 #include <QPainter>
 #include <QJsonObject>
@@ -48,7 +49,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/ml/ml.hpp>
 
-#pragma warning(disable: 4706)
+
 #include "GCGraph.hpp"
 #include "graphcut/GCoptimization.h"
 
@@ -290,12 +291,12 @@ void SuperPixelFeature::syncSuperPixels(const std::vector<cv::KeyPoint>& keyPoin
 	QVector<cv::KeyPoint> kptsOut = QVector<cv::KeyPoint>::fromStdVector(keyPointsNew);
 
 	QList<int> removeIdx;
-	for (int idx = 0; idx < keyPointsOld.size(); idx++) {
+	for (size_t idx = 0; idx < keyPointsOld.size(); idx++) {
 
 
 		int kIdx = kptsOut.indexOf(keyPointsOld[idx]);
 		if (kIdx == -1)
-			removeIdx << idx;
+			removeIdx << (int)idx;
 	}
 
 	qSort(removeIdx.begin(), removeIdx.end(), qGreater<int>());
