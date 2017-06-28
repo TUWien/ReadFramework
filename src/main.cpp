@@ -68,7 +68,11 @@ int main(int argc, char** argv) {
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 
-	QApplication app(argc, (char**)argv);
+#ifdef WIN32
+	QApplication app(argc, (char**)argv);		// enable QPainter
+#else
+	QCoreApplication app(argc, (char**)argv);	// enable headless
+#endif
 
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;
@@ -156,7 +160,12 @@ int main(int argc, char** argv) {
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
 
-	if (!dc.imagePath().isEmpty()) {
+	if (parser.isSet(testOpt)) {
+		parser.showHelp();
+		// TODO: add testing htere
+		return 1;
+	}
+	else if (!dc.imagePath().isEmpty()) {
 
 		// flos section
 		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
@@ -197,11 +206,6 @@ int main(int argc, char** argv) {
 			lt.testComponents();
 		}
 
-	}
-	else if (parser.isSet(testOpt)) {
-		parser.showHelp();
-		// TODO: add testing htere
-		return 0;
 	}
 	else {
 		qInfo() << "Please specify an input image...";
