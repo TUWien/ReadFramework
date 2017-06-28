@@ -38,7 +38,7 @@ add_dependencies(${RDF_BINARY_NAME} ${RDF_DLL_CORE_NAME})
 target_include_directories(${RDF_BINARY_NAME} 		PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_DLL_CORE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 
-qt5_use_modules(${RDF_BINARY_NAME} 	Core Network Widgets)
+qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets)
 qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
 
 # core flags
@@ -118,9 +118,6 @@ endif()
 
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
 
-# install
-install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX})
-
 # tests
 add_executable(${RDF_TEST_NAME} WIN32  MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${RDF_RC})
 target_link_libraries(${RDF_TEST_NAME} ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME} ${OpenCV_LIBS}) 
@@ -138,6 +135,10 @@ add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
 
 #package 
 if (UNIX)
+
+	# install
+	install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX})
+
 	# "make dist" target
 	string(TOLOWER ${PROJECT_NAME} CPACK_PACKAGE_NAME)
 	set(CPACK_PACKAGE_VERSION "${RDF_FRAMEWORK_VERSION}")
