@@ -117,18 +117,16 @@ QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 
 if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
-elseif(APPLE)
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacBuildTarget.cmake)
 elseif(UNIX)
 
 	# enable CTest
 	include(CTest)
 	enable_testing()
 
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
 else()
 	message(STATUS "build system unkown ... fallback to unix")
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnixBuildTarget.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/WinBuildTarget.cmake)
 endif()
 
 RDF_ADD_INSTALL()
