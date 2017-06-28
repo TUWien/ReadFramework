@@ -2,6 +2,7 @@ set(RDF_RC src/rdf.rc)
 
 # create the targets
 set(RDF_BINARY_NAME ${PROJECT_NAME})
+set(RDF_TEST_NAME ${PROJECT_NAME}Test)
 set(RDF_DLL_CORE_NAME ${PROJECT_NAME}Core)
 set(RDF_DLL_MODULE_NAME ${PROJECT_NAME}Module)
 
@@ -60,7 +61,6 @@ set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAK
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES DEBUG_OUTPUT_NAME ${RDF_DLL_MODULE_NAME}d)
 set_target_properties(${RDF_DLL_MODULE_NAME} PROPERTIES RELEASE_OUTPUT_NAME ${RDF_DLL_MODULE_NAME})
 
-
 # installation
 #  binary
 install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX})
@@ -76,8 +76,19 @@ install(TARGETS ${RDF_BINARY_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} D
 #install(FILES nomacs.appdata.xml DESTINATION /usr/share/appdata/)
 
 # tests
-add_test(NAME FrameworkTest COMMAND ${RDF_BINARY_NAME} "--tests")
+add_executable(${RDF_TEST_NAME} WIN32  MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${RDF_RC})
+target_link_libraries(${RDF_TEST_NAME} ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME} ${OpenCV_LIBS}) 
+		
+set_target_properties(${RDF_TEST_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
+set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 
+add_dependencies(${RDF_TEST_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME}) 
+
+target_include_directories(${RDF_TEST_NAME}       PRIVATE ${OpenCV_INCLUDE_DIRS})
+qt5_use_modules(${RDF_TEST_NAME} 		Core Network Widgets)
+
+add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
 
 # "make dist" target
 string(TOLOWER ${PROJECT_NAME} CPACK_PACKAGE_NAME)

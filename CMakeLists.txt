@@ -76,6 +76,10 @@ endif()
 file(GLOB MAIN_SOURCES "src/*.cpp")
 file(GLOB MAIN_HEADERS "src/*.h")
 
+# unit tests
+file(GLOB TEST_SOURCES "src/UnitTests/*.cpp")
+file(GLOB TEST_HEADERS "src/UnitTests/*.h")
+
 # loader
 file(GLOB MODULE_SOURCES "src/Module/*.cpp")
 file(GLOB MODULE_HEADERS "src/Module/*.h")
