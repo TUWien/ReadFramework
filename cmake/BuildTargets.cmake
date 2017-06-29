@@ -132,6 +132,7 @@ target_include_directories(${RDF_TEST_NAME}       PRIVATE ${OpenCV_INCLUDE_DIRS}
 qt5_use_modules(${RDF_TEST_NAME} 		Core Network Widgets)
 
 add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
+add_test(NAME TableTest COMMAND ${RDF_TEST_NAME} "--table")
 
 #package 
 if (UNIX)

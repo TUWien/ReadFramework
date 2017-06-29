@@ -67,9 +67,13 @@ int main(int argc, char** argv) {
 	parser.addHelpOption();
 	parser.addVersionOption();
 
-	// label config path
-	QCommandLineOption testOpt(QStringList() << "b" << "baseline", QObject::tr("Test Baseline."));
-	parser.addOption(testOpt);
+	// baseline test
+	QCommandLineOption baseLineOpt(QStringList() << "b" << "baseline", QObject::tr("Test Baseline."));
+	parser.addOption(baseLineOpt);
+
+	// table test
+	QCommandLineOption tableOpt(QStringList() << "t" << "table", QObject::tr("Test Table."));
+	parser.addOption(tableOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -78,12 +82,15 @@ int main(int argc, char** argv) {
 	rdf::Config& config = rdf::Config::instance();
 	
 	// test baseline extraction
-	if (parser.isSet(testOpt)) {
+	if (parser.isSet(baseLineOpt)) {
 		parser.showHelp();
 		// TODO: layout test here
 		return 0;
-	}
-	else {
+	} else if (parser.isSet(tableOpt)) {
+		parser.showHelp();
+
+		return 0;
+	} else 	{
 		qInfo() << "Please specify an input image...";
 		parser.showHelp();
 	}
