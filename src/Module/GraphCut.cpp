@@ -171,6 +171,11 @@ bool GraphCutOrientation::compute() {
 
 	Timer dt;
 
+	// nothing todo here...
+	if (mSet.size() < 2) {
+		return true;
+	}
+
 	// create graph
 	PixelGraph graph(mSet);
 	graph.connect(*mConnector);

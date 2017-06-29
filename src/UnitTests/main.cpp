@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 
-	QCoreApplication app(argc, (char**)argv);	// enable headless
+	QApplication app(argc, (char**)argv);	// enable headless
 
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;

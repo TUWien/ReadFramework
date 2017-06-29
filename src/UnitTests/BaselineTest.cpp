@@ -88,12 +88,37 @@ bool BaselineTest::layoutToXml(const cv::Mat& img, const PageXmlParser& parser) 
 
 	auto pe = parser.page();
 
+	// compute without xml data
 	rdf::LayoutAnalysis la(img);
-	la.setRootRegion(pe->rootRegion());
-	la.config()->saveDefaultSettings(Config::instance().settings());	// save default layout settings
 
 	if (!la.compute()) {
 		qWarning() << "could not compute layout analysis";
+		return false;
+	}
+
+	auto tbs = la.textBlockSet();
+	auto sl = la.stopLines();
+
+	// test layout with xml
+	rdf::LayoutAnalysis laXml(img);
+	laXml.setRootRegion(pe->rootRegion());
+	laXml.config()->saveDefaultSettings(Config::instance().settings());	// save default layout settings
+
+	if (!laXml.compute()) {
+		qWarning() << "could not compute layout analysis";
+		return false;
+	}
+
+	// test drawing
+	cv::Mat rImg = img.clone();
+	rImg = laXml.draw(rImg);
+
+	// check layout analysis with empty image
+	cv::Mat emptyImg;
+	rdf::LayoutAnalysis lae(emptyImg);
+
+	if (lae.compute()) {
+		qWarning() << "layout with empty image returned true in compute";
 		return false;
 	}
 

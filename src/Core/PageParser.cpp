@@ -68,7 +68,7 @@ bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
 		}
 
 		// load the element
-		QByteArray ba = f.readAll();
+		ba = f.readAll();
 		f.close();
 	}
 	// if there is no local resource - try downloading it

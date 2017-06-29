@@ -49,7 +49,7 @@ namespace rdf {
 /// <returns>
 /// true if we can connect to the url
 /// </returns>
-bool net::urlExists(const QString & url, int port) {
+bool net::urlExists(const QString & url, quint16 port) {
 
 	// see: https://stackoverflow.com/questions/28494571/how-in-qt5-to-check-if-url-is-available
 	QUrl lurl(url);

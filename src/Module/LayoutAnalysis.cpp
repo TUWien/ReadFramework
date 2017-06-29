@@ -262,8 +262,8 @@ QSharedPointer<LayoutAnalysisConfig> LayoutAnalysis::config() const {
 cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 
 	QPixmap pm = Image::mat2QPixmap(img);
+	
 	QPainter p(&pm);
-
 	p.setPen(ColorManager::blue());
 
 	for (auto l : mStopLines) {
