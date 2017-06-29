@@ -87,6 +87,7 @@ public:
 		status_file_not_found,		// xml file does not exist
 		status_file_locked,			// file is not readable
 		status_file_empty,			// file is empty - empty xml?!
+		status_not_downloaded,		// xml file is an url but could not be loaded
 		status_ok,					// we could parse the xml (now that's good news : )
 
 		status_end
@@ -110,7 +111,7 @@ protected:
 	QSharedPointer<PageElement> mPage;
 	LoadStatus mStatus = status_not_loaded;
 
-	virtual QSharedPointer<PageElement> parse(const QString& xmlPath, LoadStatus& status, bool ignoreLayers = false) const;
+	virtual QSharedPointer<PageElement> parse(const QByteArray& ba, LoadStatus& status, bool ignoreLayers = false) const;
 	virtual void parseRegion(QXmlStreamReader& reader, QSharedPointer<Region> parent) const;
 	virtual void parseMetadata(QXmlStreamReader& reader, QSharedPointer<PageElement> page) const;
 	virtual void parseLayers(QXmlStreamReader& reader, QSharedPointer<PageElement> page, bool ignoreLayers = false) const;

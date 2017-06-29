@@ -122,22 +122,22 @@ protected:
 /// <summary>
 /// Basic image class
 /// </summary>
-class DllCoreExport Image {
+namespace Image {
 
-public:
-	static cv::Mat qImage2Mat(const QImage& img);
-	static QImage mat2QImage(const cv::Mat& img);
-	static cv::Mat qPixmap2Mat(const QPixmap& img);
-	static QPixmap mat2QPixmap(const cv::Mat& img);
-	static cv::Mat qVector2Mat(const QVector<float>& data);
+	DllCoreExport cv::Mat qImage2Mat(const QImage& img);
+	DllCoreExport QImage mat2QImage(const cv::Mat& img);
+	DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);
+	DllCoreExport QPixmap mat2QPixmap(const cv::Mat& img);
+	DllCoreExport cv::Mat qVector2Mat(const QVector<float>& data);
 
-	static bool save(const QImage& img, const QString& savePath, int compression = -1);
-	static bool save(const cv::Mat& img, const QString& savePath, int compression = -1);
-	static bool alphaChannelUsed(const QImage& img);
-	static void imageInfo(const cv::Mat& img, const QString name);
-	static QString printImage(const cv::Mat& img, const QString name);
-	static QJsonObject matToJson(const cv::Mat& img, bool compress = true);
-	static cv::Mat jsonToMat(const QJsonObject& jo);
+	DllCoreExport QImage load(const QString& path, bool* ok = 0);
+	DllCoreExport bool save(const QImage& img, const QString& savePath, int compression = -1);
+	DllCoreExport bool save(const cv::Mat& img, const QString& savePath, int compression = -1);
+	DllCoreExport bool alphaChannelUsed(const QImage& img);
+	DllCoreExport void imageInfo(const cv::Mat& img, const QString name);
+	DllCoreExport QString printImage(const cv::Mat& img, const QString name);
+	DllCoreExport QJsonObject matToJson(const cv::Mat& img, bool compress = true);
+	DllCoreExport cv::Mat jsonToMat(const QJsonObject& jo);
 
 	/// <summary>
 	/// Prints the values of a cv::Mat to copy it to Matlab.
@@ -146,7 +146,7 @@ public:
 	/// <param name="varName">Name of the variable for matlab.</param>
 	/// <returns>The String with all values formatted for matlab.</returns>
 	template <typename numFmt>
-	static QString printMat(const cv::Mat& src, const QString varName) {
+	QString printMat(const cv::Mat& src, const QString varName) {
 
 		QString msg = varName;
 		msg.append(" = [");	// matlab...
@@ -172,6 +172,6 @@ public:
 
 		return msg;
 	}
-};
+}
 
 }

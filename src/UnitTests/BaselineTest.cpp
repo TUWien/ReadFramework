@@ -30,24 +30,75 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#pragma once
+#include "BaselineTest.h"
+
+#include "Image.h"
+#include "Utils.h"
+#include "PageParser.h"
+#include "Elements.h"
+#include "LayoutAnalysis.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QImage>
 #pragma warning(pop)
-
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
-#else
-#define DllCoreExport Q_DECL_IMPORT
-#endif
-#endif
-
-// Qt defines
 
 namespace rdf {
 
-// read defines
+BaselineTest::BaselineTest(const TestConfig & config) : mConfig(config) {
+}
+
+bool BaselineTest::baselineTest() const {
+
+	QImage img = Image::load(mConfig.imagePath());
+
+	if (img.isNull()) {
+		qWarning() << "could not load image from" << mConfig.imagePath();
+		return false;
+	}
+
+	Timer dt;
+
+	// convert image
+	cv::Mat imgCv = Image::qImage2Mat(img);
+
+	// load XML
+	rdf::PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+	
+	// fail if the XML was not loaded
+	if (parser.loadStatus() != PageXmlParser::status_ok) {
+		qWarning() << "could not load XML from" << mConfig.xmlPath();
+		return false;
+	}
+
+	// test the layout module
+	layoutToXml(imgCv, parser);
+
+	//eval();
+
+	qInfo() << "total computation time:" << dt;
+
+	return true;
+}
+
+bool BaselineTest::layoutToXml(const cv::Mat& img, const PageXmlParser& parser) const {
+
+	Timer dt;
+
+	auto pe = parser.page();
+
+	rdf::LayoutAnalysis la(img);
+	la.setRootRegion(pe->rootRegion());
+	la.config()->saveDefaultSettings(Config::instance().settings());	// save default layout settings
+
+	if (!la.compute()) {
+		qWarning() << "could not compute layout analysis";
+		return false;
+	}
+
+	qInfo() << "layout analysis computed in" << dt;
+	return true;
+}
 
 }

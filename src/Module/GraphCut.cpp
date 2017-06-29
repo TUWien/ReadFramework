@@ -635,6 +635,10 @@ bool GraphCutLineSpacing::compute() {
 	// compute scaling hist
 	mSpaceHist = spacingHist();
 
+	// line spacing GC is not needed, if all values are the same
+	if (mSpaceHist.isEmpty())
+		return true;
+
 	// create graph
 	PixelGraph graph(mSet);
 	graph.connect(*mConnector);
@@ -720,14 +724,24 @@ Histogram GraphCutLineSpacing::spacingHist() const {
 	
 	cv::Mat scales(1, mSet.size(), CV_32FC1);
 	float* sp = scales.ptr<float>();
-	
+	bool dv = false;	// check if all values are the same
+	float lv = 0;
+
 	for (int cIdx = 0; cIdx < scales.cols; cIdx++) {
 	
 		float v = (float)mSet[cIdx]->stats()->lineSpacing();
 		sp[cIdx] = v;
+		
+		if (cIdx > 0 && v != lv)
+			dv = true;
+
+		lv = v;
 	}
 
-	return Histogram::fromData<float>(scales, numLabels());
+	if (!dv)
+		return Histogram();
+	else
+		return Histogram::fromData<float>(scales, numLabels());
 }
 
 //cv::Mat GraphCutLineSpacing::spacingHist() const {

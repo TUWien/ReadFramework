@@ -34,6 +34,7 @@
 #include "ElementsHelper.h"
 #include "Utils.h"
 #include "Settings.h"
+#include "Network.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QFile>
@@ -42,6 +43,7 @@
 #include <QDebug>
 #include <QBuffer>
 #include <QDir>
+#include <QUrl>
 #pragma warning(pop)
 
 namespace rdf {
@@ -52,15 +54,53 @@ PageXmlParser::PageXmlParser() {
 
 bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
 
-	mPage = parse(xmlPath, mStatus, ignoreLayers);
+	QByteArray ba;
+	bool ok = true;
+
+	if (QFileInfo(xmlPath).exists()) {
+		
+		QFile f(xmlPath);
+
+		if (!f.open(QIODevice::ReadOnly)) {
+			qWarning() << "Sorry, I could not open " << xmlPath << " for reading...";
+			mStatus = status_file_locked;
+			ok = false;
+		}
+
+		// load the element
+		QByteArray ba = f.readAll();
+		f.close();
+	}
+	// if there is no local resource - try downloading it
+	else if (QUrl(xmlPath).isValid()) {
+
+		ba = net::download(xmlPath, &ok);
+
+		if (!ok) {
+			mStatus = status_not_downloaded;
+		}
+	}
+	else {
+		qCritical() << "cannot read XML from non-existing file:" << xmlPath;
+		mStatus = status_file_not_found;
+		ok = false;
+	}
+
+	if (mStatus == status_not_loaded) {
+		mPage = parse(ba, mStatus, ignoreLayers);
+		if (mPage)
+			mPage->setXmlPath(xmlPath);
+	}
 
 	// create an empty page if we could not read the XML
 	if (!mPage || mStatus != status_ok) {
 		mPage = mPage.create();
 		return false;
 	}
+	else
+		qInfo() << QFileInfo(xmlPath).fileName() << "loaded - #children:" << mPage->rootRegion()->children().size();
 
-	return true;
+	return ok;
 }
 
 void PageXmlParser::write(const QString & xmlPath, const QSharedPointer<PageElement> pageElement) {
@@ -158,27 +198,11 @@ void PageXmlParser::setPage(QSharedPointer<PageElement> page) {
 	mPage = page;
 }
 
-QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, LoadStatus& status, bool ignoreLayers) const {
+QSharedPointer<PageElement> PageXmlParser::parse(const QByteArray& ba, LoadStatus& status, bool ignoreLayers) const {
 
-	if (!QFileInfo(xmlPath).exists()) {
-		qCritical() << "cannot read XML from non-existing file:" << xmlPath;
-		status = status_file_not_found;
-		return QSharedPointer<PageElement>();
-	}
-
-	QFile f(xmlPath);
 	QSharedPointer<PageElement> pageElement;
 
-	if (!f.open(QIODevice::ReadOnly)) {
-		qWarning() << "Sorry, I could not open " << xmlPath << " for reading...";
-		status = status_file_locked;
-		return pageElement;
-	}
-
 	// load the element
-	QFileInfo xmlInfo = xmlPath;
-	QXmlStreamReader reader(f.readAll());
-	f.close();
 
 	QString pageTag = tagName(tag_page);	// cache - since it might be called a lot of time
 	QString metaTag = tagName(tag_meta);
@@ -187,11 +211,12 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, LoadSta
 
 	// ok - we can initialize our page element
 	pageElement = QSharedPointer<PageElement>(new PageElement());
-	pageElement->setXmlPath(xmlPath);
 
 	QSharedPointer<RootRegion> root = QSharedPointer<RootRegion>(new RootRegion());
 
 	Timer dt;
+
+	QXmlStreamReader reader(ba);
 
 	while (!reader.atEnd()) {
 
@@ -267,7 +292,7 @@ QSharedPointer<PageElement> PageXmlParser::parse(const QString& xmlPath, LoadSta
 	}
 
 	//qDebug() << "---------------------------------------------------------\n" << *pageElement;
-	qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
+	//qInfo() << xmlInfo.fileName() << "with" << root->children().size() << "elements parsed in" << dt;
 	status = !pageElement || pageElement->imageFileName().isEmpty() ? status_file_empty : status_ok;
 
 	return pageElement;

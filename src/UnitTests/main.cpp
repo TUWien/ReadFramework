@@ -41,6 +41,7 @@
 
 #include "Utils.h"
 #include "Settings.h"
+#include "BaselineTest.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")
@@ -83,13 +84,15 @@ int main(int argc, char** argv) {
 	
 	// test baseline extraction
 	if (parser.isSet(baseLineOpt)) {
-		parser.showHelp();
-		// TODO: layout test here
-		return 0;
+		
+		rdf::BaselineTest bt;
+		
+		if (!bt.baselineTest())
+			return 1;	// fail the test
+		
 	} else if (parser.isSet(tableOpt)) {
 		parser.showHelp();
 
-		return 0;
 	} else 	{
 		qInfo() << "Please specify an input image...";
 		parser.showHelp();

@@ -33,21 +33,42 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QString>
 #pragma warning(pop)
 
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
-#else
-#define DllCoreExport Q_DECL_IMPORT
-#endif
-#endif
+// TODO: add DllExport magic
 
 // Qt defines
 
 namespace rdf {
 
 // read defines
+class TestConfig{
+
+public:
+	TestConfig();
+
+	void setImagePath(const QString& path);
+	QString imagePath() const;
+
+	void setXmlPath(const QString& path);
+	QString xmlPath() const;
+
+	void setClassifierPath(const QString& path);
+	QString classifierPath() const;
+
+	void setLabelConfigPath(const QString& path);
+	QString labelConfigPath() const;
+
+	void setFeatureCachePath(const QString& path);
+	QString featureCachePath() const;
+
+protected:
+	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
+	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
+	QString mClassifierPath;
+	QString mFeatureCachePath;
+	QString mLabelConfigPath;
+};
 
 }

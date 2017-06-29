@@ -1,4 +1,4 @@
-/*******************************************************************************************************
+	/*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
  Copyright (C) 2016 Markus Diem <diem@caa.tuwien.ac.at>
@@ -33,8 +33,11 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QString>
+#include <QByteArray>
 #pragma warning(pop)
+
+#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
 
 #ifndef DllCoreExport
 #ifdef DLL_CORE_EXPORT
@@ -49,5 +52,11 @@
 namespace rdf {
 
 // read defines
+
+namespace net {
+
+	DllCoreExport bool urlExists(const QString& url, int port = 80);
+	DllCoreExport QByteArray download(const QString& url, bool* ok = 0);
+}
 
 }

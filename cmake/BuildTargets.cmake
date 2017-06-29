@@ -22,6 +22,16 @@ set_source_files_properties(${CHANGLOG_FILE} PROPERTIES HEADER_FILE_ONLY TRUE) #
 target_link_libraries(${RDF_BINARY_NAME} ${RDF_LIB_CORE_NAME} ${OpenCV_LIBS} ${VERSION_LIB}) 
 set_target_properties(${RDF_BINARY_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
 
+# add test target
+add_executable(${RDF_TEST_NAME} WIN32  MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${RDF_RC})
+target_link_libraries(${RDF_TEST_NAME} ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME} ${OpenCV_LIBS}) 
+		
+set_target_properties(${RDF_TEST_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
+set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+
+add_dependencies(${RDF_TEST_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME}) 
+
 # add core
 add_library(
 	${RDF_DLL_CORE_NAME} SHARED 
@@ -36,9 +46,11 @@ target_link_libraries(${RDF_DLL_CORE_NAME} ${VERSION_LIB} ${OpenCV_LIBS})
 add_dependencies(${RDF_BINARY_NAME} ${RDF_DLL_CORE_NAME}) 
 
 target_include_directories(${RDF_BINARY_NAME} 		PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_include_directories(${RDF_TEST_NAME} 	    PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_DLL_CORE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 
 qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets)
+qt5_use_modules(${RDF_TEST_NAME} 		Core Network Widgets)
 qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
 
 # core flags
@@ -81,6 +93,12 @@ if (MSVC)
 	set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
 	set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
 	set_target_properties(${RDF_BINARY_NAME} PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
+	
+	# set as console project 
+	set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
+	set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
+	set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
+
 endif ()
 
 file(GLOB RDF_AUTOMOC "${CMAKE_BINARY_DIR}/*_automoc.cpp")
@@ -119,18 +137,6 @@ endif()
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
 
 # tests
-add_executable(${RDF_TEST_NAME} WIN32  MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${RDF_RC})
-target_link_libraries(${RDF_TEST_NAME} ${RDF_DLL_CORE_NAME} ${RDF_DLL_MODULE_NAME} ${OpenCV_LIBS}) 
-		
-set_target_properties(${RDF_TEST_NAME} PROPERTIES COMPILE_FLAGS "-DNOMINMAX")
-set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
-set_target_properties(${RDF_TEST_NAME} PROPERTIES LINK_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
-
-add_dependencies(${RDF_TEST_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME}) 
-
-target_include_directories(${RDF_TEST_NAME}       PRIVATE ${OpenCV_INCLUDE_DIRS})
-qt5_use_modules(${RDF_TEST_NAME} 		Core Network Widgets)
-
 add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
 add_test(NAME TableTest COMMAND ${RDF_TEST_NAME} "--table")
 

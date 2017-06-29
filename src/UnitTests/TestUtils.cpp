@@ -30,24 +30,64 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#pragma once
+#include "TestUtils.h"
+
+#include "PageParser.h"
+#include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QDebug>
 #pragma warning(pop)
-
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
-#else
-#define DllCoreExport Q_DECL_IMPORT
-#endif
-#endif
-
-// Qt defines
 
 namespace rdf {
 
-// read defines
+// TestConfig --------------------------------------------------------------------	
+TestConfig::TestConfig() {
+
+}
+
+void TestConfig::setImagePath(const QString & path) {
+	mImagePath = path;
+}
+
+QString TestConfig::imagePath() const {
+	return mImagePath;
+}
+
+void TestConfig::setXmlPath(const QString & path) {
+	mXMLPath = path;
+}
+
+QString TestConfig::xmlPath() const {
+	return mXMLPath;
+}
+
+void TestConfig::setClassifierPath(const QString & path) {
+	mClassifierPath = path;
+}
+
+QString TestConfig::classifierPath() const {
+	
+	//if (mClassifierPath.isEmpty())
+	//	return Config::instance().global().superPixelClassifierPath;
+
+	return mClassifierPath;
+}
+
+void TestConfig::setLabelConfigPath(const QString & path) {
+	mLabelConfigPath = path;
+}
+
+QString TestConfig::labelConfigPath() const {
+	return mLabelConfigPath;
+}
+
+void TestConfig::setFeatureCachePath(const QString & path) {
+	mFeatureCachePath = path;
+}
+
+QString TestConfig::featureCachePath() const {
+	return mFeatureCachePath;
+}
 
 }

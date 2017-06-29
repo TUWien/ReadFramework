@@ -34,6 +34,7 @@
 #include "Drawer.h"
 #include "Shapes.h"
 #include "Utils.h"
+#include "Network.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -42,6 +43,7 @@
 #include <QFileInfo>
 #include <QPixmap>
 #include <QPainter>
+#include <QUrl>
 #pragma warning(pop)
 
 namespace rdf {
@@ -136,6 +138,27 @@ cv::Mat Image::qVector2Mat(const QVector<float>& data) {
 		mPtr[idx] = data[idx];
 
 	return m;
+}
+
+QImage Image::load(const QString & path, bool * ok) {
+	
+	// test image loading
+	QImage img(path);
+
+	if (img.isNull() && QUrl(path).isValid()) {
+
+		bool dok = false;
+		QByteArray ba = net::download(path, &dok);
+		
+		if (dok) {
+			dok = img.loadFromData((uchar*)ba.data(), ba.size());
+		}
+
+		if (ok)
+			*ok = dok;
+	}
+
+	return img;
 }
 
 /// <summary>

@@ -36,18 +36,29 @@
 // Qt Includes
 #pragma warning(pop)
 
-#ifndef DllCoreExport
-#ifdef DLL_CORE_EXPORT
-#define DllCoreExport Q_DECL_EXPORT
-#else
-#define DllCoreExport Q_DECL_IMPORT
-#endif
-#endif
+#include "TestUtils.h"
 
 // Qt defines
+namespace cv {
+	class Mat;
+}
 
 namespace rdf {
 
+class PageXmlParser;
+
 // read defines
+class BaselineTest {
+
+public:
+	BaselineTest(const TestConfig& config = TestConfig());
+
+	bool baselineTest() const;
+
+protected:
+	TestConfig mConfig;
+
+	bool layoutToXml(const cv::Mat& img, const PageXmlParser& parser) const;
+};
 
 }
