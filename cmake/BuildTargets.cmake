@@ -110,7 +110,6 @@ if (RDF_DLL_CORE_NAME)
 endif()
 
 set(RDF_OPENCV_BINARIES ${RDF_OPENCV_BINARIES})	# just to show it goes into cmake.in
-set(RDF_LIBS ${RDF_CORE_LIB})
 set(RDF_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(RDF_BUILD_DIRECTORY ${CMAKE_BINARY_DIR})
 set(
@@ -133,6 +132,8 @@ else ()
 		${CMAKE_CURRENT_BINARY_DIR}/lib${RDF_DLL_CORE_NAME}.so 
 		)
 endif()
+
+set(RDF_LIBS ${RDF_CORE_LIB})
 
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
 
