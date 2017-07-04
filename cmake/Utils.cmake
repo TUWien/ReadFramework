@@ -36,9 +36,8 @@ macro(RDF_FIND_OPENCV)
 	unset(OpenCV_DIR)
  
 	set(RDF_REQUIRED_OPENCV_PACKAGES core ml imgproc flann features2d)
-	# set(RDF_OPTIONAL_OPENCV_PACKAGES xfeatures2d)
-	# find_package(OpenCV QUIET OPTIONAL_COMPONENTS ${RDF_OPTIONAL_OPENCV_PACKAGES}) 
-	find_package(OpenCV REQUIRED ${RDF_REQUIRED_OPENCV_PACKAGES})# OPTIONAL_COMPONENTS ${RDF_OPTIONAL_OPENCV_PACKAGES}) 
+	find_package(OpenCV REQUIRED ${RDF_REQUIRED_OPENCV_PACKAGES})
+
 	if (WITH_XFEATURES2D)
 		message(STATUS "looking for xfeatures2d")
 		find_package(OpenCV REQUIRED xfeatures2d)
@@ -46,9 +45,9 @@ macro(RDF_FIND_OPENCV)
 	endif ()
 	
 	if(NOT OpenCV_FOUND)
-	 message(FATAL_ERROR "OpenCV not found.") 
+		message(FATAL_ERROR "OpenCV not found.") 
 	else()
-	 add_definitions(-DWITH_OPENCV)
+		add_definitions(-DWITH_OPENCV)
 	endif()
  
 	# unset include directories since OpenCV sets them global
@@ -74,36 +73,3 @@ macro(RDF_CHECK_COMPILER)
 		message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 	endif()
 endmacro(RDF_CHECK_COMPILER)
-
-macro(RDF_ADD_INSTALL)
-
-	if (MSVC)
-		RDF_GENERATE_PACKAGE_XML()
-	
-		SET(RDF_INSTALL_DIRECTORY ${CMAKE_SOURCE_DIR}/install CACHE PATH "Path to the nomacs install directory for deploying")
-	
-		message(STATUS "${PROJECT_NAME} \t will be installed to: ${RDF_INSTALL_DIRECTORY}")
-		
-		set(PACKAGE_DIR ${RDF_INSTALL_DIRECTORY}/packages/plugins.${RDF_ARCHITECTURE}.${PROJECT_NAME})
-		set(PACKAGE_DATA_DIR ${PACKAGE_DIR}/data/nomacs-${RDF_ARCHITECTURE}/plugins/)
-		install(TARGETS ${PROJECT_NAME} ${RDF_DLL_MODULE_NAME} ${RDF_DLL_CORE_NAME} RUNTIME DESTINATION ${PACKAGE_DATA_DIR} CONFIGURATIONS Release)
-		install(FILES ${CMAKE_CURRENT_BINARY_DIR}/package.xml DESTINATION ${PACKAGE_DIR}/meta CONFIGURATIONS Release)
-	endif()
-endmacro(RDF_ADD_INSTALL)
-
-macro(RDF_GENERATE_PACKAGE_XML)
-
-	string(TIMESTAMP CURRENT_DATE "%Y-%m-%d")	
-	
-	set(XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-	set(XML_CONTENT "${XML_CONTENT}<Package>\n")
-	set(XML_CONTENT "${XML_CONTENT}\t<DisplayName>${PROJECT_NAME} [${RDF_ARCHITECTURE}]</DisplayName>\n")
-	set(XML_CONTENT "${XML_CONTENT}\t<Description>READ Framework for ${RDF_ARCHITECTURE} systems (v${RDF_FRAMEWORK_VERSION}).</Description>\n")
-	set(XML_CONTENT "${XML_CONTENT}\t<Version>${RDF_FRAMEWORK_VERSION}</Version>\n")
-	set(XML_CONTENT "${XML_CONTENT}\t<ReleaseDate>${CURRENT_DATE}</ReleaseDate>\n")
-	set(XML_CONTENT "${XML_CONTENT}\t<Default>true</Default>\n")
-	set(XML_CONTENT "${XML_CONTENT}</Package>\n")
-	
-	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/package.xml ${XML_CONTENT})
-	
-endmacro(RDF_GENERATE_PACKAGE_XML)

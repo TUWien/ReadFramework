@@ -64,8 +64,6 @@ endif()
 
 if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Win.cmake)
-elseif(APPLE)
-	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mac.cmake)
 elseif(UNIX)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Unix.cmake)
 else()
@@ -105,9 +103,9 @@ include_directories (
 	${CMAKE_CURRENT_SOURCE_DIR}/src/Module
 	)
 
-set(RDF_RESOURCES
-src/RDF.qrc
- )
+set(	RDF_RESOURCES
+		src/RDF.qrc
+	)
 
 QT5_ADD_RESOURCES(NOMACS_RCC ${RDF_RESOURCES})
 
@@ -126,15 +124,11 @@ endif()
 # create build targets
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/BuildTargets.cmake)
 
-RDF_ADD_INSTALL()
-
 # Codecov
 if(CMAKE_COMPILER_IS_GNUCXX)
 	include("cmake/CodeCoverage.cmake")
     setup_target_for_coverage(${PROJECT_NAME}_coverage ${RDF_BINARY_NAME} coverage)
 endif()
-
-
 
 #debug for printing out all variables 
 # get_cmake_property(_variableNames VARIABLES)

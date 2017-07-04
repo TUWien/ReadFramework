@@ -1,7 +1,7 @@
 # ReadFramework cmake file for a Unix/Linux build
 
 
-if(CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+if (CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 	message(STATUS "A debug build. -DDEBUG is defined")
 	add_definitions(-DDEBUG)
 else()
