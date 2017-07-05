@@ -136,10 +136,10 @@ QSharedPointer<GCoptimizationGeneralGraph> GraphCutPixel::graphCut(const PixelGr
 
 	// run the expansion-move
 	try {
-		qDebug() << "energy before:" << gc->compute_energy();
+		//qDebug() << "energy before:" << gc->compute_energy();
 		//gc->expansion(config()->numIter());
 		gc->swap(config()->numIter());
-		qDebug() << "energy after:" << gc->compute_energy();
+		//qDebug() << "energy after:" << gc->compute_energy();
 	}
 	catch (GCException gce) {
 

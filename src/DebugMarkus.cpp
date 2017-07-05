@@ -179,8 +179,16 @@ void LayoutTest::layoutToXml() const {
 	QImage imgQt(mConfig.imagePath());
 	cv::Mat img = Image::qImage2Mat(imgQt);
 
+	if (img.empty()) {
+		qWarning() << "could not load image from" << mConfig.imagePath();
+		return;
+	}
+
 	Timer dt;
 	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+	if (QFileInfo(mConfig.xmlPath()).exists())
+		loadXmlPath = mConfig.xmlPath();
 
 	rdf::PageXmlParser parser;
 	parser.read(loadXmlPath);
