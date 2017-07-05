@@ -1,3 +1,25 @@
+Version 0.4
+===========
+- Layout Analysis
+	- GraphCut orientation improved
+	- GraphCut for line spacing added
+	- Bug fixes (e.g. XML path, ellipse fitting fixed, )
+	- Splitting TextLines by Separators added
+	- Initial noise removal (micro films)
+- Line Detection
+	- LSD (OpenCV Contrib) natively added
+- Table Analysis
+	- Corner points added (compatibility with IBK)
+- Unit tests & CodeCov added
+- Updates for Qt 5.9, CMake 3.9, VS 2017
+
+Version 0.3
+===========
+- Layout Analysis
+	- added setting localBlockOrientation
+- Table Analysis
+	- Baselines detected with layout analysis are saved in TableCell
+
 Version 0.2
 ===========
 - Layout Analysis
