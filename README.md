@@ -3,6 +3,7 @@ READ Framework is the basis for modules developed at CVL/TU Wien for the EU proj
 
 
 [![Build Status](https://travis-ci.org/TUWien/ReadFramework.svg?branch=master)](https://travis-ci.org/TUWien/ReadFramework)
+[![codecov](https://codecov.io/gh/TUWien/ReadFramework/branch/master/graph/badge.svg)](https://codecov.io/gh/TUWien/ReadFramework)
 
 Documentation can be found here: http://read-api.caa.tuwien.ac.at/ReadFramework/
 
@@ -31,7 +32,7 @@ Documentation can be found here: http://read-api.caa.tuwien.ac.at/ReadFramework/
 - check if your builds proceeded correctly
 
 ## Build on Ubuntu
-note that Qt 5.5 is needed, thus Ubuntu version must be >= 16.04 or backports of Qt 5.5 have to be used (see .travis.yml for an ppa repository and names packages which need to be installed). 
+note that Qt 5.5 is needed, thus Ubuntu version must be >= 16.04 or backports of Qt 5.5 have to be used (see .travis.yml for an ppa repository and names packages which need to be installed).
 
 Get required packages:
 
