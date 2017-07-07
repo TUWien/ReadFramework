@@ -683,6 +683,16 @@ QSharedPointer<SimpleTextLineConfig> SimpleTextLineSegmentation::config() const 
 	return qSharedPointerDynamicCast<SimpleTextLineConfig>(mConfig);
 }
 
+QVector<QSharedPointer<TextLineSet>> SimpleTextLineSegmentation::textLineSets() const {
+	
+	QVector<QSharedPointer<TextLineSet> > sets;
+	for (const PixelSet& s : mTextLines) {
+		sets << QSharedPointer<TextLineSet>(new TextLineSet(s.pixels()));
+	}
+	
+	return sets;
+}
+
 void SimpleTextLineSegmentation::scale(double s) {
 
 	for (PixelSet& tl : mTextLines)

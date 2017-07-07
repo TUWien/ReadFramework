@@ -87,6 +87,7 @@ public:
 	
 	QVector<PixelSet> sets() const;
 	QSharedPointer<SimpleTextLineConfig> config() const;
+	QVector<QSharedPointer<TextLineSet> > textLineSets() const;
 
 	// functions applied to the results
 	void scale(double s);

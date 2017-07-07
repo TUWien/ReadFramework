@@ -77,21 +77,21 @@ int main(int argc, char** argv) {
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;
 
-	parser.setApplicationDescription("READ Framework testing application.");
+	parser.setApplicationDescription("Welcome to the CVL READ Framework testing application.");
 	parser.addHelpOption();
 	parser.addVersionOption();
-	parser.addPositionalArgument("image", QObject::tr("An input image."));
+	parser.addPositionalArgument("imagepath", QObject::tr("Path to an input image."));
+
+	// xml path
+	QCommandLineOption xmlOpt(QStringList() << "x" << "xml", QObject::tr("Path to PAGE xml. If provided, we make use of the information"), "path");
+	parser.addOption(xmlOpt);
 
 	// output image
 	QCommandLineOption outputOpt(QStringList() << "o" << "output", QObject::tr("Path to output image."), "path");
 	parser.addOption(outputOpt);
 
-	// xml path
-	QCommandLineOption xmlOpt(QStringList() << "x" << "xml", QObject::tr("Path to PAGE xml."), "path");
-	parser.addOption(xmlOpt);
-
 	// developer
-	QCommandLineOption devOpt(QStringList() << "d" << "developer", QObject::tr("Developer name."), "name");
+	QCommandLineOption devOpt(QStringList() << "d" << "developer", QObject::tr("Developer name. For Baseline detection use [-d sebastian]"), "name");
 	parser.addOption(devOpt);
 
 	// settings filename
@@ -103,16 +103,12 @@ int main(int argc, char** argv) {
 	parser.addOption(classifierOpt);
 
 	// feature cache path
-	QCommandLineOption featureCachePathOpt(QStringList() << "f" << "feature cache", QObject::tr("Feature cache path."), "filepath");
+	QCommandLineOption featureCachePathOpt(QStringList() << "f" << "feature cache", QObject::tr("Feature cache path for training."), "filepath");
 	parser.addOption(featureCachePathOpt);
 
 	// label config path
-	QCommandLineOption labelConfigPathOpt(QStringList() << "l" << "label config", QObject::tr("Label config path."), "filepath");
+	QCommandLineOption labelConfigPathOpt(QStringList() << "l" << "label config", QObject::tr("Label config path for training."), "filepath");
 	parser.addOption(labelConfigPathOpt);
-
-	// label config path
-	QCommandLineOption testOpt(QStringList() << "t" << "tests", QObject::tr("Perform tests."));
-	parser.addOption(testOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -160,12 +156,7 @@ int main(int argc, char** argv) {
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
 
-	if (parser.isSet(testOpt)) {
-		parser.showHelp();
-		// TODO: add testing htere
-		return 1;
-	}
-	else if (!dc.imagePath().isEmpty()) {
+	if (!dc.imagePath().isEmpty()) {
 
 		// flos section
 		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
@@ -223,7 +214,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setImagePath("D:/read/test/00075751.tif");
 		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop.tif");
 		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
-		//dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-rcrop.tif");
+		dc.setImagePath("C:/data/read/test/tl-filtering/M_Freyung_010_0022.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/102_csrc-crop.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/M_Aigen_am_Inn_007_0084-crop.jpg");
 		//dc.setImagePath("D:/read/test/graph-cut-textlines/line-spacing.png");
