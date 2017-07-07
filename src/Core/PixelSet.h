@@ -96,6 +96,22 @@ public:
 };
 
 /// <summary>
+/// Connects pixels using the Voronoi diagram.
+/// NOTE: this is highly experimental for it
+/// creates new pixels instead of connecting
+/// the input pixels (if you need this, take a
+/// look at the DelaunayPixelConnector).
+/// </summary>
+/// <seealso cref="PixelConnector" />
+class DllCoreExport VoronoiPixelConnector : public PixelConnector {
+
+public:
+	VoronoiPixelConnector();
+	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const override;
+};
+
+
+/// <summary>
 /// Fully connected graph.
 /// Super pixels are connected with all other super pixels within a region.
 /// </summary>

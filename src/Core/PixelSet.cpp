@@ -1564,4 +1564,61 @@ QVector<QSharedPointer<TextLineSet>> TextLineHelper::filterAngle(const QVector<Q
 	return filtered;
 }
 
+VoronoiPixelConnector::VoronoiPixelConnector() {
+}
+
+QVector<QSharedPointer<PixelEdge>> VoronoiPixelConnector::connect(const QVector<QSharedPointer<Pixel>>& pixels) const {
+
+	//Timer dt;
+	// Create an instance of Subdiv2D
+	QVector<Vector2D> pts;
+	for (const QSharedPointer<Pixel>& px : pixels) {
+		assert(px);
+		pts << px->center();
+	}
+
+	Rect rect = Rect::fromPoints(pts);
+	rect.expand(2.0);	// needed for round from Rect to cvRect
+
+	cv::Subdiv2D subdiv(rect.toCvRect());
+
+	QVector<int> ids;
+	for (const QSharedPointer<Pixel>& b : pixels) {
+		Vector2D np = b->center();
+		ids << subdiv.insert(np.toCvPoint2f());
+	}
+
+	std::vector<std::vector<cv::Point2f> > faces;
+	std::vector<cv::Point2f> centers;	// not used
+
+	subdiv.getVoronoiFacetList(std::vector<int>(), faces, centers);
+
+	QVector<QSharedPointer<PixelEdge> > edges;
+	
+	for (const std::vector<cv::Point2f>& fl : faces) {
+
+		QSharedPointer<Pixel> lpx;
+
+		for (const cv::Point2f& p : fl) {
+
+			Ellipse e(Vector2D(p), Vector2D(10, 10));
+			QSharedPointer<Pixel> npx(new Pixel(e, e.bbox()));
+
+			if (lpx) {
+				QSharedPointer<PixelEdge> pe(new PixelEdge(lpx, npx));
+				edges << pe;
+			}
+
+			lpx = npx;
+		}
+
+	}
+
+	// remove edges that cross stop lines
+	filter(edges);
+
+	return edges;
+
+}
+
 }

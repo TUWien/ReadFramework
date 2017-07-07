@@ -211,13 +211,8 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
-		//dc.setImagePath("D:/read/test/00075751.tif");
-		dc.setImagePath("D:/read/test/graph-cut-textlines/00075751-crop.tif");
-		dc.setImagePath("D:/read/test/M_Aigen_am_Inn_007_0021.jpg");
 		dc.setImagePath("C:/data/read/test/tl-filtering/M_Freyung_010_0022.jpg");
-		//dc.setImagePath("D:/read/test/graph-cut-textlines/102_csrc-crop.jpg");
-		//dc.setImagePath("D:/read/test/graph-cut-textlines/M_Aigen_am_Inn_007_0084-crop.jpg");
-		//dc.setImagePath("D:/read/test/graph-cut-textlines/line-spacing.png");
+		dc.setImagePath("C:/read/test/temp/M_Aigen_am_Inn_003-01_0001.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}

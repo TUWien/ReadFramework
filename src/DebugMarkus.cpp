@@ -165,8 +165,8 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	layoutToXml();
-	//layoutToXmlDebug();
+	//layoutToXml();
+	layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
 	//eval();
@@ -334,14 +334,38 @@ void LayoutTest::layoutToXmlDebug() const {
 
 
 	//// debug visualizations --------------------------------------------------------------------
+	
+	DelauneyPixelConnector dpc;
+	auto de = dpc.connect(pixels.pixels());
+
+	VoronoiPixelConnector vpc;
+	auto ve = vpc.connect(pixels.pixels());
+
+	//cv::Mat dImg = img.clone();
+	QPixmap pm = QPixmap::fromImage(imgQt);
+	QPainter p(&pm);
+
+	p.setPen(rdf::ColorManager::blue());
+	p.setOpacity(0.2);
+	for (auto e : de) {
+		e->draw(p);
+	}
+	
+	p.setPen(rdf::ColorManager::pink());
+	p.setOpacity(1.0);
+	for (auto e : ve) {
+		e->draw(p);
+	}
+
+	cv::Mat dImg = Image::qPixmap2Mat(pm);
 
 	// drawing --------------------------------------------------------------------
 
 	// save super pixel image
 	//dImg = la.draw(rImg);
 
-	cv::Mat dImg = img.clone();
-	dImg = tlM.draw(dImg, ColorManager::blue());
+	//cv::Mat dImg = img.clone();
+	//dImg = tlM.draw(dImg, ColorManager::blue());
 
 	cv::Mat gcImg;
 	gcImg = gctlM.draw(img, ColorManager::blue());
@@ -351,7 +375,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	rImg = img.clone();
 	rImg = spM.draw(rImg);
 
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "gc-simple-textlines");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "voronoi");
 	//QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf");
 	rdf::Image::save(dImg, dstPath);
 	qDebug() << "line image saved: " << dstPath;
