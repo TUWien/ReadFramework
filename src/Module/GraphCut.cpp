@@ -75,7 +75,7 @@ void GraphCutConfig::save(QSettings & settings) const {
 // GraphCutPixel --------------------------------------------------------------------
 GraphCutPixel::GraphCutPixel(const PixelSet & set) : mSet(set) {
 	mWeightFnc = PixelDistance::spacingWeighted;
-	mConnector = QSharedPointer<DelauneyPixelConnector>::create();
+	mConnector = QSharedPointer<DelaunayPixelConnector>::create();
 
 	mConfig = QSharedPointer<GraphCutConfig>::create();
 }

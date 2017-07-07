@@ -85,13 +85,13 @@ protected:
 };
 
 /// <summary>
-/// Connects pixels using the Delauney triangulation.
+/// Connects pixels using the Delaunay triangulation.
 /// </summary>
 /// <seealso cref="PixelConnector" />
-class DllCoreExport DelauneyPixelConnector : public PixelConnector {
+class DllCoreExport DelaunayPixelConnector : public PixelConnector {
 
 public:
-	DelauneyPixelConnector();
+	DelaunayPixelConnector();
 	virtual QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& pixels) const override;
 };
 
@@ -176,7 +176,7 @@ public:
 	PixelSet(const QVector<QSharedPointer<Pixel> >& set);
 
 	enum ConnectionMode {
-		connect_delauney,
+		connect_Delaunay,
 		connect_region,
 
 		connect_end
@@ -233,7 +233,7 @@ public:
 		const DrawFlags& options = DrawFlags() | draw_pixels | draw_poly,
 		const Pixel::DrawFlags& pixelOptions = Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_label_colors) const;
 
-	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_delauney);
+	static QVector<QSharedPointer<PixelEdge> > connect(const QVector<QSharedPointer<Pixel> >& superPixels, const ConnectionMode& mode = connect_Delaunay);
 	static QVector<PixelSet> fromEdges(const QVector<QSharedPointer<PixelEdge> >& edges);
 	static PixelSet merge(const QVector<PixelSet>& sets);
 	QVector<PixelSet> splitScales() const;
@@ -382,7 +382,7 @@ public:
 	bool isEmpty() const;
 
 	void draw(QPainter& p, const PixelDistance::EdgeWeightFunction* weightFnc = 0, double dynamicRange = 1.0) const;
-	void connect(const PixelConnector& connector = DelauneyPixelConnector(), const SortMode& sort = sort_none);
+	void connect(const PixelConnector& connector = DelaunayPixelConnector(), const SortMode& sort = sort_none);
 
 	PixelSet set() const;
 	QVector<QSharedPointer<PixelEdge> > edges(const QString& pixelID) const;

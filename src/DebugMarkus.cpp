@@ -335,7 +335,7 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	//// debug visualizations --------------------------------------------------------------------
 	
-	DelauneyPixelConnector dpc;
+	DelaunayPixelConnector dpc;
 	auto de = dpc.connect(pixels.pixels());
 
 	VoronoiPixelConnector vpc;

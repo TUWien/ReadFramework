@@ -323,7 +323,7 @@ bool GraphCutLabels::compute() {
 	if (!checkInput())
 		return false;
 
-	DelauneyPixelConnector dpc;
+	DelaunayPixelConnector dpc;
 
 	Timer dt;
 	PixelGraph graph(mSet);

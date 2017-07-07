@@ -474,8 +474,8 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 	QSharedPointer<PixelConnector> connector;
 
 	switch (mode) {
-	case connect_delauney: {
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector());
+	case connect_Delaunay: {
+		connector = QSharedPointer<PixelConnector>(new DelaunayPixelConnector());
 		break;
 	}
 	case connect_region: {
@@ -484,7 +484,7 @@ QVector<QSharedPointer<PixelEdge> > PixelSet::connect(const QVector<QSharedPoint
 	}
 	default: {
 		qWarning() << "unkown mode in PixelSet::connect - mode: " << mode;
-		connector = QSharedPointer<PixelConnector>(new DelauneyPixelConnector());
+		connector = QSharedPointer<PixelConnector>(new DelaunayPixelConnector());
 	}
 	}
 
@@ -702,7 +702,7 @@ PixelSet PixelGraph::set() const {
 }
 
 /// <summary>
-/// Returns all pixel edges which were found using Delauney triangulation.
+/// Returns all pixel edges which were found using Delaunay triangulation.
 /// </summary>
 /// <returns>A vector of PixelEdges which connect 2 pixels each.</returns>
 QVector<QSharedPointer<PixelEdge> > PixelGraph::edges() const {
@@ -891,11 +891,11 @@ QVector<QSharedPointer<PixelEdge> > PixelConnector::filter(QVector<QSharedPointe
 	return filteredEdges;
 }
 
-// DelauneyPixelConnector --------------------------------------------------------------------
-DelauneyPixelConnector::DelauneyPixelConnector() : PixelConnector() {
+// DelaunayPixelConnector --------------------------------------------------------------------
+DelaunayPixelConnector::DelaunayPixelConnector() : PixelConnector() {
 }
 
-QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
+QVector<QSharedPointer<PixelEdge>> DelaunayPixelConnector::connect(const QVector<QSharedPointer<Pixel> >& pixels) const {
 	
 	//Timer dt;
 	// Create an instance of Subdiv2D
@@ -915,7 +915,7 @@ QVector<QSharedPointer<PixelEdge>> DelauneyPixelConnector::connect(const QVector
 		Vector2D np = b->center();
 		ids << subdiv.insert(np.toCvPoint2f());
 	}
-	//qDebug() << "delauney triangulation (OpenCV)" << dt;
+	//qDebug() << "Delaunay triangulation (OpenCV)" << dt;
 
 	// that took me long... but this is how we can map the edges to our objects without an (expensive) lookup
 	QVector<QSharedPointer<PixelEdge> > edges;

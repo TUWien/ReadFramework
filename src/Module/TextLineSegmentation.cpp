@@ -129,8 +129,8 @@ bool TextLineSegmentation::compute(const cv::Mat& img) {
 
 	filterDuplicates(mSet);
 
-	// create delauney graph
-	DelauneyPixelConnector dpc;
+	// create Delaunay graph
+	DelaunayPixelConnector dpc;
 	dpc.setStopLines(mStopLines);
 
 	PixelGraph pg(mSet);
@@ -609,8 +609,8 @@ bool SimpleTextLineSegmentation::compute() {
 
 	Timer dt;
 
-	// create delauney graph
-	DelauneyPixelConnector dpc;
+	// create Delaunay graph
+	DelaunayPixelConnector dpc;
 	dpc.setStopLines(mStopLines);
 
 	PixelGraph pg(mSet);
