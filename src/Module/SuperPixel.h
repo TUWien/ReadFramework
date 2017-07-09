@@ -175,6 +175,48 @@ protected:
 	bool checkInput() const override;
 };
 
+class DllCoreExport LinePixelConfig : public ModuleConfig {
+
+public:
+	LinePixelConfig();
+
+	virtual QString toString() const override;
+
+	int minLineLength() const;
+
+protected:
+	int mMinLineLength = 5;
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+class DllCoreExport LineSuperPixel : public Module {
+
+public:
+	LineSuperPixel(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	QString toString() const override;
+	QSharedPointer<LinePixelConfig> config() const;
+
+	// results - available after compute() is called
+	PixelSet superPixels() const;
+
+	cv::Mat draw(const cv::Mat& img) const;
+
+protected:
+	cv::Mat mSrcImg;
+
+	// results
+	PixelSet mSet;
+	QVector<Line> mLines;
+
+	bool checkInput() const override;
+};
+
 
 class DllCoreExport LocalOrientationConfig : public ModuleConfig {
 

@@ -37,6 +37,8 @@
 #include "Drawer.h"
 #include "Utils.h"
 #include "Settings.h"
+#include "LineTrace.h"
+
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -848,6 +850,101 @@ void ScaleSpaceSPConfig::save(QSettings & settings) const {
 	settings.setValue("minLayer", minLayer());
 }
 
+// LineSuperPixel --------------------------------------------------------------------
+LineSuperPixel::LineSuperPixel(const cv::Mat & img) {
+	mConfig = QSharedPointer<LinePixelConfig>::create();
+	mSrcImg = img;
+}
+
+bool LineSuperPixel::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+bool LineSuperPixel::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	cv::Mat img = mSrcImg.clone();
+	img = IP::grayscale(img);
+	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
+
+	LineTraceLSD lt(mSrcImg);
+	lt.config()->setScale(1.0);
+	lt.lineFilter().config()->setMinLength(config()->minLineLength());
+
+	if (!lt.compute()) {
+		qWarning() << "could not compute separators...";
+	}
+
+	mLines = lt.lines();
+
+	for (const Line& l : mLines) {
+
+		Ellipse e(l.center(), Vector2D(l.length(), 10), l.angle());
+		mSet.add(QSharedPointer<Pixel>(new Pixel(e, e.bbox())));
+	}
+
+
+	mInfo << mSet.size() << "pixels extracted in" << dt;
+
+	return true;
+}
+
+QString LineSuperPixel::toString() const {
+	return config()->toString();
+}
+
+QSharedPointer<LinePixelConfig> LineSuperPixel::config() const {
+	return qSharedPointerDynamicCast<LinePixelConfig>(mConfig);
+}
+
+PixelSet LineSuperPixel::superPixels() const {
+	return mSet;
+}
+
+cv::Mat LineSuperPixel::draw(const cv::Mat & img) const {
+
+	// debug - remove
+	QPixmap pm = Image::mat2QPixmap(img);
+	QPainter p(&pm);
+
+	p.setPen(ColorManager::blue());
+
+	for (auto px : mSet.pixels()) {
+		px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
+	}
+
+	return Image::qPixmap2Mat(pm);
+}
+
+bool LineSuperPixel::checkInput() const {
+
+	return !mSrcImg.empty();
+}
+
+// LinePixelConfig --------------------------------------------------------------------
+LinePixelConfig::LinePixelConfig() : ModuleConfig("LSD Super Pixel") {
+}
+
+QString LinePixelConfig::toString() const {
+	return ModuleConfig::toString();
+}
+
+int LinePixelConfig::minLineLength() const {
+	return checkParam(mMinLineLength, 0, 1000, "minLineLength");
+}
+
+void LinePixelConfig::load(const QSettings & settings) {
+
+	mMinLineLength = settings.value("minLineLength", minLineLength()).toInt();
+}
+
+void LinePixelConfig::save(QSettings & settings) const {
+	settings.setValue("minLineLenght", minLineLength());
+}
 
 
 }

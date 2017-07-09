@@ -296,6 +296,8 @@ bool GraphCutTextLine::compute() {
 			tlf << tl;
 	mTextLines = tlf;
 
+	//mTextLines = mTextLines.mid(0, mTextLines.size()*0.5);
+
 	// DEBUG only!
 	// sort w.r.t y
 	std::sort(mTextLines.begin(), mTextLines.end(),

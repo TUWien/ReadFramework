@@ -162,6 +162,7 @@ bool LayoutAnalysis::compute() {
 	// find super pixels
 	//rdf::SuperPixel spM(mImg);
 	rdf::ScaleSpaceSuperPixel spM(mImg);
+	//rdf::LineSuperPixel spM(mImg);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";

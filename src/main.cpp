@@ -213,6 +213,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	if (dc.imagePath().isEmpty()) {
 		dc.setImagePath("C:/data/read/test/tl-filtering/M_Freyung_010_0022.jpg");
 		dc.setImagePath("C:/read/test/temp/M_Aigen_am_Inn_003-01_0001.jpg");
+		dc.setImagePath("C:/temp/stone2.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}
