@@ -41,7 +41,7 @@
 #include "Settings.h"
 #include "GraphCut.h"
 
-#include "SuperPixel.h"
+#include "SuperPixelScaleSpace.h"
 #include "TabStopAnalysis.h"
 #include "TextLineSegmentation.h"
 #include "PageSegmentation.h"
@@ -249,7 +249,7 @@ void LayoutTest::layoutToXmlDebug() const {
 	auto pe = parser.page();
 
 	// start computing --------------------------------------------------------------------
-	rdf::GridPixel gpm(img);
+	rdf::GridSuperPixel gpm(img);
 
 	if (!gpm.compute())
 		qWarning() << "could not compute" << mConfig.imagePath();
@@ -464,7 +464,6 @@ void LayoutTest::testLineDetector(const cv::Mat & src) const {
 void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// TODOS
-	// - line spacing needs smoothing -> graphcut
 	// - DBScan is very sensitive to the line spacing
 	
 	// Workflow:
@@ -482,7 +481,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 
 	// find super pixels
 	//rdf::SuperPixel superPixel(img);
-	rdf::ScaleSpaceSuperPixel superPixel(img);
+	rdf::ScaleSpaceSuperPixel<SuperPixel> superPixel(img);
 	
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
@@ -507,6 +506,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	//rImg = textBlocks.draw(rImg);
 	//// save super pixel image
 	nImg = superPixel.draw(nImg);
+
 	//rImg = tabStops.draw(rImg);
 	//rImg = spc.draw(rImg);
 	QString imgPathN = rdf::Utils::createFilePath(mConfig.outputPath(), "-nomacs", "png");

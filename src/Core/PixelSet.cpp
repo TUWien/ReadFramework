@@ -64,6 +64,10 @@ QSharedPointer<Pixel> PixelSet::operator[](int idx) const {
 	return mSet[idx];
 }
 
+void PixelSet::operator<<(const QSharedPointer<Pixel>& pixel) {
+	add(pixel);
+}
+
 bool PixelSet::isEmpty() const {
 	return mSet.isEmpty();
 }

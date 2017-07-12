@@ -36,7 +36,7 @@
 
 #include "Utils.h"
 #include "GraphCut.h"
-#include "SuperPixel.h"
+#include "SuperPixelScaleSpace.h"
 #include "TextLineSegmentation.h"
 #include "Elements.h"
 #include "ElementsHelper.h"
@@ -160,10 +160,7 @@ bool LayoutAnalysis::compute() {
 	}
 
 	// find super pixels
-	//rdf::SuperPixel spM(mImg);
-	rdf::ScaleSpaceSuperPixel spM(mImg);
-	//rdf::GridPixel spM(mImg);
-	//rdf::LineSuperPixel spM(mImg);
+	ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";

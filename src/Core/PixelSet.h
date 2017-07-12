@@ -195,6 +195,7 @@ public:
 	void operator+=(const PixelSet& set);
 
 	QSharedPointer<Pixel> operator[](int idx) const;
+	void operator<<(const QSharedPointer<Pixel>& pixel);
 
 	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;

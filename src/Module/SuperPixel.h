@@ -58,6 +58,35 @@ namespace rdf {
 
 // read defines
 
+/// <summary>
+/// Base class implementation for SuperPixel generating modules.
+/// </summary>
+/// <seealso cref="Module" />
+class DllCoreExport SuperPixelBase : public Module {
+
+public:
+	SuperPixelBase(const cv::Mat& img);
+
+	bool isEmpty() const override;
+
+	virtual PixelSet pixelSet() const;
+
+	void setPyramidLevel(int level);
+	int pyramidLevel();
+
+protected:
+	cv::Mat mSrcImg;
+	PixelSet mSet;
+
+	int mPyramidLevel = 0;
+
+	bool checkInput() const override;
+};
+
+/// <summary>
+/// Configuration class for MserSuperPixel.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
 class DllCoreExport SuperPixelConfig : public ModuleConfig {
 
 public:
@@ -83,6 +112,11 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
+/// <summary>
+/// Container for MSER elements.
+/// This class maps OpenCVs MSER regions
+/// with their bounding boxes.
+/// </summary>
 class MserContainer {
 
 public:
@@ -97,34 +131,33 @@ public:
 	std::vector<cv::Rect> boxes;
 };
 
-class DllCoreExport SuperPixel : public Module {
+/// <summary>
+/// SuperPixel generator using MSER regions.
+/// An erosion pyramid improves the MSER
+/// regions specifically if cursive handwriting
+/// is present.
+/// </summary>
+/// <seealso cref="SuperPixelBase" />
+class DllCoreExport SuperPixel : public SuperPixelBase {
 
 public:
 	SuperPixel(const cv::Mat& img);
 
-	bool isEmpty() const override;
 	bool compute() override;
 		
 	QString toString() const override;
 	QSharedPointer<SuperPixelConfig> config() const;
 
 	// results - available after compute() is called
-	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
 	QVector<QSharedPointer<MserBlob> > getMserBlobs() const;
-	PixelSet pixelSet() const;
 
 	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 	cv::Mat drawMserBlobs(const cv::Mat& img, const QColor& col = QColor()) const;
 
 private:
-	cv::Mat mSrcImg;
-
 	// results
 	QVector<QSharedPointer<MserBlob> > mBlobs;
-	QVector<QSharedPointer<Pixel> > mPixels;
 	
-	bool checkInput() const override;
-
 	QSharedPointer<MserContainer> getBlobs(const cv::Mat& img, int kernelSize) const;
 	QSharedPointer<MserContainer> mser(const cv::Mat& img) const;
 	int filterAspectRatio(MserContainer& blobs, double aRatio = 0.1) const;
@@ -132,49 +165,10 @@ private:
 
 };
 
-class DllCoreExport ScaleSpaceSPConfig : public ModuleConfig {
-
-public:
-	ScaleSpaceSPConfig();
-
-	virtual QString toString() const override;
-
-	int numLayers() const;
-	int minLayer() const;
-
-protected:
-	int mNumLayers = 3;
-	int mMinLayer = 0;
-
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
-};
-
-class DllCoreExport ScaleSpaceSuperPixel : public Module {
-
-public:
-	ScaleSpaceSuperPixel(const cv::Mat& img);
-
-	bool isEmpty() const override;
-	bool compute() override;
-
-	QString toString() const override;
-	QSharedPointer<ScaleSpaceSPConfig> config() const;
-
-	// results - available after compute() is called
-	PixelSet pixelSet() const;
-
-	cv::Mat draw(const cv::Mat& img) const;
-
-protected:
-	cv::Mat mSrcImg;
-
-	// results
-	PixelSet mSet;
-
-	bool checkInput() const override;
-};
-
+/// <summary>
+/// Configuration class for LineSuperPixel.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
 class DllCoreExport LinePixelConfig : public ModuleConfig {
 
 public:
@@ -191,32 +185,34 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllCoreExport LineSuperPixel : public Module {
+/// <summary>
+/// SuperPixel generator based on the LSD line detector.
+/// </summary>
+/// <seealso cref="SuperPixelBase" />
+class DllCoreExport LineSuperPixel : public SuperPixelBase {
 
 public:
 	LineSuperPixel(const cv::Mat& img);
 
-	bool isEmpty() const override;
 	bool compute() override;
 
 	QString toString() const override;
 	QSharedPointer<LinePixelConfig> config() const;
 
-	// results - available after compute() is called
-	PixelSet superPixels() const;
-
 	cv::Mat draw(const cv::Mat& img) const;
 
 protected:
-	cv::Mat mSrcImg;
 
 	// results
-	PixelSet mSet;
-	QVector<Line> mLines;
+	QVector<Line> mLines;	// debug only
 
 	bool checkInput() const override;
 };
 
+/// <summary>
+/// Configuration class for GridSuperPixel.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
 class DllCoreExport GridPixelConfig : public ModuleConfig {
 
 public:
@@ -237,36 +233,34 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
-class DllCoreExport GridPixel : public Module {
+/// <summary>
+/// Grid based SuperPixel extraction.
+/// </summary>
+/// <seealso cref="SuperPixelBase" />
+class DllCoreExport GridSuperPixel : public SuperPixelBase {
 
 public:
-	GridPixel(const cv::Mat& img);
+	GridSuperPixel(const cv::Mat& img);
 
-	bool isEmpty() const override;
 	bool compute() override;
 
 	QString toString() const override;
 	QSharedPointer<GridPixelConfig> config() const;
 
-	// results - available after compute() is called
-	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
-	PixelSet pixelSet() const;
-
 	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 
 private:
-	cv::Mat mSrcImg;
 
-	// results
-	PixelSet mSet;
-
-	bool checkInput() const override;
 	cv::Mat edges(const cv::Mat& src) const;
 	PixelSet computeGrid(const cv::Mat& src, int winSize, double winOverlap) const;
 	QSharedPointer<Pixel> locatePixel(const cv::Mat& src, const cv::Mat& weight = cv::Mat()) const;
 	cv::Mat lineMask(const cv::Mat& src) const;
 };
 
+/// <summary>
+/// Configuration file for local orientation extraction.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
 class DllCoreExport LocalOrientationConfig : public ModuleConfig {
 
 public:
@@ -295,6 +289,10 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
+/// <summary>
+/// Local orientation estimation (using Il Koo's method).
+/// </summary>
+/// <seealso cref="Module" />
 class DllCoreExport LocalOrientation : public Module {
 
 public:

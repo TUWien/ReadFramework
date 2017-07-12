@@ -36,9 +36,7 @@
 #include "ImageProcessor.h"
 #include "Drawer.h"
 #include "Utils.h"
-#include "Settings.h"
 #include "LineTrace.h"
-
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -52,20 +50,10 @@ namespace rdf {
 
 
 // SuperPixel --------------------------------------------------------------------
-SuperPixel::SuperPixel(const cv::Mat& srcImg) {
-	mSrcImg = srcImg;
+SuperPixel::SuperPixel(const cv::Mat& srcImg) : SuperPixelBase(srcImg) {
+	
 	mConfig = QSharedPointer<SuperPixelConfig>::create();
 	mConfig->loadSettings();
-}
-
-bool SuperPixel::checkInput() const {
-
-	if (mSrcImg.empty()) {
-		mWarning << "the source image must not be empty...";
-		return false;
-	}
-
-	return true;
 }
 
 QSharedPointer<MserContainer> SuperPixel::getBlobs(const cv::Mat & img, int kernelSize) const {
@@ -178,10 +166,6 @@ int SuperPixel::filterDuplicates(MserContainer& blobs, int eps, int upperBound) 
 	return cnt;
 }
 
-bool SuperPixel::isEmpty() const {
-	return mSrcImg.empty();
-}
-
 bool SuperPixel::compute() {
 
 	if (!checkInput())
@@ -196,6 +180,11 @@ bool SuperPixel::compute() {
 	QSharedPointer<MserContainer> rawBlobs(new MserContainer());
 
 	int maxFilter = config()->erosionStep()*config()->numErosionLayers();
+
+	// do not erode large pyramid levels
+	if (mPyramidLevel > 3) {
+		config()->setNumErosionLayers(1);
+	}
 
 	for (int idx = 0; idx < maxFilter; idx += config()->erosionStep()) {
 
@@ -213,7 +202,7 @@ bool SuperPixel::compute() {
 	// convert to pixels
 	mBlobs = rawBlobs->toBlobs();
 	for (const QSharedPointer<MserBlob>& b : mBlobs)
-		mPixels << b->toPixel();
+		mSet << b->toPixel();
 
 	mDebug << mBlobs.size() << "regions computed in" << dt;
 
@@ -227,19 +216,8 @@ QString SuperPixel::toString() const {
 	return msg;
 }
 
-QVector<QSharedPointer<Pixel> > SuperPixel::getSuperPixels() const {
-	return mPixels;
-}
-
-QVector<QSharedPointer<MserBlob>> SuperPixel::getMserBlobs() const {
+QVector<QSharedPointer<MserBlob> > SuperPixel::getMserBlobs() const {
 	return mBlobs;
-}
-
-PixelSet SuperPixel::pixelSet() const {
-
-	PixelSet ps(mPixels);
-	
-	return ps;
 }
 
 QSharedPointer<SuperPixelConfig> SuperPixel::config() const {
@@ -274,7 +252,7 @@ cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 		// uncomment if you want to see MSER & SuperPixel at the same time
 		//mBlobs[idx].draw(p);
-		mPixels[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
+		mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
 		//qDebug() << mPixels[idx].ellipse();
 	}
 
@@ -453,7 +431,6 @@ void LocalOrientationConfig::load(const QSettings & settings) {
 	mMinScale = settings.value("MinScale", mMinScale).toInt();
 	mNumOr = settings.value("NumOrientations", mNumOr).toInt();
 	mHistSize = settings.value("HistSize", mHistSize).toInt();
-
 }
 
 void LocalOrientationConfig::save(QSettings & settings) const {
@@ -719,147 +696,9 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	return Image::qPixmap2Mat(pm);
 }
 
-// ScaleSpaceSuperPixel --------------------------------------------------------------------
-ScaleSpaceSuperPixel::ScaleSpaceSuperPixel(const cv::Mat & img) {
-	mConfig = QSharedPointer<ScaleSpaceSPConfig>::create();
-	mSrcImg = img;
-}
-
-bool ScaleSpaceSuperPixel::isEmpty() const {
-	return mSrcImg.empty();
-}
-
-bool ScaleSpaceSuperPixel::compute() {
-
-	if (!checkInput())
-		return false;
-
-	Timer dt;
-
-	cv::Mat img = mSrcImg.clone();
-	img = IP::grayscale(img);
-	cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
-
-	Config::instance().global().numScales = config()->numLayers();
-
-	int idCnt = 0;
-
-	for (int idx = 0; idx < config()->numLayers(); idx++) {
-	
-		// compute super pixel
-		if (config()->minLayer() <= idx) {
-
-			GridPixel spm(img);
-
-			// do not erode large pyramid levels
-			if (idx > 3) {
-				auto cc = spm.config();
-				//cc->setNumErosionLayers(1);
-			}
-
-			qDebug() << "computing new layer...";
-
-			// get super pixels of the current scale
-			if (!spm.compute())
-				mWarning << "could not compute super pixels for layer #" << idx;
-
-			PixelSet set = spm.getSuperPixels();
-
-			// assign the pyramid level
-			for (auto p : set.pixels()) {
-				p->setPyramidLevel(idx);
-				// make ID unique for scale space
-				p->setId(QString::number(idCnt));
-				idCnt++;
-			}
-
-			if (idx > 0) {
-
-				// re-scale
-				double sf = std::pow(2, idx);
-				set.scale(sf);
-			}
-
-			mSet += set;
-		}
-
-		cv::resize(img, img, cv::Size(), 0.5, 0.5, CV_INTER_AREA);
-	}
-
-	// filter from all scales
-	mSet.filterDuplicates();
-	mInfo << mSet.size() << "pixels extracted in" << dt;
-
-	return true;
-}
-
-QString ScaleSpaceSuperPixel::toString() const {
-	return config()->toString();
-}
-
-QSharedPointer<ScaleSpaceSPConfig> ScaleSpaceSuperPixel::config() const {
-	return qSharedPointerDynamicCast<ScaleSpaceSPConfig>(mConfig);
-}
-
-PixelSet ScaleSpaceSuperPixel::pixelSet() const {
-	return mSet;
-}
-
-cv::Mat ScaleSpaceSuperPixel::draw(const cv::Mat & img) const {
-	
-	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
-
-	p.setPen(ColorManager::blue());
-
-	for (auto px : mSet.pixels()) {
-		px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
-	}
-
-	return Image::qPixmap2Mat(pm);
-}
-
-bool ScaleSpaceSuperPixel::checkInput() const {
-
-	return !mSrcImg.empty();
-}
-
-// ScaleSpaceSpConfig --------------------------------------------------------------------
-ScaleSpaceSPConfig::ScaleSpaceSPConfig() : ModuleConfig("Scale Space Super Pixel") {
-}
-
-QString ScaleSpaceSPConfig::toString() const {
-	return ModuleConfig::toString();
-}
-
-int ScaleSpaceSPConfig::numLayers() const {
-	return checkParam(mNumLayers, 1, 10, "numLayers");
-}
-
-int ScaleSpaceSPConfig::minLayer() const {
-	return checkParam(mMinLayer, 0, numLayers()-1, "minLayer");
-}
-
-void ScaleSpaceSPConfig::load(const QSettings & settings) {
-
-	mNumLayers = settings.value("numLayers", numLayers()).toInt();
-	mMinLayer = settings.value("minLayer", minLayer()).toInt();
-}
-
-void ScaleSpaceSPConfig::save(QSettings & settings) const {
-	settings.setValue("numLayers", numLayers());
-	settings.setValue("minLayer", minLayer());
-}
-
 // LineSuperPixel --------------------------------------------------------------------
-LineSuperPixel::LineSuperPixel(const cv::Mat & img) {
+LineSuperPixel::LineSuperPixel(const cv::Mat & img) : SuperPixelBase(img) {
 	mConfig = QSharedPointer<LinePixelConfig>::create();
-	mSrcImg = img;
-}
-
-bool LineSuperPixel::isEmpty() const {
-	return mSrcImg.empty();
 }
 
 bool LineSuperPixel::compute() {
@@ -903,10 +742,6 @@ QSharedPointer<LinePixelConfig> LineSuperPixel::config() const {
 	return qSharedPointerDynamicCast<LinePixelConfig>(mConfig);
 }
 
-PixelSet LineSuperPixel::superPixels() const {
-	return mSet;
-}
-
 cv::Mat LineSuperPixel::draw(const cv::Mat & img) const {
 
 	// debug - remove
@@ -948,30 +783,13 @@ void LinePixelConfig::save(QSettings & settings) const {
 	settings.setValue("minLineLenght", minLineLength());
 }
 
-// GridPixel --------------------------------------------------------------------
-GridPixel::GridPixel(const cv::Mat& srcImg) {
-	mSrcImg = srcImg;
+// GridSuperPixel --------------------------------------------------------------------
+GridSuperPixel::GridSuperPixel(const cv::Mat& img) : SuperPixelBase(img) {
 	mConfig = QSharedPointer<GridPixelConfig>::create();
 	mConfig->loadSettings();
 }
 
-bool GridPixel::checkInput() const {
-
-	if (mSrcImg.empty()) {
-		mWarning << "the source image must not be empty...";
-		return false;
-	}
-
-	cv::Mat img = edges(mSrcImg);
-
-	return true;
-}
-
-bool GridPixel::isEmpty() const {
-	return mSrcImg.empty();
-}
-
-bool GridPixel::compute() {
+bool GridSuperPixel::compute() {
 
 	if (!checkInput())
 		return false;
@@ -986,7 +804,7 @@ bool GridPixel::compute() {
 	return true;
 }
 
-cv::Mat GridPixel::edges(const cv::Mat & src) const {
+cv::Mat GridSuperPixel::edges(const cv::Mat & src) const {
 
 	// prepare
 	cv::Mat img = src.clone();
@@ -1007,11 +825,10 @@ cv::Mat GridPixel::edges(const cv::Mat & src) const {
 	seps.convertTo(seps, img.depth());
 	img = img.mul(seps);
 
-
 	return img;
 }
 
-PixelSet GridPixel::computeGrid(const cv::Mat & src, int winSize, double winOverlap) const {
+PixelSet GridSuperPixel::computeGrid(const cv::Mat & src, int winSize, double winOverlap) const {
 	
 	// setup grid cache
 	int step = qRound(winSize*winOverlap);
@@ -1062,7 +879,7 @@ PixelSet GridPixel::computeGrid(const cv::Mat & src, int winSize, double winOver
 	return set;
 }
 
-QSharedPointer<Pixel> GridPixel::locatePixel(const cv::Mat & src, const cv::Mat& weight) const {
+QSharedPointer<Pixel> GridSuperPixel::locatePixel(const cv::Mat & src, const cv::Mat& weight) const {
 
 	// parameter!
 	double minMag = 0.05;	// minimum gradient magnitude
@@ -1095,7 +912,7 @@ QSharedPointer<Pixel> GridPixel::locatePixel(const cv::Mat & src, const cv::Mat&
 	return p;
 }
 
-cv::Mat GridPixel::lineMask(const cv::Mat & src) const {
+cv::Mat GridSuperPixel::lineMask(const cv::Mat & src) const {
 
 	LineTraceLSD ltl(src);
 	ltl.config()->setMergeLines(false);
@@ -1128,26 +945,18 @@ cv::Mat GridPixel::lineMask(const cv::Mat & src) const {
 	return mat;
 }
 
-QString GridPixel::toString() const {
+QString GridSuperPixel::toString() const {
 
 	QString msg = debugName();
 
 	return msg;
 }
 
-QVector<QSharedPointer<Pixel> > GridPixel::getSuperPixels() const {
-	return mSet.pixels();
-}
-
-PixelSet GridPixel::pixelSet() const {
-	return mSet;
-}
-
-QSharedPointer<GridPixelConfig> GridPixel::config() const {
+QSharedPointer<GridPixelConfig> GridSuperPixel::config() const {
 	return qSharedPointerDynamicCast<GridPixelConfig>(mConfig);
 }
 
-cv::Mat GridPixel::draw(const cv::Mat & img, const QColor& col) const {
+cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 	// draw super pixels
 	Timer dtf;
@@ -1227,6 +1036,37 @@ void GridPixelConfig::save(QSettings & settings) const {
 	settings.setValue("winSize", winSize());
 	settings.setValue("winOverlap", winOverlap());
 	settings.setValue("minEnergy", minEnergy());
+}
+
+// -------------------------------------------------------------------- SuperPixelBase 
+SuperPixelBase::SuperPixelBase(const cv::Mat & img) {
+	mSrcImg = img;
+}
+
+bool SuperPixelBase::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+PixelSet SuperPixelBase::pixelSet() const {
+	return mSet;
+}
+
+void SuperPixelBase::setPyramidLevel(int level) {
+	mPyramidLevel = level;
+}
+
+int SuperPixelBase::pyramidLevel() {
+	return mPyramidLevel;
+}
+
+bool SuperPixelBase::checkInput() const {
+
+	if (mSrcImg.empty()) {
+		mWarning << "the source image must not be empty...";
+		return false;
+	}
+
+	return true;
 }
 
 }
