@@ -749,13 +749,15 @@ bool ScaleSpaceSuperPixel::compute() {
 		// compute super pixel
 		if (config()->minLayer() <= idx) {
 
-			SuperPixel spm(img);
+			GridPixel spm(img);
 
 			// do not erode large pyramid levels
 			if (idx > 3) {
 				auto cc = spm.config();
-				cc->setNumErosionLayers(1);
+				//cc->setNumErosionLayers(1);
 			}
+
+			qDebug() << "computing new layer...";
 
 			// get super pixels of the current scale
 			if (!spm.compute())
@@ -799,7 +801,7 @@ QSharedPointer<ScaleSpaceSPConfig> ScaleSpaceSuperPixel::config() const {
 	return qSharedPointerDynamicCast<ScaleSpaceSPConfig>(mConfig);
 }
 
-PixelSet ScaleSpaceSuperPixel::superPixels() const {
+PixelSet ScaleSpaceSuperPixel::pixelSet() const {
 	return mSet;
 }
 
@@ -946,5 +948,285 @@ void LinePixelConfig::save(QSettings & settings) const {
 	settings.setValue("minLineLenght", minLineLength());
 }
 
+// GridPixel --------------------------------------------------------------------
+GridPixel::GridPixel(const cv::Mat& srcImg) {
+	mSrcImg = srcImg;
+	mConfig = QSharedPointer<GridPixelConfig>::create();
+	mConfig->loadSettings();
+}
+
+bool GridPixel::checkInput() const {
+
+	if (mSrcImg.empty()) {
+		mWarning << "the source image must not be empty...";
+		return false;
+	}
+
+	cv::Mat img = edges(mSrcImg);
+
+	return true;
+}
+
+bool GridPixel::isEmpty() const {
+	return mSrcImg.empty();
+}
+
+bool GridPixel::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	cv::Mat img = edges(mSrcImg);
+	
+	mSet = computeGrid(img, config()->winSize(), config()->winOverlap());
+	mDebug << mSet.size() << "regions computed in" << dt;
+
+	return true;
+}
+
+cv::Mat GridPixel::edges(const cv::Mat & src) const {
+
+	// prepare
+	cv::Mat img = src.clone();
+	img = IP::grayscale(img);
+	img.convertTo(img, CV_32FC1);
+	cv::normalize(img, img, 1.0, 0, cv::NORM_MINMAX);
+
+	float k[3] = { 1.0f, 0.0f, -1.0f };
+	cv::Mat kernel(1, 3, CV_32FC1, k);
+	cv::Mat imgDx, imgDy;
+	cv::filter2D(img, imgDx, CV_32FC1, kernel);		// dx
+	cv::filter2D(img, imgDy, CV_32FC1, kernel.t());	// dy
+
+	cv::magnitude(imgDx, imgDy, img);
+
+	// remove separator lines
+	cv::Mat seps = lineMask(src);
+	seps.convertTo(seps, img.depth());
+	img = img.mul(seps);
+
+
+	return img;
+}
+
+PixelSet GridPixel::computeGrid(const cv::Mat & src, int winSize, double winOverlap) const {
+	
+	// setup grid cache
+	int step = qRound(winSize*winOverlap);
+	Rect winr(Vector2D(), Vector2D(winSize, winSize));
+
+	int nrw = qRound((double)src.rows / winSize * 1.0 / winOverlap);
+	int ncw = qRound((double)src.cols / winSize * 1.0 / winOverlap);
+
+	Vector2D mr(0, step);
+	Vector2D mc(step, 0);
+	Vector2D si(src.size());
+
+	double thr = winSize*winSize * config()->minEnergy();
+
+	cv::Mat gvec = Algorithms::get1DGauss(winSize / 3.0, winSize);
+	cv::Mat weight = gvec.t() * gvec;
+	cv::normalize(weight, weight, 1.0, 0.0, cv::NORM_MINMAX);
+
+	PixelSet set;
+
+	for (int rIdx = 0; rIdx < nrw; rIdx++) {
+
+		// init window on the current row
+		Rect wc = winr;
+		winr.move(mr);	// slide (for the next step)
+
+		for (int cIdx = 0; cIdx < ncw; cIdx++) {
+
+			wc = wc.clipped(si);
+
+			cv::Mat win = src(wc.toCvRect());
+			double s = cv::sum(win)[0];
+
+			if (s > thr) {
+				QSharedPointer<Pixel> pixel = locatePixel(win, weight);
+
+				// locate pixel might cancel
+				if (pixel) {
+					pixel->move(wc.topLeft());	// move back to global coords
+					set.add(pixel);
+				}
+			}
+
+			wc.move(mc);	// slide (for the next step)
+		}
+	}
+	
+	return set;
+}
+
+QSharedPointer<Pixel> GridPixel::locatePixel(const cv::Mat & src, const cv::Mat& weight) const {
+
+	// parameter!
+	double minMag = 0.05;	// minimum gradient magnitude
+	int minNumPts = 20;		// minimum # of points
+
+	QVector<Vector2D> pts;
+	for (int rIdx = 0; rIdx < src.rows; rIdx++) {
+
+		const float* sp = src.ptr<float>(rIdx);
+		const float* w = weight.empty() ? 0 : weight.ptr<float>(rIdx);
+
+		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
+			
+			float spw = w ? sp[cIdx] * w[cIdx] : sp[cIdx];
+
+			if (spw > minMag) {
+				pts << Vector2D(cIdx, rIdx);
+			}
+		}
+	}
+
+	// reject if there are too few gradients present
+	if (pts.size() < minNumPts) {
+		return QSharedPointer<Pixel>();
+	}
+
+	Ellipse e = Ellipse::fromData(pts);
+	QSharedPointer<Pixel> p(new Pixel(e));
+
+	return p;
+}
+
+cv::Mat GridPixel::lineMask(const cv::Mat & src) const {
+
+	LineTraceLSD ltl(src);
+	ltl.config()->setMergeLines(false);
+
+	if (!ltl.compute()) {
+		qWarning() << "could not compute line image";
+		return cv::Mat();
+	}
+
+	QPixmap img(src.cols, src.rows);
+	img.fill(QColor(255, 255, 255));
+
+	QPen pen(QColor(0, 0, 0));
+	pen.setWidth(8);
+
+	QPainter p(&img);
+	p.setPen(pen);
+
+	auto lines = ltl.separatorLines();
+
+	for (const Line& l : lines) {
+		p.drawLine(l.line());
+		//l.draw(p);
+	}
+
+	cv::Mat mat = Image::qPixmap2Mat(img);
+	cv::cvtColor(mat, mat, CV_RGB2GRAY);
+	mat.convertTo(mat, CV_32FC1, 1.0/255.0);
+
+	return mat;
+}
+
+QString GridPixel::toString() const {
+
+	QString msg = debugName();
+
+	return msg;
+}
+
+QVector<QSharedPointer<Pixel> > GridPixel::getSuperPixels() const {
+	return mSet.pixels();
+}
+
+PixelSet GridPixel::pixelSet() const {
+	return mSet;
+}
+
+QSharedPointer<GridPixelConfig> GridPixel::config() const {
+	return qSharedPointerDynamicCast<GridPixelConfig>(mConfig);
+}
+
+cv::Mat GridPixel::draw(const cv::Mat & img, const QColor& col) const {
+
+	// draw super pixels
+	Timer dtf;
+	QPixmap pm = Image::mat2QPixmap(edges(img));
+	QPainter p(&pm);
+
+	p.setPen(col);
+
+	//// draw grid
+	//int step = qRound(config()->winSize()*config()->winOverlap());
+	//Line l(Vector2D(0, 0), Vector2D(img.cols, 0));
+	//Vector2D mv(0, step);
+	//for (int idx = 0; idx < img.rows; idx += step) {
+	//	p.drawLine(l.line());
+	//	l = l.moved(mv);
+	//}
+
+	//// draw grid
+	//l = Line(Vector2D(0, 0), Vector2D(0, img.rows));
+	//mv = Vector2D(step, 0);
+	//for (int idx = 0; idx < img.cols; idx += step) {
+	//	p.drawLine(l.line());
+	//	l = l.moved(mv);
+	//}
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		if (!col.isValid())
+			p.setPen(ColorManager::randColor());
+
+		// uncomment if you want to see MSER & SuperPixel at the same time
+		mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
+	}
+
+	qDebug() << "drawing takes" << dtf;
+	return Image::qPixmap2Mat(pm);
+}
+
+// -------------------------------------------------------------------- GridPixelConfig 
+GridPixelConfig::GridPixelConfig() : ModuleConfig("Grid Pixel") {
+}
+
+QString GridPixelConfig::toString() const {
+	QString msg = ModuleConfig::toString() + ":";
+	msg += " window size: " + QString::number(winSize());
+	msg += " window overlaps: " + QString::number(winOverlap());
+	msg += " minimum energy " + QString::number(minEnergy());
+
+	return msg;
+}
+
+int GridPixelConfig::winSize() const {
+	return ModuleConfig::checkParam(mWinSize, 1, 1000, "winSize");
+}
+
+double GridPixelConfig::winOverlap() const {
+	return ModuleConfig::checkParam(mWinOverlap, 0.01, 1.0, "winOverlap");
+}
+
+double GridPixelConfig::minEnergy() const {
+	return ModuleConfig::checkParam(mMinEnergy, 0.0, 1.0, "minEnergy");
+}
+
+void GridPixelConfig::load(const QSettings & settings) {
+
+	// add parameters
+	mWinSize = settings.value("winSize", winSize()).toInt();
+	mWinOverlap = settings.value("winOverlap", winOverlap()).toDouble();
+	mMinEnergy = settings.value("minEnergy", minEnergy()).toDouble();
+
+	qDebug() << toString();	// TODO: remove
+}
+
+void GridPixelConfig::save(QSettings & settings) const {
+
+	// add parameters
+	settings.setValue("winSize", winSize());
+	settings.setValue("winOverlap", winOverlap());
+	settings.setValue("minEnergy", minEnergy());
+}
 
 }

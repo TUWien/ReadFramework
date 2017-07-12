@@ -162,7 +162,7 @@ public:
 	QSharedPointer<ScaleSpaceSPConfig> config() const;
 
 	// results - available after compute() is called
-	PixelSet superPixels() const;
+	PixelSet pixelSet() const;
 
 	cv::Mat draw(const cv::Mat& img) const;
 
@@ -217,6 +217,55 @@ protected:
 	bool checkInput() const override;
 };
 
+class DllCoreExport GridPixelConfig : public ModuleConfig {
+
+public:
+	GridPixelConfig();
+
+	virtual QString toString() const override;
+
+	int winSize() const;
+	double winOverlap() const;
+	double minEnergy() const;
+
+protected:
+	int mWinSize = 20;				// the window size in px per scale
+	double mWinOverlap = 0.5;		// the window overlaps
+	double mMinEnergy = 0.05;		// minimum energy per cell
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+class DllCoreExport GridPixel : public Module {
+
+public:
+	GridPixel(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	QString toString() const override;
+	QSharedPointer<GridPixelConfig> config() const;
+
+	// results - available after compute() is called
+	QVector<QSharedPointer<Pixel> > getSuperPixels() const;
+	PixelSet pixelSet() const;
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+
+private:
+	cv::Mat mSrcImg;
+
+	// results
+	PixelSet mSet;
+
+	bool checkInput() const override;
+	cv::Mat edges(const cv::Mat& src) const;
+	PixelSet computeGrid(const cv::Mat& src, int winSize, double winOverlap) const;
+	QSharedPointer<Pixel> locatePixel(const cv::Mat& src, const cv::Mat& weight = cv::Mat()) const;
+	cv::Mat lineMask(const cv::Mat& src) const;
+};
 
 class DllCoreExport LocalOrientationConfig : public ModuleConfig {
 

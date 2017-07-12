@@ -201,13 +201,17 @@ public:
 	void setScale(double scale);
 	double scale() const;
 
+	void setMergeLines(bool merge);
+	bool mergeLines() const;
+
 	QString toString() const override;
 
 private:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	double mScale = 0.5;	// initial downscaling of the image
+	double mScale = 0.5;		// initial downscaling of the image
+	bool mMergeLines = true;		// if false, lines are not merged after processing (usefull if you need an exact localization)
 };
 
 /// <summary>

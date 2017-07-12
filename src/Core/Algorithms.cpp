@@ -252,12 +252,14 @@ cv::Mat Algorithms::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel
 /// </summary>
 /// <param name="sigma">The standard deviation of the Gaussian.</param>
 /// <returns>The Gaussian kernel CV_32FC1</returns>
-cv::Mat Algorithms::get1DGauss(double sigma) {
+cv::Mat Algorithms::get1DGauss(double sigma, int kernelsize) {
 
 	// correct -> checked with matlab reference
-	int kernelsize = cvRound(cvCeil(sigma * 3) * 2) + 1;
-	if (kernelsize < 3) kernelsize = 3;
-	if ((kernelsize % 2) != 1) kernelsize += 1;
+	if (kernelsize == -1) {
+		kernelsize = cvRound(cvCeil(sigma * 3) * 2) + 1;
+		if (kernelsize < 3) kernelsize = 3;
+		if ((kernelsize % 2) != 1) kernelsize += 1;
+	}
 
 	cv::Mat gKernel = cv::Mat(1, kernelsize, CV_32F);
 	float* kernelPtr = gKernel.ptr<float>();
@@ -266,7 +268,6 @@ cv::Mat Algorithms::get1DGauss(double sigma) {
 
 		kernelPtr[idx] = (float)(exp(-(x*x) / (2 * sigma*sigma)));	// 1/(sqrt(2pi)*sigma) -> discrete normalization
 	}
-
 
 	if (sum(gKernel).val[0] == 0) {
 		qWarning() << "The kernel sum is zero";

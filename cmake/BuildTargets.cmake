@@ -167,7 +167,8 @@ elseif (MSVC)
 	set(DC_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/cmake/DependencyCollector.py)
 	set(DC_CONFIG ${CMAKE_BINARY_DIR}/DependencyCollector.ini)
 
-	GET_FILENAME_COMPONENT(VS_PATH ${CMAKE_LINKER} PATH)
+	# CMAKE_MAKE_PROGRAM works for VS 2017 too
+	get_filename_component(VS_PATH ${CMAKE_MAKE_PROGRAM} PATH)
 	if(CMAKE_CL_64)
 		set(VS_PATH "${VS_PATH}/../../../Common7/IDE/Remote Debugger/x64")
 	else()

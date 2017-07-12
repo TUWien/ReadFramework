@@ -73,7 +73,7 @@ public:
 	static cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 255);
 	static cv::Mat createStructuringElement(int seSize, int shape);
 	static cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel);
-	static cv::Mat get1DGauss(double sigma);
+	static cv::Mat get1DGauss(double sigma, int kernelsize = -1);
 	static cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV);
 	static cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO);
 	static void setBorderConst(cv::Mat &src, float val = 0.0f);

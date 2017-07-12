@@ -307,6 +307,9 @@ Pixel::Pixel(const Ellipse & ellipse, const Rect& bbox, const QString& id) : Bas
 	mIsNull = false;
 	mEllipse = ellipse;
 	mBBox = bbox;
+
+	if (mBBox.isNull())
+		mBBox = mEllipse.bbox();
 }
 
 bool Pixel::isNull() const {
@@ -331,6 +334,11 @@ void Pixel::scale(double factor) {
 	
 	for (auto s : mStats)
 		s->scale(factor);
+}
+
+void Pixel::move(const Vector2D & vec) {
+	mEllipse.move(vec);
+	mBBox.move(vec);
 }
 
 void Pixel::addStats(const QSharedPointer<PixelStats>& stats) {

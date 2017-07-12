@@ -716,6 +716,14 @@ namespace rdf {
 		return ModuleConfig::checkParam(mScale, 0.001, 1.0, "Scale");
 	}
 
+	void LineTraceLSDConfig::setMergeLines(bool merge) {
+		mMergeLines = merge;
+	}
+
+	bool LineTraceLSDConfig::mergeLines() const {
+		return mMergeLines;
+	}
+
 	QString LineTraceLSDConfig::toString() const {
 		return ModuleConfig::toString();
 	}
@@ -774,9 +782,12 @@ namespace rdf {
 		}
 
 		mLines = mLineFilter.removeSmall(mLines, qRound(mLineFilter.config()->minLength()*0.5));	// speed-up
-		mLines = mLineFilter.mergeLines(mLines);
-		mLines = mLineFilter.removeSmall(mLines);
-		
+
+		if (config()->mergeLines()) {
+			mLines = mLineFilter.mergeLines(mLines);
+			mLines = mLineFilter.removeSmall(mLines);
+		}
+
 		mInfo << mLines.size() << "lines detected in" << dt;
 
 		return true;

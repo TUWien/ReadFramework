@@ -184,7 +184,7 @@ class DllCoreExport Pixel : public BaseElement {
 
 public:
 	Pixel();
-	Pixel(const Ellipse& ellipse, const Rect& bbox, const QString& id = QString());
+	Pixel(const Ellipse& ellipse, const Rect& bbox = Rect(), const QString& id = QString());
 
 	bool isNull() const;
 
@@ -201,6 +201,7 @@ public:
 	Ellipse ellipse() const;
 	
 	void scale(double factor);
+	void move(const Vector2D& vec);
 
 	void addStats(const QSharedPointer<PixelStats>& stats);
 	QSharedPointer<PixelStats> stats(int idx = -1) const;

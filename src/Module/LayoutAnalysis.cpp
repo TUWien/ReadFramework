@@ -162,13 +162,14 @@ bool LayoutAnalysis::compute() {
 	// find super pixels
 	//rdf::SuperPixel spM(mImg);
 	rdf::ScaleSpaceSuperPixel spM(mImg);
+	//rdf::GridPixel spM(mImg);
 	//rdf::LineSuperPixel spM(mImg);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";
 		return false;
 	}
-
+	
 	// TODO: automatically find text blocks
 
 	// create an 'all-in' text block
@@ -179,7 +180,7 @@ bool LayoutAnalysis::compute() {
 		mTextBlockSet << Polygon::fromRect(r);
 	}
 
-	PixelSet pixels = spM.superPixels();
+	PixelSet pixels = spM.pixelSet();
 	
 	// scale back to original coordinates
 	mTextBlockSet.setPixels(pixels);

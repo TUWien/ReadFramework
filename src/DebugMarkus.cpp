@@ -240,69 +240,19 @@ void LayoutTest::layoutToXmlDebug() const {
 	Timer dt;
 	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 
+	if (QFileInfo(mConfig.xmlPath()).exists())
+		loadXmlPath = mConfig.xmlPath();
+
+
 	rdf::PageXmlParser parser;
 	parser.read(loadXmlPath);
 	auto pe = parser.page();
 
 	// start computing --------------------------------------------------------------------
-	cv::Mat rImg = img.clone();
-	double scale = scaleFactor(rImg);
+	rdf::GridPixel gpm(img);
 
-	// resize if necessary
-	if (scale != 1.0) {
-		cv::resize(rImg, rImg, cv::Size(), scale, scale, CV_INTER_LINEAR);
-		qInfo() << "image resized, new dimension" << rImg.cols << "x" << rImg.rows << "scale factor:" << scale;
-	}
-
-	// find super pixels
-	//rdf::SuperPixel spM(mImg);
-	rdf::ScaleSpaceSuperPixel spM(rImg);
-
-	if (!spM.compute()) {
-		qWarning() << "could not compute super pixels!";
-		return;
-	}
-
-	PixelSet pixels = spM.superPixels();
-
-	// find local orientation per pixel
-	rdf::LocalOrientation lo(pixels);
-	if (!lo.compute()) {
-		qWarning() << "could not compute local orientation";
-		return;
-	}
-
-	// smooth orientation
-	rdf::GraphCutOrientation pse(pixels);
-
-	if (!pse.compute()) {
-		qWarning() << "could not compute set orientation";
-		return;
-	}
-
-	// smooth line spacing
-	rdf::GraphCutLineSpacing psl(pixels);
-
-	if (!psl.compute()) {
-		qWarning() << "could not smooth text lines";
-		return;
-	}
-
-	// find text lines
-	rdf::SimpleTextLineSegmentation tlM(pixels);
-	//textLines.addSeparatorLines(stopLines);
-
-	if (!tlM.compute()) {
-		qWarning() << "could not compute text line segmentation!";
-		return;
-	}
-	tlM.scale(1.0 / scale); 
-
-	// TODO
-	rdf::GraphCutTextLine gctlM(tlM.sets());
-
-	if (!gctlM.compute())
-		qWarning() << "could not compute text line graph-cut";
+	if (!gpm.compute())
+		qWarning() << "could not compute" << mConfig.imagePath();
 
 	// end computing --------------------------------------------------------------------
 
@@ -335,61 +285,14 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	//// debug visualizations --------------------------------------------------------------------
 	
-	DelaunayPixelConnector dpc;
-	auto de = dpc.connect(pixels.pixels());
-
-	VoronoiPixelConnector vpc;
-	auto ve = vpc.connect(pixels.pixels());
-
-	//cv::Mat dImg = img.clone();
-	QPixmap pm = QPixmap::fromImage(imgQt);
-	QPainter p(&pm);
-
-	p.setPen(rdf::ColorManager::blue());
-	p.setOpacity(0.2);
-	for (auto e : de) {
-		e->draw(p);
-	}
-	
-	p.setPen(rdf::ColorManager::pink());
-	p.setOpacity(1.0);
-	for (auto e : ve) {
-		e->draw(p);
-	}
-
-	cv::Mat dImg = Image::qPixmap2Mat(pm);
-
 	// drawing --------------------------------------------------------------------
 
-	// save super pixel image
-	//dImg = la.draw(rImg);
-
-	//cv::Mat dImg = img.clone();
-	//dImg = tlM.draw(dImg, ColorManager::blue());
-
 	cv::Mat gcImg;
-	gcImg = gctlM.draw(img, ColorManager::blue());
+	gcImg = gpm.draw(img, ColorManager::blue());
 
-	//gcImg = lo.draw(img, "1163", 256);
-
-	rImg = img.clone();
-	rImg = spM.draw(rImg);
-
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "voronoi");
-	//QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf");
-	rdf::Image::save(dImg, dstPath);
-	qDebug() << "line image saved: " << dstPath;
-
-	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-gc-textlines");
-	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-or");
-	//dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-pdf-e");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "grid-pixel");
 	rdf::Image::save(gcImg, dstPath);
-	qDebug() << "orientation image saved: " << dstPath;
-
-	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-local-orientation");
-	rdf::Image::save(rImg, dstPath);
-	qDebug() << "orientation image saved: " << dstPath;
-
+	qDebug() << "pixel image saved: " << dstPath;
 
 	if (dstPath.contains(WHO_IS_CUTE, Qt::CaseInsensitive))
 		qDebug() << "b.t.w. best image name ever...";
@@ -584,7 +487,7 @@ void LayoutTest::testLayout(const cv::Mat & src) const {
 	if (!superPixel.compute())
 		qWarning() << "could not compute super pixel!";
 
-	PixelSet sp = superPixel.superPixels();
+	PixelSet sp = superPixel.pixelSet();
 
 	// find local orientation per pixel
 	rdf::LocalOrientation lo(sp.pixels());
