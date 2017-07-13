@@ -30,7 +30,7 @@
  [4] http://nomacs.org
  *******************************************************************************************************/
 
-#include "BaselineTest.h"
+#include "LayoutTest.h"
 
 #include "Image.h"
 #include "Utils.h"
@@ -38,9 +38,15 @@
 #include "Elements.h"
 #include "LayoutAnalysis.h"
 #include "Settings.h"
+#include "SuperPixel.h"
+#include "SuperPixelClassification.h"
+#include "SuperPixelTrainer.h"
+#include "SuperPixelScaleSpace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QImage>
+
+#include <opencv2/ml/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -74,8 +80,6 @@ bool BaselineTest::baselineTest() const {
 
 	// test the layout module
 	layoutToXml(imgCv, parser);
-
-	//eval();
 
 	qInfo() << "total computation time:" << dt;
 
@@ -125,6 +129,143 @@ bool BaselineTest::layoutToXml(const cv::Mat& img, const PageXmlParser& parser) 
 
 	qInfo() << "layout analysis computed in" << dt;
 	return true;
+}
+
+// -------------------------------------------------------------------- SuperPixelTest 
+SuperPixelTest::SuperPixelTest(const TestConfig & config) : mConfig(config) {
+}
+
+bool SuperPixelTest::testSuperPixel() const {
+	
+	QImage img = Image::load(mConfig.imagePath());
+
+	if (img.isNull()) {
+		qWarning() << "could not load image from" << mConfig.imagePath();
+		return false;
+	}
+
+	Timer dt;
+
+	// convert image
+	cv::Mat src = Image::qImage2Mat(img);
+
+	// default (MSER) super pixels
+	rdf::SuperPixel sp(src);
+	if (!sp.compute()) {
+		qWarning() << "cannot compute SuperPixels";
+		return false;
+	}
+
+	// line super pixels
+	rdf::LineSuperPixel lsp(src);
+	if (!lsp.compute()) {
+		qWarning() << "cannot compute SuperPixels";
+		return false;
+	}
+
+	// grid super pixels (with scale space)
+	rdf::ScaleSpaceSuperPixel<rdf::GridSuperPixel> gsp(src);
+	if (!gsp.compute()) {
+		qWarning() << "cannot compute SuperPixels";
+		return false;
+	}
+
+	return true;
+}
+
+bool SuperPixelTest::collectFeatures() const {
+	
+	QImage img = Image::load(mConfig.imagePath());
+
+	if (img.isNull()) {
+		qWarning() << "could not load image from" << mConfig.imagePath();
+		return false;
+	}
+
+	Timer dt;
+
+	// convert image
+	cv::Mat imgCv = Image::qImage2Mat(img);
+
+	// load XML
+	rdf::PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+
+	// fail if the XML was not loaded
+	if (parser.loadStatus() != PageXmlParser::status_ok) {
+		qWarning() << "could not load XML from" << mConfig.xmlPath();
+		return false;
+	}
+
+	// test loading of label lookup
+	rdf::LabelManager lm = rdf::LabelManager::read(mConfig.labelConfigPath());
+	qInfo().noquote() << lm.toString();
+
+	// compute super pixels
+	rdf::SuperPixel sp(imgCv);
+
+	if (!sp.compute()) {
+		qCritical() << "could not compute super pixels!";
+		return false;
+	}
+
+	// feed the label lookup
+	rdf::SuperPixelLabeler spl(sp.getMserBlobs(), rdf::Rect(imgCv));
+	spl.setLabelManager(lm);
+	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
+	
+	// set the ground truth
+	if (parser.page())
+		spl.setRootRegion(parser.page()->rootRegion());
+
+
+	if (!spl.compute()) {
+		qCritical() << "could not compute SuperPixel labeling!";
+		return false;
+	}
+
+	rdf::SuperPixelFeature spf(imgCv, spl.set());
+	if (!spf.compute()) {
+		qCritical() << "could not compute SuperPixel features!";
+		return false;
+	}
+
+	rdf::FeatureCollectionManager fcm(spf.features(), spf.set());
+	fcm.write(mConfig.featureCachePath());
+
+	qDebug() << "feature collection takes" << dt;
+	return true;
+}
+
+bool SuperPixelTest::train() const {
+
+	rdf::FeatureCollectionManager fcm;
+
+	const QString& fPath = mConfig.featureCachePath();
+	rdf::FeatureCollectionManager cFc = rdf::FeatureCollectionManager::read(fPath);
+	fcm.merge(cFc);
+
+	// train classifier
+	rdf::SuperPixelTrainer spt(fcm);
+
+	if (!spt.compute()) {
+		qCritical() << "could not train data...";
+		return false;
+	}
+
+	spt.write(mConfig.classifierPath());
+
+	// test - read back the model
+	auto model = rdf::SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (f && f->isTrained()) {
+		qDebug() << "the classifier I loaded is trained...";
+		return true;
+	}
+
+	qCritical() << "could not save classifier to:" << mConfig.classifierPath();
+	return false;
 }
 
 }

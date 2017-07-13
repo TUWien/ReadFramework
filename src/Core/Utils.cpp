@@ -32,6 +32,8 @@
 
 #include "Utils.h"
 
+#include "Network.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QApplication>
 #include <QDebug>
@@ -43,6 +45,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QStandardPaths>
+#include <QUrl>
 
 #include <opencv2/core/core.hpp>
 #pragma warning(pop)
@@ -162,6 +165,47 @@ double Utils::rand() {
 }
 
 /// <summary>
+/// Loads file to buffer.
+/// The file is either loaded from a local resource
+/// or from a network resource (blocking!).
+/// </summary>
+/// <param name="filePath">The file path or url.</param>
+/// <param name="ba">The buffer.</param>
+/// <returns>true if the resource was loaded.</returns>
+bool Utils::loadToBuffer(const QString & filePath, QByteArray & ba) {
+	
+	if (QFileInfo(filePath).exists()) {
+
+		QFile f(filePath);
+
+		if (!f.open(QIODevice::ReadOnly)) {
+			qWarning() << "Sorry, I could not open " << filePath << " for reading...";
+			return false;
+		}
+
+		// load the element
+		ba = f.readAll();
+		f.close();
+	}
+	// if there is no local resource - try downloading it
+	else if (QUrl(filePath).isValid()) {
+
+		bool ok = false;
+		ba = net::download(filePath, &ok);
+
+		if (!ok)
+			return false;
+	}
+	else {
+		qCritical() << "cannot read from non-existing file:" << filePath;
+		return false;
+	}
+
+	// all good here...
+	return true;
+}
+
+/// <summary>
 /// Returns the path for writing persistant application data.
 /// The path refers to GenericDataLocation/organizationName.
 /// On Windows e.g. C:\Users\markus\AppData\Local\TU Wien
@@ -230,26 +274,18 @@ QString Utils::baseName(const QString & filePath) {
 }
 
 QJsonObject Utils::readJson(const QString & filePath) {
-	
+
 	if (filePath.isEmpty()) {
 		qCritical() << "cannot read Json, file path is empty...";
 		return QJsonObject();
 	}
 
-	QFile file(filePath);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		QFileInfo fi(filePath);
-
-		if (!fi.exists())
-			qCritical() << filePath << "does not exist...";
-		else
-			qCritical() << "cannot open" << filePath;
-
+	QByteArray ba;
+	if (!Utils::loadToBuffer(filePath, ba)) {
+		qCritical() << "cannot read Json from" << filePath;
 		return QJsonObject();
 	}
 
-	// read the file
-	QByteArray ba = file.readAll();
 	QJsonDocument doc = QJsonDocument::fromJson(ba);
 	if (doc.isNull() || doc.isEmpty()) {
 		qCritical() << "cannot parse NULL document: " << filePath;

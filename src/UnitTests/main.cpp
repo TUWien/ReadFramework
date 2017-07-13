@@ -41,7 +41,7 @@
 
 #include "Utils.h"
 #include "Settings.h"
-#include "BaselineTest.h"
+#include "LayoutTest.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")
@@ -72,6 +72,10 @@ int main(int argc, char** argv) {
 	QCommandLineOption baseLineOpt(QStringList() << "b" << "baseline", QObject::tr("Test Baseline."));
 	parser.addOption(baseLineOpt);
 
+	// baseline test
+	QCommandLineOption trainSpOpt(QStringList() << "super-pixel", QObject::tr("Test Super Pixel Training."));
+	parser.addOption(trainSpOpt);
+
 	// table test
 	QCommandLineOption tableOpt(QStringList() << "t" << "table", QObject::tr("Test Table."));
 	parser.addOption(tableOpt);
@@ -84,12 +88,26 @@ int main(int argc, char** argv) {
 	
 	// test baseline extraction
 	if (parser.isSet(baseLineOpt)) {
-		
+
 		rdf::BaselineTest bt;
-		
+
 		if (!bt.baselineTest())
 			return 1;	// fail the test
-		
+	}
+	// test baseline extraction
+	else if (parser.isSet(trainSpOpt)) {
+
+		rdf::SuperPixelTest spt;
+
+		if (!spt.testSuperPixel())
+			return 1;	// fail the test
+
+		if (!spt.collectFeatures())
+			return 1;	// fail the test
+
+		if (!spt.train())
+			return 1;	// fail the test
+
 	} else if (parser.isSet(tableOpt)) {
 		parser.showHelp();
 

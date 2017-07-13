@@ -66,9 +66,9 @@ public:
 protected:
 	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
 	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
-	QString mClassifierPath;
-	QString mFeatureCachePath;
-	QString mLabelConfigPath;
+	QString mClassifierPath = "./classifier.yml";
+	QString mFeatureCachePath = "./features.json";
+	QString mLabelConfigPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
 };
 
 }

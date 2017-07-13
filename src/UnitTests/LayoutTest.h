@@ -61,4 +61,18 @@ protected:
 	bool layoutToXml(const cv::Mat& img, const PageXmlParser& parser) const;
 };
 
+class SuperPixelTest {
+
+public:
+	SuperPixelTest(const TestConfig& config = TestConfig());
+
+	bool testSuperPixel() const;
+	bool collectFeatures() const;
+	bool train() const;
+
+protected:
+	TestConfig mConfig;
+};
+
+
 }
