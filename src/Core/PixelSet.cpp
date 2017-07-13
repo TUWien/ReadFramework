@@ -68,6 +68,12 @@ void PixelSet::operator<<(const QSharedPointer<Pixel>& pixel) {
 	add(pixel);
 }
 
+void PixelSet::operator<<(const PixelSet& set) {
+
+	for (const QSharedPointer<Pixel>& px : set.pixels())
+		add(px);
+}
+
 bool PixelSet::isEmpty() const {
 	return mSet.isEmpty();
 }
@@ -1090,13 +1096,15 @@ QVector<QSharedPointer<PixelEdge>> DBScanPixelConnector::connect(const QVector<Q
 }
 
 // DBScanPixel --------------------------------------------------------------------
-DBScanPixel::DBScanPixel(const QVector<QSharedPointer<Pixel>>& pixels) {
+DBScanPixel::DBScanPixel(const PixelSet& pixels) {
 	mPixels = pixels;
 }
 
 void DBScanPixel::compute() {
 
-	mLineSpacing = mPixels.lineSpacing();
+	// estimate max distance?
+	if (mMaxDistance == 0)
+		mMaxDistance = mPixels.lineSpacing();
 
 	// cache
 	mDists = calcDists(mPixels);
@@ -1111,7 +1119,7 @@ void DBScanPixel::compute() {
 		mLabelPtr[pIdx] = visited;
 		
 		// epsilon depends on line spacing
-		double cEps = mLineSpacing*mEpsMultiplier;// mPixels[pIdx]->stats() ? mPixels[pIdx]->stats()->lineSpacing()*mEpsMultiplier : 15.0*mEpsMultiplier;
+		double cEps = mMaxDistance*mEpsMultiplier;
 		QVector<int> neighbors = regionQuery(pIdx, cEps);
 		
 		if (neighbors.size() >= mMinPts) {
@@ -1121,6 +1129,10 @@ void DBScanPixel::compute() {
 		else
 			mLabelPtr[pIdx] = noise;
 	}
+}
+
+void DBScanPixel::setMaxDistance(double dist) {
+	mMaxDistance = dist;
 }
 
 void DBScanPixel::setEpsilonMultiplier(double eps) {
@@ -1175,7 +1187,7 @@ void DBScanPixel::expandCluster(int pixelIndex, unsigned int clusterIndex, const
 		if (mLabelPtr[nIdx] == not_visited) {
 			mLabelPtr[nIdx] = visited;
 
-			double cEps = mLineSpacing*mEpsMultiplier;
+			double cEps = mMaxDistance*mEpsMultiplier;
 			QVector<int> nPts = regionQuery(nIdx, cEps);
 			if (nPts.size() >= minPts) {
 				expandCluster(nIdx, clusterIndex, nPts, eps, minPts);

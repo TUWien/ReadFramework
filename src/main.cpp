@@ -212,6 +212,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
 		dc.setImagePath("C:/read/test/grid-pixel/M_Aigen_am_Inn_003-01_0001.jpg");
+		//dc.setImagePath("C:/read/test/grid-pixel/stone.jpg");
 		//dc.setImagePath("C:/read/test/grid-pixel/simple.png");
 		//dc.setImagePath("C:/read/test/grid-pixel/00000197-c.jpg");
 

@@ -225,17 +225,19 @@ public:
 	int winSize() const;
 	double winOverlap() const;
 	double minEnergy() const;
+	bool applyLineMask() const;
 
 protected:
 	int mWinSize = 20;				// the window size in px per scale
 	double mWinOverlap = 0.5;		// the window overlaps
-	double mMinEnergy = 0.05;		// minimum energy per cell
+	double mMinEnergy = 0.1;		// minimum energy per cell
+	bool mLineMask = true;			// if true, straight lines are removed
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 };
 
-class DllCoreExport GridPixel {
+class DllCoreExport GridPixel : public BaseElement {
 
 public:
 	GridPixel(int index = -1, int numColumns = -1);
@@ -251,6 +253,7 @@ public:
 	int col() const;
 
 	int orIdx() const;
+	double edgeStrength() const;
 
 	Ellipse ellipse() const;
 	void draw(QPainter& p) const;
@@ -258,14 +261,17 @@ public:
 	int index(int row, int col) const;
 	QVector<int> neighbors() const;
 
+	QSharedPointer<Pixel> toPixel() const;
+	
 private:
 
 	int mIndex = -1;
 	int mNumColumns = -1;
 	
 	// results
-	int mEdgeCnt = 0;
+	double mEdgeStrength = 0;
 	int mOrIdx = -1;
+
 	//Histogram mOrHist;
 	Ellipse mEllipse;
 };
@@ -289,9 +295,13 @@ public:
 private:
 
 	QVector<QSharedPointer<GridPixel> > mGridPixel;	// debug only
-
+	
 	QMap<int, QSharedPointer<GridPixel> > computeGrid(const cv::Mat& mag, const cv::Mat& phase, int winSize, double winOverlap) const;
 	QVector<QSharedPointer<GridPixel> > merge(const QMap<int, QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const;
+
+	// filtering
+	PixelSet filter(const PixelSet& set, double clusterStrength = 4.0) const;
+	QVector<PixelSet> cluster(const PixelSet& set) const;
 
 	void edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orientation) const;
 	cv::Mat lineMask(const cv::Mat& src) const;

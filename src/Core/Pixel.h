@@ -217,6 +217,9 @@ public:
 
 	cv::KeyPoint toKeyPoint() const;
 
+	void setValue(double value);
+	double value() const;
+
 	enum mDrawFlags {
 		draw_none				= 0x00,
 		draw_ellipse			= 0x01,
@@ -240,6 +243,7 @@ protected:
 	QVector<QSharedPointer<PixelStats> > mStats;
 	PixelTabStop mTabStop;
 	PixelLabel mLabel;
+	double mValue = 0.0;	// e.g. gradient magnitude for GridPixels
 
 	int mPyramidLevel = 0;	// 1.0/std::pow(2, mPyramidLevel) scales back to the pyramid
 };

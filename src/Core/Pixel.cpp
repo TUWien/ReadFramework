@@ -415,6 +415,14 @@ cv::KeyPoint Pixel::toKeyPoint() const {
 	return kp;
 }
 
+void Pixel::setValue(double value) {
+	mValue = value;
+}
+
+double Pixel::value() const {
+	return mValue;
+}
+
 void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	
 	QPen oldPen = p.pen();

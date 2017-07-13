@@ -196,6 +196,7 @@ public:
 
 	QSharedPointer<Pixel> operator[](int idx) const;
 	void operator<<(const QSharedPointer<Pixel>& pixel);
+	void operator<<(const PixelSet& set);
 
 	bool isEmpty() const;
 	bool contains(const QSharedPointer<Pixel>& pixel) const;
@@ -408,10 +409,11 @@ protected:
 class DllCoreExport DBScanPixel {
 
 public:
-	DBScanPixel(const QVector<QSharedPointer<Pixel> >& pixels);
+	DBScanPixel(const PixelSet& pixels);
 
 	void compute();
 
+	void setMaxDistance(double dist);
 	void setEpsilonMultiplier(double eps);
 	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
 
@@ -434,12 +436,12 @@ protected:
 	cv::Mat mDists;
 	cv::Mat mLabels;
 	unsigned int* mLabelPtr;
-	double mLineSpacing = 0;
 
 	unsigned int mCLabel = cluster0;
 
 	// parameters
 	PixelDistance::PixelDistanceFunction mDistFnc = &PixelDistance::euclidean;
+	double mMaxDistance = 0;
 	double mEpsMultiplier = 2.0;
 	int mMinPts = 3;
 

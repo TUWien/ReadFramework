@@ -801,15 +801,14 @@ bool GridSuperPixel::compute() {
 	edges(mSrcImg, mag, phase);
 	
 	QMap<int, QSharedPointer<GridPixel> > pixelMap = computeGrid(mag, phase, config()->winSize(), config()->winOverlap());
-	
-	QVector<QSharedPointer<GridPixel> > pixels = merge(pixelMap, mag, phase);
+	mGridPixel = merge(pixelMap, mag, phase);
 
-	mGridPixel = pixels;
-
-	for (auto p : pixels) {
+	for (auto p : mGridPixel) {
 		if (!p->isDead())
-			mSet << QSharedPointer<Pixel>(new Pixel(p->ellipse()));
+			mSet << p->toPixel();
 	}
+
+	mSet = filter(mSet, 4.0);
 
 	mDebug << mSet.size() << "regions computed in" << dt;
 
@@ -834,11 +833,16 @@ void GridSuperPixel::edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orie
 	cv::magnitude(imgDx, imgDy, magnitude);
 	cv::phase(imgDx, imgDy, orientation);
 
-	// remove separator lines
-	cv::Mat seps = lineMask(src);
-	seps.convertTo(seps, magnitude.depth());
-	
-	magnitude = magnitude.mul(seps);
+	cv::normalize(magnitude, magnitude, 1.0f, 0.0f, cv::NORM_MINMAX);
+
+	// remove separator lines - this is pretty usefull for e.g. tables
+	if (config()->applyLineMask()) {
+		// remove separator lines
+		cv::Mat seps = lineMask(src);
+		seps.convertTo(seps, magnitude.depth());
+
+		magnitude = magnitude.mul(seps);
+	}
 }
 
 QMap<int, QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & mag, const cv::Mat& phase, int winSize, double winOverlap) const {
@@ -953,6 +957,46 @@ QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QMap<int, QShared
 	return px;
 }
 
+PixelSet GridSuperPixel::filter(const PixelSet& set, double clusterStrength) const {
+
+	// parameter
+	QVector<PixelSet> sets = cluster(set);
+
+	PixelSet cleanSet;
+	int nRm = 0;
+
+	for (const PixelSet& s : sets) {
+
+		// cluster strength
+		double cs = 0.0;
+
+		for (auto px : s.pixels())
+			cs += px->value();
+
+		if (cs > clusterStrength)
+			cleanSet << s;
+		else
+			nRm += s.size();
+	}
+	
+	qDebug() << "filtering removes" << nRm << "pixels";
+
+	return cleanSet;
+}
+
+QVector<PixelSet> GridSuperPixel::cluster(const PixelSet & set) const {
+
+	// parameter
+	double dbDist = 15;
+
+	DBScanPixel dbp(set);
+	dbp.setMaxDistance(dbDist);
+
+	dbp.compute();
+
+	return dbp.sets();
+}
+
 cv::Mat GridSuperPixel::lineMask(const cv::Mat & src) const {
 
 	LineTraceLSD ltl(src);
@@ -1013,35 +1057,38 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 	p.setPen(col);
 
-	//// draw grid
-	//int step = qRound(config()->winSize()*config()->winOverlap());
-	//Line l(Vector2D(0, 0), Vector2D(img.cols, 0));
-	//Vector2D mv(0, step);
-	//for (int idx = 0; idx < img.rows; idx += step) {
-	//	p.drawLine(l.line());
-	//	l = l.moved(mv);
-	//}
-
-	//// draw grid
-	//l = Line(Vector2D(0, 0), Vector2D(0, img.rows));
-	//mv = Vector2D(step, 0);
-	//for (int idx = 0; idx < img.cols; idx += step) {
-	//	p.drawLine(l.line());
-	//	l = l.moved(mv);
-	//}
+	Histogram hist(0, 500, 30);
 
 	for (auto gp : mGridPixel) {
-		gp->draw(p);
+		//gp->draw(p);
+		hist.add(gp->edgeStrength());
 	}
 
-	for (int idx = 0; idx < mSet.size(); idx++) {
+	//for (int idx = 0; idx < mSet.size(); idx++) {
 
-		if (!col.isValid())
-			p.setPen(ColorManager::randColor());
+	//	if (!col.isValid())
+	//		p.setPen(ColorManager::randColor());
 
-		// uncomment if you want to see MSER & SuperPixel at the same time
-		mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
+	//	// uncomment if you want to see MSER & SuperPixel at the same time
+	//	mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
+	//}
+
+	for (auto s : cluster(mSet)) {
+
+		p.setPen(ColorManager::randColor());
+		s.draw(p);
+
+		// cluster strength
+		double cs = 0.0;
+
+		for (auto px : s.pixels())
+			cs += px->value();
+
+		p.drawText(s.boundingBox().bottomRight().toQPoint(), QString::number(cs));
 	}
+
+	p.setPen(ColorManager::pink());
+	hist.draw(p, Rect(Vector2D(30, 30), Vector2D(200, 100)));
 
 	qDebug() << "drawing takes" << dtf;
 	return Image::qPixmap2Mat(pm);
@@ -1072,14 +1119,17 @@ double GridPixelConfig::minEnergy() const {
 	return ModuleConfig::checkParam(mMinEnergy, 0.0, 1.0, "minEnergy");
 }
 
+bool GridPixelConfig::applyLineMask() const {
+	return mLineMask;
+}
+
 void GridPixelConfig::load(const QSettings & settings) {
 
 	// add parameters
 	mWinSize = settings.value("winSize", winSize()).toInt();
 	mWinOverlap = settings.value("winOverlap", winOverlap()).toDouble();
 	mMinEnergy = settings.value("minEnergy", minEnergy()).toDouble();
-
-	qDebug() << toString();	// TODO: remove
+	mLineMask = settings.value("applyLineMask", applyLineMask()).toDouble();
 }
 
 void GridPixelConfig::save(QSettings & settings) const {
@@ -1088,6 +1138,7 @@ void GridPixelConfig::save(QSettings & settings) const {
 	settings.setValue("winSize", winSize());
 	settings.setValue("winOverlap", winOverlap());
 	settings.setValue("minEnergy", minEnergy());
+	settings.setValue("applyLineMask", applyLineMask());
 }
 
 // -------------------------------------------------------------------- SuperPixelBase 
@@ -1142,8 +1193,6 @@ void GridPixel::compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat&
 	QVector<Vector2D> pts;
 	Histogram orHist(0, 2*CV_PI, numHistBins);
 
-	//Image::imageInfo(phase, "phase");
-
 	for (int rIdx = 0; rIdx < mag.rows; rIdx++) {
 
 		const float* mp = mag.ptr<float>(rIdx);
@@ -1162,7 +1211,7 @@ void GridPixel::compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat&
 	}
 
 	mOrIdx = orHist.maxBinIdx();
-	mEdgeCnt = pts.size();
+	mEdgeStrength = (double)pts.size()/(mag.rows*mag.cols);
 
 	// reject if there are too few gradients present
 	if (isDead()) {
@@ -1174,13 +1223,12 @@ void GridPixel::compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat&
 
 bool GridPixel::isDead() const {
 
-	int minNumPts = 20;		// minimum # of points
-
-	return mEdgeCnt < minNumPts;
+	double minEdgeStrength = 0.01;		// minimum # of points
+	return mEdgeStrength < minEdgeStrength;
 }
 
 void GridPixel::kill() {
-	mEdgeCnt = 0;
+	mEdgeStrength = 0;
 }
 
 void GridPixel::move(const Vector2D & vec) {
@@ -1199,6 +1247,10 @@ int GridPixel::orIdx() const {
 	return mOrIdx;
 }
 
+double GridPixel::edgeStrength() const {
+	return mEdgeStrength;
+}
+
 Ellipse GridPixel::ellipse() const {
 	return mEllipse;
 }
@@ -1211,13 +1263,16 @@ void GridPixel::draw(QPainter & p) const {
 	int length = 20;
 
 	p.setPen(QColor(qRound(mOrIdx/8.0*255), 100, 100));
+	p.setOpacity(mEdgeStrength);
 
 	p.translate(ellipse().center().toQPointF());
 	p.rotate(angle*DK_RAD2DEG);
 	p.drawLine(QPointF(), QPointF(-length, 0));
 	p.rotate(-angle*DK_RAD2DEG);
 	p.translate(-ellipse().center().toQPointF());
+	
 	p.setPen(oPen);
+	p.setOpacity(1.0);
 }
 
 int GridPixel::index(int row, int col) const {
@@ -1234,6 +1289,14 @@ QVector<int> rdf::GridPixel::neighbors() const {
 	nb << index(row(), col() + 1);
 	
 	return nb;
+}
+
+QSharedPointer<Pixel> GridPixel::toPixel() const {
+	
+	QSharedPointer<Pixel> px(new Pixel(mEllipse, mEllipse.bbox(), id()));
+	px->setValue(mEdgeStrength);
+
+	return px;
 }
 
 }
