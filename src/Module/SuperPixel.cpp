@@ -1013,27 +1013,14 @@ cv::Mat GridSuperPixel::lineMask(const cv::Mat & src) const {
 		return cv::Mat();
 	}
 
-	QPixmap img(src.cols, src.rows);
-	img.fill(QColor(255, 255, 255));
-
-	QPen pen(QColor(0, 0, 0));
-	pen.setWidth(8);
-
-	QPainter p(&img);
-	p.setPen(pen);
-
+	cv::Mat img(src.size(), CV_32FC1, cv::Scalar(1.0));
 	auto lines = ltl.separatorLines();
 
 	for (const Line& l : lines) {
-		p.drawLine(l.line());
-		//l.draw(p);
+		cv::line(img, l.p1().toCvPoint(), l.p2().toCvPoint(), cv::Scalar(0.0), 8);
 	}
 
-	cv::Mat mat = Image::qPixmap2Mat(img);
-	cv::cvtColor(mat, mat, CV_RGB2GRAY);
-	mat.convertTo(mat, CV_32FC1, 1.0/255.0);
-
-	return mat;
+	return img;
 }
 
 QString GridSuperPixel::toString() const {
@@ -1052,8 +1039,10 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	// draw super pixels
 	Timer dtf;
 
+	cv::Mat mag, phase;
+	edges(img, mag, phase);
 
-	QPixmap pm = Image::mat2QPixmap(img);
+	QPixmap pm = Image::mat2QPixmap(mag);
 	QPainter p(&pm);
 
 	p.setPen(col);
