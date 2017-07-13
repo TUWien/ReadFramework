@@ -416,6 +416,7 @@ public:
 	void setMaxDistance(double dist);
 	void setEpsilonMultiplier(double eps);
 	void setDistanceFunction(const PixelDistance::PixelDistanceFunction& distFnc);
+	void setFast(bool f);
 
 	QVector<PixelSet> sets() const;
 	QVector<QSharedPointer<PixelEdge> > edges() const;
@@ -444,6 +445,7 @@ protected:
 	double mMaxDistance = 0;
 	double mEpsMultiplier = 2.0;
 	int mMinPts = 3;
+	bool mFast = false;
 
 	void expandCluster(int pixelIndex, unsigned int clusterIndex, const QVector<int>& neighbors, double eps, int minPts) const;
 	QVector<int> regionQuery(int pixelIdx, double eps) const;

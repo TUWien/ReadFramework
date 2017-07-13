@@ -1143,6 +1143,10 @@ void DBScanPixel::setDistanceFunction(const PixelDistance::PixelDistanceFunction
 	mDistFnc = distFnc;
 }
 
+void DBScanPixel::setFast(bool f) {
+	mFast = f;
+}
+
 QVector<PixelSet> DBScanPixel::sets() const {
 
 	QVector<PixelSet> sets(mCLabel-cluster0);
@@ -1218,15 +1222,25 @@ QVector<int> DBScanPixel::regionQuery(int pixelIdx, double eps) const {
 
 cv::Mat DBScanPixel::calcDists(const PixelSet& pixels) const {
 	
-	cv::Mat dists(mPixels.size(), mPixels.size(), CV_32FC1, cv::Scalar(0));
+	cv::Mat dists(mPixels.size(), mPixels.size(), CV_32FC1, cv::Scalar(FLT_MAX));
+	double cEps = mMaxDistance*mEpsMultiplier;
 
 	for (int rIdx = 0; rIdx < dists.rows; rIdx++) {
 
 		float* dPtr = dists.ptr<float>(rIdx);
+		Pixel* px = pixels[rIdx].data();
 
 		for (int cIdx = rIdx + 1; cIdx < dists.cols; cIdx++) {
-			dPtr[cIdx] = (float)mDistFnc(pixels[rIdx].data(), pixels[cIdx].data());
-			dists.ptr<float>(cIdx)[rIdx] = dPtr[cIdx];	// reflect
+			
+			Pixel* pxo = pixels[cIdx].data();
+
+			// speed-up: check eps region first - note: this only works for euclidean clustering
+			if (!mFast || (std::abs(px->center().x() - pxo->center().x()) < cEps &&
+				std::abs(px->center().y() - pxo->center().y()) < cEps)) {
+
+				dPtr[cIdx] = (float)mDistFnc(px, pxo);
+				dists.ptr<float>(cIdx)[rIdx] = dPtr[cIdx];	// reflect
+			}
 		}
 	}
 	

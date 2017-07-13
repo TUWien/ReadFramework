@@ -959,6 +959,8 @@ QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QMap<int, QShared
 
 PixelSet GridSuperPixel::filter(const PixelSet& set, double clusterStrength) const {
 
+	Timer dt;
+
 	// parameter
 	QVector<PixelSet> sets = cluster(set);
 
@@ -979,7 +981,7 @@ PixelSet GridSuperPixel::filter(const PixelSet& set, double clusterStrength) con
 			nRm += s.size();
 	}
 	
-	qDebug() << "filtering removes" << nRm << "pixels";
+	qDebug() << nRm << "removed in" << dt;
 
 	return cleanSet;
 }
@@ -990,6 +992,7 @@ QVector<PixelSet> GridSuperPixel::cluster(const PixelSet & set) const {
 	double dbDist = 15;
 
 	DBScanPixel dbp(set);
+	dbp.setFast(true);
 	dbp.setMaxDistance(dbDist);
 
 	dbp.compute();
@@ -1049,42 +1052,26 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	// draw super pixels
 	Timer dtf;
 
-	cv::Mat mag, phase;
-	edges(img, mag, phase);
 
-	QPixmap pm = Image::mat2QPixmap(mag);
+	QPixmap pm = Image::mat2QPixmap(img);
 	QPainter p(&pm);
 
 	p.setPen(col);
 
-	Histogram hist(0, 500, 30);
+	Histogram hist(0, 1.0, 30);
 
 	for (auto gp : mGridPixel) {
 		//gp->draw(p);
 		hist.add(gp->edgeStrength());
 	}
 
-	//for (int idx = 0; idx < mSet.size(); idx++) {
+	for (int idx = 0; idx < mSet.size(); idx++) {
 
-	//	if (!col.isValid())
-	//		p.setPen(ColorManager::randColor());
+		if (!col.isValid())
+			p.setPen(ColorManager::randColor());
 
-	//	// uncomment if you want to see MSER & SuperPixel at the same time
-	//	mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
-	//}
-
-	for (auto s : cluster(mSet)) {
-
-		p.setPen(ColorManager::randColor());
-		s.draw(p);
-
-		// cluster strength
-		double cs = 0.0;
-
-		for (auto px : s.pixels())
-			cs += px->value();
-
-		p.drawText(s.boundingBox().bottomRight().toQPoint(), QString::number(cs));
+		// uncomment if you want to see MSER & SuperPixel at the same time
+		mSet[idx]->draw(p, 0.2, Pixel::DrawFlags() | Pixel::draw_ellipse | Pixel::draw_stats | Pixel::draw_label_colors | Pixel::draw_tab_stops);
 	}
 
 	p.setPen(ColorManager::pink());
