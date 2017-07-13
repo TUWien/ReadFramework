@@ -161,12 +161,12 @@ void LayoutTest::testComponents() {
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
 	// switch tests
-	//testFeatureCollector(imgCv);
+	testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
 	//layoutToXml();
-	layoutToXmlDebug();
+	//layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
 	//eval();
@@ -314,13 +314,13 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	qInfo().noquote() << lm.toString();
 
 	// compute super pixels
-	SuperPixel sp(src);
+	GridSuperPixel sp(src);
 
 	if (!sp.compute())
 		qCritical() << "could not compute super pixels!";
 
 	// feed the label lookup
-	SuperPixelLabeler spl(sp.getMserBlobs(), Rect(src));
+	SuperPixelLabeler spl(sp.pixelSet(), Rect(src));
 	spl.setLabelManager(lm);
 	spl.setFilePath(mConfig.imagePath());
 

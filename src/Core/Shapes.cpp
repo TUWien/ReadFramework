@@ -33,6 +33,7 @@
 #include "Shapes.h"
 #include "Utils.h"
 #include "Algorithms.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -1634,6 +1635,27 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	// draw center
 	p.drawPoint(mCenter.toQPointF());
 	p.setBrush(b);
+}
+
+cv::Mat Ellipse::toBinaryMask() const {
+
+	QImage img(bbox().size().toQSize(), QImage::Format_Grayscale8);
+	img.fill(QColor(0, 0, 0));
+
+	QPainter p(&img);
+	p.setPen(QColor(255, 255, 255));
+	p.setBrush(QColor(255, 255, 255));
+	
+	Vector2D c = bbox().size() * 0.5;
+	p.translate(c.toQPointF());
+	p.rotate(mAngle*DK_RAD2DEG);
+	p.drawEllipse(QPointF(0.0, 0.0), mAxis.x(), mAxis.y());
+	p.rotate(-mAngle*DK_RAD2DEG);
+	p.translate(c.toQPointF());
+
+	cv::Mat bw = Image::qImage2Mat(img);
+
+	return bw;
 }
 
 void Ellipse::pdf(cv::Mat & img, const Rect& box) const {

@@ -72,6 +72,10 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 			mat2 = cv::Mat(img.height(), img.width(), CV_8UC3, (uchar*)img.bits(), img.bytesPerLine());
 			//qDebug() << "RGB888";
 		}
+		else if (img.format() == QImage::Format_Grayscale8) {
+			mat2 = cv::Mat(img.height(), img.width(), CV_8UC1, (uchar*)img.bits(), img.bytesPerLine());
+			//qDebug() << "RGB888";
+		}
 		//// converting to indexed8 causes bugs in the qpainter
 		//// see: http://qt-project.org/doc/qt-4.8/qimage.html
 		//else if (img.format() == QImage::Format_Indexed8) {

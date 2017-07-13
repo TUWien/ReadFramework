@@ -167,6 +167,7 @@ class DllCoreExport SuperPixelLabeler : public Module {
 
 public:
 	SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& blobs, const Rect& imgRect);
+	SuperPixelLabeler(const PixelSet& set, const Rect& imgRect);
 
 	bool isEmpty() const override;
 	bool compute() override;
@@ -186,6 +187,7 @@ public:
 
 private:
 	QVector<QSharedPointer<MserBlob> > mBlobs;
+
 	QSharedPointer<RootRegion> mGtRegion;
 	QSharedPointer<PageElement> mPage;
 	Rect mImgRect;
@@ -197,6 +199,7 @@ private:
 
 	bool checkInput() const override;
 	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
+	PixelSet labelPixels(const cv::Mat& labelImg, const PixelSet& set) const;
 	QString parseLabel(const QString& filePath) const;
 };
 

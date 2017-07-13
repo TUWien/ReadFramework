@@ -1,6 +1,3 @@
-#include "SuperPixelTrainer.h"
-#include "SuperPixelTrainer.h"
-#include "SuperPixelTrainer.h"
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
@@ -145,6 +142,14 @@ SuperPixelLabeler::SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& b
 	mConfig->loadSettings();
 }
 
+SuperPixelLabeler::SuperPixelLabeler(const PixelSet& set, const Rect& imgRect) {
+
+	mSet = set;
+	mImgRect = imgRect;
+	mConfig = QSharedPointer<SuperPixelLabelerConfig>::create();
+	mConfig->loadSettings();
+}
+
 bool SuperPixelLabeler::isEmpty() const {
 	return mBlobs.empty();
 }
@@ -158,7 +163,11 @@ bool SuperPixelLabeler::compute() {
 
 	QImage labelImgQt = createLabelImage(mImgRect);
 	cv::Mat labelImg = Image::qImage2Mat(labelImgQt);
-	mSet = labelBlobs(labelImg, mBlobs);
+	
+	if (!mBlobs.empty())
+		mSet = labelBlobs(labelImg, mBlobs);
+	else if (!mSet.isEmpty())
+		mSet = labelPixels(labelImg, mSet);
 
 	return true;
 }
@@ -346,6 +355,31 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 		set.add(px);
 	}
 	
+	return set;
+}
+
+PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet& set) const {
+
+	PixelSet setL;
+
+	for (const auto& px : set.pixels()) {
+
+		assert(cb);
+		Rect r = px->bbox().clipped(labelImg.size());
+		cv::Mat labelBBox = labelImg(r.toCvRect());
+		cv::Mat mask = px->toBinaryMask();
+
+		// find the blob's label
+		QColor col = IP::statMomentColor(labelBBox, mask);
+		int id = LabelInfo::color2Id(col);
+
+		// assign ground truth & convert to pixel
+		PixelLabel label;
+		label.setTrueLabel(mManager.find(id));
+		px->setLabel(label);
+		setL << px;
+	}
+
 	return set;
 }
 

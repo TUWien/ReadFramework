@@ -220,6 +220,8 @@ public:
 	void setValue(double value);
 	double value() const;
 
+	cv::Mat toBinaryMask() const;
+
 	enum mDrawFlags {
 		draw_none				= 0x00,
 		draw_ellipse			= 0x01,

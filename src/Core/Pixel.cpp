@@ -423,6 +423,11 @@ double Pixel::value() const {
 	return mValue;
 }
 
+cv::Mat Pixel::toBinaryMask() const {
+
+	return mEllipse.toBinaryMask();
+}
+
 void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	
 	QPen oldPen = p.pen();
