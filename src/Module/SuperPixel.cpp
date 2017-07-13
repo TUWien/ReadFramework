@@ -800,12 +800,9 @@ bool GridSuperPixel::compute() {
 	cv::Mat mag, phase;
 	edges(mSrcImg, mag, phase);
 	
-	QVector<QSharedPointer<GridPixel> > pixels = computeGrid(mag, phase, config()->winSize(), config()->winOverlap());
-	qDebug() << pixels.size() << "pixels";
+	QMap<int, QSharedPointer<GridPixel> > pixelMap = computeGrid(mag, phase, config()->winSize(), config()->winOverlap());
 	
-	Timer dtm;
-	pixels = merge(pixels, mag, phase);
-	qDebug() << "merging takes" << dtm;
+	QVector<QSharedPointer<GridPixel> > pixels = merge(pixelMap, mag, phase);
 
 	mGridPixel = pixels;
 
@@ -844,7 +841,7 @@ void GridSuperPixel::edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orie
 	magnitude = magnitude.mul(seps);
 }
 
-QVector<QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & mag, const cv::Mat& phase, int winSize, double winOverlap) const {
+QMap<int, QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & mag, const cv::Mat& phase, int winSize, double winOverlap) const {
 	
 	assert(mag.size() == phase.size());
 
@@ -865,7 +862,8 @@ QVector<QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & 
 	cv::Mat weight = gvec.t() * gvec;
 	cv::normalize(weight, weight, 1.0, 0.0, cv::NORM_MINMAX);
 
-	QVector<QSharedPointer<GridPixel> > pixels;
+	QMap<int, QSharedPointer<GridPixel> > pixels;
+	int idx = 0;
 
 	for (int rIdx = 0; rIdx < nrw; rIdx++) {
 
@@ -883,24 +881,26 @@ QVector<QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & 
 
 			if (s > thr) {
 				
-				QSharedPointer<GridPixel> gp(new GridPixel(rIdx, cIdx));
+				
+				QSharedPointer<GridPixel> gp(new GridPixel(idx, ncw));
 				gp->compute(winM, winP, weight);
 				
 				// locate pixel might cancel
 				if (!gp->isDead()) {
 					gp->move(wc.topLeft());	// move back to global coords
-					pixels << gp;
+					pixels.insert(idx, gp);
 				}
 			}
 
 			wc.move(mc);	// slide (for the next step)
+			idx++;
 		}
 	}
 	
 	return pixels;
 }
 
-QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QVector<QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const {
+QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QMap<int, QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const {
 	
 	QVector<QSharedPointer<GridPixel> > px;
 
@@ -914,9 +914,13 @@ QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QVector<QSharedPo
 		const Rect& pbox = p->ellipse().bbox();
 
 		bool merged = false;
-		for (auto po : pixels) {
+		
+		// check all neighbors
+		for (int idx : p->neighbors()) {
 
-			if (!po->isDead() && po->isNeighbor(*p) && po != p) {
+			QSharedPointer<GridPixel> po = pixels[idx];
+
+			if (po && !po->isDead()) {
 
 				const Rect& pobox = po->ellipse().bbox();
 
@@ -1118,9 +1122,9 @@ bool SuperPixelBase::checkInput() const {
 }
 
 // -------------------------------------------------------------------- GridPixel 
-GridPixel::GridPixel(int row, int col) {
-	mRow = row;
-	mCol = col;
+GridPixel::GridPixel(int index, int numColumns) {
+	mIndex = index;
+	mNumColumns = numColumns;
 }
 
 bool GridPixel::operator==(const GridPixel & gpr) {
@@ -1133,9 +1137,10 @@ void GridPixel::compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat&
 
 	// parameter!
 	double minMag = 0.05;	// minimum gradient magnitude
+	int numHistBins = 8;	// number of orientation histogram bins (not too crucial)
 
 	QVector<Vector2D> pts;
-	Histogram orHist(0, 2*CV_PI, 8);
+	Histogram orHist(0, 2*CV_PI, numHistBins);
 
 	//Image::imageInfo(phase, "phase");
 
@@ -1182,18 +1187,12 @@ void GridPixel::move(const Vector2D & vec) {
 	mEllipse.move(vec);
 }
 
-bool GridPixel::isNeighbor(const GridPixel & pixel) const {
-
-	int d = abs(pixel.row() - row()) + abs(pixel.col() - col());
-	return d == 1;	// d <= 2 would be 8-connected
-}
-
 int GridPixel::row() const {
-	return mRow;
+	return cvFloor(mIndex/(double)mNumColumns);
 }
 
 int GridPixel::col() const {
-	return mCol;
+	return mIndex % mNumColumns;
 }
 
 int GridPixel::orIdx() const {
@@ -1211,7 +1210,7 @@ void GridPixel::draw(QPainter & p) const {
 	double angle = mOrIdx / 8.0 * 2 * CV_PI;
 	int length = 20;
 
-	p.setPen(QColor(mOrIdx/8.0*255, 100, 100));
+	p.setPen(QColor(qRound(mOrIdx/8.0*255), 100, 100));
 
 	p.translate(ellipse().center().toQPointF());
 	p.rotate(angle*DK_RAD2DEG);
@@ -1219,6 +1218,22 @@ void GridPixel::draw(QPainter & p) const {
 	p.rotate(-angle*DK_RAD2DEG);
 	p.translate(-ellipse().center().toQPointF());
 	p.setPen(oPen);
+}
+
+int GridPixel::index(int row, int col) const {
+	
+	return row*mNumColumns+col;
+}
+
+QVector<int> rdf::GridPixel::neighbors() const {
+	
+	QVector<int> nb;
+	nb << index(row() - 1, col());
+	nb << index(row() + 1, col());
+	nb << index(row(), col() - 1);
+	nb << index(row(), col() + 1);
+	
+	return nb;
 }
 
 }

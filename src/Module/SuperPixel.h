@@ -42,6 +42,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QRectF>
 #include <QVector>
+#include <QMap>
 #include <QPainter>
 #pragma warning(pop)
 
@@ -237,7 +238,7 @@ protected:
 class DllCoreExport GridPixel {
 
 public:
-	GridPixel(int row = -1, int col = -1);
+	GridPixel(int index = -1, int numColumns = -1);
 
 	bool operator==(const GridPixel& gpr);
 	void compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat& weight = cv::Mat());
@@ -245,8 +246,6 @@ public:
 	bool isDead() const;
 	void kill();
 	void move(const Vector2D& vec);
-
-	bool isNeighbor(const GridPixel& pixel) const;
 
 	int row() const;
 	int col() const;
@@ -256,10 +255,13 @@ public:
 	Ellipse ellipse() const;
 	void draw(QPainter& p) const;
 
+	int index(int row, int col) const;
+	QVector<int> neighbors() const;
+
 private:
 
-	int mRow = -1;
-	int mCol = -1;
+	int mIndex = -1;
+	int mNumColumns = -1;
 	
 	// results
 	int mEdgeCnt = 0;
@@ -288,8 +290,8 @@ private:
 
 	QVector<QSharedPointer<GridPixel> > mGridPixel;	// debug only
 
-	QVector<QSharedPointer<GridPixel> > computeGrid(const cv::Mat& mag, const cv::Mat& phase, int winSize, double winOverlap) const;
-	QVector<QSharedPointer<GridPixel> > merge(const QVector<QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const;
+	QMap<int, QSharedPointer<GridPixel> > computeGrid(const cv::Mat& mag, const cv::Mat& phase, int winSize, double winOverlap) const;
+	QVector<QSharedPointer<GridPixel> > merge(const QMap<int, QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const;
 
 	void edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orientation) const;
 	cv::Mat lineMask(const cv::Mat& src) const;
