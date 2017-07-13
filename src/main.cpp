@@ -211,8 +211,8 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
-		dc.setImagePath("C:/data/read/test/tl-filtering/M_Freyung_010_0022.jpg");
 		dc.setImagePath("C:/read/test/grid-pixel/M_Aigen_am_Inn_003-01_0001.jpg");
+		//dc.setImagePath("C:/read/test/grid-pixel/simple.png");
 		//dc.setImagePath("C:/read/test/grid-pixel/00000197-c.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";

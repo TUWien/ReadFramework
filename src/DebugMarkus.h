@@ -17,7 +17,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
+ You should have received a copy of the GNU General Public Licensex
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  The READ project  has  received  funding  from  the European  Union’s  Horizon  2020  

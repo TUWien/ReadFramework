@@ -41,6 +41,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
 
+#include <QUuid>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
@@ -796,15 +797,29 @@ bool GridSuperPixel::compute() {
 
 	Timer dt;
 
-	cv::Mat img = edges(mSrcImg);
+	cv::Mat mag, phase;
+	edges(mSrcImg, mag, phase);
 	
-	mSet = computeGrid(img, config()->winSize(), config()->winOverlap());
+	QVector<QSharedPointer<GridPixel> > pixels = computeGrid(mag, phase, config()->winSize(), config()->winOverlap());
+	qDebug() << pixels.size() << "pixels";
+	
+	Timer dtm;
+	pixels = merge(pixels, mag, phase);
+	qDebug() << "merging takes" << dtm;
+
+	mGridPixel = pixels;
+
+	for (auto p : pixels) {
+		if (!p->isDead())
+			mSet << QSharedPointer<Pixel>(new Pixel(p->ellipse()));
+	}
+
 	mDebug << mSet.size() << "regions computed in" << dt;
 
 	return true;
 }
 
-cv::Mat GridSuperPixel::edges(const cv::Mat & src) const {
+void GridSuperPixel::edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orientation) const {
 
 	// prepare
 	cv::Mat img = src.clone();
@@ -817,29 +832,32 @@ cv::Mat GridSuperPixel::edges(const cv::Mat & src) const {
 	cv::Mat imgDx, imgDy;
 	cv::filter2D(img, imgDx, CV_32FC1, kernel);		// dx
 	cv::filter2D(img, imgDy, CV_32FC1, kernel.t());	// dy
+	img.release();
 
-	cv::magnitude(imgDx, imgDy, img);
+	cv::magnitude(imgDx, imgDy, magnitude);
+	cv::phase(imgDx, imgDy, orientation);
 
 	// remove separator lines
 	cv::Mat seps = lineMask(src);
-	seps.convertTo(seps, img.depth());
-	img = img.mul(seps);
-
-	return img;
+	seps.convertTo(seps, magnitude.depth());
+	
+	magnitude = magnitude.mul(seps);
 }
 
-PixelSet GridSuperPixel::computeGrid(const cv::Mat & src, int winSize, double winOverlap) const {
+QVector<QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat & mag, const cv::Mat& phase, int winSize, double winOverlap) const {
 	
+	assert(mag.size() == phase.size());
+
 	// setup grid cache
 	int step = qRound(winSize*winOverlap);
 	Rect winr(Vector2D(), Vector2D(winSize, winSize));
 
-	int nrw = qRound((double)src.rows / winSize * 1.0 / winOverlap);
-	int ncw = qRound((double)src.cols / winSize * 1.0 / winOverlap);
+	int nrw = qRound((double)mag.rows / winSize * 1.0 / winOverlap);
+	int ncw = qRound((double)mag.cols / winSize * 1.0 / winOverlap);
 
 	Vector2D mr(0, step);
 	Vector2D mc(step, 0);
-	Vector2D si(src.size());
+	Vector2D si(mag.size());
 
 	double thr = winSize*winSize * config()->minEnergy();
 
@@ -847,7 +865,7 @@ PixelSet GridSuperPixel::computeGrid(const cv::Mat & src, int winSize, double wi
 	cv::Mat weight = gvec.t() * gvec;
 	cv::normalize(weight, weight, 1.0, 0.0, cv::NORM_MINMAX);
 
-	PixelSet set;
+	QVector<QSharedPointer<GridPixel> > pixels;
 
 	for (int rIdx = 0; rIdx < nrw; rIdx++) {
 
@@ -859,16 +877,19 @@ PixelSet GridSuperPixel::computeGrid(const cv::Mat & src, int winSize, double wi
 
 			wc = wc.clipped(si);
 
-			cv::Mat win = src(wc.toCvRect());
-			double s = cv::sum(win)[0];
+			cv::Mat winM = mag(wc.toCvRect());
+			cv::Mat winP = phase(wc.toCvRect());
+			double s = cv::sum(winM)[0];
 
 			if (s > thr) {
-				QSharedPointer<Pixel> pixel = locatePixel(win, weight);
-
+				
+				QSharedPointer<GridPixel> gp(new GridPixel(rIdx, cIdx));
+				gp->compute(winM, winP, weight);
+				
 				// locate pixel might cancel
-				if (pixel) {
-					pixel->move(wc.topLeft());	// move back to global coords
-					set.add(pixel);
+				if (!gp->isDead()) {
+					gp->move(wc.topLeft());	// move back to global coords
+					pixels << gp;
 				}
 			}
 
@@ -876,46 +897,65 @@ PixelSet GridSuperPixel::computeGrid(const cv::Mat & src, int winSize, double wi
 		}
 	}
 	
-	return set;
+	return pixels;
 }
 
-QSharedPointer<Pixel> GridSuperPixel::locatePixel(const cv::Mat & src, const cv::Mat& weight) const {
+QVector<QSharedPointer<GridPixel>> GridSuperPixel::merge(const QVector<QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const {
+	
+	QVector<QSharedPointer<GridPixel> > px;
 
-	// parameter!
-	double minMag = 0.05;	// minimum gradient magnitude
-	int minNumPts = 20;		// minimum # of points
+	for (auto p : pixels) {
 
-	QVector<Vector2D> pts;
-	for (int rIdx = 0; rIdx < src.rows; rIdx++) {
+		assert(p);
 
-		const float* sp = src.ptr<float>(rIdx);
-		const float* w = weight.empty() ? 0 : weight.ptr<float>(rIdx);
+		if (p->isDead())
+			continue;
 
-		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
-			
-			float spw = w ? sp[cIdx] * w[cIdx] : sp[cIdx];
+		const Rect& pbox = p->ellipse().bbox();
 
-			if (spw > minMag) {
-				pts << Vector2D(cIdx, rIdx);
+		bool merged = false;
+		for (auto po : pixels) {
+
+			if (!po->isDead() && po->isNeighbor(*p) && po != p) {
+
+				const Rect& pobox = po->ellipse().bbox();
+
+				// check if we have the same local orientation & if the bounding boxes intersect
+				if (p->orIdx() == po->orIdx() && pbox.intersects(pobox)) {
+
+					Rect r = p->ellipse().bbox().joined(po->ellipse().bbox());
+
+					r = r.clipped(mag.size());
+					cv::Mat magW = mag(r.toCvRect());
+					cv::Mat phaseW = phase(r.toCvRect());
+
+					p->compute(magW, phaseW);
+					p->move(r.topLeft());	// move back to global coords
+
+					merged = true;
+					px << p;
+
+					po->kill();
+					
+					break;
+				}
 			}
 		}
+
+		if (!merged)
+			px << p;
 	}
-
-	// reject if there are too few gradients present
-	if (pts.size() < minNumPts) {
-		return QSharedPointer<Pixel>();
-	}
-
-	Ellipse e = Ellipse::fromData(pts);
-	QSharedPointer<Pixel> p(new Pixel(e));
-
-	return p;
+	
+	return px;
 }
 
 cv::Mat GridSuperPixel::lineMask(const cv::Mat & src) const {
 
 	LineTraceLSD ltl(src);
 	ltl.config()->setMergeLines(false);
+
+	auto lfc = ltl.lineFilter().config();
+	lfc->setMinLength(qRound(lfc->minLength() / std::pow(2, mPyramidLevel)));	// reduce min line length for large scales
 
 	if (!ltl.compute()) {
 		qWarning() << "could not compute line image";
@@ -960,7 +1000,11 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 	// draw super pixels
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(edges(img));
+
+	cv::Mat mag, phase;
+	edges(img, mag, phase);
+
+	QPixmap pm = Image::mat2QPixmap(mag);
 	QPainter p(&pm);
 
 	p.setPen(col);
@@ -981,6 +1025,10 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	//	p.drawLine(l.line());
 	//	l = l.moved(mv);
 	//}
+
+	for (auto gp : mGridPixel) {
+		gp->draw(p);
+	}
 
 	for (int idx = 0; idx < mSet.size(); idx++) {
 
@@ -1067,6 +1115,110 @@ bool SuperPixelBase::checkInput() const {
 	}
 
 	return true;
+}
+
+// -------------------------------------------------------------------- GridPixel 
+GridPixel::GridPixel(int row, int col) {
+	mRow = row;
+	mCol = col;
+}
+
+bool GridPixel::operator==(const GridPixel & gpr) {
+	return row() == gpr.row() && col() == gpr.col();
+}
+
+void GridPixel::compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat& weight) {
+
+	assert(mag.size() == phase.size());
+
+	// parameter!
+	double minMag = 0.05;	// minimum gradient magnitude
+
+	QVector<Vector2D> pts;
+	Histogram orHist(0, 2*CV_PI, 8);
+
+	//Image::imageInfo(phase, "phase");
+
+	for (int rIdx = 0; rIdx < mag.rows; rIdx++) {
+
+		const float* mp = mag.ptr<float>(rIdx);
+		const float* pp = phase.ptr<float>(rIdx);
+		const float* w = weight.empty() ? 0 : weight.ptr<float>(rIdx);
+
+		for (int cIdx = 0; cIdx < mag.cols; cIdx++) {
+
+			float spw = w ? mp[cIdx] * w[cIdx] : mp[cIdx];
+
+			if (spw > minMag) {
+				pts << Vector2D(cIdx, rIdx);
+				orHist.add(pp[cIdx], spw);
+			}
+		}
+	}
+
+	mOrIdx = orHist.maxBinIdx();
+	mEdgeCnt = pts.size();
+
+	// reject if there are too few gradients present
+	if (isDead()) {
+		return;
+	}
+
+	mEllipse = Ellipse::fromData(pts);
+}
+
+bool GridPixel::isDead() const {
+
+	int minNumPts = 20;		// minimum # of points
+
+	return mEdgeCnt < minNumPts;
+}
+
+void GridPixel::kill() {
+	mEdgeCnt = 0;
+}
+
+void GridPixel::move(const Vector2D & vec) {
+	mEllipse.move(vec);
+}
+
+bool GridPixel::isNeighbor(const GridPixel & pixel) const {
+
+	int d = abs(pixel.row() - row()) + abs(pixel.col() - col());
+	return d == 1;	// d <= 2 would be 8-connected
+}
+
+int GridPixel::row() const {
+	return mRow;
+}
+
+int GridPixel::col() const {
+	return mCol;
+}
+
+int GridPixel::orIdx() const {
+	return mOrIdx;
+}
+
+Ellipse GridPixel::ellipse() const {
+	return mEllipse;
+}
+
+void GridPixel::draw(QPainter & p) const {
+
+	QPen oPen = p.pen();
+
+	double angle = mOrIdx / 8.0 * 2 * CV_PI;
+	int length = 20;
+
+	p.setPen(QColor(mOrIdx/8.0*255, 100, 100));
+
+	p.translate(ellipse().center().toQPointF());
+	p.rotate(angle*DK_RAD2DEG);
+	p.drawLine(QPointF(), QPointF(-length, 0));
+	p.rotate(-angle*DK_RAD2DEG);
+	p.translate(-ellipse().center().toQPointF());
+	p.setPen(oPen);
 }
 
 }

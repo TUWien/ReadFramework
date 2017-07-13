@@ -480,6 +480,14 @@ double Histogram::maxBin() const {
 	return mVal;
 }
 
+int Histogram::maxBinIdx() const {
+
+	cv::Point2i p;
+	cv::minMaxLoc(mHist, 0, 0, 0, &p);
+
+	return p.x;
+}
+
 double Histogram::minBin() const {
 	double mVal = 0;
 	cv::minMaxLoc(mHist, &mVal);
@@ -511,6 +519,16 @@ double Histogram::value(int binIdx) const {
 	val += mMinVal;
 	
 	return val;
+}
+
+void Histogram::add(double val, double weight) {
+
+	// this is inherently dangerous & fast
+	// it relies on the fact that binIdx is always within the range
+	int bin = binIdx(val);
+	assert(bin >= 0 && bin < mHist.cols);
+
+	mHist.at<float>(0, bin) += (float)weight;
 }
 
 

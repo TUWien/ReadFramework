@@ -73,10 +73,13 @@ public:
 
 	cv::Mat hist() const;
 	double maxBin() const;
+	int maxBinIdx() const;
 	double minBin() const;
 	int numBins() const;
 	int binIdx(double val) const;
 	double value(int binIdx) const;
+
+	void add(double val, double weight = 1.0);
 
 	template <typename Num>
 	static Histogram fromData(const cv::Mat& data, int numBins = 256) {

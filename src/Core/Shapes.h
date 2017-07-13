@@ -389,6 +389,9 @@ public:
 	bool isProximate(const Rect& o, double eps = 10.0) const;
 	double area() const;
 	Rect clipped(const Vector2D& size) const;
+	Rect joined(const Rect& o) const;
+	Rect intersected(const Rect& o) const;
+	bool intersects(const Rect& o) const;
 
 	void draw(QPainter& p) const;
 	

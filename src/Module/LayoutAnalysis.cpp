@@ -160,7 +160,8 @@ bool LayoutAnalysis::compute() {
 	}
 
 	// find super pixels
-	ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
+	//ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
+	GridSuperPixel spM(mImg);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";

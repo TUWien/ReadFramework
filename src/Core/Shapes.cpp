@@ -469,8 +469,7 @@ Vector2D Line::intersection(const Line & line, QLineF::IntersectType t) const {
 	return Vector2D();
 }
 
-Vector2D Line::intersectionUnrestricted(const Line & line) const
-{
+Vector2D Line::intersectionUnrestricted(const Line & line) const {
 	QPointF p;
 
 	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
@@ -1296,6 +1295,32 @@ Rect Rect::clipped(const Vector2D & size) const {
 		c.mSize.setY(qMax(size.y()-c.top(), 0.0));
 
 	return c;
+}
+
+Rect Rect::joined(const Rect & o) const {
+	
+	Vector2D tl = Vector2D::min(topLeft(), o.topLeft());
+	Vector2D br = Vector2D::max(bottomRight(), o.bottomRight());
+
+	return Rect(tl, br-tl);
+}
+
+Rect Rect::intersected(const Rect & o) const {
+	
+	Vector2D tl = Vector2D::max(topLeft(), o.topLeft());
+	Vector2D br = Vector2D::min(bottomRight(), o.bottomRight());
+
+
+	Vector2D s(br - tl);
+
+	if (s.x() <= 0 || s.y() <= 0)
+		return Rect();
+	
+	return Rect(tl, s);
+}
+
+bool Rect::intersects(const Rect & o) const {
+	return !intersected(o).isNull();
 }
 
 void Rect::draw(QPainter & p) const {

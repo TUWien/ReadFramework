@@ -37,6 +37,7 @@
 #include "Shapes.h"
 #include "Pixel.h"
 #include "PixelSet.h"
+#include "Image.h"	// TODO: remove (with GridPixel)
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QRectF>
@@ -233,6 +234,40 @@ protected:
 	void save(QSettings& settings) const override;
 };
 
+class DllCoreExport GridPixel {
+
+public:
+	GridPixel(int row = -1, int col = -1);
+
+	bool operator==(const GridPixel& gpr);
+	void compute(const cv::Mat& mag, const cv::Mat& phase, const cv::Mat& weight = cv::Mat());
+
+	bool isDead() const;
+	void kill();
+	void move(const Vector2D& vec);
+
+	bool isNeighbor(const GridPixel& pixel) const;
+
+	int row() const;
+	int col() const;
+
+	int orIdx() const;
+
+	Ellipse ellipse() const;
+	void draw(QPainter& p) const;
+
+private:
+
+	int mRow = -1;
+	int mCol = -1;
+	
+	// results
+	int mEdgeCnt = 0;
+	int mOrIdx = -1;
+	//Histogram mOrHist;
+	Ellipse mEllipse;
+};
+
 /// <summary>
 /// Grid based SuperPixel extraction.
 /// </summary>
@@ -251,9 +286,12 @@ public:
 
 private:
 
-	cv::Mat edges(const cv::Mat& src) const;
-	PixelSet computeGrid(const cv::Mat& src, int winSize, double winOverlap) const;
-	QSharedPointer<Pixel> locatePixel(const cv::Mat& src, const cv::Mat& weight = cv::Mat()) const;
+	QVector<QSharedPointer<GridPixel> > mGridPixel;	// debug only
+
+	QVector<QSharedPointer<GridPixel> > computeGrid(const cv::Mat& mag, const cv::Mat& phase, int winSize, double winOverlap) const;
+	QVector<QSharedPointer<GridPixel> > merge(const QVector<QSharedPointer<GridPixel> >& pixels, const cv::Mat& mag, const cv::Mat& phase) const;
+
+	void edges(const cv::Mat& src, cv::Mat& magnitude, cv::Mat& orientation) const;
 	cv::Mat lineMask(const cv::Mat& src) const;
 };
 
