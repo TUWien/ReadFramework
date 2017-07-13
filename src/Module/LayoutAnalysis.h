@@ -34,6 +34,7 @@
 
 #include "BaseModule.h"
 #include "PixelSet.h"
+#include "Image.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -63,19 +64,12 @@ class DllCoreExport LayoutAnalysisConfig : public ModuleConfig {
 public:
 	LayoutAnalysisConfig();
 
-	enum ScaleSideMode {
-		scale_max_side = 0,		// scales w.r.t to the max side usefull if you have free images
-		scale_height,			// [default] choose this if you now that you have pages & double pages
-
-		scale_end
-	};
-
 	virtual QString toString() const override;
 
 	void setMaxImageSide(int maxSide);
 	int maxImageSide() const;
 
-	void setScaleMode(const ScaleSideMode& mode);
+	void setScaleMode(const Image::ScaleSideMode& mode);
 	int scaleMode() const;
 
 	void setRemoveWeakTextLiens(bool remove);
@@ -95,12 +89,12 @@ protected:
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	int mMaxImageSide = 3000;			// maximum image side in px (larger images are downscaled accordingly)
-	int mScaleMode = scale_height;		// scaling mode (see ScaleSideMode)
-	bool mRemoveWeakTextLines = true;	// if true, unstable text lines are removed
-	int mMinSuperPixelsPerBlock = 15;	// the minimum number of components that are required to run the text line segmentation
-	bool mLocalBlockOrientation = true;	// local orientation is estimated per text block
-	bool mComputeSeparators = true;		// if true, separators lines are computed
+	int mMaxImageSide = 3000;				// maximum image side in px (larger images are downscaled accordingly)
+	int mScaleMode = Image::scale_height;	// scaling mode (see ScaleSideMode)
+	bool mRemoveWeakTextLines = true;		// if true, unstable text lines are removed
+	int mMinSuperPixelsPerBlock = 15;		// the minimum number of components that are required to run the text line segmentation
+	bool mLocalBlockOrientation = true;		// local orientation is estimated per text block
+	bool mComputeSeparators = true;			// if true, separators lines are computed
 };
 
 class DllCoreExport LayoutAnalysis : public Module {

@@ -127,6 +127,13 @@ protected:
 /// </summary>
 namespace Image {
 
+	enum ScaleSideMode {
+		scale_max_side = 0,		// scales w.r.t to the max side usefull if you have free images
+		scale_height,			// [default] choose this if you now that you have pages & double pages
+
+		scale_end
+	};
+
 	DllCoreExport cv::Mat qImage2Mat(const QImage& img);
 	DllCoreExport QImage mat2QImage(const cv::Mat& img);
 	DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);
@@ -141,6 +148,7 @@ namespace Image {
 	DllCoreExport QString printImage(const cv::Mat& img, const QString name);
 	DllCoreExport QJsonObject matToJson(const cv::Mat& img, bool compress = true);
 	DllCoreExport cv::Mat jsonToMat(const QJsonObject& jo);
+	DllCoreExport double scaleFactor(const cv::Mat& img, int maxImageSide, const ScaleSideMode& mode = scale_height);
 
 	/// <summary>
 	/// Prints the values of a cv::Mat to copy it to Matlab.

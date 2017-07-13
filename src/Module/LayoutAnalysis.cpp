@@ -66,12 +66,12 @@ int LayoutAnalysisConfig::maxImageSide() const {
 	return ModuleConfig::checkParam(mMaxImageSide, -1, INT_MAX, "maxImageSide");
 }
 
-void LayoutAnalysisConfig::setScaleMode(const ScaleSideMode & mode) {
+void LayoutAnalysisConfig::setScaleMode(const Image::ScaleSideMode & mode) {
 	mScaleMode = mode;
 }
 
 int LayoutAnalysisConfig::scaleMode() const {
-	return ModuleConfig::checkParam(mScaleMode, 0, (int)scale_end, "scaleMode");
+	return ModuleConfig::checkParam(mScaleMode, 0, (int)Image::scale_end, "scaleMode");
 }
 
 void LayoutAnalysisConfig::setRemoveWeakTextLiens(bool remove) {
@@ -333,33 +333,7 @@ PixelSet LayoutAnalysis::pixels() const {
 
 double LayoutAnalysis::scaleFactor() const {
 
-	int cms = config()->maxImageSide();
-
-	if (cms > 0) {
-
-		if (cms < 500) {
-			mWarning << "you chose the maximal image side to be" << cms << "px - this is pretty low";
-		}
-
-		// find the image side
-		int mSide = 0;
-		if (config()->scaleMode() == LayoutAnalysisConfig::scale_max_side)
-			mSide = qMax(mImg.rows, mImg.cols);
-		else
-			mSide = mImg.rows;
-
-		double sf = (double)cms / mSide;
-
-		// do not rescale if the factor is close to 1
-		if (sf <= 0.95)
-			return sf;
-
-		// inform user that we do not resize if the scale factor is close to 1
-		if (sf < 1.0)
-			mInfo << "I won't resize the image since the scale factor is" << sf;
-	}
-
-	return 1.0;
+	return Image::scaleFactor(mImg, config()->maxImageSide(), (Image::ScaleSideMode)config()->scaleMode());
 }
 
 bool LayoutAnalysis::checkInput() const {

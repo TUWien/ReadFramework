@@ -364,7 +364,6 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 
 	for (const auto& px : set.pixels()) {
 
-		assert(cb);
 		Rect r = px->bbox().clipped(labelImg.size());
 		cv::Mat labelBBox = labelImg(r.toCvRect());
 		cv::Mat mask = px->toBinaryMask();
