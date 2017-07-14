@@ -212,9 +212,11 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
 		dc.setImagePath("C:/read/test/grid-pixel/M_Aigen_am_Inn_003-01_0001.jpg");
+		dc.setImagePath("C:/read/cBAD/dataset/train-new/Baseline Competition - Complex Documents/ABP_FirstTestCollection/T_Freyung_008-01_0078.jpg");
 		//dc.setImagePath("C:/read/test/grid-pixel/stone.jpg");
 		//dc.setImagePath("C:/read/test/grid-pixel/simple.png");
 		//dc.setImagePath("C:/read/test/grid-pixel/00000197-c.jpg");
+		dc.setImagePath("C:/read/cBAD/dataset/train-new/Baseline Competition - Complex Documents/BHIC_Akten/5117-077-0017.jpg");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}
@@ -225,17 +227,17 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.classifierPath().isEmpty()) {
-		dc.setClassifierPath("D:/read/configs/model.json");
+		dc.setClassifierPath("C:/read/configs/cBAD-model.json");
 		qInfo() << dc.classifierPath() << "added as classifier path";
 	} 
 
 	if (dc.labelConfigPath().isEmpty()) {
-		dc.setLabelConfigPath("D:/read/configs/config-prima.json");
+		dc.setLabelConfigPath("C:/read/configs/cBAD-config.json");
 		qInfo() << dc.labelConfigPath() << "added as label config path";
 	} 
 
 	if (dc.featureCachePath().isEmpty()) {
-		dc.setFeatureCachePath("D:/read/configs/features-prima.json");
+		dc.setFeatureCachePath("C:/read/configs/cBAD-features.json");
 		qInfo() << dc.featureCachePath() << "added as feature cache path";
 	} 
 

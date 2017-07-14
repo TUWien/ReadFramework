@@ -121,8 +121,9 @@ QByteArray net::download(const QString & url, bool* ok) {
 	if (ok)
 		*ok = !ba.isEmpty();
 
-	if (ba.isEmpty())
-		qWarning() << nr->errorString();
+	// TODO: check for non-existing files 
+	//if (ba.isEmpty())
+	//	qWarning() << nr->errorString();
 
 	return ba;
 }

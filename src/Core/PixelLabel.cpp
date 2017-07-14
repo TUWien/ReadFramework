@@ -187,7 +187,7 @@ LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 	}
 
 	// print warning
-	if (ll.id() == label_unknown) {
+	if (ll.id() == label_unknown && ll.mName != "Unknown") {
 		QJsonDocument jd(jo);
 		qCritical().noquote() << "could not parse" << jd.toJson();
 		return LabelInfo::unknownLabel();

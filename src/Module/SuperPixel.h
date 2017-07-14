@@ -230,7 +230,7 @@ public:
 protected:
 	int mWinSize = 20;				// the window size in px per scale
 	double mWinOverlap = 0.5;		// the window overlaps
-	double mMinEnergy = 0.1;		// minimum energy per cell
+	double mMinEnergy = 0.07;		// minimum energy per cell
 	bool mLineMask = true;			// if true, straight lines are removed
 
 	void load(const QSettings& settings) override;

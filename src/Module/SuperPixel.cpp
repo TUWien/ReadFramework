@@ -808,7 +808,8 @@ bool GridSuperPixel::compute() {
 			mSet << p->toPixel();
 	}
 
-	mSet = filter(mSet, 4.0);
+	// TODO: that filtering would be nice however, DBScan seems not to be stable (too many recursions)
+	//mSet = filter(mSet, 4.0);
 
 	mDebug << mSet.size() << "regions computed in" << dt;
 

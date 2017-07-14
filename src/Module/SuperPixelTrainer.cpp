@@ -368,6 +368,10 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 		cv::Mat labelBBox = labelImg(r.toCvRect());
 		cv::Mat mask = px->toBinaryMask();
 
+		// clip mask
+		if (r != px->bbox())
+			mask = mask(Rect(Vector2D(), r.size()).toCvRect());
+
 		// find the blob's label
 		QColor col = IP::statMomentColor(labelBBox, mask);
 		int id = LabelInfo::color2Id(col);
