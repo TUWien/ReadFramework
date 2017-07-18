@@ -828,83 +828,113 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << "try to match cell : " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
 
 
-		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
-			rdf::Line l;
-			bool visible = false;
-			bool horizontal = false;
-			double d = 0;
-			AssociationGraphNode::LinePosition lp;
-			switch (i)
-			{
-				case AssociationGraphNode::LinePosition::pos_top : 
-					l = cells[cellIdx]->topBorder();
-					visible = cells[cellIdx]->topBorderVisible();
-					d = findMinWidth(cellsR, cells, cellIdx, i);
-					lp = AssociationGraphNode::LinePosition::pos_top;
-					horizontal = true;
-					break;
-				case AssociationGraphNode::LinePosition::pos_bottom: 
-					l = cells[cellIdx]->bottomBorder();
-					visible = cells[cellIdx]->bottomBorderVisible();
-					d = findMinWidth(cellsR, cells, cellIdx, i);
-					lp = AssociationGraphNode::LinePosition::pos_bottom;
-					horizontal = true;
-					break;
-				case AssociationGraphNode::LinePosition::pos_left: 
-					l = cells[cellIdx]->rightBorder();
-					visible = cells[cellIdx]->rightBorderVisible();
-					d = findMinWidth(cellsR, cells, cellIdx, i);
-					lp = AssociationGraphNode::LinePosition::pos_left;
-					horizontal = false;
-					break;
-				case AssociationGraphNode::LinePosition::pos_right: 
-					l = cells[cellIdx]->leftBorder();
-					visible = cells[cellIdx]->leftBorderVisible();
-					d = findMinWidth(cellsR, cells, cellIdx, i);
-					lp = AssociationGraphNode::LinePosition::pos_right;
-					horizontal = false;
-					break;
-			default:
-				qWarning() << "no Cell Border found in matchTemplate";
-				break;
-			}
-			if (visible) {
-				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-				l.translate(mOffset);
-				
-				LineCandidates lC = findLineCandidates(l, d, horizontal);
-				QVector<int> lineIdx = lC.candidatesIdx();
-				QVector<double> overlaps = lC.overlaps();
-				QVector<double> distances = lC.distances();
+for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
+	rdf::Line l;
+	bool visible = false;
+	bool horizontal = false;
+	double d = 0;
+	AssociationGraphNode::LinePosition lp;
+	switch (i)
+	{
+	case AssociationGraphNode::LinePosition::pos_top:
+		l = cells[cellIdx]->topBorder();
+		visible = cells[cellIdx]->topBorderVisible();
+		d = findMinWidth(cellsR, cells, cellIdx, i);
+		lp = AssociationGraphNode::LinePosition::pos_top;
+		horizontal = true;
+		break;
+	case AssociationGraphNode::LinePosition::pos_bottom:
+		l = cells[cellIdx]->bottomBorder();
+		visible = cells[cellIdx]->bottomBorderVisible();
+		d = findMinWidth(cellsR, cells, cellIdx, i);
+		lp = AssociationGraphNode::LinePosition::pos_bottom;
+		horizontal = true;
+		break;
+	case AssociationGraphNode::LinePosition::pos_left:
+		l = cells[cellIdx]->rightBorder();
+		visible = cells[cellIdx]->rightBorderVisible();
+		d = findMinWidth(cellsR, cells, cellIdx, i);
+		lp = AssociationGraphNode::LinePosition::pos_left;
+		horizontal = false;
+		break;
+	case AssociationGraphNode::LinePosition::pos_right:
+		l = cells[cellIdx]->leftBorder();
+		visible = cells[cellIdx]->leftBorderVisible();
+		d = findMinWidth(cellsR, cells, cellIdx, i);
+		lp = AssociationGraphNode::LinePosition::pos_right;
+		horizontal = false;
+		break;
+	default:
+		qWarning() << "no Cell Border found in matchTemplate";
+		break;
+	}
+	if (visible) {
+		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+		l.translate(mOffset);
 
-				for (int lI = 0; lI < lineIdx.size(); i++) {
+		LineCandidates lC = findLineCandidates(l, d, horizontal);
+		QVector<int> lineIdx = lC.candidatesIdx();
+		QVector<double> overlaps = lC.overlaps();
+		QVector<double> distances = lC.distances();
 
-					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
-					newNode->setLineCell(cells[cellIdx]->row(), cells[cellIdx]->col());
-					newNode->setCellIdx(cellIdx);
-					newNode->setLinePos(lp);
-					newNode->setReferenceLine(l);
-					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
-					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
-					newNode->setMatchedLineIdx(lineIdx[lI]);
-					if (horizontal) 
-						mANodesHorizontal.push_back(newNode);
-					else
-						mANodesVertical.push_back(newNode);
-				}
-			}
+		for (int lI = 0; lI < lineIdx.size(); i++) {
 
+			QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
+			newNode->setLineCell(cells[cellIdx]->row(), cells[cellIdx]->col());
+			newNode->setCellIdx(cellIdx);
+			newNode->setLinePos(lp);
+			newNode->setReferenceLine(l);
+			rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
+			newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
+			newNode->setMatchedLineIdx(lineIdx[lI]);
+			if (horizontal)
+				mANodesHorizontal.push_back(newNode);
+			else
+				mANodesVertical.push_back(newNode);
 		}
+	}
+
+}
 
 	}
 
 	//create AssociationGraph
-	for (int currentNodeIdx = 0; currentNodeIdx < mANodesHorizontal.size(); currentNodeIdx++) {
-		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
+	for (int currentNodeIdx = 0; currentNodeIdx < mANodesVertical.size(); currentNodeIdx++) {
+		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesVertical.size(); compareNodeIdx++) {
 			//if
-				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
 
+			//mANodesVertical[currentNodeIdx];
+			//mANodesVertical[compareNodeIdx];
+
+			//same template line (same cell and same line position for the reference line)
+			if (mANodesVertical[currentNodeIdx]->cellIdx() == mANodesVertical[compareNodeIdx]->cellIdx() &&
+				mANodesVertical[currentNodeIdx]->linePosition() == mANodesVertical[compareNodeIdx]->linePosition()) {
+
+				//match only, if there is no overlap and lines have the same vertical position
+				rdf::Line m1 = mANodesVertical[currentNodeIdx]->matchedLine();
+				rdf::Line m2 = mANodesVertical[compareNodeIdx]->matchedLine();
+				m1.sortEndpoints(false);
+				m2.sortEndpoints(false);
+				double overlap = m1.verticalOverlap(m2);
+				double distance = m1.distance(m2.center());
+				if (overlap == 0 && distance < 20)
+					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+			}
+			else {
+				rdf::Line ref1 = mANodesVertical[currentNodeIdx]->referenceLine();
+				rdf::Line ref2 = mANodesVertical[compareNodeIdx]->referenceLine();
+				rdf::Line m1 = mANodesVertical[currentNodeIdx]->matchedLine();
+				rdf::Line m2 = mANodesVertical[compareNodeIdx]->matchedLine();
+
+				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
+					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+				} else if (ref1.center().x() >= ref2.center().x() && m1.center().x() >= m2.center().x()) {
+					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+				}
+
+			}
+		
 		}
 	}
 
