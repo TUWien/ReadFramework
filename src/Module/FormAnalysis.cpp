@@ -882,6 +882,7 @@ bool FormFeatures::matchTemplate() {
 
 					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
 					newNode->setLineCell(cells[cellIdx]->row(), cells[cellIdx]->col());
+					newNode->setCellIdx(cellIdx);
 					newNode->setLinePos(lp);
 					newNode->setReferenceLine(l);
 					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
@@ -891,13 +892,22 @@ bool FormFeatures::matchTemplate() {
 						mANodesHorizontal.push_back(newNode);
 					else
 						mANodesVertical.push_back(newNode);
-
 				}
 			}
 
 		}
 
 	}
+
+	//create AssociationGraph
+	for (int currentNodeIdx = 0; currentNodeIdx < mANodesHorizontal.size(); currentNodeIdx++) {
+		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
+			//if
+				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+
+		}
+	}
+
 
 	////find all line candidates for all cells
 	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
@@ -1722,5 +1732,20 @@ cv::Size FormFeatures::sizeImg() const
 	}
 	int AssociationGraphNode::matchedLineIdx() const {
 		return mMatchedLineIdx;
+	}
+	void AssociationGraphNode::setCellIdx(int idx) 	{
+		mCellIdx = idx;
+	}
+	int AssociationGraphNode::cellIdx() const 	{
+		return mCellIdx;
+	}
+	QVector<int> AssociationGraphNode::adjacencyNodes() const 	{
+		return mAdjacencyNodesIdx;
+	}
+	void AssociationGraphNode::addAdjacencyNode(int idx) 	{
+		mAdjacencyNodesIdx.push_back(idx);
+	}
+	void AssociationGraphNode::clearAdjacencyList() 	{
+		mAdjacencyNodesIdx.clear();
 	}
 }

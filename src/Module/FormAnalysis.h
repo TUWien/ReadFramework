@@ -124,8 +124,15 @@ namespace rdf {
 		void setMatchedLineIdx(int idx);
 		int matchedLineIdx() const;
 
-	protected:
+		void setCellIdx(int idx);
+		int cellIdx() const;
 
+		QVector<int> adjacencyNodes() const;
+		void addAdjacencyNode(int idx);
+		void clearAdjacencyList();
+
+	protected:
+		int mCellIdx = 1;
 		Line mReferenceLine;
 		LinePosition mLinePos;
 		int mRefRowIdx, mRefColIdx;
@@ -134,6 +141,8 @@ namespace rdf {
 		int mMatchedLineIdx;
 		double mOverlap = -1;
 		double mDistance = -1;
+
+		QVector<int> mAdjacencyNodesIdx;
 
 	};
 
