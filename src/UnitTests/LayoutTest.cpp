@@ -242,7 +242,7 @@ bool SuperPixelTest::collectFeatures() const {
 	// test drawing
 	cv::Mat rImg = imgCv.clone();
 	rImg = sp.draw(rImg);
-	rImg = spl.draw(rImg);
+	//rImg = spl.draw(rImg);
 	rImg = spf.draw(rImg);
 
 	qDebug() << "feature collection takes" << dt;
