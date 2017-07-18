@@ -1409,7 +1409,7 @@ cv::Size FormFeatures::sizeImg() const
 		for (int i = 0; i < tmp.size(); i++) {
 
 			QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
-			pSepR->setLine(tmp[i].line());
+			pSepR->setLine(tmp[i].qLine());
 
 			r->addUniqueChild(pSepR);
 		}
@@ -1419,7 +1419,7 @@ cv::Size FormFeatures::sizeImg() const
 		for (int i = 0; i < tmp.size(); i++) {
 
 			QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
-			pSepR->setLine(tmp[i].line());
+			pSepR->setLine(tmp[i].qLine());
 			r->addUniqueChild(pSepR);
 		}
 	}

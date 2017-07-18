@@ -135,7 +135,7 @@ namespace Image {
 
 	DllCoreExport cv::Mat qImage2Mat(const QImage& img);
 	DllCoreExport QImage mat2QImage(const cv::Mat& img, bool toRGB = false);
-	//DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);
+	//DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);	// remember: do not use QPixmap (only supported with UIs)
 	//DllCoreExport QPixmap mat2QPixmap(const cv::Mat& img);
 	DllCoreExport cv::Mat qVector2Mat(const QVector<float>& data);
 

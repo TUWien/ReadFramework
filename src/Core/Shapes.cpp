@@ -181,7 +181,7 @@ BaseLine::BaseLine(const Polygon & baseLine) {
 
 BaseLine::BaseLine(const Line & line) {
 	
-	QLineF ql = line.line();
+	QLineF ql = line.qLine();
 	mBaseLine << ql.p1();
 	mBaseLine << ql.p2();
 }
@@ -323,7 +323,7 @@ void Line::setThickness(float thickness) {
 /// Returns the line information.
 /// </summary>
 /// <returns>The line.</returns>
-QLineF Line::line() const {
+QLineF Line::qLine() const {
 	return mLine;
 }
 
@@ -448,7 +448,7 @@ bool Line::isVertical(double mAngleTresh) const {
 
 bool Line::intersects(const Line & line, QLineF::IntersectType t) const {
 
-	return mLine.intersect(line.line(), 0) == t;
+	return mLine.intersect(line.qLine(), 0) == t;
 }
 
 /// <summary>
@@ -462,7 +462,7 @@ Vector2D Line::intersection(const Line & line, QLineF::IntersectType t) const {
 
 	QPointF p;
 
-	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
+	QLineF::IntersectType it = mLine.intersect(line.qLine(), &p);
 
 	if (it == t)
 		return Vector2D(p);
@@ -473,7 +473,7 @@ Vector2D Line::intersection(const Line & line, QLineF::IntersectType t) const {
 Vector2D Line::intersectionUnrestricted(const Line & line) const {
 	QPointF p;
 
-	QLineF::IntersectType it = mLine.intersect(line.line(), &p);
+	QLineF::IntersectType it = mLine.intersect(line.qLine(), &p);
 
 	if (it != QLineF::NoIntersection)
 		return Vector2D(p);
@@ -579,23 +579,23 @@ double Line::minDistance(const Line& l) const {
 	// we could use the Vector2D class here (it's nicer) - but this is faster...
 
 	// l1.p1 - l2.p1
-	double dx = (mLine.p1().x() - l.line().p1().x());
-	double dy = (mLine.p1().y() - l.line().p1().y());
+	double dx = (mLine.p1().x() - l.qLine().p1().x());
+	double dy = (mLine.p1().y() - l.qLine().p1().y());
 	double dist = dx*dx + dy*dy;
 
 	// l1.p1 - l2.p2
-	dx = (mLine.p1().x() - l.line().p2().x());
-	dy = (mLine.p1().y() - l.line().p2().y());
+	dx = (mLine.p1().x() - l.qLine().p2().x());
+	dy = (mLine.p1().y() - l.qLine().p2().y());
 	dist = qMin(dist, dx*dx + dy*dy);
 
 	// l1.p2 - l2.p1
-	dx = (mLine.p2().x() - l.line().p1().x());
-	dy = (mLine.p2().y() - l.line().p1().y());
+	dx = (mLine.p2().x() - l.qLine().p1().x());
+	dy = (mLine.p2().y() - l.qLine().p1().y());
 	dist = qMin(dist, dx*dx + dy*dy);
 	
 	// l1.p2 - ls2.p2
-	dx = (mLine.p2().x() - l.line().p2().x());
-	dy = (mLine.p2().y() - l.line().p2().y());
+	dx = (mLine.p2().x() - l.qLine().p2().x());
+	dy = (mLine.p2().y() - l.qLine().p2().y());
 	dist = qMin(dist, dx*dx + dy*dy);
 
 	return std::sqrt(dist);
@@ -748,10 +748,10 @@ cv::Mat Line::toMat(const Line & l) const {
 	cv::Mat distMat = cv::Mat(1, 4, CV_64FC1);
 	double* ptr = distMat.ptr<double>();
 
-	ptr[0] = Vector2D(mLine.p1() - l.line().p1()).length();
-	ptr[1] = Vector2D(mLine.p1() - l.line().p2()).length();
-	ptr[2] = Vector2D(mLine.p2() - l.line().p1()).length();
-	ptr[3] = Vector2D(mLine.p2() - l.line().p2()).length();
+	ptr[0] = Vector2D(mLine.p1() - l.qLine().p1()).length();
+	ptr[1] = Vector2D(mLine.p1() - l.qLine().p2()).length();
+	ptr[2] = Vector2D(mLine.p2() - l.qLine().p1()).length();
+	ptr[3] = Vector2D(mLine.p2() - l.qLine().p2()).length();
 
 	return distMat;
 }
@@ -773,10 +773,10 @@ Line Line::merge(const Line& l) const {
 	Line mergedLine;
 
 	switch (maxIdx) {
-	case 0: mergedLine = Line(mLine.p1(), l.line().p1(), thickness);	break;
-	case 1: mergedLine = Line(mLine.p1(), l.line().p2(), thickness);	break;
-	case 2: mergedLine = Line(mLine.p2(), l.line().p1(), thickness);	break;
-	case 3: mergedLine = Line(mLine.p2(), l.line().p2(), thickness);	break;
+	case 0: mergedLine = Line(mLine.p1(), l.qLine().p1(), thickness);	break;
+	case 1: mergedLine = Line(mLine.p1(), l.qLine().p2(), thickness);	break;
+	case 2: mergedLine = Line(mLine.p2(), l.qLine().p1(), thickness);	break;
+	case 3: mergedLine = Line(mLine.p2(), l.qLine().p2(), thickness);	break;
 	}
 
 	return mergedLine;
@@ -799,10 +799,10 @@ Line Line::gapLine(const Line& l) const {
 	Line gapLine;
 
 	switch (minIdx) {
-	case 0: gapLine = Line(mLine.p1(), l.line().p1(), thickness);	break;
-	case 1: gapLine = Line(mLine.p1(), l.line().p2(), thickness);	break;
-	case 2: gapLine = Line(mLine.p2(), l.line().p1(), thickness);	break;
-	case 3: gapLine = Line(mLine.p2(), l.line().p2(), thickness);	break;
+	case 0: gapLine = Line(mLine.p1(), l.qLine().p1(), thickness);	break;
+	case 1: gapLine = Line(mLine.p1(), l.qLine().p2(), thickness);	break;
+	case 2: gapLine = Line(mLine.p2(), l.qLine().p1(), thickness);	break;
+	case 3: gapLine = Line(mLine.p2(), l.qLine().p2(), thickness);	break;
 	}
 
 	return gapLine;

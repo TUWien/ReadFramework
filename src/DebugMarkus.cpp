@@ -133,7 +133,7 @@ void XmlTest::linesToXml() {
 	for (const rdf::Line& cL : allLines) {
 
 		QSharedPointer<rdf::SeparatorRegion> pSepR(new rdf::SeparatorRegion());
-		pSepR->setLine(cL.line());
+		pSepR->setLine(cL.qLine());
 		root->addUniqueChild(pSepR);
 	}
 

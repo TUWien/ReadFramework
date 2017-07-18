@@ -457,7 +457,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 			vec *= stats()->lineSpacing();
 			vec = vec + center();
 
-			p.drawLine(Line(center(), vec).line());
+			p.drawLine(Line(center(), vec).qLine());
 		}
 
 		// indicate tab stop
@@ -470,7 +470,7 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 
 			QPen oPen = p.pen();
 			p.setPen(ColorManager::red());
-			p.drawLine(Line(center(), center() + vec).line());
+			p.drawLine(Line(center(), center() + vec).qLine());
 			p.setPen(oPen);
 			
 		}

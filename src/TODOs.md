@@ -3,4 +3,3 @@
 - Clean up `ImageProcessor` and `Algorithm`
   - e.g. Algoritm::get1DGauss
 - Sort poly coordinates to reflect tl orientation
-- Replace all QPixmap with QImage (for headless)

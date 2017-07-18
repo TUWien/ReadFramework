@@ -1151,7 +1151,7 @@ SeparatorRegion::SeparatorRegion(const Type& type) : Region(type) {
 
 void SeparatorRegion::setLine(const Line & line) {
 
-	QLineF l = line.line();
+	QLineF l = line.qLine();
 	QPolygonF qlp;
 	qlp << l.p1() << l.p2();
 	Polygon p(qlp.toPolygon());

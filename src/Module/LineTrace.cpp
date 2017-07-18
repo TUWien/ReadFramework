@@ -965,13 +965,13 @@ namespace rdf {
 
 				rdf::Line cmpLine = *lineIterCmp;
 
-				if (cmpLine.distance(cLine.line().p1()) > 5 || cmpLine.distance(cLine.line().p2()) > 5)
+				if (cmpLine.distance(cLine.qLine().p1()) > 5 || cmpLine.distance(cLine.qLine().p2()) > 5)
 					continue;
 
-				if (cmpLine.within(cLine.line().p1()) && cmpLine.within(cLine.line().p2())) {
+				if (cmpLine.within(cLine.qLine().p1()) && cmpLine.within(cLine.qLine().p2())) {
 					eraseIdx.push_back(lineIdx);
 				}
-				else if (cLine.within(cmpLine.line().p1()) && cLine.within(cmpLine.line().p2())) {
+				else if (cLine.within(cmpLine.qLine().p1()) && cLine.within(cmpLine.qLine().p2())) {
 					eraseIdx.push_back(lineCmpIdx);
 				}
 			}

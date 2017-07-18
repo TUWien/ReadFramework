@@ -104,7 +104,7 @@ public:
 	Vector2D p1() const;
 	Vector2D p2() const;
 	Vector2D center() const;
-	QLineF line() const;
+	QLineF qLine() const;
 	QPolygonF toPoly() const;
 
 	bool isHorizontal(double mAngleTresh = 0.5) const;
