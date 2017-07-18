@@ -497,9 +497,9 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img, const QColor& col) const 
 
 cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPointer<TextLineSet> >& textLines, const QColor& col) {
 
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 
-	QPainter p(&pm);
+	QPainter p(&qImg);
 	p.setPen(col);
 
 	// draw text lines
@@ -522,7 +522,7 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 		tl->draw(p, PixelSet::DrawFlags() | PixelSet::draw_rect | PixelSet::draw_pixels, Pixel::draw_stats);
 	}
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString TextLineSegmentation::toString() const {
@@ -638,8 +638,8 @@ bool SimpleTextLineSegmentation::compute() {
 
 cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img, const QColor& col) const {
 	
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 	p.setOpacity(1.0);
 
@@ -664,7 +664,7 @@ cv::Mat SimpleTextLineSegmentation::draw(const cv::Mat & img, const QColor& col)
 		ps.draw(p, PixelSet::draw_poly);
 	}
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString SimpleTextLineSegmentation::toString() const {

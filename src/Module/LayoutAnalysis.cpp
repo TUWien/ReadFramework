@@ -261,9 +261,9 @@ QSharedPointer<LayoutAnalysisConfig> LayoutAnalysis::config() const {
 
 cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 	
-	QPainter p(&pm);
+	QPainter p(&qImg);
 	p.setPen(ColorManager::blue());
 
 	for (auto l : mStopLines) {
@@ -296,7 +296,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 		tb->draw(p, TextBlock::draw_text_lines);
 	}
 	
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString LayoutAnalysis::toString() const {

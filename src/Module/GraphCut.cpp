@@ -38,7 +38,6 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 
-#include <QPixmap>
 #include <QPainter>
 
 //#pragma warning(disable: 4706)
@@ -253,8 +252,8 @@ int GraphCutOrientation::numLabels() const {
 cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const {
 
 	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 	// show the graph
 	PixelGraph graph(mSet);
@@ -272,7 +271,7 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const
 		px->draw(p, 0.3, (Pixel::DrawFlags)(Pixel::draw_stats));
 	}
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 // GraphCutTextLine --------------------------------------------------------------------
@@ -344,9 +343,8 @@ bool GraphCutTextLine::compute() {
 
 cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 	
-	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 	//  -------------------------------------------------------------------- show the graph
 	p.setOpacity(0.3);
@@ -384,7 +382,7 @@ cv::Mat GraphCutTextLine::draw(const cv::Mat & img, const QColor& col) const {
 
 	//saveDistsDebug("C:/temp/lines/line.jpg", img);
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QVector<PixelSet> GraphCutTextLine::textLines() {
@@ -571,8 +569,8 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 	int idx = 0;
 	for (auto tl : tls) {
 
-		QPixmap pm = Image::mat2QPixmap(img);
-		QPainter p(&pm);
+		QImage qImg = Image::mat2QImage(img, true);
+		QPainter p(&qImg);
 
 		// the next lines show the mahalanobis distance
 		cv::Mat d = mahalanobisDists(tl, pixelSetCentersToMat(mSet));
@@ -614,7 +612,7 @@ void GraphCutTextLine::saveDistsDebug(const QString & filePath, const cv::Mat& i
 		e.draw(p);
 
 		QString sp = rdf::Utils::createFilePath(filePath, QString::number(idx));
-		cv::Mat rImg = Image::qPixmap2Mat(pm);
+		cv::Mat rImg = Image::qImage2Mat(qImg);
 		//rImg = rImg.t();
 		Image::save(rImg, sp);
 		idx++;
@@ -782,8 +780,8 @@ Histogram GraphCutLineSpacing::spacingHist() const {
 cv::Mat GraphCutLineSpacing::draw(const cv::Mat & img, const QColor & col) const {
 
 	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 	// show the graph
 	PixelGraph graph(mSet);
@@ -804,7 +802,7 @@ cv::Mat GraphCutLineSpacing::draw(const cv::Mat & img, const QColor & col) const
 	Rect r(Vector2D(10, 10), Vector2D(100, 100));
 	mSpaceHist.draw(p, r);
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 // GraphCutLineSpacingConfig --------------------------------------------------------------------

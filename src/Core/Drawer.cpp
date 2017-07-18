@@ -37,7 +37,6 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
-#include <QPixmap>
 #include <QPainter>
 
 #include <opencv2/core/core.hpp>
@@ -47,17 +46,6 @@ namespace rdf {
 
 
 // Drawer --------------------------------------------------------------------
-//cv::Mat Drawer::drawPoints(const cv::Mat & img, const std::vector<cv::Point> & pts, const QColor& col) {
-//
-//	// convert image
-//	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
-//	QPainter p(&pm);
-//
-//	drawPoints(p, pts);
-//
-//	return Image::qImage2Mat(pm.toImage());
-//}
-
 void Drawer::drawPoints(QPainter & p, const std::vector<cv::Point>& pts) {
 
 	// convert points
@@ -74,23 +62,6 @@ void Drawer::drawPoints(QPainter & p, const QVector<QPointF>& pts) {
 	for (const QPointF& cp : pts)
 		p.drawPoint(cp);
 }
-
-//cv::Mat Drawer::drawRects(const cv::Mat & img, const std::vector<cv::Rect>& rects) {
-//	
-//	// convert image
-//	QPixmap pm = QPixmap::fromImage(Image::mat2QImage(img));
-//	QPainter p(&pm);
-//
-//	// convert points
-//	QVector<QRectF> qRects;
-//
-//	for (const cv::Rect& r : rects)
-//		qRects << Converter::cvRectToQt(r);
-//
-//	drawRects(p, qRects);
-//
-//	return Image::qImage2Mat(pm.toImage());
-//}
 
 void Drawer::drawRects(QPainter & p, const QVector<QRectF>& rects) {
 

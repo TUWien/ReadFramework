@@ -229,8 +229,8 @@ cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 
 	// draw super pixels
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 
 	//DBScanPixel dbs(mPixels);
@@ -258,15 +258,15 @@ cv::Mat SuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	}
 
 	qDebug() << "drawing takes" << dtf;
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img, const QColor& col) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 	p.setPen(col);
 
 	for (auto b : mBlobs) {
@@ -279,7 +279,7 @@ cv::Mat SuperPixel::drawMserBlobs(const cv::Mat & img, const QColor& col) const 
 
 	qDebug() << "drawing takes" << dtf;
 	
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 // SuperPixelConfig --------------------------------------------------------------------
@@ -638,8 +638,8 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	}
 
 	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter painter(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter painter(&qImg);
 
 	Ellipse e(pixel->center(), Vector2D(radius, radius));
 	e.draw(painter, 0.3);
@@ -694,7 +694,7 @@ cv::Mat LocalOrientation::draw(const cv::Mat & img, const QString & id, double r
 	Rect r(30, pixel->center().y() - radius, histSize, 50);
 	dominantHist.draw(painter, r);
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 // LineSuperPixel --------------------------------------------------------------------
@@ -746,8 +746,8 @@ QSharedPointer<LinePixelConfig> LineSuperPixel::config() const {
 cv::Mat LineSuperPixel::draw(const cv::Mat & img) const {
 
 	// debug - remove
-	QPixmap pm = Image::mat2QPixmap(img);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
 
 	p.setPen(ColorManager::blue());
 
@@ -755,7 +755,7 @@ cv::Mat LineSuperPixel::draw(const cv::Mat & img) const {
 		px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
 	}
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 bool LineSuperPixel::checkInput() const {
@@ -1043,8 +1043,8 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	cv::Mat mag, phase;
 	edges(img, mag, phase);
 
-	QPixmap pm = Image::mat2QPixmap(mag);
-	QPainter p(&pm);
+	QImage qImg = Image::mat2QImage(mag, true);
+	QPainter p(&qImg);
 
 	p.setPen(col);
 
@@ -1068,7 +1068,7 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	hist.draw(p, Rect(Vector2D(30, 30), Vector2D(200, 100)));
 
 	qDebug() << "drawing takes" << dtf;
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 // -------------------------------------------------------------------- GridPixelConfig 

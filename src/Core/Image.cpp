@@ -41,9 +41,10 @@
 #include <QBuffer>
 #include <QImageWriter>
 #include <QFileInfo>
-#include <QPixmap>
 #include <QPainter>
 #include <QUrl>
+
+#include <opencv2/imgproc/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {
@@ -101,10 +102,13 @@ cv::Mat Image::qImage2Mat(const QImage& img) {
 /// </summary>
 /// <param name="img">The cv::Mat img.</param>
 /// <returns>The converted QImage.</returns>
-QImage Image::mat2QImage(const cv::Mat& img) {
+QImage Image::mat2QImage(const cv::Mat& img, bool toRGB) {
 
 	QImage qImg;
 	cv::Mat cvImg = img;
+
+	if (toRGB && img.channels() < 3)
+		cv::cvtColor(cvImg, cvImg, CV_GRAY2BGRA);
 
 	// since Mat header is copied, a new buffer should be allocated (check this!)
 	if (cvImg.depth() == CV_32F)
@@ -125,13 +129,13 @@ QImage Image::mat2QImage(const cv::Mat& img) {
 	return qImg;
 }
 
-cv::Mat Image::qPixmap2Mat(const QPixmap & img) {
-	return qImage2Mat(img.toImage());
-}
-
-QPixmap Image::mat2QPixmap(const cv::Mat & img) {
-	return QPixmap::fromImage(mat2QImage(img));
-}
+//cv::Mat Image::qPixmap2Mat(const QPixmap & img) {
+//	return qImage2Mat(img.toImage());
+//}
+//
+//QPixmap Image::mat2QPixmap(const cv::Mat & img) {
+//	return QPixmap::fromImage(mat2QImage(img));
+//}
 
 cv::Mat Image::qVector2Mat(const QVector<float>& data) {
 
@@ -428,14 +432,14 @@ cv::Mat Histogram::draw(const QPen & pen, const QColor & bgCol) {
 		cp = QPen(ColorManager::colors()[0]);
 	}
 
-	QPixmap pm(hist().cols, 100);
-	pm.fill(bgCol);
+	QImage img(hist().cols, 100, QImage::Format_RGB888);
+	img.fill(bgCol);
 
-	QPainter p(&pm);
+	QPainter p(&img);
 	p.setPen(cp);
 	draw(p);
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(img);
 }
 
 void Histogram::draw(QPainter & p) const {

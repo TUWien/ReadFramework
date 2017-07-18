@@ -89,11 +89,11 @@ cv::Mat PageSegmentation::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 
-	QPainter p(&pm);
+	QPainter p(&qImg);
 	
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString PageSegmentation::toString() const {

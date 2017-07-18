@@ -186,9 +186,9 @@ cv::Mat SuperPixelLabeler::draw(const cv::Mat& img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 
-	QPainter p(&pm);
+	QPainter p(&qImg);
 	p.setPen(ColorManager::red());
 	mSet.draw(p, PixelSet::draw_pixels);
 
@@ -198,7 +198,7 @@ cv::Mat SuperPixelLabeler::draw(const cv::Mat& img) const {
 	//for (auto b : mBlobs)
 	//	p.drawRect(Converter::cvRectToQt(b->bbox().toCvRect()));
 
-	return Image::qPixmap2Mat(pm);//Image::qImage2Mat(createLabelImage(Rect(img)));
+	return Image::qImage2Mat(qImg);//Image::qImage2Mat(createLabelImage(Rect(img)));
 }
 
 QString SuperPixelLabeler::toString() const {
@@ -781,12 +781,12 @@ cv::Mat SuperPixelTrainer::draw(const cv::Mat & img) const {
 
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 
-	QPainter p(&pm);
+	QPainter p(&qImg);
 	// TODO: draw something
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString SuperPixelTrainer::toString() const {

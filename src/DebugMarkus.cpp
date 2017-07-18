@@ -274,8 +274,8 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	//Timer dte;
 	//cv::Mat ei(img.size(), CV_32FC1, cv::Scalar(0));
-	//QPixmap pm = Image::mat2QPixmap(img);
-	//QPainter p(&pm);
+	//QImage qImg = Image::mat2QImage(img, true);
+	//QPainter p(&qImg);
 	//p.setPen(ColorManager::white());
 	//p.setOpacity(0.1);
 
@@ -294,7 +294,7 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	//cv::normalize(ei, ei, 1.0, 0.0, cv::NORM_MINMAX);
 	//cv::Mat dImg = ei;
-	//cv::Mat gcImg = Image::qPixmap2Mat(pm);
+	//cv::Mat gcImg = Image::qImage2Mat(qImg);
 
 
 	//// debug visualizations --------------------------------------------------------------------
@@ -375,7 +375,6 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	qDebug() << "debug image saved: " << dstPath;
 
 	qDebug() << "image path: " << mConfig.imagePath();
-
 }
 
 void LayoutTest::testTrainer() {

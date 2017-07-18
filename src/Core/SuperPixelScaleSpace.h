@@ -149,8 +149,8 @@ public:
 
 	cv::Mat draw(const cv::Mat & img) const {
 
-		QPixmap pm = Image::mat2QPixmap(img);
-		QPainter p(&pm);
+		QImage qImg = Image::mat2QImage(img, true);
+		QPainter p(&qImg);
 
 		p.setPen(ColorManager::blue());
 
@@ -158,7 +158,7 @@ public:
 			px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
 		}
 
-		return Image::qPixmap2Mat(pm);
+		return Image::qImage2Mat(qImg);
 	}
 
 	QString toString() const override {

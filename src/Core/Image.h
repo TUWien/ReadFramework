@@ -54,7 +54,6 @@
 #endif
 
 // Qt defines
-class QPixmap;
 
 namespace rdf {
 
@@ -135,9 +134,9 @@ namespace Image {
 	};
 
 	DllCoreExport cv::Mat qImage2Mat(const QImage& img);
-	DllCoreExport QImage mat2QImage(const cv::Mat& img);
-	DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);
-	DllCoreExport QPixmap mat2QPixmap(const cv::Mat& img);
+	DllCoreExport QImage mat2QImage(const cv::Mat& img, bool toRGB = false);
+	//DllCoreExport cv::Mat qPixmap2Mat(const QPixmap& img);
+	//DllCoreExport QPixmap mat2QPixmap(const cv::Mat& img);
 	DllCoreExport cv::Mat qVector2Mat(const QVector<float>& data);
 
 	DllCoreExport QImage load(const QString& path, bool* ok = 0);

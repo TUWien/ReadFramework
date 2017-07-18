@@ -91,9 +91,9 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 	
 	// draw mser blobs
 	Timer dtf;
-	QPixmap pm = Image::mat2QPixmap(img);
+	QImage qImg = Image::mat2QImage(img, true);
 	
-	QPainter p(&pm);
+	QPainter p(&qImg);
 
 	//// uncomment to see rejected tabstops
 	//p.setPen(ColorManager::darkGray());
@@ -108,7 +108,7 @@ cv::Mat TabStopAnalysis::draw(const cv::Mat& img) const {
 		ts->draw(p);
 	}
 
-	return Image::qPixmap2Mat(pm);
+	return Image::qImage2Mat(qImg);
 }
 
 QString TabStopAnalysis::toString() const {

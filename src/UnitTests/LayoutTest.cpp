@@ -114,9 +114,9 @@ bool BaselineTest::layoutToXml(const cv::Mat& img, const PageXmlParser& parser) 
 	}
 
 	// cannot test drawing: it's headless
-	//// test drawing
-	//cv::Mat rImg = img.clone();
-	//rImg = laXml.draw(rImg);
+	// test drawing
+	cv::Mat rImg = img.clone();
+	rImg = laXml.draw(rImg);
 
 	// check layout analysis with empty image
 	cv::Mat emptyImg;
@@ -169,6 +169,12 @@ bool SuperPixelTest::testSuperPixel() const {
 		qWarning() << "cannot compute SuperPixels";
 		return false;
 	}
+
+	// test drawing
+	cv::Mat rImg = src.clone();
+	rImg = sp.draw(rImg);
+	rImg = lsp.draw(rImg);
+	rImg = gsp.draw(rImg);
 
 	return true;
 }
@@ -232,6 +238,12 @@ bool SuperPixelTest::collectFeatures() const {
 
 	rdf::FeatureCollectionManager fcm(spf.features(), spf.set());
 	fcm.write(mConfig.featureCachePath());
+
+	// test drawing
+	cv::Mat rImg = imgCv.clone();
+	rImg = sp.draw(rImg);
+	rImg = spl.draw(rImg);
+	rImg = spf.draw(rImg);
 
 	qDebug() << "feature collection takes" << dt;
 	return true;

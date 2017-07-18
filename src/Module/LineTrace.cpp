@@ -824,8 +824,8 @@ namespace rdf {
 
 	cv::Mat LineTraceLSD::draw(const cv::Mat & img) const {
 		
-		QPixmap pm = Image::mat2QPixmap(img);
-		QPainter p(&pm);
+		QImage qImg = Image::mat2QImage(img, true);
+		QPainter p(&qImg);
 
 		p.setPen(ColorManager::pink());
 
@@ -837,7 +837,7 @@ namespace rdf {
 		for (auto l : mLines)
 			l.draw(p);
 		
-		return Image::qPixmap2Mat(pm);
+		return Image::qImage2Mat(qImg);
 	}
 
 	bool LineTraceLSD::checkInput() const {
