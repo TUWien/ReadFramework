@@ -142,6 +142,7 @@ public:
 	int maxNumFeaturesPerImage() const;
 	int minNumFeaturesPerClass() const;
 	int maxNumFeaturesPerClass() const;
+	QString backgroundLabelName() const;
 
 	virtual QString toString() const override;
 
@@ -152,9 +153,11 @@ protected:
 
 	QString mFeatureFilePath;
 	QString mLabelConfigFilePath;
+	QString mBackgroundLabelName = "";		// class name of background pixels (if empty, they are treated as unknown i.e. not trained)
 	int mMaxNumFeaturesPerImage = 1000000;	// 1e6
 	int mMinNumFeaturesPerClass = 10000;	// 1e4
 	int mMaxNumFeaturesPerClass = 10000;	// 1e4;
+
 };
 
 /// <summary>

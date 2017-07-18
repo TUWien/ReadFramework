@@ -161,12 +161,12 @@ void LayoutTest::testComponents() {
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
 	// switch tests
-	testFeatureCollector(imgCv);
+	//testFeatureCollector(imgCv);
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
 	//layoutToXml();
-	//layoutToXmlDebug();
+	layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
 	//eval();
@@ -254,6 +254,20 @@ void LayoutTest::layoutToXmlDebug() const {
 	if (!gpm.compute())
 		qWarning() << "could not compute" << mConfig.imagePath();
 
+	// read back the model
+	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (f->isTrained())
+		qDebug() << "the classifier I loaded is trained...";
+
+	SuperPixelClassifier spc(img, gpm.pixelSet());
+	spc.setModel(model);
+
+	if (!spc.compute())
+		qWarning() << "could not classify SuperPixels";
+
+
 	// end computing --------------------------------------------------------------------
 
 	//// debug visualizations --------------------------------------------------------------------
@@ -288,9 +302,10 @@ void LayoutTest::layoutToXmlDebug() const {
 	// drawing --------------------------------------------------------------------
 
 	cv::Mat gcImg;
-	gcImg = gpm.draw(img, ColorManager::blue());
+	//gcImg = gpm.draw(img, ColorManager::blue());
+	gcImg = spc.draw(img);
 
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "grid-pixel");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-classified");
 	rdf::Image::save(gcImg, dstPath);
 	qDebug() << "pixel image saved: " << dstPath;
 
@@ -298,7 +313,6 @@ void LayoutTest::layoutToXmlDebug() const {
 		qDebug() << "b.t.w. best image name ever...";
 	
 	qInfo() << "layout analysis computed in" << dt;
-
 }
 
 void LayoutTest::testFeatureCollector(const cv::Mat & src) const {

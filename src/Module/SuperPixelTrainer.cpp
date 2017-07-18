@@ -111,6 +111,10 @@ int SuperPixelLabelerConfig::maxNumFeaturesPerClass() const {
 	return mMaxNumFeaturesPerClass;
 }
 
+QString SuperPixelLabelerConfig::backgroundLabelName() const {
+	return mBackgroundLabelName;
+}
+
 QString SuperPixelLabelerConfig::toString() const {
 	return ModuleConfig::toString();
 }
@@ -119,6 +123,7 @@ void SuperPixelLabelerConfig::load(const QSettings & settings) {
 	
 	mFeatureFilePath = settings.value("featureFilePath", mFeatureFilePath).toString();
 	mLabelConfigFilePath = settings.value("labelConfigFilePath", mLabelConfigFilePath).toString();
+	mBackgroundLabelName = settings.value("backgroundLabelName", mBackgroundLabelName).toString();
 	mMaxNumFeaturesPerImage = settings.value("maxNumFeaturesPerImage", mMaxNumFeaturesPerImage).toInt();
 	mMinNumFeaturesPerClass = settings.value("minNumFeaturesPerClass", mMinNumFeaturesPerClass).toInt();
 	mMaxNumFeaturesPerClass = settings.value("maxNumFeaturesPerClass", mMaxNumFeaturesPerClass).toInt();
@@ -128,6 +133,7 @@ void SuperPixelLabelerConfig::save(QSettings & settings) const {
 
 	settings.setValue("featureFilePath", mFeatureFilePath);
 	settings.setValue("labelConfigFilePath", mLabelConfigFilePath);
+	settings.setValue("backgroundLabelName", mBackgroundLabelName);
 	settings.setValue("maxNumFeaturesPerImage", mMaxNumFeaturesPerImage);
 	settings.setValue("minNumFeaturesPerClass", mMinNumFeaturesPerClass);
 	settings.setValue("maxNumFeaturesPerClass", mMaxNumFeaturesPerClass);
@@ -267,7 +273,7 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 		LabelInfo ll = mManager.find(*region);
 
 		if (ll.isNull()) { 
-			qDebug() << "could not find region: " << region->type();
+			qDebug() << "could not find region: " << RegionManager::instance().typeName(region->type());
 			continue;
 		}
 		
@@ -485,8 +491,10 @@ void FeatureCollectionManager::write(const QString & filePath) const {
 
 	QJsonArray ja;
 
-	for (const FeatureCollection& fc : mCollection)
+	// NOTE: JSON objects have a size limit ~40MB
+	for (const FeatureCollection& fc : mCollection) {
 		ja << fc.toJson();
+	}
 	
 	QJsonObject jo;
 	jo.insert(FeatureCollection::jsonKey(), ja);
