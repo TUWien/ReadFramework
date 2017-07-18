@@ -822,54 +822,131 @@ bool FormFeatures::matchTemplate() {
 		}
 	}
 
-
+	//find all nodes for the association graph
 	for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
 
 		qDebug() << "try to match cell : " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
 
-		//shift cell lines according offset
-		rdf::Line tL = cells[cellIdx]->topBorder();
-		tL.translate(mOffset);
-		rdf::Line lL = cells[cellIdx]->leftBorder();
-		lL.translate(mOffset);
-		rdf::Line rL = cells[cellIdx]->rightBorder();
-		rL.translate(mOffset);
-		rdf::Line bL = cells[cellIdx]->bottomBorder();
-		bL.translate(mOffset);
 
-		//find all line candidates width a minimum distance of cell width/height /2
-		//overlap can also be 0 for a line candidate
-		//0: left 1: right 2; upper 3: bottom
-		double d = 0;
-		d = findMinWidth(cellsR, cells, cellIdx, 2); //if no neighbours are found, threshold is based on the config value
-		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-		LineCandidates topL = findLineCandidates(tL, d, true);
+		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
+			rdf::Line l;
+			bool visible = false;
+			bool horizontal = false;
+			double d = 0;
+			AssociationGraphNode::LinePosition lp;
+			switch (i)
+			{
+				case AssociationGraphNode::LinePosition::pos_top : 
+					l = cells[cellIdx]->topBorder();
+					visible = cells[cellIdx]->topBorderVisible();
+					d = findMinWidth(cellsR, cells, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_top;
+					horizontal = true;
+					break;
+				case AssociationGraphNode::LinePosition::pos_bottom: 
+					l = cells[cellIdx]->bottomBorder();
+					visible = cells[cellIdx]->bottomBorderVisible();
+					d = findMinWidth(cellsR, cells, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_bottom;
+					horizontal = true;
+					break;
+				case AssociationGraphNode::LinePosition::pos_left: 
+					l = cells[cellIdx]->rightBorder();
+					visible = cells[cellIdx]->rightBorderVisible();
+					d = findMinWidth(cellsR, cells, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_left;
+					horizontal = false;
+					break;
+				case AssociationGraphNode::LinePosition::pos_right: 
+					l = cells[cellIdx]->leftBorder();
+					visible = cells[cellIdx]->leftBorderVisible();
+					d = findMinWidth(cellsR, cells, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_right;
+					horizontal = false;
+					break;
+			default:
+				qWarning() << "no Cell Border found in matchTemplate";
+				break;
+			}
+			if (visible) {
+				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+				l.translate(mOffset);
+				
+				LineCandidates lC = findLineCandidates(l, d, horizontal);
+				QVector<int> lineIdx = lC.candidatesIdx();
+				QVector<double> overlaps = lC.overlaps();
+				QVector<double> distances = lC.distances();
 
-		d = findMinWidth(cellsR, cells, cellIdx, 0);
-		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-		LineCandidates leftL = findLineCandidates(lL, d, false);
+				for (int lI = 0; lI < lineIdx.size(); i++) {
 
-		d = findMinWidth(cellsR, cells, cellIdx, 1);
-		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-		LineCandidates rightL = findLineCandidates(rL, d, false);
+					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
+					newNode->setLineCell(cells[cellIdx]->row(), cells[cellIdx]->col());
+					newNode->setLinePos(lp);
+					newNode->setReferenceLine(l);
+					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
+					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
+					newNode->setMatchedLineIdx(lineIdx[lI]);
+					if (horizontal) 
+						mANodesHorizontal.push_back(newNode);
+					else
+						mANodesVertical.push_back(newNode);
 
-		d = findMinWidth(cellsR, cells, cellIdx, 3);
-		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-		LineCandidates bottomL = findLineCandidates(bL, d, true);
+				}
+			}
 
+		}
 
-		cellsR[cellIdx]->setLineCandidatesLeftLine(leftL);
-		cellsR[cellIdx]->setLineCandidatesRightLine(rightL);
-		cellsR[cellIdx]->setLineCandidatesTopLine(topL);
-		cellsR[cellIdx]->setLineCandidatesBottomLine(bottomL);
 	}
-			
-	//what we have: raw table structure; all neighbours of a cell are known by index; for all lines CandidateLines are know
-	//TODO: find global optimum of line matching
+
+	////find all line candidates for all cells
+	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
+
+	//	qDebug() << "try to match cell : " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
+
+	//	//shift cell lines according offset
+	//	rdf::Line tL = cells[cellIdx]->topBorder();
+	//	tL.translate(mOffset);
+	//	rdf::Line lL = cells[cellIdx]->leftBorder();
+	//	lL.translate(mOffset);
+	//	rdf::Line rL = cells[cellIdx]->rightBorder();
+	//	rL.translate(mOffset);
+	//	rdf::Line bL = cells[cellIdx]->bottomBorder();
+	//	bL.translate(mOffset);
+
+	//	//find all line candidates width a minimum distance of cell width/height /2
+	//	//overlap can also be 0 for a line candidate
+	//	//0: left 1: right 2; upper 3: bottom
+	//	double d = 0;
+	//	d = findMinWidth(cellsR, cells, cellIdx, 2); //if no neighbours are found, threshold is based on the config value
+	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates topL = findLineCandidates(tL, d, true);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 0);
+	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates leftL = findLineCandidates(lL, d, false);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 1);
+	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates rightL = findLineCandidates(rL, d, false);
+
+	//	d = findMinWidth(cellsR, cells, cellIdx, 3);
+	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+	//	LineCandidates bottomL = findLineCandidates(bL, d, true);
+
+
+	//	cellsR[cellIdx]->setLineCandidatesLeftLine(leftL);
+	//	cellsR[cellIdx]->setLineCandidatesRightLine(rightL);
+	//	cellsR[cellIdx]->setLineCandidatesTopLine(topL);
+	//	cellsR[cellIdx]->setLineCandidatesBottomLine(bottomL);
+	//}
+	//		
+	////what we have: raw table structure; all neighbours of a cell are known by index; for all lines CandidateLines are know
+	////TODO: find global optimum of line matching
 
 	//old version
 	//generate cells
@@ -1602,5 +1679,48 @@ cv::Size FormFeatures::sizeImg() const
 		settings.setValue("formTemplate", mTemplDatabase);
 		settings.setValue("saveChilds", mSaveChilds);
 
+	}
+	AssociationGraphNode::AssociationGraphNode() {
+	}
+
+	void AssociationGraphNode::setLinePos(const AssociationGraphNode::LinePosition & type) {
+		mLinePos = type;
+	}
+
+	AssociationGraphNode::LinePosition AssociationGraphNode::linePosition() const {
+		return mLinePos;
+	}
+	void AssociationGraphNode::setReferenceLine(Line l) 	{
+		mReferenceLine = l;
+	}
+	Line AssociationGraphNode::referenceLine() const 	{
+		return mReferenceLine;
+	}
+	int AssociationGraphNode::getRowIdx() const 	{
+		return mRefRowIdx;
+	}
+	int AssociationGraphNode::getColIdx() const 	{
+		return mRefColIdx;
+	}
+	void AssociationGraphNode::setLineCell(int rowIdx, int colIdx) 	{
+		mRefColIdx = colIdx;
+		mRefRowIdx = rowIdx;
+	}
+	void AssociationGraphNode::setMatchedLine(Line l) 	{
+		mMatchedLine = l;
+	}
+	void AssociationGraphNode::setMatchedLine(Line l, double overlap, double distance) 	{
+		mMatchedLine = l;
+		mDistance = distance;
+		mOverlap = overlap;
+	}
+	Line AssociationGraphNode::matchedLine() const	{
+		return mMatchedLine;
+	}
+	void AssociationGraphNode::setMatchedLineIdx(int idx) 	{
+		mMatchedLineIdx = idx;
+	}
+	int AssociationGraphNode::matchedLineIdx() const {
+		return mMatchedLineIdx;
 	}
 }

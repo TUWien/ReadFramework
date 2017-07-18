@@ -92,6 +92,53 @@ namespace rdf {
 
 	};
 
+
+	class DllCoreExport AssociationGraphNode {
+
+	public:
+		//0: left 1: right 2; upper 3: bottom
+		enum LinePosition {
+			pos_left = 0,
+			pos_right,
+			pos_top,
+			pos_bottom
+		};
+		
+
+		AssociationGraphNode();
+
+		void setLinePos(const AssociationGraphNode::LinePosition& type);
+		AssociationGraphNode::LinePosition linePosition() const;
+
+		void setReferenceLine(Line l);
+		Line referenceLine() const;
+
+		int getRowIdx() const;
+		int getColIdx() const;
+		void setLineCell(int rowIdx, int colIdx);
+
+		void setMatchedLine(Line l);
+		void setMatchedLine(Line l, double overlap, double distance);
+		Line matchedLine() const;
+
+		void setMatchedLineIdx(int idx);
+		int matchedLineIdx() const;
+
+	protected:
+
+		Line mReferenceLine;
+		LinePosition mLinePos;
+		int mRefRowIdx, mRefColIdx;
+
+		Line mMatchedLine;
+		int mMatchedLineIdx;
+		double mOverlap = -1;
+		double mDistance = -1;
+
+	};
+
+
+
 	class DllCoreExport FormFeatures : public Module {
 
 	public:
@@ -191,6 +238,9 @@ namespace rdf {
 		QVector<int> mUsedHorLineIdx;
 		QVector<rdf::Line> mVerLines;
 		QVector<int> mUsedVerLineIdx;
+
+		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesHorizontal;
+		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesVertical;
 
 		//rdf::FormFeatures mTemplateForm;
 		QSharedPointer<rdf::FormFeatures> mTemplateForm;
