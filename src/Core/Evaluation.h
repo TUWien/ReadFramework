@@ -32,46 +32,79 @@
 
 #pragma once
 
+#include "BaseImageElement.h"
+
 #pragma warning(push, 0)	// no warnings from includes
-#include <QString>
+#include <QVector>
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#pragma warning (disable: 4251)	// inlined Qt functions in dll interface
+
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
 namespace rdf {
 
 // read defines
-class TestConfig{
+
+/// <summary>
+/// Information class for SuperPixel labeling.
+/// </summary>
+/// <seealso cref="BaseElement" />
+class DllCoreExport EvalInfo : public BaseElement {
 
 public:
-	TestConfig();
+	EvalInfo(const QString& name = "unknown", int negClassId = -1);
 
-	void setImagePath(const QString& path);
-	QString imagePath() const;
+	void operator+=(const EvalInfo& o);
 
-	void setXmlPath(const QString& path);
-	QString xmlPath() const;
+	void eval(int trueClassId, int predictedClassId);
 
-	void setClassifierPath(const QString& path);
-	QString classifierPath() const;
+	void setNegClassId(int id);
 
-	void setLabelConfigPath(const QString& path);
-	QString labelConfigPath() const;
+	void setName(const QString& name);
+	QString name() const;
 
-	void setFeatureCachePath(const QString& path);
-	QString featureCachePath() const;
+	double accuracy() const;
+	double fscore() const;
+	double precision() const;
+	double recall() const;
 
-	QString backgroundLabel() const;
+	int count() const;
 
-protected:
-	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
-	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
-	QString mClassifierPath = "";
-	QString mFeatureCachePath = "";
-	QString mLabelConfigPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
-	QString mBackgroundLabel = "noise";
+	static QString header();
+	QString toString() const;
+
+private:
+	int mTp = 0;	// true positives
+	int mTn = 0;	// true negative
+	int mFp = 0;	// false positives
+	int mFn = 0;	// false negatives
+
+	int mNegClassId = -1;
+
+	QString mName;
+};
+
+class DllCoreExport EvalInfoManager {
+
+public:
+	EvalInfoManager(const QVector<EvalInfo>& evals);
+
+	bool write(const QString& filePath) const;
+	QString toString() const;
+
+private:
+	QVector<EvalInfo> mEvals;
+
+	QByteArray toBuffer() const;
 };
 
 }

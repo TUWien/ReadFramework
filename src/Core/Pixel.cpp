@@ -423,9 +423,9 @@ double Pixel::value() const {
 	return mValue;
 }
 
-cv::Mat Pixel::toBinaryMask() const {
+cv::Mat Pixel::toBinaryMask(const Rect& r) const {
 
-	return mEllipse.toBinaryMask();
+	return mEllipse.toBinaryMask(r);
 }
 
 void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
@@ -440,11 +440,21 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 
 	// colorize according to labels
 	if (df & draw_label_colors) {
-		if (!label().trueLabel().isNull()) {
-			p.setPen(label().trueLabel().visColor());
+
+		if (label().isEvaluated()) {
+
+			if (label().trueLabel() == label().label())
+				p.setPen(ColorManager::green());
+			else
+				p.setPen(ColorManager::red());
 		}
-		else if (!label().label().isNull()) {
-			p.setPen(label().label().visColor());
+		else {
+			if (!label().trueLabel().isNull()) {
+				p.setPen(label().trueLabel().visColor());
+			}
+			else if (!label().label().isNull()) {
+				p.setPen(label().label().visColor());
+			}
 		}
 	}
 	

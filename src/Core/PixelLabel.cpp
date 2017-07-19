@@ -187,7 +187,7 @@ LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 	}
 
 	// print warning
-	if (ll.id() == label_unknown && ll.mName != "Unknown") {
+	if (ll.id() == label_unknown && ll.mName.compare("unknown", Qt::CaseInsensitive)) {
 		QJsonDocument jd(jo);
 		qCritical().noquote() << "could not parse" << jd.toJson();
 		return LabelInfo::unknownLabel();
@@ -401,6 +401,16 @@ void PixelLabel::setTrueLabel(const LabelInfo & label) {
 
 LabelInfo PixelLabel::trueLabel() const {
 	return mTrueLabel;
+}
+
+/// <summary>
+/// Checks if GT and prediction are present
+/// </summary>
+/// <returns>
+///   <c>true</c> if trueLabel() and label() are set; otherwise, <c>false</c>.
+/// </returns>
+bool PixelLabel::isEvaluated() const {
+	return mTrueLabel != LabelInfo::label_unknown && mLabel != LabelInfo::label_unknown;
 }
 
 // SuperPixelModel --------------------------------------------------------------------

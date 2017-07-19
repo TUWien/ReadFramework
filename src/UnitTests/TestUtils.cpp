@@ -34,9 +34,12 @@
 
 #include "PageParser.h"
 #include "Settings.h"
+#include "Utils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
+#include <QFileInfo>
+#include <QDir>
 #pragma warning(pop)
 
 namespace rdf {
@@ -44,6 +47,8 @@ namespace rdf {
 // TestConfig --------------------------------------------------------------------	
 TestConfig::TestConfig() {
 
+	mFeatureCachePath = QFileInfo(rdf::Utils::tempPath(), "features.json").absoluteFilePath();
+	mClassifierPath = QFileInfo(rdf::Utils::tempPath(), "model.json").absoluteFilePath();
 }
 
 void TestConfig::setImagePath(const QString & path) {
@@ -88,6 +93,10 @@ void TestConfig::setFeatureCachePath(const QString & path) {
 
 QString TestConfig::featureCachePath() const {
 	return mFeatureCachePath;
+}
+
+QString TestConfig::backgroundLabel() const {
+	return mBackgroundLabel;
 }
 
 }

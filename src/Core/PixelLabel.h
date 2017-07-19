@@ -154,6 +154,8 @@ class DllCoreExport PixelLabel : public BaseElement {
 public:
 	PixelLabel(const QString& id = QString());
 
+	bool isEvaluated() const;
+
 	void setLabel(const LabelInfo& label);
 	LabelInfo label() const;
 

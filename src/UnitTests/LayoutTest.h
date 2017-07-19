@@ -69,9 +69,13 @@ public:
 	bool testSuperPixel() const;
 	bool collectFeatures() const;
 	bool train() const;
+	bool eval() const;
 
 protected:
 	TestConfig mConfig;
+
+	bool load(cv::Mat& img) const;
+	bool load(rdf::PageXmlParser& parser) const;
 };
 
 

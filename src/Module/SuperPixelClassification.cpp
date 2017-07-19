@@ -126,7 +126,10 @@ bool SuperPixelClassifier::compute() {
 	assert(labels.size() == mSet.size());
 
 	for (int idx = 0; idx < mSet.size(); idx++) {
-		pixels[idx]->setLabel(labels[idx]);
+		
+		PixelLabel& label = pixels[idx]->label();
+		label.setLabel(labels[idx].label());
+		pixels[idx]->setLabel(label);
 	}
 
 	mInfo << mSet.size() << "pixels classified in" << dt;

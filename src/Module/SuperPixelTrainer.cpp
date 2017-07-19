@@ -146,6 +146,8 @@ SuperPixelLabeler::SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& b
 	mImgRect = imgRect;
 	mConfig = QSharedPointer<SuperPixelLabelerConfig>::create();
 	mConfig->loadSettings();
+
+	mGlobalName = config()->backgroundLabelName();
 }
 
 SuperPixelLabeler::SuperPixelLabeler(const PixelSet& set, const Rect& imgRect) {
@@ -154,6 +156,8 @@ SuperPixelLabeler::SuperPixelLabeler(const PixelSet& set, const Rect& imgRect) {
 	mImgRect = imgRect;
 	mConfig = QSharedPointer<SuperPixelLabelerConfig>::create();
 	mConfig->loadSettings();
+
+	mGlobalName = config()->backgroundLabelName();
 }
 
 bool SuperPixelLabeler::isEmpty() const {
@@ -372,7 +376,7 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 
 		Rect r = px->bbox().clipped(labelImg.size());
 		cv::Mat labelBBox = labelImg(r.toCvRect());
-		cv::Mat mask = px->toBinaryMask();
+		cv::Mat mask = px->toBinaryMask(r);
 
 		// clip mask
 		if (r != px->bbox())
@@ -383,7 +387,7 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 		int id = LabelInfo::color2Id(col);
 
 		// assign ground truth & convert to pixel
-		PixelLabel label;
+		PixelLabel& label = px->label();
 		label.setTrueLabel(mManager.find(id));
 		px->setLabel(label);
 		setL << px;

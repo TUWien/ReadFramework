@@ -46,6 +46,7 @@
 #include <QJsonDocument>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QDateTime>
 
 #include <opencv2/core/core.hpp>
 #pragma warning(pop)
@@ -248,6 +249,19 @@ QString Utils::createFilePath(const QString & filePath, const QString & attribut
 }
 
 /// <summary>
+/// Returns a 'unique' filename named "ATTRIBUTE YYYY-MM-dd HH-mm.SUFFIX".
+/// </summary>
+/// <param name="attribute">An optional string to specify the file.</param>
+/// <param name="suffix">The file suffix.</param>
+/// <returns></returns>
+QString Utils::timeStampFileName(const QString & attribute, const QString & suffix) {
+	
+	QString ts = QDateTime::currentDateTime().toString("yyyy-MM-dd HH-mm");
+	
+	return attribute + " " + ts + suffix;
+}
+
+/// <summary>
 /// Returns the filePath without suffix.
 /// C:/temp/something.png -> C:/temp/something
 /// This fixes an issue of Qt QFileInfo::baseName which 
@@ -271,6 +285,11 @@ QString Utils::baseName(const QString & filePath) {
 	}
 
 	return filePath.left(sI-1);	// -1 to remove the point
+}
+
+QString Utils::tempPath() {
+	
+	return QStandardPaths::writableLocation(QStandardPaths::TempLocation);
 }
 
 QJsonObject Utils::readJson(const QString & filePath) {

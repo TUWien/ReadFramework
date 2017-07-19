@@ -42,9 +42,13 @@
 #include "SuperPixelClassification.h"
 #include "SuperPixelTrainer.h"
 #include "SuperPixelScaleSpace.h"
+#include "Evaluation.h"
+#include "EvaluationModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QImage>
+#include <QFileInfo>
+#include <QDir>
 
 #include <opencv2/ml/ml.hpp>
 #pragma warning(pop)
@@ -137,17 +141,12 @@ SuperPixelTest::SuperPixelTest(const TestConfig & config) : mConfig(config) {
 
 bool SuperPixelTest::testSuperPixel() const {
 	
-	QImage img = Image::load(mConfig.imagePath());
-
-	if (img.isNull()) {
-		qWarning() << "could not load image from" << mConfig.imagePath();
+	cv::Mat src;
+	
+	if (!load(src))
 		return false;
-	}
 
 	Timer dt;
-
-	// convert image
-	cv::Mat src = Image::qImage2Mat(img);
 
 	// default (MSER) super pixels
 	rdf::SuperPixel sp(src);
@@ -180,28 +179,17 @@ bool SuperPixelTest::testSuperPixel() const {
 }
 
 bool SuperPixelTest::collectFeatures() const {
-	
-	QImage img = Image::load(mConfig.imagePath());
 
-	if (img.isNull()) {
-		qWarning() << "could not load image from" << mConfig.imagePath();
+	cv::Mat imgCv;
+	rdf::PageXmlParser parser;
+
+	if (!load(imgCv))
 		return false;
-	}
+
+	if (!load(parser))
+		return false;
 
 	Timer dt;
-
-	// convert image
-	cv::Mat imgCv = Image::qImage2Mat(img);
-
-	// load XML
-	rdf::PageXmlParser parser;
-	parser.read(mConfig.xmlPath());
-
-	// fail if the XML was not loaded
-	if (parser.loadStatus() != PageXmlParser::status_ok) {
-		qWarning() << "could not load XML from" << mConfig.xmlPath();
-		return false;
-	}
 
 	// test loading of label lookup
 	rdf::LabelManager lm = rdf::LabelManager::read(mConfig.labelConfigPath());
@@ -224,6 +212,7 @@ bool SuperPixelTest::collectFeatures() const {
 	if (parser.page())
 		spl.setRootRegion(parser.page()->rootRegion());
 
+	spl.setBackgroundLabelName(mConfig.backgroundLabel());
 
 	if (!spl.compute()) {
 		qCritical() << "could not compute SuperPixel labeling!";
@@ -257,7 +246,7 @@ bool SuperPixelTest::train() const {
 	rdf::FeatureCollectionManager cFc = rdf::FeatureCollectionManager::read(fPath);
 	fcm.merge(cFc);
 
-	// train classifier
+	// -------------------------------------------------------------------- train the classifier 
 	rdf::SuperPixelTrainer spt(fcm);
 
 	if (!spt.compute()) {
@@ -278,6 +267,128 @@ bool SuperPixelTest::train() const {
 
 	qCritical() << "could not save classifier to:" << mConfig.classifierPath();
 	return false;
+}
+
+bool SuperPixelTest::eval() const {
+
+	cv::Mat img;
+	rdf::PageXmlParser parser;
+
+	if (!load(img))
+		return false;
+
+	if (!load(parser))
+		return false;
+
+	// compute super pixels
+	rdf::SuperPixel sp(img);
+
+	if (!sp.compute()) {
+		qCritical() << "could not compute super pixels!";
+		return false;
+	}
+
+	// -------------------------------------------------------------------- GT
+	rdf::LabelManager lm = rdf::LabelManager::read(mConfig.labelConfigPath());
+	qInfo().noquote() << lm.toString();
+
+	// feed the label lookup
+	rdf::SuperPixelLabeler spl(sp.pixelSet(), rdf::Rect(img));
+	spl.setLabelManager(lm);
+	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
+	spl.setBackgroundLabelName(mConfig.backgroundLabel());
+
+	// set the ground truth
+	if (parser.page())
+		spl.setRootRegion(parser.page()->rootRegion());
+
+	if (!spl.compute()) {
+		qCritical() << "could not compute SuperPixel labeling!";
+		return false;
+	}
+
+	// -------------------------------------------------------------------- load model 
+	QSharedPointer<rdf::SuperPixelModel> model = rdf::SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (!f || !f->isTrained()) {
+		qCritical() << "illegal classifier found in" << mConfig.classifierPath();
+		return false;
+	}
+
+	rdf::SuperPixelClassifier spc(img, sp.pixelSet());
+	spc.setModel(model);
+
+	if (!spc.compute())
+		qWarning() << "could not classify SuperPixels";
+
+	// -------------------------------------------------------------------- Evaluate 
+	rdf::SuperPixelEval spe(sp.pixelSet());
+	spe.setBackroundLabelId(lm.find(mConfig.backgroundLabel()).id());
+
+	if (!spe.compute())
+		qWarning() << "could not evaluate SuperPixels";
+
+	// test evaluation
+	EvalInfo ei = spe.evalInfo();
+	ei.setName(QFileInfo(mConfig.imagePath()).baseName());
+
+	// this is weird, but: usually we test more than one image & we do not use training images for testing : )
+	QVector<rdf::EvalInfo> infos;
+	infos << ei;
+	rdf::EvalInfoManager eim(infos);
+
+	QFileInfo fi(rdf::Utils::tempPath(), rdf::Utils::timeStampFileName("delete-me"));
+	eim.write(fi.absoluteFilePath());
+
+	qDebug().noquote() << EvalInfo::header();
+	qDebug().noquote() << eim.toString();
+	qDebug() << "results written to" << fi.absoluteFilePath();
+
+	// -------------------------------------------------------------------- drawing
+	QString fn = QFileInfo(mConfig.imagePath()).baseName() + ".jpg";
+	QString dstPath = QFileInfo(rdf::Utils::tempPath(), fn).absoluteFilePath();
+
+	cv::Mat rImg = spe.draw(img);
+	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-eval"));
+
+	rImg = sp.draw(img);
+	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-classified"));
+
+	qDebug() << "super pixels written to" << dstPath;
+
+	return true;
+}
+
+bool SuperPixelTest::load(cv::Mat& img) const {
+
+	QImage qImg = Image::load(mConfig.imagePath());
+
+	if (qImg.isNull()) {
+		qWarning() << "could not load image from" << mConfig.imagePath();
+		return false;
+	}
+
+	Timer dt;
+
+	// convert image
+	img = Image::qImage2Mat(qImg);
+
+	return true;
+}
+
+bool SuperPixelTest::load(rdf::PageXmlParser& parser) const {
+
+	// load XML
+	parser.read(mConfig.xmlPath());
+
+	// fail if the XML was not loaded
+	if (parser.loadStatus() != PageXmlParser::status_ok) {
+		qWarning() << "could not load XML from" << mConfig.xmlPath();
+		return false;
+	}
+
+	return true;
 }
 
 }

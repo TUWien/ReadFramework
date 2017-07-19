@@ -99,13 +99,16 @@ int main(int argc, char** argv) {
 
 		rdf::SuperPixelTest spt;
 
-		if (!spt.testSuperPixel())
-			return 1;	// fail the test
+		//if (!spt.testSuperPixel())
+		//	return 1;	// fail the test
 
 		if (!spt.collectFeatures())
 			return 1;	// fail the test
 
 		if (!spt.train())
+			return 1;	// fail the test
+
+		if (!spt.eval())
 			return 1;	// fail the test
 
 	} else if (parser.isSet(tableOpt)) {

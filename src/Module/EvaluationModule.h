@@ -32,46 +32,79 @@
 
 #pragma once
 
+#include "BaseModule.h"
+#include "PixelSet.h"
+#include "Evaluation.h"
+
 #pragma warning(push, 0)	// no warnings from includes
-#include <QString>
+#include <QColor>
 #pragma warning(pop)
 
-// TODO: add DllExport magic
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
 
 // Qt defines
 
 namespace rdf {
 
 // read defines
-class TestConfig{
+/// <summary>
+/// Configuration class for EvalPixelModule.
+/// </summary>
+/// <seealso cref="ModuleConfig" />
+class DllCoreExport EvalConfig : public ModuleConfig {
 
 public:
-	TestConfig();
+	EvalConfig();
 
-	void setImagePath(const QString& path);
-	QString imagePath() const;
+	virtual QString toString() const override;
 
-	void setXmlPath(const QString& path);
-	QString xmlPath() const;
-
-	void setClassifierPath(const QString& path);
-	QString classifierPath() const;
-
-	void setLabelConfigPath(const QString& path);
-	QString labelConfigPath() const;
-
-	void setFeatureCachePath(const QString& path);
-	QString featureCachePath() const;
-
-	QString backgroundLabel() const;
+	int negativeClassIndex() const;
 
 protected:
-	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
-	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
-	QString mClassifierPath = "";
-	QString mFeatureCachePath = "";
-	QString mLabelConfigPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
-	QString mBackgroundLabel = "noise";
+	int mNegClassId = -1;			// the ID of the negative class (e.g. noise)
+
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
+};
+
+/// <summary>
+/// Evaluation Module.
+/// </summary>
+/// <seealso cref="SuperPixelBase" />
+class DllCoreExport SuperPixelEval : public Module {
+
+public:
+	SuperPixelEval(const PixelSet& set);
+
+	bool isEmpty() const override;
+
+	bool compute() override;
+
+	EvalInfo evalInfo() const;
+
+	void setBackroundLabelId(int id);
+
+	QString toString() const override;
+	QSharedPointer<EvalConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+
+private:
+
+	bool checkInput() const override;
+
+	// input
+	PixelSet mSet;	
+	int mBgId = -1;
+
+	// output
+	EvalInfo mEvalInfo;
 };
 
 }

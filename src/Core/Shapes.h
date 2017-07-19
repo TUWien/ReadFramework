@@ -451,7 +451,7 @@ public:
 
 	void draw(QPainter& p, double alpha = 0.0) const;
 	void pdf(cv::Mat& img, const Rect& box = Rect()) const;
-	cv::Mat toBinaryMask() const;
+	cv::Mat toBinaryMask(const Rect& box = Rect()) const;
 
 	Vector2D getPoint(double angle) const;
 

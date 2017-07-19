@@ -1637,9 +1637,13 @@ void Ellipse::draw(QPainter& p, double alpha) const {
 	p.setBrush(b);
 }
 
-cv::Mat Ellipse::toBinaryMask() const {
+cv::Mat Ellipse::toBinaryMask(const Rect& box) const {
 
-	QImage img(bbox().size().toQSize(), QImage::Format_Grayscale8);
+	Rect r = box;
+	if (r.isNull())
+		r = bbox();
+
+	QImage img(r.size().toQSize(), QImage::Format_Grayscale8);
 	img.fill(QColor(0, 0, 0));
 
 	QPainter p(&img);
