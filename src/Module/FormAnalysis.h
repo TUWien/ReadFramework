@@ -129,6 +129,7 @@ namespace rdf {
 
 		QVector<int> adjacencyNodes() const;
 		void addAdjacencyNode(int idx);
+		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
 		void clearAdjacencyList();
 
 	protected:
@@ -173,6 +174,7 @@ namespace rdf {
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
+		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::LineCandidates findLineCandidates(rdf::Line l, double distThreshold, bool horizontal = true);
