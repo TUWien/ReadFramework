@@ -87,10 +87,9 @@ private:
 	int mTn = 0;	// true negative
 	int mFp = 0;	// false positives
 	int mFn = 0;	// false negatives
-
-	int mNegClassId = -1;
-
+	
 	QString mName;
+	int mNegClassId = -1;
 };
 
 class DllCoreExport EvalInfoManager {

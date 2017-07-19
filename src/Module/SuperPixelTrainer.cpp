@@ -387,9 +387,9 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 		int id = LabelInfo::color2Id(col);
 
 		// assign ground truth & convert to pixel
-		PixelLabel& label = px->label();
+		PixelLabel label = px->label();
 		label.setTrueLabel(mManager.find(id));
-		px->setLabel(label);
+		px->setLabel(label);		
 		setL << px;
 	}
 
