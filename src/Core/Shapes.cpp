@@ -2290,13 +2290,117 @@ LineCandidates TableCellRaw::bottomLineC() const {
 	return mBottomLine;
 }
 
-void TableCellRaw::setCornerPts(QVector<int>& cPts) {
+void TableCellRaw::setCornerPts(QVector<int> cPts) {
 	mRefCornerPts = cPts;
 }
 
 QVector<int> TableCellRaw::cornerPty() const {
 	return mRefCornerPts;
 }
+
+double TableCellRaw::width() const {
+
+	Line l = leftBorder();
+	Line r = rightBorder();
+
+	return l.distance(r.center());
+}
+
+double TableCellRaw::height() const {
+	Line t = topBorder();
+	Line b = bottomBorder();
+
+	return t.distance(b.center());
+}
+
+rdf::Line TableCellRaw::topBorder() const {
+	//check if cornerpoints are defined
+	if (mRefPoly.size() >= 4 && mRefCornerPts.size() == 4) {
+
+		QPointF p1 = mRefPoly.polygon()[mRefCornerPts[0]];
+		QPointF p2 = mRefPoly.polygon()[mRefCornerPts[3]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mRefPoly.size() == 4 && mRefCornerPts.isEmpty()) {
+
+		QPointF p1 = mRefPoly.polygon()[0];
+		QPointF p2 = mRefPoly.polygon()[3];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+
+	return rdf::Line();
+}
+
+rdf::Line TableCellRaw::bottomBorder() const {
+	if (mRefPoly.size() >= 4 && mRefCornerPts.size() == 4) {
+
+		QPointF p1 = mRefPoly.polygon()[mRefCornerPts[1]];
+		QPointF p2 = mRefPoly.polygon()[mRefCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mRefPoly.size() == 4 && mRefCornerPts.isEmpty()) {
+		QPointF p1 = mRefPoly.polygon()[1];
+		QPointF p2 = mRefPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+
+	return rdf::Line();
+
+}
+
+rdf::Line TableCellRaw::leftBorder() const {
+	if (mRefPoly.size() >= 4 && mRefCornerPts.size() == 4) {
+
+		QPointF p1 = mRefPoly.polygon()[mRefCornerPts[0]];
+		QPointF p2 = mRefPoly.polygon()[mRefCornerPts[1]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mRefPoly.size() == 4 && mRefCornerPts.isEmpty()) {
+		QPointF p1 = mRefPoly.polygon()[0];
+		QPointF p2 = mRefPoly.polygon()[1];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+
+	return rdf::Line();
+}
+
+rdf::Line TableCellRaw::rightBorder() const {
+	if (mRefPoly.size() >= 4 && mRefCornerPts.size() == 4) {
+
+		QPointF p1 = mRefPoly.polygon()[mRefCornerPts[3]];
+		QPointF p2 = mRefPoly.polygon()[mRefCornerPts[2]];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+
+	}
+	else if (mRefPoly.size() == 4 && mRefCornerPts.isEmpty()) {
+		QPointF p1 = mRefPoly.polygon()[3];
+		QPointF p2 = mRefPoly.polygon()[2];
+		QPolygonF tmp;
+		tmp << p1 << p2;
+		return rdf::Line(rdf::Polygon(tmp));
+	}
+
+	return rdf::Line();
+}
+
 
 bool TableCellRaw::operator<(const TableCellRaw & cell) const {
 	if (row() == cell.row()) {

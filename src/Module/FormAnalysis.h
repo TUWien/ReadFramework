@@ -92,6 +92,63 @@ namespace rdf {
 
 	};
 
+
+	class DllCoreExport AssociationGraphNode {
+
+	public:
+		//0: left 1: right 2; upper 3: bottom
+		enum LinePosition {
+			pos_left = 0,
+			pos_right,
+			pos_top,
+			pos_bottom
+		};
+		
+
+		AssociationGraphNode();
+
+		void setLinePos(const AssociationGraphNode::LinePosition& type);
+		AssociationGraphNode::LinePosition linePosition() const;
+
+		void setReferenceLine(Line l);
+		Line referenceLine() const;
+
+		int getRowIdx() const;
+		int getColIdx() const;
+		void setLineCell(int rowIdx, int colIdx);
+
+		void setMatchedLine(Line l);
+		void setMatchedLine(Line l, double overlap, double distance);
+		Line matchedLine() const;
+
+		void setMatchedLineIdx(int idx);
+		int matchedLineIdx() const;
+
+		void setCellIdx(int idx);
+		int cellIdx() const;
+
+		QVector<int> adjacencyNodes() const;
+		void addAdjacencyNode(int idx);
+		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
+		void clearAdjacencyList();
+
+	protected:
+		int mCellIdx = 1;
+		Line mReferenceLine;
+		LinePosition mLinePos;
+		int mRefRowIdx, mRefColIdx;
+
+		Line mMatchedLine;
+		int mMatchedLineIdx;
+		double mOverlap = -1;
+		double mDistance = -1;
+
+		QVector<int> mAdjacencyNodesIdx;
+
+	};
+
+
+
 	class DllCoreExport FormFeatures : public Module {
 
 	public:
@@ -117,11 +174,15 @@ namespace rdf {
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
+		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
+		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
+		void createAssociationGraph();
+		QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::LineCandidates findLineCandidates(rdf::Line l, double distThreshold, bool horizontal = true);
 		//0: left 1: right 2; upper 3: bottom
-		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, QVector<QSharedPointer<rdf::TableCell>> cells, int cellIdx, int neighbour);
+		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;
@@ -191,6 +252,9 @@ namespace rdf {
 		QVector<int> mUsedHorLineIdx;
 		QVector<rdf::Line> mVerLines;
 		QVector<int> mUsedVerLineIdx;
+
+		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesHorizontal;
+		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesVertical;
 
 		//rdf::FormFeatures mTemplateForm;
 		QSharedPointer<rdf::FormFeatures> mTemplateForm;
