@@ -42,7 +42,7 @@
 namespace rdf {
 
 // -------------------------------------------------------------------- SuperPixelEval 
-EvalInfo::EvalInfo(const QString & name, int negClassId) : mName(name), mNegClassId(negClassId) {
+EvalInfo::EvalInfo(const QString & name) : mName(name) {
 }
 
 void EvalInfo::operator+=(const EvalInfo & o) {
@@ -52,21 +52,17 @@ void EvalInfo::operator+=(const EvalInfo & o) {
 	mFn += o.mFn;
 }
 
-void EvalInfo::eval(int trueClassId, int predictedClassId) {
+void EvalInfo::eval(int trueClassId, int predictedClassId, bool isBackground) {
 
 	if (trueClassId == LabelInfo::label_unknown)
 		return;
 
-	if (trueClassId == mNegClassId) {
+	if (isBackground) {
 		(trueClassId == predictedClassId) ? mTn++ : mFn++;
 	}
 	else {
 		(trueClassId == predictedClassId) ? mTp++ : mFp++;
 	}
-}
-
-void EvalInfo::setNegClassId(int id) {
-	mNegClassId = id;
 }
 
 void EvalInfo::setName(const QString & name) {

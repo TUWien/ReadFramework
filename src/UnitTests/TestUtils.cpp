@@ -95,8 +95,4 @@ QString TestConfig::featureCachePath() const {
 	return mFeatureCachePath;
 }
 
-QString TestConfig::backgroundLabel() const {
-	return mBackgroundLabel;
-}
-
 }

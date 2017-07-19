@@ -61,13 +61,11 @@ namespace rdf {
 class DllCoreExport EvalInfo : public BaseElement {
 
 public:
-	EvalInfo(const QString& name = "unknown", int negClassId = -1);
+	EvalInfo(const QString& name = "unknown");
 
 	void operator+=(const EvalInfo& o);
 
-	void eval(int trueClassId, int predictedClassId);
-
-	void setNegClassId(int id);
+	void eval(int trueClassId, int predictedClassId, bool isBackground = false);
 
 	void setName(const QString& name);
 	QString name() const;
@@ -89,7 +87,6 @@ private:
 	int mFn = 0;	// false negatives
 	
 	QString mName;
-	int mNegClassId = -1;
 };
 
 class DllCoreExport EvalInfoManager {

@@ -52,27 +52,6 @@
 
 namespace rdf {
 
-// read defines
-/// <summary>
-/// Configuration class for EvalPixelModule.
-/// </summary>
-/// <seealso cref="ModuleConfig" />
-class DllCoreExport EvalConfig : public ModuleConfig {
-
-public:
-	EvalConfig();
-
-	virtual QString toString() const override;
-
-	int negativeClassIndex() const;
-
-protected:
-	int mNegClassId = -1;			// the ID of the negative class (e.g. noise)
-
-	void load(const QSettings& settings) override;
-	void save(QSettings& settings) const override;
-};
-
 /// <summary>
 /// Evaluation Module.
 /// </summary>
@@ -88,11 +67,7 @@ public:
 
 	EvalInfo evalInfo() const;
 
-	void setBackroundLabelId(int id);
-
 	QString toString() const override;
-	QSharedPointer<EvalConfig> config() const;
-
 	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
 
 private:

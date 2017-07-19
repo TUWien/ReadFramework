@@ -39,33 +39,8 @@
 
 namespace rdf {
 
-// -------------------------------------------------------------------- EvalConfig 
-EvalConfig::EvalConfig() : ModuleConfig("SuperPixelEval") {
-}
-QString EvalConfig::toString() const {
-	
-	QString s = ModuleConfig::toString();
-	s += "negative class index:" + QString::number(mNegClassId);
-	return s;
-}
-
-int EvalConfig::negativeClassIndex() const {
-	return mNegClassId;
-}
-
-void EvalConfig::load(const QSettings & settings) {
-	
-	mNegClassId = settings.value("negativeClassIndex", mNegClassId).toInt();
-}
-
-void EvalConfig::save(QSettings & settings) const {
-
-	settings.setValue("negativeClassIndex", mNegClassId);
-}
-
 // -------------------------------------------------------------------- SuperPixelEval 
 SuperPixelEval::SuperPixelEval(const PixelSet & set) : mSet(set) {
-	mConfig = QSharedPointer<EvalConfig>::create();
 }
 
 bool SuperPixelEval::isEmpty() const {
@@ -77,12 +52,11 @@ bool SuperPixelEval::compute() {
 	if (!checkInput())
 		return false;
 
-	mEvalInfo.setNegClassId(mBgId);
-
 	// create statistics
 	for (const QSharedPointer<Pixel>& px : mSet.pixels()) {
 
-		mEvalInfo.eval(px->label().trueLabel().id(), px->label().label().id());
+		const PixelLabel& pl = px->label();
+		mEvalInfo.eval(pl.trueLabel().id(), pl.label().id(), pl.trueLabel().isBackground());
 	}
 
 	return true;
@@ -92,16 +66,8 @@ EvalInfo SuperPixelEval::evalInfo() const {
 	return mEvalInfo;
 }
 
-void SuperPixelEval::setBackroundLabelId(int id) {
-	mBgId = id;
-}
-
 QString SuperPixelEval::toString() const {
 	return config()->toString();
-}
-
-QSharedPointer<EvalConfig> SuperPixelEval::config() const {
-	return qSharedPointerDynamicCast<EvalConfig>(mConfig);
 }
 
 cv::Mat SuperPixelEval::draw(const cv::Mat & img, const QColor & col) const {

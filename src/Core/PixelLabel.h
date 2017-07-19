@@ -94,6 +94,7 @@ public:
 	QString name() const;
 	QColor color() const;
 	QColor visColor() const;
+	bool isBackground() const;
 
 	QString toString() const;
 
@@ -110,6 +111,7 @@ public:
 protected:
 
 	int mId = label_unknown;
+	bool mIsBackground = false;
 	QString mName = "unknown";
 	QStringList mAlias;
 	QColor mVisColor = ColorManager::darkGray();
@@ -140,6 +142,7 @@ public:
 	LabelInfo find(const QString& str) const;
 	LabelInfo find(const Region& r) const;
 	LabelInfo find(int id) const;
+	LabelInfo backgroundLabel() const;
 
 	static QString jsonKey();
 

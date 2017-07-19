@@ -212,8 +212,6 @@ bool SuperPixelTest::collectFeatures() const {
 	if (parser.page())
 		spl.setRootRegion(parser.page()->rootRegion());
 
-	spl.setBackgroundLabelName(mConfig.backgroundLabel());
-
 	if (!spl.compute()) {
 		qCritical() << "could not compute SuperPixel labeling!";
 		return false;
@@ -296,7 +294,6 @@ bool SuperPixelTest::eval() const {
 	rdf::SuperPixelLabeler spl(sp.pixelSet(), rdf::Rect(img));
 	spl.setLabelManager(lm);
 	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
-	spl.setBackgroundLabelName(mConfig.backgroundLabel());
 
 	// set the ground truth
 	if (parser.page())
@@ -324,7 +321,6 @@ bool SuperPixelTest::eval() const {
 
 	// -------------------------------------------------------------------- Evaluate 
 	rdf::SuperPixelEval spe(sp.pixelSet());
-	spe.setBackroundLabelId(lm.find(mConfig.backgroundLabel()).id());
 
 	if (!spe.compute())
 		qWarning() << "could not evaluate SuperPixels";

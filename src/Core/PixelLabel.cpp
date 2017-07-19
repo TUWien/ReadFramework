@@ -89,6 +89,10 @@ QColor LabelInfo::visColor() const {
 	return mVisColor;
 }
 
+bool LabelInfo::isBackground() const {
+	return mIsBackground;
+}
+
 int LabelInfo::color2Id(const QColor & col) {
 	int ci = col.rgba();
 	return ci >> 8 & 0xFFFF;
@@ -117,6 +121,9 @@ QString LabelInfo::toString() const {
 
 	for (const QString& a : mAlias)
 		str += a + ", ";
+
+	if (isBackground())
+		str += "[background]";
 
 	return str;
 }
@@ -178,7 +185,10 @@ LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 	LabelInfo ll;
 	ll.mId = jo.value("id").toInt(label_unknown);
 	ll.mName = jo.value("name").toString();
+	ll.mIsBackground = jo.value("isBackground").toBool(false);
 	ll.mVisColor.setNamedColor(jo.value("color").toString());
+
+	qDebug() << jo.keys();
 
 	for (const QJsonValue& jv : jo.value("alias").toArray()) {
 		const QString alias = jv.toString();
@@ -202,6 +212,7 @@ void LabelInfo::toJson(QJsonObject & jo) const {
 	joc.insert("id", QJsonValue(mId));
 	joc.insert("name", QJsonValue(mName));
 	joc.insert("color", QJsonValue(mVisColor.name()));
+	joc.insert("isBackground", QJsonValue(mIsBackground));
 
 	QJsonArray ja;
 	for (const QString& a : mAlias)
@@ -348,6 +359,19 @@ LabelInfo LabelManager::find(int id) const {
 			return ll;
 	}
 
+	return LabelInfo();
+}
+
+/// <summary>
+/// Returns the first label that is marked as background label.
+/// </summary>
+/// <returns></returns>
+LabelInfo LabelManager::backgroundLabel() const {
+	
+	for (const LabelInfo& li : mLookups)
+		if (li.isBackground())
+			return li;
+	
 	return LabelInfo();
 }
 

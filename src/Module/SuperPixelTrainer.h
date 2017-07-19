@@ -180,7 +180,6 @@ public:
 	QString toString() const override;
 
 	void setFilePath(const QString& filePath);
-	void setBackgroundLabelName(const QString& name);
 	void setRootRegion(const QSharedPointer<RootRegion>& region);
 	void setLabelManager(const LabelManager& manager);
 	void setPage(const QSharedPointer<PageElement>& page);
@@ -204,6 +203,8 @@ private:
 	PixelSet labelBlobs(const cv::Mat& labelImg, const QVector<QSharedPointer<MserBlob> >& blobs) const;
 	PixelSet labelPixels(const cv::Mat& labelImg, const PixelSet& set) const;
 	QString parseLabel(const QString& filePath) const;
+
+	void setBackgroundLabelName(const QString& name);
 };
 
 class DllCoreExport SuperPixelTrainerConfig : public ModuleConfig {

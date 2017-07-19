@@ -249,6 +249,9 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 
 	LabelInfo bgLabel = mManager.find(mGlobalName);
 
+	if (bgLabel.isNull())
+		bgLabel = mManager.backgroundLabel();
+
 	QImage img(imgRect.size().toQSize(), QImage::Format_RGB888);
 	img.fill(bgLabel.color());
 
