@@ -175,11 +175,12 @@ namespace rdf {
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
+		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::LineCandidates findLineCandidates(rdf::Line l, double distThreshold, bool horizontal = true);
 		//0: left 1: right 2; upper 3: bottom
-		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, QVector<QSharedPointer<rdf::TableCell>> cells, int cellIdx, int neighbour);
+		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
 
 		bool isEmptyLines() const;

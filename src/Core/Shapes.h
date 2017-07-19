@@ -620,8 +620,16 @@ public:
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
-	void setCornerPts(QVector<int> &cPts);
+	void setCornerPts(QVector<int> cPts);
 	QVector<int> cornerPty() const;
+
+	double width() const;
+	double height() const;
+
+	rdf::Line topBorder() const;
+	rdf::Line bottomBorder() const;
+	rdf::Line leftBorder() const;
+	rdf::Line rightBorder() const;
 
 	//sorts Cells according row and cell
 	bool operator< (const TableCellRaw& cell) const;

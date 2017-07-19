@@ -719,6 +719,8 @@ QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::createRawTableFromTempl
 		newCellR->setBottomBorderVisible(cells[cellIdx]->bottomBorderVisible());
 		newCellR->setLeftBorderVisible(cells[cellIdx]->leftBorderVisible());
 		newCellR->setRightBorderVisible(cells[cellIdx]->rightBorderVisible());
+		newCellR->setPolygon(cells[cellIdx]->polygon());
+		newCellR->setCornerPts(cells[cellIdx]->cornerPty());
 
 		cellsR.push_back(newCellR);
 	}
@@ -806,6 +808,88 @@ QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::createRawTableFromTempl
 	return cellsR;
 }
 
+void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR) {
+
+	//QVector<QSharedPointer<rdf::AssociationGraphNode>> nodes;
+	//find all nodes for the association graph
+	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
+
+		qDebug() << "try to match cell lines of cell: " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
+
+
+		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
+			rdf::Line l;
+			bool visible = false;
+			bool horizontal = false;
+			double d = 0;
+			AssociationGraphNode::LinePosition lp;
+			switch (i)
+			{
+			case AssociationGraphNode::LinePosition::pos_top:
+				l = cellsR[cellIdx]->topBorder();
+				visible = cellsR[cellIdx]->topBorderVisible();
+				d = findMinWidth(cellsR, cellIdx, i);
+				lp = AssociationGraphNode::LinePosition::pos_top;
+				horizontal = true;
+				break;
+			case AssociationGraphNode::LinePosition::pos_bottom:
+				l = cellsR[cellIdx]->bottomBorder();
+				visible = cellsR[cellIdx]->bottomBorderVisible();
+				d = findMinWidth(cellsR, cellIdx, i);
+				lp = AssociationGraphNode::LinePosition::pos_bottom;
+				horizontal = true;
+				break;
+			case AssociationGraphNode::LinePosition::pos_left:
+				l = cellsR[cellIdx]->rightBorder();
+				visible = cellsR[cellIdx]->rightBorderVisible();
+				d = findMinWidth(cellsR, cellIdx, i);
+				lp = AssociationGraphNode::LinePosition::pos_left;
+				horizontal = false;
+				break;
+			case AssociationGraphNode::LinePosition::pos_right:
+				l = cellsR[cellIdx]->leftBorder();
+				visible = cellsR[cellIdx]->leftBorderVisible();
+				d = findMinWidth(cellsR, cellIdx, i);
+				lp = AssociationGraphNode::LinePosition::pos_right;
+				horizontal = false;
+				break;
+			default:
+				qWarning() << "no Cell Border found in matchTemplate";
+				break;
+			}
+			if (visible) {
+				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+				l.translate(mOffset);
+
+				LineCandidates lC = findLineCandidates(l, d, horizontal);
+				QVector<int> lineIdx = lC.candidatesIdx();
+				QVector<double> overlaps = lC.overlaps();
+				QVector<double> distances = lC.distances();
+
+				for (int lI = 0; lI < lineIdx.size(); i++) {
+
+					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
+					newNode->setLineCell(cellsR[cellIdx]->row(), cellsR[cellIdx]->col());
+					newNode->setCellIdx(cellIdx);
+					newNode->setLinePos(lp);
+					newNode->setReferenceLine(l);
+					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
+					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
+					newNode->setMatchedLineIdx(lineIdx[lI]);
+					if (horizontal)
+						mANodesHorizontal.push_back(newNode);
+					else
+						mANodesVertical.push_back(newNode);
+				}
+			}
+
+		}
+
+	}
+}
+
+
 bool FormFeatures::matchTemplate() {
 
 	if (mTemplateForm.isNull())
@@ -832,182 +916,8 @@ bool FormFeatures::matchTemplate() {
 	mRegion = region;
 	
 	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR = createRawTableFromTemplate();
-
-	////generate cells
-	////build raw table from template
-	////new structure is initialised
-	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
-	//	QSharedPointer<rdf::TableCellRaw> newCellR(new rdf::TableCellRaw());
-
-	//	//set cell information (a priori known structure)
-	//	newCellR->setHeader(cells[cellIdx]->header());
-	//	newCellR->setId(cells[cellIdx]->id());
-	//	newCellR->setCol(cells[cellIdx]->col());
-	//	newCellR->setRow(cells[cellIdx]->row());
-	//	newCellR->setColSpan(cells[cellIdx]->colSpan());
-	//	newCellR->setRowSpan(cells[cellIdx]->rowSpan());
-	//	newCellR->setTopBorderVisible(cells[cellIdx]->topBorderVisible());
-	//	newCellR->setBottomBorderVisible(cells[cellIdx]->bottomBorderVisible());
-	//	newCellR->setLeftBorderVisible(cells[cellIdx]->leftBorderVisible());
-	//	newCellR->setRightBorderVisible(cells[cellIdx]->rightBorderVisible());
-
-	//	cellsR.push_back(newCellR);
-	//}
-
-	////search for all cell neighbours of a cell
-	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
-	//	QSharedPointer<rdf::TableCellRaw> newCellR;
-	//	newCellR = cellsR[cellIdx];
-
-	//	//set left Neighbour and vice versa (multiple neighbours are possible
-	//	//cells are sorted -> previous cell is left neighbour if it is the same row,
-	//	//otherwise find previous cell of the same row (happens if rowspan is active)
-	//	if (cellIdx > 0 && newCellR->col() > 0) {
-	//		//due to sorting: if row index is the same of the current and the previous element,
-	//		//the previous element is the left neighbour
-	//		if (cellsR[cellIdx - 1]->row() == newCellR->row()) {
-	//			newCellR->setLeftIdx(cellIdx - 1);
-	//			cellsR[cellIdx - 1]->setRightIdx(cellIdx);
-	//			//check if mutiple left cells exist...
-	//			if (newCellR->rowSpan() > 1) {
-	//				int tmpIdx = cellIdx+1;
-	//				for (; tmpIdx < cells.size(); tmpIdx++) {
-	//					if (cells[tmpIdx]->col() + cells[tmpIdx]->colSpan() == newCellR->col()) {
-	//						//it is left neighbour
-	//						if (cells[tmpIdx]->row() < newCellR->row() + newCellR->rowSpan() && cells[tmpIdx]->row() > newCellR->row()) {
-	//							newCellR->setLeftIdx(tmpIdx);
-	//							cellsR[tmpIdx]->setRightIdx(cellIdx);
-	//						}
-	//					}
-	//				}
-	//			}
-
-	//		} else { //search for left neighbour (backwards until colIdx = currentColIdx-1)
-	//			int tmpIdx = cellIdx-1;
-	//			for (; tmpIdx >= 0; tmpIdx--) {
-	//				if (cells[tmpIdx]->col() == (newCellR->col() - 1)) {
-	//					newCellR->setLeftIdx(tmpIdx);
-	//					cellsR[tmpIdx]->setRightIdx(cellIdx);
-	//					break;
-	//				}
-	//			}
-	//		}
-	//	}
-
-	//	//set upper Neighbour  and vice versa
-	//	if (cellIdx > 0 && newCellR->row() > 0) {
-	//		int tmpIdx = cellIdx - 1;
-
-	//		for (; tmpIdx >= 0; tmpIdx--) {
-	//			//if row+rowspan of current cell equals the current row, the previous row is detected
-	//			if ((cellsR[tmpIdx]->row() + cellsR[tmpIdx]->rowSpan()) == newCellR->row()) {
-	//				//collIdx is the same as current cell -> it is upper Neighbour
-	//				if (newCellR->col() == cellsR[tmpIdx]->col()) {
-	//					//newCellR->setTopIdx(tmpIdx);
-	//					//if current colSpan > 1 -> add neighbour for all spanned cells, happens in the following case:
-	//					//          +------+----------+
-	//					//          |  X   | add also |
-	//					//          +------+----------+
-	//					//          |   cellIdx       |
-	//					//			+-----------------+
-	//					for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
-	//						int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
-	//						newCellR->setTopIdx(tmpIdx+ cellIdxTmp);
-	//						cellsR[tmpIdx+ cellIdxTmp]->setBottomIdx(cellIdx);
-	//					}
-	//				}
-
-	//				//if upperColIdx doesn't exist because of colSpan - check if the cell spans the current cell: happens in the following case:
-	//				//			+-----------------+
-	//				//          |                 |
-	//				//          +------+----------+
-	//				//          |      |  cellIdx |
-	//				//          +------+----------+
-	//				if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
-	//					newCellR->setTopIdx(tmpIdx);
-	//					cellsR[tmpIdx]->setBottomIdx(cellIdx);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	//find all nodes for the association graph
-	for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
-
-		qDebug() << "try to match cell lines of cell: " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
-
-
-		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
-			rdf::Line l;
-			bool visible = false;
-			bool horizontal = false;
-			double d = 0;
-			AssociationGraphNode::LinePosition lp;
-			switch (i)
-			{
-			case AssociationGraphNode::LinePosition::pos_top:
-				l = cells[cellIdx]->topBorder();
-				visible = cells[cellIdx]->topBorderVisible();
-				d = findMinWidth(cellsR, cells, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_top;
-				horizontal = true;
-				break;
-			case AssociationGraphNode::LinePosition::pos_bottom:
-				l = cells[cellIdx]->bottomBorder();
-				visible = cells[cellIdx]->bottomBorderVisible();
-				d = findMinWidth(cellsR, cells, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_bottom;
-				horizontal = true;
-				break;
-			case AssociationGraphNode::LinePosition::pos_left:
-				l = cells[cellIdx]->rightBorder();
-				visible = cells[cellIdx]->rightBorderVisible();
-				d = findMinWidth(cellsR, cells, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_left;
-				horizontal = false;
-				break;
-			case AssociationGraphNode::LinePosition::pos_right:
-				l = cells[cellIdx]->leftBorder();
-				visible = cells[cellIdx]->leftBorderVisible();
-				d = findMinWidth(cellsR, cells, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_right;
-				horizontal = false;
-				break;
-			default:
-				qWarning() << "no Cell Border found in matchTemplate";
-				break;
-			}
-			if (visible) {
-				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-				l.translate(mOffset);
-
-				LineCandidates lC = findLineCandidates(l, d, horizontal);
-				QVector<int> lineIdx = lC.candidatesIdx();
-				QVector<double> overlaps = lC.overlaps();
-				QVector<double> distances = lC.distances();
-
-				for (int lI = 0; lI < lineIdx.size(); i++) {
-
-					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
-					newNode->setLineCell(cells[cellIdx]->row(), cells[cellIdx]->col());
-					newNode->setCellIdx(cellIdx);
-					newNode->setLinePos(lp);
-					newNode->setReferenceLine(l);
-					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
-					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
-					newNode->setMatchedLineIdx(lineIdx[lI]);
-					if (horizontal)
-						mANodesHorizontal.push_back(newNode);
-					else
-						mANodesVertical.push_back(newNode);
-				}
-			}
-
-		}
-
-	}
+	//create AssociationGraphNodes
+	createAssociationGraphNodes(cellsR);
 
 	//create AssociationGraph
 	for (int currentNodeIdx = 0; currentNodeIdx < mANodesVertical.size(); currentNodeIdx++) {
@@ -1021,6 +931,9 @@ bool FormFeatures::matchTemplate() {
 		
 		}
 	}
+
+	//TODO: find global optimum of line matchin
+	//-> find largest maximal clique
 
 
 	////find all line candidates for all cells
@@ -1266,7 +1179,7 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 	return lC;
 }
 
-double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, QVector<QSharedPointer<rdf::TableCell>> cells, int cellIdx, int neighbour) {
+double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour) {
 	QVector<int> l;
 	double width = std::numeric_limits<double>::max();
 
@@ -1283,7 +1196,7 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 
 	for (int i = 0; i < l.size(); i++) {
 
-		double w = cells[l[i]]->width();
+		double w = cellsR[l[i]]->width();
 		if (w < width) {
 			width = w;
 		}
