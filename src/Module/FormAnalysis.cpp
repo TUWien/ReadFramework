@@ -889,6 +889,35 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 	}
 }
 
+void FormFeatures::createAssociationGraph() {
+
+	//create graph for vertical lines
+	for (int currentNodeIdx = 0; currentNodeIdx < mANodesVertical.size(); currentNodeIdx++) {
+		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesVertical.size(); compareNodeIdx++) {
+
+			//test if nodes can be associated
+			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx])) {
+				mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+				mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
+			}
+		}
+	}
+
+	//create graph for horizontal lines
+	for (int currentNodeIdx = 0; currentNodeIdx < mANodesHorizontal.size(); currentNodeIdx++) {
+		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
+
+			//test if nodes can be associated
+			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx])) {
+				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+				mANodesHorizontal[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
+			}
+		}
+	}
+
+
+}
+
 QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR) {
 
 	//find all line candidates for all cells
@@ -974,17 +1003,7 @@ bool FormFeatures::matchTemplate() {
 	createAssociationGraphNodes(cellsR);
 
 	//create AssociationGraph
-	for (int currentNodeIdx = 0; currentNodeIdx < mANodesVertical.size(); currentNodeIdx++) {
-		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesVertical.size(); compareNodeIdx++) {
-
-			//test if nodes can be associated
-			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx])) {
-				mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
-				mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
-			}
-		
-		}
-	}
+	createAssociationGraph();
 
 	//TODO: find global optimum of line matchin
 	//-> find largest maximal clique
@@ -1799,14 +1818,16 @@ cv::Size FormFeatures::sizeImg() const
 
 	bool AssociationGraphNode::testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold) {
 
+		bool horizontal = mLinePos == LinePosition::pos_top || mLinePos == LinePosition::pos_bottom ? true : false;
+
 		//same reference line (same cell and same line position for the reference line - two different matched lines)
 		if (mCellIdx == neighbour->cellIdx() && mLinePos == neighbour->linePosition()) {
 
 			//match only, if there is no overlap and lines have the same vertical position
 			rdf::Line m1 = mReferenceLine;
 			rdf::Line m2 = neighbour->matchedLine();
-			m1.sortEndpoints(false);
-			m2.sortEndpoints(false);
+			m1.sortEndpoints(horizontal);
+			m2.sortEndpoints(horizontal);
 			double overlap = m1.verticalOverlap(m2);
 			double distance = m1.distance(m2.center());
 			//no overlap and same vertical position -> line is split
@@ -1821,13 +1842,24 @@ cv::Size FormFeatures::sizeImg() const
 			rdf::Line m1 = mMatchedLine;
 			rdf::Line m2 = neighbour->matchedLine();
 
-			//reference line is left from second reference line, same must apply to matched lines
-			if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
-				return true;
-			}
-			//reference line is right from second reference line, same must apply to matched lines
-			else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
-				return true;
+			if (!horizontal) {
+				//reference line is left from second reference line, same must apply to matched lines
+				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
+					return true;
+				}
+				//reference line is right from second reference line, same must apply to matched lines
+				else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
+					return true;
+				}
+			} else {
+				//reference line is above from second reference line, same must apply to matched lines
+				if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
+					return true;
+				}
+				//reference line is beneath from second reference line, same must apply to matched lines
+				else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
+					return true;
+				}
 			}
 
 		}
