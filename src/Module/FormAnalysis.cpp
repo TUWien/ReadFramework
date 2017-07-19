@@ -889,6 +889,60 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 	}
 }
 
+QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR) {
+
+	//find all line candidates for all cells
+	for (int cellIdx = 0; cellIdx < cellR.size(); cellIdx++) {
+
+		qDebug() << "try to match cell : " << cellR[cellIdx]->row() << " " << cellR[cellIdx]->col() << " isHeader: " << cellR[cellIdx]->header();
+
+		//shift cell lines according offset
+		rdf::Line tL = cellR[cellIdx]->topBorder();
+		tL.translate(mOffset);
+		rdf::Line lL = cellR[cellIdx]->leftBorder();
+		lL.translate(mOffset);
+		rdf::Line rL = cellR[cellIdx]->rightBorder();
+		rL.translate(mOffset);
+		rdf::Line bL = cellR[cellIdx]->bottomBorder();
+		bL.translate(mOffset);
+
+		//find all line candidates width a minimum distance of cell width/height /2
+		//overlap can also be 0 for a line candidate
+		//0: left 1: right 2; upper 3: bottom
+		double d = 0;
+		d = findMinWidth(cellR, cellIdx, 2); //if no neighbours are found, threshold is based on the config value
+		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+		LineCandidates topL = findLineCandidates(tL, d, true);
+
+		d = findMinWidth(cellR, cellIdx, 0);
+		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+		LineCandidates leftL = findLineCandidates(lL, d, false);
+
+		d = findMinWidth(cellR, cellIdx, 1);
+		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+		LineCandidates rightL = findLineCandidates(rL, d, false);
+
+		d = findMinWidth(cellR, cellIdx, 3);
+		d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
+		d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
+		LineCandidates bottomL = findLineCandidates(bL, d, true);
+
+
+		cellR[cellIdx]->setLineCandidatesLeftLine(leftL);
+		cellR[cellIdx]->setLineCandidatesRightLine(rightL);
+		cellR[cellIdx]->setLineCandidatesTopLine(topL);
+		cellR[cellIdx]->setLineCandidatesBottomLine(bottomL);
+	}
+			
+	//what we have: raw table structure; all neighbours of a cell are known by index; for all lines CandidateLines are know
+	//TODO: find global optimum of line matching
+
+	return cellR;
+}
+
 
 bool FormFeatures::matchTemplate() {
 
@@ -936,56 +990,12 @@ bool FormFeatures::matchTemplate() {
 	//-> find largest maximal clique
 
 
-	////find all line candidates for all cells
-	//for (int cellIdx = 0; cellIdx < cells.size(); cellIdx++) {
-
-	//	qDebug() << "try to match cell : " << cells[cellIdx]->row() << " " << cells[cellIdx]->col() << " isHeader: " << cells[cellIdx]->header();
-
-	//	//shift cell lines according offset
-	//	rdf::Line tL = cells[cellIdx]->topBorder();
-	//	tL.translate(mOffset);
-	//	rdf::Line lL = cells[cellIdx]->leftBorder();
-	//	lL.translate(mOffset);
-	//	rdf::Line rL = cells[cellIdx]->rightBorder();
-	//	rL.translate(mOffset);
-	//	rdf::Line bL = cells[cellIdx]->bottomBorder();
-	//	bL.translate(mOffset);
-
-	//	//find all line candidates width a minimum distance of cell width/height /2
-	//	//overlap can also be 0 for a line candidate
-	//	//0: left 1: right 2; upper 3: bottom
-	//	double d = 0;
-	//	d = findMinWidth(cellsR, cells, cellIdx, 2); //if no neighbours are found, threshold is based on the config value
-	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-	//	LineCandidates topL = findLineCandidates(tL, d, true);
-
-	//	d = findMinWidth(cellsR, cells, cellIdx, 0);
-	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-	//	LineCandidates leftL = findLineCandidates(lL, d, false);
-
-	//	d = findMinWidth(cellsR, cells, cellIdx, 1);
-	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-	//	LineCandidates rightL = findLineCandidates(rL, d, false);
-
-	//	d = findMinWidth(cellsR, cells, cellIdx, 3);
-	//	d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
-	//	d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-	//	LineCandidates bottomL = findLineCandidates(bL, d, true);
-
-
-	//	cellsR[cellIdx]->setLineCandidatesLeftLine(leftL);
-	//	cellsR[cellIdx]->setLineCandidatesRightLine(rightL);
-	//	cellsR[cellIdx]->setLineCandidatesTopLine(topL);
-	//	cellsR[cellIdx]->setLineCandidatesBottomLine(bottomL);
-	//}
-	//		
-	////what we have: raw table structure; all neighbours of a cell are known by index; for all lines CandidateLines are know
-	////TODO: find global optimum of line matching
-
+	//----------------------------------------------------------------------------------------------------------------------------------------------------
+	////newer version but not tested...
+	//cellsR = findLineCandidatesForCells(cellsR);
+	//----------------------------------------------------------------------------------------------------------------------------------------------------
 	//old version
+	//----------------------------------------------------------------------------------------------------------------------------------------------------
 	//generate cells
 	for (auto c : cells) {
 		
