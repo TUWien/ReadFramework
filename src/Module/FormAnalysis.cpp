@@ -920,6 +920,7 @@ for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraph
 				double distance = m1.distance(m2.center());
 				if (overlap == 0 && distance < 20)
 					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+					mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 			}
 			else {
 				rdf::Line ref1 = mANodesVertical[currentNodeIdx]->referenceLine();
@@ -929,8 +930,10 @@ for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraph
 
 				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
 					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+					mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 				} else if (ref1.center().x() >= ref2.center().x() && m1.center().x() >= m2.center().x()) {
 					mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+					mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 				}
 
 			}
