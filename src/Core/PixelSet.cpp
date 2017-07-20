@@ -565,7 +565,7 @@ PixelSet PixelSet::merge(const QVector<PixelSet>& sets) {
 
 QVector<PixelSet> PixelSet::splitScales() const {
 
-	int numScales = Config::instance().global().numScales;
+	int numScales = Config::instance().global().numScales();
 
 	// init sets
 	QVector<PixelSet> rawSets;

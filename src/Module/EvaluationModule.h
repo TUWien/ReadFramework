@@ -53,7 +53,7 @@
 namespace rdf {
 
 /// <summary>
-/// Evaluation Module.
+/// SuperPixel evaluation Module.
 /// </summary>
 /// <seealso cref="SuperPixelBase" />
 class DllCoreExport SuperPixelEval : public Module {
@@ -68,7 +68,7 @@ public:
 	EvalInfo evalInfo() const;
 
 	QString toString() const override;
-	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+	cv::Mat draw(const cv::Mat& img) const;
 
 private:
 

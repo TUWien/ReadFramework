@@ -104,7 +104,7 @@ public:
 	void setPage(QSharedPointer<PageElement> page);
 	QSharedPointer<PageElement> page() const;
 
-	static QString imagePathToXmlPath(const QString& path);
+	static QString imagePathToXmlPath(const QString& path, const QString& subDir = "");
 	
 protected:
 

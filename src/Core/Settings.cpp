@@ -38,64 +38,63 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QCoreApplication>
-#include <QSettings>
+#include <QStandardPaths>
 #include <QDebug>
 #pragma warning(pop)
 
 namespace rdf {
 
+// -------------------------------------------------------------------- DefaultSettings
+DefaultSettings::DefaultSettings() : QSettings(Config::instance().settingsFilePath(), QSettings::IniFormat) {}
+
+
 // GlobalSettings --------------------------------------------------------------------
-GlobalSettings::GlobalSettings() {
-
-	mName = "GlobalSettings";
-	defaultSettings();
+GlobalConfig::GlobalConfig() : ModuleConfig("Global") {
 }
 
-void GlobalSettings::load(QSharedPointer<QSettings> settings) {
-
-	settings->beginGroup(mName);
-
-	workingDir = settings->value("workingDir", workingDir).toString();
-	xmlSubDir = settings->value("xmlSubDir", xmlSubDir).toString();
-	settingsFileName = settings->value("settingsFileName", settingsFileName).toString();
-	superPixelClassifierPath = settings->value("superPixelClassifierPath", superPixelClassifierPath).toString();
-	// add loading here...
-
-	settings->endGroup();
+QString GlobalConfig::toString() const {
+	return ModuleConfig::toString();
 }
 
-void GlobalSettings::save(QSharedPointer<QSettings> settings, const GenericSettings & init, bool force) const {
+QString GlobalConfig::workingDir() const {
+	
+	QFileInfo wd(mWorkingDir);
 
-	const GlobalSettings& initS = dynamic_cast<const GlobalSettings &>(init);
+	if (wd.isDir() && wd.isWritable())
+		return mWorkingDir;
+	
 
-	settings->beginGroup(mName);
+	return QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+}
 
-	if (!force && workingDir != initS.workingDir)
-		settings->setValue("workingDir", workingDir);
-	if (!force && xmlSubDir != initS.xmlSubDir)
-		settings->setValue("xmlSubDir", xmlSubDir);
-	if (!force && settingsFileName != initS.settingsFileName)
-		settings->setValue("settingsFileName", settingsFileName);
-	if (!force && superPixelClassifierPath != initS.superPixelClassifierPath)
-		settings->setValue("superPixelClassifierPath", superPixelClassifierPath);
+QString GlobalConfig::xmlSubDir() const {
+	return mXmlSubDir;
+}
 
+void GlobalConfig::setNumScales(int ns) {
+	mNumScales = ns;
+}
+
+int GlobalConfig::numScales() const {
+	return mNumScales;
+}
+
+void GlobalConfig::load(const QSettings& settings) {
+
+	mWorkingDir = settings.value("workingDir", workingDir()).toString();
+	mXmlSubDir = settings.value("xmlSubDir", xmlSubDir()).toString();
+}
+
+void GlobalConfig::save(QSettings& settings) const {
+
+	settings.setValue("workingDir", workingDir());
+	settings.setValue("xmlSubDir", xmlSubDir());
 	// add saving here...
-
-	settings->endGroup();
-}
-
-void GlobalSettings::defaultSettings() {
-
-	workingDir = "";
-	xmlSubDir = "page";
-	settingsFileName = "rdf-settings.nfo";
-	superPixelClassifierPath = "super-pixel-classifier.json";
 }
 
 // Config --------------------------------------------------------------------
 Config::Config() {
 
-	mSettings = QSharedPointer<QSettings>(new QSettings(settingsFilePath(), QSettings::IniFormat));
 	load();
 }
 
@@ -107,16 +106,8 @@ Config& Config::instance() {
 	return *inst; 
 }
 
-QSettings& Config::settings() {
-	return *mSettings;
-}
-
-GlobalSettings& Config::global() {
-	return instance().globalIntern();
-}
-
-GlobalSettings& Config::globalIntern() {
-	return mGlobal;
+GlobalConfig& Config::global() {
+	return instance().mGlobal;
 }
 
 bool Config::isPortable() const {
@@ -131,20 +122,25 @@ void Config::setSettingsFile(const QString& filePath) {
 
 	QFileInfo fileInfo(filePath);
 	if (fileInfo.exists()) {
-		mSettings = QSharedPointer<QSettings>(new QSettings(filePath, QSettings::IniFormat));
-		mGlobal.settingsFileName = fileInfo.fileName();
+		mSettingsPath = fileInfo.absolutePath();
+		mSettingsFileName = fileInfo.fileName();
 	}
 }
 
 QString Config::settingsFilePath() const {
 
-	return QFileInfo(settingsPath(), mGlobal.settingsFileName).absoluteFilePath();
+	return QFileInfo(settingsPath(), mSettingsFileName).absoluteFilePath();
 }
 
 QString Config::settingsPath() const {
 
+	// check if the input path exists
+	QFileInfo sf(mSettingsPath, mSettingsFileName);
+	if (!mSettingsPath.isEmpty() && sf.exists())
+		return sf.absolutePath();
+
 	// check if we have a local settings file (portable)
-	QFileInfo sf(QCoreApplication::applicationDirPath(), mGlobal.settingsFileName);
+	sf = QFileInfo(QCoreApplication::applicationDirPath(), mSettingsFileName);
 	if (sf.exists())
 		return sf.absolutePath();
 
@@ -153,16 +149,15 @@ QString Config::settingsPath() const {
 
 void Config::load() {
 
-	mGlobal.load(mSettings);
-	mGlobalInit = mGlobal;
-	
+	QSettings s(settingsFilePath(), QSettings::IniFormat);
+	mGlobal.loadSettings(s);
 	qInfo() << "[READ] loading settings from" << settingsFilePath();
 }
 
 void Config::save() const {
 
-	bool force = false;	// not really needed?!
-	mGlobal.save(mSettings, mGlobalInit, force);
+	QSettings s(settingsFilePath(), QSettings::IniFormat);
+	mGlobal.saveSettings(s);
 }
 
 }

@@ -72,6 +72,7 @@ public:
 	void loadSettings(QSettings& settings);
 	void saveSettings() const;
 	void saveSettings(QSettings& settings) const;
+	void saveDefaultSettings() const;
 	virtual void saveDefaultSettings(QSettings& settings) const;
 
 	QString name() const;

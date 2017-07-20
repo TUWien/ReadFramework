@@ -479,14 +479,19 @@ void PageXmlParser::writeMetaData(QXmlStreamWriter& writer) const {
 	writer.writeTextElement(tagName(tag_meta_changed), mPage->dateModified().toString(Qt::ISODate));
 
 	writer.writeEndElement();	// <Metadata>
-
 }
 
 
-QString PageXmlParser::imagePathToXmlPath(const QString& path) {
+QString PageXmlParser::imagePathToXmlPath(const QString& path, const QString& subDir) {
 
 	QFileInfo info(path);
-	QString xmlDir = info.absolutePath() + QDir::separator() + Config::instance().global().xmlSubDir;
+
+	QString xmlDir = info.absolutePath() + QDir::separator();
+	if (subDir.isEmpty())
+		xmlDir += Config::instance().global().xmlSubDir();
+	else
+		xmlDir += subDir;
+
 	QString xmlFileName = info.fileName().replace(info.suffix(), "xml");
 
 	QFileInfo xmlInfo = QFileInfo(xmlDir, xmlFileName);

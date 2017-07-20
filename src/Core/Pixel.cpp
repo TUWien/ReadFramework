@@ -441,20 +441,21 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 	// colorize according to labels
 	if (df & draw_label_colors) {
 
-		if (label().isEvaluated()) {
+/*		if (label().isEvaluated()) {
 
 			if (label().trueLabel() == label().label())
 				p.setPen(ColorManager::green());
 			else
 				p.setPen(ColorManager::red());
 		}
-		else {
-			if (!label().trueLabel().isNull()) {
-				p.setPen(label().trueLabel().visColor());
-			}
-			else if (!label().label().isNull()) {
+		else */{
+			if (!label().label().isNull()) {
 				p.setPen(label().label().visColor());
 			}
+			else if (!label().trueLabel().isNull()) {
+				p.setPen(label().trueLabel().visColor());
+			}
+
 		}
 	}
 	

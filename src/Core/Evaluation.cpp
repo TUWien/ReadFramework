@@ -96,7 +96,7 @@ int EvalInfo::count() const {
 }
 
 QString EvalInfo::header() {
-	return QString("# name, \tcount, \ttp, \ttn, \tfp, \tfn, \tp, \tr, \tf1-score, \tacc");
+	return QString("# name, \tcount, \ttp, \ttn, \tfp, \tfn, \tp, \tr, \tf1Score, \tacc");
 }
 
 QString EvalInfo::toString() const {

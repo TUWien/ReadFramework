@@ -70,7 +70,7 @@ QString SuperPixelEval::toString() const {
 	return config()->toString();
 }
 
-cv::Mat SuperPixelEval::draw(const cv::Mat & img, const QColor & col) const {
+cv::Mat SuperPixelEval::draw(const cv::Mat & img) const {
 	
 	QImage qImg = Image::mat2QImage(img, true);
 	

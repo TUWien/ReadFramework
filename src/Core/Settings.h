@@ -32,8 +32,11 @@
 
 #pragma once
 
+#include "BaseModule.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
+#include <QSettings>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
@@ -47,44 +50,42 @@
 #endif
 
 // Qt defines
-class QSettings;
 
 namespace rdf {
 
-
-class DllCoreExport GenericSettings {
+/// <summary>
+/// Convenience class that instantiates QSettings with the correct file.
+/// </summary>
+/// <seealso cref="QSettings" />
+class DllCoreExport DefaultSettings : public QSettings {
 
 public:
-	GenericSettings() { mName = "GenericSettings"; }
-
-	virtual void load(QSharedPointer<QSettings> ) {};
-	virtual void save(QSharedPointer<QSettings> , const GenericSettings& , bool = false) const {};
-
-protected:
-	virtual void defaultSettings() {};
-
-	QString mName = "DkGenericSettings";
+	DefaultSettings();
 };
 
-class DllCoreExport GlobalSettings : public GenericSettings {
+class DllCoreExport GlobalConfig : public ModuleConfig {
 
 public:
-	GlobalSettings();
+	GlobalConfig();
 
-	void load(QSharedPointer<QSettings> settings) override;
-	void save(QSharedPointer<QSettings> settings, const GenericSettings& init, bool force = false) const override;
+	virtual QString toString() const override;
 
-	QString workingDir;
-	QString settingsFileName;
-	QString xmlSubDir;
-	QString superPixelClassifierPath;
+	QString workingDir() const;
+	QString xmlSubDir() const;
+	
+	void setNumScales(int ns);
+	int numScales() const;
+
+protected:
+	QString mWorkingDir = "C:/read/configs";	// defaults to your system's temp path
+	QString mXmlSubDir = "page";
 
 	// number of scales in the scale space
 	// this value is assigned by ScaleSpaceSuperPixel
-	int numScales = 1;
+	int mNumScales = 1;
 
-protected:
-	void defaultSettings() override;
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
 };
 
 // read defines
@@ -92,8 +93,7 @@ class DllCoreExport Config {
 
 public:
 	static Config& instance();
-	static GlobalSettings& global();	// convenience
-	QSettings& settings();
+	static GlobalConfig& global();	// convenience
 
 	void load();
 	void save() const;
@@ -108,11 +108,9 @@ private:
 
 	QString settingsPath() const;
 
-	GlobalSettings& globalIntern();
-
-	QSharedPointer<QSettings> mSettings;
-	GlobalSettings mGlobal;
-	GlobalSettings mGlobalInit;
+	GlobalConfig mGlobal;
+	QString mSettingsFileName = "rdf-settings.ini";
+	QString mSettingsPath = "";
 
 };
 

@@ -47,8 +47,8 @@ namespace rdf {
 // TestConfig --------------------------------------------------------------------	
 TestConfig::TestConfig() {
 
-	mFeatureCachePath = QFileInfo(rdf::Utils::tempPath(), "features.json").absoluteFilePath();
-	mClassifierPath = QFileInfo(rdf::Utils::tempPath(), "model.json").absoluteFilePath();
+	mFeatureCachePath = QFileInfo(rdf::Config::global().workingDir(), "features.json").absoluteFilePath();
+	mClassifierPath = QFileInfo(rdf::Config::global().workingDir(), "model.json").absoluteFilePath();
 }
 
 void TestConfig::setImagePath(const QString & path) {

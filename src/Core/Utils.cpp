@@ -287,11 +287,6 @@ QString Utils::baseName(const QString & filePath) {
 	return filePath.left(sI-1);	// -1 to remove the point
 }
 
-QString Utils::tempPath() {
-	
-	return QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-}
-
 QJsonObject Utils::readJson(const QString & filePath) {
 
 	if (filePath.isEmpty()) {

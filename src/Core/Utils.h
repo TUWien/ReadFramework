@@ -82,7 +82,6 @@ public:
 	static QString createFilePath(const QString& filePath, const QString& attribute, const QString& newSuffix = QString());
 	static QString timeStampFileName(const QString& attribute = "", const QString& suffix = ".txt");
 	static QString baseName(const QString& filePath);
-	static QString tempPath();
 
 	static QJsonObject readJson(const QString& filePath);
 	static int64 writeJson(const QString& filePath, const QJsonObject& jo);

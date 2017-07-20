@@ -110,7 +110,7 @@ bool BaselineTest::layoutToXml(const cv::Mat& img, const PageXmlParser& parser) 
 	// test layout with xml
 	rdf::LayoutAnalysis laXml(img);
 	laXml.setRootRegion(pe->rootRegion());
-	laXml.config()->saveDefaultSettings(Config::instance().settings());	// save default layout settings
+	laXml.config()->saveDefaultSettings();	// save default layout settings
 
 	if (!laXml.compute()) {
 		qWarning() << "could not compute layout analysis";
@@ -334,7 +334,7 @@ bool SuperPixelTest::eval() const {
 	infos << ei;
 	rdf::EvalInfoManager eim(infos);
 
-	QFileInfo fi(rdf::Utils::tempPath(), rdf::Utils::timeStampFileName("delete-me"));
+	QFileInfo fi(rdf::Config::global().workingDir(), rdf::Utils::timeStampFileName("delete-me"));
 	eim.write(fi.absoluteFilePath());
 
 	qDebug().noquote() << EvalInfo::header();
@@ -343,7 +343,7 @@ bool SuperPixelTest::eval() const {
 
 	// -------------------------------------------------------------------- drawing
 	QString fn = QFileInfo(mConfig.imagePath()).baseName() + ".jpg";
-	QString dstPath = QFileInfo(rdf::Utils::tempPath(), fn).absoluteFilePath();
+	QString dstPath = QFileInfo(rdf::Config::global().workingDir(), fn).absoluteFilePath();
 
 	cv::Mat rImg = spe.draw(img);
 	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-eval"));

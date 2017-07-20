@@ -100,7 +100,7 @@ public:
 		img = IP::grayscale(img);
 		cv::normalize(img, img, 255, 0, cv::NORM_MINMAX);
 
-		Config::instance().global().numScales = config()->numLayers();
+		Config::instance().global().setNumScales(config()->numLayers());
 
 		int idCnt = 0;
 

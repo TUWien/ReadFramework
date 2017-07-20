@@ -117,7 +117,7 @@ QString LabelInfo::name() const {
 QString LabelInfo::toString() const {
 
 	QString str;
-	str += QString::number(id()) + ", " + name() + ", ";
+	str += QString::number(id()) + " " + name() + ": ";
 
 	for (const QString& a : mAlias)
 		str += a + ", ";
@@ -187,8 +187,6 @@ LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 	ll.mName = jo.value("name").toString();
 	ll.mIsBackground = jo.value("isBackground").toBool(false);
 	ll.mVisColor.setNamedColor(jo.value("color").toString());
-
-	qDebug() << jo.keys();
 
 	for (const QJsonValue& jv : jo.value("alias").toArray()) {
 		const QString alias = jv.toString();
@@ -434,7 +432,7 @@ LabelInfo PixelLabel::trueLabel() const {
 ///   <c>true</c> if trueLabel() and label() are set; otherwise, <c>false</c>.
 /// </returns>
 bool PixelLabel::isEvaluated() const {
-	return mTrueLabel != LabelInfo::label_unknown && mLabel != LabelInfo::label_unknown;
+	return !mTrueLabel.isNull() && !mLabel.isNull();
 }
 
 // SuperPixelModel --------------------------------------------------------------------
