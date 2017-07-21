@@ -32,15 +32,14 @@
 
 #pragma once
 
+#include "Shapes.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSharedPointer>
-#include <QSettings>
-
 #include <opencv2/core.hpp>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface
-#include "Blobs.h"
 
 #ifndef DllCoreExport
 #ifdef DLL_CORE_EXPORT
@@ -65,27 +64,7 @@ class PixelEdge;
 class DllCoreExport Algorithms {
 
 public:
-	enum MorphShape { SQUARE = 0, DISK };
-	enum MorphBorder { BORDER_ZERO = 0, BORDER_FLIP };
 
-	// image processing
-	static cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 0);
-	static cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = Algorithms::SQUARE, int borderValue = 255);
-	static cv::Mat createStructuringElement(int seSize, int shape);
-	static cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel);
-	static cv::Mat get1DGauss(double sigma, int kernelsize = -1);
-	static cv::Mat threshOtsu(const cv::Mat& srcImg, int thType = CV_THRESH_BINARY_INV);
-	static cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = BORDER_ZERO);
-	static void setBorderConst(cv::Mat &src, float val = 0.0f);
-	static void invertImg(cv::Mat& srcImg, cv::Mat mask = cv::Mat());
-	static void mulMask(cv::Mat& src, cv::Mat mask = cv::Mat());
-	static cv::Mat preFilterArea(const cv::Mat& img, int minArea, int maxArea = -1);
-	static cv::Mat computeHist(const cv::Mat img, const cv::Mat mask = cv::Mat());
-	static double getThreshOtsu(const cv::Mat& hist, const double otsuThresh = 0);
-	static double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2.0*CV_PI);
-	static double angleDist(double angle1, double angle2, double maxAngle = 2.0*CV_PI);
-	static cv::Mat estimateMask(const cv::Mat& src, bool preFilter=true);
-	static cv::Mat rotateImage(const cv::Mat& src, double angleRad, int interpolation = cv::INTER_CUBIC, cv::Scalar borderValue = cv::Scalar(0));
 	//Computes the natural logarithm of the absolute value of	the gamma function of x using the Lanczos approximation.
 	static double logGammaLanczos(double x);
 	//Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method.
@@ -96,9 +75,11 @@ public:
 	static double signedAngleDiff(double a, double b);
 
 	// convenience functions
-	static QPointF calcRotationSize(double angleRad, const QPointF& srcSize);
 	static double min(const QVector<double>& vec);
 	static double max(const QVector<double>& vec);
+
+	static double normAngleRad(double angle, double startIvl = 0.0, double endIvl = 2.0*CV_PI);
+	static double angleDist(double angle1, double angle2, double maxAngle = 2.0*CV_PI);
 
 	// template functions --------------------------------------------------------------------
 	
@@ -149,43 +130,6 @@ public:
 		}
 
 		return moment;
-	}
-
-	template<typename sFmt, typename mFmt>
-	static void mulMaskIntern(cv::Mat src, const cv::Mat mask) {
-
-		sFmt* srcPtr = (sFmt*)src.data;
-		const mFmt* mPtr = (mFmt*)mask.data;
-
-		int srcStep = (int)src.step / sizeof(sFmt);
-		int mStep = (int)mask.step / sizeof(mFmt);
-
-		for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep, mPtr += mStep) {
-
-			for (int cIdx = 0; cIdx < src.cols; cIdx++) {
-
-				if (mPtr[cIdx] == 0) srcPtr[cIdx] = 0;
-			}
-		}
-	}
-
-	template<typename sFmt>
-	static void setBorderConstIntern(cv::Mat src, sFmt val) {
-
-		sFmt* srcPtr = (sFmt*)src.data;
-		sFmt* srcPtr2 = (sFmt*)src.ptr<sFmt*>(src.rows - 1);
-		int srcStep = (int)src.step / sizeof(sFmt);
-
-		for (int cIdx = 0; cIdx < src.cols; cIdx++) {
-			srcPtr[cIdx] = val;
-			srcPtr2[cIdx] = val;
-		}
-
-		srcPtr = (sFmt*)src.data;
-		for (int rIdx = 0; rIdx < src.rows; rIdx++, srcPtr += srcStep) {
-			srcPtr[0] = val;
-			srcPtr[src.cols - 1] = val;
-		}
 	}
 
 };

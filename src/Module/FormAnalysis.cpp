@@ -37,6 +37,7 @@
 #include "Image.h"
 #include "PageParser.h"
 #include "Elements.h"
+#include "ImageProcessor.h"
 
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -215,7 +216,7 @@ namespace rdf {
 		binarizeImg.compute();
 		mBwImg = binarizeImg.binaryImage();
 		if (mPreFilter)
-			mBwImg = Algorithms::preFilterArea(mBwImg, preFilterArea);
+			mBwImg = IP::preFilterArea(mBwImg, preFilterArea);
 
 		return true;
 	}

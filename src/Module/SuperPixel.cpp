@@ -863,7 +863,7 @@ QMap<int, QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat 
 
 	double thr = winSize*winSize * config()->minEnergy();
 
-	cv::Mat gvec = Algorithms::get1DGauss(winSize / 3.0, winSize);
+	cv::Mat gvec = IP::get1DGauss(winSize / 3.0, winSize);
 	cv::Mat weight = gvec.t() * gvec;
 	cv::normalize(weight, weight, 1.0, 0.0, cv::NORM_MINMAX);
 

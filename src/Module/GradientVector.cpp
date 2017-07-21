@@ -32,6 +32,7 @@ related links:
 
 #include "GradientVector.h"
 #include "Image.h"
+#include "ImageProcessor.h"
 #include "Algorithms.h"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -250,11 +251,11 @@ namespace rdf {
 			//	//	maskEr = DkIP::fastErodeImage(mask, cvRound(sigma*12.0f));
 			//	//else
 			//	//	maskEr = mask;
-			maskEr = rdf::Algorithms::erodeImage(mMask, (int)(config()->sigma()*12.0f),rdf::Algorithms::SQUARE, 0);
+			maskEr = rdf::IP::erodeImage(mMask, (int)(config()->sigma()*12.0f), rdf::IP::morph_square, 0);
 			//mDxImg = mDxImg.mul(mDxImg);
 			//mDyImg = mDyImg.mul(mDyImg);
-			rdf::Algorithms::mulMask(mDxImg, maskEr);
-			rdf::Algorithms::mulMask(mDyImg, maskEr);
+			rdf::IP::mulMask(mDxImg, maskEr);
+			rdf::IP::mulMask(mDyImg, maskEr);
 			mMask = maskEr;
 		}
 	}

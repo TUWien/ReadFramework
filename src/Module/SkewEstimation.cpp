@@ -34,6 +34,7 @@
 
 #include "Algorithms.h"
 #include "Image.h"
+#include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -41,6 +42,7 @@
 #include <QVector3D>
 #include <QtCore/qmath.h>
 #include <QDebug>
+#include <QSettings>
 #pragma warning(pop)
 
 namespace rdf {
@@ -213,9 +215,9 @@ namespace rdf {
 
 		cv::Mat meanImg, stdImg;
 
-		meanImg = Algorithms::convolveIntegralImage(mIntegralImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
+		meanImg = IP::convolveIntegralImage(mIntegralImg, w, h, IP::border_flip); //Algorithms::BORDER_ZERO
 		//meanImg /= (float)(w*h);  //not needed since BORDER_FLIP (=mean filtering)
-		stdImg = Algorithms::convolveIntegralImage(mIntegralSqdImg, w, h, Algorithms::BORDER_FLIP); //Algorithms::BORDER_ZERO
+		stdImg = IP::convolveIntegralImage(mIntegralSqdImg, w, h, IP::border_flip); //Algorithms::BORDER_ZERO
 		//stdImg /= (float)(w*h);	//not needed since BORDER_FLIP (=mean filtering)
 		stdImg = stdImg - meanImg.mul(meanImg); // = sigma^2
 

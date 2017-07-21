@@ -36,6 +36,7 @@
 #include "Binarization.h"
 #include "SkewEstimation.h"
 #include "Algorithms.h"
+#include "ImageProcessor.h"
 #include "Blobs.h"
 #include "Shapes.h"
 #include "LineTrace.h"
@@ -90,7 +91,7 @@ namespace rdf {
 
 
 
-		cv::Mat mask = Algorithms::estimateMask(inputG);
+		cv::Mat mask = IP::estimateMask(inputG);
 		//Image::save(mask, "D:\\tmp\\mask.tif");
 		//Image::imageInfo(inputImg, "input");
 
@@ -117,7 +118,7 @@ namespace rdf {
 		cv::Mat imgTempl = rdf::Image::qImage2Mat(imgTemplate);
 		cv::Mat imgTemplG;
 		if (imgTempl.channels() != 1) cv::cvtColor(imgTempl, imgTemplG, CV_RGB2GRAY);
-		cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
+		cv::Mat maskTempl = rdf::IP::estimateMask(imgTemplG);
 		FormFeatures formTempl(imgTemplG);
 		formTempl.compute();
 
