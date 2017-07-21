@@ -42,37 +42,6 @@
 namespace rdf {
 
 /// <summary>
-/// Checks if the url is available.
-/// </summary>
-/// <param name="url">The URL to query.</param>
-/// <param name="port">The port.</param>
-/// <returns>
-/// true if we can connect to the url
-/// </returns>
-bool net::urlExists(const QString & url, quint16 port) {
-
-	// see: https://stackoverflow.com/questions/28494571/how-in-qt5-to-check-if-url-is-available
-	QUrl lurl(url);
-	QTcpSocket socket;
-	socket.connectToHost(lurl.host(), port);
-	
-	if (socket.waitForConnected()) {
-		socket.write("HEAD " + lurl.path().toUtf8() + " HTTP/1.1\r\n"
-			"Host: " + lurl.host().toUtf8() + "\r\n\r\n");
-		
-		if (socket.waitForReadyRead()) {
-
-			QByteArray bytes = socket.readAll();
-			if (bytes.contains("200 OK")) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-/// <summary>
 /// Downloads the contents of the path specified.
 /// NOTE: this is not intended for UI puroposes
 /// for it blocks while downloading

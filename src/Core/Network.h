@@ -55,7 +55,6 @@ namespace rdf {
 
 namespace net {
 
-	DllCoreExport bool urlExists(const QString& url, quint16 port = 80);
 	DllCoreExport QByteArray download(const QString& url, bool* ok = 0);
 }
 
