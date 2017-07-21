@@ -128,7 +128,7 @@ bool SuperPixelClassifier::compute() {
 	for (int idx = 0; idx < mSet.size(); idx++) {
 		
 		PixelLabel label = pixels[idx]->label();
-		label.setLabel(labels[idx].label());
+		label.setLabel(labels[idx].predicted());
 		pixels[idx]->setLabel(label);
 	}
 

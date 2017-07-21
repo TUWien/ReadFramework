@@ -413,7 +413,7 @@ void PixelLabel::setLabel(const LabelInfo & label) {
 	mLabel = label;
 }
 
-LabelInfo PixelLabel::label() const {
+LabelInfo PixelLabel::predicted() const {
 	return mLabel;
 }
 

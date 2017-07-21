@@ -449,8 +449,8 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 				p.setPen(ColorManager::red());
 		}
 		else */{
-			if (!label().label().isNull()) {
-				p.setPen(label().label().visColor());
+			if (!label().predicted().isNull()) {
+				p.setPen(label().predicted().visColor());
 			}
 			else if (!label().trueLabel().isNull()) {
 				p.setPen(label().trueLabel().visColor());

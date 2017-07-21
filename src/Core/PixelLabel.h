@@ -160,7 +160,7 @@ public:
 	bool isEvaluated() const;
 
 	void setLabel(const LabelInfo& label);
-	LabelInfo label() const;
+	LabelInfo predicted() const;
 
 	void setTrueLabel(const LabelInfo& label);
 	LabelInfo trueLabel() const;
