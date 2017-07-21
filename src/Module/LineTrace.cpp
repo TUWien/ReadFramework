@@ -590,16 +590,6 @@ namespace rdf {
 		return msg;
 	}
 
-	//void LineTrace::load(const QSettings& settings) {
-
-	//	//mErodeMaskSize = settings.value("erodeMaskSize", mErodeMaskSize).toInt();
-	//}
-
-	//void LineTrace::save(QSettings& settings) const {
-
-	//	//settings.setValue("erodeMaskSize", mErodeMaskSize);
-	//}
-
 	/// <summary>
 	/// Returns the line image.
 	/// </summary>
@@ -607,8 +597,6 @@ namespace rdf {
 	cv::Mat LineTrace::lineImage() const {
 		return mLineImg;
 	}
-
-
 
 	LineTraceConfig::LineTraceConfig() 	{
 		mModuleName = "LineTrace";
