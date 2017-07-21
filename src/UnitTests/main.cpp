@@ -42,6 +42,7 @@
 #include "Utils.h"
 #include "Settings.h"
 #include "LayoutTest.h"
+#include "PreProcessingTest.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")
@@ -69,7 +70,7 @@ int main(int argc, char** argv) {
 	parser.addVersionOption();
 
 	// baseline test
-	QCommandLineOption baseLineOpt(QStringList() << "b" << "baseline", QObject::tr("Test Baseline."));
+	QCommandLineOption baseLineOpt(QStringList() << "baseline", QObject::tr("Test Baseline."));
 	parser.addOption(baseLineOpt);
 
 	// baseline test
@@ -77,8 +78,12 @@ int main(int argc, char** argv) {
 	parser.addOption(trainSpOpt);
 
 	// table test
-	QCommandLineOption tableOpt(QStringList() << "t" << "table", QObject::tr("Test Table."));
+	QCommandLineOption tableOpt(QStringList() << "table", QObject::tr("Test Table."));
 	parser.addOption(tableOpt);
+
+	// pre-processing test
+	QCommandLineOption preProcessingOpt(QStringList() << "pre-processing", QObject::tr("Test Pre-Processing."));
+	parser.addOption(preProcessingOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -99,8 +104,8 @@ int main(int argc, char** argv) {
 
 		rdf::SuperPixelTest spt;
 
-		//if (!spt.testSuperPixel())
-		//	return 1;	// fail the test
+		if (!spt.testSuperPixel())
+			return 1;	// fail the test
 
 		if (!spt.collectFeatures())
 			return 1;	// fail the test
@@ -110,6 +115,19 @@ int main(int argc, char** argv) {
 
 		if (!spt.eval())
 			return 1;	// fail the test
+
+	}
+	// test baseline extraction
+	else if (parser.isSet(preProcessingOpt)) {
+
+		rdf::PreProcessingTest ppt;
+
+		if (!ppt.binarize())
+			return 1;	// fail the test
+
+		if (!ppt.skew())
+			return 1;	// fail the test
+
 
 	} else if (parser.isSet(tableOpt)) {
 		parser.showHelp();

@@ -365,8 +365,6 @@ bool SuperPixelTest::load(cv::Mat& img) const {
 		return false;
 	}
 
-	Timer dt;
-
 	// convert image
 	img = Image::qImage2Mat(qImg);
 

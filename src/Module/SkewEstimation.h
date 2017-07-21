@@ -34,6 +34,7 @@
 
 #include "BaseModule.h"
 
+#include "PixelSet.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -136,13 +137,6 @@ namespace rdf {
 		bool isEmpty() const override;
 		virtual QString toString() const override;
 
-		//void setThr(double thr);
-		//void setmMinLineLength(int ll);
-		//void setDelta(int d);
-		//void setEpsilon(int e);
-		//void setW(int w);
-		//void setH(int h);
-		//void setSigma(double s);
 		void setFixedThr(bool f);
 
 		QSharedPointer<BaseSkewEstimationConfig> config() const;
@@ -172,5 +166,55 @@ namespace rdf {
 		QVector<int> mSelectedLineTypes;
 
 	};
+
+	class DllCoreExport TextLineSkewConfig : public ModuleConfig {
+
+	public:
+		TextLineSkewConfig();
+
+		virtual QString toString() const override;
+
+		double minAngle() const;
+		double maxAngle() const;
+
+	protected:
+
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+		double mMinAngle = -CV_PI;			// minimum angle expected in radians
+		double mMaxAngle = CV_PI;		// maximum angle expected in radians
+	};
+
+
+	class DllCoreExport TextLineSkew : public Module {
+
+	public:
+		TextLineSkew(const cv::Mat& img = cv::Mat());
+
+		bool compute();
+		
+		double getAngle();
+		
+		bool isEmpty() const override;
+		virtual QString toString() const override;
+
+		QSharedPointer<TextLineSkewConfig> config() const;
+
+		cv::Mat draw(const cv::Mat& img) const;
+		cv::Mat rotated(const cv::Mat& img) const;
+
+	protected:
+		cv::Mat mImg;			//the input image  either 3 channel or 1 channel [0 255]
+
+		PixelSet mSet;
+
+		double mAngle = 0.0;
+
+		bool checkInput() const override;
+	};
+
+
+
 
 }

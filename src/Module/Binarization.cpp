@@ -99,10 +99,6 @@ bool SimpleBinarization::compute() {
 
 	mBwImg = mSrcImg > config()->thresh();
 
-	mDebug << " computed...";
-	mWarning << "a warning...";
-	mInfo << "an info...";
-
 	return true;
 }
 
@@ -209,25 +205,20 @@ bool BaseBinarizationSu::compute() {
 	if (srcGray.depth() == CV_8U) srcGray.convertTo(srcGray, CV_32F, 1.0f/255.0f);
 
 
-	cv::Mat thrImg, resultSegImg;
-	computeThrImg(srcGray, binContrastImg, thrImg, resultSegImg);					//compute threshold image
+	cv::Mat thrImg;
+	computeThrImg(srcGray, binContrastImg, thrImg, mBwImg);					//compute threshold image
 
 	//Image::save(thrImg, "D:\\tmp\\thrImg.tif");
 	//Image::save(resultSegImg, "D:\\tmp\\resultSegImg.tif");
 
-	cv::bitwise_and(resultSegImg, srcGray <= (thrImg), resultSegImg);		//combine with Nmin condition
+	cv::bitwise_and(mBwImg, srcGray <= (thrImg), mBwImg);		//combine with Nmin condition
 
 	if (mPreFilter)
 		mBwImg = IP::preFilterArea(mBwImg, mPreFilterSize);
 
-	mBwImg = resultSegImg.clone();
-
 
 	// I guess here is a good point to save the settings
-	//saveSettings();
 	mDebug << " computed...";
-	//mWarning << "a warning...";
-	//mInfo << "an info...";
 
 	return true;
 }
@@ -425,7 +416,6 @@ void BaseBinarizationSu::computeThrImg(const cv::Mat& grayImg32F, const cv::Mat&
 	// save RAM for small filter sizes
 	if (filtersize <= 7) {
 
-		qDebug() << "calling the new mean....";
 		// 1-dimensional since the filter is symmetric
 		cv::Mat sumKernel = cv::Mat(filtersize, 1, CV_32FC1);
 		sumKernel = 1.0;

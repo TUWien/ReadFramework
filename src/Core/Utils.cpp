@@ -76,6 +76,10 @@ Utils& Utils::instance() {
 	return *inst; 
 }
 
+bool Utils::hasGui() {
+	return (qobject_cast<QApplication*>(QCoreApplication::instance()) != 0);	// check if only QCoreApplication (headless) is running
+}
+
 void Utils::initFramework() const {
 
 	// format console

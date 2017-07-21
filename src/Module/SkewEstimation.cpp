@@ -32,6 +32,9 @@
 
 #include "SkewEstimation.h"
 
+#include "SuperPixel.h"
+#include "GraphCut.h"
+
 #include "Algorithms.h"
 #include "Image.h"
 #include "ImageProcessor.h"
@@ -47,8 +50,6 @@
 
 namespace rdf {
 	
-	
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseSkewEstimation"/> class.
 	/// </summary>
@@ -126,7 +127,7 @@ namespace rdf {
 		//Image::save(sepHV, "D:\\tmp\\horSep.png");
 		//cv::normalize(verSep, sepHV, 0, 255, cv::NORM_MINMAX, CV_8UC1);
 		//Image::save(sepHV, "D:\\tmp\\verSep.png");
-		
+
 		double min, max;
 		cv::minMaxLoc(horSep, &min, &max); //* max -> check
 		double thr = mFixedThr ? config()->thr() : config()->thr() * max;
@@ -715,6 +716,147 @@ namespace rdf {
 			settings.setValue("sigma", mSigma);
 			settings.setValue("kmax", mKMax);
 			settings.setValue("niter", mNIter);
+	}
+
+	TextLineSkewConfig::TextLineSkewConfig() : ModuleConfig("TextLine Skew") {
+
+	}
+
+	QString TextLineSkewConfig::toString() const {
+		return ModuleConfig::toString();
+	}
+
+	double TextLineSkewConfig::minAngle() const {
+		return mMinAngle;
+	}
+
+	double TextLineSkewConfig::maxAngle() const {
+		return mMaxAngle;
+	}
+
+	void TextLineSkewConfig::load(const QSettings & settings) {
+
+		mMinAngle = settings.value("minAngle", minAngle()).toDouble();
+		mMaxAngle = settings.value("maxAngle", maxAngle()).toDouble();
+	}
+
+	void TextLineSkewConfig::save(QSettings & settings) const {
+
+		settings.setValue("minAngle", minAngle());
+		settings.setValue("minAngle", maxAngle());
+	}
+
+	// -------------------------------------------------------------------- TextLineSkew 
+	TextLineSkew::TextLineSkew(const cv::Mat& img) : mImg(img) {
+
+		mConfig = QSharedPointer<TextLineSkewConfig>::create();
+	}
+
+	bool TextLineSkew::compute() {
+		
+		if (!checkInput()) {
+			qWarning() << "cannot compute " << config()->name();
+			return false;
+		}
+
+		rdf::SuperPixel superPixel(mImg);
+		
+		if (!superPixel.compute())
+			qWarning() << "could not compute super pixel!";
+
+		mSet = superPixel.pixelSet();
+
+		// configure local orientation module
+		QSharedPointer<rdf::LocalOrientationConfig> loc(new rdf::LocalOrientationConfig());
+		loc->setNumOrientations(64);
+
+		rdf::LocalOrientation lo(mSet);
+		lo.setConfig(loc);
+		if (!lo.compute())
+			qWarning() << "could not compute local orientation";
+
+		rdf::GraphCutOrientation pse(mSet);
+
+		if (!pse.compute())
+			qWarning() << "could not compute set orientation";
+
+		QList<double> angles;
+
+		// get median angle
+		for (auto p : mSet.pixels()) {
+
+			if (!p->stats())
+				continue;
+
+			angles << p->stats()->orientation();
+		}
+
+		// no super pixels found?
+		if (angles.empty())
+			return false;
+
+		// find the median angle
+		double skewAngle = -(rdf::Algorithms::statMoment(angles, 0.5) - CV_PI*0.5);
+
+		// if we have an illegal skew angle try the .75 quantile 
+		if (skewAngle < config()->minAngle() || skewAngle > config()->maxAngle()) {
+
+			double tmpSkewAngle = -(rdf::Algorithms::statMoment(angles, 0.75) - CV_PI*0.5);
+			if (tmpSkewAngle >= config()->minAngle() && tmpSkewAngle <= config()->maxAngle()) {
+				skewAngle = tmpSkewAngle;
+				qInfo() << "using 2nd guess for skew angle";
+			}
+			else
+				qInfo() << "2nd guess rejected: " << tmpSkewAngle*DK_RAD2DEG;
+		}
+
+		return true;
+	}
+
+	double TextLineSkew::getAngle() {
+		return mAngle;
+	}
+
+	bool TextLineSkew::isEmpty() const {
+		return mImg.empty();
+	}
+
+	QString TextLineSkew::toString() const {
+		return "TextLineSkew";
+	}
+
+	QSharedPointer<TextLineSkewConfig> TextLineSkew::config() const {
+		return mConfig.dynamicCast<TextLineSkewConfig>();
+	}
+
+	cv::Mat TextLineSkew::draw(const cv::Mat & img) const {
+
+		QImage qImg = Image::mat2QImage(img, true);
+
+		QPainter p(&qImg);
+		p.setPen(rdf::ColorManager::colors()[1]);
+
+		for (auto px : mSet.pixels())
+			px->draw(p, 0.3, rdf::Pixel::DrawFlags() | rdf::Pixel::draw_ellipse | rdf::Pixel::draw_stats);
+
+		if (rdf::Utils::hasGui()) {
+			QFont font = p.font();
+			font.setPointSize(16);
+			p.setFont(font);
+			p.drawText(QPoint(40, 40), QObject::tr("angle: %1%2").arg(mAngle*DK_RAD2DEG).arg(QChar(0x00B0)));
+		}
+
+		return Image::qImage2Mat(qImg);
+	}
+
+	cv::Mat TextLineSkew::rotated(const cv::Mat & img) const {
+
+		// apply angle to image
+		return rdf::IP::rotateImage(img, mAngle);
+	}
+
+	bool TextLineSkew::checkInput() const {
+		return !mImg.empty();
 	}
 
 }
