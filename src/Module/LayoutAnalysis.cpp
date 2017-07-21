@@ -58,22 +58,6 @@ QString LayoutAnalysisConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-void LayoutAnalysisConfig::setMaxImageSide(int maxSide) {
-	mMaxImageSide = maxSide;
-}
-
-int LayoutAnalysisConfig::maxImageSide() const {
-	return ModuleConfig::checkParam(mMaxImageSide, -1, INT_MAX, "maxImageSide");
-}
-
-void LayoutAnalysisConfig::setScaleMode(const Image::ScaleSideMode & mode) {
-	mScaleMode = mode;
-}
-
-int LayoutAnalysisConfig::scaleMode() const {
-	return ModuleConfig::checkParam(mScaleMode, 0, (int)Image::scale_end, "scaleMode");
-}
-
 void LayoutAnalysisConfig::setRemoveWeakTextLiens(bool remove) {
 	mRemoveWeakTextLines = remove;
 }
@@ -108,8 +92,6 @@ bool LayoutAnalysisConfig::computeSeparators() const {
 
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
-	mMaxImageSide			= settings.value("maxImageSide", maxImageSide()).toInt();
-	mScaleMode				= settings.value("scaleMode", scaleMode()).toInt();
 	mMinSuperPixelsPerBlock	= settings.value("minSuperPixelsPerBlock", minSuperixelsPerBlock()).toInt();
 	mRemoveWeakTextLines	= settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
 	mLocalBlockOrientation	= settings.value("localBlockOrientation", localBlockOrientation()).toBool();
@@ -118,8 +100,6 @@ void LayoutAnalysisConfig::load(const QSettings & settings) {
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
 	
-	settings.setValue("maxImageSide", maxImageSide());
-	settings.setValue("scaleMode", scaleMode());
 	settings.setValue("minSuperPixelsPerBlock", minSuperixelsPerBlock());
 	settings.setValue("removeWeakTextLines", removeWeakTextLines());
 	settings.setValue("localBlockOrientation", localBlockOrientation());
@@ -130,6 +110,9 @@ void LayoutAnalysisConfig::save(QSettings & settings) const {
 LayoutAnalysis::LayoutAnalysis(const cv::Mat& img) {
 
 	mImg = img;
+
+	// initialize scale factory
+	ScaleFactory::instance().init(img.size());
 
 	mConfig = QSharedPointer<LayoutAnalysisConfig>::create();
 	mConfig->loadSettings();
@@ -146,22 +129,24 @@ bool LayoutAnalysis::compute() {
 
 	Timer dt;
 
-	mScale = scaleFactor();
+	cv::Mat img = mImg;
 
-	// if you stumble upon this line:
-	// microfilm images are binary with havey noise
-	// a small median filter fixes this issue...
-	cv::medianBlur(mImg, mImg, 3);
+	if (img.rows > 2000) {
 
-	// resize if necessary
-	if (mScale != 1.0) {
-		cv::resize(mImg, mImg, cv::Size(), mScale, mScale, CV_INTER_LINEAR);
-		qInfo() << "image resized, new dimension" << mImg.cols << "x" << mImg.rows << "scale factor:" << mScale;
+		// if you stumble upon this line:
+		// microfilm images are binary with heavey noise
+		// a small median filter fixes this issue...
+		cv::medianBlur(img, img, 3);
 	}
+
+	qDebug() << "scale factor dpi: " << ScaleFactory::scaleFactorDpi();
+
+	img = ScaleFactory::scaled(img);
+	mImg = img;
 
 	// find super pixels
 	//ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
-	GridSuperPixel spM(mImg);
+	GridSuperPixel spM(img);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";
@@ -174,10 +159,10 @@ bool LayoutAnalysis::compute() {
 	mTextBlockSet = createTextBlocks();
 
 	if (mTextBlockSet.isEmpty()) {
-		Rect r(Vector2D(), mImg.size());
+		Rect r(Vector2D(), img.size());
 		mTextBlockSet << Polygon::fromRect(r);
 	}
-
+	
 	PixelSet pixels = spM.pixelSet();
 	
 	// scale back to original coordinates
@@ -240,10 +225,10 @@ bool LayoutAnalysis::compute() {
 	mInfo << "Textlines computed in" << dtTl;
 
 	// scale back to original coordinates
-	mTextBlockSet.scale(1.0 / mScale);
+	ScaleFactory::scaleInv(mTextBlockSet);
 
 	for (Line& l : mStopLines)
-		l.scale(1.0 / mScale);
+		l.scale(1.0 / ScaleFactory::scaleFactor());
 
 	// clean-up
 	if (config()->removeWeakTextLines()) {
@@ -331,11 +316,6 @@ PixelSet LayoutAnalysis::pixels() const {
 	return set;
 }
 
-double LayoutAnalysis::scaleFactor() const {
-
-	return Image::scaleFactor(mImg, config()->maxImageSide(), (Image::ScaleSideMode)config()->scaleMode());
-}
-
 bool LayoutAnalysis::checkInput() const {
 
 	return !isEmpty();
@@ -350,8 +330,7 @@ TextBlockSet LayoutAnalysis::createTextBlocks() const {
 		textRegions << RegionManager::filter<Region>(mRoot, Region::type_table_cell);
 
 		TextBlockSet tbs(textRegions);
-		tbs.scale(mScale);
-
+		tbs.scale(ScaleFactory::scaleFactor());
 
 		return tbs;
 	}
@@ -369,7 +348,7 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 
 		for (auto s : separators) {
 			Line sl = s->line();
-			sl.scale(mScale);
+			sl.scale(ScaleFactory::scaleFactor());
 			stopLines << sl;
 		}
 	}

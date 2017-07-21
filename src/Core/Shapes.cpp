@@ -867,6 +867,7 @@ Vector2D::Vector2D(const cv::Point & p) {
 }
 
 Vector2D::Vector2D(const cv::Size & s) {
+	mIsNull = false;
 	mX = s.width;
 	mY = s.height;
 }
@@ -1452,6 +1453,10 @@ Ellipse Ellipse::fromData(const QVector<Vector2D>& pts) {
 /// <returns></returns>
 Ellipse Ellipse::fromData(const cv::Mat & pts, const Vector2D & center) {
 	
+	// was only one point provided?
+	if (pts.rows < 2)
+		return Ellipse(center, Vector2D(1, 1));
+
 	// find the angle
 	cv::PCA pca(pts, cv::Mat(), CV_PCA_DATA_AS_ROW);
 

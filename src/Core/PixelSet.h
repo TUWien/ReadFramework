@@ -310,7 +310,7 @@ public:
 	void addPixels(const PixelSet& ps);
 	PixelSet pixelSet() const;
 
-	void scale(double factor);
+	void scale(double factor) override;
 
 	Polygon poly() const;
 
@@ -346,7 +346,7 @@ public:
 
 	bool isEmpty() const;
 
-	void scale(double factor);
+	void scale(double factor) override;
 
 	void setPixels(const PixelSet& ps);
 	QVector<QSharedPointer<TextBlock> > textBlocks() const;

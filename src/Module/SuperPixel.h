@@ -222,13 +222,16 @@ public:
 
 	virtual QString toString() const override;
 
+	bool autoWindowSize() const;
+	void estimateWindowSize(int height, int numTiles = 200);
 	int winSize() const;
 	double winOverlap() const;
 	double minEnergy() const;
 	bool applyLineMask() const;
 
 protected:
-	int mWinSize = 20;				// the window size in px per scale
+	bool mAutoWinSize = true;		// if true, the window size is determined w.r.t the image resolution
+	int mWinSize = 5;				// the window size in px per scale
 	double mWinOverlap = 0.5;		// the window overlaps
 	double mMinEnergy = 0.07;		// minimum energy per cell
 	bool mLineMask = true;			// if true, straight lines are removed

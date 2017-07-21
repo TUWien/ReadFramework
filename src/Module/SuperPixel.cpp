@@ -37,6 +37,7 @@
 #include "Drawer.h"
 #include "Utils.h"
 #include "LineTrace.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -394,15 +395,15 @@ QString LocalOrientationConfig::toString() const {
 }
 
 int LocalOrientationConfig::maxScale() const {
-	return mMaxScale;
+	return qRound(mMaxScale*ScaleFactory::scaleFactorDpi());
 }
 
 int LocalOrientationConfig::minScale() const {
-	return mMinScale;
+	return qRound(mMinScale*ScaleFactory::scaleFactorDpi());
 }
 
 Vector2D LocalOrientationConfig::scaleIvl() const {
-	return Vector2D(mMinScale, mMaxScale);
+	return Vector2D(minScale(), maxScale());
 }
 
 int LocalOrientationConfig::numOrientations() const {
@@ -459,12 +460,16 @@ bool LocalOrientation::compute() {
 	if (!checkInput())
 		return false;
 	
+	Timer dt;
+
 	QVector<Pixel*> ptrSet;
 	for (const QSharedPointer<Pixel>& p : mSet.pixels())
 		ptrSet << p.data();
 
 	for (Pixel* p : ptrSet)
 		computeScales(p, ptrSet);
+
+	mInfo << "computed in" << dt;
 
 	return true;
 }
@@ -797,6 +802,11 @@ bool GridSuperPixel::compute() {
 
 	Timer dt;
 
+	// estimate the window size from the source image?
+	if (config()->autoWindowSize()) {
+		config()->estimateWindowSize(mSrcImg.rows);
+	}
+
 	cv::Mat mag, phase;
 	edges(mSrcImg, mag, phase);
 	
@@ -879,6 +889,9 @@ QMap<int, QSharedPointer<GridPixel> > GridSuperPixel::computeGrid(const cv::Mat 
 		for (int cIdx = 0; cIdx < ncw; cIdx++) {
 
 			wc = wc.clipped(si);
+
+			if (wc.width() == 0 || wc.height() == 0)
+				continue;
 
 			cv::Mat winM = mag(wc.toCvRect());
 			cv::Mat winP = phase(wc.toCvRect());
@@ -1084,6 +1097,15 @@ QString GridPixelConfig::toString() const {
 	return msg;
 }
 
+bool GridPixelConfig::autoWindowSize() const {
+	return mAutoWinSize;
+}
+
+void GridPixelConfig::estimateWindowSize(int height, int numTiles) {
+
+	mWinSize = cvCeil((double)height/numTiles);
+}
+
 int GridPixelConfig::winSize() const {
 	return ModuleConfig::checkParam(mWinSize, 1, 1000, "winSize");
 }
@@ -1103,15 +1125,18 @@ bool GridPixelConfig::applyLineMask() const {
 void GridPixelConfig::load(const QSettings & settings) {
 
 	// add parameters
+	mAutoWinSize = settings.value("autoWinSize", autoWindowSize()).toBool();
 	mWinSize = settings.value("winSize", winSize()).toInt();
 	mWinOverlap = settings.value("winOverlap", winOverlap()).toDouble();
 	mMinEnergy = settings.value("minEnergy", minEnergy()).toDouble();
 	mLineMask = settings.value("applyLineMask", applyLineMask()).toDouble();
+
 }
 
 void GridPixelConfig::save(QSettings & settings) const {
 
 	// add parameters
+	settings.setValue("autoWinSize", autoWindowSize());	
 	settings.setValue("winSize", winSize());
 	settings.setValue("winOverlap", winOverlap());
 	settings.setValue("minEnergy", minEnergy());

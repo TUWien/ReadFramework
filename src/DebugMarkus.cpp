@@ -164,8 +164,8 @@ void LayoutTest::testComponents() {
 	//testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	//layoutToXml();
-	layoutToXmlDebug();
+	layoutToXml();
+	//layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
 	//eval();
@@ -209,6 +209,10 @@ void LayoutTest::layoutToXml() const {
 	rImg = la.draw(rImg);
 	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textlines");
 	rdf::Image::save(rImg, dstPath);
+
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-image");
+	rdf::Image::save(img, dstPath);
+
 	qDebug() << "debug image saved: " << dstPath;
 
 	// write to XML --------------------------------------------------------------------

@@ -65,6 +65,8 @@ public:
 	QString id() const;
 	virtual QString toString() const;
 
+	virtual void scale(double factor);
+
 protected:
 	QString mId;
 };

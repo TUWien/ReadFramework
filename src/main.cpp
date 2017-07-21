@@ -211,12 +211,9 @@ int main(int argc, char** argv) {
 void applyDebugSettings(rdf::DebugConfig& dc) {
 
 	if (dc.imagePath().isEmpty()) {
-		dc.setImagePath("C:/read/test/grid-pixel/M_Aigen_am_Inn_003-01_0001.jpg");
-		//dc.setImagePath("C:/read/cBAD/dataset/train-new/Baseline Competition - Complex Documents/ABP_FirstTestCollection/T_Freyung_008-01_0078.jpg");
-		//dc.setImagePath("C:/read/test/grid-pixel/stone.jpg");
-		//dc.setImagePath("C:/read/test/grid-pixel/simple.png");
-		//dc.setImagePath("C:/read/test/grid-pixel/00000197-c.jpg");
-		//dc.setImagePath("C:/read/cBAD/dataset/train-new/Baseline Competition - Complex Documents/BHIC_Akten/5117-077-0017.jpg");
+
+		dc.setImagePath("C:/read/test/sizes/synthetic-test-small.png");
+		dc.setImagePath("C:/read/test/sizes/synthetic-test.png");
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}

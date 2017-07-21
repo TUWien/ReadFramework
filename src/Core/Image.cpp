@@ -379,36 +379,6 @@ cv::Mat Image::jsonToMat(const QJsonObject & jo) {
 	return img;
 }
 
-double Image::scaleFactor(const cv::Mat& img, int maxImageSize, const ScaleSideMode& mode) {
-
-
-	if (maxImageSize > 0) {
-
-		if (maxImageSize < 500) {
-			qWarning() << "you chose the maximal image side to be" << maxImageSize << "px - this is pretty low";
-		}
-
-		// find the image side
-		int mSide = 0;
-		if (mode == scale_max_side)
-			mSide = qMax(img.rows, img.cols);
-		else
-			mSide = img.rows;
-
-		double sf = (double)maxImageSize / mSide;
-
-		// do not rescale if the factor is close to 1
-		if (sf <= 0.95)
-			return sf;
-
-		// inform user that we do not resize if the scale factor is close to 1
-		if (sf < 1.0)
-			qInfo() << "I won't resize the image since the scale factor is" << sf;
-	}
-
-	return 1.0;
-}
-
 // Histogram --------------------------------------------------------------------
 Histogram::Histogram(const cv::Mat & values) {
 	

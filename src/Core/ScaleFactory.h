@@ -33,9 +33,8 @@
 #pragma once
 
 #include "BaseModule.h"
-#include "PixelSet.h"
 #include "Image.h"
-#include "ScaleFactory.h"
+#include "Shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -54,74 +53,72 @@
 namespace rdf {
 
 // read defines
-class Region;
-class RootRegion;
-class SeparatorRegion;
-class Polygon;
-class TextLine;
+class BaseElement;
 
-class DllCoreExport LayoutAnalysisConfig : public ModuleConfig {
+/// <summary>
+/// Class that configures the ScaleFactory
+/// </summary>
+/// <seealso cref="ModuleConfig" />
+class DllCoreExport ScaleFactoryConfig : public ModuleConfig {
 
 public:
-	LayoutAnalysisConfig();
+	enum ScaleSideMode {
+		scale_max_side = 0,		// scales w.r.t to the max side usefull if you have free images
+		scale_height,			// [default] choose this if you now that you have pages & double pages
+
+		scale_end
+	};
+	
+	ScaleFactoryConfig();
 
 	virtual QString toString() const override;
 
-	void setRemoveWeakTextLiens(bool remove);
-	bool removeWeakTextLines() const;
+	void setMaxImageSide(int maxSide);
+	int maxImageSide() const;
 
-	void setMinSuperPixelsPerBlock(int minPx);
-	int minSuperixelsPerBlock() const;
+	void setScaleMode(const ScaleFactoryConfig::ScaleSideMode& mode);
+	ScaleFactoryConfig::ScaleSideMode scaleMode() const;
 
-	void setLocalBlockOrientation(bool lor);
-	bool localBlockOrientation() const;
-
-	void setComputeSeparators(bool cs);
-	bool computeSeparators() const;
+	int dpi() const;
 
 protected:
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
 
-	bool mRemoveWeakTextLines = true;		// if true, unstable text lines are removed
-	int mMinSuperPixelsPerBlock = 15;		// the minimum number of components that are required to run the text line segmentation
-	bool mLocalBlockOrientation = true;		// local orientation is estimated per text block
-	bool mComputeSeparators = true;			// if true, separators lines are computed
+	// 1000px == 100dpi @ A4
+	int mMaxImageSide = 1000;				// maximum image side in px (larger images are downscaled accordingly)
+	int mDpi = 300;							// estimated dpi (even better if we truely know it : )
+	ScaleFactoryConfig::ScaleSideMode mScaleMode = ScaleFactoryConfig::scale_height;	// scaling mode (see ScaleSideMode)
 };
 
-class DllCoreExport LayoutAnalysis : public Module {
+class ScaleFactory {
 
 public:
-	LayoutAnalysis(const cv::Mat& img);
+	static ScaleFactory& instance();
 
-	bool isEmpty() const override;
-	bool compute() override;
-	QSharedPointer<LayoutAnalysisConfig> config() const;
+	static double scaleFactor();
+	static double scaleFactorDpi();
+	static cv::Mat scaled(cv::Mat& img);
+	static void scale(BaseElement& el);
+	static void scaleInv(BaseElement& el);
 
-	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
-	QString toString() const override;
+	static Vector2D imgSize();
 
-	void setRootRegion(const QSharedPointer<RootRegion>& region);
-	
-	TextBlockSet textBlockSet() const;
-	QVector<SeparatorRegion> stopLines() const;
-	PixelSet pixels() const;
+	QSharedPointer<ScaleFactoryConfig> config() const;
+
+	void init(const Vector2D& imgSize);
 
 private:
-	bool checkInput() const override;
+	ScaleFactory();
+	ScaleFactory(const ScaleFactory&);
 
-	// input
-	cv::Mat mImg;
-	QSharedPointer<RootRegion> mRoot;
+	Vector2D mImgSize;
+	double mScaleFactor = 1.0;
 
-	// output
-	TextBlockSet mTextBlockSet;
-	QVector<Line> mStopLines;
+	QSharedPointer<ScaleFactoryConfig> mConfig;
 
-	TextBlockSet createTextBlocks() const;
-	QVector<Line> createStopLines() const;
-	bool computeLocalStats(PixelSet& pixels) const;
+	double scaleFactor(const Vector2D& size, int maxImageSize, const ScaleFactoryConfig::ScaleSideMode& mode) const;
 };
 
 

@@ -1,4 +1,3 @@
 # Refactoring
-- Clean up `ImageProcessor` and `Algorithm`
-  - e.g. Algoritm::get1DGauss
 - Sort poly coordinates to reflect tl orientation
+- add Rect/Line etc to ``BaseImageElement``

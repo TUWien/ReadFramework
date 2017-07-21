@@ -126,7 +126,7 @@ public:
 	double orientation() const;
 	Vector2D orVec() const;
 	
-	void scale(double factor);
+	void scale(double factor) override;
 	double scaleFactor() const;
 	int lineSpacingIndex() const;
 	double lineSpacing() const;
@@ -200,7 +200,7 @@ public:
 	double angle() const;
 	Ellipse ellipse() const;
 	
-	void scale(double factor);
+	void scale(double factor) override;
 	void move(const Vector2D& vec);
 
 	void addStats(const QSharedPointer<PixelStats>& stats);
@@ -274,7 +274,7 @@ public:
 	QSharedPointer<Pixel> first() const;
 	QSharedPointer<Pixel> second() const;
 
-	void scale(double s);
+	void scale(double s) override;
 	void draw(QPainter& p) const;
 
 protected:

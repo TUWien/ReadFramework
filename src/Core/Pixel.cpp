@@ -39,6 +39,7 @@
 #include "Image.h"
 #include "Algorithms.h"
 #include "Elements.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -256,8 +257,8 @@ double PixelStats::lineSpacing() const {
 	if (mLineSpacing != -1)
 		return mLineSpacing;
 
-	double sr = (256 / scaleFactor());	// sampling rate
-	return qMax((double)lineSpacingIndex() * sr, 20.0);	// assume some minimum line spacing
+	double sr = (256*ScaleFactory::scaleFactorDpi() / scaleFactor());	// sampling rate
+	return qMax((double)lineSpacingIndex() * sr, 10.0);	// assume some minimum line spacing
 }
 
 int PixelStats::numOrientations() const {

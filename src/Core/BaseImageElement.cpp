@@ -112,4 +112,9 @@ QString BaseElement::toString() const {
 	return id() + " toString() not implemented for this object";
 }
 
+void BaseElement::scale(double) {
+
+	qWarning() << "scale() is used but not implemented!";
+}
+
 }

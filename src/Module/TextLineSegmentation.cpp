@@ -37,6 +37,7 @@
 #include "Drawer.h"
 #include "Algorithms.h"
 #include "ImageProcessor.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -61,7 +62,11 @@ void TextLineConfig::setMinLineLength(int length) {
 }
 
 int TextLineConfig::minLineLength() const {
-	return checkParam(mMinLineLength, 0, INT_MAX, "minLineLength");
+	
+	double ml = checkParam(mMinLineLength, 0, INT_MAX, "minLineLength");
+	ml *= ScaleFactory::scaleFactorDpi();
+
+	return qRound(ml);
 }
 
 void TextLineConfig::setMinPointDistance(double dist) {
@@ -69,7 +74,10 @@ void TextLineConfig::setMinPointDistance(double dist) {
 }
 
 double TextLineConfig::minPointDistance() const {
-	return checkParam(mMinPointDist, 0.0, DBL_MAX, "minPointDist");
+	double mp = checkParam(mMinPointDist, 0.0, DBL_MAX, "minPointDist");
+	mp *= ScaleFactory::scaleFactorDpi();
+
+	return mp;
 }
 
 void TextLineConfig::setErrorMultiplier(double multiplier) {
@@ -81,23 +89,21 @@ double TextLineConfig::errorMultiplier() const {
 }
 
 QString TextLineConfig::debugPath() const {
-
 	return mDebugPath;
 }
 
-
 void TextLineConfig::load(const QSettings & settings) {
 
-	mMinLineLength = settings.value("minLineLength", minLineLength()).toInt();
-	mMinPointDist = settings.value("minPointDistance", minPointDistance()).toDouble();
+	mMinLineLength = settings.value("minLineLength", mMinLineLength).toInt();
+	mMinPointDist = settings.value("minPointDistance", mMinPointDist).toDouble();
 	mErrorMultiplier = settings.value("errorMultiplier", errorMultiplier()).toDouble();
 	mDebugPath = settings.value("debugPath", debugPath()).toString();
 }
 
 void TextLineConfig::save(QSettings & settings) const {
 
-	settings.setValue("minLineLength", minLineLength());
-	settings.setValue("minPointDistance", minPointDistance());
+	settings.setValue("minLineLength", mMinLineLength);
+	settings.setValue("minPointDistance", mMinPointDist);
 	settings.setValue("errorMultiplier", errorMultiplier());
 	settings.setValue("debugPath", debugPath());
 }
@@ -579,7 +585,7 @@ void SimpleTextLineConfig::setMaxEdgeThresh(double et) {
 }
 
 double SimpleTextLineConfig::maxEdgeTrhesh() const {
-	return mMaxEdgeThresh;
+	return mMaxEdgeThresh*ScaleFactory::scaleFactorDpi();
 }
 
 void SimpleTextLineConfig::load(const QSettings & settings) {
