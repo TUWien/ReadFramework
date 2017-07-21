@@ -46,8 +46,8 @@
 #include <QPainter>
 #include <QJsonObject>
 
-#include <opencv2/features2d/features2d.hpp>
-#include <opencv2/ml/ml.hpp>
+#include <opencv2/features2d.hpp>
+#include <opencv2/ml.hpp>
 
 
 #include "GCGraph.hpp"

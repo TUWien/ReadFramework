@@ -38,8 +38,8 @@
 #include <QColor>
 #include <QDebug>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
 #pragma warning(pop)
 
 namespace cv {

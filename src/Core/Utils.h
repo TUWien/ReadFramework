@@ -37,7 +37,7 @@
 #include <QSettings>
 #include <QTime>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #pragma warning(pop)
 
 #pragma warning (disable: 4251)	// inlined Qt functions in dll interface

@@ -37,7 +37,7 @@
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
 
-#include "opencv2/core/core.hpp"
+#include <opencv2/core.hpp>
 #pragma warning(pop)
 
 

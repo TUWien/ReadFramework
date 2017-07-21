@@ -39,7 +39,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <qmath.h>
-#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {

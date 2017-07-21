@@ -50,7 +50,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <opencv2/ml/ml.hpp>
+#include <opencv2/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {

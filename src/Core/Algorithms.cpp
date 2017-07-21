@@ -41,8 +41,7 @@
 #include <QMatrix4x4>
 #include <QtMath>
 
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/imgproc.hpp>
 #include "Image.h"
 #pragma warning(pop)
 

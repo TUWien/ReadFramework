@@ -39,7 +39,7 @@
 #include <QSharedPointer>
 #include <QPainter>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #pragma warning(pop)
 
 namespace rdf {

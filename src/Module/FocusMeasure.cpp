@@ -37,7 +37,7 @@
 #include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/imgproc.hpp>
 #include <QDebug>
 #pragma warning(pop)
 

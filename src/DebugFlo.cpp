@@ -47,9 +47,9 @@
 #include <QDebug>
 #include <QImage>
 #include <QFileInfo>
-#include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv/highgui.h"
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv/highgui.h>
 #pragma warning(pop)
 
 namespace rdf {

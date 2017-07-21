@@ -44,7 +44,7 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QDir>
-#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/imgproc.hpp>
 #pragma warning(pop)
 
 namespace rdf {

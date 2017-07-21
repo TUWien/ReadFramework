@@ -48,7 +48,7 @@
 #include <QUrl>
 #include <QDateTime>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #pragma warning(pop)
 
 // needed for registering the file version

@@ -24,9 +24,8 @@
 
 #include <QJsonObject>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/ml/ml.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/ml.hpp>
 #pragma warning(pop)
 
 namespace rdf {

@@ -35,9 +35,9 @@
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
-#include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv/highgui.h"
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+//#include "opencv/highgui.h"
 #include <QSharedPointer>
 #include <QDebug>
 #pragma warning(pop)

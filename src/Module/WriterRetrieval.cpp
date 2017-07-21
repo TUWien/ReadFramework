@@ -35,9 +35,9 @@
 #include "Elements.h"
 
 //opencv
-#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/imgproc.hpp>
 #ifdef WITH_XFEATURES2D
-#include "opencv2/xfeatures2d.hpp"
+#include <opencv2/xfeatures2d.hpp>
 #endif
 
 #pragma warning(push, 0)	// no warnings from includes

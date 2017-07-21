@@ -39,7 +39,7 @@
 #include "Settings.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #pragma warning(pop)
 
 #ifndef DllCoreExport

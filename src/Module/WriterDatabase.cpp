@@ -43,8 +43,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
-#include "opencv2/ml.hpp"
-#include "opencv2/features2d/features2d.hpp"
+#include <opencv2/ml.hpp>
+#include <opencv2/features2d.hpp>
 #pragma warning(pop)
 
 namespace rdf {

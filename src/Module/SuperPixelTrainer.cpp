@@ -52,9 +52,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/features2d/features2d.hpp>
-#include <opencv2/ml/ml.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
+#include <opencv2/ml.hpp>
 
 #pragma warning(pop)
 

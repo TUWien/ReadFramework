@@ -36,8 +36,8 @@
 // Qt Includes
 #include <QString>
 #include <QVector>
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/ml/ml.hpp"
+#include <opencv2/imgproc.hpp>
+#include <opencv2/ml.hpp>
 #pragma warning(pop)
 
 #ifndef DllCoreExport

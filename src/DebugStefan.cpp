@@ -36,7 +36,6 @@
 #include "WriterRetrieval.h"
 #include "Image.h"
 #include "Utils.h"
-#include "opencv2/ml.hpp"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -44,6 +43,9 @@
 #include <QImage>
 #include <QDebug>
 #include <QDirIterator>
+
+#include <opencv2/ml.hpp>
+
 #pragma warning(pop)
 
 namespace rdf {
