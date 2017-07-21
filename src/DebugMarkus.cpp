@@ -348,7 +348,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	if (!spf.compute())
 		qCritical() << "could not compute SuperPixel features!";
 
-	FeatureCollectionManager fcm(spf.features(), spf.set());
+	FeatureCollectionManager fcm(spf.features(), spf.pixelSet());
 	fcm.write(mConfig.featureCachePath());
 	
 	FeatureCollectionManager testFcm = FeatureCollectionManager::read(mConfig.featureCachePath());

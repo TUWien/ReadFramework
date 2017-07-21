@@ -223,7 +223,7 @@ bool SuperPixelTest::collectFeatures() const {
 		return false;
 	}
 
-	rdf::FeatureCollectionManager fcm(spf.features(), spf.set());
+	rdf::FeatureCollectionManager fcm(spf.features(), spf.pixelSet());
 	fcm.write(mConfig.featureCachePath());
 
 	// test drawing

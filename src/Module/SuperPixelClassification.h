@@ -77,7 +77,7 @@ public:
 	QString toString() const override;
 
 	cv::Mat features() const;
-	PixelSet set() const;
+	PixelSet pixelSet() const;
 
 private:
 	cv::Mat mImg;

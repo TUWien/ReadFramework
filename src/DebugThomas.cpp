@@ -130,7 +130,7 @@ void ThomasTest::testFeatureCollection() {
 	if (!spf.compute())
 		qCritical() << "could not compute SuperPixel features!";
 
-	FeatureCollectionManager fcm(spf.features(), spf.set());
+	FeatureCollectionManager fcm(spf.features(), spf.pixelSet());
 	fcm.write(mConfig.featureCachePath());
 
 	// read it back (test)

@@ -113,7 +113,7 @@ bool SuperPixelClassifier::compute() {
 
 	// sync the set
 	cv::Mat features = spf.features();
-	mSet = spf.set();
+	mSet = spf.pixelSet();
 
 	if (features.rows != mSet.size()) {
 		qCritical() << "PixelSet is out-of-sync with # of features, aborting classification";
@@ -268,7 +268,7 @@ cv::Mat SuperPixelFeature::features() const {
 	return mDescriptors;
 }
 
-PixelSet SuperPixelFeature::set() const {
+PixelSet SuperPixelFeature::pixelSet() const {
 	return mSet;
 }
 
