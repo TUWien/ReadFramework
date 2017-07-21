@@ -302,7 +302,7 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 
 	for (int i = 0; i < height; i += dy) {
 		cv::Mat row = contrastImg.row(i);
-		computeDistHist(row, &diffs, &locInt, 0.0f);
+		computeDistHist(row, &diffs, &locInt);
 	}
 
 	vec.create(1, 40, CV_32FC1);
@@ -334,16 +334,12 @@ float BaseBinarizationSu::strokeWidth(const cv::Mat& contrastImg) const {
 		return strokeWidth;
 }
 
-void BaseBinarizationSu::computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity, float gSigma) const {
+void BaseBinarizationSu::computeDistHist(const cv::Mat& src, QList<int> *maxDiffList, QList<float> *localIntensity) const {
 
 	QList<int> localMaxList;
 	QList<int>::iterator localMaxIter;
 
-	cv::Mat sHist;
-	if (gSigma > 0)
-		sHist = IP::convolveSymmetric(src, IP::get1DGauss(gSigma));
-	else
-		sHist = src;
+	cv::Mat sHist = src;
 
 	localMaxList.clear();
 

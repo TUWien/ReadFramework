@@ -65,11 +65,6 @@ class DllCoreExport Algorithms {
 
 public:
 
-	//Computes the natural logarithm of the absolute value of	the gamma function of x using the Lanczos approximation.
-	static double logGammaLanczos(double x);
-	//Computes the natural logarithm of the absolute value of the gamma function of x using Windschitl method.
-	static double logGammaWindschitl(double x);
-	static double logGamma(double x);
 	static int doubleEqual(double a, double b);
 	static double absAngleDiff(double a, double b);
 	static double signedAngleDiff(double a, double b);

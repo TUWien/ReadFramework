@@ -95,6 +95,9 @@ bool PreProcessingTest::binarize() const {
 	rImg = bss.binaryImage();
 	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-bw-simple"));
 
+	rImg = IP::threshOtsu(img);
+	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-otsu"));
+
 	qDebug() << "binarization written to" << dstPath;
 
 

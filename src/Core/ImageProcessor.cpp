@@ -405,63 +405,63 @@ cv::Mat IP::threshOtsu(const cv::Mat& srcImg, int thType) {
 
 }
 
-/// <summary>
-/// Convolves a histogram symmetrically.
-/// Symmetric convolution means that the convolution
-/// is flipped around at the histograms borders. This is
-/// specifically useful for orientation histograms (since
-/// 0° corresponds to 360°
-/// </summary>
-/// <param name="hist">The histogram CV_32FC1.</param>
-/// <param name="kernel">The convolution kernel CV_32FC1.</param>
-/// <returns>The convolved Histogram CV_32FC1.</returns>
-cv::Mat IP::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) {
-
-	if (hist.channels() > 1) {
-		qWarning() << "the histogram needs to have 1 channel";
-		return cv::Mat();
-	}
-
-	if (kernel.channels() > 1) {
-		qWarning() << "the kernel needs to have 1 channel";
-		return cv::Mat();
-	}
-
-	if (hist.type() != CV_32FC1) {
-		qWarning() << "the histogram needs to be CV_32FC1";
-		return cv::Mat();
-	}
-
-	if (kernel.type() != CV_32FC1) {
-		qWarning() << "the kernel needs to be CV_32FC1";
-		return cv::Mat();
-	}
-
-	int hs = hist.rows * hist.cols;			// histogram size
-	int ks = kernel.rows * kernel.cols;		// kernel size
-	int halfKs = cvFloor(ks / 2);				// half kernel size
-	int cs = hs + ks - 1;						// histogram size + kernel size
-
-	cv::Mat symHistSmooth;
-	cv::Mat symHist = cv::Mat(1, cs, CV_32F);
-
-	const float* histPtr = hist.ptr<float>();
-	float* symHistPtr = symHist.ptr<float>();
-
-	for (int nIdx = 0, oIdx = -halfKs; nIdx < cs; nIdx++, oIdx++) {
-
-		oIdx += hs;
-		oIdx %= hs;
-
-		symHistPtr[nIdx] = histPtr[oIdx];
-	}
-
-	filter2D(symHist, symHist, -1, kernel);
-	symHistSmooth = symHist.colRange(halfKs, cs - halfKs);
-
-	return symHistSmooth.clone();	// delete values outside the range
-
-}
+///// <summary>
+///// Convolves a histogram symmetrically.
+///// Symmetric convolution means that the convolution
+///// is flipped around at the histograms borders. This is
+///// specifically useful for orientation histograms (since
+///// 0° corresponds to 360°
+///// </summary>
+///// <param name="hist">The histogram CV_32FC1.</param>
+///// <param name="kernel">The convolution kernel CV_32FC1.</param>
+///// <returns>The convolved Histogram CV_32FC1.</returns>
+//cv::Mat IP::convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel) {
+//
+//	if (hist.channels() > 1) {
+//		qWarning() << "the histogram needs to have 1 channel";
+//		return cv::Mat();
+//	}
+//
+//	if (kernel.channels() > 1) {
+//		qWarning() << "the kernel needs to have 1 channel";
+//		return cv::Mat();
+//	}
+//
+//	if (hist.type() != CV_32FC1) {
+//		qWarning() << "the histogram needs to be CV_32FC1";
+//		return cv::Mat();
+//	}
+//
+//	if (kernel.type() != CV_32FC1) {
+//		qWarning() << "the kernel needs to be CV_32FC1";
+//		return cv::Mat();
+//	}
+//
+//	int hs = hist.rows * hist.cols;			// histogram size
+//	int ks = kernel.rows * kernel.cols;		// kernel size
+//	int halfKs = cvFloor(ks / 2);				// half kernel size
+//	int cs = hs + ks - 1;						// histogram size + kernel size
+//
+//	cv::Mat symHistSmooth;
+//	cv::Mat symHist = cv::Mat(1, cs, CV_32F);
+//
+//	const float* histPtr = hist.ptr<float>();
+//	float* symHistPtr = symHist.ptr<float>();
+//
+//	for (int nIdx = 0, oIdx = -halfKs; nIdx < cs; nIdx++, oIdx++) {
+//
+//		oIdx += hs;
+//		oIdx %= hs;
+//
+//		symHistPtr[nIdx] = histPtr[oIdx];
+//	}
+//
+//	filter2D(symHist, symHist, -1, kernel);
+//	symHistSmooth = symHist.colRange(halfKs, cs - halfKs);
+//
+//	return symHistSmooth.clone();	// delete values outside the range
+//
+//}
 
 /// <summary>
 /// Computes a 1D Gaussian filter kernel.

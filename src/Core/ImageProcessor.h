@@ -67,7 +67,7 @@ public:
 	static cv::Mat dilateImage(const cv::Mat& bwImg, int seSize, MorphShape shape = IP::morph_square, int borderValue = 0);
 	static cv::Mat erodeImage(const cv::Mat& bwImg, int seSize, MorphShape shape = IP::morph_square, int borderValue = 255);
 
-	static cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel);
+	//static cv::Mat convolveSymmetric(const cv::Mat& hist, const cv::Mat& kernel);
 	static cv::Mat convolveIntegralImage(const cv::Mat& src, const int kernelSizeX, const int kernelSizeY = 0, MorphBorder norm = IP::border_zero);
 	static cv::Mat get1DGauss(double sigma, int kernelsize = -1);
 
