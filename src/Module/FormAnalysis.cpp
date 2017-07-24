@@ -1056,9 +1056,13 @@ bool FormFeatures::matchTemplate() {
 	//create AssociationGraphNodes
 	createAssociationGraphNodes(cellsR);
 
-	//create AssociationGraph
-	createAssociationGraph();
-	findMaxCliques();
+	////create AssociationGraph
+	//createAssociationGraph();
+	//findMaxCliques();
+
+	//
+	//qDebug() << "size of horizontal max cliques: " << mMaxCliquesHor.size();
+	//qDebug() << "size of vertical max cliques: " << mMaxCliquesVer.size();
 
 	//TODO: find global optimum of line matchin
 	//-> find largest maximal clique
