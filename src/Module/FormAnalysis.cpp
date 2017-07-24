@@ -815,7 +815,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 	//find all nodes for the association graph
 	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
 
-		qDebug() << "try to match cell lines of cell: " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
+		qDebug() << "try to match cell lines of cell for associaton graph nodes: " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
 
 
 		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
@@ -841,15 +841,15 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				horizontal = true;
 				break;
 			case AssociationGraphNode::LinePosition::pos_left:
-				l = cellsR[cellIdx]->rightBorder();
-				visible = cellsR[cellIdx]->rightBorderVisible();
+				l = cellsR[cellIdx]->leftBorder();
+				visible = cellsR[cellIdx]->leftBorderVisible();
 				d = findMinWidth(cellsR, cellIdx, i);
 				lp = AssociationGraphNode::LinePosition::pos_left;
 				horizontal = false;
 				break;
 			case AssociationGraphNode::LinePosition::pos_right:
-				l = cellsR[cellIdx]->leftBorder();
-				visible = cellsR[cellIdx]->leftBorderVisible();
+				l = cellsR[cellIdx]->rightBorder();
+				visible = cellsR[cellIdx]->rightBorderVisible();
 				d = findMinWidth(cellsR, cellIdx, i);
 				lp = AssociationGraphNode::LinePosition::pos_right;
 				horizontal = false;
@@ -868,7 +868,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				QVector<double> overlaps = lC.overlaps();
 				QVector<double> distances = lC.distances();
 
-				for (int lI = 0; lI < lineIdx.size(); i++) {
+				for (int lI = 0; lI < lineIdx.size(); lI++) {
 
 					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
 					newNode->setLineCell(cellsR[cellIdx]->row(), cellsR[cellIdx]->col());
@@ -928,7 +928,8 @@ void FormFeatures::findMaxCliques() {
 	
 	//create set of nodeIdx for vertical nodes
 	for (int i = 0; i < mANodesVertical.size(); i++) {
-		nodesIdx << i;
+		//nodesIdx << i;
+		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesVer;
 
@@ -937,7 +938,8 @@ void FormFeatures::findMaxCliques() {
 	nodesIdx.clear();
 	//create set of nodeIdx for horizontal nodes
 	for (int i = 0; i < mANodesHorizontal.size(); i++) {
-		nodesIdx << i;
+		//nodesIdx << i;
+		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesHor;
 
@@ -954,20 +956,26 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 	}
 	
 	QSet<int>::iterator it;
+	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
 
-
-	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); it++) {
+	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
 
 		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
-		QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
-		QSet<int> PN = previousExpansionsIdx.intersect(neighbourNodes);
+		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
+		QSet<int> NN = nextExpansionsCopy;
+		NN = NN.intersect(neighbourNodes);
+		//QSet<int> PN = previousExpansionsIdx.intersect(neighbourNodes);
+		QSet<int> PN = previousExpansionsIdx;
+		PN = PN.intersect(neighbourNodes);
 		QSet<int> CN = cliqueIdx;
-		CN += *it;
+		qDebug() << "key: " << (int)(*it);
+		CN += (*it);
 
 		BronKerbosch(CN, NN, PN, maxCliques);
 
-		nextExpansionsIdx.remove(*it);
-		previousExpansionsIdx += *it;
+		//nextExpansionsIdx.remove(*it);
+		nextExpansionsCopy.remove(*it);
+		previousExpansionsIdx.insert(*it);
 	}
 }
 
@@ -1054,11 +1062,16 @@ bool FormFeatures::matchTemplate() {
 	
 	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR = createRawTableFromTemplate();
 	//create AssociationGraphNodes
+	qDebug() << "create Association Graph nodes...";
 	createAssociationGraphNodes(cellsR);
 
-	////create AssociationGraph
-	//createAssociationGraph();
-	//findMaxCliques();
+	qDebug() << "create Association Graph...";
+	//create AssociationGraph
+	createAssociationGraph();
+
+	qDebug() << "create Association Graph...";
+	//find maximal cliques
+	findMaxCliques();
 
 	//
 	//qDebug() << "size of horizontal max cliques: " << mMaxCliquesHor.size();
@@ -1876,7 +1889,7 @@ cv::Size FormFeatures::sizeImg() const
 		QSet<int> aN;
 
 		for (int i = 0; i < mAdjacencyNodesIdx.size(); i++) {
-			aN << mAdjacencyNodesIdx[i];
+			aN.insert(mAdjacencyNodesIdx[i]);
 		}
 
 		return aN;
