@@ -962,7 +962,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 
 		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
 		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
-		QSet<int> NN = nextExpansionsCopy;
+		QSet<int> NN = nextExpansionsCopy;	//we need a copy since intersect changes the original set
 		NN = NN.intersect(neighbourNodes);
 		//QSet<int> PN = previousExpansionsIdx.intersect(neighbourNodes);
 		QSet<int> PN = previousExpansionsIdx;
