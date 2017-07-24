@@ -919,6 +919,59 @@ void FormFeatures::createAssociationGraph() {
 
 }
 
+void FormFeatures::findMaxCliques() {
+
+	//QVector<int> nodesIdx;
+	QSet<int> c, p;
+	QSet<int> nodesIdx;
+	QVector<QSet<int>> *pMaxCliques;
+	
+	//create set of nodeIdx for vertical nodes
+	for (int i = 0; i < mANodesVertical.size(); i++) {
+		nodesIdx << i;
+	}
+	pMaxCliques = &mMaxCliquesVer;
+
+	BronKerbosch(c, nodesIdx, p, pMaxCliques);
+	
+	nodesIdx.clear();
+	//create set of nodeIdx for horizontal nodes
+	for (int i = 0; i < mANodesHorizontal.size(); i++) {
+		nodesIdx << i;
+	}
+	pMaxCliques = &mMaxCliquesHor;
+
+}
+
+void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques) {
+
+	if (nextExpansionsIdx.isEmpty() && previousExpansionsIdx.isEmpty()) {
+
+		//cliqueIdx is maximal clique
+		qDebug() << "max Clique found";
+		maxCliques->append(cliqueIdx);
+		//return;
+	}
+	
+	QSet<int>::iterator it;
+
+
+	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); it++) {
+
+		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
+		QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
+		QSet<int> PN = previousExpansionsIdx.intersect(neighbourNodes);
+		QSet<int> CN = cliqueIdx;
+		CN += *it;
+
+		BronKerbosch(CN, NN, PN, maxCliques);
+
+		nextExpansionsIdx.remove(*it);
+		previousExpansionsIdx += *it;
+	}
+}
+
+
 QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR) {
 
 	//find all line candidates for all cells
@@ -1005,6 +1058,7 @@ bool FormFeatures::matchTemplate() {
 
 	//create AssociationGraph
 	createAssociationGraph();
+	findMaxCliques();
 
 	//TODO: find global optimum of line matchin
 	//-> find largest maximal clique
@@ -1813,6 +1867,17 @@ cv::Size FormFeatures::sizeImg() const
 		return mAdjacencyNodesIdx;
 	}
 
+	QSet<int> AssociationGraphNode::adjacencyNodesSet() const {
+		
+		QSet<int> aN;
+
+		for (int i = 0; i < mAdjacencyNodesIdx.size(); i++) {
+			aN << mAdjacencyNodesIdx[i];
+		}
+
+		return aN;
+	}
+
 	void AssociationGraphNode::addAdjacencyNode(int idx) 	{
 		mAdjacencyNodesIdx.push_back(idx);
 	}
@@ -1872,4 +1937,8 @@ cv::Size FormFeatures::sizeImg() const
 	void AssociationGraphNode::clearAdjacencyList() 	{
 		mAdjacencyNodesIdx.clear();
 	}
+	int AssociationGraphNode::degree() const 	{
+		return (int)mAdjacencyNodesIdx.size();
+	}
+
 }

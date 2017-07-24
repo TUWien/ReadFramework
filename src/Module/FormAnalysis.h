@@ -128,9 +128,12 @@ namespace rdf {
 		int cellIdx() const;
 
 		QVector<int> adjacencyNodes() const;
+		QSet<int> adjacencyNodesSet() const;
 		void addAdjacencyNode(int idx);
 		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
 		void clearAdjacencyList();
+
+		int degree() const;
 
 	protected:
 		int mCellIdx = 1;
@@ -177,6 +180,9 @@ namespace rdf {
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		void createAssociationGraph();
+		void findMaxCliques();
+		void BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques);
+
 		QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
 		bool matchTemplate();
 		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
@@ -256,6 +262,9 @@ namespace rdf {
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesHorizontal;
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesVertical;
 
+		QVector<QSet<int>> mMaxCliquesHor;
+		QVector<QSet<int>> mMaxCliquesVer;
+		
 		//rdf::FormFeatures mTemplateForm;
 		QSharedPointer<rdf::FormFeatures> mTemplateForm;
 
