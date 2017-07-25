@@ -823,15 +823,21 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 			bool visible = false;
 			bool horizontal = false;
 			double d = 0;
+			QVector<int> neighbourIdx;
 			AssociationGraphNode::LinePosition lp;
+
 			switch (i)
 			{
 			case AssociationGraphNode::LinePosition::pos_top:
-				l = cellsR[cellIdx]->topBorder();
-				visible = cellsR[cellIdx]->topBorderVisible();
-				d = findMinWidth(cellsR, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_top;
-				horizontal = true;
+				//check if node already exists...
+				neighbourIdx = cellsR[cellIdx]->topIdx();
+				if (neighbourIdx.size() == 0) {
+					l = cellsR[cellIdx]->topBorder();
+					visible = cellsR[cellIdx]->topBorderVisible();
+					d = findMinWidth(cellsR, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_top;
+					horizontal = true;
+				}
 				break;
 			case AssociationGraphNode::LinePosition::pos_bottom:
 				l = cellsR[cellIdx]->bottomBorder();
@@ -841,11 +847,15 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				horizontal = true;
 				break;
 			case AssociationGraphNode::LinePosition::pos_left:
-				l = cellsR[cellIdx]->leftBorder();
-				visible = cellsR[cellIdx]->leftBorderVisible();
-				d = findMinWidth(cellsR, cellIdx, i);
-				lp = AssociationGraphNode::LinePosition::pos_left;
-				horizontal = false;
+				//check if node already exists...
+				neighbourIdx = cellsR[cellIdx]->leftIdx();
+				if (neighbourIdx.size() == 0) {
+					l = cellsR[cellIdx]->leftBorder();
+					visible = cellsR[cellIdx]->leftBorderVisible();
+					d = findMinWidth(cellsR, cellIdx, i);
+					lp = AssociationGraphNode::LinePosition::pos_left;
+					horizontal = false;
+				}
 				break;
 			case AssociationGraphNode::LinePosition::pos_right:
 				l = cellsR[cellIdx]->rightBorder();
@@ -925,6 +935,31 @@ void FormFeatures::findMaxCliques() {
 	QSet<int> c, p;
 	QSet<int> nodesIdx;
 	QVector<QSet<int>> *pMaxCliques;
+	int minSize = 4;
+
+	////only test of Bron Kerbosch
+	//QSharedPointer<rdf::AssociationGraphNode> newNode0(new rdf::AssociationGraphNode());
+	//newNode0->addAdjacencyNode(1); newNode0->addAdjacencyNode(2); newNode0->addAdjacencyNode(3); newNode0->addAdjacencyNode(4);
+	//QSharedPointer<rdf::AssociationGraphNode> newNode1(new rdf::AssociationGraphNode());
+	//newNode1->addAdjacencyNode(0); newNode1->addAdjacencyNode(2); newNode1->addAdjacencyNode(3); newNode1->addAdjacencyNode(4);
+	//QSharedPointer<rdf::AssociationGraphNode> newNode2(new rdf::AssociationGraphNode());
+	//newNode2->addAdjacencyNode(0); newNode2->addAdjacencyNode(1);
+	//QSharedPointer<rdf::AssociationGraphNode> newNode3(new rdf::AssociationGraphNode());
+	//newNode3->addAdjacencyNode(0); newNode3->addAdjacencyNode(1); newNode3->addAdjacencyNode(4);
+	//QSharedPointer<rdf::AssociationGraphNode> newNode4(new rdf::AssociationGraphNode());
+	//newNode4->addAdjacencyNode(0); newNode4->addAdjacencyNode(1); newNode4->addAdjacencyNode(3);
+	//testNodes.push_back(newNode0);
+	//testNodes.push_back(newNode1);
+	//testNodes.push_back(newNode2);
+	//testNodes.push_back(newNode3);
+	//testNodes.push_back(newNode4);
+	//for (int i = 0; i < testNodes.size(); i++) {
+	//	//nodesIdx << i;
+	//	nodesIdx.insert(i);
+	//}
+	//pMaxCliques = &mMaxCliquesVer;
+	//BronKerbosch(c, nodesIdx, p, pMaxCliques, minSize);
+	////end of test
 	
 	//create set of nodeIdx for vertical nodes
 	for (int i = 0; i < mANodesVertical.size(); i++) {
@@ -932,8 +967,9 @@ void FormFeatures::findMaxCliques() {
 		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesVer;
+	
 
-	BronKerbosch(c, nodesIdx, p, pMaxCliques);
+	BronKerbosch(c, nodesIdx, p, pMaxCliques, minSize);
 	
 	nodesIdx.clear();
 	//create set of nodeIdx for horizontal nodes
@@ -945,22 +981,33 @@ void FormFeatures::findMaxCliques() {
 
 }
 
-void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques) {
+void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int minSize) {
 
 	if (nextExpansionsIdx.isEmpty() && previousExpansionsIdx.isEmpty()) {
 
 		//cliqueIdx is maximal clique
-		qDebug() << "max Clique found";
+		qDebug() << "max Clique found.....";
 		maxCliques->append(cliqueIdx);
 		//return;
 	}
-	
+
+	if (!previousExpansionsIdx.isEmpty()) {
+		QSet<int>::iterator it;
+		for (it = previousExpansionsIdx.begin(); it != previousExpansionsIdx.end(); ++it) {
+			QSet<int> tmp = mANodesVertical[*it]->adjacencyNodesSet();
+			tmp = tmp.intersect(nextExpansionsIdx);
+			if (tmp.size() == nextExpansionsIdx.size())
+				return;
+		}
+	}
+
 	QSet<int>::iterator it;
 	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
 
 	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
 
 		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
+		//QSet<int> neighbourNodes = testNodes[*it]->adjacencyNodesSet();
 		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
 		QSet<int> NN = nextExpansionsCopy;	//we need a copy since intersect changes the original set
 		NN = NN.intersect(neighbourNodes);
@@ -968,10 +1015,12 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		QSet<int> PN = previousExpansionsIdx;
 		PN = PN.intersect(neighbourNodes);
 		QSet<int> CN = cliqueIdx;
-		qDebug() << "key: " << (int)(*it);
+		//qDebug() << "key: " << (int)(*it);
 		CN += (*it);
 
-		BronKerbosch(CN, NN, PN, maxCliques);
+		//iterate only if minSize could be achieved
+		if (CN.size() + NN.size() >= minSize)
+			BronKerbosch(CN, NN, PN, maxCliques, minSize);
 
 		//nextExpansionsIdx.remove(*it);
 		nextExpansionsCopy.remove(*it);
@@ -1926,22 +1975,42 @@ cv::Size FormFeatures::sizeImg() const
 			rdf::Line m2 = neighbour->matchedLine();
 
 			if (!horizontal) {
+				ref1.sortEndpoints(horizontal);
+				ref2.sortEndpoints(horizontal);
+				m1.sortEndpoints(horizontal);
+				m2.sortEndpoints(horizontal);
+				bool overlapRef = ref1.verticalOverlap(ref2) > 0 ? true : false;
+				bool overlapM = m1.verticalOverlap(m2) > 0 ? true : false;
 				//reference line is left from second reference line, same must apply to matched lines
 				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
-					return true;
+					//if reference lines have an overlap, same must apply to matched lines
+					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+						return true;
 				}
 				//reference line is right from second reference line, same must apply to matched lines
 				else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
-					return true;
+					//if reference lines have an overlap, same must apply to matched lines
+					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+						return true;
 				}
 			} else {
+				ref1.sortEndpoints(horizontal);
+				ref2.sortEndpoints(horizontal);
+				m1.sortEndpoints(horizontal);
+				m2.sortEndpoints(horizontal);
+				bool overlapRef = ref1.horizontalOverlap(ref2) > 0 ? true : false;
+				bool overlapM = m1.horizontalOverlap(m2) > 0 ? true : false;
 				//reference line is above from second reference line, same must apply to matched lines
 				if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
-					return true;
+					//if reference lines have an overlap, same must apply to matched lines
+					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+						return true;
 				}
 				//reference line is beneath from second reference line, same must apply to matched lines
 				else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
-					return true;
+					//if reference lines have an overlap, same must apply to matched lines
+					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+						return true;
 				}
 			}
 
