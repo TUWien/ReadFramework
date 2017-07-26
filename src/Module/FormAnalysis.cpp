@@ -978,7 +978,7 @@ void FormFeatures::findMaxCliques() {
 		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesVer;
-	BronKerbosch(c, nodesIdx, p, pMaxCliques, mMinGraphSizeVer);
+	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer);
 
 
 	nodesIdx.clear();
@@ -991,12 +991,13 @@ void FormFeatures::findMaxCliques() {
 
 }
 
-void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int minSize) {
+void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize) {
 
 	if (nextExpansionsIdx.isEmpty() && previousExpansionsIdx.isEmpty()) {
 
 		//cliqueIdx is maximal clique
-		qDebug() << "max Clique found.....";
+		*minSize = cliqueIdx.size() > *minSize ? cliqueIdx.size() : *minSize;
+		qDebug() << "max Clique found....." << *minSize;
 		maxCliques->append(cliqueIdx);
 		//return;
 	}
@@ -1030,7 +1031,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		CN += (*it);
 
 		//iterate only if minSize could be achieved
-		if (CN.size() + NN.size() >= minSize)
+		if (CN.size() + NN.size() > *minSize)
 			BronKerbosch(CN, NN, PN, maxCliques, minSize);
 
 		//nextExpansionsIdx.remove(*it);
@@ -1973,16 +1974,19 @@ cv::Size FormFeatures::sizeImg() const
 		if (mCellIdx == neighbour->cellIdx() && mLinePos == neighbour->linePosition()) {
 
 			//match only, if there is no overlap and lines have the same vertical position
-			rdf::Line m1 = mReferenceLine;
-			rdf::Line m2 = neighbour->matchedLine();
+			//rdf::Line m1 = mReferenceLine;			//error?
+			rdf::Line m1 = mMatchedLine;
+			rdf::Line m2 = neighbour->matchedLine(); 
 			m1.sortEndpoints(horizontal);
 			m2.sortEndpoints(horizontal);
-			double overlap = m1.verticalOverlap(m2);
+			double overlap = horizontal ? m1.horizontalOverlap(m2) : m1.verticalOverlap(m2);
 			double distance = m1.distance(m2.center());
 			//no overlap and same vertical position -> line is split
 			//can co-exist
-			if (overlap == 0 && distance < distThreshold)
+			if (overlap == 0 && distance < distThreshold) {
+				//qDebug() << "TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 				return true;
+			}
 
 		} else {
 			//not the same reference line
@@ -1996,18 +2000,18 @@ cv::Size FormFeatures::sizeImg() const
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
-				bool overlapRef = ref1.verticalOverlap(ref2) > 0 ? true : false;
-				bool overlapM = m1.verticalOverlap(m2) > 0 ? true : false;
+				//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
+				//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
 				//reference line is left from second reference line, same must apply to matched lines
 				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
 					//if reference lines have an overlap, same must apply to matched lines
-					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
 				}
 				//reference line is right from second reference line, same must apply to matched lines
 				else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
 					//if reference lines have an overlap, same must apply to matched lines
-					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
 				}
 			} else {
@@ -2015,18 +2019,18 @@ cv::Size FormFeatures::sizeImg() const
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
-				bool overlapRef = ref1.horizontalOverlap(ref2) > 0 ? true : false;
-				bool overlapM = m1.horizontalOverlap(m2) > 0 ? true : false;
+				//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
+				//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
 				//reference line is above from second reference line, same must apply to matched lines
 				if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
 					//if reference lines have an overlap, same must apply to matched lines
-					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
 				}
 				//reference line is beneath from second reference line, same must apply to matched lines
 				else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
 					//if reference lines have an overlap, same must apply to matched lines
-					if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
 				}
 			}

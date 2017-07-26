@@ -181,7 +181,7 @@ namespace rdf {
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		void createAssociationGraph();
 		void findMaxCliques();
-		void BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int minSize);
+		void BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize);
 
 		QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
 		bool matchTemplate();
