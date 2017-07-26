@@ -831,6 +831,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 			case AssociationGraphNode::LinePosition::pos_top:
 				//check if node already exists...
 				neighbourIdx = cellsR[cellIdx]->topIdx();
+				//if top neighbour idx exist, do not add node
 				if (neighbourIdx.size() == 0) {
 					l = cellsR[cellIdx]->topBorder();
 					visible = cellsR[cellIdx]->topBorderVisible();
@@ -849,6 +850,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 			case AssociationGraphNode::LinePosition::pos_left:
 				//check if node already exists...
 				neighbourIdx = cellsR[cellIdx]->leftIdx();
+				//if top neighbour idx exist, do not add node
 				if (neighbourIdx.size() == 0) {
 					l = cellsR[cellIdx]->leftBorder();
 					visible = cellsR[cellIdx]->leftBorderVisible();
@@ -869,6 +871,12 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				break;
 			}
 			if (visible) {
+				//one line added -> add 1 to minimum graph size
+				if (horizontal)
+					mMinGraphSizeHor++;
+				else
+					mMinGraphSizeVer++;
+
 				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
 				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
 				l.translate(mOffset);
@@ -935,7 +943,7 @@ void FormFeatures::findMaxCliques() {
 	QSet<int> c, p;
 	QSet<int> nodesIdx;
 	QVector<QSet<int>> *pMaxCliques;
-	int minSize = 4;
+	//int minSize = 4;
 
 	////only test of Bron Kerbosch
 	//QSharedPointer<rdf::AssociationGraphNode> newNode0(new rdf::AssociationGraphNode());
@@ -961,16 +969,18 @@ void FormFeatures::findMaxCliques() {
 	//BronKerbosch(c, nodesIdx, p, pMaxCliques, minSize);
 	////end of test
 	
+	//test
+	mMinGraphSizeVer = 28;
+
 	//create set of nodeIdx for vertical nodes
 	for (int i = 0; i < mANodesVertical.size(); i++) {
 		//nodesIdx << i;
 		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesVer;
-	
+	BronKerbosch(c, nodesIdx, p, pMaxCliques, mMinGraphSizeVer);
 
-	BronKerbosch(c, nodesIdx, p, pMaxCliques, minSize);
-	
+
 	nodesIdx.clear();
 	//create set of nodeIdx for horizontal nodes
 	for (int i = 0; i < mANodesHorizontal.size(); i++) {
@@ -991,6 +1001,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		//return;
 	}
 
+	//check if this could moved to for loop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	if (!previousExpansionsIdx.isEmpty()) {
 		QSet<int>::iterator it;
 		for (it = previousExpansionsIdx.begin(); it != previousExpansionsIdx.end(); ++it) {
@@ -1305,7 +1316,10 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 
 			if (distance < distThreshold) {
 				double overlap = l.horizontalOverlap(cLine);
-				lC.addCandidate(lidx, overlap, distance);
+				double len = cLine.length() < l.length() ? cLine.length() : l.length();
+				//only add candidate if overlap is larger than 80% in reference to the smaller line
+				if ((overlap/len) > 0.8)
+					lC.addCandidate(lidx, overlap, distance);
 			}
 		}
 
@@ -1321,7 +1335,10 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 
 			if (distance < distThreshold) {
 				double overlap = l.verticalOverlap(cLine);
-				lC.addCandidate(lidx, overlap, distance);
+				double len = cLine.length() < l.length() ? cLine.length() : l.length();
+				//only add candidate if overlap is larger than 80% in reference to the smaller line
+				if ((overlap / len) > 0.8)
+					lC.addCandidate(lidx, overlap, distance);
 			}
 		}
 	}

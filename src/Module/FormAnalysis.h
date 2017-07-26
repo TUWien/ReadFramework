@@ -261,6 +261,8 @@ namespace rdf {
 
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesHorizontal;
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesVertical;
+		int mMinGraphSizeHor = 0;
+		int mMinGraphSizeVer = 0;
 		//QVector<QSharedPointer<rdf::AssociationGraphNode>> testNodes;
 
 		QVector<QSet<int>> mMaxCliquesHor;
