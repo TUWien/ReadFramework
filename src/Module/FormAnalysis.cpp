@@ -1606,7 +1606,7 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 				double overlap = l.horizontalOverlap(cLine);
 				double len = cLine.length() < l.length() ? cLine.length() : l.length();
 				//only add candidate if overlap is larger than 80% in reference to the smaller line
-				if ((overlap/len) > 0.8)
+				if ((overlap/len) > 0.5)
 					lC.addCandidate(lidx, overlap, distance);
 			}
 		}
@@ -1625,7 +1625,7 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 				double overlap = l.verticalOverlap(cLine);
 				double len = cLine.length() < l.length() ? cLine.length() : l.length();
 				//only add candidate if overlap is larger than 80% in reference to the smaller line
-				if ((overlap / len) > 0.8)
+				if ((overlap / len) > 0.5)
 					lC.addCandidate(lidx, overlap, distance);
 			}
 		}
