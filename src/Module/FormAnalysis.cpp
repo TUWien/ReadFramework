@@ -1047,7 +1047,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 
 		//cliqueIdx is maximal clique
 		*minSize = cliqueIdx.size() > *minSize ? cliqueIdx.size() : *minSize;
-		qDebug() << "max Clique found....." << *minSize;
+		qDebug() << "max Clique found....." << cliqueIdx.size();
 		maxCliques->append(cliqueIdx);
 		//return;
 	}
@@ -1201,6 +1201,29 @@ bool FormFeatures::matchTemplate() {
 	findMaxCliques();
 	mCellsR = cellsR;
 
+	QSet<int> maxCliqueVer;
+	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
+	QSet<int>::iterator it;
+	qDebug() << "clique size : " << maxCliqueVer.size();
+	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+		qDebug() << "clique: " << *it;
+	}
+
+	qDebug() << "second -------------------------- ";
+
+	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 2];
+	qDebug() << "clique size : " << maxCliqueVer.size();
+	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+		qDebug() << "clique: " << *it;
+	}
+
+	qDebug() << "third -------------------------- ";
+
+	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 3];
+	qDebug() << "clique size : " << maxCliqueVer.size();
+	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+		qDebug() << "clique: " << *it;
+	}
 
 	////max clique
 	//QSet<int> maxCliqueVer;
@@ -2231,50 +2254,97 @@ cv::Size FormFeatures::sizeImg() const
 			rdf::Line m2 = neighbour->matchedLine();
 
 			if (!horizontal) {
+				//line is vertical
 				ref1.sortEndpoints(horizontal);
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
+				//horizontal distances
 				double dm = std::abs(m1.center().x() - m2.center().x());
 				double dref = std::abs(ref1.center().x() - ref2.center().x());
 
-				if (dref*0.8 < dm && dm < dref*1.2) {
-					//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
-					//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
-					//reference line is left from second reference line, same must apply to matched lines
-					if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
-						//if reference lines have an overlap, same must apply to matched lines
-						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
-						return true;
+				//reference line has same horizontal position (colinear lines), but belongs to a different cell
+				//alternatively use:
+				//if (ref1.distance(ref2.p1()) < distThreshold) {
+				if (dref < distThreshold) {
+
+					double lineDtmp = m1.p1().y() < m2.p1().y() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
+					if (lineDtmp < distThreshold) {
+						//matched lines are also "colinear"
+						//check if reference line is above or not, same must apply to matched lines
+						if (ref1.p1().y() <= ref2.p1().y() && m1.p1().y() <= m2.p1().y()) {
+							return true;
+						}
+						else if (ref1.p1().y() > ref2.p2().y() && m1.p1().y() > m2.p1().y()) {
+							return true;
+						}
 					}
-					//reference line is right from second reference line, same must apply to matched lines
-					else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
-						//if reference lines have an overlap, same must apply to matched lines
-						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
-						return true;
+
+				}
+				else {
+					if (dref*0.8 < dm && dm < dref*1.2) {
+						//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
+						//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
+						//reference line is left from second reference line, same must apply to matched lines
+						if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
+							//if reference lines have an overlap, same must apply to matched lines
+							//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+							return true;
+						}
+						//reference line is right from second reference line, same must apply to matched lines
+						else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
+							//if reference lines have an overlap, same must apply to matched lines
+							//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+							return true;
+						}
 					}
 				}
 			} else {
+				//line is horizontal
 				ref1.sortEndpoints(horizontal);
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
+				//vertical distances
 				double dm = std::abs(m1.center().y() - m2.center().y());
 				double dref = std::abs(ref1.center().y() - ref2.center().y());
-				if (dref*0.8 < dm && dm < dref*1.2) {
-					//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
-					//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
-					//reference line is above from second reference line, same must apply to matched lines
-					if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
-						//if reference lines have an overlap, same must apply to matched lines
-						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
-						return true;
+
+				//reference line has same vertical position (colinear), but belongs to a different cell
+				//alternatively use:
+				//if (ref1.distance(ref2.p1()) < distThreshold) {
+				if (dref < distThreshold) {
+					
+					double lineDtmp = m1.p1().x() < m2.p1().x() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
+					if (lineDtmp < distThreshold) {
+						//matched lines are also "colinear"
+						//check if reference line is left or not, same must apply to matched lines
+						if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
+							return true;
+						}
+						else if (ref1.p1().x() > ref2.p2().x() && m1.p1().x() > m2.p1().x()) {
+							return true;
+						}
 					}
-					//reference line is beneath from second reference line, same must apply to matched lines
-					else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
-						//if reference lines have an overlap, same must apply to matched lines
-						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
-						return true;
+					
+				}
+				else {
+					//reference line has different vertical position
+					//allow only a certain variation
+					if (dref*0.8 < dm && dm < dref*1.2) {
+						//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
+						//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
+						//reference line is above from second reference line, same must apply to matched lines
+						if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
+							//if reference lines have an overlap, same must apply to matched lines
+							//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+							return true;
+						}
+						//reference line is beneath from second reference line, same must apply to matched lines
+						else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
+							//if reference lines have an overlap, same must apply to matched lines
+							//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+							return true;
+						}
 					}
 				}
 			}
