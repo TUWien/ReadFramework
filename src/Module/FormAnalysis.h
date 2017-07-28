@@ -176,6 +176,7 @@ namespace rdf {
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		cv::Mat drawLines(cv::Mat img = cv::Mat(), float t = 10.0);
 		cv::Mat drawMaxClique(cv::Mat img = cv::Mat(), float t = 10.0, int idx = 0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();

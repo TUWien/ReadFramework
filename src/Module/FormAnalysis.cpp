@@ -670,6 +670,44 @@ cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
 	
 }
 
+cv::Mat FormFeatures::drawLines(cv::Mat img, float t) {
+	
+	QVector<rdf::Line> hLines, vLines;
+	//create line vectors
+
+	//hLines = notUsedHorLines();
+	//vLines = notUseVerLines();
+
+	hLines = mHorLines;
+	vLines = mVerLines;
+
+	for (auto i : hLines) {
+		i.setThickness(t);
+	}
+	for (auto i : vLines) {
+		i.setThickness(t);
+	}
+
+	if (!img.empty()) {
+		cv::Mat tmp = img.clone();
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+		}
+		else {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0));
+		}
+
+		return	tmp;
+	}
+	else {
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+
+		return tmp;
+	}
+
+}
+
 cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t, int idx) {
 	
 	QVector<rdf::Line> hLines, vLines;
@@ -1201,29 +1239,29 @@ bool FormFeatures::matchTemplate() {
 	findMaxCliques();
 	mCellsR = cellsR;
 
-	QSet<int> maxCliqueVer;
-	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
-	QSet<int>::iterator it;
-	qDebug() << "clique size : " << maxCliqueVer.size();
-	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-		qDebug() << "clique: " << *it;
-	}
+	//QSet<int> maxCliqueVer;
+	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
+	//QSet<int>::iterator it;
+	//qDebug() << "clique size : " << maxCliqueVer.size();
+	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+	//	qDebug() << "clique: " << *it;
+	//}
 
-	qDebug() << "second -------------------------- ";
+	//qDebug() << "second -------------------------- ";
 
-	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 2];
-	qDebug() << "clique size : " << maxCliqueVer.size();
-	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-		qDebug() << "clique: " << *it;
-	}
+	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 2];
+	//qDebug() << "clique size : " << maxCliqueVer.size();
+	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+	//	qDebug() << "clique: " << *it;
+	//}
 
-	qDebug() << "third -------------------------- ";
+	//qDebug() << "third -------------------------- ";
 
-	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 3];
-	qDebug() << "clique size : " << maxCliqueVer.size();
-	for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-		qDebug() << "clique: " << *it;
-	}
+	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 3];
+	//qDebug() << "clique size : " << maxCliqueVer.size();
+	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+	//	qDebug() << "clique: " << *it;
+	//}
 
 	////max clique
 	//QSet<int> maxCliqueVer;
@@ -2269,13 +2307,14 @@ cv::Size FormFeatures::sizeImg() const
 				if (dref < distThreshold) {
 
 					double lineDtmp = m1.p1().y() < m2.p1().y() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
-					if (lineDtmp < distThreshold) {
+					//colinear lines
+					if (lineDtmp < distThreshold*3) {
 						//matched lines are also "colinear"
 						//check if reference line is above or not, same must apply to matched lines
 						if (ref1.p1().y() <= ref2.p1().y() && m1.p1().y() <= m2.p1().y()) {
 							return true;
 						}
-						else if (ref1.p1().y() > ref2.p2().y() && m1.p1().y() > m2.p1().y()) {
+						else if (ref1.p1().y() > ref2.p1().y() && m1.p1().y() > m2.p1().y()) {
 							return true;
 						}
 					}
@@ -2315,13 +2354,13 @@ cv::Size FormFeatures::sizeImg() const
 				if (dref < distThreshold) {
 					
 					double lineDtmp = m1.p1().x() < m2.p1().x() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
-					if (lineDtmp < distThreshold) {
+					if (lineDtmp < distThreshold*3) {
 						//matched lines are also "colinear"
 						//check if reference line is left or not, same must apply to matched lines
 						if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
 							return true;
 						}
-						else if (ref1.p1().x() > ref2.p2().x() && m1.p1().x() > m2.p1().x()) {
+						else if (ref1.p1().x() > ref2.p1().x() && m1.p1().x() > m2.p1().x()) {
 							return true;
 						}
 					}
