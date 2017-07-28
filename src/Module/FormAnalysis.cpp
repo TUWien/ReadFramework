@@ -670,6 +670,55 @@ cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
 	
 }
 
+cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t) {
+	
+	QVector<rdf::Line> hLines, vLines;
+	//create line vectors
+
+	QSet<int> mMaxVer;
+	if (mMaxCliquesVer.size() > 0)
+		mMaxVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
+
+	QSet<int>::iterator it;
+	for (it = mMaxVer.begin(); it != mMaxVer.end(); ++it) {
+		//check id -> int vs string!!
+		QSharedPointer<rdf::TableCellRaw> cell = mCellsR[mANodesVertical[*it]->cellIdx()]; //= getCellId(cellsR, mANodesVertical[*it]->cellIdx());
+		rdf::Line imgLine = mANodesVertical[*it]->matchedLine();
+		imgLine.setThickness(t);
+		vLines.push_back(imgLine);
+	}
+
+	QSet<int> mMaxHor;
+	if (mMaxCliquesHor.size() > 0)
+		mMaxHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
+
+	for (it = mMaxHor.begin(); it != mMaxHor.end(); ++it) {
+		//check id -> int vs string!!
+		QSharedPointer<rdf::TableCellRaw> cell = mCellsR[mANodesHorizontal[*it]->cellIdx()]; //= getCellId(cellsR, mANodesVertical[*it]->cellIdx());
+		rdf::Line imgLine = mANodesHorizontal[*it]->matchedLine();
+		imgLine.setThickness(t);
+		hLines.push_back(imgLine);
+	}
+
+	if (!img.empty()) {
+		cv::Mat tmp = img.clone();
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+		}
+		else {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0));
+		}
+
+		return	tmp;
+	}
+	else {
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+
+		return tmp;
+	}
+}
+
 QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
 
 
@@ -981,13 +1030,14 @@ void FormFeatures::findMaxCliques() {
 	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer);
 
 
-	nodesIdx.clear();
-	//create set of nodeIdx for horizontal nodes
-	for (int i = 0; i < mANodesHorizontal.size(); i++) {
-		//nodesIdx << i;
-		nodesIdx.insert(i);
-	}
-	pMaxCliques = &mMaxCliquesHor;
+
+	//nodesIdx.clear();
+	////create set of nodeIdx for horizontal nodes
+	//for (int i = 0; i < mANodesHorizontal.size(); i++) {
+	//	//nodesIdx << i;
+	//	nodesIdx.insert(i);
+	//}
+	//pMaxCliques = &mMaxCliquesHor;
 
 }
 
@@ -1002,7 +1052,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		//return;
 	}
 
-	//check if this could moved to for loop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	////check if this could moved to for loop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	if (!previousExpansionsIdx.isEmpty()) {
 		QSet<int>::iterator it;
 		for (it = previousExpansionsIdx.begin(); it != previousExpansionsIdx.end(); ++it) {
@@ -1015,10 +1065,12 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 
 	QSet<int>::iterator it;
 	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
+	//QSet<int> prevExpansionsNeighbours;
 
 	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
 
 		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
+
 		//QSet<int> neighbourNodes = testNodes[*it]->adjacencyNodesSet();
 		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
 		QSet<int> NN = nextExpansionsCopy;	//we need a copy since intersect changes the original set
@@ -1030,6 +1082,10 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		//qDebug() << "key: " << (int)(*it);
 		CN += (*it);
 
+		//prevExpansionsNeighbours = prevExpansionsNeighbours.intersect(nextExpansionsCopy);
+		//if (nextExpansionsCopy.size() == prevExpansionsNeighbours.size())
+			//break;
+
 		//iterate only if minSize could be achieved
 		if (CN.size() + NN.size() > *minSize)
 			BronKerbosch(CN, NN, PN, maxCliques, minSize);
@@ -1037,7 +1093,17 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 		//nextExpansionsIdx.remove(*it);
 		nextExpansionsCopy.remove(*it);
 		previousExpansionsIdx.insert(*it);
+		
+		//prevExpansionsNeighbours = neighbourNodes;
 	}
+}
+
+QVector<QSet<int>> FormFeatures::getMaxCliqueHor() const {
+	return mMaxCliquesHor;
+}
+
+QVector<QSet<int>> FormFeatures::getMaxCliqueVer() const {
+	return mMaxCliquesVer;
 }
 
 
@@ -1133,13 +1199,172 @@ bool FormFeatures::matchTemplate() {
 	qDebug() << "create Association Graph...";
 	//find maximal cliques
 	findMaxCliques();
+	mCellsR = cellsR;
 
-	//
-	//qDebug() << "size of horizontal max cliques: " << mMaxCliquesHor.size();
-	//qDebug() << "size of vertical max cliques: " << mMaxCliquesVer.size();
+	////max clique
+	//QSet<int> maxCliqueVer;
+	//if (mMaxCliquesVer.size() > 0)
+	//	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
 
-	//TODO: find global optimum of line matchin
-	//-> find largest maximal clique
+	//QSet<int>::iterator it;
+	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
+	//	//check id -> int vs string!!
+	//	QSharedPointer<rdf::TableCellRaw> cell = cellsR[mANodesVertical[*it]->cellIdx()]; //= getCellId(cellsR, mANodesVertical[*it]->cellIdx());
+	//	rdf::Line imgLine = mANodesVertical[*it]->matchedLine();
+	//	int lineIdx = mANodesVertical[*it]->matchedLineIdx();
+	//	rdf::AssociationGraphNode::LinePosition lp = mANodesVertical[*it]->linePosition();
+	//	
+	//	rdf::Line tmpLine;
+	//	rdf::LineCandidates tmpC;
+	//	cell->clearCandidates();
+
+	//	switch (lp) {
+	//	case AssociationGraphNode::LinePosition::pos_top:
+	//		tmpC = cell->topLineC();
+	//		tmpC.addCandidate(imgLine, lineIdx);
+	//		cell->setLineCandidatesTopLine(tmpC);
+	//		break;
+	//	case AssociationGraphNode::LinePosition::pos_bottom:
+	//		tmpC = cell->bottomLineC();
+	//		tmpC.addCandidate(imgLine, lineIdx);
+	//		cell->setLineCandidatesBottomLine(tmpC);
+	//		break;
+	//	case AssociationGraphNode::LinePosition::pos_left:
+	//		tmpC = cell->leftLineC();
+	//		tmpC.addCandidate(imgLine, lineIdx);
+	//		cell->setLineCandidatesLeftLine(tmpC);
+	//		break;
+	//	case AssociationGraphNode::LinePosition::pos_right:
+	//		tmpC = cell->rightLineC();
+	//		tmpC.addCandidate(imgLine, lineIdx);
+	//		cell->setLineCandidatesRightLine(tmpC);
+	//		break;
+	//	default:
+	//		qWarning() << "no Cell Border found in matchTemplate";
+	//		break;
+	//	}
+	//}
+
+	//for (int i = 0; i < cells.size(); i++) {
+
+	//	QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
+
+	//	qDebug() << "create new table cell : " << cells[i]->row() << " " << cells[i]->col() << " isHeader: " << cells[i]->header();
+
+	//	//copy attributes
+	//	newCell->setHeader(cells[i]->header());
+	//	newCell->setId(cells[i]->id());
+	//	newCell->setCol(cells[i]->col());
+	//	newCell->setRow(cells[i]->row());
+	//	newCell->setColSpan(cells[i]->colSpan());
+	//	newCell->setRowSpan(cells[i]->rowSpan());
+	//	newCell->setTopBorderVisible(cells[i]->topBorderVisible());
+	//	newCell->setBottomBorderVisible(cells[i]->bottomBorderVisible());
+	//	newCell->setLeftBorderVisible(cells[i]->leftBorderVisible());
+	//	newCell->setRightBorderVisible(cells[i]->rightBorderVisible());
+
+	//	//get same cell from rawCells
+	//	rdf::Line lL = cellsR[i]->leftLineC().mergedLine();
+	//	rdf::Line tL = cellsR[i]->topLineC().mergedLine();
+	//	rdf::Line rL = cellsR[i]->rightLineC().mergedLine();
+	//	rdf::Line bL = cellsR[i]->bottomLineC().mergedLine();
+	//	rdf::Polygon p = createPolygon(tL, lL, rL, bL);
+	//		//newCell->setPolygon(p);
+	//		//newCell->setCustom(customTmp);
+	//		//if (p.size() == 4) {
+	//		//	cornerPts << 0 << 1 << 2 << 3;
+	//		//	newCell->setCornerPts(cornerPts);
+	//		//}
+	//		//else {
+	//		//	qWarning() << "Wrong number of corners for tablecell...";
+	//		//}
+
+
+	//	//?
+	//	//tL.translate(mOffset);
+	//	//lL.translate(mOffset);
+	//	//tL.translate(mOffset);
+	//	//lb.translate(mOffset);
+
+	//	//bool found = false;
+	//	//QString customTmp;
+
+	//	////orientation of cornerpts stored by Transkribus:
+	//	//// topleft: 0, bottomleft: 1, bottomright: 2, topright: 3 
+	//	//QVector<int> cornerPts;
+	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+	//	////if (newCell->topBorderVisible())
+	//	////	newCell->setTopBorderVisible(found);
+
+	//	//lL = findLine(lL, thr, found, false);
+	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+	//	////if (newCell->leftBorderVisible())
+	//	////	newCell->setLeftBorderVisible(found);
+
+	//	//rL = findLine(rL, thr, found, false);
+	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
+	//	////if (newCell->rightBorderVisible())
+	//	////	newCell->setRightBorderVisible(found);
+
+	//	//bL = findLine(bL, thr, found);
+	//	//customTmp = customTmp + (found ? QString("true") : QString("false"));
+	//	////if (newCell->bottomBorderVisible())
+	//	////	newCell->setBottomBorderVisible(found);
+
+	////	rdf::Polygon p = createPolygon(tL, lL, rL, bL);
+	////	newCell->setPolygon(p);
+	////	newCell->setCustom(customTmp);
+	////	if (p.size() == 4) {
+	////		cornerPts << 0 << 1 << 2 << 3;
+	////		newCell->setCornerPts(cornerPts);
+	////	}
+	////	else {
+	////		qWarning() << "Wrong number of corners for tablecell...";
+	////	}
+
+	////	rdf::Vector2D offSet = newCell->upperLeft() - c->upperLeft();
+
+	////	//copy children
+	////	QVector<QSharedPointer<rdf::Region>> templateChildren = c->children();	//get children from template
+	////	QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
+	////	if (!templateChildren.isEmpty() && config()->saveChilds()) {
+
+	////		for (QSharedPointer<rdf::Region> ci : templateChildren) {
+
+	////			if (ci->type() == ci->type_text_line) {
+
+	////				QSharedPointer<rdf::TextLine> tTextLine = ci.dynamicCast<rdf::TextLine>();
+	////				tTextLine = QSharedPointer<rdf::TextLine>(new rdf::TextLine(*tTextLine));
+	////				//get baseline and polygon
+	////				rdf::BaseLine tmpBL = tTextLine->baseLine();
+	////				rdf::Polygon tmpP = tTextLine->polygon();
+	////				//shift by offset;
+	////				tmpBL.translate(offSet.toQPointF());
+	////				tmpP.translate(offSet.toQPointF());
+	////				//set shifted polygon and baseline
+	////				tTextLine->setBaseLine(tmpBL);
+	////				tTextLine->setPolygon(tmpP);
+
+	////				newChildren.push_back(tTextLine);	//push back altered text line
+	////			}
+	////			else {
+	////				newChildren.push_back(ci);			//otherwise push back pointer to original element
+	////			}
+	////		}
+	////		newCell->setChildren(newChildren);
+	////	}
+
+	////	mCells.push_back(newCell);
+	//}
+
+
+
+	////
+	////qDebug() << "size of horizontal max cliques: " << mMaxCliquesHor.size();
+	////qDebug() << "size of vertical max cliques: " << mMaxCliquesVer.size();
+
+	////TODO: find global optimum of line matchin
+	////-> find largest maximal clique
 
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1706,6 +1931,15 @@ cv::Size FormFeatures::sizeImg() const
 		}
 	}
 
+	//QSharedPointer<rdf::TableCellRaw> FormFeatures::getCellId(QVector<QSharedPointer<rdf::TableCellRaw>> cells, int id) const 	{
+
+	//	for (auto i : cells) {
+	//		if (i->id() == id)
+	//			return i;
+	//	}
+	//	return QSharedPointer<rdf::TableCellRaw>();
+	//}
+
 	//float FormFeatures::errLine(const cv::Mat & distImg, const rdf::Line l, cv::Point offset)
 	//{
 
@@ -2000,38 +2234,47 @@ cv::Size FormFeatures::sizeImg() const
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
-				//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
-				//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
-				//reference line is left from second reference line, same must apply to matched lines
-				if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
-					//if reference lines have an overlap, same must apply to matched lines
-					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+				double dm = std::abs(m1.center().x() - m2.center().x());
+				double dref = std::abs(ref1.center().x() - ref2.center().x());
+
+				if (dref*0.8 < dm && dm < dref*1.2) {
+					//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
+					//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
+					//reference line is left from second reference line, same must apply to matched lines
+					if (ref1.center().x() < ref2.center().x() && m1.center().x() < m2.center().x()) {
+						//if reference lines have an overlap, same must apply to matched lines
+						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
-				}
-				//reference line is right from second reference line, same must apply to matched lines
-				else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
-					//if reference lines have an overlap, same must apply to matched lines
-					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					}
+					//reference line is right from second reference line, same must apply to matched lines
+					else if (ref1.center().x() > ref2.center().x() && m1.center().x() > m2.center().x()) {
+						//if reference lines have an overlap, same must apply to matched lines
+						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
+					}
 				}
 			} else {
 				ref1.sortEndpoints(horizontal);
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
-				//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
-				//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
-				//reference line is above from second reference line, same must apply to matched lines
-				if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
-					//if reference lines have an overlap, same must apply to matched lines
-					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+				double dm = std::abs(m1.center().y() - m2.center().y());
+				double dref = std::abs(ref1.center().y() - ref2.center().y());
+				if (dref*0.8 < dm && dm < dref*1.2) {
+					//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
+					//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
+					//reference line is above from second reference line, same must apply to matched lines
+					if (ref1.center().y() < ref2.center().y() && m1.center().y() < m2.center().y()) {
+						//if reference lines have an overlap, same must apply to matched lines
+						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
-				}
-				//reference line is beneath from second reference line, same must apply to matched lines
-				else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
-					//if reference lines have an overlap, same must apply to matched lines
-					//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
+					}
+					//reference line is beneath from second reference line, same must apply to matched lines
+					else if (ref1.center().y() > ref2.center().y() && m1.center().y() > m2.center().y()) {
+						//if reference lines have an overlap, same must apply to matched lines
+						//if ((overlapM && overlapRef) || (!overlapM && !overlapRef))
 						return true;
+					}
 				}
 			}
 

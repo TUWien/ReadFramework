@@ -2074,6 +2074,10 @@ void LineCandidates::addCandidate(Line c, int lIdx) {
 	mDistances.push_back(dist);
 }
 
+rdf::Line LineCandidates::mergedLine() {
+	return rdf::Line();
+}
+
 QVector<int> LineCandidates::sortByOverlap() {
 
 	if (mLCandidatesIdx.size() == mOverlaps.size()) {
@@ -2098,6 +2102,12 @@ QVector<int> LineCandidates::sortByDistance() {
 		qWarning() << "sortByDistance different length of idx and overlap - return emtpy vector";
 		return QVector<int>();
 	}
+}
+
+void LineCandidates::clear() {
+	mLCandidatesIdx.clear();
+	mOverlaps.clear();
+	mDistances.clear();
 }
 
 //int LineCandidates::bestLineMatch(/*QSharedPointer<QVector<rdf::Line>> lines*/) {
@@ -2261,6 +2271,13 @@ void TableCellRaw::setHeader(bool b) {
 
 bool TableCellRaw::header() const {
 	return mHeader;
+}
+
+void TableCellRaw::clearCandidates() {
+	mLeftLine.clear();
+	mRightLine.clear();
+	mTopLine.clear();
+	mBottomLine.clear();
 }
 
 void TableCellRaw::setLineCandidatesLeftLine(LineCandidates l) {

@@ -176,12 +176,16 @@ namespace rdf {
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
 		cv::Mat drawLinesNotUsedForm(cv::Mat img = cv::Mat(), float t = 10.0);
+		cv::Mat drawMaxClique(cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		void createAssociationGraph();
 		void findMaxCliques();
 		void BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize);
+
+		QVector<QSet<int>> getMaxCliqueHor() const;
+		QVector<QSet<int>> getMaxCliqueVer() const;
 
 		QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
 		bool matchTemplate();
@@ -237,6 +241,8 @@ namespace rdf {
 		QSharedPointer<rdf::TableRegion> region() const;
 		void setSeparators(QSharedPointer<rdf::Region> r);
 
+		//QSharedPointer<rdf::TableCellRaw> getCellId(QVector<QSharedPointer<rdf::TableCellRaw>> cells, int id) const;
+
 	protected:
 
 		//old version
@@ -285,6 +291,8 @@ namespace rdf {
 		QVector<QSharedPointer<rdf::TableCell>> mCells;
 		QSharedPointer<rdf::TableRegion> mRegion;
 
+		//only for drawing
+		QVector<QSharedPointer<rdf::TableCellRaw>> mCellsR;
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;
 	};

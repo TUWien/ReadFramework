@@ -540,8 +540,12 @@ public:
 	void addCandidate(int lIdx, double o, double d);
 	void addCandidate(Line c, int lIdx);
 
+	rdf::Line mergedLine();
+
 	QVector<int> sortByOverlap();
 	QVector<int> sortByDistance();
+
+	void clear();
 
 	//int bestLineMatch(/*QSharedPointer<QVector<rdf::Line>> lines*/);
 
@@ -605,6 +609,8 @@ public:
 
 	void setHeader(bool b);
 	bool header() const;
+
+	void clearCandidates();
 
 	void setLineCandidatesLeftLine(LineCandidates l);
 	LineCandidates leftLineC() const;
