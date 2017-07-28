@@ -670,14 +670,14 @@ cv::Mat FormFeatures::drawLinesNotUsedForm(cv::Mat img, float t) {
 	
 }
 
-cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t) {
+cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t, int idx) {
 	
 	QVector<rdf::Line> hLines, vLines;
 	//create line vectors
 
 	QSet<int> mMaxVer;
-	if (mMaxCliquesVer.size() > 0)
-		mMaxVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
+	if (mMaxCliquesVer.size()-idx > 0)
+		mMaxVer = mMaxCliquesVer[mMaxCliquesVer.size()-idx - 1];
 
 	QSet<int>::iterator it;
 	for (it = mMaxVer.begin(); it != mMaxVer.end(); ++it) {
@@ -689,8 +689,8 @@ cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t) {
 	}
 
 	QSet<int> mMaxHor;
-	if (mMaxCliquesHor.size() > 0)
-		mMaxHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
+	if (mMaxCliquesHor.size()-idx > 0)
+		mMaxHor = mMaxCliquesHor[mMaxCliquesHor.size()-idx - 1];
 
 	for (it = mMaxHor.begin(); it != mMaxHor.end(); ++it) {
 		//check id -> int vs string!!
@@ -1200,6 +1200,7 @@ bool FormFeatures::matchTemplate() {
 	//find maximal cliques
 	findMaxCliques();
 	mCellsR = cellsR;
+
 
 	////max clique
 	//QSet<int> maxCliqueVer;
