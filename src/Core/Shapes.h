@@ -573,6 +573,9 @@ public:
 	void setId(const QString& id);
 	QString id() const;
 
+	void setCustom(const QString& c);
+	QString custom() const;
+
 	void setRow(int r);
 	int row() const;
 	void setCol(int c);
@@ -614,15 +617,19 @@ public:
 
 	void setLineCandidatesLeftLine(LineCandidates l);
 	LineCandidates leftLineC() const;
+	void addLineCandidateLeft(Line c, int lIdx);
 
 	void setLineCandidatesRightLine(LineCandidates l);
 	LineCandidates rightLineC() const;
+	void addLineCandidateRight(Line c, int lIdx);
 
 	void setLineCandidatesTopLine(LineCandidates l);
 	LineCandidates topLineC() const;
+	void addLineCandidateTop(Line c, int lIdx);
 
 	void setLineCandidatesBottomLine(LineCandidates l);
 	LineCandidates bottomLineC() const;
+	void addLineCandidateBottom(Line c, int lIdx);
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
@@ -636,6 +643,8 @@ public:
 	rdf::Line bottomBorder() const;
 	rdf::Line leftBorder() const;
 	rdf::Line rightBorder() const;
+
+	rdf::Vector2D upperLeft() const;
 
 	//sorts Cells according row and cell
 	bool operator< (const TableCellRaw& cell) const;
@@ -652,6 +661,7 @@ protected:
 	int mColSpan = -1;
 
 	QString mId;
+	QString mCostum;
 
 	bool mLeftBorderVisible = false;
 	QVector<int> mLeftIdx;

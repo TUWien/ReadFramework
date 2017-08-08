@@ -195,6 +195,7 @@ namespace rdf {
 		//0: left 1: right 2; upper 3: bottom
 		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour);
 		rdf::Polygon createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line rl, rdf::Line bl);
+		void createCellfromLineCandidates(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;

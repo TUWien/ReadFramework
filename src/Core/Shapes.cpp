@@ -2080,9 +2080,11 @@ rdf::Line LineCandidates::mergedLine() {
 
 QVector<int> LineCandidates::sortByOverlap() {
 
+	double refLength = mReferenceLine.length();
+
 	if (mLCandidatesIdx.size() == mOverlaps.size()) {
 
-		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mOverlaps[i1] < mOverlaps[i2];  } );
+		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mOverlaps[i1]/refLength < mOverlaps[i2]/refLength;  } );
 		return mLCandidatesIdx;
 
 	} else {
@@ -2159,6 +2161,14 @@ void TableCellRaw::setId(const QString & id) {
 
 QString TableCellRaw::id() const {
 	return mId;
+}
+
+void TableCellRaw::setCustom(const QString & c) {
+	mCostum = c;
+}
+
+QString TableCellRaw::custom() const {
+	return mCostum;
 }
 
 void TableCellRaw::setRow(int r) {
@@ -2288,12 +2298,20 @@ LineCandidates TableCellRaw::leftLineC() const {
 	return mLeftLine;
 }
 
+void TableCellRaw::addLineCandidateLeft(Line c, int lIdx) {
+	mLeftLine.addCandidate(c, lIdx);
+}
+
 void TableCellRaw::setLineCandidatesRightLine(LineCandidates l) {
 	mRightLine = l;
 }
 
 LineCandidates TableCellRaw::rightLineC() const {
 	return mRightLine;
+}
+
+void TableCellRaw::addLineCandidateRight(Line c, int lIdx) {
+	mRightLine.addCandidate(c, lIdx);
 }
 
 void TableCellRaw::setLineCandidatesTopLine(LineCandidates l) {
@@ -2304,6 +2322,10 @@ LineCandidates TableCellRaw::topLineC() const {
 	return mTopLine;
 }
 
+void TableCellRaw::addLineCandidateTop(Line c, int lIdx) {
+	mTopLine.addCandidate(c, lIdx);
+}
+
 void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
 	mBottomLine = l;
 }
@@ -2311,6 +2333,11 @@ void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
 LineCandidates TableCellRaw::bottomLineC() const {
 	return mBottomLine;
 }
+
+void TableCellRaw::addLineCandidateBottom(Line c, int lIdx) {
+	mBottomLine.addCandidate(c, lIdx);
+}
+
 
 void TableCellRaw::setCornerPts(QVector<int> cPts) {
 	mRefCornerPts = cPts;
@@ -2421,6 +2448,24 @@ rdf::Line TableCellRaw::rightBorder() const {
 	}
 
 	return rdf::Line();
+}
+
+rdf::Vector2D TableCellRaw::upperLeft() const {
+	//check if cornerpoints are defined
+	if (mRefPoly.size() >= 4 && mRefCornerPts.size() == 4) {
+
+		QPointF p = mRefPoly.polygon()[mRefCornerPts[0]];
+		return rdf::Vector2D(p);
+
+		//no cornerpoints but polygon is present
+	}
+	else if (mRefPoly.size() == 4 && mRefCornerPts.isEmpty()) {
+
+		QPointF p = mRefPoly.polygon()[0];
+		return rdf::Vector2D(p);
+	}
+
+	return rdf::Vector2D();
 }
 
 
