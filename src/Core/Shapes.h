@@ -617,18 +617,22 @@ public:
 
 	void setLineCandidatesLeftLine(LineCandidates l);
 	LineCandidates leftLineC() const;
+	void setRefLineLeft(Line l);
 	void addLineCandidateLeft(Line c, int lIdx);
 
 	void setLineCandidatesRightLine(LineCandidates l);
 	LineCandidates rightLineC() const;
+	void setRefLineRight(Line l);
 	void addLineCandidateRight(Line c, int lIdx);
 
 	void setLineCandidatesTopLine(LineCandidates l);
 	LineCandidates topLineC() const;
+	void setRefLineTop(Line l);
 	void addLineCandidateTop(Line c, int lIdx);
 
 	void setLineCandidatesBottomLine(LineCandidates l);
 	LineCandidates bottomLineC() const;
+	void setRefLineBottom(Line l);
 	void addLineCandidateBottom(Line c, int lIdx);
 
 	void setPolygon(const Polygon& polygon);

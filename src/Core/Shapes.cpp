@@ -2080,12 +2080,24 @@ rdf::Line LineCandidates::mergedLine() {
 
 QVector<int> LineCandidates::sortByOverlap() {
 
-	double refLength = mReferenceLine.length();
+	//double refLength = mReferenceLine.length();
 
 	if (mLCandidatesIdx.size() == mOverlaps.size()) {
 
-		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mOverlaps[i1]/refLength < mOverlaps[i2]/refLength;  } );
-		return mLCandidatesIdx;
+		QVector<std::pair<double, int>> overLaps;
+
+		for (int i = 0; i < mLCandidatesIdx.size(); i++) {
+			overLaps.push_back(std::make_pair(mOverlaps[i] /*/ refLength*/, mLCandidatesIdx[i]));
+		}
+
+		//sort descending order
+		std::sort(overLaps.begin(), overLaps.end(), std::greater<>());
+		QVector<int> result;
+		for (int i = 0; i < overLaps.size(); i++) {
+			result.push_back(overLaps[i].second);
+		}
+
+		return result;
 
 	} else {
 		qWarning() << "sortByOverlap different length of idx and overlap - return emtpy vector";
@@ -2096,8 +2108,20 @@ QVector<int> LineCandidates::sortByOverlap() {
 QVector<int> LineCandidates::sortByDistance() {
 	if (mLCandidatesIdx.size() == mDistances.size()) {
 
-		std::sort(mLCandidatesIdx.begin(), mLCandidatesIdx.end(), [&](int i1, int i2) {return mDistances[i1] < mDistances[i2];  });
-		return mLCandidatesIdx;
+		QVector<std::pair<double, int>> distances;
+
+		for (int i = 0; i < mLCandidatesIdx.size(); i++) {
+			distances.push_back(std::make_pair(mDistances[i], mLCandidatesIdx[i]));
+		}
+
+		//sort ascending
+		std::sort(distances.begin(), distances.end());
+		QVector<int> result;
+		for (int i = 0; i < distances.size(); i++) {
+			result.push_back(distances[i].second);
+		}
+
+		return result;
 
 	}
 	else {
@@ -2298,6 +2322,10 @@ LineCandidates TableCellRaw::leftLineC() const {
 	return mLeftLine;
 }
 
+void TableCellRaw::setRefLineLeft(Line l) {
+	mLeftLine.setReferenceLine(l);
+}
+
 void TableCellRaw::addLineCandidateLeft(Line c, int lIdx) {
 	mLeftLine.addCandidate(c, lIdx);
 }
@@ -2308,6 +2336,10 @@ void TableCellRaw::setLineCandidatesRightLine(LineCandidates l) {
 
 LineCandidates TableCellRaw::rightLineC() const {
 	return mRightLine;
+}
+
+void TableCellRaw::setRefLineRight(Line l) {
+	mRightLine.setReferenceLine(l);
 }
 
 void TableCellRaw::addLineCandidateRight(Line c, int lIdx) {
@@ -2322,6 +2354,10 @@ LineCandidates TableCellRaw::topLineC() const {
 	return mTopLine;
 }
 
+void TableCellRaw::setRefLineTop(Line l) {
+	mTopLine.setReferenceLine(l);
+}
+
 void TableCellRaw::addLineCandidateTop(Line c, int lIdx) {
 	mTopLine.addCandidate(c, lIdx);
 }
@@ -2332,6 +2368,10 @@ void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
 
 LineCandidates TableCellRaw::bottomLineC() const {
 	return mBottomLine;
+}
+
+void TableCellRaw::setRefLineBottom(Line l) {
+	mBottomLine.setReferenceLine(l);
 }
 
 void TableCellRaw::addLineCandidateBottom(Line c, int lIdx) {

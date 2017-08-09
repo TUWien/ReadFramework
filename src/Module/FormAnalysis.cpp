@@ -975,7 +975,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				QVector<int> lineIdx = lC.candidatesIdx();
 				QVector<double> overlaps = lC.overlaps();
 				QVector<double> distances = lC.distances();
-
+				
 				for (int lI = 0; lI < lineIdx.size(); lI++) {
 
 					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
@@ -1268,10 +1268,14 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << "node: " << *it;
 		int cellIdx = mANodesVertical[*it]->cellIdx();
 		//add matched Line
-		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left)
+		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left) {
+			cellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateLeft(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
-		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right)
+		}
+		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right) {
+			cellsR[cellIdx]->setRefLineRight(mANodesVertical[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateRight(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
+		}
 	}
 
 	qDebug() << "clique size : " << maxHor.size();
@@ -1279,10 +1283,14 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << "node: " << *it;
 		int cellIdx = mANodesHorizontal[*it]->cellIdx();
 		//add matched Line
-		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_top)
+		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_top) {
+			cellsR[cellIdx]->setRefLineTop(mANodesHorizontal[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateTop(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
-		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom)
+		}
+		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom) {
+			cellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
+		}
 	}
 
 	//create new cells
@@ -1801,14 +1809,16 @@ rdf::Polygon FormFeatures::createPolygon(rdf::Line tl, rdf::Line ll, rdf::Line r
 
 void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR) {
 
-	QString customTmp;
-
 	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
+
+		QString customTmp;
 		
 		//left line
 		rdf::LineCandidates tmpCand = cellsR[cellIdx]->leftLineC();
-		QVector<int> cand = tmpCand.sortByOverlap();
-
+		QVector<int> cand;
+		cand = tmpCand.sortByOverlap();
+		
+		
 		rdf::Line newLineLeft;
 		for (int i = 0; i < cand.size(); i++) {
 			rdf::Line tmpLine = mVerLines[cand[i]];
