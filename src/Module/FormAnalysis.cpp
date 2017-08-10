@@ -1282,10 +1282,12 @@ bool FormFeatures::matchTemplate() {
 		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left) {
 			cellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateLeft(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
+			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
 		}
 		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right) {
 			cellsR[cellIdx]->setRefLineRight(mANodesVertical[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateRight(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
+			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
 		}
 	}
 
@@ -1297,10 +1299,12 @@ bool FormFeatures::matchTemplate() {
 		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_top) {
 			cellsR[cellIdx]->setRefLineTop(mANodesHorizontal[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateTop(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
+			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
 		}
 		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom) {
 			cellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
+			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
 		}
 	}
 
