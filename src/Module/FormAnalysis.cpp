@@ -1070,7 +1070,7 @@ void FormFeatures::findMaxCliques() {
 		nodesIdx.insert(i);
 	}
 	pMaxCliques = &mMaxCliquesVer;
-	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer);
+	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer, false);
 
 	qDebug() << "horizontal max clique...";
 	//test
@@ -1083,11 +1083,11 @@ void FormFeatures::findMaxCliques() {
 	}
 	pMaxCliques = &mMaxCliquesHor;
 	QSet<int> cH, pH;
-	BronKerbosch(cH, nodesIdx, pH, pMaxCliques, &mMinGraphSizeHor);
+	BronKerbosch(cH, nodesIdx, pH, pMaxCliques, &mMinGraphSizeHor, true);
 
 }
 
-void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize) {
+void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize, bool horizontal) {
 
 	if (nextExpansionsIdx.isEmpty() && previousExpansionsIdx.isEmpty()) {
 
@@ -1102,7 +1102,9 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 	if (!previousExpansionsIdx.isEmpty()) {
 		QSet<int>::iterator it;
 		for (it = previousExpansionsIdx.begin(); it != previousExpansionsIdx.end(); ++it) {
-			QSet<int> tmp = mANodesVertical[*it]->adjacencyNodesSet();
+			//QSet<int> tmp = mANodesVertical[*it]->adjacencyNodesSet();
+			QSet<int> tmp;
+			tmp = horizontal ? mANodesHorizontal[*it]->adjacencyNodesSet() : mANodesVertical[*it]->adjacencyNodesSet();
 			tmp = tmp.intersect(nextExpansionsIdx);
 			if (tmp.size() == nextExpansionsIdx.size())
 				return;
@@ -1115,7 +1117,8 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 
 	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
 
-		QSet<int> neighbourNodes = mANodesVertical[*it]->adjacencyNodesSet();
+		QSet<int> neighbourNodes;
+		neighbourNodes = horizontal ? mANodesHorizontal[*it]->adjacencyNodesSet() : mANodesVertical[*it]->adjacencyNodesSet();
 
 		//QSet<int> neighbourNodes = testNodes[*it]->adjacencyNodesSet();
 		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
@@ -1134,7 +1137,7 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 
 		//iterate only if minSize could be achieved
 		if (CN.size() + NN.size() > *minSize)
-			BronKerbosch(CN, NN, PN, maxCliques, minSize);
+			BronKerbosch(CN, NN, PN, maxCliques, minSize, horizontal);
 
 		//nextExpansionsIdx.remove(*it);
 		nextExpansionsCopy.remove(*it);
@@ -1249,6 +1252,14 @@ bool FormFeatures::matchTemplate() {
 	findMaxCliques();
 	
 	mCellsR = cellsR;
+
+	QSet<int> maxCliqueHor;
+	maxCliqueHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
+	QSet<int>::iterator it1;
+	qDebug() << "clique size : " << maxCliqueHor.size();
+	for (it1 = maxCliqueHor.begin(); it1 != maxCliqueHor.end(); ++it1) {
+		qDebug() << "clique: " << *it1;
+	}
 
 	//clear lineCandidates
 	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
@@ -2638,7 +2649,7 @@ cv::Size FormFeatures::sizeImg() const
 				if (dref < distThreshold) {
 					
 					double lineDtmp = m1.p1().x() < m2.p1().x() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
-					if (lineDtmp < distThreshold*1) {
+					if (lineDtmp < distThreshold*3) {
 						//matched lines are also "colinear"
 						//check if reference line is left or not, same must apply to matched lines
 						if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
