@@ -2043,6 +2043,10 @@ Line LineCandidates::referenceLine() const {
 	return mReferenceLine;
 }
 
+bool LineCandidates::isEmpty() const {
+	return mLCandidatesIdx.isEmpty() ? true : false;
+}
+
 void LineCandidates::addCandidate(int lIdx, double o, double d) {
 	mLCandidatesIdx.push_back(lIdx);
 	mOverlaps.push_back(o);
@@ -2072,6 +2076,20 @@ void LineCandidates::addCandidate(Line c, int lIdx) {
 	mOverlaps.push_back(overlap);
 	double dist = c.distance(mReferenceLine.center());
 	mDistances.push_back(dist);
+}
+
+void LineCandidates::addLineCandidate(LineCandidates lc) {
+
+	QVector<int> tmp1 = lc.candidatesIdx();
+	QVector<double> tmp2 = lc.overlaps();
+	QVector<double> tmp3 = lc.distances();
+	rdf::Line tmpL = lc.referenceLine();
+
+	mLCandidatesIdx.append(tmp1);
+	mOverlaps.append(tmp2);
+	mDistances.append(tmp3);
+
+	mReferenceLine = mReferenceLine.merge(tmpL);
 }
 
 rdf::Line LineCandidates::mergedLine() {
@@ -2135,6 +2153,8 @@ void LineCandidates::clear() {
 	mOverlaps.clear();
 	mDistances.clear();
 }
+
+
 
 //int LineCandidates::bestLineMatch(/*QSharedPointer<QVector<rdf::Line>> lines*/) {
 //
@@ -2330,6 +2350,16 @@ void TableCellRaw::addLineCandidateLeft(Line c, int lIdx) {
 	mLeftLine.addCandidate(c, lIdx);
 }
 
+void TableCellRaw::addLineCandidateLeft(LineCandidates l) {
+	if (mLeftLine.isEmpty()) {
+		mLeftLine = l;
+	}
+	else {
+		mLeftLine.addLineCandidate(l);
+	}
+
+}
+
 void TableCellRaw::setLineCandidatesRightLine(LineCandidates l) {
 	mRightLine = l;
 }
@@ -2344,6 +2374,16 @@ void TableCellRaw::setRefLineRight(Line l) {
 
 void TableCellRaw::addLineCandidateRight(Line c, int lIdx) {
 	mRightLine.addCandidate(c, lIdx);
+}
+
+void TableCellRaw::addLineCandidateRight(LineCandidates l) {
+	if (mRightLine.isEmpty()) {
+		mRightLine = l;
+	}
+	else {
+		mRightLine.addLineCandidate(l);
+	}
+
 }
 
 void TableCellRaw::setLineCandidatesTopLine(LineCandidates l) {
@@ -2362,6 +2402,15 @@ void TableCellRaw::addLineCandidateTop(Line c, int lIdx) {
 	mTopLine.addCandidate(c, lIdx);
 }
 
+void TableCellRaw::addLineCandidateTop(LineCandidates l) {
+	if (mTopLine.isEmpty()) {
+		mTopLine = l;
+	}
+	else {
+		mTopLine.addLineCandidate(l);
+	}
+}
+
 void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
 	mBottomLine = l;
 }
@@ -2376,6 +2425,15 @@ void TableCellRaw::setRefLineBottom(Line l) {
 
 void TableCellRaw::addLineCandidateBottom(Line c, int lIdx) {
 	mBottomLine.addCandidate(c, lIdx);
+}
+
+void TableCellRaw::addLineCandidateBottom(LineCandidates l) {
+
+	if (mBottomLine.isEmpty()) {
+		mBottomLine = l;
+	} else {
+		mBottomLine.addLineCandidate(l);
+	}
 }
 
 

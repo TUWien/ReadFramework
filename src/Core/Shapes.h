@@ -537,8 +537,11 @@ public:
 	void setReferenceLine(Line referenceLine);
 	Line referenceLine() const;
 
+	bool isEmpty() const;
+
 	void addCandidate(int lIdx, double o, double d);
 	void addCandidate(Line c, int lIdx);
+	void addLineCandidate(LineCandidates lc);
 
 	rdf::Line mergedLine();
 
@@ -619,21 +622,25 @@ public:
 	LineCandidates leftLineC() const;
 	void setRefLineLeft(Line l);
 	void addLineCandidateLeft(Line c, int lIdx);
+	void addLineCandidateLeft(LineCandidates l);
 
 	void setLineCandidatesRightLine(LineCandidates l);
 	LineCandidates rightLineC() const;
 	void setRefLineRight(Line l);
 	void addLineCandidateRight(Line c, int lIdx);
+	void addLineCandidateRight(LineCandidates l);
 
 	void setLineCandidatesTopLine(LineCandidates l);
 	LineCandidates topLineC() const;
 	void setRefLineTop(Line l);
 	void addLineCandidateTop(Line c, int lIdx);
+	void addLineCandidateTop(LineCandidates l);
 
 	void setLineCandidatesBottomLine(LineCandidates l);
 	LineCandidates bottomLineC() const;
 	void setRefLineBottom(Line l);
 	void addLineCandidateBottom(Line c, int lIdx);
+	void addLineCandidateBottom(LineCandidates l);
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;

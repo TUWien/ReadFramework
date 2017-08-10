@@ -1242,7 +1242,7 @@ bool FormFeatures::matchTemplate() {
 	//create AssociationGraph
 	createAssociationGraph();
 
-	qDebug() << "create Association Graph...";
+	qDebug() << "find maximal cliques...";
 	//find maximal cliques
 	mMinGraphSizeHor /= 2;
 	mMinGraphSizeVer /= 2;
@@ -1291,6 +1291,26 @@ bool FormFeatures::matchTemplate() {
 			cellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
 			cellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
 		}
+	}
+
+	//add empty lines (if left or top neighbour exists, no node is added in adjacency graph
+	//copy it now
+	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
+		//get left neighbours
+		QVector<int> neighbourIdx = cellsR[cellIdx]->leftIdx();
+		//add right lines of left neighbours to current cell
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp1 = cellsR[neighbourIdx[i]]->rightLineC();
+			cellsR[cellIdx]->addLineCandidateLeft(tmp1);
+		}
+
+		//same for top line
+		neighbourIdx = cellsR[cellIdx]->topIdx();
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp2 = cellsR[neighbourIdx[i]]->bottomLineC();
+			cellsR[cellIdx]->addLineCandidateTop(tmp2);
+		}
+
 	}
 
 	//create new cells
@@ -1834,6 +1854,10 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		}
 		if (newLineLeft.isEmpty()) {
 			newLineLeft = tmpCand.referenceLine();
+			if (newLineLeft.isEmpty()) {
+				newLineLeft = cellsR[cellIdx]->leftBorder();
+				newLineLeft.translate(mOffset);
+			}
 			customTmp = customTmp + QString("false") + " ";
 		} else {
 			customTmp = customTmp + QString("true") + " ";
@@ -1859,6 +1883,10 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		}
 		if (newLineRight.isEmpty()) {
 			newLineRight = tmpCand.referenceLine();
+			if (newLineRight.isEmpty()) {
+				newLineRight = cellsR[cellIdx]->rightBorder();
+				newLineRight.translate(mOffset);
+			}
 			customTmp = customTmp + QString("false") + " ";
 		}
 		else {
@@ -1885,6 +1913,10 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		}
 		if (newLineTop.isEmpty()) {
 			newLineTop = tmpCand.referenceLine();
+			if (newLineTop.isEmpty()) {
+				newLineTop = cellsR[cellIdx]->topBorder();
+				newLineTop.translate(mOffset);
+			}
 			customTmp = customTmp + QString("false") + " ";
 		}
 		else {
@@ -1912,6 +1944,10 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		}
 		if (newLineBottom.isEmpty()) {
 			newLineBottom = tmpCand.referenceLine();
+			if (newLineBottom.isEmpty()) {
+				newLineBottom = cellsR[cellIdx]->bottomBorder();
+				newLineBottom.translate(mOffset);
+			}
 			customTmp = customTmp + QString("false");
 		}
 		else {
