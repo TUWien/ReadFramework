@@ -2109,7 +2109,7 @@ QVector<int> LineCandidates::sortByOverlap() {
 		}
 
 		//sort descending order
-		std::sort(overLaps.begin(), overLaps.end(), std::greater<>());
+		std::sort(overLaps.begin(), overLaps.end(), std::greater<std::pair<double, int>>());
 		QVector<int> result;
 		for (int i = 0; i < overLaps.size(); i++) {
 			result.push_back(overLaps[i].second);

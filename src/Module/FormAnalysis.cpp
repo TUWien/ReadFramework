@@ -2638,7 +2638,7 @@ cv::Size FormFeatures::sizeImg() const
 				if (dref < distThreshold) {
 					
 					double lineDtmp = m1.p1().x() < m2.p1().x() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
-					if (lineDtmp < distThreshold*3) {
+					if (lineDtmp < distThreshold*1) {
 						//matched lines are also "colinear"
 						//check if reference line is left or not, same must apply to matched lines
 						if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
