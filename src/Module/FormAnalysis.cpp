@@ -1791,7 +1791,7 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 
 double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour) {
 	QVector<int> l;
-	double width = std::numeric_limits<double>::max();
+	double cellDim = std::numeric_limits<double>::max();
 
 	//0: left 1: right 2; upper 3: bottom
 	switch (neighbour) {
@@ -1806,13 +1806,20 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 
 	for (int i = 0; i < l.size(); i++) {
 
-		double w = cellsR[l[i]]->width();
-		if (w < width) {
-			width = w;
+		double w;
+		
+		if (neighbour == 0 || neighbour == 1) {
+			w = cellsR[l[i]]->width();
+		} else {
+			w = cellsR[l[i]]->height();
+		}
+			
+		if (w < cellDim) {
+			cellDim = w;
 		}
 	}
 
-	return width;
+	return cellDim;
 }
 
 
