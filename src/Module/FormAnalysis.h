@@ -117,6 +117,10 @@ namespace rdf {
 		int getColIdx() const;
 		void setLineCell(int rowIdx, int colIdx);
 
+		int rowSpan() const;
+		int colSpan() const;
+		void setSpan(int rowSpan, int colSpan);
+
 		void setMatchedLine(Line l);
 		void setMatchedLine(Line l, double overlap, double distance);
 		Line matchedLine() const;
@@ -139,7 +143,10 @@ namespace rdf {
 		int mCellIdx = 1;
 		Line mReferenceLine;
 		LinePosition mLinePos;
-		int mRefRowIdx, mRefColIdx;
+		int mRefRowIdx = -1;
+		int mRefColIdx = -1;
+		int mRowSpan = 0;
+		int mColSpan = 0;
 
 		Line mMatchedLine;
 		int mMatchedLineIdx;

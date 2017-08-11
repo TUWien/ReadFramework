@@ -980,6 +980,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 
 					QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode());
 					newNode->setLineCell(cellsR[cellIdx]->row(), cellsR[cellIdx]->col());
+					newNode->setSpan(cellsR[cellIdx]->rowSpan(), cellsR[cellIdx]->colSpan() );
 					newNode->setCellIdx(cellIdx);
 					newNode->setLinePos(lp);
 					newNode->setReferenceLine(l);
@@ -2512,6 +2513,19 @@ cv::Size FormFeatures::sizeImg() const
 		mRefRowIdx = rowIdx;
 	}
 
+	int AssociationGraphNode::rowSpan() const 	{
+		return mRowSpan;
+	}
+
+	int AssociationGraphNode::colSpan() const 	{
+		return mColSpan;
+	}
+
+	void AssociationGraphNode::setSpan(int rowSpan, int colSpan) 	{
+		mRowSpan = rowSpan;
+		mColSpan = colSpan;
+	}
+
 	void AssociationGraphNode::setMatchedLine(Line l) 	{
 		mMatchedLine = l;
 	}
@@ -2601,9 +2615,16 @@ cv::Size FormFeatures::sizeImg() const
 				double dref = std::abs(ref1.center().x() - ref2.center().x());
 
 				//reference line has same horizontal position (colinear lines), but belongs to a different cell
+
+				// line position must be the same and row position must be the same for top line
+				// or for bottom line rowIdx + rowSpan must be the same
+				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) ||
+					(mLinePos == neighbour->linePosition() && (mRefColIdx + mColSpan) == (neighbour->getColIdx() + neighbour->colSpan()))) {
+				//if (mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) {
+				//problem with distance by non straight lines....
+				//if (dref < distThreshold) {
 				//alternatively use:
 				//if (ref1.distance(ref2.p1()) < distThreshold) {
-				if (dref < distThreshold) {
 
 					double lineDtmp = m1.p1().y() < m2.p1().y() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
 					//colinear lines
@@ -2638,7 +2659,9 @@ cv::Size FormFeatures::sizeImg() const
 					}
 				}
 			} else {
+				//--------------------------------------------------------------------------------------------------------------
 				//line is horizontal
+				//--------------------------------------------------------------------------------------------------------------
 				ref1.sortEndpoints(horizontal);
 				ref2.sortEndpoints(horizontal);
 				m1.sortEndpoints(horizontal);
@@ -2648,9 +2671,16 @@ cv::Size FormFeatures::sizeImg() const
 				double dref = std::abs(ref1.center().y() - ref2.center().y());
 
 				//reference line has same vertical position (colinear), but belongs to a different cell
+								
+				// line position must be the same and row position must be the same for top line
+				// or for bottom line rowIdx + rowSpan must be the same
+				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) || 
+					(mLinePos == neighbour->linePosition() && (mRefRowIdx+mRowSpan) == (neighbour->getRowIdx()+neighbour->rowSpan()))) {
+				//if (mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) {
+				//-> problem with distance if lines are not straight... 
+				//if (dref < distThreshold) {
 				//alternatively use:
 				//if (ref1.distance(ref2.p1()) < distThreshold) {
-				if (dref < distThreshold) {
 					
 					double lineDtmp = m1.p1().x() < m2.p1().x() ? m1.distance(m2.p1()) : m2.distance(m1.p1());
 					if (lineDtmp < distThreshold*3) {
