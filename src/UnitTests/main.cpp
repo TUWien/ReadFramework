@@ -130,7 +130,18 @@ int main(int argc, char** argv) {
 
 
 	} else if (parser.isSet(tableOpt)) {
-		parser.showHelp();
+		//parser.showHelp();
+
+		rdf::TestConfig tc;
+		tc.setXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn_003-01_0006.xml");
+		tc.setImagePath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/M_Aigen_am_Inn_003-01_0006.jpg");
+
+		rdf::TableTest tt(tc);
+		
+		if (!tt.match())
+			return 1;	// fail the test
+
+		qDebug() << "table matched";
 
 	} else 	{
 		qInfo() << "Please specify an input image...";

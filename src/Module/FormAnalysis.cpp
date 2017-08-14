@@ -168,7 +168,7 @@ namespace rdf {
 	{
 		if (!checkInput())
 			return false;
-
+		//rdf::Image::save(mSrcImg, "C:\\tmp\\test1.png");
 		if (mBwImg.empty()) {
 			if (!computeBinaryInput()) {
 				mWarning << "binary image was not set and could not be calculated";
@@ -183,7 +183,7 @@ namespace rdf {
 			skewE.compute();
 			mPageAngle = skewE.getAngle();
 		}
-
+		//rdf::Image::save(mBwImg, "C:\\tmp\\test2.png");
 		//compute Lines
 		LineTrace lt(mBwImg, mMask);
 		if (mEstimateSkew) {
@@ -194,6 +194,7 @@ namespace rdf {
 		lt.compute();
 		mBwImg = lt.lineImage();
 
+		//rdf::Image::save(mBwImg, "C:\\tmp\\test3.png");
 		mHorLines = lt.getHLines();
 		mVerLines = lt.getVLines();
 
@@ -381,7 +382,9 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 		return false;
 	}
 
-	QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mTemplateName);
+	//Achtung!!! geändert
+	//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mTemplateName);
+	QString loadXmlPath = mTemplateName;
 	
 	rdf::PageXmlParser parser;
 	if (!parser.read(loadXmlPath)) {
@@ -1115,6 +1118,9 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 	QSet<int>::iterator it;
 	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
 	//QSet<int> prevExpansionsNeighbours;
+
+	//QListnextExpansionsIdx.toList();
+
 
 	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
 
@@ -2735,6 +2741,10 @@ cv::Size FormFeatures::sizeImg() const
 	}
 	int AssociationGraphNode::degree() const 	{
 		return (int)mAdjacencyNodesIdx.size();
+	}
+
+	bool AssociationGraphNode::operator<(const AssociationGraphNode & node) const 	{
+		return degree() < node.degree();
 	}
 
 }

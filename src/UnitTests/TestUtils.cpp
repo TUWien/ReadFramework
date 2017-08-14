@@ -67,6 +67,14 @@ QString TestConfig::xmlPath() const {
 	return mXMLPath;
 }
 
+void TestConfig::setTemplateXmlPath(const QString & path) {
+	mTemplateXMLPath = path;
+}
+
+QString TestConfig::templateXmlPath() const {
+	return mTemplateXMLPath;
+}
+
 void TestConfig::setClassifierPath(const QString & path) {
 	mClassifierPath = path;
 }

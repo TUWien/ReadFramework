@@ -37,6 +37,7 @@
 #pragma warning(pop)
 
 #include "TestUtils.h"
+#include "PageParser.h"
 
  // Qt defines
 namespace cv {
@@ -61,6 +62,22 @@ protected:
 
 	bool nativeSkew(const cv::Mat& img, double& angle) const;
 };
+
+class TableTest {
+
+public:
+	TableTest(const TestConfig& config = TestConfig());
+
+	bool match() const;
+
+protected:
+	TestConfig mConfig;
+
+	bool load(cv::Mat& img) const;
+	bool load(rdf::PageXmlParser& parser) const;
+
+};
+
 
 }
 

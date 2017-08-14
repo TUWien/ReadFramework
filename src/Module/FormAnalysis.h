@@ -139,6 +139,9 @@ namespace rdf {
 
 		int degree() const;
 
+		bool operator< (const AssociationGraphNode& node) const;
+		//static bool compareCells(const QSharedPointer<rdf::TableCellRaw> l1, const QSharedPointer<rdf::TableCellRaw> l2);
+
 	protected:
 		int mCellIdx = 1;
 		Line mReferenceLine;
