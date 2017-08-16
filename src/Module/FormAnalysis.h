@@ -194,8 +194,8 @@ namespace rdf {
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		void createAssociationGraph();
+		bool** adjacencyMatrix(const QVector<QSharedPointer<rdf::AssociationGraphNode>> &associationGraphNodes);
 		void findMaxCliques();
-		void BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize, bool horizontal);
 
 		QVector<QSet<int>> getMaxCliqueHor() const;
 		QVector<QSet<int>> getMaxCliqueVer() const;
@@ -281,8 +281,8 @@ namespace rdf {
 
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesHorizontal;
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mANodesVertical;
-		int mMinGraphSizeHor = 0;
-		int mMinGraphSizeVer = 0;
+		//int mMinGraphSizeHor = 0;
+		//int mMinGraphSizeVer = 0;
 		//QVector<QSharedPointer<rdf::AssociationGraphNode>> testNodes;
 
 		QVector<QSet<int>> mMaxCliquesHor;

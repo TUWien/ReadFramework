@@ -966,10 +966,10 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 			}
 			if (visible) {
 				//one line added -> add 1 to minimum graph size
-				if (horizontal)
-					mMinGraphSizeHor++;
-				else
-					mMinGraphSizeVer++;
+				//if (horizontal)
+				//	mMinGraphSizeHor++;
+				//else
+				//	mMinGraphSizeVer++;
 
 				d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
 				d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
@@ -1032,132 +1032,78 @@ void FormFeatures::createAssociationGraph() {
 
 }
 
+bool ** FormFeatures::adjacencyMatrix(const QVector<QSharedPointer<rdf::AssociationGraphNode>>& associationGraphNodes) {
+
+	int numberNodes = associationGraphNodes.size();
+
+	if (numberNodes > 0) {
+
+		bool **ppAdjacencyMatrixVer = new bool*[numberNodes];
+		for (int i = 0; i < numberNodes; i++) {
+			ppAdjacencyMatrixVer[i] = new bool[numberNodes];
+			memset(ppAdjacencyMatrixVer[i], 0, numberNodes * sizeof(bool));
+		}
+		
+		for (int adVer = 0; adVer < numberNodes; adVer++) {
+			QVector<int> neighbours = associationGraphNodes[adVer]->adjacencyNodes();
+			for (int n = 0; n < neighbours.size(); n++) {
+				ppAdjacencyMatrixVer[adVer][neighbours[n]] = true;
+				ppAdjacencyMatrixVer[neighbours[n]][adVer] = true;
+			}
+		}
+
+		return ppAdjacencyMatrixVer;
+	} else
+		return nullptr;
+}
+
 void FormFeatures::findMaxCliques() {
 
-	//QVector<int> nodesIdx;
-	QSet<int> c, p;
-	QSet<int> nodesIdx;
-	QVector<QSet<int>> *pMaxCliques;
-	//int minSize = 4;
-
-	////only test of Bron Kerbosch
-	//QSharedPointer<rdf::AssociationGraphNode> newNode0(new rdf::AssociationGraphNode());
-	//newNode0->addAdjacencyNode(1); newNode0->addAdjacencyNode(2); newNode0->addAdjacencyNode(3); newNode0->addAdjacencyNode(4);
-	//QSharedPointer<rdf::AssociationGraphNode> newNode1(new rdf::AssociationGraphNode());
-	//newNode1->addAdjacencyNode(0); newNode1->addAdjacencyNode(2); newNode1->addAdjacencyNode(3); newNode1->addAdjacencyNode(4);
-	//QSharedPointer<rdf::AssociationGraphNode> newNode2(new rdf::AssociationGraphNode());
-	//newNode2->addAdjacencyNode(0); newNode2->addAdjacencyNode(1);
-	//QSharedPointer<rdf::AssociationGraphNode> newNode3(new rdf::AssociationGraphNode());
-	//newNode3->addAdjacencyNode(0); newNode3->addAdjacencyNode(1); newNode3->addAdjacencyNode(4);
-	//QSharedPointer<rdf::AssociationGraphNode> newNode4(new rdf::AssociationGraphNode());
-	//newNode4->addAdjacencyNode(0); newNode4->addAdjacencyNode(1); newNode4->addAdjacencyNode(3);
-	//testNodes.push_back(newNode0);
-	//testNodes.push_back(newNode1);
-	//testNodes.push_back(newNode2);
-	//testNodes.push_back(newNode3);
-	//testNodes.push_back(newNode4);
-	//for (int i = 0; i < testNodes.size(); i++) {
-	//	//nodesIdx << i;
-	//	nodesIdx.insert(i);
-	//}
-	//pMaxCliques = &mMaxCliquesVer;
-	//BronKerbosch(c, nodesIdx, p, pMaxCliques, minSize);
-	////end of test
-	
-	//test
-	//mMinGraphSizeVer = 28;
+	bool** ppAdjacencyMatrixVertical = 0;
+	bool** ppAdjacencyMatrixHorizontal = 0;
+	int *qmax;
+	int qsize;
 
 	qDebug() << "vertical max clique...";
+	ppAdjacencyMatrixVertical = adjacencyMatrix(mANodesVertical);
 
-	//create set of nodeIdx for vertical nodes
-	for (int i = 0; i < mANodesVertical.size(); i++) {
-		//nodesIdx << i;
-		nodesIdx.insert(i);
-		mANodesVertical[i]->createAdjacencyNodesSet();
+	if (ppAdjacencyMatrixVertical != 0 && mANodesVertical.size() > 0) {
+		Maxclique m(ppAdjacencyMatrixVertical, mANodesVertical.size());
+
+		m.mcq(qmax, qsize);
+		QSet<int> mCl;
+		for (int iN = 0; iN < qsize; iN++) {
+			mCl.insert(qmax[iN]);
+		}
+		mMaxCliquesVer.push_back(mCl);
+		////test - faster?
+		//Maxclique m2(ppAdjacencyMatrixVer, sizeVer, 0.025);
+		//m2.mcqdyn(qmax, qsize);
+		delete(qmax);
+		for (int nRows = 0; nRows < mANodesVertical.size(); nRows++)
+			delete(ppAdjacencyMatrixVertical[nRows]);
 	}
-	pMaxCliques = &mMaxCliquesVer;
-
-	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer, false);
 
 	qDebug() << "horizontal max clique...";
-	//test
-	//mMinGraphSizeVer = 18;
-	nodesIdx.clear();
-	//create set of nodeIdx for horizontal nodes
-	for (int i = 0; i < mANodesHorizontal.size(); i++) {
-		//nodesIdx << i;
-		nodesIdx.insert(i);
-		mANodesHorizontal[i]->createAdjacencyNodesSet();
-	}
-	pMaxCliques = &mMaxCliquesHor;
-	QSet<int> cH, pH;
-	BronKerbosch(cH, nodesIdx, pH, pMaxCliques, &mMinGraphSizeHor, true);
+	ppAdjacencyMatrixHorizontal = adjacencyMatrix(mANodesHorizontal);
 
-}
+	if (ppAdjacencyMatrixHorizontal != 0 && mANodesHorizontal.size() > 0) {
+		Maxclique mHor(ppAdjacencyMatrixHorizontal, mANodesHorizontal.size());
 
-void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx, QSet<int> previousExpansionsIdx, QVector<QSet<int>> *maxCliques, int *minSize, bool horizontal) {
-
-	if (nextExpansionsIdx.isEmpty() && previousExpansionsIdx.isEmpty()) {
-
-		//cliqueIdx is maximal clique
-		*minSize = cliqueIdx.size() > *minSize ? cliqueIdx.size() : *minSize;
-		qDebug() << "max Clique found....." << cliqueIdx.size();
-		maxCliques->append(cliqueIdx);
-		//return;
-	}
-
-	////check if this could moved to for loop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	if (!previousExpansionsIdx.isEmpty()) {
-		QSet<int>::iterator it;
-		for (it = previousExpansionsIdx.begin(); it != previousExpansionsIdx.end(); ++it) {
-			//QSet<int> tmp = mANodesVertical[*it]->adjacencyNodesSet();
-			QSet<int> tmp;
-			tmp = horizontal ? mANodesHorizontal[*it]->adjacencyNodesSet() : mANodesVertical[*it]->adjacencyNodesSet();
-			tmp = tmp.intersect(nextExpansionsIdx);
-			if (tmp.size() == nextExpansionsIdx.size())
-				return;
+		mHor.mcq(qmax, qsize);
+		QSet<int> mClH;
+		for (int iN = 0; iN < qsize; iN++) {
+			mClH.insert(qmax[iN]);
 		}
+		mMaxCliquesHor.push_back(mClH);
+		delete(qmax);
+		for (int nRows = 0; nRows < mANodesHorizontal.size(); nRows++)
+			delete(ppAdjacencyMatrixHorizontal[nRows]);
 	}
 
-	QSet<int>::iterator it;
-	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
-	//QSet<int> prevExpansionsNeighbours;
-
-	//QList<int> tmpList = nextExpansionsIdx.toList();
-	
-
-
-	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
-
-		QSet<int> neighbourNodes;
-		neighbourNodes = horizontal ? mANodesHorizontal[*it]->adjacencyNodesSet() : mANodesVertical[*it]->adjacencyNodesSet();
-
-		//QSet<int> neighbourNodes = testNodes[*it]->adjacencyNodesSet();
-		//QSet<int> NN = nextExpansionsIdx.intersect(neighbourNodes);
-		QSet<int> NN = nextExpansionsCopy;	//we need a copy since intersect changes the original set
-		NN = NN.intersect(neighbourNodes);
-		//QSet<int> PN = previousExpansionsIdx.intersect(neighbourNodes);
-		QSet<int> PN = previousExpansionsIdx;
-		PN = PN.intersect(neighbourNodes);
-		QSet<int> CN = cliqueIdx;
-		//qDebug() << "key: " << (int)(*it);
-		CN += (*it);
-
-		//prevExpansionsNeighbours = prevExpansionsNeighbours.intersect(nextExpansionsCopy);
-		//if (nextExpansionsCopy.size() == prevExpansionsNeighbours.size())
-			//break;
-
-		//iterate only if minSize could be achieved
-		if (CN.size() + NN.size() > *minSize)
-			BronKerbosch(CN, NN, PN, maxCliques, minSize, horizontal);
-
-		//nextExpansionsIdx.remove(*it);
-		nextExpansionsCopy.remove(*it);
-		previousExpansionsIdx.insert(*it);
-		
-		//prevExpansionsNeighbours = neighbourNodes;
-	}
 }
+
+
 
 QVector<QSet<int>> FormFeatures::getMaxCliqueHor() const {
 	return mMaxCliquesHor;
@@ -1257,74 +1203,9 @@ bool FormFeatures::matchTemplate() {
 	//create AssociationGraph
 	createAssociationGraph();
 
-	int sizeVer = mANodesVertical.size();
-	int sizeHor = mANodesHorizontal.size();
-
-
 	qDebug() << "find maximal cliques...";
-	//vertical adjacencyMatrix
-	bool **ppAdjacencyMatrixVer = new bool*[sizeVer];
-	for (int i = 0; i < sizeVer; i++) {
-		ppAdjacencyMatrixVer[i] = new bool[sizeVer];
-		memset(ppAdjacencyMatrixVer[i], 0, sizeVer * sizeof(bool));
-	}
-	for (int adVer = 0; adVer < mANodesVertical.size(); adVer++) {
+	findMaxCliques();
 
-		QVector<int> neighbours = mANodesVertical[adVer]->adjacencyNodes();
-		for (int n = 0; n < neighbours.size(); n++) {
-			ppAdjacencyMatrixVer[adVer][neighbours[n]] = true;
-			ppAdjacencyMatrixVer[neighbours[n]][adVer] = true;
-		}
-
-	}
-	
-	Maxclique m(ppAdjacencyMatrixVer, sizeVer);
-	int *qmax;
-	int qsize;
-	m.mcq(qmax, qsize);
-	QSet<int> mCl;
-	for (int iN = 0; iN < qsize; iN++) {
-		mCl.insert(qmax[iN]);
-	}
-	mMaxCliquesVer.push_back(mCl);
-	////test - faster?
-	//Maxclique m2(ppAdjacencyMatrixVer, sizeVer);
-	//m2.mcqdyn(qmax, qsize);
-
-	//horizontal adjacencyMatrix
-	bool **ppAdjacencyMatrixHor = new bool*[sizeHor];
-	for (int i = 0; i < sizeHor; i++) {
-		ppAdjacencyMatrixHor[i] = new bool[sizeHor];
-		memset(ppAdjacencyMatrixHor[i], 0, sizeHor * sizeof(bool));
-	}
-	for (int adVer = 0; adVer < mANodesHorizontal.size(); adVer++) {
-
-		QVector<int> neighbours = mANodesHorizontal[adVer]->adjacencyNodes();
-		for (int n = 0; n < neighbours.size(); n++) {
-			ppAdjacencyMatrixHor[adVer][neighbours[n]] = true;
-			ppAdjacencyMatrixHor[neighbours[n]][adVer] = true;
-		}
-
-	}
-
-	Maxclique mHor(ppAdjacencyMatrixHor, sizeHor);
-	delete(qmax);
-	mHor.mcq(qmax, qsize);
-	QSet<int> mClH;
-	for (int iN = 0; iN < qsize; iN++) {
-		mClH.insert(qmax[iN]);
-	}
-	mMaxCliquesHor.push_back(mClH);
-	delete(qmax);
-
-
-
-	//qDebug() << "find maximal cliques...";
-	////find maximal cliques
-	//mMinGraphSizeHor /= 2;
-	//mMinGraphSizeVer /= 2;
-	//findMaxCliques();
-	
 	mCellsR = cellsR;
 
 	QSet<int> maxCliqueHor;
