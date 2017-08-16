@@ -403,6 +403,7 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	
 	QVector<QSharedPointer<rdf::TableCell>> cells;
 	QSharedPointer<rdf::TableRegion> region;
+	bool detHeader = false;
 
 	for (auto i : test) {
 
@@ -422,7 +423,8 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 					if (child->type() == child->type_text_line) {
 						tCell->setHeader(true);
 						//qDebug() << imgC->filePath() << "detected header...";
-						qDebug() << "detected header...";
+						//qDebug() << "detected header...";
+						detHeader = true;
 						break;
 					}
 				}
@@ -457,6 +459,9 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 
 		}
 	}
+
+	if (detHeader)
+		qDebug() << "detected header...";
 
 	std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
@@ -903,10 +908,13 @@ QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::createRawTableFromTempl
 void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR) {
 
 	//QVector<QSharedPointer<rdf::AssociationGraphNode>> nodes;
+
+	qDebug() << "try to match cell lines of all cells: " << cellsR.size() << " for associaton graph nodes...";
+
 	//find all nodes for the association graph
 	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
 
-		qDebug() << "try to match cell lines of cell for associaton graph nodes: " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
+		//qDebug() << "try to match cell lines of cell for associaton graph nodes: " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
 
 		for (int i = AssociationGraphNode::LinePosition::pos_left; i <= AssociationGraphNode::LinePosition::pos_bottom; i++) {
 			rdf::Line l;
@@ -942,7 +950,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 			case AssociationGraphNode::LinePosition::pos_left:
 				//check if node already exists...
 				neighbourIdx = cellsR[cellIdx]->leftIdx();
-				//if top neighbour idx exist, do not add node
+				//if left neighbour idx exist, do not add node
 				if (neighbourIdx.size() == 0) {
 					l = cellsR[cellIdx]->leftBorder();
 					visible = cellsR[cellIdx]->leftBorderVisible();
@@ -1103,6 +1111,150 @@ void FormFeatures::findMaxCliques() {
 
 }
 
+void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::TableCell>> &cells) {
+
+	//QSet<int> maxCliqueHor;
+	//maxCliqueHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
+	//QSet<int>::iterator it1;
+	//qDebug() << "clique size : " << maxCliqueHor.size();
+	//for (it1 = maxCliqueHor.begin(); it1 != maxCliqueHor.end(); ++it1) {
+	//	qDebug() << "clique: " << *it1;
+	//}
+
+	//clear lineCandidates
+	for (int cellIdx = 0; cellIdx < mCellsR.size(); cellIdx++) {
+		mCellsR[cellIdx]->clearCandidates();
+	}
+
+	QSet<int> maxVer, maxHor;
+	if (mMaxCliquesVer.size() > 0)
+		maxVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
+	if (mMaxCliquesHor.size() > 0)
+		maxHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
+
+	//create lineCandidates from nodes of maxClique graph
+	QSet<int>::iterator it;
+	qDebug() << "clique size (ver): " << maxVer.size();
+	for (it = maxVer.begin(); it != maxVer.end(); ++it) {
+		//qDebug() << "node: " << *it;
+		int cellIdx = mANodesVertical[*it]->cellIdx();
+		//add matched Line
+		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left) {
+			mCellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
+			mCellsR[cellIdx]->addLineCandidateLeft(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
+			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
+		}
+		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right) {
+			mCellsR[cellIdx]->setRefLineRight(mANodesVertical[*it]->referenceLine());
+			mCellsR[cellIdx]->addLineCandidateRight(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
+			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
+		}
+	}
+
+	qDebug() << "clique size (hor): " << maxHor.size();
+	for (it = maxHor.begin(); it != maxHor.end(); ++it) {
+		//qDebug() << "node: " << *it;
+		int cellIdx = mANodesHorizontal[*it]->cellIdx();
+		//add matched Line
+		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_top) {
+			mCellsR[cellIdx]->setRefLineTop(mANodesHorizontal[*it]->referenceLine());
+			mCellsR[cellIdx]->addLineCandidateTop(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
+			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
+		}
+		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom) {
+			mCellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
+			mCellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
+			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
+		}
+	}
+
+	//add empty lines (if left or top neighbour exists, no node is added in adjacency graph
+	//copy it now
+	for (int cellIdx = 0; cellIdx < mCellsR.size(); cellIdx++) {
+		//get left neighbours
+		QVector<int> neighbourIdx = mCellsR[cellIdx]->leftIdx();
+		//add right lines of left neighbours to current cell
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp1 = mCellsR[neighbourIdx[i]]->rightLineC();
+			mCellsR[cellIdx]->addLineCandidateLeft(tmp1);
+		}
+
+		//same for top line
+		neighbourIdx = mCellsR[cellIdx]->topIdx();
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp2 = mCellsR[neighbourIdx[i]]->bottomLineC();
+			mCellsR[cellIdx]->addLineCandidateTop(tmp2);
+		}
+
+	}
+
+	//create new cells
+	createCellfromLineCandidates(mCellsR);
+
+	//generate cells
+	qDebug() << "generating cells...";
+	for (int cellIdx = 0; cellIdx < mCellsR.size(); cellIdx++) {
+
+		//QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell(*c));
+		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
+
+		//qDebug() << "generating cell : " << mCellsR[cellIdx]->row() << " " << mCellsR[cellIdx]->col() << " isHeader: " << mCellsR[cellIdx]->header();
+
+		//copy attributes
+		newCell->setHeader(mCellsR[cellIdx]->header());
+		newCell->setId(mCellsR[cellIdx]->id());
+		newCell->setCol(mCellsR[cellIdx]->col());
+		newCell->setRow(mCellsR[cellIdx]->row());
+		newCell->setColSpan(mCellsR[cellIdx]->colSpan());
+		newCell->setRowSpan(mCellsR[cellIdx]->rowSpan());
+		newCell->setTopBorderVisible(mCellsR[cellIdx]->topBorderVisible());
+		newCell->setBottomBorderVisible(mCellsR[cellIdx]->bottomBorderVisible());
+		newCell->setLeftBorderVisible(mCellsR[cellIdx]->leftBorderVisible());
+		newCell->setRightBorderVisible(mCellsR[cellIdx]->rightBorderVisible());
+
+		newCell->setPolygon(mCellsR[cellIdx]->polygon());
+		newCell->setCustom(mCellsR[cellIdx]->custom());
+		QVector<int> cPty = mCellsR[cellIdx]->cornerPty();
+		newCell->setCornerPts(cPty);
+
+		rdf::Vector2D offSet = newCell->upperLeft() - mCellsR[cellIdx]->upperLeft();
+		//copy children
+
+		QVector<QSharedPointer<rdf::Region>> templateChildren = cells[cellIdx]->children();	//get children from template
+		QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
+
+		if (!templateChildren.isEmpty() && config()->saveChilds()) {
+
+			for (QSharedPointer<rdf::Region> ci : templateChildren) {
+
+				if (ci->type() == ci->type_text_line) {
+
+					QSharedPointer<rdf::TextLine> tTextLine = ci.dynamicCast<rdf::TextLine>();
+					tTextLine = QSharedPointer<rdf::TextLine>(new rdf::TextLine(*tTextLine));
+					//get baseline and polygon
+					rdf::BaseLine tmpBL = tTextLine->baseLine();
+					rdf::Polygon tmpP = tTextLine->polygon();
+					//shift by offset;
+					tmpBL.translate(offSet.toQPointF());
+					tmpP.translate(offSet.toQPointF());
+					//set shifted polygon and baseline
+					tTextLine->setBaseLine(tmpBL);
+					tTextLine->setPolygon(tmpP);
+
+					newChildren.push_back(tTextLine);	//push back altered text line
+				}
+				else {
+					newChildren.push_back(ci);			//otherwise push back pointer to original element
+				}
+			}
+			newCell->setChildren(newChildren);
+		}
+
+		mCells.push_back(newCell);
+	}
+
+}
+
 
 
 QVector<QSet<int>> FormFeatures::getMaxCliqueHor() const {
@@ -1194,6 +1346,7 @@ bool FormFeatures::matchTemplate() {
 
 	mRegion = region;
 	
+	qDebug() << "create raw table from template...";
 	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR = createRawTableFromTemplate();
 	//create AssociationGraphNodes
 	qDebug() << "create Association Graph nodes...";
@@ -1202,340 +1355,14 @@ bool FormFeatures::matchTemplate() {
 	qDebug() << "create Association Graph...";
 	//create AssociationGraph
 	createAssociationGraph();
-
-	qDebug() << "find maximal cliques...";
+	
+	
 	findMaxCliques();
 
 	mCellsR = cellsR;
 
-	QSet<int> maxCliqueHor;
-	maxCliqueHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
-	QSet<int>::iterator it1;
-	qDebug() << "clique size : " << maxCliqueHor.size();
-	for (it1 = maxCliqueHor.begin(); it1 != maxCliqueHor.end(); ++it1) {
-		qDebug() << "clique: " << *it1;
-	}
-
-	//clear lineCandidates
-	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
-		cellsR[cellIdx]->clearCandidates();
-	}
-
-	QSet<int> maxVer, maxHor;
-	if (mMaxCliquesVer.size() > 0)
-		maxVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
-	if (mMaxCliquesHor.size() > 0)
-		maxHor = mMaxCliquesHor[mMaxCliquesHor.size() - 1];
-
-	//create lineCandidates from nodes of maxClique graph
-	QSet<int>::iterator it;
-	qDebug() << "clique size : " << maxVer.size();
-	for (it = maxVer.begin(); it != maxVer.end(); ++it) {
-		qDebug() << "node: " << *it;
-		int cellIdx = mANodesVertical[*it]->cellIdx();
-		//add matched Line
-		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left) {
-			cellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
-			cellsR[cellIdx]->addLineCandidateLeft(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
-			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
-		}
-		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right) {
-			cellsR[cellIdx]->setRefLineRight(mANodesVertical[*it]->referenceLine());
-			cellsR[cellIdx]->addLineCandidateRight(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
-			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
-		}
-	}
-
-	qDebug() << "clique size : " << maxHor.size();
-	for (it = maxHor.begin(); it != maxHor.end(); ++it) {
-		qDebug() << "node: " << *it;
-		int cellIdx = mANodesHorizontal[*it]->cellIdx();
-		//add matched Line
-		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_top) {
-			cellsR[cellIdx]->setRefLineTop(mANodesHorizontal[*it]->referenceLine());
-			cellsR[cellIdx]->addLineCandidateTop(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
-			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
-		}
-		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom) {
-			cellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
-			cellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
-			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
-		}
-	}
-
-	//add empty lines (if left or top neighbour exists, no node is added in adjacency graph
-	//copy it now
-	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
-		//get left neighbours
-		QVector<int> neighbourIdx = cellsR[cellIdx]->leftIdx();
-		//add right lines of left neighbours to current cell
-		for (int i = 0; i < neighbourIdx.size(); i++) {
-			rdf::LineCandidates tmp1 = cellsR[neighbourIdx[i]]->rightLineC();
-			cellsR[cellIdx]->addLineCandidateLeft(tmp1);
-		}
-
-		//same for top line
-		neighbourIdx = cellsR[cellIdx]->topIdx();
-		for (int i = 0; i < neighbourIdx.size(); i++) {
-			rdf::LineCandidates tmp2 = cellsR[neighbourIdx[i]]->bottomLineC();
-			cellsR[cellIdx]->addLineCandidateTop(tmp2);
-		}
-
-	}
-
-	//create new cells
-	createCellfromLineCandidates(cellsR);
-
-	//generate cells
-	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
-
-		//QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell(*c));
-		QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
-
-		qDebug() << "generating cell : " << cellsR[cellIdx]->row() << " " << cellsR[cellIdx]->col() << " isHeader: " << cellsR[cellIdx]->header();
-
-		//copy attributes
-		newCell->setHeader(cellsR[cellIdx]->header());
-		newCell->setId(cellsR[cellIdx]->id());
-		newCell->setCol(cellsR[cellIdx]->col());
-		newCell->setRow(cellsR[cellIdx]->row());
-		newCell->setColSpan(cellsR[cellIdx]->colSpan());
-		newCell->setRowSpan(cellsR[cellIdx]->rowSpan());
-		newCell->setTopBorderVisible(cellsR[cellIdx]->topBorderVisible());
-		newCell->setBottomBorderVisible(cellsR[cellIdx]->bottomBorderVisible());
-		newCell->setLeftBorderVisible(cellsR[cellIdx]->leftBorderVisible());
-		newCell->setRightBorderVisible(cellsR[cellIdx]->rightBorderVisible());
-
-		newCell->setPolygon(cellsR[cellIdx]->polygon());
-		newCell->setCustom(cellsR[cellIdx]->custom());
-		QVector<int> cPty = cellsR[cellIdx]->cornerPty();
-		newCell->setCornerPts(cPty);
-
-		rdf::Vector2D offSet = newCell->upperLeft() - cellsR[cellIdx]->upperLeft();
-		//copy children
-
-		QVector<QSharedPointer<rdf::Region>> templateChildren = cells[cellIdx]->children();	//get children from template
-		QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
-		
-		if (!templateChildren.isEmpty() && config()->saveChilds()) {
-
-			for (QSharedPointer<rdf::Region> ci : templateChildren) {
-
-				if (ci->type() == ci->type_text_line) {
-
-					QSharedPointer<rdf::TextLine> tTextLine = ci.dynamicCast<rdf::TextLine>();
-					tTextLine = QSharedPointer<rdf::TextLine>(new rdf::TextLine(*tTextLine));
-					//get baseline and polygon
-					rdf::BaseLine tmpBL = tTextLine->baseLine();
-					rdf::Polygon tmpP = tTextLine->polygon();
-					//shift by offset;
-					tmpBL.translate(offSet.toQPointF());
-					tmpP.translate(offSet.toQPointF());
-					//set shifted polygon and baseline
-					tTextLine->setBaseLine(tmpBL);
-					tTextLine->setPolygon(tmpP);
-
-					newChildren.push_back(tTextLine);	//push back altered text line
-				}
-				else {
-					newChildren.push_back(ci);			//otherwise push back pointer to original element
-				}
-			}
-			newCell->setChildren(newChildren);
-		}
-
-		mCells.push_back(newCell);
-	}
-
-
-	//QSet<int> maxCliqueVer;
-	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
-	//QSet<int>::iterator it;
-	//qDebug() << "clique size : " << maxCliqueVer.size();
-	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-	//	qDebug() << "clique: " << *it;
-	//}
-
-	//qDebug() << "second -------------------------- ";
-
-	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 2];
-	//qDebug() << "clique size : " << maxCliqueVer.size();
-	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-	//	qDebug() << "clique: " << *it;
-	//}
-
-	//qDebug() << "third -------------------------- ";
-
-	//maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 3];
-	//qDebug() << "clique size : " << maxCliqueVer.size();
-	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-	//	qDebug() << "clique: " << *it;
-	//}
-
-	////max clique
-	//QSet<int> maxCliqueVer;
-	//if (mMaxCliquesVer.size() > 0)
-	//	maxCliqueVer = mMaxCliquesVer[mMaxCliquesVer.size() - 1];
-
-	//QSet<int>::iterator it;
-	//for (it = maxCliqueVer.begin(); it != maxCliqueVer.end(); ++it) {
-	//	//check id -> int vs string!!
-	//	QSharedPointer<rdf::TableCellRaw> cell = cellsR[mANodesVertical[*it]->cellIdx()]; //= getCellId(cellsR, mANodesVertical[*it]->cellIdx());
-	//	rdf::Line imgLine = mANodesVertical[*it]->matchedLine();
-	//	int lineIdx = mANodesVertical[*it]->matchedLineIdx();
-	//	rdf::AssociationGraphNode::LinePosition lp = mANodesVertical[*it]->linePosition();
-	//	
-	//	rdf::Line tmpLine;
-	//	rdf::LineCandidates tmpC;
-	//	cell->clearCandidates();
-
-	//	switch (lp) {
-	//	case AssociationGraphNode::LinePosition::pos_top:
-	//		tmpC = cell->topLineC();
-	//		tmpC.addCandidate(imgLine, lineIdx);
-	//		cell->setLineCandidatesTopLine(tmpC);
-	//		break;
-	//	case AssociationGraphNode::LinePosition::pos_bottom:
-	//		tmpC = cell->bottomLineC();
-	//		tmpC.addCandidate(imgLine, lineIdx);
-	//		cell->setLineCandidatesBottomLine(tmpC);
-	//		break;
-	//	case AssociationGraphNode::LinePosition::pos_left:
-	//		tmpC = cell->leftLineC();
-	//		tmpC.addCandidate(imgLine, lineIdx);
-	//		cell->setLineCandidatesLeftLine(tmpC);
-	//		break;
-	//	case AssociationGraphNode::LinePosition::pos_right:
-	//		tmpC = cell->rightLineC();
-	//		tmpC.addCandidate(imgLine, lineIdx);
-	//		cell->setLineCandidatesRightLine(tmpC);
-	//		break;
-	//	default:
-	//		qWarning() << "no Cell Border found in matchTemplate";
-	//		break;
-	//	}
-	//}
-
-	//for (int i = 0; i < cells.size(); i++) {
-
-	//	QSharedPointer<rdf::TableCell> newCell(new rdf::TableCell());
-
-	//	qDebug() << "create new table cell : " << cells[i]->row() << " " << cells[i]->col() << " isHeader: " << cells[i]->header();
-
-	//	//copy attributes
-	//	newCell->setHeader(cells[i]->header());
-	//	newCell->setId(cells[i]->id());
-	//	newCell->setCol(cells[i]->col());
-	//	newCell->setRow(cells[i]->row());
-	//	newCell->setColSpan(cells[i]->colSpan());
-	//	newCell->setRowSpan(cells[i]->rowSpan());
-	//	newCell->setTopBorderVisible(cells[i]->topBorderVisible());
-	//	newCell->setBottomBorderVisible(cells[i]->bottomBorderVisible());
-	//	newCell->setLeftBorderVisible(cells[i]->leftBorderVisible());
-	//	newCell->setRightBorderVisible(cells[i]->rightBorderVisible());
-
-	//	//get same cell from rawCells
-	//	rdf::Line lL = cellsR[i]->leftLineC().mergedLine();
-	//	rdf::Line tL = cellsR[i]->topLineC().mergedLine();
-	//	rdf::Line rL = cellsR[i]->rightLineC().mergedLine();
-	//	rdf::Line bL = cellsR[i]->bottomLineC().mergedLine();
-	//	rdf::Polygon p = createPolygon(tL, lL, rL, bL);
-	//		//newCell->setPolygon(p);
-	//		//newCell->setCustom(customTmp);
-	//		//if (p.size() == 4) {
-	//		//	cornerPts << 0 << 1 << 2 << 3;
-	//		//	newCell->setCornerPts(cornerPts);
-	//		//}
-	//		//else {
-	//		//	qWarning() << "Wrong number of corners for tablecell...";
-	//		//}
-
-
-	//	//?
-	//	//tL.translate(mOffset);
-	//	//lL.translate(mOffset);
-	//	//tL.translate(mOffset);
-	//	//lb.translate(mOffset);
-
-	//	//bool found = false;
-	//	//QString customTmp;
-
-	//	////orientation of cornerpts stored by Transkribus:
-	//	//// topleft: 0, bottomleft: 1, bottomright: 2, topright: 3 
-	//	//QVector<int> cornerPts;
-	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
-	//	////if (newCell->topBorderVisible())
-	//	////	newCell->setTopBorderVisible(found);
-
-	//	//lL = findLine(lL, thr, found, false);
-	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
-	//	////if (newCell->leftBorderVisible())
-	//	////	newCell->setLeftBorderVisible(found);
-
-	//	//rL = findLine(rL, thr, found, false);
-	//	//customTmp = customTmp + (found ? QString("true") : QString("false")) + " ";
-	//	////if (newCell->rightBorderVisible())
-	//	////	newCell->setRightBorderVisible(found);
-
-	//	//bL = findLine(bL, thr, found);
-	//	//customTmp = customTmp + (found ? QString("true") : QString("false"));
-	//	////if (newCell->bottomBorderVisible())
-	//	////	newCell->setBottomBorderVisible(found);
-
-	////	rdf::Polygon p = createPolygon(tL, lL, rL, bL);
-	////	newCell->setPolygon(p);
-	////	newCell->setCustom(customTmp);
-	////	if (p.size() == 4) {
-	////		cornerPts << 0 << 1 << 2 << 3;
-	////		newCell->setCornerPts(cornerPts);
-	////	}
-	////	else {
-	////		qWarning() << "Wrong number of corners for tablecell...";
-	////	}
-
-	////	rdf::Vector2D offSet = newCell->upperLeft() - c->upperLeft();
-
-	////	//copy children
-	////	QVector<QSharedPointer<rdf::Region>> templateChildren = c->children();	//get children from template
-	////	QVector<QSharedPointer<rdf::Region>> newChildren;						//will contain the new children vector
-	////	if (!templateChildren.isEmpty() && config()->saveChilds()) {
-
-	////		for (QSharedPointer<rdf::Region> ci : templateChildren) {
-
-	////			if (ci->type() == ci->type_text_line) {
-
-	////				QSharedPointer<rdf::TextLine> tTextLine = ci.dynamicCast<rdf::TextLine>();
-	////				tTextLine = QSharedPointer<rdf::TextLine>(new rdf::TextLine(*tTextLine));
-	////				//get baseline and polygon
-	////				rdf::BaseLine tmpBL = tTextLine->baseLine();
-	////				rdf::Polygon tmpP = tTextLine->polygon();
-	////				//shift by offset;
-	////				tmpBL.translate(offSet.toQPointF());
-	////				tmpP.translate(offSet.toQPointF());
-	////				//set shifted polygon and baseline
-	////				tTextLine->setBaseLine(tmpBL);
-	////				tTextLine->setPolygon(tmpP);
-
-	////				newChildren.push_back(tTextLine);	//push back altered text line
-	////			}
-	////			else {
-	////				newChildren.push_back(ci);			//otherwise push back pointer to original element
-	////			}
-	////		}
-	////		newCell->setChildren(newChildren);
-	////	}
-
-	////	mCells.push_back(newCell);
-	//}
-
-
-
-	////
-	////qDebug() << "size of horizontal max cliques: " << mMaxCliquesHor.size();
-	////qDebug() << "size of vertical max cliques: " << mMaxCliquesVer.size();
-
-	////TODO: find global optimum of line matchin
-	////-> find largest maximal clique
+	qDebug() << "create Table from maxclique...";
+	createTableFromMaxClique(cells);
 
 	//uncomment from here for old version
 	////----------------------------------------------------------------------------------------------------------------------------------------------------

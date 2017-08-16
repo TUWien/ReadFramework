@@ -196,6 +196,7 @@ namespace rdf {
 		void createAssociationGraph();
 		bool** adjacencyMatrix(const QVector<QSharedPointer<rdf::AssociationGraphNode>> &associationGraphNodes);
 		void findMaxCliques();
+		void createTableFromMaxClique(const QVector<QSharedPointer<rdf::TableCell>> &cells);
 
 		QVector<QSet<int>> getMaxCliqueHor() const;
 		QVector<QSet<int>> getMaxCliqueVer() const;
