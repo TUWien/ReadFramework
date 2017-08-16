@@ -43,6 +43,7 @@
 #include "Settings.h"
 #include "LayoutTest.h"
 #include "PreProcessingTest.h"
+#include "TableTest.h"
 
 #if defined(_MSC_BUILD) && !defined(QT_NO_DEBUG_OUTPUT) // fixes cmake bug - really release uses subsystem windows, debug and release subsystem console
 #pragma comment (linker, "/SUBSYSTEM:CONSOLE")

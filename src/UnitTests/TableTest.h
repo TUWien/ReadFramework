@@ -33,37 +33,35 @@
 #pragma once
 
 #pragma warning(push, 0)	// no warnings from includes
- // Qt Includes
+// Qt Includes
 #pragma warning(pop)
 
 #include "TestUtils.h"
-#include "PageParser.h"
 
- // Qt defines
+// Qt defines
 namespace cv {
 	class Mat;
 }
 
 namespace rdf {
 
+class PageXmlParser;
+
 // read defines
-class PreProcessingTest {
+class TableTest {
 
 public:
-	PreProcessingTest(const TestConfig& config = TestConfig());
+	TableTest(const TestConfig& config = TestConfig());
 
-	bool binarize() const;
-	bool skew() const;
-	bool gradient() const;
+	bool match() const;
 
 protected:
 	TestConfig mConfig;
 
 	bool load(cv::Mat& img) const;
+	bool load(rdf::PageXmlParser& parser) const;
 
-	bool nativeSkew(const cv::Mat& img, double& angle) const;
 };
 
 
 }
-
