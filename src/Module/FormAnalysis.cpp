@@ -1072,8 +1072,10 @@ void FormFeatures::findMaxCliques() {
 	for (int i = 0; i < mANodesVertical.size(); i++) {
 		//nodesIdx << i;
 		nodesIdx.insert(i);
+		mANodesVertical[i]->createAdjacencyNodesSet();
 	}
 	pMaxCliques = &mMaxCliquesVer;
+
 	BronKerbosch(c, nodesIdx, p, pMaxCliques, &mMinGraphSizeVer, false);
 
 	qDebug() << "horizontal max clique...";
@@ -1084,6 +1086,7 @@ void FormFeatures::findMaxCliques() {
 	for (int i = 0; i < mANodesHorizontal.size(); i++) {
 		//nodesIdx << i;
 		nodesIdx.insert(i);
+		mANodesHorizontal[i]->createAdjacencyNodesSet();
 	}
 	pMaxCliques = &mMaxCliquesHor;
 	QSet<int> cH, pH;
@@ -1119,7 +1122,8 @@ void FormFeatures::BronKerbosch(QSet<int> cliqueIdx, QSet<int> nextExpansionsIdx
 	QSet<int> nextExpansionsCopy = nextExpansionsIdx;
 	//QSet<int> prevExpansionsNeighbours;
 
-	//QListnextExpansionsIdx.toList();
+	//QList<int> tmpList = nextExpansionsIdx.toList();
+	
 
 
 	for (it = nextExpansionsIdx.begin(); it != nextExpansionsIdx.end(); ++it) {
@@ -2575,13 +2579,20 @@ cv::Size FormFeatures::sizeImg() const
 
 	QSet<int> AssociationGraphNode::adjacencyNodesSet() const {
 		
-		QSet<int> aN;
+		//QSet<int> aN;
 
+		//for (int i = 0; i < mAdjacencyNodesIdx.size(); i++) {
+		//	aN.insert(mAdjacencyNodesIdx[i]);
+		//}
+
+		return mAn;
+	}
+
+	void AssociationGraphNode::createAdjacencyNodesSet() 	{
+		mAn.clear();
 		for (int i = 0; i < mAdjacencyNodesIdx.size(); i++) {
-			aN.insert(mAdjacencyNodesIdx[i]);
+			mAn.insert(mAdjacencyNodesIdx[i]);
 		}
-
-		return aN;
 	}
 
 	void AssociationGraphNode::addAdjacencyNode(int idx) 	{
@@ -2745,6 +2756,10 @@ cv::Size FormFeatures::sizeImg() const
 
 	bool AssociationGraphNode::operator<(const AssociationGraphNode & node) const 	{
 		return degree() < node.degree();
+	}
+
+	bool AssociationGraphNode::compareNodes(const QSharedPointer<rdf::AssociationGraphNode> n1, const QSharedPointer<rdf::AssociationGraphNode> n2) {
+		return n1->degree() < n2->degree();
 	}
 
 }

@@ -133,6 +133,7 @@ namespace rdf {
 
 		QVector<int> adjacencyNodes() const;
 		QSet<int> adjacencyNodesSet() const;
+		void createAdjacencyNodesSet();
 		void addAdjacencyNode(int idx);
 		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
 		void clearAdjacencyList();
@@ -140,7 +141,7 @@ namespace rdf {
 		int degree() const;
 
 		bool operator< (const AssociationGraphNode& node) const;
-		//static bool compareCells(const QSharedPointer<rdf::TableCellRaw> l1, const QSharedPointer<rdf::TableCellRaw> l2);
+		static bool compareNodes(const QSharedPointer<rdf::AssociationGraphNode> n1, const QSharedPointer<rdf::AssociationGraphNode> n2);
 
 	protected:
 		int mCellIdx = 1;
@@ -157,6 +158,7 @@ namespace rdf {
 		double mDistance = -1;
 
 		QVector<int> mAdjacencyNodesIdx;
+		QSet<int> mAn;
 
 	};
 

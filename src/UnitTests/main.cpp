@@ -136,6 +136,10 @@ int main(int argc, char** argv) {
 		tc.setXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn_003-01_0006.xml");
 		tc.setImagePath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/M_Aigen_am_Inn_003-01_0006.jpg");
 
+		//tc.setXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0003.xml");
+		//tc.setImagePath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/RM_Freyung_028_0003.jpg");
+		//tc.setTemplateXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0001.xml");
+
 		rdf::TableTest tt(tc);
 		
 		if (!tt.match())
