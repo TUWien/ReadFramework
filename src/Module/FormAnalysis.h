@@ -132,8 +132,8 @@ namespace rdf {
 		int cellIdx() const;
 
 		QVector<int> adjacencyNodes() const;
-		QSet<int> adjacencyNodesSet() const;
-		void createAdjacencyNodesSet();
+		//QSet<int> adjacencyNodesSet() const;
+		//void createAdjacencyNodesSet();
 		void addAdjacencyNode(int idx);
 		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
 		void clearAdjacencyList();
@@ -201,9 +201,10 @@ namespace rdf {
 		QVector<QSet<int>> getMaxCliqueHor() const;
 		QVector<QSet<int>> getMaxCliqueVer() const;
 
-		QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
+		
 		bool matchTemplate();
-		rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
+		//QVector<QSharedPointer<rdf::TableCellRaw>> findLineCandidatesForCells(QVector<QSharedPointer<rdf::TableCellRaw>> cellR);
+		//rdf::Line findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal = true);
 		rdf::LineCandidates findLineCandidates(rdf::Line l, double distThreshold, bool horizontal = true);
 		//0: left 1: right 2; upper 3: bottom
 		double findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR, int cellIdx, int neighbour);
