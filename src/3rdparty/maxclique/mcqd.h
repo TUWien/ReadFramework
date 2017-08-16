@@ -27,6 +27,11 @@
 #include <iostream>
 #include <algorithm>
 #include <assert.h>
+
+#pragma warning(push, 0)	// no warnings from includes
+#include <QDebug>
+#pragma warning(pop)
+
 #ifdef DBG
 using namespace std;
 #endif
@@ -84,7 +89,7 @@ class Maxclique {
     ColorClass(const int sz) : sz(sz), i(0) { init(sz); }
     ~ColorClass() { if (i) delete [] i;
     }
-    void init(const int sz) { i = new int[sz]; rewind(); }
+    void init(const int sz2) { i = new int[sz2]; rewind(); }
     void push(const int ii) { i[sz++] = ii; };
     void pop() { sz--; };
     void rewind() { sz = 0; };
@@ -247,7 +252,7 @@ void Maxclique::expand(Vertices R) {
         expand(Rp);
       }
       else if (Q.size() > QMAX.size()) { 
-        std::cout << "step = " << pk << " current max. clique size = " << Q.size() << std::endl; 
+        qDebug() << "step = " << pk << " current max. clique size = " << Q.size(); 
 	QMAX = Q;
       }    
       Rp.dispose();
