@@ -187,6 +187,11 @@ namespace rdf {
 			return false;
 		}
 
+		if (mSrcImg.channels() != 1) {
+			cv::cvtColor(mSrcImg, mSrcImg, CV_RGB2GRAY);
+		}
+
+
 		return true;
 	}
 

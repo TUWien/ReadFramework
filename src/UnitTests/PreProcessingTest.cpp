@@ -35,6 +35,7 @@
 #include "Binarization.h"		// tested
 #include "SkewEstimation.h"		// tested
 #include "FormAnalysis.h"		// tested
+#include "GradientVector.h"
 
 #include "Image.h"
 #include "Utils.h"
@@ -145,6 +146,44 @@ bool PreProcessingTest::skew() const {
 	rdf::Image::save(rImg, rdf::Utils::createFilePath(dstPath, "-tls-debug"));
 
 	qDebug() << "rotated images written to" << dstPath;
+
+	return true;
+}
+
+bool PreProcessingTest::gradient() const {
+
+	cv::Mat img;
+	if (!load(img))
+		return false;
+
+	GradientVector gradients(img);
+	if (!gradients.compute()) {
+		return false;
+	}
+
+	cv::Mat mag = gradients.magImg();
+	cv::Mat rad = gradients.radImg();
+
+	cv::normalize(mag, mag, 255, 0, cv::NORM_MINMAX);
+	mag.convertTo(mag, CV_8U);
+	if (mag.channels() == 1) {
+		cv::cvtColor(mag, mag, CV_GRAY2RGB);
+	}
+
+	cv::normalize(rad, rad, 255, 0, cv::NORM_MINMAX);
+	mag.convertTo(rad, CV_8U);
+	if (rad.channels() == 1) {
+		cv::cvtColor(rad, rad, CV_GRAY2RGB);
+	}
+
+	// -------------------------------------------------------------------- drawing
+	QString fn = QFileInfo(mConfig.imagePath()).baseName() + ".jpg";
+	QString dstPath = QFileInfo(rdf::Config::global().workingDir(), fn).absoluteFilePath();
+
+	rdf::Image::save(mag, rdf::Utils::createFilePath(dstPath, "-mag"));
+	rdf::Image::save(rad, rdf::Utils::createFilePath(dstPath, "-rad"));
+
+	qDebug() << "gradient images written to" << dstPath;
 
 	return true;
 }

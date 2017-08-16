@@ -128,6 +128,9 @@ int main(int argc, char** argv) {
 		if (!ppt.skew())
 			return 1;	// fail the test
 
+		if (!ppt.gradient())
+			return 1;	// fail the test
+
 
 	} else if (parser.isSet(tableOpt)) {
 		//parser.showHelp();

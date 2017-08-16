@@ -54,6 +54,7 @@ public:
 
 	bool binarize() const;
 	bool skew() const;
+	bool gradient() const;
 
 protected:
 	TestConfig mConfig;
