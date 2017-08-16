@@ -38,6 +38,7 @@
 #include "PageParser.h"
 #include "Elements.h"
 #include "ImageProcessor.h"
+#include "maxclique/mcqd.h"
 
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -1256,11 +1257,73 @@ bool FormFeatures::matchTemplate() {
 	//create AssociationGraph
 	createAssociationGraph();
 
+	int sizeVer = mANodesVertical.size();
+	int sizeHor = mANodesHorizontal.size();
+
+
 	qDebug() << "find maximal cliques...";
-	//find maximal cliques
-	mMinGraphSizeHor /= 2;
-	mMinGraphSizeVer /= 2;
-	findMaxCliques();
+	//vertical adjacencyMatrix
+	bool **ppAdjacencyMatrixVer = new bool*[sizeVer];
+	for (int i = 0; i < sizeVer; i++) {
+		ppAdjacencyMatrixVer[i] = new bool[sizeVer];
+		memset(ppAdjacencyMatrixVer[i], 0, sizeVer * sizeof(bool));
+	}
+	for (int adVer = 0; adVer < mANodesVertical.size(); adVer++) {
+
+		QVector<int> neighbours = mANodesVertical[adVer]->adjacencyNodes();
+		for (int n = 0; n < neighbours.size(); n++) {
+			ppAdjacencyMatrixVer[adVer][neighbours[n]] = true;
+			ppAdjacencyMatrixVer[neighbours[n]][adVer] = true;
+		}
+
+	}
+	
+	Maxclique m(ppAdjacencyMatrixVer, sizeVer);
+	int *qmax;
+	int qsize;
+	m.mcq(qmax, qsize);
+	QSet<int> mCl;
+	for (int iN = 0; iN < qsize; iN++) {
+		mCl.insert(qmax[iN]);
+	}
+	mMaxCliquesVer.push_back(mCl);
+	////test - faster?
+	//Maxclique m2(ppAdjacencyMatrixVer, sizeVer);
+	//m2.mcqdyn(qmax, qsize);
+
+	//horizontal adjacencyMatrix
+	bool **ppAdjacencyMatrixHor = new bool*[sizeHor];
+	for (int i = 0; i < sizeHor; i++) {
+		ppAdjacencyMatrixHor[i] = new bool[sizeHor];
+		memset(ppAdjacencyMatrixHor[i], 0, sizeHor * sizeof(bool));
+	}
+	for (int adVer = 0; adVer < mANodesHorizontal.size(); adVer++) {
+
+		QVector<int> neighbours = mANodesHorizontal[adVer]->adjacencyNodes();
+		for (int n = 0; n < neighbours.size(); n++) {
+			ppAdjacencyMatrixHor[adVer][neighbours[n]] = true;
+			ppAdjacencyMatrixHor[neighbours[n]][adVer] = true;
+		}
+
+	}
+
+	Maxclique mHor(ppAdjacencyMatrixHor, sizeHor);
+	delete(qmax);
+	mHor.mcq(qmax, qsize);
+	QSet<int> mClH;
+	for (int iN = 0; iN < qsize; iN++) {
+		mClH.insert(qmax[iN]);
+	}
+	mMaxCliquesHor.push_back(mClH);
+	delete(qmax);
+
+
+
+	//qDebug() << "find maximal cliques...";
+	////find maximal cliques
+	//mMinGraphSizeHor /= 2;
+	//mMinGraphSizeVer /= 2;
+	//findMaxCliques();
 	
 	mCellsR = cellsR;
 

@@ -39,6 +39,7 @@ add_library(
 	${MODULE_SOURCES} ${MODULE_HEADERS} 	# modules
 	${GC_HEADERS} ${GC_SOURCES} 			# graph-cut
 	${LSD_HEADERS} ${LSD_SOURCES} 			# LSD
+	${MC_HEADERS} ${MC_SOURCES} 			# LSD
 	${RDF_RC}
 	)
 target_link_libraries(${RDF_DLL_CORE_NAME} ${VERSION_LIB} ${OpenCV_LIBS}) 
@@ -87,6 +88,7 @@ if (MSVC)
 	source_group("Generated Files" FILES ${RDF_RC} ${RDF_QM} ${RDF_AUTOMOC})
 	source_group("graphcut" FILES ${GC_HEADERS} ${GC_SOURCES})
 	source_group("LSD" FILES ${LSD_HEADERS} ${LSD_SOURCES})
+	source_group("maxclique" FILES ${MC_HEADERS} ${MC_SOURCES})
 	source_group("Changelog" FILES ${CHANGLOG_FILE})
 
 	# set as console project 

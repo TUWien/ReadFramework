@@ -94,6 +94,10 @@ file(GLOB GC_HEADERS "src/3rdparty/graphcut/*.h")
 file(GLOB LSD_SOURCES "src/3rdparty/lsd/*.cpp")
 file(GLOB LSD_HEADERS "src/3rdparty/lsd/*.h")
 
+# external headers
+file(GLOB MC_SOURCES "src/3rdparty/maxclique/*.cpp")
+file(GLOB MC_HEADERS "src/3rdparty/maxclique/*.h")
+
 # gather information for building
 include_directories (
 	${CMAKE_BINARY_DIR}
