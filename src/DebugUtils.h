@@ -66,9 +66,13 @@ public:
 	void setFeatureCachePath(const QString& path);
 	QString featureCachePath() const;
 
+	void setTableTemplate(const QString& tableTemplate);
+	QString tableTemplate() const;
+
 protected:
 	QString mImagePath;
 	QString mXMLPath;
+	QString mXMLTableTemplate;
 	QString mOutputPath;
 	QString mClassifierPath;
 	QString mFeatureCachePath;

@@ -98,4 +98,12 @@ QString DebugConfig::featureCachePath() const {
 	return mFeatureCachePath;
 }
 
+void DebugConfig::setTableTemplate(const QString & tableTemplate) {
+	mXMLTableTemplate = tableTemplate;
+}
+
+QString DebugConfig::tableTemplate() const {
+	return mXMLTableTemplate;
+}
+
 }

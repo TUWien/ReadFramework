@@ -91,8 +91,8 @@ int main(int argc, char** argv) {
 	parser.addOption(outputOpt);
 
 	// developer
-	QCommandLineOption devOpt(QStringList() << "d" << "developer", QObject::tr("Developer name. For Baseline detection use [-d sebastian]"), "name");
-	parser.addOption(devOpt);
+	QCommandLineOption modeOpt(QStringList() << "m" << "mode", QObject::tr("Mode defines the methodology. For Baseline detection use [-d sebastian]"), "name");
+	parser.addOption(modeOpt);
 
 	// settings filename
 	QCommandLineOption settingOpt(QStringList() << "s" << "setting", QObject::tr("Settings filepath."), "filepath");
@@ -109,6 +109,10 @@ int main(int argc, char** argv) {
 	// label config path
 	QCommandLineOption labelConfigPathOpt(QStringList() << "l" << "label config", QObject::tr("Label config path for training."), "filepath");
 	parser.addOption(labelConfigPathOpt);
+
+	// table template path
+	QCommandLineOption xmlTableOpt(QStringList() << "t" << "xml", QObject::tr("Path to PAGE xml of table template. Table must be specified"), "templatepath");
+	parser.addOption(xmlTableOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -153,20 +157,31 @@ int main(int argc, char** argv) {
 	if (parser.isSet(labelConfigPathOpt))
 		dc.setLabelConfigPath(parser.value(labelConfigPathOpt));
 
+	// add table template
+	if (parser.isSet(xmlTableOpt))
+		dc.setTableTemplate(parser.value(xmlTableOpt));
+
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
 
 	if (!dc.imagePath().isEmpty()) {
 
 		// flos section
-		if (parser.isSet(devOpt) && parser.value(devOpt) == "flo") {
+		if (parser.isSet(modeOpt) && parser.value(modeOpt) == "binarization") {
 			// TODO do what ever you want
-			qDebug() << "starting flos debug code ...";
+			qDebug() << "starting binarization ...";
 			rdf::BinarizationTest test(dc);
 			test.binarizeTest();
 		}
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "table") {
+			qDebug() << "starting table matching ... (not yet)";
+			//TODO table
+			rdf::BinarizationTest test(dc);
+			test.binarizeTest();
+		}
+
 		// stefans section
-		else if (parser.isSet(devOpt) && parser.value(devOpt) == "stefan") {
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "stefan") {
 			// TODO do what ever you want
 			qDebug() << "loading stefan's debug code";
 
@@ -174,21 +189,21 @@ int main(int argc, char** argv) {
 			twr.run();
 		}
 		// sebastians section
-		else if (parser.isSet(devOpt) && parser.value(devOpt) == "sebastian") {
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "layout") {
 			qDebug() << "Starting layout analysis...";
 
 			rdf::LayoutTest lt(dc);
 			lt.layoutToXml();
 		}
 		// thomas
-		else if (parser.isSet(devOpt) && parser.value(devOpt) == "thomas") {
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "thomas") {
 			qDebug() << "thomas";
 			rdf::ThomasTest test(dc);
 			test.test();
 		}
 		// my section
 		else {
-			qDebug() << "Servus Markus...";
+			qDebug() << "Hütt nett...";
 			//rdf::XmlTest test(dc);
 			//test.parseXml();
 			//test.linesToXml();
