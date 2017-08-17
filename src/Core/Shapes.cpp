@@ -2096,6 +2096,30 @@ rdf::Line LineCandidates::mergedLine() {
 	return rdf::Line();
 }
 
+rdf::Line LineCandidates::mergeLines(const QVector<rdf::Line>& l) {
+
+	////rdf::LineCandidates tmpCand = cellsR[cellIdx]->leftLineC();
+	QVector<int> cand;
+	cand = sortByOverlap();
+
+	rdf::Line newLine;
+	for (int i = 0; i < cand.size(); i++) {
+		rdf::Line tmpLine = l[cand[i]];
+		if (newLine.isEmpty()) {
+			newLine = tmpLine;
+		}
+		else {
+			double dist = newLine.distance(tmpLine.p1()) < newLine.distance(tmpLine.p2()) ? newLine.distance(tmpLine.p1()) : newLine.distance(tmpLine.p2());
+			if (dist < 20) {
+				//line is colinear
+				newLine = newLine.merge(tmpLine);
+			}
+		}
+	}
+
+	return newLine;
+}
+
 QVector<int> LineCandidates::sortByOverlap() {
 
 	//double refLength = mReferenceLine.length();
@@ -2360,6 +2384,10 @@ void TableCellRaw::addLineCandidateLeft(LineCandidates l) {
 
 }
 
+void TableCellRaw::clearLineCandidatesLeft() {
+	mLeftLine.clear();
+}
+
 void TableCellRaw::setLineCandidatesRightLine(LineCandidates l) {
 	mRightLine = l;
 }
@@ -2384,6 +2412,10 @@ void TableCellRaw::addLineCandidateRight(LineCandidates l) {
 		mRightLine.addLineCandidate(l);
 	}
 
+}
+
+void TableCellRaw::clearLineCandidatesRight() {
+	mRightLine.clear();
 }
 
 void TableCellRaw::setLineCandidatesTopLine(LineCandidates l) {
@@ -2411,6 +2443,10 @@ void TableCellRaw::addLineCandidateTop(LineCandidates l) {
 	}
 }
 
+void TableCellRaw::clearLineCandidatesTop() {
+	mTopLine.clear();
+}
+
 void TableCellRaw::setLineCandidatesBottomLine(LineCandidates l) {
 	mBottomLine = l;
 }
@@ -2434,6 +2470,10 @@ void TableCellRaw::addLineCandidateBottom(LineCandidates l) {
 	} else {
 		mBottomLine.addLineCandidate(l);
 	}
+}
+
+void TableCellRaw::clearLineCandidatesBottom() {
+	mBottomLine.clear();
 }
 
 

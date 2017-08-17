@@ -544,7 +544,7 @@ public:
 	void addLineCandidate(LineCandidates lc);
 
 	rdf::Line mergedLine();
-
+	rdf::Line mergeLines(const QVector<rdf::Line> &l);
 	QVector<int> sortByOverlap();
 	QVector<int> sortByDistance();
 
@@ -623,24 +623,28 @@ public:
 	void setRefLineLeft(Line l);
 	void addLineCandidateLeft(Line c, int lIdx);
 	void addLineCandidateLeft(LineCandidates l);
+	void clearLineCandidatesLeft();
 
 	void setLineCandidatesRightLine(LineCandidates l);
 	LineCandidates rightLineC() const;
 	void setRefLineRight(Line l);
 	void addLineCandidateRight(Line c, int lIdx);
 	void addLineCandidateRight(LineCandidates l);
+	void clearLineCandidatesRight();
 
 	void setLineCandidatesTopLine(LineCandidates l);
 	LineCandidates topLineC() const;
 	void setRefLineTop(Line l);
 	void addLineCandidateTop(Line c, int lIdx);
 	void addLineCandidateTop(LineCandidates l);
+	void clearLineCandidatesTop();
 
 	void setLineCandidatesBottomLine(LineCandidates l);
 	LineCandidates bottomLineC() const;
 	void setRefLineBottom(Line l);
 	void addLineCandidateBottom(Line c, int lIdx);
 	void addLineCandidateBottom(LineCandidates l);
+	void clearLineCandidatesBottom();
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
