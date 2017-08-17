@@ -41,17 +41,20 @@
 #include "Shapes.h"
 #include "LineTrace.h"
 #include "FormAnalysis.h"
+#include "PageParser.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QDebug>
-#include <QDebug>
+#include <QDir>
 #include <QImage>
 #include <QFileInfo>
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv/highgui.h>
+#include <opencv2/ml.hpp>
 #pragma warning(pop)
+
 
 namespace rdf {
 
@@ -256,5 +259,106 @@ namespace rdf {
 			qDebug() << "no save path";
 		}
 	}
+
+
+
+	TableTest::TableTest(const DebugConfig & config) {
+
+		mConfig = config;
+
+	}
+
+	bool TableTest::match() const {
+
+		cv::Mat imgForm;
+		rdf::PageXmlParser parser;
+
+		if (!load(imgForm))
+			return false;
+
+
+		cv::Mat imgFormG = imgForm;
+		if (imgForm.channels() != 1)
+			cv::cvtColor(imgForm, imgFormG, CV_RGB2GRAY);
+		//cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
+		rdf::FormFeatures formF(imgFormG);
+		formF.setFormName("testForm");
+		formF.setSize(imgFormG.size());
+
+		if (mConfig.tableTemplate().isEmpty())
+			return false;
+
+		//TODO check if tableTemplate is correct
+		QFileInfo tmpInfo(mConfig.tableTemplate()); //tmpInfo.filePath();
+		formF.setTemplateName(mConfig.tableTemplate());
+
+		QSharedPointer<rdf::FormFeaturesConfig> tmpConfig(new rdf::FormFeaturesConfig());
+		//(*tmpConfig) = mFormConfig;
+		tmpConfig->setTemplDatabase(mConfig.tableTemplate());
+		formF.setConfig(tmpConfig);
+
+		//rdf::FormFeatures formTemplate;
+		QSharedPointer<rdf::FormFeatures> formTemplate(new rdf::FormFeatures());
+		if (!formF.readTemplate(formTemplate)) {
+			qWarning() << "no template set - aborting";
+			qInfo() << "please provide a template Plugins > Read Config > Form Analysis > lineTemplPath";
+			return false;
+		}
+
+
+		if (!formF.compute()) {
+			qWarning() << "could not compute form template " << mConfig.imagePath();
+			qInfo() << "could not compute form template";
+			return false;
+		}
+
+		qDebug() << "Compute rough alignment...";
+		formF.estimateRoughAlignment();
+
+		cv::Mat drawImg = imgForm.clone();
+		cv::cvtColor(drawImg, drawImg, CV_RGBA2BGR);
+		cv::Mat resultImg;// = imgForm;
+
+		resultImg = formF.drawAlignment(drawImg);
+
+		if (!resultImg.empty()) {
+			qDebug() << "Match template...";
+			formF.matchTemplate();
+
+		}
+
+		return true;
+	}
+
+
+	bool TableTest::load(cv::Mat& img) const {
+
+		QImage qImg = Image::load(mConfig.imagePath());
+
+		if (qImg.isNull()) {
+			qWarning() << "could not load image from" << mConfig.imagePath();
+			return false;
+		}
+
+		// convert image
+		img = Image::qImage2Mat(qImg);
+
+		return true;
+	}
+
+	bool TableTest::load(rdf::PageXmlParser& parser) const {
+
+		// load XML
+		parser.read(mConfig.xmlPath());
+
+		// fail if the XML was not loaded
+		if (parser.loadStatus() != PageXmlParser::status_ok) {
+			qWarning() << "could not load XML from" << mConfig.xmlPath();
+			return false;
+		}
+
+		return true;
+	}
+
 
 }

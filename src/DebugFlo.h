@@ -35,7 +35,13 @@
 #include "DebugUtils.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+ // Qt Includes
+//#include <QDebug>
+//#include <QDir>
+//#include <QImage>
+//#include <QFileInfo>
+#include <opencv2/core.hpp>
+
 #pragma warning(pop)
 
 // TODO: add DllExport magic
@@ -43,6 +49,8 @@
 // Qt defines
 
 namespace rdf {
+
+class PageXmlParser;
 
 // read defines
 class BinarizationTest {
@@ -54,6 +62,24 @@ public:
 
 protected:
 	DebugConfig mConfig;
+
+};
+
+
+
+// read defines
+class TableTest {
+
+public:
+	TableTest(const DebugConfig& config = DebugConfig());
+
+	bool match() const;
+
+protected:
+	DebugConfig mConfig;
+
+	bool load(cv::Mat& img) const;
+	bool load(rdf::PageXmlParser& parser) const;
 
 };
 

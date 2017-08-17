@@ -176,8 +176,9 @@ int main(int argc, char** argv) {
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "table") {
 			qDebug() << "starting table matching ... (not yet)";
 			//TODO table
-			rdf::BinarizationTest test(dc);
-			test.binarizeTest();
+			rdf::TableTest test(dc);
+			test.match();
+
 		}
 
 		// stefans section
@@ -261,7 +262,6 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		//dc.setXmlPath("C:/temp/T_Aigen_am_Inn_001_0056.xml");
 		qInfo() << dc.xmlPath() << "added as XML path";
 	} 
-
 
 	// add your debug overwrites here...
 }
