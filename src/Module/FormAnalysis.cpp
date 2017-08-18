@@ -2571,8 +2571,10 @@ cv::Size FormFeatures::sizeImg() const
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
 				//horizontal distances
-				double dm = std::abs(m1.center().x() - m2.center().x());
-				double dref = std::abs(ref1.center().x() - ref2.center().x());
+				//double dm = std::abs(m1.center().x() - m2.center().x()); //-> can cause too much variation
+				double dm = std::min(m1.distance(m2.center()), m2.distance(m1.center()));
+				double dref = std::abs(ref1.center().x() - ref2.center().x()); 
+				//double dref = std::min(ref1.distance(ref2.center()), ref2.distance(ref1.center()));
 
 				//reference line has same horizontal position (colinear lines), but belongs to a different cell
 
@@ -2627,8 +2629,10 @@ cv::Size FormFeatures::sizeImg() const
 				m1.sortEndpoints(horizontal);
 				m2.sortEndpoints(horizontal);
 				//vertical distances
-				double dm = std::abs(m1.center().y() - m2.center().y());
+				//double dm = std::abs(m1.center().y() - m2.center().y()); //can cause too much variation
+				double dm = std::min(m1.distance(m2.center()), m2.distance(m1.center()));
 				double dref = std::abs(ref1.center().y() - ref2.center().y());
+				//double dref = std::min(ref1.distance(ref2.center()), ref2.distance(ref1.center()));
 
 				//reference line has same vertical position (colinear), but belongs to a different cell
 								
