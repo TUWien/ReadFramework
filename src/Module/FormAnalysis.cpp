@@ -790,12 +790,6 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 
 	if (!img.empty()) {
 		cv::Mat tmp = img.clone();
-		if (tmp.channels() == 1) {
-			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
-		}
-		else {
-			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0));
-		}
 
 		QVector<rdf::Line> neighb, tmpL;
 		int nodeC = 0;
@@ -803,7 +797,7 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 		switch (lp) {
 		case AssociationGraphNode::LinePosition::pos_left:
 		case AssociationGraphNode::LinePosition::pos_right:
-
+			vLines.clear();
 			for (int i = 0; i < mANodesVertical.size(); i++) {
 				if (mANodesVertical[i]->cellIdx() == cellIdx && mANodesVertical[i]->linePosition() == lp) {
 					nodeC++;
@@ -811,7 +805,9 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 						QVector<int> nNeighbourLines = mANodesVertical[i]->adjacencyNodes();
 						for (int j = 0; j < nNeighbourLines.size(); j++) {
 							rdf::Line newLine(mANodesVertical[i]->matchedLine().center(), mANodesVertical[nNeighbourLines[j]]->matchedLine().center(), t);
+							rdf::Line newLine2 = mANodesVertical[nNeighbourLines[j]]->matchedLine(); newLine2.setThickness(t);
 							neighb.push_back(newLine);
+							vLines.push_back(newLine2);
 						}
 					}
 					
@@ -821,7 +817,7 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 			break;
 		case AssociationGraphNode::LinePosition::pos_bottom:
 		case AssociationGraphNode::LinePosition::pos_top:
-
+			hLines.clear();
 			for (int i = 0; i < mANodesHorizontal.size(); i++) {
 				if (mANodesHorizontal[i]->cellIdx() == cellIdx && mANodesHorizontal[i]->linePosition() == lp) {
 					nodeC++;
@@ -829,7 +825,9 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 						QVector<int> nNeighbourLines = mANodesHorizontal[i]->adjacencyNodes();
 						for (int j = 0; j < nNeighbourLines.size(); j++) {
 							rdf::Line newLine(mANodesHorizontal[i]->matchedLine().center(), mANodesHorizontal[nNeighbourLines[j]]->matchedLine().center(), t);
+							rdf::Line newLine2 = mANodesHorizontal[nNeighbourLines[j]]->matchedLine(); newLine2.setThickness(t);
 							neighb.push_back(newLine);
+							hLines.push_back(newLine2);
 						}
 					}
 				}
@@ -838,6 +836,13 @@ cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode:
 			break;
 		default:
 			break;
+		}
+		//draw matched lines
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+		}
+		else {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0));
 		}
 		//draw neighbours
 		if (tmp.channels() == 1) {
