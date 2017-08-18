@@ -771,6 +771,93 @@ cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t, int idx) {
 	}
 }
 
+cv::Mat FormFeatures::drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode::LinePosition lp, int nodeCnt, cv::Mat img, float t) {
+	QVector<rdf::Line> hLines, vLines;
+	//create line vectors
+
+	//hLines = notUsedHorLines();
+	//vLines = notUseVerLines();
+
+	hLines = mHorLines;
+	vLines = mVerLines;
+
+	for (auto i : hLines) {
+		i.setThickness(t);
+	}
+	for (auto i : vLines) {
+		i.setThickness(t);
+	}
+
+	if (!img.empty()) {
+		cv::Mat tmp = img.clone();
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+		}
+		else {
+			rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0));
+		}
+
+		QVector<rdf::Line> neighb, tmpL;
+		int nodeC = 0;
+
+		switch (lp) {
+		case AssociationGraphNode::LinePosition::pos_left:
+		case AssociationGraphNode::LinePosition::pos_right:
+
+			for (int i = 0; i < mANodesVertical.size(); i++) {
+				if (mANodesVertical[i]->cellIdx() == cellIdx && mANodesVertical[i]->linePosition() == lp) {
+					nodeC++;
+					if (nodeCnt == nodeC || nodeCnt == -1) {
+						QVector<int> nNeighbourLines = mANodesVertical[i]->adjacencyNodes();
+						for (int j = 0; j < nNeighbourLines.size(); j++) {
+							rdf::Line newLine(mANodesVertical[i]->matchedLine().center(), mANodesVertical[nNeighbourLines[j]]->matchedLine().center(), t);
+							neighb.push_back(newLine);
+						}
+					}
+					
+				}
+			}
+
+			break;
+		case AssociationGraphNode::LinePosition::pos_bottom:
+		case AssociationGraphNode::LinePosition::pos_top:
+
+			for (int i = 0; i < mANodesHorizontal.size(); i++) {
+				if (mANodesHorizontal[i]->cellIdx() == cellIdx && mANodesHorizontal[i]->linePosition() == lp) {
+					nodeC++;
+					if (nodeCnt == nodeC || nodeCnt == -1) {
+						QVector<int> nNeighbourLines = mANodesHorizontal[i]->adjacencyNodes();
+						for (int j = 0; j < nNeighbourLines.size(); j++) {
+							rdf::Line newLine(mANodesHorizontal[i]->matchedLine().center(), mANodesHorizontal[nNeighbourLines[j]]->matchedLine().center(), t);
+							neighb.push_back(newLine);
+						}
+					}
+				}
+			}
+
+			break;
+		default:
+			break;
+		}
+		//draw neighbours
+		if (tmp.channels() == 1) {
+			rdf::LineTrace::generateLineImage(neighb, tmpL, tmp, cv::Scalar(255), cv::Scalar(255));
+		}
+		else {
+			rdf::LineTrace::generateLineImage(neighb, tmpL, tmp, cv::Scalar(255, 0, 0), cv::Scalar(0, 0, 0));
+		}
+
+
+		return	tmp;
+	}
+	else {
+		cv::Mat tmp = mSrcImg.clone();
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255), cv::Scalar(255));
+
+		return tmp;
+	}
+}
+
 QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
 
 
