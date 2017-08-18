@@ -463,6 +463,11 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	if (detHeader)
 		qDebug() << "detected header...";
 
+	if (cells.size() == 0) {
+		qWarning() << " no table in template specified ...";
+		return false;
+	}
+
 	std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
 	templateForm->setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
@@ -1368,8 +1373,10 @@ QVector<QSet<int>> FormFeatures::getMaxCliqueVer() const {
 
 bool FormFeatures::matchTemplate() {
 
-	if (mTemplateForm.isNull())
+	if (mTemplateForm.isNull()) {
+		qWarning() << "no template provided in matchTemplate";
 		return false;
+	}
 	
 	QVector<QSharedPointer<rdf::TableCell>> cells = mTemplateForm->cells();
 	QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());

@@ -68,10 +68,10 @@ protected:
 
 
 // read defines
-class TableTest {
+class TableProcessing {
 
 public:
-	TableTest(const DebugConfig& config = DebugConfig());
+	TableProcessing(const DebugConfig& config = DebugConfig());
 
 	bool match() const;
 

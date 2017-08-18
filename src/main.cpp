@@ -176,8 +176,8 @@ int main(int argc, char** argv) {
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "table") {
 			qDebug() << "starting table matching ... (not yet)";
 			//TODO table
-			rdf::TableTest test(dc);
-			test.match();
+			rdf::TableProcessing tableproc(dc);
+			tableproc.match();
 
 		}
 
