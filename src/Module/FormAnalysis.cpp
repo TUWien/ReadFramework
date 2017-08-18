@@ -1115,7 +1115,7 @@ void FormFeatures::createAssociationGraph() {
 		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesVertical.size(); compareNodeIdx++) {
 
 			//test if nodes can be associated
-			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx])) {
+			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx], config()->coLinearityThr(), config()->variationThr())) {
 				mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
 				mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 			}
@@ -1127,7 +1127,7 @@ void FormFeatures::createAssociationGraph() {
 		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
 
 			//test if nodes can be associated
-			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx])) {
+			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx], config()->coLinearityThr(), config()->variationThr())) {
 				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
 				mANodesHorizontal[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 			}
@@ -2361,12 +2361,12 @@ cv::Size FormFeatures::sizeImg() const
 	FormFeaturesConfig::FormFeaturesConfig() {
 		mModuleName = "FormFeatures";
 	}
-	double FormFeaturesConfig::threshLineLenRation() const	{
-		return mThreshLineLenRatio;
-	}
-	void FormFeaturesConfig::setThreshLineLenRation(double s)	{
-		mThreshLineLenRatio = s;
-	}
+	//double FormFeaturesConfig::threshLineLenRation() const	{
+	//	return mThreshLineLenRatio;
+	//}
+	//void FormFeaturesConfig::setThreshLineLenRation(double s)	{
+	//	mThreshLineLenRatio = s;
+	//}
 
 	double FormFeaturesConfig::distThreshold() const	{
 		return mDistThreshold;
@@ -2384,13 +2384,29 @@ cv::Size FormFeatures::sizeImg() const
 		mErrorThr = e;
 	}
 
-	int FormFeaturesConfig::searchXOffset() const	{
-		return mSearchXOffset;
+	double FormFeaturesConfig::variationThr() const 	{
+		return mVariationThr;
 	}
 
-	int FormFeaturesConfig::searchYOffset() const	{
-		return mSearchYOffset;
+	void FormFeaturesConfig::setVariationThr(double v) 	{
+		mVariationThr = v;
 	}
+
+	double FormFeaturesConfig::coLinearityThr() const 	{
+		return mColinearityThreshold;
+	}
+
+	void FormFeaturesConfig::setCoLinearityThr(double c) 	{
+		mColinearityThreshold = c;
+	}
+
+	//int FormFeaturesConfig::searchXOffset() const	{
+	//	return mSearchXOffset;
+	//}
+
+	//int FormFeaturesConfig::searchYOffset() const	{
+	//	return mSearchYOffset;
+	//}
 
 	bool FormFeaturesConfig::saveChilds() const {
 		return mSaveChilds;
@@ -2410,27 +2426,39 @@ cv::Size FormFeatures::sizeImg() const
 
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
-		msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
-		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
-		msg += "  mErrorThr: " + QString::number(mErrorThr);
+		//msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
 		msg += "  mformTemplate: " + mTemplDatabase;
+		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
+		msg += "  mColinearityThr: " + QString::number(mColinearityThreshold);
+		//msg += "  mErrorThr: " + QString::number(mErrorThr);
+		msg += "  mVariationThr: " + QString::number(mVariationThr);
 		msg += "  mSaveChilds: " + mSaveChilds;
 		return msg;
 	}
 	
+	//double mDistThreshold = 30.0;
+	double mDistThreshold = 200.0;			//threshold is set dynamically - fallback value to find line candidates within mDistThreshold
+	double mColinearityThreshold = 20;		//up to which distance a line is colinear
+	double mErrorThr = 15.0;				//currently not used
+	double mVariationThr = 0.2;
+
 	void FormFeaturesConfig::load(const QSettings & settings)	{
-		mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
-		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
-		mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
+		//mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
+		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
+		//mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
+		mColinearityThreshold = settings.value("colinearityThreshold", mColinearityThreshold).toDouble();
+		mVariationThr = settings.value("variationThreshold", mVariationThr).toDouble();
 		mSaveChilds = settings.value("saveChilds", mSaveChilds).toBool();
 	}
 
 	void FormFeaturesConfig::save(QSettings & settings) const	{
-		settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
-		settings.setValue("distThreshold", mDistThreshold);
-		settings.setValue("errorThr", mErrorThr);
+		//settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("formTemplate", mTemplDatabase);
+		settings.setValue("distThreshold", mDistThreshold);
+		//settings.setValue("errorThr", mErrorThr);
+		settings.setValue("colinearityThreshold", mColinearityThreshold);
+		settings.setValue("variationThreshold", mVariationThr);
 		settings.setValue("saveChilds", mSaveChilds);
 
 	}
@@ -2535,10 +2563,10 @@ cv::Size FormFeatures::sizeImg() const
 		mAdjacencyNodesIdx.push_back(idx);
 	}
 
-	bool AssociationGraphNode::testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold) {
+	bool AssociationGraphNode::testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold, double variationThr) {
 
 		bool horizontal = mLinePos == LinePosition::pos_top || mLinePos == LinePosition::pos_bottom ? true : false;
-
+		
 		//same reference line (same cell and same line position for the reference line - two different matched lines)
 		if (mCellIdx == neighbour->cellIdx() && mLinePos == neighbour->linePosition()) {
 
@@ -2603,7 +2631,7 @@ cv::Size FormFeatures::sizeImg() const
 
 				}
 				else {
-					if (dref*0.8 < dm && dm < dref*1.2) {
+					if (dref*(1.0-variationThr) < dm && dm < dref*(1.0+variationThr)) {
 						//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
 						//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
 						//reference line is left from second reference line, same must apply to matched lines
@@ -2662,7 +2690,7 @@ cv::Size FormFeatures::sizeImg() const
 				else {
 					//reference line has different vertical position
 					//allow only a certain variation
-					if (dref*0.8 < dm && dm < dref*1.2) {
+					if (dref*(1.0 - variationThr) < dm && dm < dref*(1.0 + variationThr)) {
 						//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
 						//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
 						//reference line is above from second reference line, same must apply to matched lines

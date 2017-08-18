@@ -52,8 +52,8 @@ namespace rdf {
 	public:
 		FormFeaturesConfig();
 
-		double threshLineLenRation() const;
-		void setThreshLineLenRation(double s);
+		//double threshLineLenRation() const;
+		//void setThreshLineLenRation(double s);
 
 		double distThreshold() const;
 		void setDistThreshold(double d);
@@ -61,8 +61,14 @@ namespace rdf {
 		double errorThr() const;
 		void setErrorThr(double e);
 
-		int searchXOffset() const;
-		int searchYOffset() const;
+		double variationThr() const;
+		void setVariationThr(double v);
+
+		double coLinearityThr() const;
+		void setCoLinearityThr(double c);
+
+		//int searchXOffset() const;
+		//int searchYOffset() const;
 
 		bool saveChilds() const;
 		void setSaveChilds(bool c);
@@ -80,15 +86,17 @@ namespace rdf {
 		//QString mTemplDatabase;
 		QString mTemplDatabase = QString("D:\\projects\\READ\\formTest\\form-gt\\Table_Template_M_Aigen-am-Inn_003_01\\page\\M_Aigen_am_Inn_003-01_0001.xml");
 
-		double mThreshLineLenRatio = 0.6;
+		//double mThreshLineLenRatio = 0.6;
 		//double mDistThreshold = 30.0;
-		double mDistThreshold = 100.0;
-		double mErrorThr = 15.0;
+		double mDistThreshold = 200.0;			//threshold is set dynamically - fallback value to find line candidates within mDistThreshold
+		double mColinearityThreshold = 20;		//up to which distance a line is colinear
+		double mErrorThr = 15.0;				//currently not used
+		double mVariationThr = 0.2;				//allowed variation for width/height of cells in %
 
 		bool mSaveChilds = false;
 
-		int mSearchXOffset = 200;
-		int mSearchYOffset = 200;
+		//int mSearchXOffset = 200;
+		//int mSearchYOffset = 200;
 
 	};
 
@@ -135,7 +143,7 @@ namespace rdf {
 		//QSet<int> adjacencyNodesSet() const;
 		//void createAdjacencyNodesSet();
 		void addAdjacencyNode(int idx);
-		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20);
+		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20, double variationThr = 0.2);
 		void clearAdjacencyList();
 
 		int degree() const;
