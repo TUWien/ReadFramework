@@ -61,8 +61,11 @@ namespace rdf {
 		double errorThr() const;
 		void setErrorThr(double e);
 
-		double variationThr() const;
-		void setVariationThr(double v);
+		double variationThrLower() const;
+		void setVariationThrLower(double v);
+
+		double variationThrUpper() const;
+		void setVariationThrUpper(double v);
 
 		double coLinearityThr() const;
 		void setCoLinearityThr(double c);
@@ -91,7 +94,8 @@ namespace rdf {
 		double mDistThreshold = 200.0;			//threshold is set dynamically - fallback value to find line candidates within mDistThreshold
 		double mColinearityThreshold = 20;		//up to which distance a line is colinear
 		double mErrorThr = 15.0;				//currently not used
-		double mVariationThr = 0.2;				//allowed variation for width/height of cells in %
+		double mVariationThrLower = 0.2;				//allowed variation for width/height of cells in % (lower bound)
+		double mVariationThrUpper = 0.3;				//allowed variation for width/height of cells in % (upper bound)
 
 		bool mSaveChilds = false;
 
@@ -143,7 +147,7 @@ namespace rdf {
 		//QSet<int> adjacencyNodesSet() const;
 		//void createAdjacencyNodesSet();
 		void addAdjacencyNode(int idx);
-		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20, double variationThr = 0.2);
+		bool testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold = 20, double variationThrLower = 0.2, double variationThrUpper = 0.2);
 		void clearAdjacencyList();
 
 		int degree() const;

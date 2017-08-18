@@ -1115,7 +1115,7 @@ void FormFeatures::createAssociationGraph() {
 		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesVertical.size(); compareNodeIdx++) {
 
 			//test if nodes can be associated
-			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx], config()->coLinearityThr(), config()->variationThr())) {
+			if (mANodesVertical[currentNodeIdx]->testAdjacency(mANodesVertical[compareNodeIdx], config()->coLinearityThr(), config()->variationThrLower(), config()->variationThrUpper())) {
 				mANodesVertical[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
 				mANodesVertical[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 			}
@@ -1127,7 +1127,7 @@ void FormFeatures::createAssociationGraph() {
 		for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
 
 			//test if nodes can be associated
-			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx], config()->coLinearityThr(), config()->variationThr())) {
+			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx], config()->coLinearityThr(), config()->variationThrLower(), config()->variationThrUpper())) {
 				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
 				mANodesHorizontal[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
 			}
@@ -1236,6 +1236,7 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 	for (it = maxVer.begin(); it != maxVer.end(); ++it) {
 		//qDebug() << "node: " << *it;
 		int cellIdx = mANodesVertical[*it]->cellIdx();
+		qDebug() << "ver Clique Idx: " << *it;
 		//add matched Line
 		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_left) {
 			mCellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
@@ -2384,12 +2385,20 @@ cv::Size FormFeatures::sizeImg() const
 		mErrorThr = e;
 	}
 
-	double FormFeaturesConfig::variationThr() const 	{
-		return mVariationThr;
+	double FormFeaturesConfig::variationThrLower() const 	{
+		return mVariationThrLower;
 	}
 
-	void FormFeaturesConfig::setVariationThr(double v) 	{
-		mVariationThr = v;
+	void FormFeaturesConfig::setVariationThrLower(double v) 	{
+		mVariationThrLower = v;
+	}
+
+	double FormFeaturesConfig::variationThrUpper() const 	{
+		return mVariationThrUpper;
+	}
+
+	void FormFeaturesConfig::setVariationThrUpper(double v) {
+		mVariationThrUpper = v;
 	}
 
 	double FormFeaturesConfig::coLinearityThr() const 	{
@@ -2431,24 +2440,19 @@ cv::Size FormFeatures::sizeImg() const
 		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
 		msg += "  mColinearityThr: " + QString::number(mColinearityThreshold);
 		//msg += "  mErrorThr: " + QString::number(mErrorThr);
-		msg += "  mVariationThr: " + QString::number(mVariationThr);
+		msg += "  mVariationThrLower: " + QString::number(mVariationThrLower);
 		msg += "  mSaveChilds: " + mSaveChilds;
 		return msg;
 	}
 	
-	//double mDistThreshold = 30.0;
-	double mDistThreshold = 200.0;			//threshold is set dynamically - fallback value to find line candidates within mDistThreshold
-	double mColinearityThreshold = 20;		//up to which distance a line is colinear
-	double mErrorThr = 15.0;				//currently not used
-	double mVariationThr = 0.2;
-
 	void FormFeaturesConfig::load(const QSettings & settings)	{
 		//mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
 		//mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
 		mColinearityThreshold = settings.value("colinearityThreshold", mColinearityThreshold).toDouble();
-		mVariationThr = settings.value("variationThreshold", mVariationThr).toDouble();
+		mVariationThrLower = settings.value("variationThresholdLower", mVariationThrLower).toDouble();
+		mVariationThrUpper = settings.value("variationThresholdUpper", mVariationThrUpper).toDouble();
 		mSaveChilds = settings.value("saveChilds", mSaveChilds).toBool();
 	}
 
@@ -2458,7 +2462,8 @@ cv::Size FormFeatures::sizeImg() const
 		settings.setValue("distThreshold", mDistThreshold);
 		//settings.setValue("errorThr", mErrorThr);
 		settings.setValue("colinearityThreshold", mColinearityThreshold);
-		settings.setValue("variationThreshold", mVariationThr);
+		settings.setValue("variationThresholdLower", mVariationThrLower);
+		settings.setValue("variationThresholdUpper", mVariationThrUpper);
 		settings.setValue("saveChilds", mSaveChilds);
 
 	}
@@ -2563,7 +2568,7 @@ cv::Size FormFeatures::sizeImg() const
 		mAdjacencyNodesIdx.push_back(idx);
 	}
 
-	bool AssociationGraphNode::testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold, double variationThr) {
+	bool AssociationGraphNode::testAdjacency(QSharedPointer<AssociationGraphNode> neighbour, double distThreshold, double variationThrLower, double variationThrUpper) {
 
 		bool horizontal = mLinePos == LinePosition::pos_top || mLinePos == LinePosition::pos_bottom ? true : false;
 		
@@ -2577,7 +2582,7 @@ cv::Size FormFeatures::sizeImg() const
 			m1.sortEndpoints(horizontal);
 			m2.sortEndpoints(horizontal);
 			double overlap = horizontal ? m1.horizontalOverlap(m2) : m1.verticalOverlap(m2);
-			double distance = m1.distance(m2.center());
+			double distance = std::min(m1.distance(m2.center()), m2.distance(m1.center()));
 			//no overlap and same vertical position -> line is split
 			//can co-exist
 			if (overlap == 0 && distance < distThreshold) {
@@ -2631,7 +2636,7 @@ cv::Size FormFeatures::sizeImg() const
 
 				}
 				else {
-					if (dref*(1.0-variationThr) < dm && dm < dref*(1.0+variationThr)) {
+					if (dref*(1.0 - variationThrLower) < dm && dm < dref*(1.0 + variationThrUpper)) {
 						//bool overlapRef = ref1.verticalOverlap(ref2) > 10 ? true : false;
 						//bool overlapM = m1.verticalOverlap(m2) > 10 ? true : false;
 						//reference line is left from second reference line, same must apply to matched lines
@@ -2690,7 +2695,7 @@ cv::Size FormFeatures::sizeImg() const
 				else {
 					//reference line has different vertical position
 					//allow only a certain variation
-					if (dref*(1.0 - variationThr) < dm && dm < dref*(1.0 + variationThr)) {
+					if (dref*(1.0 - variationThrLower) < dm && dm < dref*(1.0 + variationThrUpper)) {
 						//bool overlapRef = ref1.horizontalOverlap(ref2) > 10 ? true : false;
 						//bool overlapM = m1.horizontalOverlap(m2) > 10 ? true : false;
 						//reference line is above from second reference line, same must apply to matched lines
