@@ -111,8 +111,9 @@ int main(int argc, char** argv) {
 	parser.addOption(labelConfigPathOpt);
 
 	// table template path
-	QCommandLineOption xmlTableOpt(QStringList() << "t" << "xml", QObject::tr("Path to PAGE xml of table template. Table must be specified"), "templatepath");
+	QCommandLineOption xmlTableOpt(QStringList() << "t" << "table template", QObject::tr("Path to PAGE xml of table template. Table must be specified"), "templatepath");
 	parser.addOption(xmlTableOpt);
+
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
