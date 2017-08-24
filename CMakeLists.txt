@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.0)
 ######################## begin of project
 project(ReadFramework)
 
-set(RDF_FRAMEWORK_VERSION 0.3)
+set(RDF_FRAMEWORK_VERSION 0.4)
 add_definitions(-DRDF_FRAMEWORK_VERSION="${RDF_FRAMEWORK_VERSION}")
 
 # Codecov

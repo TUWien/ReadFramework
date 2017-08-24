@@ -15,3 +15,4 @@ buildfiles/x64
 CMakeUser.txt
 /x64
 *.dir
+/install/packages/plugins.x64.ReadFramework/meta/package.xml
