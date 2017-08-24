@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 	parser.addOption(outputOpt);
 
 	// developer
-	QCommandLineOption modeOpt(QStringList() << "m" << "mode", QObject::tr("Mode defines the methodology. For Baseline detection use [-d sebastian]"), "name");
+	QCommandLineOption modeOpt(QStringList() << "m" << "mode", QObject::tr("Mode defines the methodology. For Baseline detection use [-d layout]"), "name");
 	parser.addOption(modeOpt);
 
 	// settings filename
