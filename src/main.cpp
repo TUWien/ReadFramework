@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;
 
+
 	parser.setApplicationDescription("Welcome to the CVL READ Framework testing application.");
 	parser.addHelpOption();
 	parser.addVersionOption();
