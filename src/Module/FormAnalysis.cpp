@@ -1084,6 +1084,7 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 				QVector<int> lineIdx = lC.candidatesIdx();
 				QVector<double> overlaps = lC.overlaps();
 				QVector<double> distances = lC.distances();
+				QVector<QSharedPointer<rdf::AssociationGraphNode>> nodesTmp;
 				
 				for (int lI = 0; lI < lineIdx.size(); lI++) {
 
@@ -1096,16 +1097,69 @@ void FormFeatures::createAssociationGraphNodes(QVector<QSharedPointer<rdf::Table
 					rdf::Line cLine = horizontal ? mHorLines[lineIdx[lI]] : mVerLines[lineIdx[lI]];
 					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
 					newNode->setMatchedLineIdx(lineIdx[lI]);
-					if (horizontal)
-						mANodesHorizontal.push_back(newNode);
-					else
-						mANodesVertical.push_back(newNode);
+					nodesTmp.push_back(newNode);
+
 				}
+
+				nodesTmp = mergeColinearNodes(nodesTmp);
+
+				if (horizontal)
+					mANodesHorizontal.append(nodesTmp);
+				else
+					mANodesVertical.append(nodesTmp);
 			}
 
 		}
 
 	}
+}
+
+QVector<QSharedPointer<rdf::AssociationGraphNode>> FormFeatures::mergeColinearNodes(QVector<QSharedPointer<rdf::AssociationGraphNode>>& tmpNodes) {
+	
+	QSet<int> coLinearIdx;
+	QVector<QSharedPointer<rdf::AssociationGraphNode>> newNodes;
+
+	for (int nodeIdx = 0; nodeIdx < tmpNodes.size(); nodeIdx++) {
+
+		//check if node was already visited...
+		if (coLinearIdx.contains(nodeIdx))
+			continue;
+
+		QSharedPointer<rdf::AssociationGraphNode> newNode(new rdf::AssociationGraphNode(*tmpNodes[nodeIdx]));
+		//newNode->setLineCell(newNode->getRowIdx(), newNode->getColIdx());
+		//newNode->setSpan(newNode->rowSpan(), newNode->colSpan());
+		//newNode->setCellIdx(newNode->cellIdx());
+		//newNode->setLinePos(newNode->linePosition());
+		//newNode->setReferenceLine(newNode->referenceLine());
+		//newNode->setMatchedLineIdx(newNode->matchedLineIdx());
+		//newNode->setMatchedLine(newNode->matchedLine(), newNode->overlap(), newNode->distance());
+
+		for (int cmpNodeIdx = nodeIdx + 1; cmpNodeIdx < tmpNodes.size(); cmpNodeIdx++) {
+			if (tmpNodes[nodeIdx]->matchedLine().isColinear(tmpNodes[cmpNodeIdx]->matchedLine())) {
+				//node is colinear -> store index
+				coLinearIdx.insert(cmpNodeIdx);
+
+				//add colinear node to broken lines or to matched line according to length
+				if (tmpNodes[nodeIdx]->matchedLine().length() > tmpNodes[cmpNodeIdx]->matchedLine().length()) {
+					//line of current match is longer
+					newNode->addBrokenLine(tmpNodes[cmpNodeIdx]->matchedLine(), tmpNodes[cmpNodeIdx]->matchedLineIdx());
+
+				} else {
+					//cmpNodeLine is longer -> switch Lines
+					newNode->addBrokenLine(newNode->matchedLine(), newNode->matchedLineIdx());
+					newNode->setMatchedLine(tmpNodes[cmpNodeIdx]->matchedLine(), tmpNodes[cmpNodeIdx]->overlap(), tmpNodes[cmpNodeIdx]->distance());
+					newNode->setMatchedLineIdx(tmpNodes[cmpNodeIdx]->matchedLineIdx());
+				}
+			}
+
+		}
+
+		newNodes.push_back(newNode);
+
+
+	}
+	
+	return newNodes;
 }
 
 void FormFeatures::createAssociationGraph() {
@@ -1496,6 +1550,9 @@ bool FormFeatures::matchTemplate() {
 	//create AssociationGraphNodes
 	qDebug() << "create Association Graph nodes...";
 	createAssociationGraphNodes(cellsR);
+	//is done in createAssociationGraphNodes
+	//mANodesHorizontal = mergeColinearNodes(mANodesHorizontal);
+	//mANodesVertical = mergeColinearNodes(mANodesVertical);
 
 	qDebug() << "create Association Graph...";
 	//create AssociationGraph
@@ -2524,6 +2581,19 @@ cv::Size FormFeatures::sizeImg() const
 
 	Line AssociationGraphNode::matchedLine() const	{
 		return mMatchedLine;
+	}
+
+	double AssociationGraphNode::overlap() const 	{
+		return mOverlap;
+	}
+
+	double AssociationGraphNode::distance() const 	{
+		return mDistance;
+	}
+
+	void AssociationGraphNode::addBrokenLine(Line l, int lineIdx) 	{
+		mBrokenLines.push_back(l);
+		mBrokenLinesIdx.push_back(lineIdx);
 	}
 
 	void AssociationGraphNode::setMatchedLineIdx(int idx) 	{

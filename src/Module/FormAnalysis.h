@@ -136,6 +136,10 @@ namespace rdf {
 		void setMatchedLine(Line l);
 		void setMatchedLine(Line l, double overlap, double distance);
 		Line matchedLine() const;
+		double overlap() const;
+		double distance() const;
+
+		void addBrokenLine(Line l, int lineIdx);
 
 		void setMatchedLineIdx(int idx);
 		int matchedLineIdx() const;
@@ -164,8 +168,14 @@ namespace rdf {
 		int mRowSpan = 0;
 		int mColSpan = 0;
 
+		//line that represents the current cell line
 		Line mMatchedLine;
 		int mMatchedLineIdx;
+
+		//broken line pieces, but all have a shorter overlap compared to matchedLine
+		QVector<Line> mBrokenLines;
+		QVector<int> mBrokenLinesIdx;
+
 		double mOverlap = -1;
 		double mDistance = -1;
 
@@ -206,6 +216,7 @@ namespace rdf {
 		QSharedPointer<rdf::TableRegion> tableRegion();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
+		QVector<QSharedPointer<rdf::AssociationGraphNode>> mergeColinearNodes(QVector<QSharedPointer<rdf::AssociationGraphNode>> &tmpNodes);
 		void createAssociationGraph();
 		bool** adjacencyMatrix(const QVector<QSharedPointer<rdf::AssociationGraphNode>> &associationGraphNodes);
 		void findMaxCliques();

@@ -83,7 +83,7 @@ public:
 	double length() const;
 	double weightedLength(const Vector2D& orVec) const;
 	double angle() const;
-	double minDistance(const Line& l) const;
+	double minDistance(const Line &l) const;
 
 	void translate(cv::Point offset);
 	void scale(double s);
@@ -109,6 +109,7 @@ public:
 
 	bool isHorizontal(double mAngleTresh = 0.5) const;
 	bool isVertical(double mAngleTresh = 0.5) const;
+	bool isColinear(const Line& line, double threshold = 20) const;
 	bool intersects(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 
 	Vector2D intersection(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
@@ -542,6 +543,8 @@ public:
 	void addCandidate(int lIdx, double o, double d);
 	void addCandidate(Line c, int lIdx);
 	void addLineCandidate(LineCandidates lc);
+
+	//QVector<QSharedPointer<LineCandidates>> findColinearCandidates(QVector<rdf::Line> &lines, double distThreshold = 20);
 
 	rdf::Line mergedLine();
 	rdf::Line mergeLines(const QVector<rdf::Line> &l);

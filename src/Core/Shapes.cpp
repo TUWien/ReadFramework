@@ -446,6 +446,17 @@ bool Line::isVertical(double mAngleTresh) const {
 
 }
 
+bool Line::isColinear(const Line &line, double threshold) const {
+
+	double d1 = distance(line.center());
+	double d2 = line.distance(center());
+
+	if (d1 < threshold && d2 < threshold)
+		return true;
+	else
+		return false;
+}
+
 bool Line::intersects(const Line & line, QLineF::IntersectType t) const {
 
 	return mLine.intersect(line.qLine(), 0) == t;
@@ -2092,6 +2103,30 @@ void LineCandidates::addLineCandidate(LineCandidates lc) {
 	mReferenceLine = mReferenceLine.merge(tmpL);
 }
 
+//QVector<QSharedPointer<LineCandidates>> LineCandidates::findColinearCandidates(QVector<rdf::Line> &lines, double distThreshold) {
+//	//distThreshold = 20;
+//	QVector<QSharedPointer<LineCandidates>> splitCandidates;
+//
+//	for (int lineIdx = 0; lineIdx < mLCandidatesIdx.size(); lineIdx++) {
+//
+//		QSharedPointer<rdf::LineCandidates> newLC(new rdf::LineCandidates());
+//		newLC->setReferenceLine(mReferenceLine);
+//		newLC->addCandidate(mLCandidatesIdx[lineIdx], mOverlaps[lineIdx], mDistances[lineIdx]);
+//
+//		for (int lineCmp = lineIdx+1; lineCmp < mLCandidatesIdx.size(); lineCmp++) {
+//
+//			if (lines[mLCandidatesIdx[lineIdx]].isColinear(lines[mLCandidatesIdx[lineCmp]], distThreshold)) {
+//				newLC->addCandidate(mLCandidatesIdx[lineCmp], mOverlaps[mLCandidatesIdx[lineCmp]], mDistances[mLCandidatesIdx[lineCmp]]);
+//			}
+//		}
+//		splitCandidates.push_back(newLC);
+//
+//
+//	}
+//
+//	return splitCandidates;
+//}
+
 rdf::Line LineCandidates::mergedLine() {
 	return rdf::Line();
 }
@@ -2171,6 +2206,8 @@ QVector<int> LineCandidates::sortByDistance() {
 		return QVector<int>();
 	}
 }
+
+
 
 void LineCandidates::clear() {
 	mLCandidatesIdx.clear();
