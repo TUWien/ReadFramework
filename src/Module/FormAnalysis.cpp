@@ -738,6 +738,16 @@ cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t, int idx) {
 		rdf::Line imgLine = mANodesVertical[*it]->matchedLine();
 		imgLine.setThickness(t);
 		vLines.push_back(imgLine);
+
+		if (mANodesVertical[*it]->brokenLinesPresent()) {
+			QVector<rdf::Line> brokenL = mANodesVertical[*it]->brokenLines();
+			for (int iB = 0; iB < brokenL.size(); iB++) {
+				rdf::Line tmpLine = brokenL[iB];
+				tmpLine.setThickness(t);
+				vLines.push_back(tmpLine);
+			}
+		}
+
 	}
 
 	QSet<int> mMaxHor;
@@ -750,6 +760,15 @@ cv::Mat FormFeatures::drawMaxClique(cv::Mat img, float t, int idx) {
 		rdf::Line imgLine = mANodesHorizontal[*it]->matchedLine();
 		imgLine.setThickness(t);
 		hLines.push_back(imgLine);
+
+		if (mANodesHorizontal[*it]->brokenLinesPresent()) {
+			QVector<rdf::Line> brokenL = mANodesHorizontal[*it]->brokenLines();
+			for (int iB = 0; iB < brokenL.size(); iB++) {
+				rdf::Line tmpLine = brokenL[iB];
+				tmpLine.setThickness(t);
+				hLines.push_back(tmpLine);
+			}
+		}
 	}
 
 	if (!img.empty()) {
@@ -1588,13 +1607,10 @@ bool FormFeatures::matchTemplate() {
 	qDebug() << "create Association Graph nodes...";
 	createAssociationGraphNodes(cellsR);
 	//is done in createAssociationGraphNodes
-	//mANodesHorizontal = mergeColinearNodes(mANodesHorizontal);
-	//mANodesVertical = mergeColinearNodes(mANodesVertical);
 
 	qDebug() << "create Association Graph...";
 	//create AssociationGraph
 	createAssociationGraph();
-	
 	
 	findMaxCliques();
 
