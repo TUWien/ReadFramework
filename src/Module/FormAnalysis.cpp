@@ -1135,12 +1135,12 @@ QVector<QSharedPointer<rdf::AssociationGraphNode>> FormFeatures::mergeColinearNo
 		//newNode->setMatchedLine(newNode->matchedLine(), newNode->overlap(), newNode->distance());
 
 		for (int cmpNodeIdx = nodeIdx + 1; cmpNodeIdx < tmpNodes.size(); cmpNodeIdx++) {
-			if (tmpNodes[nodeIdx]->matchedLine().isColinear(tmpNodes[cmpNodeIdx]->matchedLine())) {
+			if (newNode->matchedLine().isColinear(tmpNodes[cmpNodeIdx]->matchedLine())) {
 				//node is colinear -> store index
 				coLinearIdx.insert(cmpNodeIdx);
 
 				//add colinear node to broken lines or to matched line according to length
-				if (tmpNodes[nodeIdx]->matchedLine().length() > tmpNodes[cmpNodeIdx]->matchedLine().length()) {
+				if (newNode->matchedLine().length() > tmpNodes[cmpNodeIdx]->matchedLine().length()) {
 					//line of current match is longer
 					newNode->addBrokenLine(tmpNodes[cmpNodeIdx]->matchedLine(), tmpNodes[cmpNodeIdx]->matchedLineIdx());
 
@@ -1296,11 +1296,29 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 			mCellsR[cellIdx]->setRefLineLeft(mANodesVertical[*it]->referenceLine());
 			mCellsR[cellIdx]->addLineCandidateLeft(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
 			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
+			//add also broken lines
+			if (mANodesVertical[*it]->brokenLinesPresent()) {
+				QVector<Line> tmpLines = mANodesVertical[*it]->brokenLines();
+				QVector<int> tmpLinesIdx = mANodesVertical[*it]->brokenLinesIdx();
+				for (int iBl = 0; iBl < tmpLines.size(); iBl++) {
+					mCellsR[cellIdx]->addLineCandidateLeft(tmpLines[iBl], tmpLinesIdx[iBl]);
+					mUsedVerLineIdx.push_back(tmpLinesIdx[iBl]);
+				}
+			}
 		}
 		if (mANodesVertical[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_right) {
 			mCellsR[cellIdx]->setRefLineRight(mANodesVertical[*it]->referenceLine());
 			mCellsR[cellIdx]->addLineCandidateRight(mANodesVertical[*it]->matchedLine(), mANodesVertical[*it]->matchedLineIdx());
 			mUsedVerLineIdx.push_back(mANodesVertical[*it]->matchedLineIdx());
+			//add also broken lines
+			if (mANodesVertical[*it]->brokenLinesPresent()) {
+				QVector<Line> tmpLines = mANodesVertical[*it]->brokenLines();
+				QVector<int> tmpLinesIdx = mANodesVertical[*it]->brokenLinesIdx();
+				for (int iBl = 0; iBl < tmpLines.size(); iBl++) {
+					mCellsR[cellIdx]->addLineCandidateRight(tmpLines[iBl], tmpLinesIdx[iBl]);
+					mUsedVerLineIdx.push_back(tmpLinesIdx[iBl]);
+				}
+			}
 		}
 	}
 
@@ -1313,11 +1331,30 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 			mCellsR[cellIdx]->setRefLineTop(mANodesHorizontal[*it]->referenceLine());
 			mCellsR[cellIdx]->addLineCandidateTop(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
 			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
+			//add also broken lines
+			if (mANodesHorizontal[*it]->brokenLinesPresent()) {
+				QVector<Line> tmpLines = mANodesHorizontal[*it]->brokenLines();
+				QVector<int> tmpLinesIdx = mANodesHorizontal[*it]->brokenLinesIdx();
+				for (int iBl = 0; iBl < tmpLines.size(); iBl++) {
+					mCellsR[cellIdx]->addLineCandidateTop(tmpLines[iBl], tmpLinesIdx[iBl]);
+					mUsedHorLineIdx.push_back(tmpLinesIdx[iBl]);
+				}
+			}
+			
 		}
 		if (mANodesHorizontal[*it]->linePosition() == AssociationGraphNode::LinePosition::pos_bottom) {
 			mCellsR[cellIdx]->setRefLineBottom(mANodesHorizontal[*it]->referenceLine());
 			mCellsR[cellIdx]->addLineCandidateBottom(mANodesHorizontal[*it]->matchedLine(), mANodesHorizontal[*it]->matchedLineIdx());
 			mUsedHorLineIdx.push_back(mANodesHorizontal[*it]->matchedLineIdx());
+			//add also broken lines
+			if (mANodesHorizontal[*it]->brokenLinesPresent()) {
+				QVector<Line> tmpLines = mANodesHorizontal[*it]->brokenLines();
+				QVector<int> tmpLinesIdx = mANodesHorizontal[*it]->brokenLinesIdx();
+				for (int iBl = 0; iBl < tmpLines.size(); iBl++) {
+					mCellsR[cellIdx]->addLineCandidateBottom(tmpLines[iBl], tmpLinesIdx[iBl]);
+					mUsedHorLineIdx.push_back(tmpLinesIdx[iBl]);
+				}
+			}
 		}
 	}
 
@@ -2594,6 +2631,18 @@ cv::Size FormFeatures::sizeImg() const
 	void AssociationGraphNode::addBrokenLine(Line l, int lineIdx) 	{
 		mBrokenLines.push_back(l);
 		mBrokenLinesIdx.push_back(lineIdx);
+	}
+
+	bool AssociationGraphNode::brokenLinesPresent() const 	{
+		return mBrokenLines.size() > 0;
+	}
+
+	QVector<Line> AssociationGraphNode::brokenLines() const 	{
+		return mBrokenLines;
+	}
+
+	QVector<int> AssociationGraphNode::brokenLinesIdx() const 	{
+		return mBrokenLinesIdx;
 	}
 
 	void AssociationGraphNode::setMatchedLineIdx(int idx) 	{

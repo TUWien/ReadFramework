@@ -140,6 +140,9 @@ namespace rdf {
 		double distance() const;
 
 		void addBrokenLine(Line l, int lineIdx);
+		bool brokenLinesPresent() const;
+		QVector<Line> brokenLines() const;
+		QVector<int> brokenLinesIdx() const;
 
 		void setMatchedLineIdx(int idx);
 		int matchedLineIdx() const;

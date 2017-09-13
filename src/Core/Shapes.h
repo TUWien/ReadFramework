@@ -95,6 +95,7 @@ public:
 	double verticalDistance(const Line& l, double threshold = 20) const;
 	
 	Line merge(const Line& l) const;
+	Line mergeFit(const Line& l) const;
 	Line gapLine(const Line& l) const;
 	double diffAngle(const Line& l) const;
 	bool within(const Vector2D& p) const;

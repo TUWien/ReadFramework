@@ -793,6 +793,23 @@ Line Line::merge(const Line& l) const {
 	return mergedLine;
 }
 
+Line Line::mergeFit(const Line & l) const {
+
+	QVector<Vector2D> pts;
+	pts.push_back(l.p1());
+	pts.push_back(l.p2());
+	pts.push_back(p1());
+	pts.push_back(p2());
+
+	LineFitting newLineFit(pts);
+	Line fittedLine = newLineFit.fitLine();
+	//take thickness from the longest line
+	float thickness = mThickness < l.thickness() ? mThickness : l.thickness();
+	fittedLine.setThickness(thickness);
+
+	return fittedLine;
+}
+
 /// <summary>
 /// Calculates the gap line between line l and the current line instance.
 /// </summary>
@@ -2132,27 +2149,50 @@ rdf::Line LineCandidates::mergedLine() {
 }
 
 rdf::Line LineCandidates::mergeLines(const QVector<rdf::Line>& l) {
+	Line fittedLine;
 
 	////rdf::LineCandidates tmpCand = cellsR[cellIdx]->leftLineC();
 	QVector<int> cand;
 	cand = sortByOverlap();
 
-	rdf::Line newLine;
+	if (cand.isEmpty())
+		return fittedLine;
+
+	//if only one line is present...
+	if (cand.size() == 1)
+		return l[cand[0]];
+
+	QVector<Vector2D> pts;
 	for (int i = 0; i < cand.size(); i++) {
 		rdf::Line tmpLine = l[cand[i]];
-		if (newLine.isEmpty()) {
-			newLine = tmpLine;
-		}
-		else {
-			double dist = newLine.distance(tmpLine.p1()) < newLine.distance(tmpLine.p2()) ? newLine.distance(tmpLine.p1()) : newLine.distance(tmpLine.p2());
-			if (dist < 20) {
-				//line is colinear
-				newLine = newLine.merge(tmpLine);
-			}
-		}
+		pts.push_back(tmpLine.p1());
+		pts.push_back(tmpLine.p2());
 	}
+	LineFitting newLineFit(pts);
+	fittedLine = newLineFit.fitLine();
+	//take thickness from the longest line
+	fittedLine.setThickness(l[cand[0]].thickness());
 
-	return newLine;
+	return fittedLine;
+
+	////simplified old version
+	////LineFitting
+	//rdf::Line newLine;
+	//for (int i = 0; i < cand.size(); i++) {
+	//	rdf::Line tmpLine = l[cand[i]];
+	//	if (newLine.isEmpty()) {
+	//		newLine = tmpLine;
+	//	}
+	//	else {
+	//		double dist = newLine.distance(tmpLine.p1()) < newLine.distance(tmpLine.p2()) ? newLine.distance(tmpLine.p1()) : newLine.distance(tmpLine.p2());
+	//		if (dist < 20) {
+	//			//line is colinear
+	//			newLine = newLine.merge(tmpLine);
+	//		}
+	//	}
+	//}
+
+	//return newLine;
 }
 
 QVector<int> LineCandidates::sortByOverlap() {
