@@ -150,6 +150,8 @@ namespace rdf {
 		void setCellIdx(int idx);
 		int cellIdx() const;
 
+		double weight();
+
 		QVector<int> adjacencyNodes() const;
 		//QSet<int> adjacencyNodesSet() const;
 		//void createAdjacencyNodesSet();

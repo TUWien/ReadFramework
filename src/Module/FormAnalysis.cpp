@@ -40,6 +40,10 @@
 #include "ImageProcessor.h"
 #include "maxclique/mcqd.h"
 
+//#pragma warning(push, 0)
+//#include "maxclique/cliquer.h"
+//#pragma warning(pop)
+
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -1237,6 +1241,7 @@ bool ** FormFeatures::adjacencyMatrix(const QVector<QSharedPointer<rdf::Associat
 
 void FormFeatures::findMaxCliques() {
 
+	// --------------------------- unweighted clique version ---------------------------------------------------
 	bool** ppAdjacencyMatrixVertical = 0;
 	bool** ppAdjacencyMatrixHorizontal = 0;
 	int *qmax;
@@ -1278,6 +1283,65 @@ void FormFeatures::findMaxCliques() {
 		for (int nRows = 0; nRows < mANodesHorizontal.size(); nRows++)
 			delete(ppAdjacencyMatrixHorizontal[nRows]);
 	}
+
+	//// --------------------------- weighted clique version ---------------------------------------------------
+	////vertical clique (weighted)
+	//graph_t *g;
+	//int numberNodes = mANodesVertical.size();
+	//int *weights = new int[numberNodes];
+
+	//g = graph_new(numberNodes);
+	//for (int adVer = 0; adVer < numberNodes; adVer++) {
+	//	QVector<int> neighbours = mANodesVertical[adVer]->adjacencyNodes();
+	//	double w = (int)(mANodesVertical[adVer]->weight()*100.0);
+	////	qDebug() << w;
+	//	weights[adVer] = (int)w;
+	//	for (int n = 0; n < neighbours.size(); n++) {
+	//		GRAPH_ADD_EDGE(g, adVer, neighbours[n]);
+	//	}
+	//}
+	//g->weights = weights;
+	//
+	//set_t maxCliqueNew;
+	//qDebug() << "vertical max clique weighted...";
+	//maxCliqueNew = clique_find_single(g, 0, 0, FALSE, NULL);
+	//int i = -1;
+	//QSet<int> mCl;
+	//
+	//while ((i = set_return_next(maxCliqueNew, i)) >= 0) {
+	//	mCl.insert(i);
+	//}
+
+	//mMaxCliquesVer.push_back(mCl);
+
+	////horizontal clique (weighted)
+	//graph_t *gHor;
+	//int numberNodesHor = mANodesHorizontal.size();
+	//int *weightsHor = new int[numberNodesHor];
+
+	//gHor = graph_new(numberNodesHor);
+	//for (int adVer = 0; adVer < numberNodesHor; adVer++) {
+	//	QVector<int> neighbours = mANodesHorizontal[adVer]->adjacencyNodes();
+	//	double w = (int)(mANodesHorizontal[adVer]->weight()*100.0);
+	////	qDebug() << w;
+	//	weightsHor[adVer] = (int)w;
+	//	for (int n = 0; n < neighbours.size(); n++) {
+	//		GRAPH_ADD_EDGE(gHor, adVer, neighbours[n]);
+	//	}
+	//}
+	//g->weights = weightsHor;
+
+	//set_t maxCliqueNewHor;
+	//qDebug() << "horizontal max clique weighted...";
+	//maxCliqueNewHor = clique_find_single(gHor, 0, 0, FALSE, NULL);
+	//int i2 = -1;
+	//QSet<int> mClH;
+
+	//while ((i2 = set_return_next(maxCliqueNew, i2)) >= 0) {
+	//	mClH.insert(i2);
+	//}
+
+	//mMaxCliquesHor.push_back(mClH);
 
 }
 
@@ -2675,6 +2739,47 @@ cv::Size FormFeatures::sizeImg() const
 
 	int AssociationGraphNode::cellIdx() const 	{
 		return mCellIdx;
+	}
+
+	double AssociationGraphNode::weight() {
+		double weight;
+		double overlap;
+
+		if (mReferenceLine.isVertical()) {
+			mMatchedLine.sortEndpoints(false);
+			mReferenceLine.sortEndpoints(false);
+			overlap = mMatchedLine.verticalOverlap(mReferenceLine);
+			overlap /= mReferenceLine.length();
+			weight = overlap;
+
+			for (int i = 0; i < mBrokenLines.size(); i++) {
+				Line tmp = mBrokenLines[i]; tmp.sortEndpoints(false);
+				overlap = tmp.verticalOverlap(mReferenceLine);
+				overlap /= mReferenceLine.length();
+				weight += overlap;
+			}
+
+		} else {
+			mMatchedLine.sortEndpoints(true);
+			mReferenceLine.sortEndpoints(true);
+
+			overlap = mMatchedLine.horizontalOverlap(mReferenceLine);
+			overlap /= mReferenceLine.length();
+			weight = overlap;
+
+			for (int i = 0; i < mBrokenLines.size(); i++) {
+				Line tmp = mBrokenLines[i]; tmp.sortEndpoints(true);
+				overlap = tmp.horizontalOverlap(mReferenceLine);
+				overlap /= mReferenceLine.length();
+				weight += overlap;
+			}
+
+		}
+
+		if (weight > 1)
+			weight = 1.0;
+
+		return weight;
 	}
 
 	QVector<int> AssociationGraphNode::adjacencyNodes() const 	{
