@@ -3032,7 +3032,10 @@ cv::Size FormFeatures::sizeImg() const
 	}
 
 	void FormEvaluation::computeEvalTableRegion() 	{
-
+		
+		mTableTemplate = computeTableImage(mTableRegionTemplate);
+		mTableMatched = computeTableImage(mTableRegionMatched);
+		
 		cv::Mat templateImg = mTableTemplate.clone();
 		templateImg.setTo(0);
 		cv::Mat tableImg = mTableMatched.clone();
@@ -3091,7 +3094,6 @@ cv::Size FormFeatures::sizeImg() const
 	}
 
 	QVector<double> FormEvaluation::cellJaccards() 	{
-	
 		return mJaccardCell;
 	}
 
@@ -3148,16 +3150,34 @@ cv::Size FormFeatures::sizeImg() const
 			return 0;
 	}
 
-	//double FormEvaluation::underSegmented(double threshold) 	{
-	//	return 0.0;
-	//}
+	double FormEvaluation::underSegmented(double threshold) 	{
+
+		double cnt = 0;
+		double cntUnderSegmented = 0;
+
+		for (auto i : mUnderSegmented) {
+			cnt++;
+			if (i > threshold)
+				cntUnderSegmented++;
+		}
+
+		if (cnt > 1)
+			return cntUnderSegmented / cnt;
+		else
+			return 0.0;
+	}
+
+	QVector<double> FormEvaluation::underSegmented() 	{
+		return mUnderSegmented;
+	}
 
 	void FormEvaluation::computeEvalCells() 	{
 
 
 		double minVal;
 		cv::minMaxLoc(mTableTemplate, &minVal, &mCellsTemplate);
-		cv::minMaxLoc(mTableTemplate, &minVal, &mCellsMatched);
+		cv::minMaxLoc(mTableMatched, &minVal, &mCellsMatched);
+		cv::Mat templateImg = mTableTemplate > 0;
 
 		if (mCellsMatched != mCellsTemplate) {
 			qWarning() << "different amount of cells in template and matched table";
@@ -3179,6 +3199,14 @@ cv::Size FormFeatures::sizeImg() const
 
 			mJaccardCell.push_back(andNumb / orNumb);
 			mCellMatch.push_back(andNumb / tempNumb);
+
+			//undersegmented
+			//double match = andNumb / tempNumb;
+			cv::Mat underRes;
+			cv::bitwise_and(cmpTable, templateImg, underRes);
+			double underResNum = (double)cv::countNonZero(underRes);
+			double undersegmented = (underResNum - andNumb) / tempNumb;
+			mUnderSegmented.push_back(undersegmented);
 
 		}
 

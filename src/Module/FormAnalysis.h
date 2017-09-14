@@ -210,14 +210,10 @@ namespace rdf {
 		double meanCellMatch();
 
 		double missedCells(double threshold = 0.2);
-		//double underSegmented(double threshold = 0.2);
-
-
-
+		double underSegmented(double threshold = 0.2);
+		QVector<double> underSegmented();
 
 	protected:
-
-		
 
 		QSharedPointer<rdf::TableRegion> mTableRegionTemplate;
 		QSharedPointer<rdf::TableRegion> mTableRegionMatched;
@@ -234,6 +230,7 @@ namespace rdf {
 
 		QVector<double> mJaccardCell;
 		QVector<double> mCellMatch;
+		QVector<double> mUnderSegmented;
 
 	};
 
