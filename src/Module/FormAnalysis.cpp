@@ -2975,4 +2975,213 @@ cv::Size FormFeatures::sizeImg() const
 		return n1->degree() < n2->degree();
 	}
 
+	FormEvaluation::FormEvaluation() 	{
+	}
+
+	void FormEvaluation::setSize(cv::Size s) 	{
+		mImageSize = s;
+	}
+
+	void FormEvaluation::setTemplate(QSharedPointer<rdf::TableRegion> temp) 	{
+		mTableRegionTemplate = temp;
+	}
+
+	void FormEvaluation::setTable(QSharedPointer<rdf::TableRegion> table) 	{
+		mTableRegionMatched = table;
+	}
+
+	cv::Mat FormEvaluation::computeTableImage(QSharedPointer<rdf::TableRegion> table) 	{
+
+		cv::Mat tableImage;
+
+		tableImage = cv::Mat(mImageSize, CV_16UC1);
+		tableImage.setTo(0);
+
+		QVector<QSharedPointer<rdf::Region>> cells = table->children();
+		QVector<QSharedPointer<rdf::TableCell>> filteredCells;
+		
+		for (auto cell : cells) {
+			if (cell->type() == cell->type_table_cell) {
+				//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
+				QSharedPointer<rdf::TableCell> tCell = cell.dynamicCast<rdf::TableCell>();
+				
+				filteredCells.push_back(tCell);
+			}
+		}
+		
+		std::sort(filteredCells.begin(), filteredCells.end(), rdf::TableCell::compareCells);
+
+		for (int i = 0; i < filteredCells.size(); i++) {
+
+			rdf::Polygon cellPoly = filteredCells[i]->polygon();
+			QVector<rdf::Vector2D> tmpPts = cellPoly.toPoints();
+			std::vector<cv::Point> cvPtsTmp;
+
+			for (auto p : tmpPts) {
+				cv::Point pp = p.toCvPoint();
+				cvPtsTmp.push_back(pp);
+			}
+
+			std::vector<std::vector<cv::Point>> contour;
+			contour.push_back(cvPtsTmp);
+			
+			cv::fillPoly(tableImage, contour, cv::Scalar(i+1));
+		}
+
+		return tableImage;
+	}
+
+	void FormEvaluation::computeEvalTableRegion() 	{
+
+		cv::Mat templateImg = mTableTemplate.clone();
+		templateImg.setTo(0);
+		cv::Mat tableImg = mTableMatched.clone();
+		tableImg.setTo(0);
+
+		rdf::Polygon templPolygon = mTableRegionTemplate->polygon();
+		rdf::Polygon matchPolygon = mTableRegionMatched->polygon();
+
+		//create template image
+		QVector<rdf::Vector2D> templPts = templPolygon.toPoints();
+		std::vector<cv::Point> cvPtsTmp;
+
+		for (auto p : templPts) {
+			cv::Point pp = p.toCvPoint();
+			cvPtsTmp.push_back(pp);
+		}
+		std::vector<std::vector<cv::Point>> contour;
+		contour.push_back(cvPtsTmp);
+		cv::fillPoly(templateImg, contour, cv::Scalar(1));
+
+
+		//create table image
+		templPts.clear();
+		templPts = matchPolygon.toPoints();
+		cvPtsTmp.clear();
+
+		for (auto p : templPts) {
+			cv::Point pp = p.toCvPoint();
+			cvPtsTmp.push_back(pp);
+		}
+		contour.clear();
+		contour.push_back(cvPtsTmp);
+		cv::fillPoly(tableImg, contour, cv::Scalar(1));
+
+		cv::Mat andRes, orRes;
+
+		cv::bitwise_and(templateImg, tableImg, andRes);
+		cv::bitwise_or(templateImg, tableImg, orRes);
+
+		double tempNumb = (double)cv::countNonZero(templateImg);
+		//double matchNumb = (double)cv::countNonZero(tableImg);
+		double orNumb = (double)cv::countNonZero(orRes);
+		double andNumb = (double)cv::countNonZero(andRes);
+
+		mJaccardTable = andNumb / orNumb;
+		mMatchTable = andNumb / tempNumb;
+
+	}
+
+	double FormEvaluation::tableJaccard() 	{
+		return mJaccardTable;
+	}
+
+	double FormEvaluation::tableMatch() 	{
+		return mMatchTable;
+	}
+
+	QVector<double> FormEvaluation::cellJaccards() 	{
+	
+		return mJaccardCell;
+	}
+
+	double FormEvaluation::meanCellJaccard() 	{
+
+		double sum = 0;
+		double cnt = 0;
+
+		for (auto i : mJaccardCell) {
+
+			sum += i;
+			cnt++;
+		}
+
+		if (cnt >= 1)
+			return sum / cnt;
+		else
+			return 0.0;
+	}
+
+	QVector<double> FormEvaluation::cellMatches() 	{
+		return mCellMatch;
+	}
+
+	double FormEvaluation::meanCellMatch() 	{
+		double sum = 0;
+		double cnt = 0;
+
+		for (auto i : mCellMatch) {
+
+			sum += i;
+			cnt++;
+		}
+
+		if (cnt >= 1)
+			return sum / cnt;
+		else
+			return 0.0;
+	}
+
+	double FormEvaluation::missedCells(double threshold) 	{
+		double cnt = 0;
+		double cntMissed = 0;
+
+		for (auto i : mCellMatch) {
+			cnt++;
+			if (i < threshold)
+				cntMissed++;
+		}
+
+		if (cnt > 0)
+			return cntMissed / cnt;
+		else
+			return 0;
+	}
+
+	//double FormEvaluation::underSegmented(double threshold) 	{
+	//	return 0.0;
+	//}
+
+	void FormEvaluation::computeEvalCells() 	{
+
+
+		double minVal;
+		cv::minMaxLoc(mTableTemplate, &minVal, &mCellsTemplate);
+		cv::minMaxLoc(mTableTemplate, &minVal, &mCellsMatched);
+
+		if (mCellsMatched != mCellsTemplate) {
+			qWarning() << "different amount of cells in template and matched table";
+		}
+
+		for (int i = 1; i <= mCellsTemplate; i++) {
+
+			cv::Mat cmpTemplate = mTableTemplate == i;
+			cv::Mat cmpTable = mTableMatched == i;
+			cv::Mat andRes, orRes;
+
+			cv::bitwise_and(cmpTemplate, cmpTable, andRes);
+			cv::bitwise_or(cmpTemplate, cmpTable, orRes);
+
+			double tempNumb = (double)cv::countNonZero(cmpTemplate);
+			//double matchNumb = (double)cv::countNonZero(cmpTable);
+			double orNumb = (double)cv::countNonZero(orRes);
+			double andNumb = (double)cv::countNonZero(andRes);
+
+			mJaccardCell.push_back(andNumb / orNumb);
+			mCellMatch.push_back(andNumb / tempNumb);
+
+		}
+
+	}
+
 }

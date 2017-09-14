@@ -189,6 +189,55 @@ namespace rdf {
 
 	};
 
+	class DllCoreExport FormEvaluation {
+
+	public:
+
+		FormEvaluation();
+		void setSize(cv::Size s);
+		void setTemplate(QSharedPointer<rdf::TableRegion> temp);
+		void setTable(QSharedPointer<rdf::TableRegion> table);
+		cv::Mat computeTableImage(QSharedPointer<rdf::TableRegion> table);
+		void computeEvalCells();
+		void computeEvalTableRegion();
+
+		double tableJaccard();
+		double tableMatch();
+
+		QVector<double> cellJaccards();
+		double meanCellJaccard();
+		QVector<double> cellMatches();
+		double meanCellMatch();
+
+		double missedCells(double threshold = 0.2);
+		//double underSegmented(double threshold = 0.2);
+
+
+
+
+	protected:
+
+		
+
+		QSharedPointer<rdf::TableRegion> mTableRegionTemplate;
+		QSharedPointer<rdf::TableRegion> mTableRegionMatched;
+
+		cv::Size mImageSize;
+		cv::Mat mTableTemplate;
+		cv::Mat mTableMatched;
+
+		double mCellsTemplate = -1;
+		double mCellsMatched = -1;
+
+		double mJaccardTable;
+		double mMatchTable;
+
+		QVector<double> mJaccardCell;
+		QVector<double> mCellMatch;
+
+	};
+
+
 
 
 	class DllCoreExport FormFeatures : public Module {
