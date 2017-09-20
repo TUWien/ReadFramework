@@ -79,6 +79,8 @@ namespace rdf {
 		QString templDatabase() const;
 		void setTemplDatabase(QString s);
 
+		QString evalPath() const;
+		void setevalPath(QString s);
 
 		QString toString() const override;
 
@@ -88,6 +90,7 @@ namespace rdf {
 
 		//QString mTemplDatabase;
 		QString mTemplDatabase = QString("C:\\Users\\flo\\projects\\READ\\formTest\\form - gt\\Table_Template_M_Freyung_014_01\\page\\M_Freyung_014 - 01_0112.xml");
+		QString mEvalPath = QString("C:\\Users\\flo\\projects\\READ\\formTest\\form - gt\\Table_Template_M_Freyung_014_01\\page\\");
 
 		//double mThreshLineLenRatio = 0.6;
 		//double mDistThreshold = 30.0;

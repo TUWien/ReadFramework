@@ -2619,12 +2619,21 @@ cv::Size FormFeatures::sizeImg() const
 
 	void FormFeaturesConfig::setTemplDatabase(QString s) {
 		mTemplDatabase = s;
-	} 
+	}
+
+	QString FormFeaturesConfig::evalPath() const 	{
+		return mEvalPath;
+	}
+
+	void FormFeaturesConfig::setevalPath(QString s) 	{
+		mEvalPath = s;
+	}
 
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
 		//msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
 		msg += "  mformTemplate: " + mTemplDatabase;
+		msg += "  mEvalPath: " + mEvalPath;
 		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
 		msg += "  mColinearityThr: " + QString::number(mColinearityThreshold);
 		//msg += "  mErrorThr: " + QString::number(mErrorThr);
@@ -2636,6 +2645,7 @@ cv::Size FormFeatures::sizeImg() const
 	void FormFeaturesConfig::load(const QSettings & settings)	{
 		//mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
+		mEvalPath = settings.value("evalPath", mEvalPath).toString();
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
 		//mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
 		mColinearityThreshold = settings.value("colinearityThreshold", mColinearityThreshold).toDouble();
@@ -2647,6 +2657,7 @@ cv::Size FormFeatures::sizeImg() const
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		//settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("formTemplate", mTemplDatabase);
+		settings.setValue("evalPath", mEvalPath);
 		settings.setValue("distThreshold", mDistThreshold);
 		//settings.setValue("errorThr", mErrorThr);
 		settings.setValue("colinearityThreshold", mColinearityThreshold);
