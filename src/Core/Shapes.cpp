@@ -163,7 +163,8 @@ QPolygonF Polygon::closedPolygon() const {
 
 QVector<Vector2D> Polygon::toPoints() const {
 
-	QVector<Vector2D> pts(mPoly.size());
+	//QVector<Vector2D> pts(mPoly.size());
+	QVector<Vector2D> pts; //bugfix fk
 	for (const QPointF& p : mPoly)
 		pts << p;
 

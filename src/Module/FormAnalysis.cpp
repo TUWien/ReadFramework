@@ -3070,6 +3070,8 @@ cv::Size FormFeatures::sizeImg() const
 		std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
 		mTableRegionTemplate = region;
+		//only add tablecells as children for the template
+		mTableRegionTemplate->removeAllChildren();
 
 		for (int i = 0; i < cells.size(); i++) {
 			mTableRegionTemplate->addChild(cells[i]);
@@ -3119,6 +3121,7 @@ cv::Size FormFeatures::sizeImg() const
 			
 			cv::fillPoly(tableImage, contour, cv::Scalar(i+1));
 		}
+		//rdf::Image::save(tableImage, "C:\\tmp\\cmptable.png");
 
 		return tableImage;
 	}
@@ -3172,8 +3175,18 @@ cv::Size FormFeatures::sizeImg() const
 		double orNumb = (double)cv::countNonZero(orRes);
 		double andNumb = (double)cv::countNonZero(andRes);
 
-		mJaccardTable = andNumb / orNumb;
-		mMatchTable = andNumb / tempNumb;
+		if (orNumb  > 0)
+			mJaccardTable = andNumb / orNumb;
+		else {
+			mJaccardTable = 0;
+			qWarning() << "error in calculating JaccardTable - set to 0";
+		}
+		if (tempNumb > 0)
+			mMatchTable = andNumb / tempNumb;
+		else {
+			mMatchTable = 0;
+			qWarning() << "error in calculating MatchTable - set to 0";
+		}
 
 	}
 
@@ -3281,6 +3294,9 @@ cv::Size FormFeatures::sizeImg() const
 			cv::Mat cmpTable = mTableMatched == i;
 			cv::Mat andRes, orRes;
 
+			//rdf::Image::save(cmpTable, "C:\\tmp\\cmptable.png");
+			//rdf::Image::save(cmpTemplate, "C:\\tmp\\cmptemplate.png");
+
 			cv::bitwise_and(cmpTemplate, cmpTable, andRes);
 			cv::bitwise_or(cmpTemplate, cmpTable, orRes);
 
@@ -3289,15 +3305,32 @@ cv::Size FormFeatures::sizeImg() const
 			double orNumb = (double)cv::countNonZero(orRes);
 			double andNumb = (double)cv::countNonZero(andRes);
 
-			mJaccardCell.push_back(andNumb / orNumb);
-			mCellMatch.push_back(andNumb / tempNumb);
+			if (orNumb > 0)
+				mJaccardCell.push_back(andNumb / orNumb);
+			else {
+				mJaccardCell.push_back(0);
+				qWarning() << "error for calculating JI for cell " << i << " - set to 0";
+			}
+
+			if (tempNumb > 0)
+				mCellMatch.push_back(andNumb / tempNumb);
+			else {
+				mCellMatch.push_back(0);
+				qWarning() << "error for calculating match for cell " << i << " - set to 0";
+			}
 
 			//undersegmented
 			//double match = andNumb / tempNumb;
 			cv::Mat underRes;
 			cv::bitwise_and(cmpTable, templateImg, underRes);
 			double underResNum = (double)cv::countNonZero(underRes);
-			double undersegmented = (underResNum - andNumb) / tempNumb;
+			double undersegmented = 0;
+			if (tempNumb > 0 && (underResNum - andNumb) >= 0)
+				undersegmented = (underResNum - andNumb) / tempNumb;
+			else
+				qWarning() << "error for caluclating undersegmentation for cell " << i << " - set to 0";
+
+
 			mUnderSegmented.push_back(undersegmented);
 
 		}
