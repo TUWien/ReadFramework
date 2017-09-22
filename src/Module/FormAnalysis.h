@@ -79,6 +79,8 @@ namespace rdf {
 		QString templDatabase() const;
 		void setTemplDatabase(QString s);
 
+		QString evalPath() const;
+		void setevalPath(QString s);
 
 		QString toString() const override;
 
@@ -88,6 +90,7 @@ namespace rdf {
 
 		//QString mTemplDatabase;
 		QString mTemplDatabase = QString("C:\\Users\\flo\\projects\\READ\\formTest\\form - gt\\Table_Template_M_Freyung_014_01\\page\\M_Freyung_014 - 01_0112.xml");
+		QString mEvalPath = QString("C:\\Users\\flo\\projects\\READ\\formTest\\form - gt\\Table_Template_M_Freyung_014_01\\page\\");
 
 		//double mThreshLineLenRatio = 0.6;
 		//double mDistThreshold = 30.0;
@@ -195,7 +198,7 @@ namespace rdf {
 
 		FormEvaluation();
 		void setSize(cv::Size s);
-		void setTemplate(QSharedPointer<rdf::TableRegion> temp);
+		bool setTemplate(QString templateName);
 		void setTable(QSharedPointer<rdf::TableRegion> table);
 		cv::Mat computeTableImage(QSharedPointer<rdf::TableRegion> table);
 		void computeEvalCells();
@@ -211,7 +214,7 @@ namespace rdf {
 
 		double missedCells(double threshold = 0.2);
 		double underSegmented(double threshold = 0.2);
-		QVector<double> underSegmented();
+		QVector<double> underSegmentedC();
 
 	protected:
 
@@ -265,6 +268,7 @@ namespace rdf {
 		cv::Mat drawMaxClique(cv::Mat img = cv::Mat(), float t = 10.0, int idx = 0);
 		cv::Mat drawMaxCliqueNeighbours(int cellIdx, AssociationGraphNode::LinePosition lp, int nodeCnt = -1, cv::Mat img = cv::Mat(), float t = 10.0);
 		QSharedPointer<rdf::TableRegion> tableRegion();
+		QSharedPointer<rdf::TableRegion> tableRegionTemplate();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mergeColinearNodes(QVector<QSharedPointer<rdf::AssociationGraphNode>> &tmpNodes);

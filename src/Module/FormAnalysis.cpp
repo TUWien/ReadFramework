@@ -494,8 +494,10 @@ bool FormFeatures::estimateRoughAlignment(bool useBinaryImg) {
 		return false;
 	}
 
-	if (isEmptyLines() || mTemplateForm->isEmptyLines())
+	if (isEmptyLines() || mTemplateForm->isEmptyLines()) {
+		qWarning() << "no lines in template provided - aborting";
 		return false;
+	}
 
 	cv::Mat lineImg;
 		
@@ -912,6 +914,18 @@ QSharedPointer<rdf::TableRegion> FormFeatures::tableRegion() {
 	}
 		
 	return mRegion;
+}
+
+QSharedPointer<rdf::TableRegion> FormFeatures::tableRegionTemplate() {
+
+
+	if (mTemplateForm->isEmpty()) {
+		QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());
+		return region;
+	}
+	else
+		return mTemplateForm->tableRegion();
+
 }
 
 QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::createRawTableFromTemplate() {
@@ -2605,12 +2619,21 @@ cv::Size FormFeatures::sizeImg() const
 
 	void FormFeaturesConfig::setTemplDatabase(QString s) {
 		mTemplDatabase = s;
-	} 
+	}
+
+	QString FormFeaturesConfig::evalPath() const 	{
+		return mEvalPath;
+	}
+
+	void FormFeaturesConfig::setevalPath(QString s) 	{
+		mEvalPath = s;
+	}
 
 	QString FormFeaturesConfig::toString() const	{
 		QString msg;
 		//msg += "  mThreshLineLenRatio: " + QString::number(mThreshLineLenRatio);
 		msg += "  mformTemplate: " + mTemplDatabase;
+		msg += "  mEvalPath: " + mEvalPath;
 		msg += "  mDistThreshold: " + QString::number(mDistThreshold);
 		msg += "  mColinearityThr: " + QString::number(mColinearityThreshold);
 		//msg += "  mErrorThr: " + QString::number(mErrorThr);
@@ -2622,6 +2645,7 @@ cv::Size FormFeatures::sizeImg() const
 	void FormFeaturesConfig::load(const QSettings & settings)	{
 		//mThreshLineLenRatio = settings.value("threshLineLenRatio", mThreshLineLenRatio).toDouble();
 		mTemplDatabase = settings.value("formTemplate", mTemplDatabase).toString();
+		mEvalPath = settings.value("evalPath", mEvalPath).toString();
 		mDistThreshold = settings.value("distThreshold", mDistThreshold).toDouble();
 		//mErrorThr = settings.value("errorThr", mErrorThr).toDouble();
 		mColinearityThreshold = settings.value("colinearityThreshold", mColinearityThreshold).toDouble();
@@ -2633,6 +2657,7 @@ cv::Size FormFeatures::sizeImg() const
 	void FormFeaturesConfig::save(QSettings & settings) const	{
 		//settings.setValue("threshLineLenRatio", mThreshLineLenRatio);
 		settings.setValue("formTemplate", mTemplDatabase);
+		settings.setValue("evalPath", mEvalPath);
 		settings.setValue("distThreshold", mDistThreshold);
 		//settings.setValue("errorThr", mErrorThr);
 		settings.setValue("colinearityThreshold", mColinearityThreshold);
@@ -2982,8 +3007,75 @@ cv::Size FormFeatures::sizeImg() const
 		mImageSize = s;
 	}
 
-	void FormEvaluation::setTemplate(QSharedPointer<rdf::TableRegion> temp) 	{
-		mTableRegionTemplate = temp;
+	bool FormEvaluation::setTemplate(QString templateName) 	{
+
+		if (templateName.isEmpty()) {
+			return false;
+		}
+
+
+		QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(templateName);
+		//QString loadXmlPath = mTemplateName;
+
+		rdf::PageXmlParser parser;
+		if (!parser.read(loadXmlPath)) {
+			qWarning() << "could not read template from" << loadXmlPath;
+			return false;
+		}
+
+		auto pe = parser.page();
+
+
+		QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
+
+		QVector<QSharedPointer<rdf::TableCell>> cells;
+		QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());
+		bool detHeader = false;
+
+		for (auto i : test) {
+
+			if (i->type() == i->type_table_region) {
+				region = i.dynamicCast<rdf::TableRegion>();
+
+			}
+			else if (i->type() == i->type_table_cell) {
+				//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
+				QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
+				cells.push_back(tCell);
+
+				//check if tCell has a Textline as child, if yes, mark as table header;
+				if (!tCell->children().empty()) {
+					QVector<QSharedPointer<rdf::Region>> childs = tCell->children();
+					for (auto child : childs) {
+						if (child->type() == child->type_text_line) {
+							tCell->setHeader(true);
+							//qDebug() << imgC->filePath() << "detected header...";
+							//qDebug() << "detected header...";
+							detHeader = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (detHeader)
+			qDebug() << "detected header...";
+
+		if (cells.size() == 0) {
+			qWarning() << " no table in template specified ...";
+			return false;
+		}
+
+		std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
+
+		mTableRegionTemplate = region;
+
+		for (int i = 0; i < cells.size(); i++) {
+			mTableRegionTemplate->addChild(cells[i]);
+		}
+
+		return true;
 	}
 
 	void FormEvaluation::setTable(QSharedPointer<rdf::TableRegion> table) 	{
@@ -3167,7 +3259,7 @@ cv::Size FormFeatures::sizeImg() const
 			return 0.0;
 	}
 
-	QVector<double> FormEvaluation::underSegmented() 	{
+	QVector<double> FormEvaluation::underSegmentedC() 	{
 		return mUnderSegmented;
 	}
 
