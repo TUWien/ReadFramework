@@ -9,8 +9,8 @@ Documentation can be found here: http://read-api.caa.tuwien.ac.at/ReadFramework/
 
 ## Build on Windows
 ### Compile dependencies
-- `Qt` SDK or the compiled sources (>= 5.4.0)
-- `OpenCV` (>= 3.0.0)
+- `Qt` SDK or the compiled sources (>= 5.8.0)
+- `OpenCV` (>= 3.2.0)
 
 ### Compile ReadFramework
 1. Clone the repository from `git@github.com:TUWien/ReadFramework.git`
