@@ -232,6 +232,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 
 		dc.setImagePath("C:/read/test/sizes/synthetic-test-small.png");
 		dc.setImagePath("C:/read/test/sizes/synthetic-test.png");
+		dc.setImagePath("C:/read/test/bugs/S_Freyung_023-01_0002.jpg");
+
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}
