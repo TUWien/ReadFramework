@@ -294,7 +294,7 @@ namespace rdf {
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;
 
-		void setTemplateName(QString s);
+		bool setTemplateName(QString s);
 		QString templateName() const;
 
 		cv::Size sizeImg() const;

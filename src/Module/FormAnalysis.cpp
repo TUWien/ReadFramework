@@ -2144,8 +2144,63 @@ bool FormFeatures::isEmptyTable() const {
 		return false;
 }
 
-void FormFeatures::setTemplateName(QString s) {
-	mTemplateName = s;
+bool FormFeatures::setTemplateName(QString s) {
+
+	//check if templateName is an xml
+	//otherwise it must be an csv specifying the template
+
+	QFileInfo fi(s);
+	QString ext = fi.suffix();
+
+	if (ext == "xml") {
+		mTemplateName = s;
+		qDebug() << "template xml specified in settings... ";
+	}
+	else if (ext == "csv") {
+		qDebug() << "template database specified in settings - searching for template xml...";
+		QFile templDataF(s);
+		bool found = false;
+
+		if (templDataF.open(QIODevice::ReadOnly)) {
+			QTextStream in(&templDataF);
+			while (!in.atEnd()) {
+				QString line = in.readLine();
+				//QStringList strlist = line.split(",");
+				QStringList strlist = line.split(QRegExp("s*,\\s*"));
+				QString formNameFile = strlist.first();
+				if (formName() == formNameFile) {
+					//found entry in databae - check if second entry is an xml
+					QString templRef = strlist[1];
+					QFileInfo testRef(templRef);
+					if (testRef.suffix() == "xml") {
+						//templatename = templRef - create full file path;	
+						QFileInfo newPath(fi.absolutePath(), templRef);
+						mTemplateName = newPath.absoluteFilePath();
+						found = true;
+					}
+					else {
+						qWarning() << "not xml specified...";
+						return false;
+					}
+				}
+			}
+			templDataF.close();
+			if (!found) {
+				qWarning() << "template not found";
+				return false;
+			}
+		} else {
+			qWarning() << "could not open template database";
+			return false;
+		}
+
+	}
+	else {
+		qWarning() << "no template specified...";
+		return false;
+	}
+
+	return true;
 }
 
 QString FormFeatures::templateName() const {
