@@ -402,6 +402,8 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	//read xml separators and store them to testinfo
 	QVector<rdf::Line> hLines;
 	QVector<rdf::Line> vLines;
+	int maxRowIdx = 0;
+	int maxColIdx = 0;
 
 	QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
 	
@@ -419,6 +421,9 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 			//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
 			QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
 			cells.push_back(tCell);
+
+			maxRowIdx = tCell->row() > maxRowIdx ? tCell->row() : maxRowIdx;
+			maxColIdx = tCell->col() > maxColIdx ? tCell->col() : maxColIdx;
 
 			//check if tCell has a Textline as child, if yes, mark as table header;
 			if (!tCell->children().empty()) {
@@ -479,6 +484,8 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	templateForm->setHorLines(hLines);
 	templateForm->setVerLines(vLines);
 
+	region->setRows(maxRowIdx+1);
+	region->setCols(maxColIdx+1);
 	templateForm->setRegion(region);
 	templateForm->setCells(cells);
 	
@@ -3087,54 +3094,56 @@ cv::Size FormFeatures::sizeImg() const
 		QSharedPointer<rdf::TableRegion> region(new rdf::TableRegion());
 		bool detHeader = false;
 
-for (auto i : test) {
+		for (auto i : test) {
 
-	if (i->type() == i->type_table_region) {
-		region = i.dynamicCast<rdf::TableRegion>();
+			if (i->type() == i->type_table_region) {
+				region = i.dynamicCast<rdf::TableRegion>();
 
-	}
-	else if (i->type() == i->type_table_cell) {
-		//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
-		QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
-		cells.push_back(tCell);
+			}
+			else if (i->type() == i->type_table_cell) {
+				//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
+				QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
+				cells.push_back(tCell);
 
-		//check if tCell has a Textline as child, if yes, mark as table header;
-		if (!tCell->children().empty()) {
-			QVector<QSharedPointer<rdf::Region>> childs = tCell->children();
-			for (auto child : childs) {
-				if (child->type() == child->type_text_line) {
-					tCell->setHeader(true);
-					//qDebug() << imgC->filePath() << "detected header...";
-					//qDebug() << "detected header...";
-					detHeader = true;
-					break;
-				}
+				//don't use this here, because the template xml is the fully annotated form
+				//-> each cell can contain text....
+				////check if tCell has a Textline as child, if yes, mark as table header;
+				//if (!tCell->children().empty()) {
+				//	QVector<QSharedPointer<rdf::Region>> childs = tCell->children();
+				//	for (auto child : childs) {
+				//		if (child->type() == child->type_text_line) {
+				//			tCell->setHeader(true);
+				//			//qDebug() << imgC->filePath() << "detected header...";
+				//			//qDebug() << "detected header...";
+				//			detHeader = true;
+				//			break;
+				//		}
+				//	}
+				//}
 			}
 		}
-	}
-}
 
-if (detHeader)
-qDebug() << "detected header...";
+		if (detHeader)
+		qDebug() << "detected header...";
 
-if (cells.size() == 0) {
-	qWarning() << " no table in template specified ...";
-	return false;
-}
+		if (cells.size() == 0) {
+			qWarning() << " no table in template specified ...";
+			return false;
+		}
 
-std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
+		std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
-mTableRegionTemplate = region;
-//only add tablecells as children for the template
-mTableRegionTemplate->removeAllChildren();
+		mTableRegionTemplate = region;
+		//only add tablecells as children for the template
+		mTableRegionTemplate->removeAllChildren();
 
-for (int i = 0; i < cells.size(); i++) {
-	mTableRegionTemplate->addChild(cells[i]);
-}
+		for (int i = 0; i < cells.size(); i++) {
+			mTableRegionTemplate->addChild(cells[i]);
+		}
 
-mCellsTemplate = (double)cells.size();
+		mCellsTemplate = (double)cells.size();
 
-return true;
+		return true;
 	}
 
 	void FormEvaluation::setTable(QSharedPointer<rdf::TableRegion> table) {
@@ -3181,20 +3190,37 @@ return true;
 			drawIndex = i + 1;
 
 			if (mergeCells && (mCellsTemplate > mCellsMatched)) {
-				//if ground truth of table contains also each row
-				// -> merge row
+
 				int row = filteredCells[i]->row();
 				int col = filteredCells[i]->col();
 
-				//get index of the previous row
-				row = row - 1;
-				for (int j = 0; j < filteredCells.size(); j++) {
-					if ((filteredCells[j]->col() == col) && (filteredCells[j]->row() == row)) {
-						drawIndex = j + 1;
+				if (row > mTableRegionMatched->rows()-1) {
+					//get index of the previous row
+					row = mTableRegionMatched->rows() - 1;
+					for (int j = 0; j < filteredCells.size(); j++) {
+						if ((filteredCells[j]->col() == col) && (filteredCells[j]->row() == row)) {
+							drawIndex = j + 1;
+						}
 					}
 				}
 
 			}
+
+			//wrong version, because every cell can contain text in the fully annotated template
+			//if (mergeCells && (mCellsTemplate > mCellsMatched) && !filteredCells[i]->header()) {
+			//	//if ground truth of table contains also each row
+			//	// -> merge row
+			//	int row = filteredCells[i]->row();
+			//	int col = filteredCells[i]->col();
+
+			//	//get index of the previous row
+			//	row = row - 1;
+			//	for (int j = 0; j < filteredCells.size(); j++) {
+			//		if ((filteredCells[j]->col() == col) && (filteredCells[j]->row() == row) && !filteredCells[j]->header()) {
+			//			drawIndex = j + 1;
+			//		}
+			//	}
+			//}
 			
 			cv::fillPoly(tableImage, contour, cv::Scalar(drawIndex));
 		}
