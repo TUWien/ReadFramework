@@ -479,6 +479,7 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 
 	std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
+
 	templateForm->setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
 	templateForm->setFormName(mTemplateName);
 	templateForm->setHorLines(hLines);
@@ -3076,8 +3077,8 @@ cv::Size FormFeatures::sizeImg() const
 		}
 
 
-		QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(templateName);
-		//QString loadXmlPath = mTemplateName;
+		//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(templateName);
+		QString loadXmlPath = templateName;
 
 		rdf::PageXmlParser parser;
 		if (!parser.read(loadXmlPath)) {
