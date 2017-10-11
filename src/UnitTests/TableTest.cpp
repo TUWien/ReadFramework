@@ -123,7 +123,8 @@ namespace rdf {
 
 			rdf::FormEvaluation formEval;
 			formEval.setSize(formF.sizeImg());
-			if (!formEval.setTemplate(mConfig.templateXmlPath())) {
+			//if (!formEval.setTemplate(mConfig.templateXmlPath())) {
+			if (!formEval.setTemplate(mConfig.xmlPath())) {
 				qWarning() << "could not find template for evaluation " << mConfig.templateXmlPath();
 				qInfo() << "could not find template for evaluation";
 
@@ -150,31 +151,30 @@ namespace rdf {
 			//QVector<double> underSegCells = formEval.underSegmentedC();
 			
 			bool evalResultFail = false;
-			//check why results are wrong...
-			//if (tableJI < 0.99) {
-			//	qDebug() << "tableJI failed...";
-			//	evalResultFail = true;
-			//}
-			//if (tableM < 0.99) {
-			//	qDebug() << "tableM failed...";
-			//	evalResultFail = true;
-			//}
-			//if (meanCellM < 0.98) {
-			//	qDebug() << "meanCellM failed...";
-			//	evalResultFail = true;
-			//}
-			//if (meanCellJI < 0.97) {
-			//	qDebug() << "meanCellJI failed...";
-			//	evalResultFail = true;
-			//}
-			//if (missedCells > 0.05) {
-			//	qDebug() << "missedCells failed...";
-			//	evalResultFail = true;
-			//}
-			//if (underSeg > 0.05) {
-			//	qDebug() << "underSeg failed...";
-			//	evalResultFail = true;
-			//}
+			if (tableJI < 0.99) {
+				qDebug() << "tableJI failed...";
+				evalResultFail = true;
+			}
+			if (tableM < 0.99) {
+				qDebug() << "tableM failed...";
+				evalResultFail = true;
+			}
+			if (meanCellM < 0.98) {
+				qDebug() << "meanCellM failed...";
+				evalResultFail = true;
+			}
+			if (meanCellJI < 0.97) {
+				qDebug() << "meanCellJI failed...";
+				evalResultFail = true;
+			}
+			if (missedCells > 0.05) {
+				qDebug() << "missedCells failed...";
+				evalResultFail = true;
+			}
+			if (underSeg > 0.05) {
+				qDebug() << "underSeg failed...";
+				evalResultFail = true;
+			}
 
 
 			if (evalResultFail) {
