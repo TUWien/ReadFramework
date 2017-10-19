@@ -54,7 +54,7 @@ namespace rdf {
 
 	}
 
-	bool TableTest::match() const {
+	bool TableTest::match(bool eval) const {
 
 		cv::Mat imgForm;
 		rdf::PageXmlParser parser;
@@ -106,15 +106,83 @@ namespace rdf {
 		cv::Mat resultImg;// = imgForm;
 
 		resultImg = formF.drawAlignment(drawImg);
-
+		bool matchSuccess = false;
 		if (!resultImg.empty()) {
 			qDebug() << "Match template...";
-			formF.matchTemplate();
+			matchSuccess = formF.matchTemplate();
 
 		}
 
+		if (!matchSuccess) {
+			qWarning() << "could not match template " << mConfig.imagePath();
+			return matchSuccess;
+		}
+
+		//calculate eval section
+		if (eval) {
+
+			rdf::FormEvaluation formEval;
+			formEval.setSize(formF.sizeImg());
+			//if (!formEval.setTemplate(mConfig.templateXmlPath())) {
+			if (!formEval.setTemplate(mConfig.xmlPath())) {
+				qWarning() << "could not find template for evaluation " << mConfig.templateXmlPath();
+				qInfo() << "could not find template for evaluation";
+
+				return false;
+			}
+
+			formEval.setTable(formF.tableRegion());
 
 
+			formEval.computeEvalTableRegion();
+			formEval.computeEvalCells();
+
+			double tableJI = formEval.tableJaccard();
+			double tableM = formEval.tableMatch();
+
+			QVector<double> cellJI = formEval.cellJaccards();
+			double meanCellJI = formEval.meanCellJaccard();
+
+			QVector<double> cellM = formEval.cellMatches();
+			double meanCellM = formEval.meanCellMatch();
+
+			double missedCells = formEval.missedCells();
+			double underSeg = formEval.underSegmented();
+			//QVector<double> underSegCells = formEval.underSegmentedC();
+			
+			bool evalResultFail = false;
+			if (tableJI < 0.99) {
+				qDebug() << "tableJI failed...";
+				evalResultFail = true;
+			}
+			if (tableM < 0.99) {
+				qDebug() << "tableM failed...";
+				evalResultFail = true;
+			}
+			if (meanCellM < 0.98) {
+				qDebug() << "meanCellM failed...";
+				evalResultFail = true;
+			}
+			if (meanCellJI < 0.97) {
+				qDebug() << "meanCellJI failed...";
+				evalResultFail = true;
+			}
+			if (missedCells > 0.05) {
+				qDebug() << "missedCells failed...";
+				evalResultFail = true;
+			}
+			if (underSeg > 0.05) {
+				qDebug() << "underSeg failed...";
+				evalResultFail = true;
+			}
+
+
+			if (evalResultFail) {
+				qDebug() << "evalTable failed...";
+				return false;
+			}
+
+		}
 		return true;
 	}
 

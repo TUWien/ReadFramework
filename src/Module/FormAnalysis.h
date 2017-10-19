@@ -200,7 +200,7 @@ namespace rdf {
 		void setSize(cv::Size s);
 		bool setTemplate(QString templateName);
 		void setTable(QSharedPointer<rdf::TableRegion> table);
-		cv::Mat computeTableImage(QSharedPointer<rdf::TableRegion> table);
+		cv::Mat computeTableImage(QSharedPointer<rdf::TableRegion> table, bool mergeCells = false);
 		void computeEvalCells();
 		void computeEvalTableRegion();
 
@@ -294,7 +294,7 @@ namespace rdf {
 		bool isEmptyLines() const;
 		bool isEmptyTable() const;
 
-		void setTemplateName(QString s);
+		bool setTemplateName(QString s);
 		QString templateName() const;
 
 		cv::Size sizeImg() const;

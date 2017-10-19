@@ -53,7 +53,7 @@ class TableTest {
 public:
 	TableTest(const TestConfig& config = TestConfig());
 
-	bool match() const;
+	bool match(bool eval = false) const;
 
 protected:
 	TestConfig mConfig;

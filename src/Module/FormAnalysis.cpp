@@ -402,6 +402,8 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	//read xml separators and store them to testinfo
 	QVector<rdf::Line> hLines;
 	QVector<rdf::Line> vLines;
+	int maxRowIdx = 0;
+	int maxColIdx = 0;
 
 	QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
 	
@@ -419,6 +421,9 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 			//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
 			QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
 			cells.push_back(tCell);
+
+			maxRowIdx = tCell->row() > maxRowIdx ? tCell->row() : maxRowIdx;
+			maxColIdx = tCell->col() > maxColIdx ? tCell->col() : maxColIdx;
 
 			//check if tCell has a Textline as child, if yes, mark as table header;
 			if (!tCell->children().empty()) {
@@ -474,11 +479,14 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 
 	std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
+
 	templateForm->setSize(cv::Size(pe->imageSize().width(), pe->imageSize().height()));
 	templateForm->setFormName(mTemplateName);
 	templateForm->setHorLines(hLines);
 	templateForm->setVerLines(vLines);
 
+	region->setRows(maxRowIdx+1);
+	region->setCols(maxColIdx+1);
 	templateForm->setRegion(region);
 	templateForm->setCells(cells);
 	
@@ -2144,8 +2152,63 @@ bool FormFeatures::isEmptyTable() const {
 		return false;
 }
 
-void FormFeatures::setTemplateName(QString s) {
-	mTemplateName = s;
+bool FormFeatures::setTemplateName(QString s) {
+
+	//check if templateName is an xml
+	//otherwise it must be an csv specifying the template
+
+	QFileInfo fi(s);
+	QString ext = fi.suffix();
+
+	if (ext == "xml") {
+		mTemplateName = s;
+		qDebug() << "template xml specified in settings... ";
+	}
+	else if (ext == "csv") {
+		qDebug() << "template database specified in settings - searching for template xml...";
+		QFile templDataF(s);
+		bool found = false;
+
+		if (templDataF.open(QIODevice::ReadOnly)) {
+			QTextStream in(&templDataF);
+			while (!in.atEnd()) {
+				QString line = in.readLine();
+				//QStringList strlist = line.split(",");
+				QStringList strlist = line.split(QRegExp("s*,\\s*"));
+				QFileInfo formNameFile = strlist.first();
+				if (formName() == formNameFile.fileName()) {
+					//found entry in databae - check if second entry is an xml
+					QString templRef = strlist[1];
+					QFileInfo testRef(templRef);
+					if (testRef.suffix() == "xml") {
+						//templatename = templRef - create full file path;	
+						QFileInfo newPath(fi.absolutePath(), templRef);
+						mTemplateName = newPath.absoluteFilePath();
+						found = true;
+					}
+					else {
+						qWarning() << "not xml specified...";
+						return false;
+					}
+				}
+			}
+			templDataF.close();
+			if (!found) {
+				qWarning() << "template not found";
+				return false;
+			}
+		} else {
+			qWarning() << "could not open template database";
+			return false;
+		}
+
+	}
+	else {
+		qWarning() << "no template specified...";
+		return false;
+	}
+
+	return true;
 }
 
 QString FormFeatures::templateName() const {
@@ -3014,8 +3077,8 @@ cv::Size FormFeatures::sizeImg() const
 		}
 
 
-		QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(templateName);
-		//QString loadXmlPath = mTemplateName;
+		//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(templateName);
+		QString loadXmlPath = templateName;
 
 		rdf::PageXmlParser parser;
 		if (!parser.read(loadXmlPath)) {
@@ -3043,24 +3106,26 @@ cv::Size FormFeatures::sizeImg() const
 				QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
 				cells.push_back(tCell);
 
-				//check if tCell has a Textline as child, if yes, mark as table header;
-				if (!tCell->children().empty()) {
-					QVector<QSharedPointer<rdf::Region>> childs = tCell->children();
-					for (auto child : childs) {
-						if (child->type() == child->type_text_line) {
-							tCell->setHeader(true);
-							//qDebug() << imgC->filePath() << "detected header...";
-							//qDebug() << "detected header...";
-							detHeader = true;
-							break;
-						}
-					}
-				}
+				//don't use this here, because the template xml is the fully annotated form
+				//-> each cell can contain text....
+				////check if tCell has a Textline as child, if yes, mark as table header;
+				//if (!tCell->children().empty()) {
+				//	QVector<QSharedPointer<rdf::Region>> childs = tCell->children();
+				//	for (auto child : childs) {
+				//		if (child->type() == child->type_text_line) {
+				//			tCell->setHeader(true);
+				//			//qDebug() << imgC->filePath() << "detected header...";
+				//			//qDebug() << "detected header...";
+				//			detHeader = true;
+				//			break;
+				//		}
+				//	}
+				//}
 			}
 		}
 
 		if (detHeader)
-			qDebug() << "detected header...";
+		qDebug() << "detected header...";
 
 		if (cells.size() == 0) {
 			qWarning() << " no table in template specified ...";
@@ -3070,19 +3135,24 @@ cv::Size FormFeatures::sizeImg() const
 		std::sort(cells.begin(), cells.end(), rdf::TableCell::compareCells);
 
 		mTableRegionTemplate = region;
+		//only add tablecells as children for the template
+		mTableRegionTemplate->removeAllChildren();
 
 		for (int i = 0; i < cells.size(); i++) {
 			mTableRegionTemplate->addChild(cells[i]);
 		}
 
+		mCellsTemplate = (double)cells.size();
+
 		return true;
 	}
 
-	void FormEvaluation::setTable(QSharedPointer<rdf::TableRegion> table) 	{
+	void FormEvaluation::setTable(QSharedPointer<rdf::TableRegion> table) {
 		mTableRegionMatched = table;
+		mCellsMatched = mTableRegionMatched->children().size();
 	}
 
-	cv::Mat FormEvaluation::computeTableImage(QSharedPointer<rdf::TableRegion> table) 	{
+	cv::Mat FormEvaluation::computeTableImage(QSharedPointer<rdf::TableRegion> table, bool mergeCells) {
 
 		cv::Mat tableImage;
 
@@ -3091,18 +3161,19 @@ cv::Size FormFeatures::sizeImg() const
 
 		QVector<QSharedPointer<rdf::Region>> cells = table->children();
 		QVector<QSharedPointer<rdf::TableCell>> filteredCells;
-		
+
 		for (auto cell : cells) {
 			if (cell->type() == cell->type_table_cell) {
 				//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
 				QSharedPointer<rdf::TableCell> tCell = cell.dynamicCast<rdf::TableCell>();
-				
+
 				filteredCells.push_back(tCell);
 			}
 		}
-		
+
 		std::sort(filteredCells.begin(), filteredCells.end(), rdf::TableCell::compareCells);
 
+		int drawIndex = 0;
 		for (int i = 0; i < filteredCells.size(); i++) {
 
 			rdf::Polygon cellPoly = filteredCells[i]->polygon();
@@ -3116,16 +3187,52 @@ cv::Size FormFeatures::sizeImg() const
 
 			std::vector<std::vector<cv::Point>> contour;
 			contour.push_back(cvPtsTmp);
+
+			drawIndex = i + 1;
+
+			if (mergeCells && (mCellsTemplate > mCellsMatched)) {
+
+				int row = filteredCells[i]->row();
+				int col = filteredCells[i]->col();
+
+				if (row > mTableRegionMatched->rows()-1) {
+					//get index of the previous row
+					row = mTableRegionMatched->rows() - 1;
+					for (int j = 0; j < filteredCells.size(); j++) {
+						if ((filteredCells[j]->col() == col) && (filteredCells[j]->row() == row)) {
+							drawIndex = j + 1;
+						}
+					}
+				}
+
+			}
+
+			//wrong version, because every cell can contain text in the fully annotated template
+			//if (mergeCells && (mCellsTemplate > mCellsMatched) && !filteredCells[i]->header()) {
+			//	//if ground truth of table contains also each row
+			//	// -> merge row
+			//	int row = filteredCells[i]->row();
+			//	int col = filteredCells[i]->col();
+
+			//	//get index of the previous row
+			//	row = row - 1;
+			//	for (int j = 0; j < filteredCells.size(); j++) {
+			//		if ((filteredCells[j]->col() == col) && (filteredCells[j]->row() == row) && !filteredCells[j]->header()) {
+			//			drawIndex = j + 1;
+			//		}
+			//	}
+			//}
 			
-			cv::fillPoly(tableImage, contour, cv::Scalar(i+1));
+			cv::fillPoly(tableImage, contour, cv::Scalar(drawIndex));
 		}
+		//rdf::Image::save(tableImage, "C:\\tmp\\cmptable.png");
 
 		return tableImage;
 	}
 
 	void FormEvaluation::computeEvalTableRegion() 	{
 		
-		mTableTemplate = computeTableImage(mTableRegionTemplate);
+		mTableTemplate = computeTableImage(mTableRegionTemplate, true);
 		mTableMatched = computeTableImage(mTableRegionMatched);
 		
 		cv::Mat templateImg = mTableTemplate.clone();
@@ -3172,8 +3279,18 @@ cv::Size FormFeatures::sizeImg() const
 		double orNumb = (double)cv::countNonZero(orRes);
 		double andNumb = (double)cv::countNonZero(andRes);
 
-		mJaccardTable = andNumb / orNumb;
-		mMatchTable = andNumb / tempNumb;
+		if (orNumb  > 0)
+			mJaccardTable = andNumb / orNumb;
+		else {
+			mJaccardTable = 0;
+			qWarning() << "error in calculating JaccardTable - set to 0";
+		}
+		if (tempNumb > 0)
+			mMatchTable = andNumb / tempNumb;
+		else {
+			mMatchTable = 0;
+			qWarning() << "error in calculating MatchTable - set to 0";
+		}
 
 	}
 
@@ -3281,6 +3398,9 @@ cv::Size FormFeatures::sizeImg() const
 			cv::Mat cmpTable = mTableMatched == i;
 			cv::Mat andRes, orRes;
 
+			//rdf::Image::save(cmpTable, "C:\\tmp\\cmptable.png");
+			//rdf::Image::save(cmpTemplate, "C:\\tmp\\cmptemplate.png");
+
 			cv::bitwise_and(cmpTemplate, cmpTable, andRes);
 			cv::bitwise_or(cmpTemplate, cmpTable, orRes);
 
@@ -3289,15 +3409,32 @@ cv::Size FormFeatures::sizeImg() const
 			double orNumb = (double)cv::countNonZero(orRes);
 			double andNumb = (double)cv::countNonZero(andRes);
 
-			mJaccardCell.push_back(andNumb / orNumb);
-			mCellMatch.push_back(andNumb / tempNumb);
+			if (orNumb > 0)
+				mJaccardCell.push_back(andNumb / orNumb);
+			else {
+				mJaccardCell.push_back(0);
+				qWarning() << "error for calculating JI for cell " << i << " - set to 0";
+			}
+
+			if (tempNumb > 0)
+				mCellMatch.push_back(andNumb / tempNumb);
+			else {
+				mCellMatch.push_back(0);
+				qWarning() << "error for calculating match for cell " << i << " - set to 0";
+			}
 
 			//undersegmented
 			//double match = andNumb / tempNumb;
 			cv::Mat underRes;
 			cv::bitwise_and(cmpTable, templateImg, underRes);
 			double underResNum = (double)cv::countNonZero(underRes);
-			double undersegmented = (underResNum - andNumb) / tempNumb;
+			double undersegmented = 0;
+			if (tempNumb > 0 && (underResNum - andNumb) >= 0)
+				undersegmented = (underResNum - andNumb) / tempNumb;
+			else
+				qWarning() << "error for caluclating undersegmentation for cell " << i << " - set to 0";
+
+
 			mUnderSegmented.push_back(undersegmented);
 
 		}

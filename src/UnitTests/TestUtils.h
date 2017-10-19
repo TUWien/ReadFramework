@@ -69,7 +69,7 @@ public:
 protected:
 	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
 	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
-	QString mTemplateXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn-template.xml";
+	QString mTemplateXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn-template2.xml";
 	QString mClassifierPath = "";
 	QString mFeatureCachePath = "";
 	QString mLabelConfigPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
