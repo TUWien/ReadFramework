@@ -81,7 +81,7 @@ sudo ln -s /opt/local/libexec/qt5/bin/qmake /opt/local/bin/qmake
 
 Get the READ Framework sources from github:
 ``` console
-git clone https://github.com/TUWien/ReadFramework
+git clone https://github.com/TUWien/ReadFramework.git
 ```
 
 This will by default place the source into ./ReadFramework
