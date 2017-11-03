@@ -67,6 +67,41 @@ You will now have a binary (ReadFramework), which you can test (or use directly)
 sudo make install
 ```
 
+## Build on macOS (MacPorts)
+
+Get required packages:
+``` console
+sudo port install cmake qt5 opencv
+```
+
+By default, `qmake` is installed in `/opt/local/libexec/qt5/bin/qmake` which might not be in your `PATH`. Set a link to an appropriate directory, e.g.:
+``` console
+sudo ln -s /opt/local/libexec/qt5/bin/qmake /opt/local/bin/qmake
+```
+
+Get the READ Framework sources from github:
+``` console
+git clone https://github.com/TUWien/ReadFramework
+```
+
+This will by default place the source into ./ReadFramework
+
+Go to the ReadFramework directory and run `cmake` to get the Makefiles:
+``` console
+cd ReadFramework
+cmake .
+```
+
+Compile READ Framework:
+``` console
+make
+```
+
+You will now have a macOS app (`ReadFramework.app/`), which contains a command-line interface (`ReadFramework.app/Contents/MacOS/ReadFramework`) which you can test (or use directly). Also the resulting libraries are in the working directory. To install everything it to `/usr/local/`, use:
+``` console
+sudo make install
+```
+
 ### Authors
 - Markus Diem
 - Stefan Fiel
