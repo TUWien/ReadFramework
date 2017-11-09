@@ -2341,6 +2341,14 @@ Polygon TableCellRaw::polygon() const{
 	return mRefPoly;
 }
 
+void TableCellRaw::setNewPolygon(const Polygon & polygon) {
+	mNewPoly = polygon;
+}
+
+Polygon TableCellRaw::newPolygon() const {
+	return mNewPoly;
+}
+
 void TableCellRaw::setRowSpan(int r) {
 	mRowSpan = r;
 }

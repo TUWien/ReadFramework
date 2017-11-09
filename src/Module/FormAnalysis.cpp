@@ -1512,7 +1512,8 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 		newCell->setLeftBorderVisible(mCellsR[cellIdx]->leftBorderVisible());
 		newCell->setRightBorderVisible(mCellsR[cellIdx]->rightBorderVisible());
 
-		newCell->setPolygon(mCellsR[cellIdx]->polygon());
+		//newCell->setPolygon(mCellsR[cellIdx]->polygon());
+		newCell->setPolygon(mCellsR[cellIdx]->newPolygon());
 		newCell->setCustom(mCellsR[cellIdx]->custom());
 		QVector<int> cPty = mCellsR[cellIdx]->cornerPty();
 		newCell->setCornerPts(cPty);
@@ -2009,8 +2010,8 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			//use neighbours to get left Line position
 			QVector<int> t = cellsR[cellIdx]->leftIdx();
 			for (int n = 0; n < t.size(); n++) {
-				rdf::Line debugL = cellsR[t[n]]->topBorder();		//only debug
-				rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
+				//rdf::Line debugL = cellsR[t[n]]->topBorder();		//only debug
+				//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
 				if (cellsR[t[n]]->topBorder().p2().y() == cellsR[cellIdx]->topBorder().p1().y()) {
 					rdf::Line tmpLine = cellsR[t[n]]->topLineC().mergeLines(mHorLines);
 					newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
@@ -2018,8 +2019,8 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			}
 			QVector<int> b = cellsR[cellIdx]->rightIdx();
 			for (int n = 0; n < b.size(); n++) {
-				rdf::Line debugL = cellsR[b[n]]->topBorder();		//only debug
-				rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
+				//rdf::Line debugL = cellsR[b[n]]->topBorder();		//only debug
+				//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
 				if (cellsR[b[n]]->topBorder().p1().y() == cellsR[cellIdx]->topBorder().p2().y()) {
 					rdf::Line tmpLine = cellsR[b[n]]->topLineC().mergeLines(mHorLines);
 					newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
@@ -2066,8 +2067,8 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			//use neighbours to get left Line position
 			QVector<int> t = cellsR[cellIdx]->leftIdx();
 			for (int n = 0; n < t.size(); n++) {
-				rdf::Line debugL = cellsR[t[n]]->bottomBorder();		//only debug
-				rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
+				//rdf::Line debugL = cellsR[t[n]]->bottomBorder();		//only debug
+				//rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
 				if (cellsR[t[n]]->bottomBorder().p2().y() == cellsR[cellIdx]->bottomBorder().p1().y()) {
 					rdf::Line tmpLine = cellsR[t[n]]->bottomLineC().mergeLines(mHorLines);
 					newLineBottom = newLineBottom.isEmpty() ? tmpLine : newLineBottom.merge(tmpLine);
@@ -2075,8 +2076,8 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			}
 			QVector<int> b = cellsR[cellIdx]->rightIdx();
 			for (int n = 0; n < b.size(); n++) {
-				rdf::Line debugL = cellsR[b[n]]->bottomBorder();		//only debug
-				rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
+				//rdf::Line debugL = cellsR[b[n]]->bottomBorder();		//only debug
+				//rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
 				if (cellsR[b[n]]->bottomBorder().p1().y() == cellsR[cellIdx]->bottomBorder().p2().y()) {
 					rdf::Line tmpLine = cellsR[b[n]]->bottomLineC().mergeLines(mHorLines);
 					newLineBottom = newLineBottom.isEmpty() ? tmpLine : newLineBottom.merge(tmpLine);
@@ -2137,10 +2138,12 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		//}
 
 		//plausibilityCheck();
+		//cellsR[cellIdx]->
 
 		rdf::Polygon p = createPolygon(newLineTop, newLineLeft, newLineRight, newLineBottom);
 
-		cellsR[cellIdx]->setPolygon(p);
+		//cellsR[cellIdx]->setPolygon(p);
+		cellsR[cellIdx]->setNewPolygon(p);
 		cellsR[cellIdx]->setCustom(customTmp);
 		QVector<int> cornerPts;
 
