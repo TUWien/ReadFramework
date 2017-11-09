@@ -2157,6 +2157,12 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 
 	}
 
+	//do this if functions like topBorder etc. are used...
+	//otherwise not the new polygon is referenced
+	//for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
+	//	cellsR[cellIdx]->setPolygon(cellsR[cellIdx]->newPolygon());
+	//}
+
 }
 
 bool FormFeatures::isEmptyLines() const {
