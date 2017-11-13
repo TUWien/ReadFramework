@@ -402,7 +402,7 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	QSize templSize = pe->imageSize();
 	double scaleFactor = 1.0;
 	if (!templSize.isEmpty()) {
-		if (!mSizeSrc.empty()) {
+		if (mSizeSrc.width > 0) {
 			scaleFactor = (double)mSizeSrc.width / (double)templSize.width();
 		}
 	}
