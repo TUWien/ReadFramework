@@ -3149,6 +3149,25 @@ cv::Size FormFeatures::sizeImg() const
 
 		auto pe = parser.page();
 
+		//QSize templSize = pe->imageSize();
+		//double scaleFactor = 1.0;
+		//if (!templSize.isEmpty()) {
+		//	if (mImageSize.width > 0) {
+		//		scaleFactor = (double)mImageSize.width / (double)templSize.width();
+		//	}
+		//}
+		//if (scaleFactor <= 0) {
+		//	scaleFactor = 1.0;
+		//	qWarning() << "ScaleFactor of template to image is <= 0";
+		//}
+		//if (scaleFactor > 2 && scaleFactor < 3) {
+		//	qWarning() << "ScaleFactor is " << scaleFactor << " (but not changed)";
+		//}
+		//if (scaleFactor >= 3) {
+		//	qWarning() << "ScaleFactor is <= 3... set to 1.0";
+		//	scaleFactor = 1.0;
+		//}
+
 
 		QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
 
@@ -3160,11 +3179,13 @@ cv::Size FormFeatures::sizeImg() const
 
 			if (i->type() == i->type_table_region) {
 				region = i.dynamicCast<rdf::TableRegion>();
+				//region->scaleRegion(scaleFactor);
 
 			}
 			else if (i->type() == i->type_table_cell) {
 				//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
 				QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
+				//tCell->scaleRegion(scaleFactor);
 				cells.push_back(tCell);
 
 				//don't use this here, because the template xml is the fully annotated form

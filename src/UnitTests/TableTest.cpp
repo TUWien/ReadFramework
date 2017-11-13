@@ -81,6 +81,8 @@ namespace rdf {
 		QSharedPointer<rdf::FormFeaturesConfig> tmpConfig(new rdf::FormFeaturesConfig());
 		//(*tmpConfig) = mFormConfig;
 		tmpConfig->setTemplDatabase(mConfig.templateXmlPath());
+		tmpConfig->setVariationThrLower(0.5);
+		tmpConfig->setVariationThrUpper(0.55);
 		formF.setConfig(tmpConfig);
 
 		//rdf::FormFeatures formTemplate;
@@ -151,19 +153,19 @@ namespace rdf {
 			//QVector<double> underSegCells = formEval.underSegmentedC();
 			
 			bool evalResultFail = false;
-			if (tableJI < 0.99) {
+			if (tableJI < 0.9) {
 				qDebug() << "tableJI failed...";
 				evalResultFail = true;
 			}
-			if (tableM < 0.99) {
+			if (tableM < 0.9) {
 				qDebug() << "tableM failed...";
 				evalResultFail = true;
 			}
-			if (meanCellM < 0.98) {
+			if (meanCellM < 0.95) {
 				qDebug() << "meanCellM failed...";
 				evalResultFail = true;
 			}
-			if (meanCellJI < 0.97) {
+			if (meanCellJI < 0.95) {
 				qDebug() << "meanCellJI failed...";
 				evalResultFail = true;
 			}
