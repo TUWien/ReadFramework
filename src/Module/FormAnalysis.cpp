@@ -1518,6 +1518,17 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 		QVector<int> cPty = mCellsR[cellIdx]->cornerPty();
 		newCell->setCornerPts(cPty);
 
+		//QVector<int> cornerPts;
+		//rdf::Polygon tmpPoly = mCellsR[cellIdx]->newPolygon();
+		//if (tmpPoly.size() == 4) {
+		//	cornerPts << 0 << 1 << 2 << 3;
+		//	newCell->setCornerPts(cornerPts);
+		//}
+		//else {
+		//	qWarning() << "Wrong number of corners for tablecell...";
+		//}
+
+
 		rdf::Vector2D offSet = newCell->upperLeft() - mCellsR[cellIdx]->upperLeft();
 		//copy children
 
@@ -2142,11 +2153,13 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 
 		rdf::Polygon p = createPolygon(newLineTop, newLineLeft, newLineRight, newLineBottom);
 
-		//cellsR[cellIdx]->setPolygon(p);
+		cellsR[cellIdx]->setPolygon(p);
 		cellsR[cellIdx]->setNewPolygon(p);
 		cellsR[cellIdx]->setCustom(customTmp);
+		
+		//do this at the end of createTableFromMaxClique when the new table is created????
+		//only necessary if old polygon is saved
 		QVector<int> cornerPts;
-
 		if (p.size() == 4) {
 			cornerPts << 0 << 1 << 2 << 3;
 			cellsR[cellIdx]->setCornerPts(cornerPts);
