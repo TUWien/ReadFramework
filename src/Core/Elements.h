@@ -104,6 +104,8 @@ public:
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
 
+	void scaleRegion(double scale);
+
 	void addChild(QSharedPointer<Region> child);
 	bool reassignChild(QSharedPointer<Region> child);
 	void addUniqueChild(QSharedPointer<Region> child, bool update = false);

@@ -398,6 +398,25 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	}
 
 	auto pe = parser.page();
+	
+	QSize templSize = pe->imageSize();
+	double scaleFactor = 1.0;
+	if (!templSize.isEmpty()) {
+		if (!mSizeSrc.empty()) {
+			scaleFactor = (double)mSizeSrc.width / (double)templSize.width();
+		}
+	}
+	if (scaleFactor <= 0) {
+		scaleFactor = 1.0;
+		qWarning() << "ScaleFactor of template to image is <= 0";
+	}
+	if (scaleFactor > 2 && scaleFactor < 3) {
+		qWarning() << "ScaleFactor is " << scaleFactor << " (but not changed)";
+	}
+	if (scaleFactor >= 3) {
+		qWarning() << "ScaleFactor is <= 3... set to 1.0";
+		scaleFactor = 1.0;
+	}
 
 	//read xml separators and store them to testinfo
 	QVector<rdf::Line> hLines;
@@ -415,11 +434,13 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 
 		if (i->type() == i->type_table_region) {
 			region = i.dynamicCast<rdf::TableRegion>();
+			region->scaleRegion(scaleFactor);
 
 		}
 		else if (i->type() == i->type_table_cell) {
 			//rdf::TableCell* tCell = dynamic_cast<rdf::TableCell*>(i.data());
 			QSharedPointer<rdf::TableCell> tCell = i.dynamicCast<rdf::TableCell>();
+			tCell->scaleRegion(scaleFactor);
 			cells.push_back(tCell);
 
 			maxRowIdx = tCell->row() > maxRowIdx ? tCell->row() : maxRowIdx;
