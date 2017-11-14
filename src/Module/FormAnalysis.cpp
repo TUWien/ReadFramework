@@ -1742,6 +1742,10 @@ bool FormFeatures::matchTemplate() {
 	for (int t = 0; t < mMaxCliquesVer.size(); t++) {
 		qDebug() << mMaxCliquesVer[t];
 	}
+	qDebug() << "maxCliqueHor";
+	for (int t = 0; t < mMaxCliquesHor.size(); t++) {
+		qDebug() << mMaxCliquesHor[t];
+	}
 
 	mCellsR = cellsR;
 
@@ -1850,6 +1854,9 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 	QVector<int> l;
 	double cellDim = std::numeric_limits<double>::max();
 
+	double wCell = cellsR[cellIdx]->width();
+	double hCell = cellsR[cellIdx]->height();
+
 	//0: left 1: right 2; upper 3: bottom
 	switch (neighbour) {
 
@@ -1874,6 +1881,12 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 		if (w < cellDim) {
 			cellDim = w;
 		}
+	}
+
+	if (neighbour == 0 || neighbour == 1) {
+		cellDim = cellDim < wCell ? cellDim : wCell;
+	} else {
+		cellDim = cellDim < hCell ? cellDim : hCell;
 	}
 
 	return cellDim;
@@ -3015,12 +3028,14 @@ cv::Size FormFeatures::sizeImg() const
 					if (lineDtmp < distThreshold*3) {
 						//matched lines are also "colinear"
 						//check if reference line is above or not, same must apply to matched lines
-						if (ref1.p1().y() <= ref2.p1().y() && m1.p1().y() <= m2.p1().y()) {
-							return true;
-						}
-						else if (ref1.p1().y() > ref2.p1().y() && m1.p1().y() > m2.p1().y()) {
-							return true;
-						}
+						//really? matched line can be line of entire row... test only with true...
+						return true;
+						//if (ref1.p1().y() <= ref2.p1().y() && m1.p1().y() <= m2.p1().y()) {
+						//	return true;
+						//}
+						//else if (ref1.p1().y() > ref2.p1().y() && m1.p1().y() > m2.p1().y()) {
+						//	return true;
+						//}
 					}
 
 				}
@@ -3072,12 +3087,14 @@ cv::Size FormFeatures::sizeImg() const
 					if (lineDtmp < distThreshold*3) {
 						//matched lines are also "colinear"
 						//check if reference line is left or not, same must apply to matched lines
-						if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
-							return true;
-						}
-						else if (ref1.p1().x() > ref2.p1().x() && m1.p1().x() > m2.p1().x()) {
-							return true;
-						}
+						//really? matched line can be line of entire row... test only with true...
+						return true;
+						//if (ref1.p1().x() <= ref2.p1().x() && m1.p1().x() <= m2.p1().x()) {
+						//	return true;
+						//}
+						//else if (ref1.p1().x() > ref2.p1().x() && m1.p1().x() > m2.p1().x()) {
+						//	return true;
+						//}
 					}
 					
 				}
