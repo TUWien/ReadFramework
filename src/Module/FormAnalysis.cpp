@@ -1206,7 +1206,7 @@ QVector<QSharedPointer<rdf::AssociationGraphNode>> FormFeatures::mergeColinearNo
 		//newNode->setMatchedLine(newNode->matchedLine(), newNode->overlap(), newNode->distance());
 
 		for (int cmpNodeIdx = nodeIdx + 1; cmpNodeIdx < tmpNodes.size(); cmpNodeIdx++) {
-			if (newNode->matchedLine().isColinear(tmpNodes[cmpNodeIdx]->matchedLine())) {
+			if (newNode->matchedLine().isColinear(tmpNodes[cmpNodeIdx]->matchedLine()) || newNode->matchedLine().isClose(tmpNodes[cmpNodeIdx]->matchedLine())) {
 				//node is colinear -> store index
 				coLinearIdx.insert(cmpNodeIdx);
 
@@ -1747,14 +1747,13 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << mMaxCliquesHor[t];
 	}
 
-	for (QSet<int>::iterator t = mMaxCliquesHor[0].begin(); t != mMaxCliquesHor[0].end(); ++t) {
-		QSet<int> test = mANodesHorizontal[*t]->adjacencyNodes().toList().toSet();
-		int searchNode = 96;
+	for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
+		QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
+		int searchNode = 67;
 		if (!test.contains(searchNode))
 			qDebug() << "node " << searchNode << " not found in node: " << *t;
 	}
-
-
+	
 
 
 	mCellsR = cellsR;
@@ -3025,7 +3024,7 @@ cv::Size FormFeatures::sizeImg() const
 
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx() && mLinePos == LinePosition::pos_left) ||
+				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) ||
 					(mLinePos == neighbour->linePosition() && (mRefColIdx + mColSpan) == (neighbour->getColIdx() + neighbour->colSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) {
 				//problem with distance by non straight lines....
@@ -3085,7 +3084,7 @@ cv::Size FormFeatures::sizeImg() const
 								
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx() && mLinePos == LinePosition::pos_top) ||
+				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) || 
 					(mLinePos == neighbour->linePosition() && (mRefRowIdx+mRowSpan) == (neighbour->getRowIdx()+neighbour->rowSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) {
 				//-> problem with distance if lines are not straight... 

@@ -458,6 +458,19 @@ bool Line::isColinear(const Line &line, double threshold) const {
 		return false;
 }
 
+bool Line::isClose(const Line & line, double threshold) const {
+
+	double d1 = distance(line.p1());
+	double d2 = distance(line.p2());
+	double d3 = line.distance(p1());
+	double d4 = line.distance(p2());
+
+	if ((d1 < threshold && d2 < threshold) || (d3 < threshold && d4 < threshold))
+		return true;
+	else
+		return false;
+}
+
 bool Line::intersects(const Line & line, QLineF::IntersectType t) const {
 
 	return mLine.intersect(line.qLine(), 0) == t;
