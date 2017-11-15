@@ -1747,6 +1747,16 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << mMaxCliquesHor[t];
 	}
 
+	for (QSet<int>::iterator t = mMaxCliquesHor[0].begin(); t != mMaxCliquesHor[0].end(); ++t) {
+		QSet<int> test = mANodesHorizontal[*t]->adjacencyNodes().toList().toSet();
+		int searchNode = 96;
+		if (!test.contains(searchNode))
+			qDebug() << "node " << searchNode << " not found in node: " << *t;
+	}
+
+
+
+
 	mCellsR = cellsR;
 
 	qDebug() << "create Table from maxclique...";
@@ -1854,8 +1864,8 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 	QVector<int> l;
 	double cellDim = std::numeric_limits<double>::max();
 
-	double wCell = cellsR[cellIdx]->width();
-	double hCell = cellsR[cellIdx]->height();
+	//double wCell = cellsR[cellIdx]->width();
+	//double hCell = cellsR[cellIdx]->height();
 
 	//0: left 1: right 2; upper 3: bottom
 	switch (neighbour) {
@@ -1883,11 +1893,11 @@ double FormFeatures::findMinWidth(QVector<QSharedPointer<rdf::TableCellRaw>> cel
 		}
 	}
 
-	if (neighbour == 0 || neighbour == 1) {
-		cellDim = cellDim < wCell ? cellDim : wCell;
-	} else {
-		cellDim = cellDim < hCell ? cellDim : hCell;
-	}
+	//if (neighbour == 0 || neighbour == 1) {
+	//	cellDim = cellDim < wCell ? cellDim : wCell;
+	//} else {
+	//	cellDim = cellDim < hCell ? cellDim : hCell;
+	//}
 
 	return cellDim;
 }
@@ -3015,7 +3025,7 @@ cv::Size FormFeatures::sizeImg() const
 
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) ||
+				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx() && mLinePos == LinePosition::pos_left) ||
 					(mLinePos == neighbour->linePosition() && (mRefColIdx + mColSpan) == (neighbour->getColIdx() + neighbour->colSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) {
 				//problem with distance by non straight lines....
@@ -3075,7 +3085,7 @@ cv::Size FormFeatures::sizeImg() const
 								
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) || 
+				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx() && mLinePos == LinePosition::pos_top) ||
 					(mLinePos == neighbour->linePosition() && (mRefRowIdx+mRowSpan) == (neighbour->getRowIdx()+neighbour->rowSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) {
 				//-> problem with distance if lines are not straight... 
