@@ -1506,9 +1506,27 @@ void FormFeatures::createTableFromMaxClique(const QVector<QSharedPointer<rdf::Ta
 			rdf::LineCandidates tmp2 = mCellsR[neighbourIdx[i]]->bottomLineC();
 			mCellsR[cellIdx]->addLineCandidateTop(tmp2);
 		}
-
 	}
 
+	//maybe some left or top lines are copied -> check again right and bottom lines
+	for (int cellIdx = 0; cellIdx < mCellsR.size(); cellIdx++) {
+		//get left neighbours
+		QVector<int> neighbourIdx = mCellsR[cellIdx]->rightIdx();
+		//add right lines of left neighbours to current cell
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp1 = mCellsR[neighbourIdx[i]]->leftLineC();
+			mCellsR[cellIdx]->addLineCandidateRight(tmp1);
+		}
+
+		//same for top line
+		neighbourIdx = mCellsR[cellIdx]->bottomIdx();
+		for (int i = 0; i < neighbourIdx.size(); i++) {
+			rdf::LineCandidates tmp2 = mCellsR[neighbourIdx[i]]->topLineC();
+			mCellsR[cellIdx]->addLineCandidateBottom(tmp2);
+		}
+	}
+
+	//now maximum clique information is fully copied into mCellsR
 	//create new cells
 	createCellfromLineCandidates(mCellsR);
 
@@ -1747,12 +1765,12 @@ bool FormFeatures::matchTemplate() {
 		qDebug() << mMaxCliquesHor[t];
 	}
 
-	for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
-		QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
-		int searchNode = 67;
-		if (!test.contains(searchNode))
-			qDebug() << "node " << searchNode << " not found in node: " << *t;
-	}
+	//for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
+	//	QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
+	//	int searchNode = 67;
+	//	if (!test.contains(searchNode))
+	//		qDebug() << "node " << searchNode << " not found in node: " << *t;
+	//}
 	
 
 
@@ -1961,51 +1979,56 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			}
 		}
 
-
 		//check if emtpy for left line
+		//if left line is empty -> no left neighbour cell with a detected right line exists
+		//(otherwise left line would have been copied)
 		if (newLineLeft.isEmpty()) {
 
-			//use neighbours to get left Line position
-			QVector<int> t = cellsR[cellIdx]->topIdx();
-			for (int n = 0; n < t.size(); n++) {
-				if (cellsR[t[n]]->leftBorder().p2().x() == cellsR[cellIdx]->leftBorder().p1().x()) {
-					rdf::Line tmpLine = cellsR[t[n]]->leftLineC().mergeLines(mVerLines);
-					newLineLeft = newLineLeft.isEmpty() ? tmpLine : newLineLeft.merge(tmpLine);
+			QVector<int> l = mCellsR[cellIdx]->leftIdx();
+			//add right lines of left neighbours to current cell (already visited cells)
+			for (int i = 0; i < l.size(); i++) {
+				if (l[i] < cellIdx) {
+					newLineLeft = mCellsR[l[i]]->rightBorder();
 				}
+
 			}
-			QVector<int> b = cellsR[cellIdx]->bottomIdx();
-			for (int n = 0; n < b.size(); n++) {
-				if (cellsR[b[n]]->leftBorder().p1().x() == cellsR[cellIdx]->leftBorder().p2().x()) {
-					rdf::Line tmpLine = cellsR[b[n]]->leftLineC().mergeLines(mVerLines);
-					newLineLeft = newLineLeft.isEmpty() ? tmpLine : newLineLeft.merge(tmpLine);
+
+			//not calculated previously
+			//use top and bottom neighbours to get left Line position
+			if (newLineLeft.isEmpty()) {
+				QVector<int> t = cellsR[cellIdx]->topIdx();
+				for (int n = 0; n < t.size(); n++) {
+					if (cellsR[t[n]]->col() == cellsR[cellIdx]->col()) {
+						//if (cellsR[t[n]]->leftBorder().p2().x() == cellsR[cellIdx]->leftBorder().p1().x()) {
+						rdf::Line tmpLine = cellsR[t[n]]->leftLineC().mergeLines(mVerLines);
+						newLineLeft = newLineLeft.isEmpty() ? tmpLine : newLineLeft.merge(tmpLine);
+					}
+				}
+				QVector<int> b = cellsR[cellIdx]->bottomIdx();
+				for (int n = 0; n < b.size(); n++) {
+					if (cellsR[b[n]]->col() == cellsR[cellIdx]->col()) {
+						//if (cellsR[b[n]]->leftBorder().p1().x() == cellsR[cellIdx]->leftBorder().p2().x()) {
+						rdf::Line tmpLine = cellsR[b[n]]->leftLineC().mergeLines(mVerLines);
+						newLineLeft = newLineLeft.isEmpty() ? tmpLine : newLineLeft.merge(tmpLine);
+					}
 				}
 			}
 
 			//no neighbouring cells with same line position use right line and move by width
 			if (newLineLeft.isEmpty() && !newLineRight.isEmpty()) {
-				QVector<int> lN = cellsR[cellIdx]->leftIdx();
-				if (lN.size() >= 1) {
-					newLineLeft = cellsR[lN[0]]->rightBorder();
-				} else {
-					newLineLeft = newLineRight;
-					newLineLeft.translate(cv::Point(-(int)cellsR[cellIdx]->width(), 0));
-				}
+				newLineLeft = newLineRight;
+				newLineLeft.translate(cv::Point(-(int)cellsR[cellIdx]->width(), 0));
 				qDebug() << "left line is right line moved by width " << cellIdx;
 			} else if (newLineLeft.isEmpty()){
 				//no neighbouring cells and no right line - use template line
-				QVector<int> lN = cellsR[cellIdx]->leftIdx();
-				if (lN.size() >= 1) {
-					newLineLeft = cellsR[lN[0]]->rightBorder();
-				}
-				else {
-					newLineLeft = cellsR[cellIdx]->leftBorder();
-					newLineLeft.translate(mOffset);
-				}
+				newLineLeft = cellsR[cellIdx]->leftBorder();
+				newLineLeft.translate(mOffset);
 				qDebug() << "left line is template line " << cellIdx;
 			} else {
 				qDebug() << "left line merged from borders " << cellIdx;
 			}
 			customTmp = customTmp + QString("false") + " ";
+
 		}
 		else {
 			qDebug() << "left line detected " << cellIdx;
@@ -2017,17 +2040,23 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		//check if emtpy for right line
 		if (newLineRight.isEmpty()) {
 
+			//right cells don't have to be checked, since they will be calculated later in the loop
+			//QVector<int> l = mCellsR[cellIdx]->rightIdx();
+			//not necessary!!
+
 			//use neighbours to get left Line position
 			QVector<int> t = cellsR[cellIdx]->topIdx();
 			for (int n = 0; n < t.size(); n++) {
-				if (cellsR[t[n]]->rightBorder().p2().x() == cellsR[cellIdx]->rightBorder().p1().x()) {
+				if (cellsR[t[n]]->col()+ cellsR[t[n]]->colSpan() == cellsR[cellIdx]->col() + cellsR[cellIdx]->colSpan()) {
+				//if (cellsR[t[n]]->rightBorder().p2().x() == cellsR[cellIdx]->rightBorder().p1().x()) {
 					rdf::Line tmpLine = cellsR[t[n]]->rightLineC().mergeLines(mVerLines);
 					newLineRight = newLineRight.isEmpty() ? tmpLine : newLineRight.merge(tmpLine);
 				}
 			}
 			QVector<int> b = cellsR[cellIdx]->bottomIdx();
 			for (int n = 0; n < b.size(); n++) {
-				if (cellsR[b[n]]->rightBorder().p1().x() == cellsR[cellIdx]->rightBorder().p2().x()) {
+				if (cellsR[b[n]]->col() + cellsR[b[n]]->colSpan() == cellsR[cellIdx]->col() + cellsR[cellIdx]->colSpan()) {
+				//if (cellsR[b[n]]->rightBorder().p1().x() == cellsR[cellIdx]->rightBorder().p2().x()) {
 					rdf::Line tmpLine = cellsR[b[n]]->rightLineC().mergeLines(mVerLines);
 					newLineRight = newLineRight.isEmpty() ? tmpLine : newLineRight.merge(tmpLine);
 				}
@@ -2061,48 +2090,51 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		//check if emtpy for top line
 		if (newLineTop.isEmpty()) {
 
-			//use neighbours to get left Line position
-			QVector<int> t = cellsR[cellIdx]->leftIdx();
-			for (int n = 0; n < t.size(); n++) {
-				//rdf::Line debugL = cellsR[t[n]]->topBorder();		//only debug
-				//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
-				if (cellsR[t[n]]->topBorder().p2().y() == cellsR[cellIdx]->topBorder().p1().y()) {
-					rdf::Line tmpLine = cellsR[t[n]]->topLineC().mergeLines(mHorLines);
-					newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
+			QVector<int> top = mCellsR[cellIdx]->topIdx();
+			//add bottom lines of top neighbours to current cell (already visited cells)
+			for (int i = 0; i < top.size(); i++) {
+				if (top[i] < cellIdx) {
+					newLineTop = mCellsR[top[i]]->bottomBorder();
 				}
+
 			}
-			QVector<int> b = cellsR[cellIdx]->rightIdx();
-			for (int n = 0; n < b.size(); n++) {
-				//rdf::Line debugL = cellsR[b[n]]->topBorder();		//only debug
-				//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
-				if (cellsR[b[n]]->topBorder().p1().y() == cellsR[cellIdx]->topBorder().p2().y()) {
-					rdf::Line tmpLine = cellsR[b[n]]->topLineC().mergeLines(mHorLines);
-					newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
+
+
+			//not calculated previously
+			//use neighbours to get left Line position
+			if (newLineTop.isEmpty()) {
+				QVector<int> t = cellsR[cellIdx]->leftIdx();
+				for (int n = 0; n < t.size(); n++) {
+					//rdf::Line debugL = cellsR[t[n]]->topBorder();		//only debug
+					//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
+					if (cellsR[t[n]]->row() == cellsR[cellIdx]->row()) {
+					//if (cellsR[t[n]]->topBorder().p2().y() == cellsR[cellIdx]->topBorder().p1().y()) {
+						rdf::Line tmpLine = cellsR[t[n]]->topLineC().mergeLines(mHorLines);
+						newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
+					}
+				}
+				QVector<int> b = cellsR[cellIdx]->rightIdx();
+				for (int n = 0; n < b.size(); n++) {
+					//rdf::Line debugL = cellsR[b[n]]->topBorder();		//only debug
+					//rdf::Line debugL2 = cellsR[cellIdx]->topBorder();	//only debug
+					if (cellsR[b[n]]->row() == cellsR[cellIdx]->row()) {
+					//if (cellsR[b[n]]->topBorder().p1().y() == cellsR[cellIdx]->topBorder().p2().y()) {
+						rdf::Line tmpLine = cellsR[b[n]]->topLineC().mergeLines(mHorLines);
+						newLineTop = newLineTop.isEmpty() ? tmpLine : newLineTop.merge(tmpLine);
+					}
 				}
 			}
 
 			//no neighbouring cells with same line position use right line and move by width
 			if (newLineTop.isEmpty() && !newLineBottom.isEmpty()) {
-				QVector<int> lN = cellsR[cellIdx]->topIdx();
-				if (lN.size() >= 1) {
-					newLineTop = cellsR[lN[0]]->bottomBorder();
-				}
-				else {
-					newLineTop = newLineBottom;
-					newLineTop.translate(cv::Point(0, -(int)cellsR[cellIdx]->height()));
-				}
+				newLineTop = newLineBottom;
+				newLineTop.translate(cv::Point(0, -(int)cellsR[cellIdx]->height()));
 				qDebug() << "top line is bottom border moved by height " << cellIdx;
 			}
 			else if (newLineTop.isEmpty()) {
 				//no neighbouring cells and no right line - use template line
-				QVector<int> lN = cellsR[cellIdx]->topIdx();
-				if (lN.size() >= 1) {
-					newLineTop = cellsR[lN[0]]->bottomBorder();
-				}
-				else {
-					newLineTop = cellsR[cellIdx]->topBorder();
-					newLineTop.translate(mOffset);
-				}
+				newLineTop = cellsR[cellIdx]->topBorder();
+				newLineTop.translate(mOffset);
 				qDebug() << "top line is template line " << cellIdx;
 			} else {
 				qDebug() << "top line merged from borders " << cellIdx;
@@ -2118,12 +2150,17 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 		//check if emtpy for bottom line
 		if (newLineBottom.isEmpty()) {
 
+			//bottom cells don't have to be checked, since they will be calculated later in the loop
+			//QVector<int> l = mCellsR[cellIdx]->bottomIdx();
+			//not necessary!!
+
 			//use neighbours to get left Line position
 			QVector<int> t = cellsR[cellIdx]->leftIdx();
 			for (int n = 0; n < t.size(); n++) {
 				//rdf::Line debugL = cellsR[t[n]]->bottomBorder();		//only debug
 				//rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
-				if (cellsR[t[n]]->bottomBorder().p2().y() == cellsR[cellIdx]->bottomBorder().p1().y()) {
+				if (cellsR[t[n]]->row()+ cellsR[t[n]]->rowSpan() == cellsR[cellIdx]->row()+ cellsR[cellIdx]->rowSpan()) {
+				//if (cellsR[t[n]]->bottomBorder().p2().y() == cellsR[cellIdx]->bottomBorder().p1().y()) {
 					rdf::Line tmpLine = cellsR[t[n]]->bottomLineC().mergeLines(mHorLines);
 					newLineBottom = newLineBottom.isEmpty() ? tmpLine : newLineBottom.merge(tmpLine);
 				}
@@ -2132,7 +2169,8 @@ void FormFeatures::createCellfromLineCandidates(QVector<QSharedPointer<rdf::Tabl
 			for (int n = 0; n < b.size(); n++) {
 				//rdf::Line debugL = cellsR[b[n]]->bottomBorder();		//only debug
 				//rdf::Line debugL2 = cellsR[cellIdx]->bottomBorder();	//only debug
-				if (cellsR[b[n]]->bottomBorder().p1().y() == cellsR[cellIdx]->bottomBorder().p2().y()) {
+				if (cellsR[b[n]]->row() + cellsR[b[n]]->rowSpan() == cellsR[cellIdx]->row() + cellsR[cellIdx]->rowSpan()) {
+				//if (cellsR[b[n]]->bottomBorder().p1().y() == cellsR[cellIdx]->bottomBorder().p2().y()) {
 					rdf::Line tmpLine = cellsR[b[n]]->bottomLineC().mergeLines(mHorLines);
 					newLineBottom = newLineBottom.isEmpty() ? tmpLine : newLineBottom.merge(tmpLine);
 				}
