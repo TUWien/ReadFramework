@@ -37,6 +37,7 @@
 #include "Utils.h"
 #include "GraphCut.h"
 #include "SuperPixelScaleSpace.h"
+#include "SuperPixelClassification.h"
 #include "TextLineSegmentation.h"
 #include "Elements.h"
 #include "ElementsHelper.h"
@@ -44,7 +45,10 @@
 #include "LineTrace.h"
 
 #pragma warning(push, 0)	// no warnings from includes
- // Qt Includes
+
+#include <QFileInfo>
+#include <opencv2/ml.hpp>
+
 #pragma warning(pop)
 
 namespace rdf {
@@ -58,7 +62,7 @@ QString LayoutAnalysisConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-void LayoutAnalysisConfig::setRemoveWeakTextLiens(bool remove) {
+void LayoutAnalysisConfig::setRemoveWeakTextLines(bool remove) {
 	mRemoveWeakTextLines = remove;
 }
 
@@ -90,12 +94,21 @@ bool LayoutAnalysisConfig::computeSeparators() const {
 	return mComputeSeparators;
 }
 
+void LayoutAnalysisConfig::setClassiferPath(const QString & cp) {
+	mClassifierPath = cp;
+}
+
+QString LayoutAnalysisConfig::classifierPath() const {
+	return mClassifierPath;
+}
+
 void LayoutAnalysisConfig::load(const QSettings & settings) {
 
 	mMinSuperPixelsPerBlock	= settings.value("minSuperPixelsPerBlock", minSuperixelsPerBlock()).toInt();
 	mRemoveWeakTextLines	= settings.value("removeWeakTextLines", removeWeakTextLines()).toBool();
 	mLocalBlockOrientation	= settings.value("localBlockOrientation", localBlockOrientation()).toBool();
 	mComputeSeparators		= settings.value("computeSeparators", computeSeparators()).toBool();
+	mClassifierPath			= settings.value("classifierPath", classifierPath()).toString();
 }
 
 void LayoutAnalysisConfig::save(QSettings & settings) const {
@@ -104,6 +117,7 @@ void LayoutAnalysisConfig::save(QSettings & settings) const {
 	settings.setValue("removeWeakTextLines", removeWeakTextLines());
 	settings.setValue("localBlockOrientation", localBlockOrientation());
 	settings.setValue("computeSeparators", computeSeparators());
+	settings.setValue("classifierPath", classifierPath());
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -131,13 +145,13 @@ bool LayoutAnalysis::compute() {
 
 	cv::Mat img = mImg;
 
-	if (img.rows > 2000) {
+	//if (img.rows > 2000) {
 
-		// if you stumble upon this line:
-		// microfilm images are binary with heavey noise
-		// a small median filter fixes this issue...
-		cv::medianBlur(img, img, 3);
-	}
+	//	// if you stumble upon this line:
+	//	// microfilm images are binary with heavy noise
+	//	// a small median filter fixes this issue...
+	//	cv::medianBlur(img, img, 3);
+	//}
 
 	qDebug() << "scale factor dpi: " << ScaleFactory::scaleFactorDpi();
 
@@ -145,9 +159,10 @@ bool LayoutAnalysis::compute() {
 	mImg = img;
 
 	// find super pixels
-	//ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
+	ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
 	//GridSuperPixel spM(img);
-	SuperPixel spM(img);
+	//SuperPixel spM(img);
+	//LineSuperPixel spM(img);
 
 	if (!spM.compute()) {
 		mWarning << "could not compute super pixels!";
@@ -177,6 +192,23 @@ bool LayoutAnalysis::compute() {
 		if (!computeLocalStats(pixels))
 			return false;
 	}
+
+	if (QFileInfo(config()->classifierPath()).exists()) {
+		// classify pixel
+		QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(config()->classifierPath());
+
+		auto f = model->model();
+		if (f->isTrained())
+			qDebug() << "the classifier I loaded is trained...";
+
+		SuperPixelClassifier spc(img, pixels);
+		spc.setModel(model);
+
+		if (!spc.compute())
+			qWarning() << "could not classify SuperPixels";
+	}
+	else
+		qDebug() << "could not load classifier from " << config()->classifierPath();
 
 	// compute text lines for each text block
 	for (QSharedPointer<TextBlock> tb : mTextBlockSet.textBlocks()) {

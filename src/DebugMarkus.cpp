@@ -159,6 +159,29 @@ void LayoutTest::testComponents() {
 	else
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
+
+	//QImage tp("C:/temp/chris/c12.png");
+	//cv::Mat tpc = Image::qImage2Mat(tp);
+	//
+	//cv::cvtColor(imgCv, imgCv, CV_RGB2GRAY);
+	//cv::cvtColor(tpc, tpc, CV_RGB2GRAY);
+	//imgCv.convertTo(imgCv, 1.0 / 255, CV_32FC1);
+	//tpc.convertTo(tpc, 1.0 / 255, CV_32FC1);
+
+	//int rc = imgCv.cols - tpc.cols + 1;
+	//int rr = imgCv.rows - tpc.rows + 1;
+	//cv::Mat r(rr, rc, CV_32FC1);
+	//Image::imageInfo(r, "template");
+	//Image::imageInfo(imgCv, "img");
+	//Image::imageInfo(tpc, "t");
+	//matchTemplate(imgCv, tpc, r, CV_TM_CCORR_NORMED);
+
+	//Image::imageInfo(r, "result");
+	////cv::normalize(r, r, 255.0, cv::NORM_MINMAX);
+	//Image::save(r, "C:/temp/chris/result2.png");
+
+
+
 	// switch tests
 	//testFeatureCollector(imgCv);
 	//testTrainer();
@@ -196,6 +219,8 @@ void LayoutTest::layoutToXml() const {
 	rdf::LayoutAnalysis la(img);
 	la.setRootRegion(pe->rootRegion());
 	la.config()->saveDefaultSettings();	// save default layout settings
+	la.config()->setClassiferPath(mConfig.classifierPath());
+	//la.config()->setRemoveWeakTextLines(false);
 
 	if (!la.compute())
 		qWarning() << "could not compute layout analysis";
@@ -206,7 +231,7 @@ void LayoutTest::layoutToXml() const {
 	// save super pixel image
 	//rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
-	rImg = la.draw(rImg);
+	rImg = la.draw(rImg, ColorManager::darkGray());
 	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textlines");
 	rdf::Image::save(rImg, dstPath);
 
@@ -252,23 +277,24 @@ void LayoutTest::layoutToXmlDebug() const {
 	auto pe = parser.page();
 
 	// start computing --------------------------------------------------------------------
-	rdf::GridSuperPixel gpm(img);
+	//rdf::ScaleSpaceSuperPixel<rdf::GridSuperPixel> gpm(img);
+	rdf::SuperPixel gpm(img);
 
 	if (!gpm.compute())
 		qWarning() << "could not compute" << mConfig.imagePath();
 
-	// read back the model
-	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
+	//// read back the model
+	//QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
 
-	auto f = model->model();
-	if (f->isTrained())
-		qDebug() << "the classifier I loaded is trained...";
+	//auto f = model->model();
+	//if (f->isTrained())
+	//	qDebug() << "the classifier I loaded is trained...";
 
-	SuperPixelClassifier spc(img, gpm.pixelSet());
-	spc.setModel(model);
+	//SuperPixelClassifier spc(img, gpm.pixelSet());
+	//spc.setModel(model);
 
-	if (!spc.compute())
-		qWarning() << "could not classify SuperPixels";
+	//if (!spc.compute())
+	//	qWarning() << "could not classify SuperPixels";
 
 
 	// end computing --------------------------------------------------------------------
@@ -306,7 +332,7 @@ void LayoutTest::layoutToXmlDebug() const {
 
 	cv::Mat gcImg;
 	//gcImg = gpm.draw(img, ColorManager::blue());
-	gcImg = spc.draw(img);
+	gcImg = gpm.draw(img);
 
 	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-classified");
 	rdf::Image::save(gcImg, dstPath);
@@ -712,7 +738,7 @@ void LayoutTest::eval(const QString & toolPath, const QString & gtPath, const QS
 	//qDebug() << "exit status: " << eval.exitStatus() << "code:" << eval.exitCode();
 
 	// show the results
-	qDebug().noquote() << "\n" << eval.readAllStandardOutput();
+	qDebug().noquote() << "/n" << eval.readAllStandardOutput();
 }
 
 }

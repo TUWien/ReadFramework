@@ -1056,7 +1056,7 @@ cv::Mat GridSuperPixel::draw(const cv::Mat & img, const QColor& col) const {
 	cv::Mat mag, phase;
 	edges(img, mag, phase);
 
-	QImage qImg = Image::mat2QImage(mag, true);
+	QImage qImg = Image::mat2QImage(img, true);
 	QPainter p(&qImg);
 
 	p.setPen(col);

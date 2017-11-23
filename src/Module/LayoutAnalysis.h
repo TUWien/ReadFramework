@@ -67,7 +67,7 @@ public:
 
 	virtual QString toString() const override;
 
-	void setRemoveWeakTextLiens(bool remove);
+	void setRemoveWeakTextLines(bool remove);
 	bool removeWeakTextLines() const;
 
 	void setMinSuperPixelsPerBlock(int minPx);
@@ -79,6 +79,9 @@ public:
 	void setComputeSeparators(bool cs);
 	bool computeSeparators() const;
 
+	void setClassiferPath(const QString& cp);
+	QString classifierPath() const;
+
 protected:
 
 	void load(const QSettings& settings) override;
@@ -86,8 +89,9 @@ protected:
 
 	bool mRemoveWeakTextLines = true;		// if true, unstable text lines are removed
 	int mMinSuperPixelsPerBlock = 15;		// the minimum number of components that are required to run the text line segmentation
-	bool mLocalBlockOrientation = true;		// local orientation is estimated per text block
+	bool mLocalBlockOrientation = false;	// local orientation is estimated per text block
 	bool mComputeSeparators = true;			// if true, separators lines are computed
+	QString mClassifierPath = "";
 };
 
 class DllCoreExport LayoutAnalysis : public Module {

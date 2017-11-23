@@ -147,15 +147,20 @@ public:
 		return true;
 	}
 
-	cv::Mat draw(const cv::Mat & img) const {
+	cv::Mat draw(const cv::Mat & img, const QColor& col = QColor()) const {
 
 		QImage qImg = Image::mat2QImage(img, true);
+
 		QPainter p(&qImg);
 
-		p.setPen(ColorManager::blue());
+		QVector<PixelSet> s = mSet.splitScales();
+		for (int idx = s.size() - 1; idx >= 0; idx--) {
 
-		for (auto px : mSet.pixels()) {
-			px->draw(p, 0.3, Pixel::DrawFlags() | /*Pixel::draw_id |*/ Pixel::draw_center | Pixel::draw_stats);
+			if (!col.isValid())
+				p.setPen(ColorManager::randColor());
+			p.setOpacity(0.5);
+			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
+			//qDebug() << "scale" << idx << ":" << *s[idx];
 		}
 
 		return Image::qImage2Mat(qImg);

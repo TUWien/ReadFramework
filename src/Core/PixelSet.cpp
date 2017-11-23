@@ -931,6 +931,9 @@ QVector<QSharedPointer<PixelEdge>> DelaunayPixelConnector::connect(const QVector
 	QVector<QSharedPointer<PixelEdge> > edges;
 	for (int idx = 0; idx < (pixels.size()-8)*3; idx++) {
 
+		//assert(subdiv.edgeOrg((idx << 2)) < ids.size() && subdiv.edgeOrg((idx << 2)) >= 0);
+		//assert(subdiv.edgeDst((idx << 2)) < ids.size() && subdiv.edgeDst((idx << 2)) >= 0);
+
 		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
 		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
 
@@ -1287,12 +1290,27 @@ void TextLineSet::draw(QPainter & p, const DrawFlags & options, const Pixel::Dra
 
 	PixelSet::draw(p, options, pixelOptions);
 
-	Line tLine = mLine;
-	tLine.draw(p);
+	p.setRenderHints(QPainter::HighQualityAntialiasing);
+	//Line tLine = mLine;
+	//tLine.draw(p);
 	
 	Line bLine = fitLine(0);
 	bLine.setThickness(3);
 	bLine.draw(p);
+
+	int ss = 4;
+
+	QPen dp = p.pen();
+	QPen sp = dp;
+	sp.setWidth(2);
+	sp.setColor(sp.color().darker());
+
+	p.setPen(sp);
+	p.setBrush(ColorManager::white(0.6));
+	p.drawEllipse(bLine.p1().toQPointF(), ss, ss);
+	p.drawEllipse(bLine.p2().toQPointF(), ss, ss);
+	p.setPen(dp);
+
 }
 
 Line TextLineSet::line() const {
@@ -1528,7 +1546,7 @@ void TextBlockSet::removeWeakTextLines() const {
 	auto filtered = TextLineHelper::filterLowDensity(tls);
 	int nf = filtered.size();
 	filtered << TextLineHelper::filterAngle(tls, maxAngleDiff);
-
+	
 	for (auto tb : textBlocks()) {
 		
 		// remove the textlines
@@ -1563,7 +1581,7 @@ QVector<QSharedPointer<TextLineSet> > TextLineHelper::filterLowDensity(const QVe
 	QVector<QSharedPointer<TextLineSet> > filtered;
 
 	for (auto tl : textLines) {
-		if (tl->density() < lb)
+		if (tl->density() < lb || tl->size() < 5)
 			filtered << tl;
 	}
 

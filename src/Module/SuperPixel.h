@@ -223,7 +223,7 @@ public:
 	virtual QString toString() const override;
 
 	bool autoWindowSize() const;
-	void estimateWindowSize(int height, int numTiles = 200);
+	void estimateWindowSize(int height, int numTiles = 75);
 	int winSize() const;
 	double winOverlap() const;
 	double minEnergy() const;
