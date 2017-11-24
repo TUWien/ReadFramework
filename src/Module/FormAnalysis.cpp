@@ -1038,32 +1038,39 @@ QVector<QSharedPointer<rdf::TableCellRaw>> FormFeatures::createRawTableFromTempl
 			for (; tmpIdx >= 0; tmpIdx--) {
 				//if row+rowspan of current cell equals the current row, the previous row is detected
 				if ((cellsR[tmpIdx]->row() + cellsR[tmpIdx]->rowSpan()) == newCellR->row()) {
-					//collIdx is the same as current cell -> it is upper Neighbour
-					if (newCellR->col() == cellsR[tmpIdx]->col()) {
-						//newCellR->setTopIdx(tmpIdx);
-						//if current colSpan > 1 -> add neighbour for all spanned cells, happens in the following case:
-						//          +------+----------+
-						//          |  X   | add also |
-						//          +------+----------+
-						//          |   cellIdx       |
-						//			+-----------------+
-						for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
-							int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
-							newCellR->setTopIdx(tmpIdx + cellIdxTmp);
-							cellsR[tmpIdx + cellIdxTmp]->setBottomIdx(cellIdx);
-						}
-					}
-
-					//if upperColIdx doesn't exist because of colSpan - check if the cell spans the current cell: happens in the following case:
-					//			+-----------------+
-					//          |                 |
-					//          +------+----------+
-					//          |      |  cellIdx |
-					//          +------+----------+
-					if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
+					
+					if ((cellsR[tmpIdx]->col() >= newCellR->col() && cellsR[tmpIdx]->col() < (newCellR->col() + newCellR->colSpan())) ||
+						(cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col()))) {
 						newCellR->setTopIdx(tmpIdx);
 						cellsR[tmpIdx]->setBottomIdx(cellIdx);
 					}
+					////old version
+					////collIdx is the same as current cell -> it is upper Neighbour
+					//if (newCellR->col() == cellsR[tmpIdx]->col()) {
+					//	//newCellR->setTopIdx(tmpIdx);
+					//	//if current colSpan > 1 -> add neighbour for all spanned cells, happens in the following case:
+					//	//          +------+----------+
+					//	//          |  X   | add also |
+					//	//          +------+----------+
+					//	//          |   cellIdx       |
+					//	//			+-----------------+
+					//	for (int tmpColSpan = newCellR->colSpan(); tmpColSpan > 0; tmpColSpan--) {
+					//		int cellIdxTmp = newCellR->colSpan() - tmpColSpan;
+					//		newCellR->setTopIdx(tmpIdx + cellIdxTmp);
+					//		cellsR[tmpIdx + cellIdxTmp]->setBottomIdx(cellIdx);
+					//	}
+					//}
+
+					////if upperColIdx doesn't exist because of colSpan - check if the cell spans the current cell: happens in the following case:
+					////			+-----------------+
+					////          |                 |
+					////          +------+----------+
+					////          |      |  cellIdx |
+					////          +------+----------+
+					//if (cellsR[tmpIdx]->col() < newCellR->col() && (cellsR[tmpIdx]->col() + cellsR[tmpIdx]->colSpan() > newCellR->col())) {
+					//	newCellR->setTopIdx(tmpIdx);
+					//	cellsR[tmpIdx]->setBottomIdx(cellIdx);
+					//}
 				}
 			}
 		}
@@ -1259,6 +1266,22 @@ void FormFeatures::createAssociationGraph() {
 		}
 	}
 
+	////only debug
+	//QVector<int> tmp = mANodesHorizontal[99]->adjacencyNodes();
+	//for (int i = 0; i < mANodesHorizontal.size(); i++) {
+	//	mANodesHorizontal[i]->clearAdjacencyList();
+	//}
+	//for (int currentNodeIdx = 0; currentNodeIdx < mANodesHorizontal.size(); currentNodeIdx++) {
+	//	for (int compareNodeIdx = currentNodeIdx + 1; compareNodeIdx < mANodesHorizontal.size(); compareNodeIdx++) {
+	//		if (tmp.toList().toSet().contains(currentNodeIdx) || currentNodeIdx == 99) {
+	//			//test if nodes can be associated
+	//			if (mANodesHorizontal[currentNodeIdx]->testAdjacency(mANodesHorizontal[compareNodeIdx], config()->coLinearityThr(), config()->variationThrLower(), config()->variationThrUpper())) {
+	//				mANodesHorizontal[currentNodeIdx]->addAdjacencyNode(compareNodeIdx);
+	//				mANodesHorizontal[compareNodeIdx]->addAdjacencyNode(currentNodeIdx);
+	//			}
+	//		}
+	//	}
+	//}
 
 }
 
@@ -1756,6 +1779,11 @@ bool FormFeatures::matchTemplate() {
 	
 	findMaxCliques();
 
+	//QSet<int> testH = mANodesHorizontal[99]->adjacencyNodes().toList().toSet();
+	//testH.insert(99);
+	//mMaxCliquesHor.clear();
+	//mMaxCliquesHor.push_back(testH);
+
 	qDebug() << "maxCliqueVer";
 	for (int t = 0; t < mMaxCliquesVer.size(); t++) {
 		qDebug() << mMaxCliquesVer[t];
@@ -1768,6 +1796,29 @@ bool FormFeatures::matchTemplate() {
 	//for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
 	//	QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
 	//	int searchNode = 67;
+	//	if (!test.contains(searchNode))
+	//		qDebug() << "node " << searchNode << " not found in node: " << *t;
+	//}
+
+	//QVector<int> neighNN = mANodesHorizontal[125]->adjacencyNodes();
+	//for (int ii = 0; ii < neighNN.size(); ii++) {
+	//	if (!mMaxCliquesHor[0].contains(neighNN[ii]))
+	//		qDebug() << "not found " << neighNN[ii];
+
+	//}
+	
+	//for (int ii = 0; ii < neighNN.size(); ii++) {
+	//	QSet<int> tmp2 = mANodesHorizontal[ii]->adjacencyNodes().toList().toSet();
+	//	tmp2.insert(ii);
+	//	tmpS = tmpS.intersect(tmp2);
+	//}
+	//mMaxCliquesHor.clear();
+	//mMaxCliquesHor.append(tmpS);
+	
+
+	//for (QSet<int>::iterator t = mMaxCliquesHor[0].begin(); t != mMaxCliquesHor[0].end(); ++t) {
+	//	QSet<int> test = mANodesHorizontal[*t]->adjacencyNodes().toList().toSet();
+	//	int searchNode = 82;
 	//	if (!test.contains(searchNode))
 	//		qDebug() << "node " << searchNode << " not found in node: " << *t;
 	//}
@@ -3062,7 +3113,7 @@ cv::Size FormFeatures::sizeImg() const
 
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) ||
+				if ((mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx() && mLinePos==rdf::AssociationGraphNode::LinePosition::pos_left) ||
 					(mLinePos == neighbour->linePosition() && (mRefColIdx + mColSpan) == (neighbour->getColIdx() + neighbour->colSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefColIdx == neighbour->getColIdx()) {
 				//problem with distance by non straight lines....
@@ -3122,8 +3173,8 @@ cv::Size FormFeatures::sizeImg() const
 								
 				// line position must be the same and row position must be the same for top line
 				// or for bottom line rowIdx + rowSpan must be the same
-				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) || 
-					(mLinePos == neighbour->linePosition() && (mRefRowIdx+mRowSpan) == (neighbour->getRowIdx()+neighbour->rowSpan()))) {
+				if ((mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx() && mLinePos==rdf::AssociationGraphNode::LinePosition::pos_top) || 
+					(mLinePos == neighbour->linePosition() && (mRefRowIdx+mRowSpan == neighbour->getRowIdx()+neighbour->rowSpan()))) {
 				//if (mLinePos == neighbour->linePosition() && mRefRowIdx == neighbour->getRowIdx()) {
 				//-> problem with distance if lines are not straight... 
 				//if (dref < distThreshold) {
