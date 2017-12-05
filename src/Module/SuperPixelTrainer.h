@@ -73,8 +73,8 @@ public:
 	FeatureCollection(const cv::Mat& descriptors = cv::Mat(), const LabelInfo& label = LabelInfo());
 	friend DllCoreExport bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr);
 
-	QJsonObject toJson() const;
-	static FeatureCollection read(QJsonObject& jo);
+	QJsonObject toJson(const QString& filePath = "") const;
+	static FeatureCollection read(QJsonObject& jo, const QString& filePath = "");
 
 	void append(const cv::Mat& descriptor);
 	LabelInfo label() const;

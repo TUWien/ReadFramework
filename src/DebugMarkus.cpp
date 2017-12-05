@@ -183,11 +183,11 @@ void LayoutTest::testComponents() {
 
 
 	// switch tests
-	//testFeatureCollector(imgCv);
-	//testTrainer();
+	testFeatureCollector(imgCv);
+	testTrainer();
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	layoutToXml();
+	//layoutToXml();
 	//layoutToXmlDebug();
 	//testLineDetector(imgCv);
 
@@ -357,7 +357,7 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	qInfo().noquote() << lm.toString();
 
 	// compute super pixels
-	GridSuperPixel sp(src);
+	SuperPixel sp(src);
 
 	if (!sp.compute())
 		qCritical() << "could not compute super pixels!";
@@ -443,7 +443,7 @@ void LayoutTest::testTrainer() {
 	QSharedPointer<SuperPixelModel> model = SuperPixelModel::read(mConfig.classifierPath());
 
 	auto f = model->model();
-	if (f->isTrained())
+	if (f && f->isTrained())
 		qDebug() << "the classifier I loaded is trained...";
 	
 	//qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;

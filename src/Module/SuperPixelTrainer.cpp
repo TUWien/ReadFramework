@@ -47,6 +47,7 @@
 #include <QPainter>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -410,20 +411,34 @@ bool operator==(const FeatureCollection& fcl, const FeatureCollection& fcr) {
 	return fcl.label() == fcr.label();
 }
 
-QJsonObject FeatureCollection::toJson() const {
+QJsonObject FeatureCollection::toJson(const QString& filePath) const {
 
 	QJsonObject jo;
 	mLabel.toJson(jo);
-	jo.insert("descriptors", Image::matToJson(mDesc));
+
+	// embed features
+	if (filePath == "")
+		jo.insert("descriptors", Image::matToJson(mDesc));
+	else {
+
+		// write data to external file
+		QString fp = Utils::createFilePath(filePath, "-" + Utils::timeStampFileName(mLabel.name(), ""), "rdf");
+		Image::writeMat(mDesc, fp);
+
+		QFileInfo fi(fp);
+		jo.insert("descriptors", Image::matToJsonExtern(mDesc, fi.fileName()));
+	}
 
 	return jo;
 }
 
-FeatureCollection FeatureCollection::read(QJsonObject & jo) {
+FeatureCollection FeatureCollection::read(QJsonObject & jo, const QString& filePath) {
+
+	QString path = QFileInfo(filePath).absolutePath();
 
 	FeatureCollection fc;
 	fc.mLabel = LabelInfo::fromJson(jo.value("Class").toObject());
-	fc.mDesc = Image::jsonToMat(jo.value("descriptors").toObject());
+	fc.mDesc = Image::jsonToMat(jo.value("descriptors").toObject(), path);
 
 	return fc;
 }
@@ -500,7 +515,7 @@ void FeatureCollectionManager::write(const QString & filePath) const {
 
 	// NOTE: JSON objects have a size limit ~40MB
 	for (const FeatureCollection& fc : mCollection) {
-		ja << fc.toJson();
+		ja << fc.toJson(filePath);
 	}
 	
 	QJsonObject jo;
@@ -523,7 +538,7 @@ FeatureCollectionManager FeatureCollectionManager::read(const QString & filePath
 	// parse labels
 	for (const QJsonValue& cLabel : labels) {
 		QJsonObject co = cLabel.toObject();
-		manager.add(FeatureCollection::read(co));
+		manager.add(FeatureCollection::read(co, filePath));
 	}
 
 	return manager;
@@ -802,7 +817,7 @@ QString SuperPixelTrainer::toString() const {
 
 bool SuperPixelTrainer::write(const QString & filePath) const {
 
-	if (!mModel->isTrained())
+	if (mModel && !mModel->isTrained())
 		qWarning() << "writing trainer that is NOT trained!";
 
 	return model()->write(filePath);

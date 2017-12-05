@@ -139,7 +139,11 @@ namespace Image {
 	DllCoreExport void imageInfo(const cv::Mat& img, const QString name);
 	DllCoreExport QString printImage(const cv::Mat& img, const QString name);
 	DllCoreExport QJsonObject matToJson(const cv::Mat& img, bool compress = true);
-	DllCoreExport cv::Mat jsonToMat(const QJsonObject& jo);
+	DllCoreExport cv::Mat jsonToMat(const QJsonObject& jo, const QString& filePath = "");
+
+	DllCoreExport QJsonObject matToJsonExtern(const cv::Mat& img, const QString& fileName, bool compress = true);
+	DllCoreExport bool writeMat(const cv::Mat& img, const QString& filePath, bool compress = true);
+
 
 	/// <summary>
 	/// Prints the values of a cv::Mat to copy it to Matlab.

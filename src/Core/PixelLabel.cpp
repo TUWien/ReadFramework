@@ -492,7 +492,7 @@ QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
 
 bool SuperPixelModel::write(const QString & filePath) const {
 
-	if (!mModel->isTrained())
+	if (mModel && !mModel->isTrained())
 		qWarning() << "writing trainer that is NOT trained!";
 
 	// write all label data
@@ -508,6 +508,11 @@ bool SuperPixelModel::write(const QString & filePath) const {
 }
 
 void SuperPixelModel::toJson(QJsonObject& jo) const {
+
+	if (!mModel) {
+		qWarning() << "cannot save SuperPixelModel because it is NULL.";
+		return;
+	}
 
 	cv::FileStorage fs(".xml", cv::FileStorage::WRITE | cv::FileStorage::MEMORY | cv::FileStorage::FORMAT_XML);
 	mModel->write(fs);
