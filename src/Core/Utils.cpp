@@ -338,7 +338,7 @@ int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 	else
 		qDebug() << nb << "bytes written to" << filePath;
 
-	return 0;
+	return nb;
 }
 
 void Utils::initDefaultFramework() {

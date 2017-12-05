@@ -111,6 +111,7 @@ public:
 	bool isHorizontal(double mAngleTresh = 0.5) const;
 	bool isVertical(double mAngleTresh = 0.5) const;
 	bool isColinear(const Line& line, double threshold = 20) const;
+	bool isClose(const Line& line, double threshold = 20) const;
 	bool intersects(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
 
 	Vector2D intersection(const Line& line, QLineF::IntersectType t = QLineF::BoundedIntersection) const;
@@ -652,6 +653,10 @@ public:
 
 	void setPolygon(const Polygon& polygon);
 	Polygon polygon() const;
+
+	void setNewPolygon(const Polygon& polygon);
+	Polygon newPolygon() const;
+
 	void setCornerPts(QVector<int> cPts);
 	QVector<int> cornerPty() const;
 
@@ -696,6 +701,7 @@ protected:
 	// topleft: 0, bottomleft: 1, bottomright: 2, topright: 3
 	//reference CornerPts of the reference Cell
 	Polygon mRefPoly;
+	Polygon mNewPoly;
 	QVector<int> mRefCornerPts;
 
 	LineCandidates mLeftLine;

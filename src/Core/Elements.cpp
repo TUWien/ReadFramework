@@ -154,6 +154,10 @@ Polygon Region::polygon() const {
 	return mPoly;
 }
 
+void Region::scaleRegion(double scale) {
+	mPoly.scale(scale);
+}
+
 /// <summary>
 /// Draws the Region to the Painter.
 /// </summary>

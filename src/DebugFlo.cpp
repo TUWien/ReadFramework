@@ -301,6 +301,8 @@ namespace rdf {
 		QSharedPointer<rdf::FormFeaturesConfig> tmpConfig(new rdf::FormFeaturesConfig());
 		//(*tmpConfig) = mFormConfig;
 		tmpConfig->setTemplDatabase(mConfig.tableTemplate());
+		//tmpConfig->setVariationThrLower(0.5);
+		//tmpConfig->setVariationThrUpper(0.55);
 		formF.setConfig(tmpConfig);
 
 		//rdf::FormFeatures formTemplate;
