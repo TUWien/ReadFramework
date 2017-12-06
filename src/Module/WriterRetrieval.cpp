@@ -64,6 +64,9 @@ namespace rdf {
 	void WriterImage::setImage(const cv::Mat img) {
 		this->mImg = img;
 	}
+	void WriterImage::setMask(cv::Mat mask) {
+		this->mMask = mask;
+	}
 	/// <summary>
 	/// Calculates the SIFT features of the image.
 	/// </summary>
@@ -73,7 +76,8 @@ namespace rdf {
 #ifdef WITH_XFEATURES2D
 		cv::Ptr<cv::Feature2D> sift = cv::xfeatures2d::SIFT::create();
 		std::vector<cv::KeyPoint> kp;
-		sift->detect(mImg, kp, cv::Mat());
+		//sift->detect(mImg, kp, cv::Mat());
+		sift->detect(mImg, kp, mMask);
 
 
 		qWarning() << "using modified SIFT";
@@ -85,8 +89,9 @@ namespace rdf {
 			//kp[i].size = 10;
 		}
 
+		qWarning() << "computing descriptors";
 		sift->compute(mImg, kp, mDescriptors);
-
+		qWarning() << "done";
 		mKeyPoints = QVector<cv::KeyPoint>::fromStdVector(kp);
 #else
 		mKeyPoints = QVector<cv::KeyPoint>();
@@ -216,79 +221,48 @@ namespace rdf {
 	/// </summary>
 	WriterRetrievalConfig::WriterRetrievalConfig() : ModuleConfig("WriterRetrieval") {
 	}
+	QString WriterRetrievalConfig::vocabularyPath() const {
+		return mVocPath;
+	}
+	void WriterRetrievalConfig::setVocabularyPath(QString path) {
+		this->mVocPath = path;
+	}
+	QString WriterRetrievalConfig::featureDirectory() const {
+		return mFeatureDir;
+	}
+	void WriterRetrievalConfig::setFeatureDirectory(QString dir) {
+		mFeatureDir = dir;
+	}
+	QString WriterRetrievalConfig::evalPath() const {
+		return mEvalPath;
+	}
+	void WriterRetrievalConfig::setEvalPath(QString dir) {
+		mEvalPath = dir;
+	}
 	/// <summary>
 	/// outputs the feature directory and the properties of the vocabulary
 	/// </summary>
 	/// <returns></returns>
 	QString WriterRetrievalConfig::toString() const {
-		return "featureDir:" + mFeatureDir + " " + mVoc.toString();
-	}
-	/// <summary>
-	/// Determines whether this instance is empty.
-	/// </summary>
-	/// <returns></returns>
-	bool WriterRetrievalConfig::isEmpty() {
-		return mVoc.isEmpty();
-	}
-	/// <summary>
-	/// returns the vocabulary
-	/// </summary>
-	/// <returns></returns>
-	WriterVocabulary WriterRetrievalConfig::vocabulary() {
-		return mVoc;
+		return "featureDir:" + mFeatureDir + " vocDir:" + mVocPath;
 	}
 	/// <summary>
 	/// Loads the properties from the settings. If a vocabulary path is set, the vocabulary is also loaded.
 	/// </summary>
 	/// <param name="settings">The settings.</param>
 	void WriterRetrievalConfig::load(const QSettings & settings) {
-		mSettingsVocPath = settings.value("vocPath", QString()).toString();
-		if(!mSettingsVocPath.isEmpty()) {
-			mInfo << "loading vocabulary from " << mSettingsVocPath;
-			if(!QFileInfo(mSettingsVocPath).exists()) 
-				mWarning << "vocabulary " << mSettingsVocPath << " does not exist!";
-			else
-				mVoc.loadVocabulary(mSettingsVocPath);
-		} else {
-			mVoc.setType(settings.value("vocType", mVoc.type()).toInt());
-			if(mVoc.type() > rdf::WriterVocabulary::WI_UNDEFINED)
-				mVoc.setType(rdf::WriterVocabulary::WI_UNDEFINED);
-			mVoc.setNumberOfCluster(settings.value("numberOfClusters", mVoc.numberOfCluster()).toInt());
-			mVoc.setNumberOfPCA(settings.value("numberOfPCA", mVoc.numberOfPCA()).toInt());
-			mVoc.setMaximumSIFTSize(settings.value("maxSIFTSize", mVoc.maximumSIFTSize()).toInt());
-			mVoc.setMinimumSIFTSize(settings.value("minSIFTSize", mVoc.minimumSIFTSize()).toInt());
-			mVoc.setPowerNormalization(settings.value("powerNormalization", mVoc.powerNormalization()).toInt());
-			mVoc.setNumOfPCAWhiteComp(settings.value("numberOfPCAWhitening", mVoc.numberOfPCAWhiteningComponents()).toInt());
-			mInfo << "settings set to: type: " << mVoc.type() << " numberOfClusters: " << mVoc.numberOfCluster() << " numberOfPCA:" << mVoc.numberOfPCA();
-		}
-
-		
+		mVocPath = settings.value("vocPath", QString()).toString();		
 		mFeatureDir = settings.value("featureDir", QString()).toString();
-
-		mEvalFile = settings.value("evalFile", QString()).toString();
+		mEvalPath = settings.value("evalPath", QString()).toString();
 	}
 	/// <summary>
 	/// Saves the current setup into the settings
 	/// </summary>
 	/// <param name="settings">The settings.</param>
 	void WriterRetrievalConfig::save(QSettings & settings) const {
-		settings.setValue("vocType", mVoc.type());
-		settings.setValue("numberOfClusters", mVoc.numberOfCluster());
-		settings.setValue("numberOfPCA", mVoc.numberOfPCA());
-		settings.setValue("maxSIFTSize", mVoc.maximumSIFTSize());
-		settings.setValue("minSIFTSize", mVoc.minimumSIFTSize());
-		settings.setValue("powerNormalization", mVoc.powerNormalization());
-
-		settings.setValue("vocPath", mSettingsVocPath);
+		settings.setValue("vocPath", mVocPath);
 		settings.setValue("featureDir", mFeatureDir);
-		settings.setValue("evalFile", mEvalFile);
-	}
-	/// <summary>
-	/// Returns the debugName
-	/// </summary>
-	/// <returns></returns>
-	QString WriterRetrievalConfig::debugName() {
-		return mDebugName;
+		settings.setValue("evalFile", mEvalPath);	
 	}
 
 	// --------------- WriterRetrieval ----------------------------------------------------------------------------------
@@ -301,13 +275,7 @@ namespace rdf {
 		mImg = img;
 		mConfig = QSharedPointer<WriterRetrievalConfig>::create();
 	}
-	/// <summary>
-	/// Determines whether this instance is empty (if a config is set).
-	/// </summary>
-	/// <returns></returns>
-	bool WriterRetrieval::isEmpty() const {
-		return config()->isEmpty();
-	}
+
 	/// <summary>
 	/// Computes feature for the image. If a xmlPath is set the keypoints are also filterd according to the text regions.
 	/// </summary>
@@ -317,10 +285,14 @@ namespace rdf {
 		if (isEmpty())
 			return false;
 
+		if (mVoc.isEmpty()) {
+			mVoc.loadVocabulary(config()->vocabularyPath());
+		}
+
 		WriterImage wi = WriterImage();
 		wi.setImage(mImg);
 		wi.calculateFeatures();
-		wi.filterKeyPoints(config()->vocabulary().minimumSIFTSize(), config()->vocabulary().maximumSIFTSize());
+		wi.filterKeyPoints(mVoc.minimumSIFTSize(), mVoc.maximumSIFTSize());
 		
 		// collect all polygons in xml file and filter keypoints
 		QVector<QPolygonF> polys;
@@ -338,7 +310,7 @@ namespace rdf {
 				wi.filterKeyPointsPoly(polys);
 		}
 		
-		mFeature = config()->vocabulary().generateHist(wi.descriptors());
+		mFeature = mVoc.generateHist(wi.descriptors());
 
 		mDesc = wi.descriptors();
 		mKeyPoints = wi.keyPoints();
