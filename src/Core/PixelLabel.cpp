@@ -360,6 +360,18 @@ LabelInfo LabelManager::find(int id) const {
 	return LabelInfo();
 }
 
+int LabelManager::indexOf(int id) const {
+
+	// try to directly find the entry
+	for (int idx = 0; idx < mLookups.size(); idx++) {
+
+		if (mLookups[idx].id() == id)
+			return idx;
+	}
+
+	return -1;
+}
+
 /// <summary>
 /// Returns the first label that is marked as background label.
 /// </summary>
@@ -425,6 +437,14 @@ LabelInfo PixelLabel::trueLabel() const {
 	return mTrueLabel;
 }
 
+void PixelLabel::setVotes(const PixelVotes & votes) {
+	mVotes = votes;
+}
+
+PixelVotes PixelLabel::votes() const {
+	return mVotes;
+}
+
 /// <summary>
 /// Checks if GT and prediction are present
 /// </summary>
@@ -449,6 +469,10 @@ cv::Ptr<cv::ml::StatModel> SuperPixelModel::model() const {
 	return mModel;
 }
 
+cv::Ptr<cv::ml::RTrees> SuperPixelModel::randomTrees() const {
+	return mModel.dynamicCast<cv::ml::RTrees>();
+}
+
 LabelManager SuperPixelModel::manager() const {
 	return mManager;
 }
@@ -467,20 +491,37 @@ QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
 		// TODO: get weights
 		const cv::Mat& cr = cFeatures.row(rIdx);
 		cv::Mat out(1, cr.cols, cr.depth());
-		float l = mModel->predict(cr);// , out, cv::ml::DTrees::RAW_OUTPUT);// , cv::ml::DTrees::PREDICT_MASK);
 
-		////int labelId = qRound(mModel->predict(cr));
-		//qDebug() << Image::printImage(out, "voting");
-		//qDebug() << "label" << l;
-		int labelId = qRound(l);
+		cv::Mat rawVotes;
+		float rawLabel = 0;
+
+		PixelLabel pLabel;
+
+#if CV_MAJOR_VERSION >= 3 && CV_MINOR_VERSION >= 3
+		
+		if (randomTrees()) {
+			randomTrees()->getVotes(cr, rawVotes, cv::ml::DTrees::RAW_OUTPUT);
+			rawLabel = *rawVotes.ptr<float>();
+
+			// get pixel votes
+			PixelVotes pv(mManager);
+			pv.setRawVotes(rawVotes);
+
+			pLabel.setVotes(pv);
+		}
+		else {
+			rawLabel = mModel->predict(cr);
+		}
+#else
+		l = mModel->predict(cr);
+#endif
+
+		// get label
+		int labelId = qRound(rawLabel);
 
 		LabelInfo label = mManager.find(labelId);
 		assert(label.id() != LabelInfo::label_unknown);
-		
-		//qDebug() << label;
-		//qDebug() << "id: " << labelId;
 
-		PixelLabel pLabel;
 		pLabel.setLabel(label);
 		labelInfos << pLabel;
 	}
@@ -571,6 +612,48 @@ cv::Ptr<cv::ml::RTrees> SuperPixelModel::readRTreesModel(QJsonObject & jo) {
 
 	cv::Ptr<cv::ml::RTrees> model = cv::Algorithm::read<cv::ml::RTrees>(root);
 	return model;
+}
+
+// -------------------------------------------------------------------- PixelVotes 
+PixelVotes::PixelVotes(const LabelManager & lm, const QString & id) : BaseElement(id) {
+	mManager = lm;
+}
+
+bool PixelVotes::isEmpty() const {
+	return mVotes.empty();
+}
+
+void PixelVotes::setRawVotes(const cv::Mat & rawVotes) {
+
+	if (rawVotes.empty())
+		return;
+
+	mVotes = cv::Mat(1, mManager.size(), CV_32FC1, cv::Scalar(0));
+
+	const float* rvp = rawVotes.ptr<float>();
+	float* vp = mVotes.ptr<float>();
+
+	// start with 1 for the first element is the overall vote
+	for (int rIdx = 1; rIdx < rawVotes.cols; rIdx++) {
+
+		int cl = qRound(rvp[rIdx]);
+		int labelIndex = mManager.indexOf(cl);
+
+		if (labelIndex != -1) {
+
+			assert(labelIndex >= 0 && labelIndex < mVotes.cols);
+			vp[labelIndex] += 1;
+		}
+		else
+			qWarning() << "unknown class index: " << cl;
+	}
+
+	mNumTrees = cv::sum(mVotes)[0];
+
+	if (mNumTrees > 0)
+		mVotes /= mNumTrees;
+	else
+		qWarning() << "sum votes is zero - that's weird!";
 }
 
 }

@@ -233,7 +233,7 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setImagePath("C:/read/test/sizes/synthetic-test-small.png");
 		dc.setImagePath("C:/read/test/sizes/synthetic-test.png");
 		dc.setImagePath("C:/read/test/d6.5/0056_S_Alzgern_011-01_0056-crop.JPG");
-		dc.setImagePath("C:/read/cBAD/test/M_Aigen_am_Inn_002-01_0000.jpg");
+		dc.setImagePath("C:/read/cBAD/dataset/test-new/Baseline Competition - Complex Documents/ABP_FirstTestCollection/M_Aigen_am_Inn_007_0336.jpg");
 		//dc.setImagePath("C:/temp/chris/test2.png");
 
 
@@ -246,17 +246,17 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 	}
 
 	if (dc.classifierPath().isEmpty()) {
-		dc.setClassifierPath("C:/read/configs/test/test-model.json");
+		dc.setClassifierPath("C:/read/configs/test/test-two-classes/test-model-local.json");
 		qInfo() << dc.classifierPath() << "added as classifier path";
 	} 
 
 	if (dc.labelConfigPath().isEmpty()) {
-		dc.setLabelConfigPath("C:/read/configs/test/test-config.json");
+		dc.setLabelConfigPath("C:/read/configs/test/test-two-classes/test-config.json");
 		qInfo() << dc.labelConfigPath() << "added as label config path";
 	} 
 
 	if (dc.featureCachePath().isEmpty()) {
-		dc.setFeatureCachePath("C:/read/configs/test/test-features.json");
+		dc.setFeatureCachePath("C:/read/configs/test/test-two-classes/test-features.json");
 		qInfo() << dc.featureCachePath() << "added as feature cache path";
 	} 
 

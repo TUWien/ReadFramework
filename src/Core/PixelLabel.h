@@ -142,6 +142,7 @@ public:
 	LabelInfo find(const QString& str) const;
 	LabelInfo find(const Region& r) const;
 	LabelInfo find(int id) const;
+	int indexOf(int id) const;
 	LabelInfo backgroundLabel() const;
 
 	static QString jsonKey();
@@ -150,6 +151,21 @@ public:
 
 protected:
 	QVector<LabelInfo> mLookups;
+};
+
+class DllCoreExport PixelVotes : public BaseElement {
+
+public:
+	PixelVotes(const LabelManager& lm = LabelManager(), const QString& id = QString());
+
+	bool isEmpty() const;
+
+	void setRawVotes(const cv::Mat& rawVotes);
+
+protected:
+	LabelManager mManager;
+	cv::Mat mVotes;
+	double mNumTrees = 0;
 };
 
 class DllCoreExport PixelLabel : public BaseElement {
@@ -165,9 +181,13 @@ public:
 	void setTrueLabel(const LabelInfo& label);
 	LabelInfo trueLabel() const;
 
+	void setVotes(const PixelVotes& votes);
+	PixelVotes votes() const;
+
 protected:
 	LabelInfo mTrueLabel = LabelInfo::label_unknown;
 	LabelInfo mLabel = LabelInfo::label_unknown;
+	PixelVotes mVotes;
 };
 
 class DllCoreExport SuperPixelModel {
@@ -178,6 +198,7 @@ public:
 	bool isEmpty() const;
 
 	cv::Ptr<cv::ml::StatModel> model() const;
+	cv::Ptr<cv::ml::RTrees> randomTrees() const;
 	LabelManager manager() const;
 
 	QVector<PixelLabel> classify(const cv::Mat& features) const;
@@ -191,6 +212,7 @@ protected:
 
 	static cv::Ptr<cv::ml::RTrees> readRTreesModel(QJsonObject& jo);
 	void toJson(QJsonObject& jo) const;
+
 };
 
 }

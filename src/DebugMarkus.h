@@ -71,6 +71,7 @@ public:
 protected:
 	void testFeatureCollector(const cv::Mat& src) const;
 	void testTrainer();
+	void testClassifier(const cv::Mat& src) const;
 	void testLineDetector(const cv::Mat& src) const;
 
 	void testLayout(const cv::Mat& src) const;

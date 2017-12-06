@@ -769,6 +769,10 @@ bool SuperPixelTrainer::compute() {
 	Timer dt;
 	
 	mModel = cv::ml::RTrees::create();
+	
+	// TODO: validate!
+	cv::TermCriteria tc(cv::TermCriteria::COUNT, 150, 1e-6);
+	mModel->setTermCriteria(tc);
 
 	if (mFeatureManager.numFeatures() == 0) {
 		qCritical() << "Cannot train random trees if no feature vectors are provided";
@@ -788,7 +792,9 @@ bool SuperPixelTrainer::compute() {
 		int i, n = (int)vi.total();
 		for (i = 0; i < n; i++ )
 			qInfo() << i << "\t" << 100.f * vi.at<float>(i)/viSum;
+
 	}
+	qInfo() << "num trees (nodes):" << mModel->getNodes().size();
 
 	mInfo << "trained in" << dt;
 

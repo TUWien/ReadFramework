@@ -48,6 +48,7 @@
 #include "SuperPixelClassification.h"
 #include "SuperPixelTrainer.h"
 #include "LayoutAnalysis.h"
+#include "EvaluationModule.h"
 #include "lsd/LSDDetector.h"
 
 #pragma warning(push, 0)	// no warnings from includes
@@ -160,31 +161,10 @@ void LayoutTest::testComponents() {
 		qInfo() << mConfig.imagePath() << "NOT loaded...";
 
 
-	//QImage tp("C:/temp/chris/c12.png");
-	//cv::Mat tpc = Image::qImage2Mat(tp);
-	//
-	//cv::cvtColor(imgCv, imgCv, CV_RGB2GRAY);
-	//cv::cvtColor(tpc, tpc, CV_RGB2GRAY);
-	//imgCv.convertTo(imgCv, 1.0 / 255, CV_32FC1);
-	//tpc.convertTo(tpc, 1.0 / 255, CV_32FC1);
-
-	//int rc = imgCv.cols - tpc.cols + 1;
-	//int rr = imgCv.rows - tpc.rows + 1;
-	//cv::Mat r(rr, rc, CV_32FC1);
-	//Image::imageInfo(r, "template");
-	//Image::imageInfo(imgCv, "img");
-	//Image::imageInfo(tpc, "t");
-	//matchTemplate(imgCv, tpc, r, CV_TM_CCORR_NORMED);
-
-	//Image::imageInfo(r, "result");
-	////cv::normalize(r, r, 255.0, cv::NORM_MINMAX);
-	//Image::save(r, "C:/temp/chris/result2.png");
-
-
-
 	// switch tests
-	testFeatureCollector(imgCv);
-	testTrainer();
+	//testFeatureCollector(imgCv);
+	//testTrainer();
+	testClassifier(imgCv);
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
 	//layoutToXml();
@@ -447,6 +427,77 @@ void LayoutTest::testTrainer() {
 		qDebug() << "the classifier I loaded is trained...";
 	
 	//qDebug() << fcm.numFeatures() << "SuperPixels trained in" << dt;
+}
+
+void LayoutTest::testClassifier(const cv::Mat & src) const {
+
+	rdf::Timer dt;
+
+	// parse xml
+	PageXmlParser parser;
+	parser.read(mConfig.xmlPath());
+
+	auto pe = parser.page();
+
+	// -------------------------------------------------------------------- Generate Super Pixels 
+	rdf::ScaleSpaceSuperPixel<rdf::SuperPixel> gpm(src);
+
+	if (!gpm.compute())
+		qWarning() << "could not compute" << gpm;
+
+	// -------------------------------------------------------------------- Label Pixels with GT 
+	// test loading of label lookup
+	rdf::LabelManager lm = rdf::LabelManager::read(mConfig.labelConfigPath());
+	qInfo().noquote() << lm.toString();
+
+	// feed the label lookup
+	rdf::SuperPixelLabeler spl(gpm.pixelSet(), rdf::Rect(src));
+	spl.setLabelManager(lm);
+	spl.setFilePath(mConfig.imagePath());	// parse filepath for gt
+
+											// set the ground truth
+	if (parser.page())
+		spl.setRootRegion(parser.page()->rootRegion());
+
+	if (!spl.compute())
+		qCritical() << "could not compute SuperPixel labeling!";
+
+	// -------------------------------------------------------------------- Label Pixels with GT 
+
+	QSharedPointer<rdf::SuperPixelModel> model = rdf::SuperPixelModel::read(mConfig.classifierPath());
+
+	auto f = model->model();
+	if (f && f->isTrained())
+		qDebug() << "the classifier I loaded is trained...";
+	else
+		qCritical() << "illegal classifier found in" << mConfig.classifierPath();
+
+	rdf::SuperPixelClassifier spc(src, gpm.pixelSet());
+	spc.setModel(model);
+
+	if (!spc.compute())
+		qWarning() << "could not classify SuperPixels";
+
+	qInfo() << "regions classified in" << dt;
+
+	// -------------------------------------------------------------------- Evaluate 
+	rdf::SuperPixelEval spe(gpm.pixelSet());
+
+	if (!spe.compute())
+		qWarning() << "could not evaluate SuperPixels";
+
+	auto ei = spe.evalInfo();
+	ei.setName(QFileInfo(mConfig.imagePath()).fileName());
+	qInfo().noquote() << ei;
+
+	// -------------------------------------------------------------------- drawing 
+	cv::Mat rImg = src.clone();
+
+	rImg = spe.draw(rImg);
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-superpixels");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
 }
 
 void LayoutTest::testLineDetector(const cv::Mat & src) const {
