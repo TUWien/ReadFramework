@@ -300,7 +300,6 @@ QString PixelStats::toString() const {
 
 // Pixel --------------------------------------------------------------------
 Pixel::Pixel() {
-
 }
 
 Pixel::Pixel(const Ellipse & ellipse, const Rect& bbox, const QString& id) : BaseElement(id) {
@@ -386,11 +385,11 @@ PixelTabStop Pixel::tabStop() const {
 	return mTabStop;
 }
 
-void Pixel::setLabel(const PixelLabel & label) {
+void Pixel::setLabel(const QSharedPointer<PixelLabel> & label) {
 	mLabel = label;
 }
 
-PixelLabel Pixel::label() const {
+QSharedPointer<PixelLabel> Pixel::label() const {
 	return mLabel;
 }
 
@@ -450,11 +449,11 @@ void Pixel::draw(QPainter & p, double alpha, const DrawFlags & df) const {
 				p.setPen(ColorManager::red());
 		}
 		else */{
-			if (!label().predicted().isNull()) {
-				p.setPen(label().predicted().visColor());
+			if (!label()->predicted().isNull()) {
+				p.setPen(label()->predicted().visColor());
 			}
-			else if (!label().trueLabel().isNull()) {
-				p.setPen(label().trueLabel().visColor());
+			else if (!label()->trueLabel().isNull()) {
+				p.setPen(label()->trueLabel().visColor());
 			}
 
 		}

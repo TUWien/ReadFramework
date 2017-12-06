@@ -55,8 +55,9 @@ bool SuperPixelEval::compute() {
 	// create statistics
 	for (const QSharedPointer<Pixel>& px : mSet.pixels()) {
 
-		const PixelLabel& pl = px->label();
-		mEvalInfo.eval(pl.trueLabel().id(), pl.predicted().id(), pl.trueLabel().isBackground());
+		auto pl = px->label();
+		if (pl)
+			mEvalInfo.eval(pl->trueLabel().id(), pl->predicted().id(), pl->trueLabel().isBackground());
 	}
 
 	return true;

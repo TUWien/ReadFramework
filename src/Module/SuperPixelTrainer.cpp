@@ -362,10 +362,9 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 		int id = LabelInfo::color2Id(col);
 
 		// assign ground truth & convert to pixel
-		PixelLabel label;
-		label.setTrueLabel(mManager.find(id));
 		QSharedPointer<Pixel> px = cb->toPixel();
-		px->setLabel(label);
+		QSharedPointer<PixelLabel> l = px->label();
+		l->setTrueLabel(mManager.find(id));
 		set.add(px);
 	}
 	
@@ -391,9 +390,8 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 		int id = LabelInfo::color2Id(col);
 
 		// assign ground truth & convert to pixel
-		PixelLabel label = px->label();
-		label.setTrueLabel(mManager.find(id));
-		px->setLabel(label);		
+		QSharedPointer<PixelLabel> l = px->label();
+		l->setTrueLabel(mManager.find(id));
 		setL << px;
 	}
 
@@ -457,7 +455,7 @@ QVector<FeatureCollection> FeatureCollection::split(const cv::Mat & descriptors,
 	for (int idx = 0; idx < set.size(); idx++) {
 
 		const QSharedPointer<Pixel> px = set.pixels()[idx];
-		const LabelInfo& cLabel = px->label().trueLabel();
+		const LabelInfo& cLabel = px->label()->trueLabel();
 		bool isNew = true;
 		
 		for (FeatureCollection& fc : collections) {

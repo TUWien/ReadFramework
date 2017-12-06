@@ -169,7 +169,7 @@ namespace Image {
 				msg.append(QString::number(srcPtr[cIdx]));
 				msg.append( (cIdx < src.cols - 1) ? " " : "; " ); // next row matlab?
 
-				if (cnt % 7 == 0)
+				if (cnt % 7 == 0 && cnt > 0)
 					msg.append("...\n");
 			}
 

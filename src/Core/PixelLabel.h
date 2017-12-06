@@ -145,6 +145,8 @@ public:
 	int indexOf(int id) const;
 	LabelInfo backgroundLabel() const;
 
+	QVector<LabelInfo> labelInfos() const;
+
 	static QString jsonKey();
 
 	void draw(QPainter& p) const;
@@ -161,11 +163,16 @@ public:
 	bool isEmpty() const;
 
 	void setRawVotes(const cv::Mat& rawVotes);
+	cv::Mat data() const;
+
+	int labelIndex() const;
 
 protected:
 	LabelManager mManager;
 	cv::Mat mVotes;
 	double mNumTrees = 0;
+
+	int maxVote() const;
 };
 
 class DllCoreExport PixelLabel : public BaseElement {

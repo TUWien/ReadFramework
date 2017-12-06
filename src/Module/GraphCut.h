@@ -149,6 +149,32 @@ private:
 	int numLabels() const override;
 };
 
+/// <summary>
+/// Graph cut for pixel labeling.
+/// </summary>
+/// <seealso cref="GraphCutPixel" />
+class DllCoreExport GraphCutPixelLabel : public GraphCutPixel {
+
+public:
+	GraphCutPixelLabel(const PixelSet& set);
+
+	virtual bool compute() override;
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+
+	void setLabelManager(const LabelManager& m);
+
+private:
+
+	bool checkInput() const override;
+
+	cv::Mat costs(int numLabels) const override;
+	cv::Mat labelDistMatrix(int numLabels) const override;
+	int numLabels() const override;
+
+	LabelManager mManager;
+};
+
 class DllCoreExport GraphCutLineSpacingConfig : public GraphCutConfig {
 
 public:

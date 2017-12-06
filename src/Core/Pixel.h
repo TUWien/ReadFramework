@@ -209,8 +209,8 @@ public:
 	void setTabStop(const PixelTabStop& tabStop);
 	PixelTabStop tabStop() const;
 
-	void setLabel(const PixelLabel& label);
-	PixelLabel label() const;
+	void setLabel(const QSharedPointer<PixelLabel>& label);
+	QSharedPointer<PixelLabel> label() const;
 
 	void setPyramidLevel(int level);
 	int pyramidLevel() const;
@@ -244,7 +244,7 @@ protected:
 	Rect mBBox;
 	QVector<QSharedPointer<PixelStats> > mStats;
 	PixelTabStop mTabStop;
-	PixelLabel mLabel;
+	QSharedPointer<PixelLabel> mLabel = QSharedPointer<PixelLabel>::create();
 	double mValue = 0.0;	// e.g. gradient magnitude for GridPixels
 
 	int mPyramidLevel = 0;	// 1.0/std::pow(2, mPyramidLevel) scales back to the pyramid

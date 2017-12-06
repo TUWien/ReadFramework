@@ -472,6 +472,7 @@ void LayoutTest::testClassifier(const cv::Mat & src) const {
 	else
 		qCritical() << "illegal classifier found in" << mConfig.classifierPath();
 
+	// -------------------------------------------------------------------- classify 
 	rdf::SuperPixelClassifier spc(src, gpm.pixelSet());
 	spc.setModel(model);
 
@@ -479,6 +480,14 @@ void LayoutTest::testClassifier(const cv::Mat & src) const {
 		qWarning() << "could not classify SuperPixels";
 
 	qInfo() << "regions classified in" << dt;
+
+	// smooth estimation
+	rdf::GraphCutPixelLabel gpl(spc.pixelSet());	// ha: gpl
+	gpl.setLabelManager(model->manager());
+
+	if (!gpl.compute())
+		qWarning() << "could not compute set orientation";
+
 
 	// -------------------------------------------------------------------- Evaluate 
 	rdf::SuperPixelEval spe(gpm.pixelSet());
@@ -493,6 +502,7 @@ void LayoutTest::testClassifier(const cv::Mat & src) const {
 	// -------------------------------------------------------------------- drawing 
 	cv::Mat rImg = src.clone();
 
+	rImg = gpl.draw(rImg);
 	rImg = spe.draw(rImg);
 	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-superpixels");
 	rdf::Image::save(rImg, dstPath);

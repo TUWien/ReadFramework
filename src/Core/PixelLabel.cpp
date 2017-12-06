@@ -385,6 +385,10 @@ LabelInfo LabelManager::backgroundLabel() const {
 	return LabelInfo();
 }
 
+QVector<LabelInfo> LabelManager::labelInfos() const {
+	return mLookups;
+}
+
 QString LabelManager::jsonKey() {
 	return "Labels";
 }
@@ -501,12 +505,12 @@ QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
 		
 		if (randomTrees()) {
 			randomTrees()->getVotes(cr, rawVotes, cv::ml::DTrees::RAW_OUTPUT);
-			rawLabel = *rawVotes.ptr<float>();
 
 			// get pixel votes
 			PixelVotes pv(mManager);
 			pv.setRawVotes(rawVotes);
 
+			rawLabel = (float)pv.labelIndex();
 			pLabel.setVotes(pv);
 		}
 		else {
@@ -633,8 +637,7 @@ void PixelVotes::setRawVotes(const cv::Mat & rawVotes) {
 	const float* rvp = rawVotes.ptr<float>();
 	float* vp = mVotes.ptr<float>();
 
-	// start with 1 for the first element is the overall vote
-	for (int rIdx = 1; rIdx < rawVotes.cols; rIdx++) {
+	for (int rIdx = 0; rIdx < rawVotes.cols; rIdx++) {
 
 		int cl = qRound(rvp[rIdx]);
 		int labelIndex = mManager.indexOf(cl);
@@ -654,6 +657,21 @@ void PixelVotes::setRawVotes(const cv::Mat & rawVotes) {
 		mVotes /= mNumTrees;
 	else
 		qWarning() << "sum votes is zero - that's weird!";
+}
+
+cv::Mat PixelVotes::data() const {
+	return mVotes;
+}
+
+int PixelVotes::labelIndex() const {
+	return mManager.labelInfos()[maxVote()].id();
+}
+
+int PixelVotes::maxVote() const {
+	
+	cv::Point pMaxIdx;
+	cv::minMaxLoc(mVotes, 0, 0, 0, &pMaxIdx);
+	return pMaxIdx.x;
 }
 
 }

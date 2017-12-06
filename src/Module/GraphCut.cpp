@@ -274,6 +274,125 @@ cv::Mat GraphCutOrientation::draw(const cv::Mat & img, const QColor & col) const
 	return Image::qImage2Mat(qImg);
 }
 
+// -------------------------------------------------------------------- GraphCutPixelLabel 
+GraphCutPixelLabel::GraphCutPixelLabel(const PixelSet & set) : GraphCutPixel(set) {
+	mWeightFnc = PixelDistance::euclidean;
+}
+
+bool GraphCutPixelLabel::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	// nothing todo here...
+	if (mSet.size() < 2) {
+		return true;
+	}
+
+	// create graph
+	PixelGraph graph(mSet);
+	graph.connect(*mConnector);
+
+	// perform graphcut
+	auto gc = graphCut(graph);
+
+	if (gc) {
+		QVector<QSharedPointer<Pixel> > pixel = graph.set().pixels();
+		for (int idx = 0; idx < pixel.size(); idx++) {
+
+			// update label accordingly
+			auto pl = pixel[idx]->label();
+
+			int gcl = gc->whatLabel(idx);
+
+			pl->setLabel(mManager.labelInfos()[gcl]);
+		}
+	}
+
+	mInfo << "computed in" << dt;
+
+	return true;
+}
+
+cv::Mat GraphCutPixelLabel::draw(const cv::Mat & img, const QColor & col) const {
+	
+	// debug - remove
+	QImage qImg = Image::mat2QImage(img, true);
+	QPainter p(&qImg);
+
+	// show the graph
+	PixelGraph graph(mSet);
+	graph.connect(*mConnector);
+
+	p.setPen(ColorManager::darkGray(0.3));
+	graph.draw(p);
+
+	p.setPen(col);
+
+	for (auto px : mSet.pixels()) {
+
+		if (!col.isValid())
+			p.setPen(ColorManager::randColor());
+		px->draw(p, 0.3, (Pixel::DrawFlags)Pixel::draw_label_colors);
+	}
+
+	return Image::qImage2Mat(qImg);
+
+}
+
+void GraphCutPixelLabel::setLabelManager(const LabelManager & m) {
+	mManager = m;
+}
+
+bool GraphCutPixelLabel::checkInput() const {
+	return !isEmpty() && !mManager.isEmpty();
+}
+
+cv::Mat GraphCutPixelLabel::costs(int numLabels) const {
+
+	// fill costs
+	cv::Mat data(mSet.size(), numLabels, CV_32SC1);
+
+	for (int idx = 0; idx < mSet.size(); idx++) {
+
+		auto pl = mSet[idx]->label();
+
+		cv::Mat cData = 1.0 - pl->votes().data();
+		assert(cData.cols == data.cols);
+
+		cData.convertTo(data.row(idx), CV_32SC1, config()->scaleFactor()/10.0);
+	}
+
+	return data;
+}
+
+cv::Mat GraphCutPixelLabel::labelDistMatrix(int numLabels) const {
+
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+
+		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+
+			// set smoothness cost for pixel labels
+			int diff = abs(rIdx - cIdx);
+			
+			// let's assume that similar classes have close indexes for now
+			sPtr[cIdx] = diff;// <= 3 ? 1 : 12;
+		}
+	}
+
+	return orDist;
+}
+
+int GraphCutPixelLabel::numLabels() const {
+	return mManager.size();
+}
+
 // GraphCutTextLine --------------------------------------------------------------------
 GraphCutTextLine::GraphCutTextLine(const QVector<PixelSet>& sets) : GraphCutPixel(PixelSet::merge(sets)) {
 	mWeightFnc = PixelDistance::orientationWeighted;
@@ -824,5 +943,6 @@ void GraphCutLineSpacingConfig::save(QSettings & settings) const {
 	GraphCutConfig::save(settings);
 	settings.setValue("numLabels", numLabels());
 }
+
 
 }

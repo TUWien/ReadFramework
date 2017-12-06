@@ -185,13 +185,12 @@ int main(int argc, char** argv) {
 
 		// stefans section
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "stefan") {
-			// TODO do what ever you want
 			qDebug() << "loading stefan's debug code";
 
 			rdf::TestWriterRetrieval twr = rdf::TestWriterRetrieval();
 			twr.run();
 		}
-		// sebastians section
+		// layout section
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "layout") {
 			qDebug() << "Starting layout analysis...";
 
@@ -206,7 +205,6 @@ int main(int argc, char** argv) {
 		}
 		// my section
 		else {
-			qDebug() << "Hütt nett...";
 			//rdf::XmlTest test(dc);
 			//test.parseXml();
 			//test.linesToXml();
