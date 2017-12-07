@@ -58,13 +58,36 @@
 
 
 namespace rdf {
-	class WriterRetrievalConfig;
+	class DllCoreExport WriterRetrievalConfig : public ModuleConfig {
+	public:
+		WriterRetrievalConfig();
+
+		QString vocabularyPath() const;
+		void setVocabularyPath(QString path);
+
+		QString featureDirectory() const;
+		void setFeatureDirectory(QString dir);
+
+		QString evalPath() const;
+		void setEvalPath(QString path);
+
+		QString toString() const override;
+
+	protected:
+		void load(const QSettings& settings) override;
+		void save(QSettings& settings) const override;
+
+	private:
+		QString mVocPath = "";
+		QString mFeatureDir = "sift";
+		QString mEvalPath = "";
+	};
+
 
 	class DllCoreExport WriterRetrieval : public Module {
 	public:
 		WriterRetrieval(cv::Mat img);
 
-		bool isEmpty() const override;
 		bool compute() override;
 		QSharedPointer<WriterRetrievalConfig> config() const;
 		cv::Mat getFeature();
@@ -85,29 +108,7 @@ namespace rdf {
 
 		QString mXmlPath = "";
 		
-		
-	};
-
-	class DllCoreExport WriterRetrievalConfig : public ModuleConfig {
-	public:
-		WriterRetrievalConfig();
-
-		virtual QString toString() const override;
-		bool isEmpty();
-		WriterVocabulary vocabulary();
-
-	protected:
-		void load(const QSettings& settings) override;
-		void save(QSettings& settings) const override;
-
-
-	private:
-		QString debugName();
-		QString mDebugName = "Writer Retrieval Config";
 		WriterVocabulary mVoc;
-		QString mSettingsVocPath;
-		QString mFeatureDir = "sift";
-		QString mEvalFile = "";
 	};
 
 	class DllCoreExport WriterImage {
@@ -116,6 +117,7 @@ namespace rdf {
 		WriterImage();
 
 		void setImage(cv::Mat img);
+		void setMask(cv::Mat mask);
 		void calculateFeatures();
 		void saveFeatures(QString filePath);
 		void loadFeatures(QString filePath);
@@ -133,6 +135,7 @@ namespace rdf {
 		QString debugName();
 
 		cv::Mat mImg;
+		cv::Mat mMask = cv::Mat();
 		cv::Mat mDescriptors;
 		QVector<cv::KeyPoint> mKeyPoints;
 

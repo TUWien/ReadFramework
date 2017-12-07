@@ -341,7 +341,7 @@ namespace rdf {
 			hardPerc.push_back(hard[i] / (float)(tp + fp));
 		}
 
-		QVector<int> softCriteria({ 1, 2, 5, 7 });
+		QVector<int> softCriteria({ 1, 2, 5, 7, 10 });
 		QString softOutputHeader = "soft evaluation\n";
 		QString softOutput = "";
 		for(int i = 0; i < softCriteria.size(); i++) {
@@ -1083,7 +1083,7 @@ namespace rdf {
 			cv::Mat probs, means;
 			std::vector<cv::Mat> covs;
 
-			//cv::Vec2d emOut = em->predict2(feature, probs);
+			cv::Vec2d emOut = em->predict2(feature, probs);
 			probs.convertTo(probs, CV_32F);
 			em->getCovs(covs);
 			means = em->getMeans();
@@ -1163,6 +1163,98 @@ namespace rdf {
 			d.row(i) = d.row(i) / sigma.t();
 		}
 		return d;
+	}
+
+	WriterVocabularyConfig::WriterVocabularyConfig() {
+		mModuleName = "WriterVocabulary";
+	}
+
+	int WriterVocabularyConfig::type() const {
+		return mType;
+	}
+
+	void WriterVocabularyConfig::setType(int type) {
+		mType = type;
+	}
+
+	int WriterVocabularyConfig::numberOfClusters() const  {
+		return mNumberOfClusters;
+	}
+
+	void WriterVocabularyConfig::setNumberOfCluster(int num) {
+		mNumberOfClusters = num;
+	}
+
+	int WriterVocabularyConfig::numberOfPCA() const {
+		return mNumberOfPCA;
+	}
+
+	void WriterVocabularyConfig::setNumberOfPCA(int num) {
+		mNumberOfPCA = num;
+	}
+
+	int WriterVocabularyConfig::numberOfPCAWhitening() const {
+		return mNumverOfPCAWhitening;
+	}
+
+	void WriterVocabularyConfig::setNumberOfPCAWhitening(int num) {
+		mNumverOfPCAWhitening = num;
+	}
+
+	int WriterVocabularyConfig::maxSIFTSize() const {
+		return mMaxSIFTSize;
+	}
+
+	void WriterVocabularyConfig::setMaxSIFTSize(int maxSize) {
+		mMaxSIFTSize = maxSize;
+	}
+
+	int WriterVocabularyConfig::minSIFTSize() const {
+		return mMinSIFTSize;
+	}
+
+	void WriterVocabularyConfig::setMINSIFTSize(int minSize) {
+		mMinSIFTSize = minSize;
+	}
+
+	double WriterVocabularyConfig::powerNormalization() const {
+		return mPowerNormalization;
+	}
+
+	void WriterVocabularyConfig::setPowerNormalization(float power) {
+		mPowerNormalization = power;
+	}
+
+	bool WriterVocabularyConfig::l2before() const {
+		return mL2NormBefore;
+	}
+
+	void WriterVocabularyConfig::setL2Before(bool performL2) {
+		mL2NormBefore = performL2;
+	}
+
+	void WriterVocabularyConfig::load(const QSettings & settings) {
+		mType = settings.value("vocType", mType).toInt();
+		if(mType > rdf::WriterVocabulary::WI_UNDEFINED)
+			mType = rdf::WriterVocabulary::WI_UNDEFINED;
+		mNumberOfClusters= settings.value("numberOfClusters", mNumberOfClusters).toInt();
+		mNumberOfPCA = settings.value("numberOfPCA", mNumberOfPCA).toInt();
+		mNumverOfPCAWhitening = settings.value("numberOfPCAWhitening", mNumverOfPCAWhitening).toInt();
+		mMaxSIFTSize = settings.value("maxSIFTSize", mMaxSIFTSize).toInt();
+		mMinSIFTSize = settings.value("minSIFTSize", mMinSIFTSize).toInt();
+		mPowerNormalization = settings.value("powerNormalization", mPowerNormalization).toDouble();
+		mL2NormBefore = settings.value("L2before", mL2NormBefore).toBool();
+	}
+
+	void WriterVocabularyConfig::save(QSettings & settings) const {
+		settings.setValue("vocType", mType);
+		settings.setValue("numberOfClusters", mNumberOfClusters);
+		settings.setValue("numberOfPCA", mNumberOfPCA);
+		settings.setValue("numberOfPCAWhitening", mNumverOfPCAWhitening);
+		settings.setValue("maxSIFTSize", mMaxSIFTSize);
+		settings.setValue("minSIFTSize", mMinSIFTSize);
+		settings.setValue("powerNormalization", mPowerNormalization);
+		settings.setValue("L2before", mL2NormBefore);
 	}
 
 }

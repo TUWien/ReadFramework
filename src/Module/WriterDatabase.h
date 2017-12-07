@@ -32,6 +32,8 @@
 
 #pragma once
 
+#include "BaseModule.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QString>
@@ -56,6 +58,52 @@
 
 namespace rdf {
 	class WriterImage;
+	class WriterVocabulary;
+
+	class DllCoreExport WriterVocabularyConfig : public ModuleConfig {
+		public:
+			WriterVocabularyConfig();
+
+			int type() const;
+			void setType(int type);
+
+			int numberOfClusters() const;
+			void setNumberOfCluster(int num);
+
+			int numberOfPCA() const;
+			void setNumberOfPCA(int num);
+
+			int numberOfPCAWhitening() const;
+			void setNumberOfPCAWhitening(int num);
+
+			int maxSIFTSize() const;
+			void setMaxSIFTSize(int maxSize);
+
+			int minSIFTSize() const;
+			void setMINSIFTSize(int minSize);
+
+			double powerNormalization() const;
+			void setPowerNormalization(float power);
+
+			bool l2before() const;
+			void setL2Before(bool performL2);
+
+			//QString toString() const override;
+
+		protected:
+			void load(const QSettings& settings) override;
+			void save(QSettings& settings) const override;
+
+		private:
+			int mType = -1;
+			int mNumberOfClusters = 50;
+			int mNumberOfPCA = 96;
+			int mNumverOfPCAWhitening = 0;
+			int mMaxSIFTSize = 70;
+			int mMinSIFTSize = 20;
+			double mPowerNormalization = 0.5;
+			bool mL2NormBefore = false;
+	};
 
 	class DllCoreExport WriterVocabulary {
 
