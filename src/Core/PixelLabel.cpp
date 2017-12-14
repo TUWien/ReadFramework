@@ -517,7 +517,7 @@ QVector<PixelLabel> SuperPixelModel::classify(const cv::Mat & features) const {
 			rawLabel = mModel->predict(cr);
 		}
 #else
-		l = mModel->predict(cr);
+		rawLabel = mModel->predict(cr);
 #endif
 
 		// get label
