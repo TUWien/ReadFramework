@@ -47,11 +47,11 @@ target_link_libraries(${RDF_DLL_CORE_NAME} ${VERSION_LIB} ${OpenCV_LIBS})
 add_dependencies(${RDF_BINARY_NAME} ${RDF_DLL_CORE_NAME}) 
 
 target_include_directories(${RDF_BINARY_NAME} 		PRIVATE ${OpenCV_INCLUDE_DIRS})
-target_include_directories(${RDF_TEST_NAME} 	    PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_include_directories(${RDF_TEST_NAME} 	    	PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_DLL_CORE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 
 qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets)
-qt5_use_modules(${RDF_TEST_NAME} 		Core Network Widgets)
+qt5_use_modules(${RDF_TEST_NAME} 			Core Network Widgets)
 qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
 
 # core flags

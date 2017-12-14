@@ -187,15 +187,23 @@ QSharedPointer<SuperPixelLabelerConfig> SuperPixelLabeler::config() const {
 	return qSharedPointerDynamicCast<SuperPixelLabelerConfig>(mConfig);
 }
 
-cv::Mat SuperPixelLabeler::draw(const cv::Mat& img) const {
+cv::Mat SuperPixelLabeler::draw(const cv::Mat& img, bool drawPixels) const {
 
 	// draw mser blobs
 	Timer dtf;
 	QImage qImg = Image::mat2QImage(img, true);
 
+	QImage labelImgQt = createLabelImage(mImgRect, true);
+
 	QPainter p(&qImg);
+
+	p.setOpacity(0.4);
+	p.drawImage(QPoint(), labelImgQt);
+	p.setOpacity(1.0);
 	p.setPen(ColorManager::red());
-	mSet.draw(p, PixelSet::draw_pixels);
+	
+	if (drawPixels)
+		mSet.draw(p, PixelSet::draw_pixels);
 
 	// draw legend
 	mManager.draw(p);
@@ -243,7 +251,7 @@ void SuperPixelLabeler::setPage(const QSharedPointer<PageElement>& page) {
 	mPage = page;
 }
 
-QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
+QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect, bool visualize) const {
 
 	if (mManager.isEmpty())
 		mWarning << "label manager is empty...";
@@ -280,16 +288,22 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect) const {
 
 		LabelInfo ll = mManager.find(*region);
 
+		if (ll == LabelInfo())
+			continue;
+
 		if (ll.isNull()) { 
 			qDebug() << "could not find region: " << RegionManager::instance().typeName(region->type());
 			continue;
 		}
 		
-		QColor labelC = ll.color();
+		QColor labelC = (!visualize) ? ll.color() : ll.visColor();
 		p.setPen(labelC);
 		p.setBrush(labelC);
 		region->polygon().draw(p);
 	}
+
+	if (visualize)
+		mManager.draw(p);
 
 	return img;
 }
@@ -374,6 +388,7 @@ PixelSet SuperPixelLabeler::labelBlobs(const cv::Mat & labelImg, const QVector<Q
 PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet& set) const {
 
 	PixelSet setL;
+	int rCnt = 0;
 
 	for (const auto& px : set.pixels()) {
 
@@ -386,14 +401,25 @@ PixelSet SuperPixelLabeler::labelPixels(const cv::Mat & labelImg, const PixelSet
 			mask = mask(Rect(Vector2D(), r.size()).toCvRect());
 
 		// find the blob's label
-		QColor col = IP::statMomentColor(labelBBox, mask);
-		int id = LabelInfo::color2Id(col);
+		QColor col1 = IP::statMomentColor(labelBBox, mask, 0.2);
+		QColor col2 = IP::statMomentColor(labelBBox, mask, 0.8);
 
-		// assign ground truth & convert to pixel
+		// if less than 60% of the blob's area is consistent, we reject the blob
+		if (col1 != col2) {
+			rCnt++;
+			continue;
+		}
+
+		// col1 == col2
+		int id = LabelInfo::color2Id(col1);
+
+		// assign ground truth
 		QSharedPointer<PixelLabel> l = px->label();
 		l->setTrueLabel(mManager.find(id));
 		setL << px;
 	}
+
+	qDebug() << rCnt << "rejected because they have an ambigous GT class";
 
 	return set;
 }
@@ -735,17 +761,27 @@ QString SuperPixelTrainerConfig::toString() const {
 	return msg;
 }
 
+void SuperPixelTrainerConfig::setNumTrees(int numTrees) {
+	mNumTrees = numTrees;
+}
+
+int SuperPixelTrainerConfig::numTrees() const {
+	return mNumTrees;
+}
+
 void SuperPixelTrainerConfig::load(const QSettings & settings) {
 
 	QString paths = settings.value("featureCachePaths", mFeatureCachePaths.join(",")).toString();
 	mFeatureCachePaths = paths.split(",");
 	mModelPath = settings.value("modelPath", mModelPath).toString();
+	mNumTrees = settings.value("numTrees", mNumTrees).toInt();
 }
 
 void SuperPixelTrainerConfig::save(QSettings & settings) const {
 	
 	settings.setValue("featureCachePaths", mFeatureCachePaths.join(","));
 	settings.setValue("modelPath", mModelPath);
+	settings.setValue("numTrees", mNumTrees);
 }
 
 // SuperPixelTrainer --------------------------------------------------------------------
@@ -769,8 +805,9 @@ bool SuperPixelTrainer::compute() {
 	mModel = cv::ml::RTrees::create();
 	
 	// TODO: validate!
-	cv::TermCriteria tc(cv::TermCriteria::COUNT, 150, 1e-6);
+	cv::TermCriteria tc(cv::TermCriteria::COUNT, config()->numTrees(), 1e-6);
 	mModel->setTermCriteria(tc);
+	qInfo() << "training RF with" << config()->numTrees() << "trees";
 
 	if (mFeatureManager.numFeatures() == 0) {
 		qCritical() << "Cannot train random trees if no feature vectors are provided";

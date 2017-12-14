@@ -176,14 +176,14 @@ public:
 	bool compute() override;
 	QSharedPointer<SuperPixelLabelerConfig> config() const;
 
-	cv::Mat draw(const cv::Mat& img) const;
+	cv::Mat draw(const cv::Mat& img, bool drawPixels = true) const;
 	QString toString() const override;
 
 	void setFilePath(const QString& filePath);
 	void setRootRegion(const QSharedPointer<RootRegion>& region);
 	void setLabelManager(const LabelManager& manager);
 	void setPage(const QSharedPointer<PageElement>& page);
-	QImage createLabelImage(const Rect& imgRect) const;
+	QImage createLabelImage(const Rect& imgRect, bool visualize = false) const;
 
 	PixelSet set() const;
 
@@ -217,10 +217,14 @@ public:
 
 	virtual QString toString() const override;
 
+	void setNumTrees(int numTrees);
+	int numTrees() const;
+
 protected:
 
 	QStringList mFeatureCachePaths;
 	QString mModelPath;
+	int mNumTrees = 150;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

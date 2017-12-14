@@ -382,7 +382,7 @@ cv::Mat GraphCutPixelLabel::labelDistMatrix(int numLabels) const {
 			int diff = abs(rIdx - cIdx);
 			
 			// let's assume that similar classes have close indexes for now
-			sPtr[cIdx] = diff;// <= 3 ? 1 : 12;
+			sPtr[cIdx] = diff > 0 ? 1 : 0;// <= 3 ? 1 : 12;
 		}
 	}
 

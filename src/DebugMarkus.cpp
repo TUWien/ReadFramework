@@ -50,6 +50,7 @@
 #include "LayoutAnalysis.h"
 #include "EvaluationModule.h"
 #include "lsd/LSDDetector.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QDebug>
@@ -378,8 +379,8 @@ void LayoutTest::testFeatureCollector(const cv::Mat & src) const {
 	//rImg = superPixel.drawSuperPixels(rImg);
 	//rImg = tabStops.draw(rImg);
 	rImg = spl.draw(rImg);
-	rImg = spf.draw(rImg);
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textlines");
+	//rImg = spf.draw(rImg);
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-labels");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
@@ -440,10 +441,12 @@ void LayoutTest::testClassifier(const cv::Mat & src) const {
 	auto pe = parser.page();
 
 	// -------------------------------------------------------------------- Generate Super Pixels 
-	rdf::ScaleSpaceSuperPixel<rdf::SuperPixel> gpm(src);
+	rdf::SuperPixel gpm(src);
 
 	if (!gpm.compute())
 		qWarning() << "could not compute" << gpm;
+
+	auto pixels = gpm.pixelSet();
 
 	// -------------------------------------------------------------------- Label Pixels with GT 
 	// test loading of label lookup
@@ -502,9 +505,34 @@ void LayoutTest::testClassifier(const cv::Mat & src) const {
 	// -------------------------------------------------------------------- drawing 
 	cv::Mat rImg = src.clone();
 
-	rImg = gpl.draw(rImg);
+	//rImg = gpl.draw(rImg);
+	rImg = spl.draw(rImg, false);
 	rImg = spe.draw(rImg);
-	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-superpixels");
+	QString dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-eval");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	rImg = src.clone();
+	rImg = spl.draw(rImg, false);
+	rImg = spc.draw(rImg);
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-superpixels");
+	rdf::Image::save(rImg, dstPath);
+	qDebug() << "debug image saved: " << dstPath;
+
+	// remove bg pixels
+	auto ps = spc.pixelSet();
+	PixelSet psf;
+	for (auto px : ps.pixels()) {
+
+		if (px->label()->predicted() != model->manager().backgroundLabel())
+			psf << px;
+	}
+
+	rImg = src.clone();
+	rdf::SuperPixelLabeler spld(psf, rdf::Rect(src));
+
+	rImg = spld.draw(rImg);
+	dstPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-textpixels");
 	rdf::Image::save(rImg, dstPath);
 	qDebug() << "debug image saved: " << dstPath;
 
