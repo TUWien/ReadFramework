@@ -34,6 +34,7 @@
 
 #include "BaseModule.h"
 
+#include "ScaleFactory.h"
 #include "Shapes.h"
 #include "Pixel.h"
 #include "PixelSet.h"
@@ -314,7 +315,7 @@ private:
 /// Configuration file for local orientation extraction.
 /// </summary>
 /// <seealso cref="ModuleConfig" />
-class DllCoreExport LocalOrientationConfig : public ModuleConfig {
+class DllCoreExport LocalOrientationConfig : public ScaleModuleConfig {
 
 public:
 	LocalOrientationConfig();

@@ -382,7 +382,7 @@ size_t MserContainer::size() const {
 }
 
 // LocalOrientationConfig --------------------------------------------------------------------
-LocalOrientationConfig::LocalOrientationConfig() : ModuleConfig("Local Orientation") {
+LocalOrientationConfig::LocalOrientationConfig() : ScaleModuleConfig("Local Orientation") {
 }
 
 QString LocalOrientationConfig::toString() const {
@@ -395,11 +395,12 @@ QString LocalOrientationConfig::toString() const {
 }
 
 int LocalOrientationConfig::maxScale() const {
-	return qRound(mMaxScale*ScaleFactory::scaleFactorDpi());
+	
+	return qRound(mMaxScale*mScaleFactory->scaleFactorDpi());
 }
 
 int LocalOrientationConfig::minScale() const {
-	return qRound(mMinScale*ScaleFactory::scaleFactorDpi());
+	return qRound(mMinScale*mScaleFactory->scaleFactorDpi());
 }
 
 Vector2D LocalOrientationConfig::scaleIvl() const {
@@ -554,7 +555,7 @@ void LocalOrientation::computeAllOrHists(Pixel* pixel, const QVector<Pixel*>& se
 		sparsity.at<float>(0, k) = sp;
 	}
 
-	pixel->addStats(QSharedPointer<PixelStats>(new PixelStats(orHist, sparsity, radius, pixel->id())));
+	pixel->addStats(QSharedPointer<PixelStats>(new PixelStats(orHist, sparsity, radius, config()->scaleFactory(), pixel->id())));
 }
 
 void LocalOrientation::computeOrHist(const Pixel* pixel, 

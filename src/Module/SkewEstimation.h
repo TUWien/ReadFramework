@@ -208,6 +208,7 @@ namespace rdf {
 		cv::Mat mImg;			//the input image  either 3 channel or 1 channel [0 255]
 
 		PixelSet mSet;
+		QSharedPointer<ScaleFactory> mScaleFactory;
 
 		double mAngle = 0.0;
 

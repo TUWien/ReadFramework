@@ -165,10 +165,10 @@ void LayoutTest::testComponents() {
 	// switch tests
 	//testFeatureCollector(imgCv);
 	//testTrainer();
-	testClassifier(imgCv);
+	//testClassifier(imgCv);
 	//pageSegmentation(imgCv);
 	//testLayout(imgCv);
-	//layoutToXml();
+	layoutToXml();
 	//layoutToXmlDebug();
 	//testLineDetector(imgCv);
 

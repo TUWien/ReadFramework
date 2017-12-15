@@ -49,7 +49,7 @@
 namespace rdf {
 
 // TextLineConfig --------------------------------------------------------------------
-TextLineConfig::TextLineConfig() : ModuleConfig("Text Line Module") {
+TextLineConfig::TextLineConfig() : ScaleModuleConfig("Text Line Module") {
 }
 
 QString TextLineConfig::toString() const {
@@ -64,7 +64,7 @@ void TextLineConfig::setMinLineLength(int length) {
 int TextLineConfig::minLineLength() const {
 	
 	double ml = checkParam(mMinLineLength, 0, INT_MAX, "minLineLength");
-	ml *= ScaleFactory::scaleFactorDpi();
+	ml *= mScaleFactory->scaleFactorDpi();
 
 	return qRound(ml);
 }
@@ -75,7 +75,7 @@ void TextLineConfig::setMinPointDistance(double dist) {
 
 double TextLineConfig::minPointDistance() const {
 	double mp = checkParam(mMinPointDist, 0.0, DBL_MAX, "minPointDist");
-	mp *= ScaleFactory::scaleFactorDpi();
+	mp *= mScaleFactory->scaleFactorDpi();
 
 	return mp;
 }
@@ -570,7 +570,8 @@ bool TextLineSegmentation::checkInput() const {
 }
 
 // SimpleTextLineConfig --------------------------------------------------------------------
-SimpleTextLineConfig::SimpleTextLineConfig() : ModuleConfig("Simple Textline Segmentation") {
+SimpleTextLineConfig::SimpleTextLineConfig(QSharedPointer<ScaleFactory> scaleFactory) : ModuleConfig("Simple Textline Segmentation") {
+	mScaleFactory = scaleFactory;
 }
 
 QString SimpleTextLineConfig::toString() const {
@@ -585,7 +586,7 @@ void SimpleTextLineConfig::setMaxEdgeThresh(double et) {
 }
 
 double SimpleTextLineConfig::maxEdgeTrhesh() const {
-	return mMaxEdgeThresh*ScaleFactory::scaleFactorDpi();
+	return mMaxEdgeThresh*mScaleFactory->scaleFactorDpi();
 }
 
 void SimpleTextLineConfig::load(const QSettings & settings) {

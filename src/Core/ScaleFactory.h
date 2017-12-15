@@ -95,27 +95,20 @@ protected:
 class ScaleFactory {
 
 public:
-	static ScaleFactory& instance();
+	ScaleFactory(const Vector2D& imgSize = Vector2D());
 
-	static double scaleFactor();
-	static double scaleFactorDpi();
-	static cv::Mat scaled(cv::Mat& img);
-	static void scale(BaseElement& el);
-	static void scaleInv(BaseElement& el);
-
-	static Vector2D imgSize();
+	double scaleFactor();
+	double scaleFactorDpi();
+	cv::Mat scaled(cv::Mat& img);
+	void scale(BaseElement& el);
+	void scaleInv(BaseElement& el);
+	Vector2D imgSize();
 
 	QSharedPointer<ScaleFactoryConfig> config() const;
 
-	void init(const Vector2D& imgSize);
-
 private:
-	ScaleFactory();
-	ScaleFactory(const ScaleFactory&);
-
 	Vector2D mImgSize;
 	double mScaleFactor = 1.0;
-
 	QSharedPointer<ScaleFactoryConfig> mConfig;
 
 	double scaleFactor(const Vector2D& size, int maxImageSize, const ScaleFactoryConfig::ScaleSideMode& mode) const;

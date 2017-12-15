@@ -37,6 +37,7 @@
 #include "Utils.h"
 #include "PixelLabel.h"
 #include "Algorithms.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
@@ -101,9 +102,10 @@ protected:
 class DllCoreExport PixelStats : public BaseElement {
 
 public:
-	PixelStats(const cv::Mat& orHist = cv::Mat(), 
-		const cv::Mat& sparsity = cv::Mat(), 
-		double scale = 0.0, 
+	PixelStats(const cv::Mat& orHist = cv::Mat(),
+		const cv::Mat& sparsity = cv::Mat(),
+		double scale = 0.0,
+		QSharedPointer<ScaleFactory> scaleFactory = QSharedPointer<ScaleFactory>(new ScaleFactory()),
 		const QString& id = QString());
 
 	/* row index of data */
@@ -118,6 +120,8 @@ public:
 	};
 
 	bool isEmpty() const;
+
+	void setScaleFactory(const QSharedPointer<ScaleFactory>& scaleFactory);
 
 	void setOrientationIndex(int orIdx);
 	void setLineSpacing(int ls);
@@ -135,11 +139,12 @@ public:
 	cv::Mat data(const DataIndex& dIdx = all_data);
 
 	QString toString() const;
-
+	
 protected:
 	cv::Mat mData;	// MxN orientation histograms M ... idx_end and N ... number of orientations
 	double mScale = 0.0;
 	double mMinVal = 0.0;
+	QSharedPointer<ScaleFactory> mScaleFactory;
 
 	int mHistSize = 0;
 	int mOrIdx = -1;

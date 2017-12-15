@@ -35,6 +35,7 @@
 #include "BaseModule.h"
 #include "Pixel.h"
 #include "PixelSet.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 
@@ -57,16 +58,17 @@ namespace rdf {
 class DllCoreExport SimpleTextLineConfig : public ModuleConfig {
 
 public:
-	SimpleTextLineConfig();
+	SimpleTextLineConfig(QSharedPointer<ScaleFactory> scaleFactory = QSharedPointer<ScaleFactory>(new ScaleFactory()));
 
 	virtual QString toString() const override;
 
 	void setMaxEdgeThresh(double et); // <-- hehe E.T.
 	double maxEdgeTrhesh() const;
-
+	
 protected:
 
 	double mMaxEdgeThresh = 20;			// maximum edge in px
+	QSharedPointer<ScaleFactory> mScaleFactory;
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
@@ -104,7 +106,7 @@ private:
 };
 
 
-class DllCoreExport TextLineConfig : public ModuleConfig {
+class DllCoreExport TextLineConfig : public ScaleModuleConfig {
 
 public:
 	TextLineConfig();
@@ -127,7 +129,7 @@ protected:
 	int mMinLineLength = 15;			// minimum text line length when clustering
 	double mMinPointDist = 40.0;		// acceptable minimal distance of a point to a line
 	double mErrorMultiplier = 1.2;		// maximal increase of error when merging two lines
-	QString mDebugPath = "C:/temp/cluster/";
+	QString mDebugPath = "C:/temp/cluster/";	// TODO: remove
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;

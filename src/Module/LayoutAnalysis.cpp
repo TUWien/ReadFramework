@@ -125,11 +125,11 @@ LayoutAnalysis::LayoutAnalysis(const cv::Mat& img) {
 
 	mImg = img;
 
-	// initialize scale factory
-	ScaleFactory::instance().init(img.size());
-
 	mConfig = QSharedPointer<LayoutAnalysisConfig>::create();
 	mConfig->loadSettings();
+
+	// initialize scale factory
+	mScaleFactory = QSharedPointer<ScaleFactory>(new ScaleFactory(img.size()));
 }
 
 bool LayoutAnalysis::isEmpty() const {
@@ -153,9 +153,9 @@ bool LayoutAnalysis::compute() {
 	//	cv::medianBlur(img, img, 3);
 	//}
 
-	qDebug() << "scale factor dpi: " << ScaleFactory::scaleFactorDpi();
+	qDebug() << "scale factor dpi: " << mScaleFactory->scaleFactorDpi();
 
-	img = ScaleFactory::scaled(img);
+	img = mScaleFactory->scaled(img);
 	mImg = img;
 
 	// find super pixels
@@ -237,6 +237,7 @@ bool LayoutAnalysis::compute() {
 
 			rdf::TextLineSegmentation tlM(sp);
 			tlM.addSeparatorLines(mStopLines);
+			tlM.config()->setScaleFactory(mScaleFactory);
 
 			if (!tlM.compute()) {
 				qWarning() << "could not compute text line segmentation!";
@@ -258,10 +259,10 @@ bool LayoutAnalysis::compute() {
 	mInfo << "Textlines computed in" << dtTl;
 
 	// scale back to original coordinates
-	ScaleFactory::scaleInv(mTextBlockSet);
+	mScaleFactory->scaleInv(mTextBlockSet);
 
 	for (Line& l : mStopLines)
-		l.scale(1.0 / ScaleFactory::scaleFactor());
+		l.scale(1.0 / mScaleFactory->scaleFactor());
 
 	// clean-up
 	if (config()->removeWeakTextLines()) {
@@ -363,7 +364,7 @@ TextBlockSet LayoutAnalysis::createTextBlocks() const {
 		textRegions << RegionManager::filter<Region>(mRoot, Region::type_table_cell);
 
 		TextBlockSet tbs(textRegions);
-		tbs.scale(ScaleFactory::scaleFactor());
+		tbs.scale(mScaleFactory->scaleFactor());
 
 		return tbs;
 	}
@@ -381,7 +382,7 @@ QVector<Line> LayoutAnalysis::createStopLines() const {
 
 		for (auto s : separators) {
 			Line sl = s->line();
-			sl.scale(ScaleFactory::scaleFactor());
+			sl.scale(mScaleFactory->scaleFactor());
 			stopLines << sl;
 		}
 	}
@@ -405,6 +406,8 @@ bool LayoutAnalysis::computeLocalStats(PixelSet & pixels) const {
 
 	// find local orientation per pixel
 	rdf::LocalOrientation lo(pixels);
+	lo.config()->setScaleFactory(mScaleFactory);
+
 	if (!lo.compute()) {
 		qWarning() << "could not compute local orientation";
 		return false;

@@ -107,7 +107,7 @@ public:
 	QString toString() const override;
 
 	void setRootRegion(const QSharedPointer<RootRegion>& region);
-	
+
 	TextBlockSet textBlockSet() const;
 	QVector<SeparatorRegion> stopLines() const;
 	PixelSet pixels() const;
@@ -122,6 +122,7 @@ private:
 	// output
 	TextBlockSet mTextBlockSet;
 	QVector<Line> mStopLines;
+	QSharedPointer<ScaleFactory> mScaleFactory;
 
 	TextBlockSet createTextBlocks() const;
 	QVector<Line> createStopLines() const;

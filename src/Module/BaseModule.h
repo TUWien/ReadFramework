@@ -102,6 +102,22 @@ protected:
 
 };
 
+class ScaleFactory;
+
+class DllCoreExport ScaleModuleConfig : public ModuleConfig {
+
+public:
+	ScaleModuleConfig(
+		const QString& moduleName = "Generic Module",
+		const QSharedPointer<ScaleFactory>& sf = QSharedPointer<ScaleFactory>());
+
+	void setScaleFactory(const QSharedPointer<ScaleFactory>& sf);
+	QSharedPointer<ScaleFactory> scaleFactory();
+
+protected:
+	QSharedPointer<ScaleFactory> mScaleFactory;
+};
+
 
 /// <summary>
 /// This is the base class for all modules.

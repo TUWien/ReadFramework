@@ -168,9 +168,11 @@ void MserBlob::draw(QPainter & p) {
 PixelStats::PixelStats(const cv::Mat& orHist, 
 	const cv::Mat& sparsity, 
 	double scale, 
+	QSharedPointer<ScaleFactory> scaleFactory,
 	const QString& id) : BaseElement(id) {
 
 	mScale = scale;
+	mScaleFactory = scaleFactory;
 	convertData(orHist, sparsity);
 }
 
@@ -209,6 +211,10 @@ void PixelStats::convertData(const cv::Mat& orHist, const cv::Mat& sparsity) {
 
 bool PixelStats::isEmpty() const {
 	return mData.empty();
+}
+
+void PixelStats::setScaleFactory(const QSharedPointer<ScaleFactory>& scaleFactory) {
+	mScaleFactory = scaleFactory;
 }
 
 void PixelStats::setOrientationIndex(int orIdx) {
@@ -257,8 +263,8 @@ double PixelStats::lineSpacing() const {
 	if (mLineSpacing != -1)
 		return mLineSpacing;
 
-	double sr = (256*ScaleFactory::scaleFactorDpi() / scaleFactor());	// sampling rate
-	return qMax((double)lineSpacingIndex() * sr, 10.0);	// assume some minimum line spacing
+	double sr = (256 * mScaleFactory->scaleFactorDpi() / scaleFactor());	// sampling rate
+	return qMax((double)lineSpacingIndex() * sr, 10.0);						// assume some minimum line spacing
 }
 
 int PixelStats::numOrientations() const {

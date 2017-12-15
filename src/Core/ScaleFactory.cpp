@@ -85,48 +85,34 @@ void ScaleFactoryConfig::save(QSettings & settings) const {
 }
 
 // --------------------------------------------------------------------  ScaleFactory
-ScaleFactory::ScaleFactory() {
+ScaleFactory::ScaleFactory(const Vector2D& imgSize) {
 
 	mConfig = QSharedPointer<ScaleFactoryConfig>::create();
 	mConfig->loadSettings();
-}
 
-ScaleFactory& ScaleFactory::instance() {
-
-	static QSharedPointer<ScaleFactory> inst;
-	if (!inst)
-		inst = QSharedPointer<ScaleFactory>(new ScaleFactory());
-	return *inst;
+	mImgSize = imgSize;
+	mScaleFactor = scaleFactor(mImgSize, config()->maxImageSide(), config()->scaleMode());
 }
 
 double ScaleFactory::scaleFactor() {
 
-	ScaleFactory& sf = ScaleFactory::instance();
 
-	if (sf.mImgSize.isNull()) {
+	if (mImgSize.isNull()) {
 		qWarning() << "querying scaleFactor() of uninitialized ScaleFactory...";
 		return 1.0;
 	}
 
-	return sf.mScaleFactor;
+	return mScaleFactor;
 }
 
 double ScaleFactory::scaleFactorDpi() {
 
-	ScaleFactory& sf = ScaleFactory::instance();
-
 	// clear dpi changes (parameters are tuned for 300dpi)
-	return sf.scaleFactor() * (double)sf.config()->dpi() / 300.0;
+	return scaleFactor() * (double)config()->dpi() / 300.0;
 }
 
 QSharedPointer<ScaleFactoryConfig> ScaleFactory::config() const {
 	return mConfig;
-}
-
-void ScaleFactory::init(const Vector2D & imgSize) {
-
-	mImgSize = imgSize;
-	mScaleFactor = scaleFactor(mImgSize, config()->maxImageSide(), config()->scaleMode());
 }
 
 cv::Mat ScaleFactory::scaled(cv::Mat & img) {
@@ -149,11 +135,11 @@ void ScaleFactory::scale(BaseElement & el) {
 }
 
 void ScaleFactory::scaleInv(BaseElement & el) {
-	el.scale(1.0/ ScaleFactory::scaleFactor());
+	el.scale(1.0 / ScaleFactory::scaleFactor());
 }
 
 Vector2D ScaleFactory::imgSize() {
-	return ScaleFactory::instance().mImgSize;
+	return mImgSize;
 }
 
 double ScaleFactory::scaleFactor(const Vector2D& size, int maxImageSize, const ScaleFactoryConfig::ScaleSideMode& mode) const {

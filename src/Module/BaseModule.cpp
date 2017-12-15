@@ -32,6 +32,7 @@
 
 #include "BaseModule.h"
 #include "Settings.h"
+#include "ScaleFactory.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QSettings>
@@ -140,6 +141,20 @@ QDebug operator<<(QDebug d, const Module& m) {
 
 	d << qPrintable(m.toString());
 	return d;
+}
+
+// -------------------------------------------------------------------- ScaleModuleConfig 
+ScaleModuleConfig::ScaleModuleConfig(const QString & moduleName, const QSharedPointer<ScaleFactory>& sf) : ModuleConfig(moduleName) {
+	
+	mScaleFactory = sf ? sf : QSharedPointer<ScaleFactory>(new ScaleFactory());
+}
+
+void ScaleModuleConfig::setScaleFactory(const QSharedPointer<ScaleFactory>& sf) {
+	mScaleFactory = sf;
+}
+
+QSharedPointer<ScaleFactory> ScaleModuleConfig::scaleFactory() {
+	return mScaleFactory;
 }
 
 }

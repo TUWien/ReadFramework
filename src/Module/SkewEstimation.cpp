@@ -750,6 +750,7 @@ namespace rdf {
 	TextLineSkew::TextLineSkew(const cv::Mat& img) : mImg(img) {
 
 		mConfig = QSharedPointer<TextLineSkewConfig>::create();
+		mScaleFactory = QSharedPointer<ScaleFactory>(new ScaleFactory(img.size()));
 	}
 
 	bool TextLineSkew::compute() {
@@ -769,9 +770,11 @@ namespace rdf {
 		// configure local orientation module
 		QSharedPointer<rdf::LocalOrientationConfig> loc(new rdf::LocalOrientationConfig());
 		loc->setNumOrientations(64);
+		loc->setScaleFactory(mScaleFactory);
 
 		rdf::LocalOrientation lo(mSet);
 		lo.setConfig(loc);
+
 		if (!lo.compute())
 			qWarning() << "could not compute local orientation";
 
