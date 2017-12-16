@@ -416,7 +416,7 @@ double PixelDistance::spacingWeighted(const PixelEdge * edge) {
 	}
 
 	qDebug() << "no stats when computing the scaled edges...";
-	return 0.0;
+	return euclidean(edge);
 }
 
 double PixelDistance::orientationWeighted(const PixelEdge * edge) {
@@ -448,7 +448,7 @@ double PixelDistance::orientationWeighted(const PixelEdge * edge) {
 	}
 
 	qDebug() << "no stats when computing the oriented edges...";
-	return 0.0;
+	return euclidean(edge);
 }
 
 double PixelDistance::euclidean(const PixelEdge * edge) {

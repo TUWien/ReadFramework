@@ -310,6 +310,10 @@ Ellipse PixelSet::fitEllipse() const {
 	}
 
 	Ellipse el = Ellipse::fromData(pts);
+
+	if (el.center().x() != el.center().x())
+		qWarning() << "::fitEllipse() is numerically not stable!";
+
 	return el;
 }
 
@@ -688,6 +692,13 @@ void PixelGraph::connect(const PixelConnector& connector, const SortMode& sort) 
 		for (auto e : lEdges)
 			mEdges << e;
 	}
+	else if (sort == sort_distance) {
+
+		auto lSort = [&](const  QSharedPointer<PixelEdge>& e1, const  QSharedPointer<PixelEdge>& e2) { 
+			return e1->edge().length() < e2->edge().length(); 
+		};
+		qSort(mEdges.begin(), mEdges.end(), lSort);
+	}
 
 	// edge lookup (maps pixel IDs to their corresponding edge index) this is a 1 ... n relationship
 	for (int idx = 0; idx < mEdges.size(); idx++) {
@@ -934,8 +945,12 @@ QVector<QSharedPointer<PixelEdge>> DelaunayPixelConnector::connect(const QVector
 		//assert(subdiv.edgeOrg((idx << 2)) < ids.size() && subdiv.edgeOrg((idx << 2)) >= 0);
 		//assert(subdiv.edgeDst((idx << 2)) < ids.size() && subdiv.edgeDst((idx << 2)) >= 0);
 
-		int orgVertex = ids.indexOf(subdiv.edgeOrg((idx << 2)));
-		int dstVertex = ids.indexOf(subdiv.edgeDst((idx << 2)));
+		// for debugging:
+		int ei = idx << 2;
+		int eio = subdiv.edgeOrg(ei);
+		int eid = subdiv.edgeDst(ei);
+		int orgVertex = ids.indexOf(eio);
+		int dstVertex = ids.indexOf(eid);
 
 		// there are a few edges that lead to nowhere
 		if (orgVertex == -1 || dstVertex == -1) {
@@ -1306,10 +1321,12 @@ void TextLineSet::draw(QPainter & p, const DrawFlags & options, const Pixel::Dra
 	sp.setColor(sp.color().darker());
 
 	p.setPen(sp);
-	p.setBrush(ColorManager::white(0.6));
+	p.setBrush(ColorManager::white(0.3));
 	p.drawEllipse(bLine.p1().toQPointF(), ss, ss);
 	p.drawEllipse(bLine.p2().toQPointF(), ss, ss);
 	p.setPen(dp);
+
+	//p.drawText(bLine.center().toQPoint(), id());
 
 }
 
@@ -1439,6 +1456,10 @@ bool TextBlock::remove(const QSharedPointer<TextLineSet>& tl) {
 	return false;
 }
 
+void TextBlock::cleanTextLines() {
+	TextLineHelper::mergeStableTextLines(mTextLines);
+}
+
 QSharedPointer<Region> TextBlock::toTextRegion() const {
 
 	QSharedPointer<TextRegion> r(new TextRegion(Region::type_text_region));
@@ -1546,12 +1567,15 @@ void TextBlockSet::removeWeakTextLines() const {
 	auto filtered = TextLineHelper::filterLowDensity(tls);
 	int nf = filtered.size();
 	filtered << TextLineHelper::filterAngle(tls, maxAngleDiff);
+	filtered << TextLineHelper::filterHeight(tls, 10);
 	
 	for (auto tb : textBlocks()) {
 		
 		// remove the textlines
 		for (auto tl : filtered)
 			tb->remove(tl);
+
+		tb->cleanTextLines();
 	}
 
 	qDebug().nospace() << filtered.size() << " unstable textlines removed (" << nf << "/" << filtered.size()-nf << ") sparse/angle";
@@ -1588,6 +1612,21 @@ QVector<QSharedPointer<TextLineSet> > TextLineHelper::filterLowDensity(const QVe
 	return filtered;
 }
 
+QVector<QSharedPointer<TextLineSet> > TextLineHelper::filterHeight(const QVector<QSharedPointer<TextLineSet>>& textLines, double minHeight, double maxHeight) {
+
+	QVector<QSharedPointer<TextLineSet> > filtered;
+
+	for (auto tl : textLines) {
+
+		auto e = tl->fitEllipse();
+
+		if (e.minorAxis() < minHeight || e.minorAxis() > maxHeight)
+			filtered << tl;
+	}
+
+	return filtered;
+}
+
 /// <summary>
 /// Filters all textlines whose baseline angle is > maxAngle w.r.t the text orientation.
 /// </summary>
@@ -1605,12 +1644,134 @@ QVector<QSharedPointer<TextLineSet>> TextLineHelper::filterAngle(const QVector<Q
 		double orDist = Algorithms::angleDist(textOr, baseLineOr, CV_PI);
 		if (orDist > maxAngle) {
 			filtered << tl;
-			//qDebug() << tl->id() << "angle error:" << orDist*DK_RAD2DEG << "tl" << textOr*DK_RAD2DEG << "bl" << baseLineOr*DK_RAD2DEG;
+			qDebug() << tl->id() << "angle error:" << orDist*DK_RAD2DEG << "tl" << textOr*DK_RAD2DEG << "bl" << baseLineOr*DK_RAD2DEG;
 		}
 	}
 
 	return filtered;
 }
+
+void TextLineHelper::mergeStableTextLines(QVector<QSharedPointer<TextLineSet>>& textLines) {
+
+	QVector<QSharedPointer<Pixel> > pxs;
+
+	for (auto t : textLines) {
+
+		Line l = t->fitLine(0);
+		double s = 10;	// not relevant
+		Ellipse e1(l.p1(), Vector2D(s, s));
+		pxs << QSharedPointer<Pixel>(new Pixel(e1, e1.bbox(), t->id()));
+		Ellipse e2(l.p2(), Vector2D(s, s));
+		pxs << QSharedPointer<Pixel>(new Pixel(e2, e2.bbox(), t->id()));
+	}
+
+	DelaunayPixelConnector dpc;
+	dpc.setDistanceFunction(PixelDistance::euclidean);
+
+	PixelGraph pg(pxs);
+	pg.connect(dpc, PixelGraph::sort_distance);
+
+	QMap<QSharedPointer<TextLineSet>, QSharedPointer<TextLineSet> > mergeMap;
+
+	for (auto e : pg.edges()) {
+
+		auto t1 = find(e->first()->id(), textLines);
+		auto t2 = find(e->second()->id(), textLines);
+
+		// find merged text line
+		auto ri = mergeMap.find(t1);
+
+		// resolve text line (find the merged one)
+		while (ri != mergeMap.end()) {
+			t1 = ri.value();
+			ri = mergeMap.find(t1);
+		}
+
+		ri = mergeMap.find(t2);
+
+		// resolve text line
+		while (ri != mergeMap.end()) {
+			t2 = ri.value();
+			ri = mergeMap.find(t2);
+		}
+
+		double ml = qMax(t1->fitLine().length(), t2->fitLine().length());
+
+		// check merge
+		if (t1 && t2 && t1 != t2 && ml > e->edge().length()) {
+
+			if (merge(t1, t2)) {
+				t1->append(t2->pixels());
+				mergeMap.insert(t2, t1);
+			}
+		}
+	}
+
+	for (auto tl : mergeMap.keys()) {
+		int idx = textLines.indexOf(tl);
+		if (idx != -1)
+			textLines.remove(idx);
+	}
+
+}
+
+QSharedPointer<TextLineSet> TextLineHelper::find(const QString & id, const QVector<QSharedPointer<TextLineSet>>& tl) {
+
+	for (auto t : tl) {
+		if (t->id() == id)
+			return t;
+	}
+
+	return QSharedPointer<TextLineSet>();
+}
+
+bool TextLineHelper::merge(const QSharedPointer<TextLineSet>& tl1, const QSharedPointer<TextLineSet>& tl2) {
+
+	// parameter
+	double maxAngleDiff = 0.75 * DK_DEG2RAD;
+	double maxAxisIncrease = 1.4;
+	double minAxisIncrease = 1.05;
+
+	auto l1 = tl1->fitLine();
+	auto l2 = tl2->fitLine();
+
+	// find the 'more stable' textline
+	QSharedPointer<TextLineSet> stable, unstable;
+
+	if (l1.length() > l2.length()) {
+		stable = tl1;
+		unstable = tl2;
+	}
+	else {
+		stable = tl2;
+		unstable = tl1;
+	}
+
+	Ellipse es = stable->fitEllipse();
+
+	TextLineSet merged(stable->pixels());
+	merged.append(unstable->pixels());
+
+	Ellipse em = merged.fitEllipse();
+
+	// the baseline's orientation must not change too much
+	if (Algorithms::absAngleDiff(es.angle(), em.angle()) > maxAngleDiff)
+		return false;
+
+	//qDebug() << "angle diff:" << Algorithms::absAngleDiff(es.angle(), em.angle())*DK_RAD2DEG;
+
+	// the text height must not increase too much
+	if (em.minorAxis() > es.minorAxis() * maxAxisIncrease)
+		return false;
+
+	//qDebug() << "new ellipse" << em << "old:" << es;
+
+	if (em.majorAxis() < es.majorAxis() * minAxisIncrease)
+		return false;
+
+	return true;
+}
+
 
 VoronoiPixelConnector::VoronoiPixelConnector() {
 }

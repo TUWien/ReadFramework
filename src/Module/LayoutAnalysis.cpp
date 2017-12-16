@@ -206,6 +206,7 @@ bool LayoutAnalysis::compute() {
 
 		if (!spc.compute())
 			qWarning() << "could not classify SuperPixels";
+		
 	}
 	else
 		qDebug() << "could not load classifier from " << config()->classifierPath();
@@ -267,6 +268,7 @@ bool LayoutAnalysis::compute() {
 	// clean-up
 	if (config()->removeWeakTextLines()) {
 		mTextBlockSet.removeWeakTextLines();
+		qDebug() << "removing weak textlines...";
 	}
 
 	mInfo << "computed in" << dt;
@@ -302,7 +304,7 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 			if (!col.isValid())
 				p.setPen(ColorManager::randColor());
 			p.setOpacity(0.5);
-			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse);
+			s[idx].draw(p, PixelSet::DrawFlags() | PixelSet::draw_pixels, Pixel::DrawFlags() | Pixel::draw_stats | Pixel::draw_ellipse | Pixel::draw_label_colors);
 			//qDebug() << "scale" << idx << ":" << *s[idx];
 		}
 				
@@ -314,7 +316,9 @@ cv::Mat LayoutAnalysis::draw(const cv::Mat & img, const QColor& col) const {
 
 		tb->draw(p, TextBlock::draw_text_lines);
 	}
-	
+
+	//return tlM.draw(Image::qImage2Mat(qImg));
+
 	return Image::qImage2Mat(qImg);
 }
 

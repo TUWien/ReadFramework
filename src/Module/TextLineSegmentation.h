@@ -127,8 +127,8 @@ public:
 protected:
 
 	int mMinLineLength = 15;			// minimum text line length when clustering
-	double mMinPointDist = 40.0;		// acceptable minimal distance of a point to a line
-	double mErrorMultiplier = 1.2;		// maximal increase of error when merging two lines
+	double mMinPointDist = 80.0;		// acceptable minimal distance of a point to a line
+	double mErrorMultiplier = 1.4;		// maximal increase of error when merging two lines
 	QString mDebugPath = "C:/temp/cluster/";	// TODO: remove
 
 	void load(const QSettings& settings) override;
@@ -173,7 +173,6 @@ private:
 
 	// post processing
 	void mergeUnstableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines) const;
-
 };
 
 }

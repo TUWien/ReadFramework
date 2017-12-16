@@ -518,7 +518,8 @@ cv::Mat TextLineSegmentation::draw(const cv::Mat& img,  const QVector<QSharedPoi
 
 		Vector2D c = tl->center();
 		c.setX(c.x() + 20);
-		p.drawText(c.toQPointF(), QString::number(tl->density()));
+		//p.drawText(c.toQPointF(), QString::number(tl->density()));
+		//p.drawText(c.toQPointF(), tl->id());
 	}
 
 	// draw errored/crucial text lines

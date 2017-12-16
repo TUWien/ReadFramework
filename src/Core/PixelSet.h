@@ -279,7 +279,13 @@ protected:
 namespace TextLineHelper {
 
 	QVector<QSharedPointer<TextLineSet> > filterLowDensity(const QVector<QSharedPointer<TextLineSet> >& textLines);
+	QVector<QSharedPointer<TextLineSet> > filterHeight(const QVector<QSharedPointer<TextLineSet> >& textLines, double minHeight = 5, double maxHeight = 5000);
 	QVector<QSharedPointer<TextLineSet> > filterAngle(const QVector<QSharedPointer<TextLineSet> >& textLines, double maxAngle = 4 * DK_DEG2RAD);
+
+	void mergeStableTextLines(QVector<QSharedPointer<TextLineSet> >& textLines);
+
+	QSharedPointer<TextLineSet> find(const QString& id, const QVector<QSharedPointer<TextLineSet> >& tl);
+	bool merge(const QSharedPointer<TextLineSet> & tl1, const QSharedPointer<TextLineSet> & tl2);
 
 }
 
@@ -317,6 +323,7 @@ public:
 	void setTextLines(const QVector<QSharedPointer<TextLineSet> >& textLines);
 	QVector<QSharedPointer<TextLineSet> > textLines() const;
 	bool remove(const QSharedPointer<TextLineSet>& tl);
+	void cleanTextLines();
 
 	QSharedPointer<Region> toTextRegion() const;
 
@@ -377,6 +384,7 @@ public:
 		sort_none,
 		sort_edges,
 		sort_line_edges,
+		sort_distance,	// euclidean
 
 		sort_end
 	};

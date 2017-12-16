@@ -1768,7 +1768,11 @@ Vector2D Ellipse::getPoint(double angle) const {
 
 	double a = mAxis.x();
 	double b = mAxis.y();
-	
+
+	// fix numerical issues
+	if (b == 0)
+		b = 1;
+
 	double tt = std::tan(lAngle);
 	double x = (a*b) / (std::sqrt(b*b + a*a * (tt*tt)));
 
