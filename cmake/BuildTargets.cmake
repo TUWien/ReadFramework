@@ -81,7 +81,6 @@ endif()
 
 if (MSVC)
 	# set properties for Visual Studio Projects
-	add_definitions(/Zc:wchar_t-)
 	set(CMAKE_CXX_FLAGS_DEBUG "/W4 ${CMAKE_CXX_FLAGS_DEBUG}")
 	set(CMAKE_CXX_FLAGS_RELEASE "/W4 /O2 ${CMAKE_CXX_FLAGS_RELEASE}")
 	
