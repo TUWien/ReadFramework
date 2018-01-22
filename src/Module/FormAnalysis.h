@@ -153,6 +153,9 @@ namespace rdf {
 		void setCellIdx(int idx);
 		int cellIdx() const;
 
+		void setNeighbourCellIdx(QVector<int> n);
+		QVector<int> neighbourCellIDx();
+
 		double weight();
 
 		QVector<int> adjacencyNodes() const;
@@ -169,6 +172,7 @@ namespace rdf {
 
 	protected:
 		int mCellIdx = 1;
+		QVector<int> mMergedNeighbourCells;
 		Line mReferenceLine;
 		LinePosition mLinePos;
 		int mRefRowIdx = -1;
@@ -271,11 +275,13 @@ namespace rdf {
 		QSharedPointer<rdf::TableRegion> tableRegionTemplate();
 		QVector<QSharedPointer<rdf::TableCellRaw>> createRawTableFromTemplate();
 		void createAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
+		void createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf::TableCellRaw>> cellsR);
 		QVector<QSharedPointer<rdf::AssociationGraphNode>> mergeColinearNodes(QVector<QSharedPointer<rdf::AssociationGraphNode>> &tmpNodes);
 		void createAssociationGraph();
 		bool** adjacencyMatrix(const QVector<QSharedPointer<rdf::AssociationGraphNode>> &associationGraphNodes);
 		void findMaxCliques();
 		void createTableFromMaxClique(const QVector<QSharedPointer<rdf::TableCell>> &cells);
+		void createTableFromMaxCliqueReduced(const QVector<QSharedPointer<rdf::TableCell>> &cells);
 		//void plausibilityCheck();
 
 		QVector<QSet<int>> getMaxCliqueHor() const;
