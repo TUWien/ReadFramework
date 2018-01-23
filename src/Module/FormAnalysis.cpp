@@ -1199,7 +1199,7 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	int tableRows = mRegion->rows();
 	int tableCols = mRegion->cols();
 
-	cv::Mat table = cv::Mat(tableRows, tableCols, CV_16UC1);
+	cv::Mat table = cv::Mat(tableRows, tableCols, CV_32SC1);
 	table = -1;
 
 	for (int cellIdx = 0; cellIdx < cellsR.size(); cellIdx++) {
@@ -1247,8 +1247,11 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 					newNode->setSpan(cellsR[idxUpper[0]]->rowSpan(), cellsR[idxUpper[0]]->colSpan());
 					newNode->setCellIdx(idxUpper[0]);
 					newNode->setLinePos(AssociationGraphNode::LinePosition::pos_top);
-					idxUpper.pop_front();
-					newNode->setNeighbourCellIdx(idxUpper);
+					//idxUpper.pop_front();
+					QVector<int> tmpVec = idxUpper;
+					tmpVec.pop_front();
+					newNode->setNeighbourCellIdx(tmpVec);
+					//newNode->setNeighbourCellIdx(idxUpper);
 					newNode->setReferenceLine(tmpU);
 					rdf::Line cLine = mHorLines[lineIdx[lI]];
 					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
@@ -1286,9 +1289,9 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 					double d = findMinWidth(cellsR, idx[0], AssociationGraphNode::LinePosition::pos_bottom);
 					d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
 					d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-					tmpU.translate(mOffset);
+					tmpL.translate(mOffset);
 
-					LineCandidates lC = findLineCandidates(tmpU, d, true);
+					LineCandidates lC = findLineCandidates(tmpL, d, true);
 					QVector<int> lineIdx = lC.candidatesIdx();
 					QVector<double> overlaps = lC.overlaps();
 					QVector<double> distances = lC.distances();
@@ -1301,9 +1304,10 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 						newNode->setSpan(cellsR[idx[0]]->rowSpan(), cellsR[idx[0]]->colSpan());
 						newNode->setCellIdx(idx[0]);
 						newNode->setLinePos(AssociationGraphNode::LinePosition::pos_bottom);
-						idx.pop_front();
-						newNode->setNeighbourCellIdx(idx);
-						newNode->setReferenceLine(tmpU);
+						QVector<int> tmpVec = idx;
+						tmpVec.pop_front();
+						newNode->setNeighbourCellIdx(tmpVec);
+						newNode->setReferenceLine(tmpL);
 						rdf::Line cLine = mHorLines[lineIdx[lI]];
 						newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
 						newNode->setMatchedLineIdx(lineIdx[lI]);
@@ -1324,19 +1328,20 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	//----------------------------------------------------------------------------------------------------------------------------
 	//------- same for vertical lines --------------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------------
-	cellDiffHor = table.clone();
-	cellDiffHor.t();
+	cv::Mat tableT = table.clone();
+	tableT = tableT.t();
+	cellDiffHor = tableT.clone();
 	cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range(0, cellDiffHor.cols - 1)) = cellDiffHor(cv::Range(1, cellDiffHor.rows), cv::Range(1, cellDiffHor.cols)) - cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range(0, cellDiffHor.cols - 1));
 
 	tmpU = rdf::Line();
 	idxUpper.clear();
-	for (int col = 0; col < tableCols; col++) {
-		int cellIdx = table.at<int>(0, col);
+	for (int col = 0; col < cellDiffHor.cols; col++) {
+		int cellIdx = tableT.at<int>(0, col);
 		if (cellsR[cellIdx]->leftBorderVisible()) {
 			idxUpper.push_back(cellIdx);
 			tmpU = tmpU.isEmpty() ? cellsR[cellIdx]->leftBorder() : tmpU.merge(cellsR[cellIdx]->leftBorder());
 		}
-		if (!cellsR[cellIdx]->leftBorderVisible() || col == tableCols - 1) {
+		if (!cellsR[cellIdx]->leftBorderVisible() || col == cellDiffHor.cols - 1) {
 			//createAssociationGraphNode
 			if (!idxUpper.isEmpty()) {
 				double d = findMinWidth(cellsR, idxUpper[0], AssociationGraphNode::LinePosition::pos_left);
@@ -1357,8 +1362,11 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 					newNode->setSpan(cellsR[idxUpper[0]]->rowSpan(), cellsR[idxUpper[0]]->colSpan());
 					newNode->setCellIdx(idxUpper[0]);
 					newNode->setLinePos(AssociationGraphNode::LinePosition::pos_left);
-					idxUpper.pop_front();
-					newNode->setNeighbourCellIdx(idxUpper);
+					//idxUpper.pop_front();
+					QVector<int> tmpVec = idxUpper;
+					tmpVec.pop_front();
+					newNode->setNeighbourCellIdx(tmpVec);
+					//newNode->setNeighbourCellIdx(idxUpper);
 					newNode->setReferenceLine(tmpU);
 					rdf::Line cLine = mVerLines[lineIdx[lI]];
 					newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
@@ -1376,28 +1384,28 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	}
 
 	//right border
-	for (int row = 0; row < tableRows; row++) {
+	for (int row = 0; row < cellDiffHor.rows; row++) {
 		QVector<int> idx;
 		rdf::Line tmpL;
-		const int* pt = table.ptr<int>(row);
+		const int* pt = tableT.ptr<int>(row);
 		const int* ptDiff = cellDiffHor.ptr<int>(row);
 
-		for (int col = 0; col < tableCols; col++) {
+		for (int col = 0; col < cellDiffHor.cols; col++) {
 			int cellIdx = pt[col];
 			int cellDiffIdx = ptDiff[col];
 			if (cellsR[cellIdx]->rightBorderVisible() && cellDiffIdx != 0) {
 				idx.push_back(cellIdx);
 				tmpL = tmpL.isEmpty() ? cellsR[cellIdx]->rightBorder() : tmpL.merge(cellsR[cellIdx]->rightBorder());
 			}
-			if ((!cellsR[cellIdx]->rightBorderVisible() || cellDiffIdx == 0) || col == tableCols - 1) {
+			if ((!cellsR[cellIdx]->rightBorderVisible() || cellDiffIdx == 0) || col == cellDiffHor.cols - 1) {
 				//createAssociationGraphNode
 				if (!idx.isEmpty()) {
 					double d = findMinWidth(cellsR, idx[0], AssociationGraphNode::LinePosition::pos_right);
 					d = d < config()->distThreshold() ? config()->distThreshold() : d; //search size is minimum width of the neighbouring cell
 					d = d == std::numeric_limits<double>::max() ? config()->distThreshold() : d;
-					tmpU.translate(mOffset);
+					tmpL.translate(mOffset);
 
-					LineCandidates lC = findLineCandidates(tmpU, d, false);
+					LineCandidates lC = findLineCandidates(tmpL, d, false);
 					QVector<int> lineIdx = lC.candidatesIdx();
 					QVector<double> overlaps = lC.overlaps();
 					QVector<double> distances = lC.distances();
@@ -1410,9 +1418,12 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 						newNode->setSpan(cellsR[idx[0]]->rowSpan(), cellsR[idx[0]]->colSpan());
 						newNode->setCellIdx(idx[0]);
 						newNode->setLinePos(AssociationGraphNode::LinePosition::pos_right);
-						idx.pop_front();
-						newNode->setNeighbourCellIdx(idx);
-						newNode->setReferenceLine(tmpU);
+						//idx.pop_front();
+						QVector<int> tmpVec = idx;
+						tmpVec.pop_front();
+						newNode->setNeighbourCellIdx(tmpVec);
+						//newNode->setNeighbourCellIdx(idx);
+						newNode->setReferenceLine(tmpL);
 						rdf::Line cLine = mVerLines[lineIdx[lI]];
 						newNode->setMatchedLine(cLine, overlaps[lI], distances[lI]);
 						newNode->setMatchedLineIdx(lineIdx[lI]);
@@ -2224,7 +2235,9 @@ bool FormFeatures::matchTemplate() {
 	QVector<QSharedPointer<rdf::TableCellRaw>> cellsR = createRawTableFromTemplate();
 	//create AssociationGraphNodes
 	qDebug() << "create Association Graph nodes...";
-	createAssociationGraphNodes(cellsR);
+	//createAssociationGraphNodes(cellsR);
+	createReducedAssociationGraphNodes(cellsR);
+
 	//is done in createAssociationGraphNodes
 
 	qDebug() << "create Association Graph...";
@@ -2249,7 +2262,13 @@ bool FormFeatures::matchTemplate() {
 
 	//for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
 	//	QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
-	//	int searchNode = 67;
+	//	int searchNode = 4;
+	//	if (!test.contains(searchNode))
+	//		qDebug() << "node " << searchNode << " not found in node: " << *t;
+	//}
+	//for (QSet<int>::iterator t = mMaxCliquesVer[0].begin(); t != mMaxCliquesVer[0].end(); ++t) {
+	//	QSet<int> test = mANodesVertical[*t]->adjacencyNodes().toList().toSet();
+	//	int searchNode = 29;
 	//	if (!test.contains(searchNode))
 	//		qDebug() << "node " << searchNode << " not found in node: " << *t;
 	//}
@@ -2282,7 +2301,8 @@ bool FormFeatures::matchTemplate() {
 	mCellsR = cellsR;
 
 	qDebug() << "create Table from maxclique...";
-	createTableFromMaxClique(cells); //cells needed for children
+	//createTableFromMaxClique(cells); //cells needed for children
+	createTableFromMaxCliqueReduced(cells);
 
 	return true;
 }
