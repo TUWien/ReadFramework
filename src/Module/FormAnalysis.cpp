@@ -1213,7 +1213,9 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	}
 
 	cv::Mat cellDiffHor = table.clone();
-	cellDiffHor(cv::Range(0, tableRows-1), cv::Range(0, tableCols-1)) = cellDiffHor(cv::Range(1, tableRows), cv::Range(1, tableCols)) - cellDiffHor(cv::Range(0, tableRows-1), cv::Range(0, tableCols-1));
+	cv::Mat tmpM = cellDiffHor(cv::Range(0, tableRows-1), cv::Range::all()) - cellDiffHor(cv::Range(1, tableRows), cv::Range::all());
+	tmpM.copyTo(cellDiffHor(cv::Range(0, tableRows - 1), cv::Range::all()));
+	
 	//entries with zero indicate no lower border
 
 	//upper border first row
@@ -1223,8 +1225,10 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	for (int col = 0; col < tableCols; col++) {
 		int cellIdx = table.at<int>(0, col);
 		if (cellsR[cellIdx]->topBorderVisible()) {
-			idxUpper.push_back(cellIdx);
-			tmpU = tmpU.isEmpty() ? cellsR[cellIdx]->topBorder() : tmpU.merge(cellsR[cellIdx]->topBorder());
+			if (idxUpper.isEmpty() || (!idxUpper.isEmpty() && idxUpper.last() != cellIdx)) {
+				idxUpper.push_back(cellIdx);
+				tmpU = tmpU.isEmpty() ? cellsR[cellIdx]->topBorder() : tmpU.merge(cellsR[cellIdx]->topBorder());
+			}
 		} 
 		if (!cellsR[cellIdx]->topBorderVisible() || col == tableCols-1) {
 			//createAssociationGraphNode
@@ -1280,8 +1284,10 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 			int cellIdx = pt[col];
 			int cellDiffIdx = ptDiff[col];
 			if (cellsR[cellIdx]->bottomBorderVisible() && cellDiffIdx != 0) {
-				idx.push_back(cellIdx);
-				tmpL = tmpL.isEmpty() ? cellsR[cellIdx]->bottomBorder() : tmpL.merge(cellsR[cellIdx]->bottomBorder());
+				if (idx.isEmpty() || (!idx.isEmpty() && idx.last() != cellIdx)) {
+					idx.push_back(cellIdx);
+					tmpL = tmpL.isEmpty() ? cellsR[cellIdx]->bottomBorder() : tmpL.merge(cellsR[cellIdx]->bottomBorder());
+				}
 			} 
 			if ((!cellsR[cellIdx]->bottomBorderVisible() || cellDiffIdx == 0) || col == tableCols-1) {
 				//createAssociationGraphNode
@@ -1331,15 +1337,20 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	cv::Mat tableT = table.clone();
 	tableT = tableT.t();
 	cellDiffHor = tableT.clone();
-	cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range(0, cellDiffHor.cols - 1)) = cellDiffHor(cv::Range(1, cellDiffHor.rows), cv::Range(1, cellDiffHor.cols)) - cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range(0, cellDiffHor.cols - 1));
+
+	tmpM = cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()) - cellDiffHor(cv::Range(1, cellDiffHor.rows), cv::Range::all());
+	tmpM.copyTo(cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()));
+
 
 	tmpU = rdf::Line();
 	idxUpper.clear();
 	for (int col = 0; col < cellDiffHor.cols; col++) {
 		int cellIdx = tableT.at<int>(0, col);
 		if (cellsR[cellIdx]->leftBorderVisible()) {
-			idxUpper.push_back(cellIdx);
-			tmpU = tmpU.isEmpty() ? cellsR[cellIdx]->leftBorder() : tmpU.merge(cellsR[cellIdx]->leftBorder());
+			if (idxUpper.isEmpty() || (!idxUpper.isEmpty() && idxUpper.last() != cellIdx)) {
+				idxUpper.push_back(cellIdx);
+				tmpU = tmpU.isEmpty() ? cellsR[cellIdx]->leftBorder() : tmpU.merge(cellsR[cellIdx]->leftBorder());
+			}
 		}
 		if (!cellsR[cellIdx]->leftBorderVisible() || col == cellDiffHor.cols - 1) {
 			//createAssociationGraphNode
@@ -1394,8 +1405,10 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 			int cellIdx = pt[col];
 			int cellDiffIdx = ptDiff[col];
 			if (cellsR[cellIdx]->rightBorderVisible() && cellDiffIdx != 0) {
-				idx.push_back(cellIdx);
-				tmpL = tmpL.isEmpty() ? cellsR[cellIdx]->rightBorder() : tmpL.merge(cellsR[cellIdx]->rightBorder());
+				if (idx.isEmpty() || (!idx.isEmpty() && idx.last() != cellIdx)) {
+					idx.push_back(cellIdx);
+					tmpL = tmpL.isEmpty() ? cellsR[cellIdx]->rightBorder() : tmpL.merge(cellsR[cellIdx]->rightBorder());
+				}
 			}
 			if ((!cellsR[cellIdx]->rightBorderVisible() || cellDiffIdx == 0) || col == cellDiffHor.cols - 1) {
 				//createAssociationGraphNode
