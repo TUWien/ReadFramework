@@ -285,7 +285,7 @@ namespace rdf {
 					QTextStream stream(&file);
 					QFileInfo fi = QFileInfo(filePaths[i]);
 					// eval file: file path , real label
-					stream << "'" << fi.baseName() << "'," << classLabels[i] << ",";
+					stream << "'" << fi.baseName() << "',' " << fi.absoluteFilePath() << "', " << classLabels[i] << ",";
 					for(int k = 0; k < idxs.rows; k++) {
 						// eval file: real writer id, distance, number of page
 						QString out = classLabels[idxs.at<int>(k)] + "," + QString::number(distances.at<float>(k)) + "," + QString::number(idxs.at<int>(k)) + ",";
