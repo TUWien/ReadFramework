@@ -2385,9 +2385,14 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 
 			if (distance < distThreshold) {
 				double overlap = l.horizontalOverlap(cLine);
-				double len = cLine.length() < l.length() ? cLine.length() : l.length();
-				//only add candidate if overlap is larger than 80% in reference to the smaller line
-				if ((overlap/len) > 0.5)
+				//double len = cLine.length() < l.length() ? cLine.length() : l.length();77
+				////only add candidate if overlap is larger than 80% in reference to the smaller line
+				//if ((overlap/len) > 0.5)
+				//	lC.addCandidate(lidx, overlap, distance);
+
+				//add candidate if line is longer as reference line or overlap compared to reference line is > 0.3
+				//if (cLine.length() >= l.length() || overlap/l.length() > 0.3)
+				if (overlap / l.length() > 0.3)
 					lC.addCandidate(lidx, overlap, distance);
 			}
 		}
@@ -2404,10 +2409,16 @@ rdf::LineCandidates FormFeatures::findLineCandidates(rdf::Line l, double distThr
 
 			if (distance < distThreshold) {
 				double overlap = l.verticalOverlap(cLine);
-				double len = cLine.length() < l.length() ? cLine.length() : l.length();
-				//only add candidate if overlap is larger than 80% in reference to the smaller line
-				if ((overlap / len) > 0.5)
+				//double len = cLine.length() < l.length() ? cLine.length() : l.length();
+				////only add candidate if overlap is larger than 80% in reference to the smaller line
+				//if ((overlap / len) > 0.5)
+				//	lC.addCandidate(lidx, overlap, distance);
+
+				//add candidate if line is longer as reference line or overlap compared to reference line is > 0.3
+				//if (cLine.length() >= l.length() || overlap / l.length() > 0.3)
+				if (overlap / l.length() > 0.3)
 					lC.addCandidate(lidx, overlap, distance);
+
 			}
 		}
 	}
