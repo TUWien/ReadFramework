@@ -111,6 +111,8 @@ public:
 	TextBlockSet textBlockSet() const;
 	QVector<SeparatorRegion> stopLines() const;
 	PixelSet pixels() const;
+	
+	QSharedPointer<ScaleFactory> scaleFactory() const;
 
 private:
 	bool checkInput() const override;

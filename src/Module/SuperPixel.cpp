@@ -815,7 +815,7 @@ bool GridSuperPixel::compute() {
 	mGridPixel = merge(pixelMap, mag, phase);
 
 	for (auto p : mGridPixel) {
-		if (!p->isDead())
+		if (!p->isDead() && p->ellipse().isValid())
 			mSet << p->toPixel();
 	}
 

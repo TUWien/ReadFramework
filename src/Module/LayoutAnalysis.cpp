@@ -158,8 +158,10 @@ bool LayoutAnalysis::compute() {
 	img = mScaleFactory->scaled(img);
 	mImg = img;
 
+
 	// find super pixels
-	ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
+	//ScaleSpaceSuperPixel<GridSuperPixel> spM(mImg);
+	ScaleSpaceSuperPixel<SuperPixel> spM(mImg);
 	//GridSuperPixel spM(img);
 	//SuperPixel spM(img);
 	//LineSuperPixel spM(img);
@@ -352,6 +354,10 @@ PixelSet LayoutAnalysis::pixels() const {
 		set.append(tb->pixelSet().pixels());
 	
 	return set;
+}
+
+QSharedPointer<ScaleFactory> LayoutAnalysis::scaleFactory() const {
+	return mScaleFactory;
 }
 
 bool LayoutAnalysis::checkInput() const {

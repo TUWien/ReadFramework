@@ -115,6 +115,12 @@ QSharedPointer<ScaleFactoryConfig> ScaleFactory::config() const {
 	return mConfig;
 }
 
+void ScaleFactory::setConfig(QSharedPointer<ScaleFactoryConfig> c) {
+
+	mConfig = c;
+	mScaleFactor = scaleFactor(mImgSize, config()->maxImageSide(), config()->scaleMode());
+}
+
 cv::Mat ScaleFactory::scaled(cv::Mat & img) {
 
 	cv::Mat sImg = img;

@@ -421,11 +421,9 @@ public:
 	static Ellipse fromData(const std::vector<cv::Point>& pts);
 	static Ellipse fromData(const QVector<Vector2D>& pts);
 	static Ellipse fromData(const cv::Mat& pts, const Vector2D& center);
-	//static Ellipse fromData(const cv::Mat& means, const cv::Mat& covs);
-	//static Ellipse fromImage(const cv::Mat& img);
-	//bool axisFromCov(const cv::Mat& cov);
 
 	bool isNull() const;
+	bool isValid() const;
 
 	QString toString() const;
 

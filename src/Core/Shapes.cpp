@@ -1524,6 +1524,10 @@ bool Ellipse::isNull() const {
 	return mIsNull;
 }
 
+bool Ellipse::isValid() const {
+	return mCenter.x() == mCenter.x() && mCenter.y() == mCenter.y();	// check if the center is nan
+}
+
 QString Ellipse::toString() const {
 
 	return QString("c %1 axis %3 angle %5")

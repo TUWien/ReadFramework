@@ -92,7 +92,7 @@ protected:
 	ScaleFactoryConfig::ScaleSideMode mScaleMode = ScaleFactoryConfig::scale_height;	// scaling mode (see ScaleSideMode)
 };
 
-class ScaleFactory {
+class DllCoreExport ScaleFactory {
 
 public:
 	ScaleFactory(const Vector2D& imgSize = Vector2D());
@@ -105,6 +105,7 @@ public:
 	Vector2D imgSize();
 
 	QSharedPointer<ScaleFactoryConfig> config() const;
+	void setConfig(QSharedPointer<ScaleFactoryConfig> c);
 
 private:
 	Vector2D mImgSize;
