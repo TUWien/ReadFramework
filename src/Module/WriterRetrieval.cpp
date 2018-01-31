@@ -262,7 +262,7 @@ namespace rdf {
 	void WriterRetrievalConfig::save(QSettings & settings) const {
 		settings.setValue("vocPath", mVocPath);
 		settings.setValue("featureDir", mFeatureDir);
-		settings.setValue("evalFile", mEvalPath);	
+		settings.setValue("evalPath", mEvalPath);	
 	}
 
 	// --------------- WriterRetrieval ----------------------------------------------------------------------------------
