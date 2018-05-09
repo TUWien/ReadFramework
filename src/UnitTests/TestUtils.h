@@ -1,9 +1,9 @@
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
- Copyright (C) 2016 Markus Diem <diem@caa.tuwien.ac.at>
- Copyright (C) 2016 Stefan Fiel <fiel@caa.tuwien.ac.at>
- Copyright (C) 2016 Florian Kleber <kleber@caa.tuwien.ac.at>
+ Copyright (C) 2016 Markus Diem <diem@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Stefan Fiel <fiel@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Florian Kleber <kleber@cvl.tuwien.ac.at>
 
  This file is part of ReadFramework.
 
@@ -24,7 +24,7 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.caa.tuwien.ac.at/cvl/
+ [1] http://www.cvl.tuwien.ac.at/cvl/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
  [4] http://nomacs.org
@@ -67,12 +67,12 @@ public:
 	QString featureCachePath() const;
 
 protected:
-	QString mImagePath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
-	QString mXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
-	QString mTemplateXMLPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn-template2.xml";
+	QString mImagePath = "ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/00000001-6.jpg";
+	QString mXMLPath = "ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/page/00000001-6.xml";
+	QString mTemplateXMLPath = "ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn-template2.xml";
 	QString mClassifierPath = "";
 	QString mFeatureCachePath = "";
-	QString mLabelConfigPath = "ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
+	QString mLabelConfigPath = "ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/configs/config-baseline.json";
 	
 };
 

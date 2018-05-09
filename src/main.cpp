@@ -1,9 +1,9 @@
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
- Copyright (C) 2016 Markus Diem <diem@caa.tuwien.ac.at>
- Copyright (C) 2016 Stefan Fiel <fiel@caa.tuwien.ac.at>
- Copyright (C) 2016 Florian Kleber <kleber@caa.tuwien.ac.at>
+ Copyright (C) 2016 Markus Diem <diem@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Stefan Fiel <fiel@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Florian Kleber <kleber@cvl.tuwien.ac.at>
 
  This file is part of ReadFramework.
 
@@ -24,7 +24,7 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.caa.tuwien.ac.at/cvl/
+ [1] http://www.cvl.tuwien.ac.at/cvl/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
  [4] http://nomacs.org
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 	qInfo().nospace() << "I am using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION;
 
 	QCoreApplication::setOrganizationName("TU Wien");
-	QCoreApplication::setOrganizationDomain("http://www.caa.tuwien.ac.at/cvl");
+	QCoreApplication::setOrganizationDomain("http://www.cvl.tuwien.ac.at/cvl");
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 
