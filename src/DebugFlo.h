@@ -33,6 +33,7 @@
 #pragma once
 
 #include "DebugUtils.h"
+#include "FormAnalysis.h"
 
 #pragma warning(push, 0)	// no warnings from includes
  // Qt Includes
@@ -74,9 +75,11 @@ public:
 	TableProcessing(const DebugConfig& config = DebugConfig());
 
 	bool match() const;
+	void setTableConfig(const rdf::FormFeaturesConfig& tableConfig);
 
 protected:
 	DebugConfig mConfig;
+	rdf::FormFeaturesConfig mFormConfig;
 
 	bool load(cv::Mat& img) const;
 	bool load(rdf::PageXmlParser& parser) const;

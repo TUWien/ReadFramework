@@ -279,8 +279,12 @@ namespace rdf {
 		}
 
 		cv::Mat imgFormG = imgForm;
+
 		if (imgForm.channels() != 1)
 			cv::cvtColor(imgForm, imgFormG, CV_RGB2GRAY);
+		else {
+			cv::cvtColor(imgForm, imgForm, CV_GRAY2RGB);
+		}
 		
 		//cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
 
@@ -301,8 +305,9 @@ namespace rdf {
 		QSharedPointer<rdf::FormFeaturesConfig> tmpConfig(new rdf::FormFeaturesConfig());
 		//(*tmpConfig) = mFormConfig;
 		tmpConfig->setTemplDatabase(mConfig.tableTemplate());
-		//tmpConfig->setVariationThrLower(0.5);
-		//tmpConfig->setVariationThrUpper(0.55);
+		tmpConfig->setVariationThrLower(mFormConfig.variationThrLower());
+		tmpConfig->setVariationThrUpper(mFormConfig.variationThrUpper());
+		tmpConfig->setSaveChilds(mFormConfig.saveChilds());
 		formF.setConfig(tmpConfig);
 
 		//rdf::FormFeatures formTemplate;
@@ -368,6 +373,10 @@ namespace rdf {
 		parserOut.write(loadXmlPath, pe);
 
 		return true;
+	}
+
+	void TableProcessing::setTableConfig(const rdf::FormFeaturesConfig & tableConfig) 	{
+		mFormConfig = tableConfig;
 	}
 
 

@@ -70,6 +70,9 @@ namespace rdf {
 		cv::Mat imgFormG = imgForm;
 		if (imgForm.channels() != 1)
 			cv::cvtColor(imgForm, imgFormG, CV_RGB2GRAY);
+		else {
+			cv::cvtColor(imgForm, imgForm, CV_GRAY2RGB);
+		}
 		//cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
 		rdf::FormFeatures formF(imgFormG);
 		formF.setFormName("testForm");

@@ -125,17 +125,23 @@ int main(int argc, char** argv) {
 
 	// load settings
 	rdf::Config& config = rdf::Config::instance();
-	
+	rdf::FormFeaturesConfig fc;
+
 	// load user defined settings
 	if (parser.isSet(settingOpt)) {
 		QString sName = parser.value(settingOpt);
 		config.setSettingsFile(sName);
 		config.load();
+
+		QSettings s(sName, QSettings::IniFormat);
+		s.beginGroup("FormAnalysis");
+		fc.loadSettings(s);
+		s.endGroup();
 	}
 
 	// create debug config
 	rdf::DebugConfig dc;
-
+	
 	if (parser.positionalArguments().size() > 0)
 		dc.setImagePath(parser.positionalArguments()[0].trimmed());
 
@@ -160,8 +166,11 @@ int main(int argc, char** argv) {
 		dc.setLabelConfigPath(parser.value(labelConfigPathOpt));
 
 	// add table template
-	if (parser.isSet(xmlTableOpt))
+	if (parser.isSet(xmlTableOpt)) {
 		dc.setTableTemplate(parser.value(xmlTableOpt));
+	} else if (parser.isSet(settingOpt)) {
+		dc.setTableTemplate(fc.templDatabase());
+	}
 
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	applyDebugSettings(dc);
@@ -179,6 +188,7 @@ int main(int argc, char** argv) {
 			qDebug() << "starting table matching ... (not yet)";
 			//TODO table
 			rdf::TableProcessing tableproc(dc);
+			tableproc.setTableConfig(fc);
 			tableproc.match();
 
 		}
