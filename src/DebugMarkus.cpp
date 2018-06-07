@@ -830,4 +830,97 @@ void LayoutTest::eval(const QString & toolPath, const QString & gtPath, const QS
 	qDebug().noquote() << "/n" << eval.readAllStandardOutput();
 }
 
+// Layout Test --------------------------------------------------------------------
+DeepMerge::DeepMerge(const DebugConfig & config) {
+	mConfig = config;
+}
+
+void DeepMerge::run() {
+
+	Timer dt;
+
+	// test image loading
+	QImage img(mConfig.imagePath());
+	cv::Mat imgCv = Image::qImage2Mat(img);
+
+	if (!imgCv.empty())
+		qInfo() << mConfig.imagePath() << "loaded...";
+	else
+		qInfo() << mConfig.imagePath() << "NOT loaded...";
+
+
+	// merge the map
+	merge(imgCv);
+
+	qInfo() << "total computation time:" << dt;
+
+}
+
+void DeepMerge::merge(const cv::Mat & img) const {
+
+	// TODO: graph-cut on the image
+	Timer dt;
+
+
+	cv::Mat cImg = img.clone();
+
+	cv::cvtColor(cImg, cImg, cv::COLOR_RGBA2RGB);
+	cImg.convertTo(cImg, CV_32F, 1.0/255.0);
+
+	double mi = 10;
+
+	for (int idx = 0; idx < mi; idx++) {
+
+		double thr = idx / mi;
+		cv::Mat rImg = thresh(cImg, thr);
+
+		QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge-" + QString::number(thr));
+		rdf::Image::save(rImg, imgPath);
+	}
+
+	qInfo() << "maps merged in" << dt;
+}
+
+cv::Mat DeepMerge::thresh(const cv::Mat& img, double thr) const {
+	
+	cv::Mat rImg = img.clone();
+
+	// find the max channel
+	cv::Mat mImg(rImg.size(), CV_32FC1, cv::Scalar(0));
+
+	for (int rIdx = 0; rIdx < mImg.rows; rIdx++) {
+
+		const float* rPtr = rImg.ptr<float>(rIdx);
+		float* mPtr = mImg.ptr<float>(rIdx);
+
+		for (int cIdx = 0; cIdx < mImg.cols; cIdx++) {
+			
+			float m = *rPtr;	rPtr++;
+			m = qMax(m, *rPtr); rPtr++;
+			m = qMax(m, *rPtr); rPtr++;
+
+			// max of all channels
+			mPtr[cIdx] = m;
+		}
+	}
+
+	std::vector<cv::Mat> channels;
+	cv::split(rImg, channels);
+
+	for (cv::Mat& ch : channels) {
+		ch = ch > thr & ch == mImg;
+	}
+
+	cv::merge(channels, rImg);
+
+	return rImg;
+}
+
+cv::Mat DeepMerge::graphCut(const cv::Mat& img) const {
+
+
+
+}
+
+
 }

@@ -396,7 +396,6 @@ cv::Mat IP::threshOtsu(const cv::Mat& srcImg, int thType) {
 
 	cv::Mat srcGray = srcImg;
 	if (srcImg.channels() != 1) cv::cvtColor(srcImg, srcGray, CV_RGB2GRAY);
-	//qDebug() << "convertedImg has " << srcGray.channels() << " channels";
 
 	cv::Mat binImg;
 	cv::threshold(srcGray, binImg, 0, 255, thType | CV_THRESH_OTSU);

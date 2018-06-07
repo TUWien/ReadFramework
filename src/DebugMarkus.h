@@ -84,4 +84,20 @@ protected:
 	DebugConfig mConfig;
 };
 
+class DeepMerge {
+
+public:
+	DeepMerge(const DebugConfig& config = DebugConfig());
+
+	void run();
+
+protected:
+
+	void merge(const cv::Mat& img) const;
+	cv::Mat thresh(const cv::Mat& img, double thr = 0.5) const;
+	cv::Mat graphCut(const cv::Mat& img) const;
+
+	DebugConfig mConfig;
+};
+
 }
