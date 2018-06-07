@@ -35,7 +35,7 @@
 #include "Network.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QPolygon>
 #include <QFileInfo>
@@ -77,7 +77,9 @@ Utils& Utils::instance() {
 }
 
 bool Utils::hasGui() {
-	return (qobject_cast<QApplication*>(QCoreApplication::instance()) != 0);	// check if only QCoreApplication (headless) is running
+	//return (qobject_cast<QApplication*>(QCoreApplication::instance()) != 0);	// check if only QCoreApplication (headless) is running
+	// as of Qt 5.11 we have painters in the headless too ...
+	return false;
 }
 
 void Utils::initFramework() const {
@@ -141,8 +143,8 @@ void Utils::registerVersion() const {
 
 #else
 	QString version(RDF_FRAMEWORK_VERSION);	// default version (we do not know the build)
-#endif
-	QApplication::setApplicationVersion(version);
+#endif	
+	QCoreApplication::setApplicationVersion(version);
 
 }
 

@@ -32,7 +32,7 @@
 
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QApplication>
+#include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QImage>

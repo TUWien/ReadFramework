@@ -3,6 +3,7 @@
 set(RDF_BINARY_NAME ${PROJECT_NAME})		# binary
 set(RDF_TEST_NAME ${PROJECT_NAME}Test)		# test binary
 set(RDF_DLL_CORE_NAME ${PROJECT_NAME}Core)	# library
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if (MSVC)
 	set(RDF_RC src/rdf.rc) #add resource file when compiling with MSVC 
@@ -50,9 +51,9 @@ target_include_directories(${RDF_BINARY_NAME} 		PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_TEST_NAME} 	    	PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_include_directories(${RDF_DLL_CORE_NAME} 	PRIVATE ${OpenCV_INCLUDE_DIRS})
 
-qt5_use_modules(${RDF_BINARY_NAME} 		Core Network Widgets)
-qt5_use_modules(${RDF_TEST_NAME} 			Core Network Widgets)
-qt5_use_modules(${RDF_DLL_CORE_NAME} 	Core Network Widgets)
+target_link_libraries(${RDF_BINARY_NAME} 		Qt5::Core Qt5::Network Qt5::Gui)
+target_link_libraries(${RDF_TEST_NAME} 			Qt5::Core Qt5::Network Qt5::Gui)
+target_link_libraries(${RDF_DLL_CORE_NAME} 	Qt5::Core Qt5::Network Qt5::Gui)
 
 # core flags
 set_target_properties(${RDF_DLL_CORE_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/libs/$<CONFIGURATION>)

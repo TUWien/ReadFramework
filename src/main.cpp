@@ -32,7 +32,7 @@
 
 
 #pragma warning(push, 0)	// no warnings from includes
-#include <QApplication>
+#include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QImage>
@@ -68,15 +68,10 @@ int main(int argc, char** argv) {
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 
-#ifdef WIN32
-	QApplication app(argc, (char**)argv);		// enable QPainter
-#else
 	QCoreApplication app(argc, (char**)argv);	// enable headless
-#endif
 
 	// CMD parser --------------------------------------------------------------------
 	QCommandLineParser parser;
-
 
 	parser.setApplicationDescription("Welcome to the CVL READ Framework testing application.");
 	parser.addHelpOption();
@@ -190,7 +185,6 @@ int main(int argc, char** argv) {
 			rdf::TableProcessing tableproc(dc);
 			tableproc.setTableConfig(fc);
 			tableproc.match();
-
 		}
 
 		// stefans section
@@ -219,8 +213,8 @@ int main(int argc, char** argv) {
 			//test.parseXml();
 			//test.linesToXml();
 
-			rdf::LayoutTest lt(dc);
-			lt.testComponents();
+			//rdf::LayoutTest lt(dc);
+			//lt.testComponents();
 		}
 
 	}
