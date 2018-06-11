@@ -856,56 +856,46 @@ void DeepMerge::run() {
 
 }
 
-void DeepMerge::merge(const cv::Mat & img) const {
+void DeepMerge::merge(const cv::Mat & src) const {
 
 	// TODO: graph-cut on the image
 	Timer dt;
 
 
-	cv::Mat cImg = img.clone();
+	cv::Mat cImg = src.clone();
 
 	cv::cvtColor(cImg, cImg, cv::COLOR_RGBA2RGB);
 	cImg.convertTo(cImg, CV_32F, 1.0/255.0);
 
-	double mi = 10;
+	//double mi = 10;
 
-	for (int idx = 0; idx < mi; idx++) {
+	//for (int idx = 0; idx < mi; idx++) {
 
-		double thr = idx / mi;
-		cv::Mat rImg = thresh(cImg, thr);
+	//	double thr = idx / mi;
+	//	cv::Mat rImg = thresh(cImg, thr);
 
-		QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge-" + QString::number(thr));
-		rdf::Image::save(rImg, imgPath);
-	}
+	//	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge-" + QString::number(thr));
+	//	rdf::Image::save(rImg, imgPath);
+	//}
+
+	cv::Mat rImg = graphCut(cImg);
+
+	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "results written to" << imgPath;
 
 	qInfo() << "maps merged in" << dt;
 }
 
-cv::Mat DeepMerge::thresh(const cv::Mat& img, double thr) const {
+cv::Mat DeepMerge::thresh(const cv::Mat& src, double thr) const {
 	
-	cv::Mat rImg = img.clone();
+	cv::Mat rImg = src.clone();
 
-	// find the max channel
-	cv::Mat mImg(rImg.size(), CV_32FC1, cv::Scalar(0));
-
-	for (int rIdx = 0; rIdx < mImg.rows; rIdx++) {
-
-		const float* rPtr = rImg.ptr<float>(rIdx);
-		float* mPtr = mImg.ptr<float>(rIdx);
-
-		for (int cIdx = 0; cIdx < mImg.cols; cIdx++) {
-			
-			float m = *rPtr;	rPtr++;
-			m = qMax(m, *rPtr); rPtr++;
-			m = qMax(m, *rPtr); rPtr++;
-
-			// max of all channels
-			mPtr[cIdx] = m;
-		}
-	}
 
 	std::vector<cv::Mat> channels;
 	cv::split(rImg, channels);
+
+	cv::Mat mImg = maxImg(rImg);
 
 	for (cv::Mat& ch : channels) {
 		ch = ch > thr & ch == mImg;
@@ -916,10 +906,49 @@ cv::Mat DeepMerge::thresh(const cv::Mat& img, double thr) const {
 	return rImg;
 }
 
-cv::Mat DeepMerge::graphCut(const cv::Mat& img) const {
+cv::Mat DeepMerge::graphCut(const cv::Mat& src) const {
 
+	cv::Mat img = src.clone();
+	cv::Mat mi = maxImg(img);
 
+	std::vector<cv::Mat> ch;
+	
+	cv::split(img, ch);
+	
+	QVector<cv::Mat> channels = QVector<cv::Mat>::fromStdVector(ch);
+	channels.push_front(1.0 - mi);
 
+	DeepCut dc(channels);
+	if (!dc.compute())
+		qWarning() << "could not compute DeepCut!";
+
+	img = dc.image();
+
+	return img;
+}
+
+cv::Mat DeepMerge::maxImg(const cv::Mat & src) const {
+
+	// find the max channel
+	cv::Mat mImg(src.size(), CV_32FC1, cv::Scalar(0));
+
+	for (int rIdx = 0; rIdx < mImg.rows; rIdx++) {
+
+		const float* rPtr = src.ptr<float>(rIdx);
+		float* mPtr = mImg.ptr<float>(rIdx);
+
+		for (int cIdx = 0; cIdx < mImg.cols; cIdx++) {
+
+			float m = *rPtr;	rPtr++;
+			m = qMax(m, *rPtr); rPtr++;
+			m = qMax(m, *rPtr); rPtr++;
+
+			// max of all channels
+			mPtr[cIdx] = m;
+		}
+	}
+
+	return cv::Mat();
 }
 
 

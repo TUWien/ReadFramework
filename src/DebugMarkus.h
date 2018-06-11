@@ -93,9 +93,10 @@ public:
 
 protected:
 
-	void merge(const cv::Mat& img) const;
-	cv::Mat thresh(const cv::Mat& img, double thr = 0.5) const;
-	cv::Mat graphCut(const cv::Mat& img) const;
+	void merge(const cv::Mat& src) const;
+	cv::Mat thresh(const cv::Mat& src, double thr = 0.5) const;
+	cv::Mat graphCut(const cv::Mat& src) const;
+	cv::Mat maxImg(const cv::Mat& src) const;
 
 	DebugConfig mConfig;
 };

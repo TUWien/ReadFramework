@@ -944,5 +944,162 @@ void GraphCutLineSpacingConfig::save(QSettings & settings) const {
 	settings.setValue("numLabels", numLabels());
 }
 
+// GarphCutImage --------------------------------------------------------------------
+GraphCutImage::GraphCutImage(const QVector<cv::Mat> & src) : mImgs(src) {
+
+	mConfig = QSharedPointer<GraphCutConfig>::create();
+}
+
+bool GraphCutImage::isEmpty() const {
+	
+	return mImgs.empty();
+}
+
+QSharedPointer<GraphCutConfig> GraphCutImage::config() const {
+	
+	return qSharedPointerCast<GraphCutConfig>(mConfig);
+}
+
+cv::Mat GraphCutImage::image() const {
+	
+	return mLabelImg;
+}
+
+QSharedPointer<GCoptimizationGridGraph> GraphCutImage::graphCut(const QVector<cv::Mat>& src) const {
+
+	if (src.empty()) {
+		return QSharedPointer<GCoptimizationGridGraph>();
+	}
+
+	cv::Mat data;
+
+	for (const cv::Mat& m : src) {
+
+		cv::Mat cm;
+		m.convertTo(cm, CV_32S, 255);
+
+		data.push_back(cm);
+	}
+	
+	Image::imageInfo(data, "graphcut data");
+
+	int nLabels = numLabels();
+
+	// get costs and smoothness term
+	//cv::Mat c = costs(nLabels);				// Set size x #labels
+	cv::Mat sm = labelDistMatrix(nLabels);	// #labels x #labels
+											// init the graph
+	QSharedPointer<GCoptimizationGridGraph> gc(new GCoptimizationGridGraph(size().height(), size().width(), nLabels));
+	gc->setDataCost(data.ptr<int>());
+	gc->setSmoothCost(sm.ptr<int>());
+
+	// run the expansion-move
+	try {
+		qDebug() << "energy before:" << gc->compute_energy();
+		//gc->expansion(config()->numIter());
+		gc->swap(config()->numIter());
+		qDebug() << "energy after:" << gc->compute_energy();
+	}
+	catch (GCException gce) {
+
+		mWarning << "exception while performing graph-cut";
+		mWarning << QString::fromUtf8(gce.message);
+		return QSharedPointer<GCoptimizationGridGraph>();
+	}
+
+	return gc;
+}
+
+int GraphCutImage::numLabels() const {
+	return 0;
+}
+
+QSize GraphCutImage::size() const {
+	
+	if (mImgs.empty())
+		return QSize();
+	
+	return QSize(mImgs[0].rows, mImgs[0].cols);
+}
+
+// -------------------------------------------------------------------- DeepCut 
+DeepCut::DeepCut(const QVector<cv::Mat>& src) : GraphCutImage(src) {
+
+}
+
+bool DeepCut::checkInput() const {
+	return !isEmpty();
+}
+
+bool DeepCut::compute() {
+
+	if (!checkInput())
+		return false;
+
+	Timer dt;
+
+	// perform graphcut
+	auto gc = graphCut(mImgs);
+
+	if (gc) {
+
+		mLabelImg = cv::Mat(size().width(), size().height(), CV_8UC1);
+		unsigned char* lPtr = mLabelImg.ptr<unsigned char>();
+
+		QSize s = size();
+
+		for (int idx = 0; idx < s.width()*s.height(); idx++) {
+
+			lPtr[idx] = (unsigned char)gc->whatLabel(idx);
+		}
+
+		Image::imageInfo(mLabelImg, "labelImg");
+	}
+
+	mInfo << "computed in" << dt;
+
+	return true;
+}
+
+cv::Mat DeepCut::labelDistMatrix(int numLabels) const {
+
+	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+
+	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+
+		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+
+		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+
+			// set smoothness cost for orientations
+			int diff = abs(rIdx - cIdx);
+			sPtr[cIdx] = qMin(diff, numLabels - diff);
+
+			// Il Koo proposed this:
+			//// set smoothness cost for orientations
+			//if (rIdx == cIdx)
+			//	sPtr[cIdx] = 0;
+
+			//int diff = abs(rIdx - cIdx);
+			//sPtr[cIdx] = diff <= 3 ? 1 : 12; // Il Koo: 0.4 : 5
+		}
+	}
+
+	return orDist;
+}
+
+/// <summary>
+/// Returns the numbers of labels (states).
+/// The statistics' columns == the number of possible labels
+/// </summary>
+/// <returns></returns>
+int DeepCut::numLabels() const {
+	return mImgs.size();
+}
+
+cv::Mat DeepCut::draw(const cv::Mat & img, const QColor &) const {
+
+	return mLabelImg;
+}
 
 }
