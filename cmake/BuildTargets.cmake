@@ -140,11 +140,11 @@ set(RDF_LIBS ${RDF_CORE_LIB})
 
 configure_file(${RDF_SOURCE_DIR}/ReadFramework.cmake.in ${CMAKE_BINARY_DIR}/ReadFrameworkConfig.cmake)
 
-# tests
-add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
-add_test(NAME TableTest COMMAND ${RDF_TEST_NAME} "--table")
-add_test(NAME PreProcessing COMMAND ${RDF_TEST_NAME} "--pre-processing")
-add_test(NAME SuperPixel COMMAND ${RDF_TEST_NAME} "--super-pixel")
+# # tests
+# add_test(NAME BaselineTest COMMAND ${RDF_TEST_NAME} "--baseline")
+# add_test(NAME TableTest COMMAND ${RDF_TEST_NAME} "--table")
+# add_test(NAME PreProcessing COMMAND ${RDF_TEST_NAME} "--pre-processing")
+# add_test(NAME SuperPixel COMMAND ${RDF_TEST_NAME} "--super-pixel")
 
 #package 
 if (UNIX)
