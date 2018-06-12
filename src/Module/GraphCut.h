@@ -329,6 +329,7 @@ protected:
 	virtual cv::Mat labelDistMatrix(int numLabels) const = 0;
 
 	virtual int numLabels() const = 0;
+	cv::Mat convertData(const QVector<cv::Mat>& src) const;
 	QSize size() const;
 };
 

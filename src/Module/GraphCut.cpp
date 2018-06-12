@@ -971,24 +971,14 @@ QSharedPointer<GCoptimizationGridGraph> GraphCutImage::graphCut(const QVector<cv
 		return QSharedPointer<GCoptimizationGridGraph>();
 	}
 
-	cv::Mat data;
-
-	for (const cv::Mat& m : src) {
-
-		cv::Mat cm;
-		m.convertTo(cm, CV_32S, 255);
-
-		data.push_back(cm);
-	}
-	
-	Image::imageInfo(data, "graphcut data");
+	cv::Mat data = convertData(src);
 
 	int nLabels = numLabels();
 
 	// get costs and smoothness term
-	//cv::Mat c = costs(nLabels);				// Set size x #labels
 	cv::Mat sm = labelDistMatrix(nLabels);	// #labels x #labels
-											// init the graph
+
+	// init the graph
 	QSharedPointer<GCoptimizationGridGraph> gc(new GCoptimizationGridGraph(size().height(), size().width(), nLabels));
 	gc->setDataCost(data.ptr<int>());
 	gc->setSmoothCost(sm.ptr<int>());
@@ -996,8 +986,8 @@ QSharedPointer<GCoptimizationGridGraph> GraphCutImage::graphCut(const QVector<cv
 	// run the expansion-move
 	try {
 		qDebug() << "energy before:" << gc->compute_energy();
-		//gc->expansion(config()->numIter());
-		gc->swap(config()->numIter());
+		gc->expansion(config()->numIter());
+		//gc->swap(config()->numIter());
 		qDebug() << "energy after:" << gc->compute_energy();
 	}
 	catch (GCException gce) {
@@ -1012,6 +1002,34 @@ QSharedPointer<GCoptimizationGridGraph> GraphCutImage::graphCut(const QVector<cv
 
 int GraphCutImage::numLabels() const {
 	return 0;
+}
+
+cv::Mat GraphCutImage::convertData(const QVector<cv::Mat>& src) const {
+
+	int nL = numLabels();
+	int numPixels = src[0].rows*src[0].cols;
+	int length = numPixels * nL;
+	cv::Mat data(1, length, CV_8UC1);
+	unsigned char* dPtr = data.ptr<unsigned char>();
+
+	// max value - indicates the 'dynamic range'
+	double maxVal = 10;
+
+	// packs all pixels into a vector
+	// [l0p0 l1p0 l2p0 l0p1 l1p1 l2p1 ...] with li (i = 0 ... numLabels()) and pj (j = 0 ... numPixels)
+	for (int lIdx = 0; lIdx < src.size(); lIdx++) {
+
+		const float* sPtr = src[lIdx].ptr<float>();
+
+		for (int pIdx = 0; pIdx < numPixels; pIdx++) {
+
+			dPtr[(pIdx*nL) + lIdx] = (unsigned char)qRound(maxVal - (sPtr[pIdx] * maxVal));
+		}
+	}
+
+	data.convertTo(data, CV_32SC1);
+
+	return data;
 }
 
 QSize GraphCutImage::size() const {
@@ -1043,10 +1061,10 @@ bool DeepCut::compute() {
 
 	if (gc) {
 
+		QSize s = size();
+
 		mLabelImg = cv::Mat(size().width(), size().height(), CV_8UC1);
 		unsigned char* lPtr = mLabelImg.ptr<unsigned char>();
-
-		QSize s = size();
 
 		for (int idx = 0; idx < s.width()*s.height(); idx++) {
 
@@ -1063,29 +1081,23 @@ bool DeepCut::compute() {
 
 cv::Mat DeepCut::labelDistMatrix(int numLabels) const {
 
-	cv::Mat orDist(numLabels, numLabels, CV_32SC1);
+	// TODO: check good smoothness terms
+	cv::Mat lDist(numLabels, numLabels, CV_32SC1);
 
-	for (int rIdx = 0; rIdx < orDist.rows; rIdx++) {
+	for (int rIdx = 0; rIdx < lDist.rows; rIdx++) {
 
-		unsigned int* sPtr = orDist.ptr<unsigned int>(rIdx);
+		unsigned int* sPtr = lDist.ptr<unsigned int>(rIdx);
 
-		for (int cIdx = 0; cIdx < orDist.cols; cIdx++) {
+		for (int cIdx = 0; cIdx < lDist.cols; cIdx++) {
 
 			// set smoothness cost for orientations
 			int diff = abs(rIdx - cIdx);
 			sPtr[cIdx] = qMin(diff, numLabels - diff);
 
-			// Il Koo proposed this:
-			//// set smoothness cost for orientations
-			//if (rIdx == cIdx)
-			//	sPtr[cIdx] = 0;
-
-			//int diff = abs(rIdx - cIdx);
-			//sPtr[cIdx] = diff <= 3 ? 1 : 12; // Il Koo: 0.4 : 5
 		}
 	}
 
-	return orDist;
+	return lDist;
 }
 
 /// <summary>

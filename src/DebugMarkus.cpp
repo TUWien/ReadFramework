@@ -948,7 +948,7 @@ cv::Mat DeepMerge::maxImg(const cv::Mat & src) const {
 		}
 	}
 
-	return cv::Mat();
+	return mImg;
 }
 
 

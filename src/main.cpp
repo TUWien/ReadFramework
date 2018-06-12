@@ -240,7 +240,8 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setImagePath("C:/read/test/d6.5/0056_S_Alzgern_011-01_0056-crop.JPG");
 		dc.setImagePath("C:/read/baseline-evaluation/BL_English/Images/ior!p!241!37_8_feb_1793_pp_594-610_f001v.jpg");
 		
-		dc.setImagePath("C:/read/basilis/merging/Mss_003357_0152_pag-047[051]-probs.png");
+		dc.setImagePath("C:/nextcloud/READ/basilis/merging/Mss_003357_0152_pag-047[051]-probs.png");
+		dc.setImagePath("C:/nextcloud/READ/basilis/merging/_5269957-probs.png");
 
 
 		qInfo() << dc.imagePath() << "added as image path";
