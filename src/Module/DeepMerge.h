@@ -17,7 +17,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public Licensex
+ You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  The READ project  has  received  funding  from  the European  Union’s  Horizon  2020  
@@ -32,71 +32,93 @@
 
 #pragma once
 
-#include "DebugUtils.h"
+#include "BaseModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QColor>
 #pragma warning(pop)
 
-// Qt/CV defines
-namespace cv {
-	class Mat;
-}
+#ifndef DllCoreExport
+#ifdef DLL_CORE_EXPORT
+#define DllCoreExport Q_DECL_EXPORT
+#else
+#define DllCoreExport Q_DECL_IMPORT
+#endif
+#endif
+
+// Qt defines
 
 namespace rdf {
 
 // read defines
 
-class XmlTest {
+class DllCoreExport DeepMergeConfig : public ModuleConfig {
 
 public:
-	XmlTest(const DebugConfig& config = DebugConfig());
+	DeepMergeConfig();
 
-	void parseXml();
-	void linesToXml();
-
-protected:
-	DebugConfig mConfig;
-};
-
-class LayoutTest {
-	
-public:
-	LayoutTest(const DebugConfig& config = DebugConfig());
-
-	void testComponents();
-	void layoutToXml() const;
-	void layoutToXmlDebug() const;
-
-protected:
-	void testFeatureCollector(const cv::Mat& src) const;
-	void testTrainer();
-	void testClassifier(const cv::Mat& src) const;
-	void testLineDetector(const cv::Mat& src) const;
-
-	void testLayout(const cv::Mat& src) const;
-	void pageSegmentation(const cv::Mat& src) const;
-
-	double scaleFactor(const cv::Mat& img) const;
-	void eval() const;
-	void eval(const QString& toolPath, const QString& gtPath, const QString& resultPath) const;
-
-	DebugConfig mConfig;
-};
-
-class DeepMergeTest {
-
-public:
-	DeepMergeTest(const DebugConfig& config = DebugConfig());
-
-	void run();
+	virtual QString toString() const override;
 
 protected:
 
-	void merge(const cv::Mat& src) const;
-	cv::Mat thresh(const cv::Mat& src, double thr = 0.5) const;
-
-	DebugConfig mConfig;
+	void load(const QSettings& settings) override;
+	void save(QSettings& settings) const override;
 };
+
+class DllCoreExport DeepMerge : public Module {
+
+public:
+	DeepMerge(const cv::Mat& img);
+
+	bool isEmpty() const override;
+	bool compute() override;
+
+	cv::Mat thresh(const cv::Mat& src, double thr) const;
+
+	QSharedPointer<DeepMergeConfig> config() const;
+
+	cv::Mat draw(const cv::Mat& img, const QColor& col = QColor()) const;
+	QString toString() const override;
+
+	cv::Mat image() const;
+
+private:
+	bool checkInput() const override;
+
+	// input
+	cv::Mat mImg;
+
+	// output
+	cv::Mat mMergedImg;
+
+	// helpers
+	template <typename numFmt>
+	cv::Mat maxChannels(const cv::Mat & src) const {
+
+		// find the max channel
+		cv::Mat maxImg(src.size(), src.depth(), cv::Scalar(0));
+
+		for (int rIdx = 0; rIdx < maxImg.rows; rIdx++) {
+
+			const numFmt* rPtr = src.ptr<numFmt>(rIdx);
+			numFmt* mPtr = maxImg.ptr<numFmt>(rIdx);
+
+			for (int cIdx = 0; cIdx < maxImg.cols; cIdx++) {
+
+				numFmt m = *rPtr;	rPtr++;
+				m = qMax(m, *rPtr); rPtr++;
+				m = qMax(m, *rPtr); rPtr++;
+
+				// max of all channels
+				mPtr[cIdx] = m;
+			}
+		}
+
+		return maxImg;
+	}
+
+
+};
+
 
 }

@@ -216,7 +216,7 @@ int main(int argc, char** argv) {
 			//rdf::LayoutTest lt(dc);
 			//lt.testComponents();
 
-			rdf::DeepMerge dm(dc);
+			rdf::DeepMergeTest dm(dc);
 			dm.run();
 		}
 
@@ -241,14 +241,14 @@ void applyDebugSettings(rdf::DebugConfig& dc) {
 		dc.setImagePath("C:/read/baseline-evaluation/BL_English/Images/ior!p!241!37_8_feb_1793_pp_594-610_f001v.jpg");
 		
 		dc.setImagePath("C:/nextcloud/READ/basilis/merging/Mss_003357_0152_pag-047[051]-probs.png");
-		dc.setImagePath("C:/nextcloud/READ/basilis/merging/_5269957-probs.png");
+		//dc.setImagePath("C:/nextcloud/READ/basilis/merging/_5269957-probs.png");
 
 
 		qInfo() << dc.imagePath() << "added as image path";
 	}
 
 	if (dc.outputPath().isEmpty()) {
-		dc.setOutputPath(rdf::Utils::createFilePath(dc.imagePath(), "-result", "tif"));
+		dc.setOutputPath(rdf::Utils::createFilePath(dc.imagePath(), "-result", "png"));
 		qInfo() << dc.outputPath() << "added as output path";
 	}
 

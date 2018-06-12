@@ -40,6 +40,7 @@
 #include "ElementsHelper.h"
 #include "Settings.h"
 #include "GraphCut.h"
+#include "DeepMerge.h"
 
 #include "SuperPixelScaleSpace.h"
 #include "TabStopAnalysis.h"
@@ -831,11 +832,11 @@ void LayoutTest::eval(const QString & toolPath, const QString & gtPath, const QS
 }
 
 // Layout Test --------------------------------------------------------------------
-DeepMerge::DeepMerge(const DebugConfig & config) {
+DeepMergeTest::DeepMergeTest(const DebugConfig & config) {
 	mConfig = config;
 }
 
-void DeepMerge::run() {
+void DeepMergeTest::run() {
 
 	Timer dt;
 
@@ -856,100 +857,38 @@ void DeepMerge::run() {
 
 }
 
-void DeepMerge::merge(const cv::Mat & src) const {
+void DeepMergeTest::merge(const cv::Mat & src) const {
 
 	// TODO: graph-cut on the image
 	Timer dt;
 
 
+
 	cv::Mat cImg = src.clone();
 
-	cv::cvtColor(cImg, cImg, cv::COLOR_RGBA2RGB);
-	cImg.convertTo(cImg, CV_32F, 1.0/255.0);
+	DeepMerge dm(cImg);
 
-	//double mi = 10;
+	if (!dm.compute())
+		qWarning() << "could not compute DeepMerge";
 
-	//for (int idx = 0; idx < mi; idx++) {
+	cv::Mat rImg = dm.image();
 
-	//	double thr = idx / mi;
-	//	cv::Mat rImg = thresh(cImg, thr);
-
-	//	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge-" + QString::number(thr));
-	//	rdf::Image::save(rImg, imgPath);
-	//}
-
-	cv::Mat rImg = graphCut(cImg);
-
-	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-merge");
+	QString imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-grabcut");
 	rdf::Image::save(rImg, imgPath);
 	qDebug() << "results written to" << imgPath;
 
+
+	for (int idx = 1; idx < 255; idx += 20) {
+		rImg = dm.thresh(cImg, idx);
+
+		imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-thresh-" + QString::number(idx));
+		rdf::Image::save(rImg, imgPath);
+	}
+	qDebug() << "results written to" << imgPath;
+
+
+
 	qInfo() << "maps merged in" << dt;
 }
-
-cv::Mat DeepMerge::thresh(const cv::Mat& src, double thr) const {
-	
-	cv::Mat rImg = src.clone();
-
-
-	std::vector<cv::Mat> channels;
-	cv::split(rImg, channels);
-
-	cv::Mat mImg = maxImg(rImg);
-
-	for (cv::Mat& ch : channels) {
-		ch = ch > thr & ch == mImg;
-	}
-
-	cv::merge(channels, rImg);
-
-	return rImg;
-}
-
-cv::Mat DeepMerge::graphCut(const cv::Mat& src) const {
-
-	cv::Mat img = src.clone();
-	cv::Mat mi = maxImg(img);
-
-	std::vector<cv::Mat> ch;
-	
-	cv::split(img, ch);
-	
-	QVector<cv::Mat> channels = QVector<cv::Mat>::fromStdVector(ch);
-	channels.push_front(1.0 - mi);
-
-	DeepCut dc(channels);
-	if (!dc.compute())
-		qWarning() << "could not compute DeepCut!";
-
-	img = dc.image();
-
-	return img;
-}
-
-cv::Mat DeepMerge::maxImg(const cv::Mat & src) const {
-
-	// find the max channel
-	cv::Mat mImg(src.size(), CV_32FC1, cv::Scalar(0));
-
-	for (int rIdx = 0; rIdx < mImg.rows; rIdx++) {
-
-		const float* rPtr = src.ptr<float>(rIdx);
-		float* mPtr = mImg.ptr<float>(rIdx);
-
-		for (int cIdx = 0; cIdx < mImg.cols; cIdx++) {
-
-			float m = *rPtr;	rPtr++;
-			m = qMax(m, *rPtr); rPtr++;
-			m = qMax(m, *rPtr); rPtr++;
-
-			// max of all channels
-			mPtr[cIdx] = m;
-		}
-	}
-
-	return mImg;
-}
-
 
 }
