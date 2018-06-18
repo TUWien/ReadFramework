@@ -862,8 +862,6 @@ void DeepMergeTest::merge(const cv::Mat & src) const {
 	// TODO: graph-cut on the image
 	Timer dt;
 
-
-
 	cv::Mat cImg = src.clone();
 
 	DeepMerge dm(cImg);
@@ -877,14 +875,21 @@ void DeepMergeTest::merge(const cv::Mat & src) const {
 	rdf::Image::save(rImg, imgPath);
 	qDebug() << "results written to" << imgPath;
 
+	rImg = src.clone();
+	rImg = dm.draw(rImg);
+	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-regions");
+	rdf::Image::save(rImg, imgPath);
+	qDebug() << "regions written to" << imgPath;
 
-	for (int idx = 1; idx < 255; idx += 20) {
-		rImg = dm.thresh(cImg, idx);
 
-		imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-thresh-" + QString::number(idx));
-		rdf::Image::save(rImg, imgPath);
-	}
-	qDebug() << "results written to" << imgPath;
+
+	//for (int idx = 1; idx < 255; idx += 20) {
+	//	rImg = dm.thresh(cImg, idx);
+
+	//	imgPath = rdf::Utils::createFilePath(mConfig.outputPath(), "-thresh-" + QString::number(idx));
+	//	rdf::Image::save(rImg, imgPath);
+	//}
+	//qDebug() << "results written to" << imgPath;
 
 
 

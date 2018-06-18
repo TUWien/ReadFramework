@@ -88,6 +88,8 @@ namespace ColorManager {
 	DllCoreExport QColor pink(double alpha = 1.0);
 	DllCoreExport QColor white(double alpha = 1.0);
 
+	DllCoreExport QColor alpha(const QColor& col, double a);
+
 	// add your favorite colors here
 }
 

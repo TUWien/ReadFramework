@@ -36,6 +36,7 @@
 #include "Image.h"
 #include "Drawer.h"
 #include "GraphCut.h"
+#include "ImageProcessor.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QPainter>
@@ -53,12 +54,18 @@ QString DeepMergeConfig::toString() const {
 	return ModuleConfig::toString();
 }
 
-void DeepMergeConfig::load(const QSettings & settings) {
+QString DeepMergeConfig::labelConfigPath() const {
+	return mLabelConfigPath;
+}
 
+void DeepMergeConfig::load(const QSettings & settings) {
+	
+	mLabelConfigPath = settings.value("LabelConfigPath", mLabelConfigPath).toString();
 }
 
 void DeepMergeConfig::save(QSettings & settings) const {
 	
+	settings.setValue("LabelConfigPath", mLabelConfigPath);
 }
 
 // LayoutAnalysis --------------------------------------------------------------------
@@ -78,6 +85,8 @@ bool DeepMerge::compute() {
 
 	if (!checkInput())
 		return false;
+
+	mManager = LabelManager::read(config()->labelConfigPath());
 
 	Timer dt;
 
@@ -100,7 +109,23 @@ bool DeepMerge::compute() {
 	if (!dc.compute())
 		qWarning() << "could not compute DeepCut!";
 
-	mMergedImg = dc.image();
+	mLabelImg = dc.image();
+
+	// convert to polygons
+	
+	if (mManager.labelInfos().size() != channels.size()) {
+		qWarning() << "the labels loaded from" << config()->labelConfigPath() << "do not fit the number of labels we have in DeepMerge:" << channels.size();
+	}
+
+	for (int idx = 0; idx < channels.size(); idx++) {
+
+		cv::Mat cImg = mLabelImg == idx;
+
+		auto poly = IP::maskToPoly(cImg, mScaleFactor);
+		LabelInfo l = mManager.find(idx);
+
+		mRegions << DMRegion(poly, l);
+	}
 
 	mInfo << "computed in" << dt;
 
@@ -141,6 +166,17 @@ cv::Mat DeepMerge::draw(const cv::Mat & img, const QColor& col) const {
 	QPainter p(&qImg);
 	p.setPen(ColorManager::blue());
 
+	for (auto r : mRegions) {
+		
+		// don't draw the background
+		if (r.label().id() == LabelInfo::label_unknown)
+			continue;
+
+		r.draw(p);
+	}
+
+	mManager.draw(p);
+
 	return Image::qImage2Mat(qImg);
 }
 
@@ -149,12 +185,47 @@ QString DeepMerge::toString() const {
 }
 
 cv::Mat DeepMerge::image() const {
-	return mMergedImg;
+	return mLabelImg;
+}
+
+void DeepMerge::setScaleFactor(double sf) {
+	mScaleFactor = sf;
 }
 
 bool DeepMerge::checkInput() const {
 
 	return !isEmpty();
+}
+
+// -------------------------------------------------------------------- DMRegion 
+DMRegion::DMRegion(const QVector<Polygon>& poly, const LabelInfo& l) {
+
+	mPoly = poly;
+	mLabel = l;
+}
+
+void DMRegion::setRegions(const QVector<Polygon>& poly) {
+	mPoly = poly;
+}
+
+QVector<Polygon> DMRegion::regions() const {
+	return mPoly;
+}
+
+LabelInfo DMRegion::label() const {
+	return mLabel;
+}
+
+void DMRegion::draw(QPainter & p) {
+
+	QPen pen(mLabel.visColor());
+	
+	p.setPen(pen);
+	p.setBrush(ColorManager::alpha(mLabel.visColor(), 0.3));
+	
+	for (const Polygon& py : mPoly) {
+		py.draw(p);
+	}
 }
 
 }

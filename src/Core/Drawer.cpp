@@ -193,4 +193,12 @@ QColor ColorManager::white(double alpha) {
 	return QColor(255, 255, 255, qRound(alpha * 255));
 }
 
+QColor ColorManager::alpha(const QColor & col, double a) {
+	
+	QColor c = col;
+	c.setAlphaF(a);
+
+	return c;
+}
+
 }

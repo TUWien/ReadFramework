@@ -1093,7 +1093,6 @@ cv::Mat DeepCut::labelDistMatrix(int numLabels) const {
 			// set smoothness cost for orientations
 			int diff = abs(rIdx - cIdx);
 			sPtr[cIdx] = qMin(diff, numLabels - diff);
-
 		}
 	}
 

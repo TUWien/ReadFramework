@@ -267,6 +267,37 @@ void IP::normalize(cv::Mat & src) {
 	}
 }
 
+QVector<Polygon> IP::maskToPoly(const cv::Mat & src, double scale) {
+	
+
+	std::vector<cv::Vec4i> hierarchy;
+	std::vector<std::vector<cv::Point> > contours;
+	
+	cv::Mat img = src.clone();	// find contours changes the src
+	cv::findContours(img, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+	
+	// convert to Qt
+	QVector<Polygon> polys;
+	std::vector<cv::Vec4i>::iterator hy(hierarchy.begin());
+	for (const std::vector<cv::Point>& ct : contours) {
+
+		// remove inner contours
+		if ((*hy)[3] >= 0) {
+			hy++;
+			continue;
+		}
+
+		Polygon p = Polygon::fromCvPoints(ct);
+		if (scale != 1.0)
+			p.scale(scale);
+
+		polys << p;
+		hy++;
+	}
+
+	return polys;
+}
+
 /// <summary>
 /// Dilates the image bwImg with a given structuring element.
 /// </summary>

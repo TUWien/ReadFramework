@@ -56,6 +56,8 @@ namespace cv {
 namespace rdf {
 
 // read defines
+class Polygon;
+
 class DllCoreExport IP {	// basically a namespace for now
 
 public:
@@ -94,6 +96,8 @@ public:
 	static QColor statMomentColor(const cv::Mat& src, const cv::Mat& mask = cv::Mat(), double momentValue = 0.5);
 
 	static void normalize(cv::Mat& src);
+
+	static QVector<Polygon> maskToPoly(const cv::Mat& src, double scale);
 
 private:
 	template<typename sFmt, typename mFmt>

@@ -33,6 +33,9 @@
 #pragma once
 
 #include "BaseModule.h"
+#include "BaseImageElement.h"
+#include "PixelLabel.h"
+#include "Shapes.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 #include <QColor>
@@ -59,10 +62,35 @@ public:
 
 	virtual QString toString() const override;
 
+	QString labelConfigPath() const;
+
 protected:
+
+	QString mLabelConfigPath = "C:/nextcloud/READ/basilis/DeepMerge-config.json";
 
 	void load(const QSettings& settings) override;
 	void save(QSettings& settings) const override;
+};
+
+class DllCoreExport DMRegion : public BaseElement {
+
+public:
+	DMRegion(const QVector<Polygon>& poly = QVector<Polygon>(), const LabelInfo& l = LabelInfo());
+
+	void operator<<(const Polygon& py) {
+		mPoly << py;
+	}
+
+	void setRegions(const QVector<Polygon>& poly);
+	QVector<Polygon> regions() const;
+
+	LabelInfo label() const;
+
+	void draw(QPainter& p);
+
+private:
+	QVector<Polygon> mPoly;
+	LabelInfo mLabel;
 };
 
 class DllCoreExport DeepMerge : public Module {
@@ -82,14 +110,19 @@ public:
 
 	cv::Mat image() const;
 
+	void setScaleFactor(double sf);
+
 private:
 	bool checkInput() const override;
 
 	// input
 	cv::Mat mImg;
+	double mScaleFactor = 1.0;
 
 	// output
-	cv::Mat mMergedImg;
+	cv::Mat mLabelImg;
+	QVector<DMRegion> mRegions;
+	LabelManager mManager;
 
 	// helpers
 	template <typename numFmt>
