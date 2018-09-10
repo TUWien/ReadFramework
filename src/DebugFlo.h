@@ -34,10 +34,11 @@
 
 #include "DebugUtils.h"
 #include "FormAnalysis.h"
+#include "BaseModule.h"
 
 #pragma warning(push, 0)	// no warnings from includes
  // Qt Includes
-//#include <QDebug>
+#include <QDebug>
 //#include <QDir>
 //#include <QImage>
 //#include <QFileInfo>
@@ -83,6 +84,33 @@ protected:
 
 	bool load(cv::Mat& img) const;
 	bool load(rdf::PageXmlParser& parser) const;
+
+};
+
+class LineProcessing {
+public:
+	LineProcessing(const DebugConfig& config = DebugConfig());
+	bool lineTrace();
+
+
+protected:
+	bool mEstimateSkew = false;
+	bool mPreFilter = true;
+	cv::Mat mSrcImg = cv::Mat();
+	cv::Mat mBwImg = cv::Mat();
+	cv::Mat mMask = cv::Mat();
+	double mPageAngle = 0;
+	int preFilterArea = 10;
+	QVector<rdf::Line> mLines;
+	//QVector<rdf::Line> mHorLines;
+	//QVector<int> mUsedHorLineIdx;
+	//QVector<rdf::Line> mVerLines;
+	//QVector<int> mUsedVerLineIdx;
+	DebugConfig mConfig;
+
+	bool load(cv::Mat& img) const;
+	bool load(rdf::PageXmlParser& parser) const;
+	bool computeBinaryInput();
 
 };
 
