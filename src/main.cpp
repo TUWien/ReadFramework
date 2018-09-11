@@ -194,22 +194,22 @@ int main(int argc, char** argv) {
 			lineproc.lineTrace();
 		}
 		// stefans section
-		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "stefan") {
-			qDebug() << "loading stefan's debug code";
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "wi") {
+			qDebug() << "starting writer retrieval ...";
 
 			rdf::TestWriterRetrieval twr = rdf::TestWriterRetrieval();
 			twr.run();
 		}
 		// layout section
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "layout") {
-			qDebug() << "Starting layout analysis...";
+			qDebug() << "Starting layout analysis ...";
 
 			rdf::LayoutTest lt(dc);
 			lt.layoutToXml();
 		}
 		// thomas
-		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "thomas") {
-			qDebug() << "thomas";
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "apa") {
+			qDebug() << "Starting newspaper analysis ...";
 			rdf::ThomasTest test(dc);
 			test.test();
 		}
