@@ -493,8 +493,11 @@ namespace rdf {
 
 
 		//if (QFileInfo(mConfig.xmlPath()).exists())
-		if (!mConfig.xmlPath().isEmpty())
+		if (!mConfig.xmlPath().isEmpty()) {
+			if (!QFileInfo(mConfig.xmlPath()).exists())
+				qWarning() << "specified xml file doesn't exist - following file is created: " << mConfig.xmlPath();
 			loadXmlPath = mConfig.xmlPath();
+		}
 
 		rdf::PageXmlParser parserOut;
 		bool newXML = parserOut.read(loadXmlPath);
