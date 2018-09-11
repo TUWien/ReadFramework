@@ -491,7 +491,9 @@ namespace rdf {
 		//Save output to xml
 		QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
 
-		if (QFileInfo(mConfig.xmlPath()).exists())
+
+		//if (QFileInfo(mConfig.xmlPath()).exists())
+		if (!mConfig.xmlPath().isEmpty())
 			loadXmlPath = mConfig.xmlPath();
 
 		rdf::PageXmlParser parserOut;
