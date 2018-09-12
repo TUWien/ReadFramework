@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
 	}
 
 	// apply debug settings - convenience if you don't want to always change the cmd args
-	applyDebugSettings(dc);
+	//applyDebugSettings(dc);
 
 	if (!dc.imagePath().isEmpty()) {
 
@@ -180,30 +180,36 @@ int main(int argc, char** argv) {
 			test.binarizeTest();
 		}
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "table") {
-			qDebug() << "starting table matching ... (not yet)";
+			qDebug() << "starting table matching ...";
 			//TODO table
 			rdf::TableProcessing tableproc(dc);
 			tableproc.setTableConfig(fc);
 			tableproc.match();
 		}
-
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "separators") {
+			//TODO just calculate separators (visual lines) and write to xml
+			//needed for Herve
+			qDebug() << "starting line extraction ...";
+			rdf::LineProcessing lineproc(dc);
+			lineproc.lineTrace();
+		}
 		// stefans section
-		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "stefan") {
-			qDebug() << "loading stefan's debug code";
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "wi") {
+			qDebug() << "starting writer retrieval ...";
 
 			rdf::TestWriterRetrieval twr = rdf::TestWriterRetrieval();
 			twr.run();
 		}
 		// layout section
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "layout") {
-			qDebug() << "Starting layout analysis...";
+			qDebug() << "Starting layout analysis ...";
 
 			rdf::LayoutTest lt(dc);
 			lt.layoutToXml();
 		}
 		// thomas
-		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "thomas") {
-			qDebug() << "thomas";
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "apa") {
+			qDebug() << "Starting newspaper analysis ...";
 			rdf::ThomasTest test(dc);
 			test.test();
 		}
