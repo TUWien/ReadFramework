@@ -170,7 +170,7 @@ class DllCoreExport SuperPixelLabeler : public Module {
 
 public:
 	SuperPixelLabeler(const QVector<QSharedPointer<MserBlob> >& blobs, const Rect& imgRect);
-	SuperPixelLabeler(const PixelSet& set, const Rect& imgRect);
+	SuperPixelLabeler(const PixelSet& set = PixelSet(), const Rect& imgRect = Rect());
 
 	bool isEmpty() const override;
 	bool compute() override;
