@@ -91,6 +91,7 @@ public:
 	bool contains(const QString& key) const;
 
 	int id() const;
+	int zIndex() const;
 	QString name() const;
 	QColor color() const;
 	QColor visColor() const;
@@ -112,6 +113,7 @@ protected:
 
 	int mId = label_unknown;
 	bool mIsBackground = false;
+	int mZIndex = 0;
 	QString mName = "unknown";
 	QStringList mAlias;
 	QColor mVisColor = ColorManager::darkGray();

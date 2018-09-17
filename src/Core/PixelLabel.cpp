@@ -110,6 +110,10 @@ int LabelInfo::id() const {
 	return mId;
 }
 
+int LabelInfo::zIndex() const {
+	return mZIndex;
+}
+
 QString LabelInfo::name() const {
 	return mName;
 }
@@ -178,12 +182,14 @@ LabelInfo LabelInfo::fromJson(const QJsonObject & jo) {
 	//"Class": {
 	//	"id": 5,
 	//	"name": "image",
+	//  "z-index": 1,
 	//	"alias": ["ImageRegion", "ChartRegion", "GraphicRegion"],
 	//	"color": "#990066", 
 	//},
 
 	LabelInfo ll;
 	ll.mId = jo.value("id").toInt(label_unknown);
+	ll.mZIndex = jo.value("z-index").toInt(0);
 	ll.mName = jo.value("name").toString();
 	ll.mIsBackground = jo.value("isBackground").toBool(false);
 	ll.mVisColor.setNamedColor(jo.value("color").toString());
@@ -208,6 +214,7 @@ void LabelInfo::toJson(QJsonObject & jo) const {
 
 	QJsonObject joc;
 	joc.insert("id", QJsonValue(mId));
+	joc.insert("z-index", QJsonValue(mZIndex));
 	joc.insert("name", QJsonValue(mName));
 	joc.insert("color", QJsonValue(mVisColor.name()));
 	joc.insert("isBackground", QJsonValue(mIsBackground));
