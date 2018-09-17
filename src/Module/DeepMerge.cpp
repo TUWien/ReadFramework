@@ -24,10 +24,10 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.cvl.tuwien.ac.at/cvl/
+ [1] https://cvl.tuwien.ac.at/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
- [4] http://nomacs.org
+ [4] https://nomacs.org
  *******************************************************************************************************/
 
 #include "DeepMerge.h"
@@ -159,7 +159,7 @@ QSharedPointer<DeepMergeConfig> DeepMerge::config() const {
 	return qSharedPointerDynamicCast<DeepMergeConfig>(mConfig);
 }
 
-cv::Mat DeepMerge::draw(const cv::Mat & img, const QColor& col) const {
+cv::Mat DeepMerge::draw(const cv::Mat & img, const QColor& /*col*/) const {
 
 	QImage qImg = Image::mat2QImage(img, true);
 	

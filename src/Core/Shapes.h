@@ -27,7 +27,7 @@
  [1] http://www.cvl.tuwien.ac.at/cvl/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
- [4] http://nomacs.org
+ [4] https://nomacs.org
  *******************************************************************************************************/
 
 #pragma once

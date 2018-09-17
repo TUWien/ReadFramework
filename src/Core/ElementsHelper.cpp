@@ -24,10 +24,10 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.cvl.tuwien.ac.at/cvl/
+ [1] https://cvl.tuwien.ac.at/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
- [4] http://nomacs.org
+ [4] https://nomacs.org
  *******************************************************************************************************/
 
 #include "ElementsHelper.h"
@@ -147,6 +147,7 @@ void RegionTypeConfig::assignDefaultColor(const Region::Type & type) {
 	case Region::type_graphic:		col = QColor(100, 74, 0);	break;
 	case Region::type_chart:		col = QColor(0, 108, 255);	break;
 	case Region::type_noise:		col = QColor(204, 204, 204);break;
+	case Region::type_border:		col = QColor(204, 185, 146);break;
 	default:;	// default is gray
 	}
 
@@ -278,6 +279,7 @@ QString RegionManager::typeName(const Region::Type& type) const {
 	case Region::type_graphic:		return "GraphicRegion";
 	case Region::type_chart:		return "ChartRegion";
 	case Region::type_noise:		return "NoiseRegion";
+	case Region::type_border:		return "Border";
 	default:;
 	}
 
@@ -316,6 +318,7 @@ QSharedPointer<Region> RegionManager::createRegion(const Region::Type & type) co
 	case Region::type_graphic:
 	case Region::type_chart:
 	case Region::type_noise:
+	case Region::type_border:
 		return QSharedPointer<Region>::create(type);
 	case Region::type_table_region:
 		return QSharedPointer<TableRegion>::create(type);

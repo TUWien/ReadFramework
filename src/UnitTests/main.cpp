@@ -1,9 +1,9 @@
 /*******************************************************************************************************
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
- Copyright (C) 2016 Markus Diem <diem@caa.tuwien.ac.at>
- Copyright (C) 2016 Stefan Fiel <fiel@caa.tuwien.ac.at>
- Copyright (C) 2016 Florian Kleber <kleber@caa.tuwien.ac.at>
+ Copyright (C) 2016 Markus Diem <diem@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Stefan Fiel <fiel@cvl.tuwien.ac.at>
+ Copyright (C) 2016 Florian Kleber <kleber@cvl.tuwien.ac.at>
 
  This file is part of ReadFramework.
 
@@ -24,10 +24,10 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.caa.tuwien.ac.at/cvl/
+ [1] https://cvl.tuwien.ac.at/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
- [4] http://nomacs.org
+ [4] https://nomacs.org
  *******************************************************************************************************/
 
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 	qInfo().nospace() << "I am using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION;
 
 	QCoreApplication::setOrganizationName("TU Wien");
-	QCoreApplication::setOrganizationDomain("http://www.caa.tuwien.ac.at/cvl");
+	QCoreApplication::setOrganizationDomain("https://cvl.tuwien.ac.at/");
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 
@@ -137,12 +137,12 @@ int main(int argc, char** argv) {
 		//parser.showHelp();
 
 		rdf::TestConfig tc;
-		tc.setXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn_003-01_0002.xml");
-		tc.setImagePath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/M_Aigen_am_Inn_003-01_0002.jpg");
+		tc.setXmlPath("ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/page/M_Aigen_am_Inn_003-01_0002.xml");
+		tc.setImagePath("ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/M_Aigen_am_Inn_003-01_0002.jpg");
 
-		//tc.setXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0003.xml");
-		//tc.setImagePath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/RM_Freyung_028_0003.jpg");
-		//tc.setTemplateXmlPath("ftp://scruffy.caa.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0001.xml");
+		//tc.setXmlPath("ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0003.xml");
+		//tc.setImagePath("ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/RM_Freyung_028_0003.jpg");
+		//tc.setTemplateXmlPath("ftp://scruffy.cvl.tuwien.ac.at/staff/read/test-resources/page/RM_Freyung_028_0001.xml");
 
 		rdf::TableTest tt(tc);
 		
