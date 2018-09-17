@@ -432,9 +432,9 @@ QByteArray PageXmlParser::writePageElement() const {
 
 	// <PcGts>
 	writer.writeStartElement(tagName(tag_root));
-	writer.writeAttribute(tagName(attr_xmlns), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15");
-	writer.writeAttribute(tagName(attr_xsi), "http://www.w3.org/2001/XMLSchema-instance");
-	writer.writeAttribute(tagName(attr_schemaLocation), "http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd");
+	writer.writeAttribute(tagName(attr_xmlns), "https://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15");
+	writer.writeAttribute(tagName(attr_xsi), "https://www.w3.org/2001/XMLSchema-instance");
+	writer.writeAttribute(tagName(attr_schemaLocation), "https://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15 https://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15/pagecontent.xsd");
 
 	// <Metadata>
 	writeMetaData(writer);

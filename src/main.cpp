@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 	qInfo().nospace() << "I am using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION;
 
 	QCoreApplication::setOrganizationName("TU Wien");
-	QCoreApplication::setOrganizationDomain("http://www.cvl.tuwien.ac.at/cvl");
+	QCoreApplication::setOrganizationDomain("https://cvl.tuwien.ac.at/");
 	QCoreApplication::setApplicationName("READ Framework");
 	rdf::Utils::instance().initFramework();
 

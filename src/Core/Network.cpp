@@ -64,7 +64,7 @@ QByteArray net::download(const QString & url, bool* ok) {
 	QNetworkAccessManager manager;
 
 	// do we need to support global proxies?
-	QNetworkProxyQuery npq(QUrl("http://www.nomacs.org"));
+	QNetworkProxyQuery npq(QUrl("https://google.com"));
 	QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
 
 	if (!listOfProxies.empty() && listOfProxies[0].hostName() != "") {

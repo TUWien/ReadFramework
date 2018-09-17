@@ -24,7 +24,7 @@
  research  and innovation programme under grant agreement No 674943
  
  related links:
- [1] http://www.cvl.tuwien.ac.at/cvl/
+ [1] https://cvl.tuwien.ac.at/
  [2] https://transkribus.eu/Transkribus/
  [3] https://github.com/TUWien/
  [4] https://nomacs.org

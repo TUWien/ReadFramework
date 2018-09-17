@@ -346,7 +346,7 @@ int64 Utils::writeJson(const QString & filePath, const QJsonObject & jo) {
 void Utils::initDefaultFramework() {
 
 	QCoreApplication::setOrganizationName("TU Wien");
-	QCoreApplication::setOrganizationDomain("http://www.cvl.tuwien.ac.at/cvl");
+	QCoreApplication::setOrganizationDomain("https://cvl.tuwien.ac.at");
 	QCoreApplication::setApplicationName("READ Framework");
 
 	rdf::Utils::instance().initFramework();
