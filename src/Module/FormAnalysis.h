@@ -403,7 +403,7 @@ namespace rdf {
 	};
 
 
-	class DllCoreExport PieData : public Module {
+	class DllCoreExport PieData {
 
 	public:
 		//PieData();
@@ -413,11 +413,11 @@ namespace rdf {
 		
 
 	protected:
-		bool calculateFeatures(const QJsonObject &document, QString xmlDoc) const;
+		bool calculateFeatures(QJsonObject &document, QString xmlDoc);
 
 	private:
-		QString mXmlDir;
-		QString mJsonFile;
+		QString mXmlDir = "C:\\tmp\\read-database";
+		QString mJsonFile = "C:\\tmp\\read-database\\database.json";
 
 	};
 

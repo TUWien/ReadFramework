@@ -4150,8 +4150,8 @@ cv::Size FormFeatures::sizeImg() const
 	//}
 
 	PieData::PieData(const QString xmlDir, const QString jsonFile) {
-		mXmlDir = mXmlDir;
-		mJsonFile = jsonFile;
+		if (!xmlDir.isEmpty()) mXmlDir = xmlDir;
+		if (!jsonFile.isEmpty()) mJsonFile = jsonFile;
 	}
 
 	QJsonObject PieData::getImgObject(const QString xmlDoc) 	{
@@ -4177,6 +4177,7 @@ cv::Size FormFeatures::sizeImg() const
 		QDirIterator it(mXmlDir, QStringList() << "*.xml", QDir::Files, QDirIterator::Subdirectories);
 		while (it.hasNext()) {
 			QFileInfo f(it.next());
+			QString tmp = f.absoluteFilePath();
 			//qDebug() << it.next();
 			QJsonObject currentXmlDoc;
 			calculateFeatures(currentXmlDoc, f.absoluteFilePath());
@@ -4196,7 +4197,7 @@ cv::Size FormFeatures::sizeImg() const
 
 	}
 
-	bool PieData::calculateFeatures(const QJsonObject &document, QString xmlDoc) const 	{
+	bool PieData::calculateFeatures(QJsonObject &document, QString xmlDoc) 	{
 
 		if (xmlDoc.isEmpty()) {
 			return false;
@@ -4217,7 +4218,8 @@ cv::Size FormFeatures::sizeImg() const
 
 		QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
 
-		document["name"] = pe->imageFileName();
+		document["imgName"] = pe->imageFileName();
+		document["xmlName"] = xmlDoc;
 		document["width"] = templSize.width();
 		document["height"] = templSize.height();
 		
@@ -4299,7 +4301,7 @@ cv::Size FormFeatures::sizeImg() const
 		document["images"] = imgRegions;
 		document["graphics"] = graphicRegions;
 		document["charts"] = chartRegions;
-		document["seps"] = separatorRegions;
+		//document["seps"] = separatorRegions;
 
 
 		return true;

@@ -188,6 +188,9 @@ int main(int argc, char** argv) {
 		}
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "separators") {
 			//TODO just calculate separators (visual lines) and write to xml
+			//QString test =QString();
+			//rdf::PieData testDB(test,test);
+			//testDB.saveJsonDatabase();
 			//needed for Herve
 			qDebug() << "starting line extraction ...";
 			rdf::LineProcessing lineproc(dc);
