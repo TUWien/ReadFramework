@@ -4145,4 +4145,164 @@ cv::Size FormFeatures::sizeImg() const
 
 	}
 
+	//PieData::PieData() {
+
+	//}
+
+	PieData::PieData(const QString xmlDir, const QString jsonFile) {
+		mXmlDir = mXmlDir;
+		mJsonFile = jsonFile;
+	}
+
+	QJsonObject PieData::getImgObject(const QString xmlDoc) 	{
+
+		if (xmlDoc.isEmpty())
+			return QJsonObject();
+
+		QJsonObject newPage;
+		calculateFeatures(newPage, xmlDoc);
+		return newPage;
+	}
+
+	void PieData::saveJsonDatabase() {
+		//QStringList filters;
+		//filters << "*.xml";
+		//fileInfoList = dir.entryInfoList(filters, QDir::Files | QDir::NoDotAndDotDot);
+
+		QJsonObject xmlDatabaseObj;
+		xmlDatabaseObj["database"] = mXmlDir;
+
+		//QDir xmlRootDir(mXmlDir);
+		QJsonArray databaseImgs;
+		QDirIterator it(mXmlDir, QStringList() << "*.xml", QDir::Files, QDirIterator::Subdirectories);
+		while (it.hasNext()) {
+			QFileInfo f(it.next());
+			//qDebug() << it.next();
+			QJsonObject currentXmlDoc;
+			calculateFeatures(currentXmlDoc, f.absoluteFilePath());
+			databaseImgs.append(currentXmlDoc);
+		}
+
+		xmlDatabaseObj["imgs"] = databaseImgs;
+		
+		QFile saveFile(mJsonFile);
+		if (!saveFile.open(QIODevice::WriteOnly)) {
+			qWarning("Couldn't open save file.");
+			return;
+		}
+
+		QJsonDocument saveDatabase(xmlDatabaseObj);
+		saveFile.write(saveDatabase.toJson());
+
+	}
+
+	bool PieData::calculateFeatures(const QJsonObject &document, QString xmlDoc) const 	{
+
+		if (xmlDoc.isEmpty()) {
+			return false;
+		}
+
+		//Achtung!!! geändert
+		//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mTemplateName);
+		QString loadXmlPath = xmlDoc;
+
+		rdf::PageXmlParser parser;
+		if (!parser.read(loadXmlPath)) {
+			qWarning() << "could not xml for creating database" << loadXmlPath;
+			return false;
+		}
+
+		auto pe = parser.page();
+		QSize templSize = pe->imageSize();
+
+		QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
+
+		document["name"] = pe->imageFileName();
+		document["width"] = templSize.width();
+		document["height"] = templSize.height();
+		
+		QSharedPointer<rdf::Region> region;
+		QSharedPointer<rdf::TextRegion> text;
+		QSharedPointer<rdf::TableRegion> tableRegion;
+
+		//bool detHeader = false;
+		QJsonArray tableRegions;
+		QJsonArray textRegions;
+		QJsonArray imgRegions;
+		QJsonArray graphicRegions;
+		QJsonArray chartRegions;
+		QJsonArray separatorRegions;
+
+
+			//type_table_region,
+			//type_text_region,
+			//type_image,
+			//type_graphic,
+			//type_chart,
+			//type_separator,
+		for (auto i : test) {
+
+			if (i->type() == i->type_table_region) {
+				tableRegion = i.dynamicCast<rdf::TableRegion>();
+				QJsonObject table;
+				rdf::Polygon pol = tableRegion->polygon();
+				QPolygonF qPol = pol.closedPolygon();
+				QRectF qRect = qPol.boundingRect();
+				table["size"] = qRect.width() * qRect.height();
+				tableRegions.append(table);
+
+			} else if (i->type() == i->type_text_region) {
+				text = i.dynamicCast<rdf::TextRegion>();
+
+				QJsonObject txt;
+				rdf::Polygon pol = text->polygon();
+				QPolygonF qPol = pol.closedPolygon();
+				QRectF qRect = qPol.boundingRect();
+				txt["size"] = qRect.width() * qRect.height();
+				textRegions.append(txt);
+
+			} else if (i->type() == i->type_image) {
+				//image
+				QJsonObject img;
+				rdf::Polygon pol = i->polygon();
+				QPolygonF qPol = pol.closedPolygon();
+				QRectF qRect = qPol.boundingRect();
+				img["size"] = qRect.width() * qRect.height();
+				imgRegions.append(img);
+			} else if (i->type() == i->type_graphic) {
+				//graphic
+				QJsonObject gra;
+				rdf::Polygon pol = i->polygon();
+				QPolygonF qPol = pol.closedPolygon();
+				QRectF qRect = qPol.boundingRect();
+				gra["size"] = qRect.width() * qRect.height();
+				graphicRegions.append(gra);
+			} else if (i->type() == i->type_chart) {
+				//chart
+				QJsonObject chart;
+				rdf::Polygon pol = i->polygon();
+				QPolygonF qPol = pol.closedPolygon();
+				QRectF qRect = qPol.boundingRect();
+				chart["size"] = qRect.width() * qRect.height();
+				chartRegions.append(chart);
+			}
+			//} else if (i->type() == i->type_separator) {
+			//	//separator
+			//	QJsonObject sep;
+			//	sep["length"] = 200;
+			//	separatorRegions.append(sep);
+			//}
+		}
+
+		document["tables"] = tableRegions;
+		document["texts"] = textRegions;
+		document["images"] = imgRegions;
+		document["graphics"] = graphicRegions;
+		document["charts"] = chartRegions;
+		document["seps"] = separatorRegions;
+
+
+		return true;
+	}
+
 }

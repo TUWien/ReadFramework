@@ -37,6 +37,10 @@
 #include "Elements.h"
 #pragma warning(push, 0)	// no warnings from includes
 #include <QObject>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDirIterator>
+#include <QJsonDocument>
 
 #include <opencv2/core.hpp>
 #pragma warning(pop)
@@ -397,5 +401,47 @@ namespace rdf {
 		//void load(const QSettings& settings) override;
 		//void save(QSettings& settings) const override;
 	};
+
+
+	class DllCoreExport PieData : public Module {
+
+	public:
+		//PieData();
+		PieData(const QString xmlDir, const QString jsonFile);
+		QJsonObject getImgObject(const QString xmlDoc = QString());
+		void saveJsonDatabase();
+		
+
+	protected:
+		bool calculateFeatures(const QJsonObject &document, QString xmlDoc) const;
+
+	private:
+		QString mXmlDir;
+		QString mJsonFile;
+
+	};
+
+
+	//don't care
+	//QtJson::JsonObject document;
+	//document["name"] = "page1.png"
+	//
+	//QtJson::JsonArray imgRegions;
+	//QtJson::JsonObject image1, image2;
+	//image1["size"] = 20;
+	//image2["size"] = 40;
+	//imgRegions.append(image1);
+	//imgRegions.append(image2);
+
+	//QtJson::JsonArray txtRegions;
+	//QtJson::JsonObject text1, text2;
+	//text1["size"] = 20;
+	//text2["size"] = 40;
+	//imgRegions.append(text1);
+	//imgRegions.append(text2);
+	//	
+	//document["images"] = imgRegions;
+	//document["text"] = txtRegions;
+	
 
 }
