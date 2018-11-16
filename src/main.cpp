@@ -40,6 +40,7 @@
 #pragma warning(pop)
 
 #include "Utils.h"
+#include "PieData.h"
 #include "Settings.h"
 #include "DebugUtils.h"
 #include "DebugMarkus.h"
