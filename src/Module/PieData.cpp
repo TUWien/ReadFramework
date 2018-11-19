@@ -37,11 +37,8 @@
 #pragma warning(pop)
 
 namespace rdf {
-	//PieData::PieData() {
-
-	//}
-
-	PieData::PieData(const QString xmlDir, const QString jsonFile) {
+	
+	PieData::PieData(const QString& xmlDir, const QString& jsonFile) {
 		if (!xmlDir.isEmpty()) mXmlDir = xmlDir;
 		if (!jsonFile.isEmpty()) mJsonFile = jsonFile;
 	}

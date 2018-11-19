@@ -302,7 +302,9 @@ QImage SuperPixelLabeler::createLabelImage(const Rect & imgRect, bool visualize)
 
 
 	QPainter p(&img);
-	   
+	// this allows for overlaying multiple classes
+	//p.setCompositionMode(QPainter::CompositionMode_Plus);
+
 	for (QVector<QSharedPointer<Region> > cRegions : mapRegions) {
 
 		for (auto region : cRegions) {

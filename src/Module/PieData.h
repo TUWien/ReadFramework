@@ -60,8 +60,7 @@ namespace rdf {
 	class DllCoreExport PieData {
 
 	public:
-		//PieData();
-		PieData(const QString xmlDir, const QString jsonFile);
+		PieData(const QString& xmlDir = QString(), const QString& jsonFile = QString());
 		QJsonObject getImgObject(const QString xmlDoc = QString());
 		void saveJsonDatabase();
 

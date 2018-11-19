@@ -111,6 +111,9 @@ int main(int argc, char** argv) {
 	QCommandLineOption xmlTableOpt(QStringList() << "t" << "table template", QObject::tr("Path to PAGE xml of table template. Table must be specified"), "templatepath");
 	parser.addOption(xmlTableOpt);
 
+	// pie db path
+	QCommandLineOption jsonOpt(QStringList() << "json", QObject::tr("Path to JSON file for PIE crawler"), "filepath");
+	parser.addOption(jsonOpt);
 
 	parser.process(*QCoreApplication::instance());
 	// CMD parser --------------------------------------------------------------------
@@ -187,12 +190,17 @@ int main(int argc, char** argv) {
 			tableproc.setTableConfig(fc);
 			tableproc.match();
 		}
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "pie") {
+
+			QString jsonPath;
+			if (parser.isSet(jsonOpt))
+				jsonPath = parser.value(jsonOpt);
+			
+			rdf::PieData testDB(dc.imagePath(), jsonPath);
+			testDB.saveJsonDatabase();
+		}
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "separators") {
 			//TODO just calculate separators (visual lines) and write to xml
-			//QString test =QString();
-			//rdf::PieData testDB(test,test);
-			//testDB.saveJsonDatabase();
-			//needed for Herve
 			qDebug() << "starting line extraction ...";
 			rdf::LineProcessing lineproc(dc);
 			lineproc.lineTrace();

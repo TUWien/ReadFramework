@@ -81,7 +81,7 @@ bool LabelInfo::contains(const QString& key) const {
 }
 
 QColor LabelInfo::color() const {
-	QColor c(id() << 8);	// << 8 away from alpha (RGBA)
+	QColor c(id());	// << 8 away from alpha (RGBA)
 	return c;
 }
 
