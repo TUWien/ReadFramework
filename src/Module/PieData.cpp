@@ -190,11 +190,11 @@ namespace rdf {
 			//}
 		}
 
-		document["tables"] = tableRegions;
-		document["texts"] = textRegions;
-		document["images"] = imgRegions;
-		document["graphics"] = graphicRegions;
-		document["charts"] = chartRegions;
+		if (!tableRegions.isEmpty()) document["tables"] = tableRegions;
+		if (!textRegions.isEmpty()) document["texts"] = textRegions;
+		if (!imgRegions.isEmpty()) document["images"] = imgRegions;
+		if (!graphicRegions.isEmpty()) document["graphics"] = graphicRegions;
+		if (!chartRegions.isEmpty()) document["charts"] = chartRegions;
 		//document["seps"] = separatorRegions;
 
 
