@@ -145,12 +145,13 @@ namespace rdf {
 			}
 			else if (i->type() == i->type_text_region) {
 				text = i.dynamicCast<rdf::TextRegion>();
-
+				QString currTxt = text->text();
 				QJsonObject txt;
 				rdf::Polygon pol = text->polygon();
 				QPolygonF qPol = pol.closedPolygon();
 				QRectF qRect = qPol.boundingRect();
 				txt["size"] = qRect.width() * qRect.height();
+				txt["text"] = currTxt;
 				textRegions.append(txt);
 
 			}
