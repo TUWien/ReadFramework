@@ -45,6 +45,7 @@
 #include <QFileInfo>
 #include <opencv2/ml.hpp>
 #include <opencv2/features2d.hpp>
+#include <opencv2/imgproc/imgproc_c.h>
 #pragma warning(pop)
 
 namespace rdf {

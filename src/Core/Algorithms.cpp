@@ -40,6 +40,7 @@
 #include <QMatrix4x4>
 
 #include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc_c.h>
 #pragma warning(pop)
 
 namespace rdf {

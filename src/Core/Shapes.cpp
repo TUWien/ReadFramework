@@ -39,6 +39,7 @@
 // Qt Includes
 #include <QDebug>
 #include <QPainter>
+#include <opencv2/imgproc/imgproc_c.h>
 #pragma warning(pop)
 
 namespace rdf {
