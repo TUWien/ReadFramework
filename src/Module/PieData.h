@@ -67,6 +67,7 @@ namespace rdf {
 
 	protected:
 		bool calculateFeatures(QJsonObject &document, QString xmlDoc);
+		QString normalize(const QString& str) const;
 
 	private:
 		QString mXmlDir = "C:\\tmp\\read-database";

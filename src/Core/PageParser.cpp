@@ -380,8 +380,8 @@ void PageXmlParser::parseMetadata(QXmlStreamReader & reader, QSharedPointer<Page
 			reader.readNext();
 			page->setCreator(reader.text().toString());
 		}
-		else if (reader.tokenType() == QXmlStreamReader::StartElement)
-			qDebug() << "unknown meta data token:" << tag;
+		//else if (reader.tokenType() == QXmlStreamReader::StartElement)
+		//	qDebug() << "unknown meta data token:" << tag;
 
 	}
 }

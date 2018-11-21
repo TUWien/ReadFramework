@@ -174,6 +174,9 @@ int main(int argc, char** argv) {
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	//applyDebugSettings(dc);
 
+	rdf::XmlTest xmlTest(dc);
+	xmlTest.parseXml();
+	
 	if (!dc.imagePath().isEmpty()) {
 
 		// flos section
@@ -227,6 +230,8 @@ int main(int argc, char** argv) {
 		}
 		// my section
 		else {
+
+			qDebug() << "hey markus - your section is empty...";
 			//rdf::XmlTest test(dc);
 			//test.parseXml();
 			//test.linesToXml();
@@ -234,8 +239,8 @@ int main(int argc, char** argv) {
 			//rdf::LayoutTest lt(dc);
 			//lt.testComponents();
 
-			rdf::DeepMergeTest dm(dc);
-			dm.run();
+			//rdf::DeepMergeTest dm(dc);
+			//dm.run();
 		}
 
 	}

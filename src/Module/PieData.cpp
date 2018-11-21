@@ -33,7 +33,7 @@
 #include "PieData.h"
 
 #pragma warning(push, 0)	// no warnings from includes
-// Qt Includes
+#include <QTextDocument>
 #pragma warning(pop)
 
 namespace rdf {
@@ -105,100 +105,95 @@ namespace rdf {
 		auto pe = parser.page();
 		QSize templSize = pe->imageSize();
 
-		QVector<QSharedPointer<rdf::Region>> test = rdf::Region::allRegions(pe->rootRegion().data());
+		QVector<QSharedPointer<rdf::Region>> regions = rdf::Region::allRegions(pe->rootRegion().data());
 
 		document["imgName"] = pe->imageFileName();
 		document["xmlName"] = xmlDoc;
 		document["width"] = templSize.width();
 		document["height"] = templSize.height();
 
-		QSharedPointer<rdf::Region> region;
-		QSharedPointer<rdf::TextRegion> text;
-		QSharedPointer<rdf::TableRegion> tableRegion;
-
-		//bool detHeader = false;
-		QJsonArray tableRegions;
 		QJsonArray textRegions;
+		QJsonArray tableRegions;
 		QJsonArray imgRegions;
 		QJsonArray graphicRegions;
 		QJsonArray chartRegions;
 		QJsonArray separatorRegions;
 
+		QString txtFromRegions;
+		QString txtFromLines;
 
-		//type_table_region,
-		//type_text_region,
-		//type_image,
-		//type_graphic,
-		//type_chart,
-		//type_separator,
-		for (auto i : test) {
+		for (auto r : regions) {
 
-			if (i->type() == i->type_table_region) {
-				tableRegion = i.dynamicCast<rdf::TableRegion>();
-				QJsonObject table;
-				rdf::Polygon pol = tableRegion->polygon();
-				QPolygonF qPol = pol.closedPolygon();
-				QRectF qRect = qPol.boundingRect();
-				table["size"] = qRect.width() * qRect.height();
-				tableRegions.append(table);
+			// calculate general region properties
+			QJsonObject rProp;
+			rdf::Polygon pol = r->polygon();
+			QPolygonF qPol = pol.closedPolygon();
+			QRectF qRect = qPol.boundingRect();
+			rProp["width"] = qRect.width();
+			rProp["height"] = qRect.height();
 
-			}
-			else if (i->type() == i->type_text_region) {
-				text = i.dynamicCast<rdf::TextRegion>();
-				QString currTxt = text->text();
-				QJsonObject txt;
-				rdf::Polygon pol = text->polygon();
-				QPolygonF qPol = pol.closedPolygon();
-				QRectF qRect = qPol.boundingRect();
-				txt["size"] = qRect.width() * qRect.height();
-				txt["text"] = currTxt;
-				textRegions.append(txt);
+			// append specific region properties
+			switch (r->type()) {
 
+			case Region::type_table_region:
+				tableRegions << rProp; break;
+			case Region::type_image:
+				imgRegions << rProp; break;
+			case Region::type_graphic:
+				graphicRegions << rProp; break;
+			case Region::type_chart:
+				chartRegions << rProp; break;
+
+			case Region::type_text_region: {
+				auto tr = r.dynamicCast<rdf::TextRegion>();
+				textRegions << rProp;
+				QString ct = normalize(tr->text());
+				if (!ct.isEmpty())
+					txtFromRegions += " " + ct;
+				break;
 			}
-			else if (i->type() == i->type_image) {
-				//image
-				QJsonObject img;
-				rdf::Polygon pol = i->polygon();
-				QPolygonF qPol = pol.closedPolygon();
-				QRectF qRect = qPol.boundingRect();
-				img["size"] = qRect.width() * qRect.height();
-				imgRegions.append(img);
+			case Region::type_text_line: {
+				auto tl = r.dynamicCast<rdf::TextLine>();
+				QString ct = normalize(tl->text());
+				if (!ct.isEmpty())
+					txtFromLines += " " + ct;
+				break;
 			}
-			else if (i->type() == i->type_graphic) {
-				//graphic
-				QJsonObject gra;
-				rdf::Polygon pol = i->polygon();
-				QPolygonF qPol = pol.closedPolygon();
-				QRectF qRect = qPol.boundingRect();
-				gra["size"] = qRect.width() * qRect.height();
-				graphicRegions.append(gra);
 			}
-			else if (i->type() == i->type_chart) {
-				//chart
-				QJsonObject chart;
-				rdf::Polygon pol = i->polygon();
-				QPolygonF qPol = pol.closedPolygon();
-				QRectF qRect = qPol.boundingRect();
-				chart["size"] = qRect.width() * qRect.height();
-				chartRegions.append(chart);
-			}
-			//} else if (i->type() == i->type_separator) {
-			//	//separator
-			//	QJsonObject sep;
-			//	sep["length"] = 200;
-			//	separatorRegions.append(sep);
-			//}
 		}
 
-		if (!tableRegions.isEmpty()) document["tables"] = tableRegions;
-		if (!textRegions.isEmpty()) document["texts"] = textRegions;
-		if (!imgRegions.isEmpty()) document["images"] = imgRegions;
-		if (!graphicRegions.isEmpty()) document["graphics"] = graphicRegions;
-		if (!chartRegions.isEmpty()) document["charts"] = chartRegions;
+		// prefer text from regions
+		QString content;
+		if (!txtFromRegions.isEmpty())
+			content = txtFromRegions;
+		else if (!txtFromLines.isEmpty())
+			content = txtFromLines;
+
+		if (!tableRegions.isEmpty())	document["tables"] = tableRegions;
+		if (!textRegions.isEmpty())		document["textRegions"] = textRegions;
+		if (!content.isEmpty())			document["content"] = content;
+		if (!imgRegions.isEmpty())		document["images"] = imgRegions;
+		if (!graphicRegions.isEmpty())	document["graphics"] = graphicRegions;
+		if (!chartRegions.isEmpty())	document["charts"] = chartRegions;
 		//document["seps"] = separatorRegions;
 
 
 		return true;
+	}
+
+	QString PieData::normalize(const QString & str) const {
+		
+		QTextDocument doc;
+		doc.setHtml(str);
+
+
+		QString ns = doc.toPlainText();
+
+		ns = ns.replace(QRegExp("[^a-zA-Z\\ ]+"), "");
+		ns = ns.trimmed();
+		//qDebug() << "normalized...";
+
+		return ns;
 	}
 
 }
