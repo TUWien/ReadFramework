@@ -69,8 +69,8 @@ namespace rdf {
 			QString tmp = f.absoluteFilePath();
 			//qDebug() << it.next();
 			QJsonObject currentXmlDoc;
-			calculateFeatures(currentXmlDoc, f.absoluteFilePath());
-			databaseImgs.append(currentXmlDoc);
+			if (calculateFeatures(currentXmlDoc, f.absoluteFilePath()))
+				databaseImgs.append(currentXmlDoc);
 		}
 
 		xmlDatabaseObj["imgs"] = databaseImgs;
@@ -107,17 +107,17 @@ namespace rdf {
 
 		QVector<QSharedPointer<rdf::Region>> regions = rdf::Region::allRegions(pe->rootRegion().data());
 
+		if (pe->rootRegion()->children().size() < 2) {
+			qDebug() << xmlDoc << "not added to the database...";
+			return false;
+		}
+
 		document["imgName"] = pe->imageFileName();
 		document["xmlName"] = xmlDoc;
 		document["width"] = templSize.width();
 		document["height"] = templSize.height();
 
-		QJsonArray textRegions;
-		QJsonArray tableRegions;
-		QJsonArray imgRegions;
-		QJsonArray graphicRegions;
-		QJsonArray chartRegions;
-		QJsonArray separatorRegions;
+		QJsonArray jsonRegions;
 
 		QString txtFromRegions;
 		QString txtFromLines;
@@ -131,22 +131,22 @@ namespace rdf {
 			QRectF qRect = qPol.boundingRect();
 			rProp["width"] = qRect.width();
 			rProp["height"] = qRect.height();
+			rProp["type"] = r->type();
+
 
 			// append specific region properties
 			switch (r->type()) {
 
 			case Region::type_table_region:
-				tableRegions << rProp; break;
-			case Region::type_image:
-				imgRegions << rProp; break;
-			case Region::type_graphic:
-				graphicRegions << rProp; break;
 			case Region::type_chart:
-				chartRegions << rProp; break;
+			case Region::type_image:
+			case Region::type_graphic:
+				jsonRegions << rProp;
+				break;
 
 			case Region::type_text_region: {
+				jsonRegions << rProp;
 				auto tr = r.dynamicCast<rdf::TextRegion>();
-				textRegions << rProp;
 				QString ct = normalize(tr->text());
 				if (!ct.isEmpty())
 					txtFromRegions += " " + ct;
@@ -169,12 +169,8 @@ namespace rdf {
 		else if (!txtFromLines.isEmpty())
 			content = txtFromLines;
 
-		if (!tableRegions.isEmpty())	document["tables"] = tableRegions;
-		if (!textRegions.isEmpty())		document["textRegions"] = textRegions;
-		if (!content.isEmpty())			document["content"] = content;
-		if (!imgRegions.isEmpty())		document["images"] = imgRegions;
-		if (!graphicRegions.isEmpty())	document["graphics"] = graphicRegions;
-		if (!chartRegions.isEmpty())	document["charts"] = chartRegions;
+		if (!regions.isEmpty())		document["regions"] = jsonRegions;
+		if (!content.isEmpty())		document["content"] = content;
 		//document["seps"] = separatorRegions;
 
 
