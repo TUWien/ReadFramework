@@ -67,7 +67,7 @@ namespace rdf {
 			dictionary[word]++;
 		}
 
-		qDebug() << dictionary;
+		//qDebug() << dictionary;
 
 		return dictionary;
 
