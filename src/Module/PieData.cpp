@@ -53,6 +53,26 @@ namespace rdf {
 		return newPage;
 	}
 
+	QMap<QString, int> PieData::createDictionary(const QString & txt, const int ignoreSize) const 	{
+
+		QStringList words = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+		QStringList filteredWords;
+
+		for (const auto &word : words) {
+			if (word.length() > ignoreSize) filteredWords << word;
+		}
+
+		QMap<QString, int> dictionary;
+		for (const auto &word : filteredWords) {
+			dictionary[word]++;
+		}
+
+		qDebug() << dictionary;
+
+		return dictionary;
+
+	}
+
 	void PieData::saveJsonDatabase() {
 		//QStringList filters;
 		//filters << "*.xml";
@@ -60,6 +80,7 @@ namespace rdf {
 
 		QJsonObject xmlDatabaseObj;
 		xmlDatabaseObj["database"] = mXmlDir;
+		mDictionary.clear();
 
 		//QDir xmlRootDir(mXmlDir);
 		QJsonArray databaseImgs;
@@ -71,6 +92,17 @@ namespace rdf {
 			QJsonObject currentXmlDoc;
 			if (calculateFeatures(currentXmlDoc, f.absoluteFilePath()))
 				databaseImgs.append(currentXmlDoc);
+		}
+
+
+
+		if (!mDictionary.isEmpty()) {
+			QVariantMap vDict;
+			for (const auto w : mDictionary.keys()) {
+				vDict.insert(w, mDictionary.value(w));
+			}
+			QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
+			xmlDatabaseObj["dictionary"] = dictionary;
 		}
 
 		xmlDatabaseObj["imgs"] = databaseImgs;
@@ -171,6 +203,20 @@ namespace rdf {
 
 		if (!regions.isEmpty())		document["regions"] = jsonRegions;
 		if (!content.isEmpty())		document["content"] = content;
+		if (!content.isEmpty()) {
+			QMap<QString, int> dict = createDictionary(content);
+			QVariantMap vDict;
+			if (!dict.isEmpty()) {
+				
+				for (const auto w : dict.keys()) {
+					vDict.insert(w, dict.value(w));
+					//mWords << w;
+					mDictionary[w] += dict.value(w);
+				}
+				QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
+				document["dictionary"] = dictionary;
+			}
+		}
 		//document["seps"] = separatorRegions;
 
 

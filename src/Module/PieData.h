@@ -62,6 +62,7 @@ namespace rdf {
 	public:
 		PieData(const QString& xmlDir = QString(), const QString& jsonFile = QString());
 		QJsonObject getImgObject(const QString xmlDoc = QString());
+		QMap<QString, int> createDictionary(const QString &txt, const int ignoreSize = 3) const;
 		void saveJsonDatabase();
 
 
@@ -72,6 +73,7 @@ namespace rdf {
 	private:
 		QString mXmlDir = "C:\\tmp\\read-database";
 		QString mJsonFile = "C:\\tmp\\read-database\\database.json";
+		QMap<QString,int> mDictionary;
 
 	};
 
