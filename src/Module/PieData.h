@@ -74,6 +74,7 @@ namespace rdf {
 		QString mXmlDir = "C:\\tmp\\read-database";
 		QString mJsonFile = "C:\\tmp\\read-database\\database.json";
 		QMap<QString,int> mDictionary;
+		int mFilterDict = 2;
 
 	};
 

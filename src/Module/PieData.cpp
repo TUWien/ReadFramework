@@ -99,7 +99,8 @@ namespace rdf {
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
 			for (const auto w : mDictionary.keys()) {
-				vDict.insert(w, mDictionary.value(w));
+				if (mDictionary.value(w) > mFilterDict)
+					vDict.insert(w, mDictionary.value(w));
 			}
 			QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
 			xmlDatabaseObj["dictionary"] = dictionary;
@@ -205,16 +206,16 @@ namespace rdf {
 		if (!content.isEmpty())		document["content"] = content;
 		if (!content.isEmpty()) {
 			QMap<QString, int> dict = createDictionary(content);
-			QVariantMap vDict;
+			//QVariantMap vDict;
 			if (!dict.isEmpty()) {
 				
 				for (const auto w : dict.keys()) {
-					vDict.insert(w, dict.value(w));
+					//vDict.insert(w, dict.value(w));
 					//mWords << w;
 					mDictionary[w] += dict.value(w);
 				}
-				QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
-				document["dictionary"] = dictionary;
+				//QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
+				//document["dictionary"] = dictionary;
 			}
 		}
 		//document["seps"] = separatorRegions;
