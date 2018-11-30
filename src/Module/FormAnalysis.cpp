@@ -1213,8 +1213,15 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	}
 
 	cv::Mat cellDiffHor = table.clone();
-	cv::Mat tmpM = cellDiffHor(cv::Range(0, tableRows-1), cv::Range::all()) - cellDiffHor(cv::Range(1, tableRows), cv::Range::all());
-	tmpM.copyTo(cellDiffHor(cv::Range(0, tableRows - 1), cv::Range::all()));
+	cv::Mat tmpM;
+	//added - if only one row (or column exist) the difference function crashes
+	//logic not tested
+	if (tableRows != 1) {
+		tmpM = cellDiffHor(cv::Range(0, tableRows - 1), cv::Range::all()) - cellDiffHor(cv::Range(1, tableRows), cv::Range::all());
+		tmpM.copyTo(cellDiffHor(cv::Range(0, tableRows - 1), cv::Range::all()));
+	}/* else {
+		cellDiffHor = 1;
+	}*/
 	
 	//entries with zero indicate no lower border
 
@@ -1337,10 +1344,13 @@ void FormFeatures::createReducedAssociationGraphNodes(QVector<QSharedPointer<rdf
 	cv::Mat tableT = table.clone();
 	tableT = tableT.t();
 	cellDiffHor = tableT.clone();
-
-	tmpM = cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()) - cellDiffHor(cv::Range(1, cellDiffHor.rows), cv::Range::all());
-	tmpM.copyTo(cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()));
-
+	
+	//added - if only one row (or column exist) the difference function crashes
+	//logic not tested
+	if (cellDiffHor.rows != 1) {
+		tmpM = cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()) - cellDiffHor(cv::Range(1, cellDiffHor.rows), cv::Range::all());
+		tmpM.copyTo(cellDiffHor(cv::Range(0, cellDiffHor.rows - 1), cv::Range::all()));
+	}
 
 	tmpU = rdf::Line();
 	idxUpper.clear();

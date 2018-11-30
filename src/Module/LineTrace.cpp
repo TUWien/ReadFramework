@@ -302,7 +302,9 @@ namespace rdf {
 			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 			pEnd += offset;
 
-			cv::line(img, pStart, pEnd, hCol, (int)l.thickness(), 8, 0);
+			int t = (int)l.thickness();
+			if (t > 0)
+				cv::line(img, pStart, pEnd, hCol, t, 8, 0);
 		}
 
 		for (auto l : vline) {
@@ -312,7 +314,9 @@ namespace rdf {
 			cv::Point2d pEnd(l.p2().x(), l.p2().y());
 			pEnd += offset;
 
-			cv::line(img, pStart, pEnd, vCol, (int)l.thickness(), 8, 0);
+			int t = (int)l.thickness();
+			if (t > 0)
+				cv::line(img, pStart, pEnd, vCol, t, 8, 0);
 		}
 	}
 
@@ -322,7 +326,9 @@ namespace rdf {
 
 			cv::Point2d pStart(l.p1().x(), l.p1().y());
 			cv::Point2d pEnd(l.p2().x(), l.p2().y());
-
+			int t = (int)l.thickness();
+			if (t <= 0)
+				t = 1;
 			cv::line(img, pStart, pEnd, cv::Scalar(255), (int)l.thickness(), 8, 0);
 		}
 
