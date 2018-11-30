@@ -248,8 +248,8 @@ protected:
 	int mRow = -1;
 	int mCol = -1;
 
-	int mRowSpan = -1;
-	int mColSpan = -1;
+	int mRowSpan = 1;  //intitialize with 1 if missing in the xml
+	int mColSpan = 1;  //intitialize with 1 if missing in the xml
 
 	bool mLeftBorderVisible = false;
 	bool mRightBorderVisible = false;

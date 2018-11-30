@@ -1538,7 +1538,15 @@ void TableCell::readAttributes(QXmlStreamReader & reader) {
 	mCol = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_col)).toInt();
 
 	mRowSpan = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rowspan)).toInt();
+	if (mRowSpan < 1) {
+		mRowSpan = 1;
+		qWarning() << "illegal rowSpan - set to 1";
+	}
 	mColSpan = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_colspan)).toInt();
+	if (mColSpan < 1) {
+		mColSpan = 1;
+		qWarning() << "illegal colSpan - set to 1";
+	}
 
 	mLeftBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_leftVisible)).toString().compare("true") == 0 ? true : false;
 	mRightBorderVisible = reader.attributes().value(RegionXmlHelper::instance().tag(RegionXmlHelper::attr_rightVisible)).toString().compare("true") == 0 ? true : false;;
