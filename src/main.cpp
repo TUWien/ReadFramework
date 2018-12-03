@@ -174,8 +174,8 @@ int main(int argc, char** argv) {
 	// apply debug settings - convenience if you don't want to always change the cmd args
 	//applyDebugSettings(dc);
 
-	rdf::XmlTest xmlTest(dc);
-	xmlTest.parseXml();
+	//rdf::XmlTest xmlTest(dc);
+	//xmlTest.parseXml();
 	
 	if (!dc.imagePath().isEmpty()) {
 

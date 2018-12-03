@@ -61,13 +61,16 @@ namespace rdf {
 
 	public:
 		PieData(const QString& xmlDir = QString(), const QString& jsonFile = QString());
-		QJsonObject getImgObject(const QString xmlDoc = QString());
+		QJsonObject getImgObject(const QString& xmlDoc = QString());
 		QMap<QString, int> createDictionary(const QString &txt, const int ignoreSize = 3) const;
 		void saveJsonDatabase();
 
 
 	protected:
-		bool calculateFeatures(QJsonObject &document, QString xmlDoc);
+		bool collect(QJsonObject &document, const QString& xmlPath);
+		bool calculateFeatures(QSharedPointer<PageElement> page, QJsonObject& document);
+		bool calculateLabels(QSharedPointer<PageElement> page, QJsonObject& document);
+		bool calculateDictionary(const QJsonObject& document);
 		QString normalize(const QString& str) const;
 
 	private:

@@ -43,13 +43,14 @@ namespace rdf {
 		if (!jsonFile.isEmpty()) mJsonFile = jsonFile;
 	}
 
-	QJsonObject PieData::getImgObject(const QString xmlDoc) {
+	QJsonObject PieData::getImgObject(const QString& xmlDoc) {
 
 		if (xmlDoc.isEmpty())
 			return QJsonObject();
 
 		QJsonObject newPage;
-		calculateFeatures(newPage, xmlDoc);
+		collect(newPage, xmlDoc);
+
 		return newPage;
 	}
 
@@ -87,14 +88,10 @@ namespace rdf {
 		QDirIterator it(mXmlDir, QStringList() << "*.xml", QDir::Files, QDirIterator::Subdirectories);
 		while (it.hasNext()) {
 			QFileInfo f(it.next());
-			QString tmp = f.absoluteFilePath();
-			//qDebug() << it.next();
 			QJsonObject currentXmlDoc;
-			if (calculateFeatures(currentXmlDoc, f.absoluteFilePath()))
+			if (collect(currentXmlDoc, f.absoluteFilePath()))
 				databaseImgs.append(currentXmlDoc);
 		}
-
-
 
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
@@ -119,39 +116,46 @@ namespace rdf {
 
 	}
 
-	bool PieData::calculateFeatures(QJsonObject &document, QString xmlDoc) {
+	bool PieData::collect(QJsonObject &document, const QString& xmlPath) {
 
-		if (xmlDoc.isEmpty()) {
+		if (xmlPath.isEmpty()) {
 			return false;
 		}
 
-		//Achtung!!! geändert
-		//QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mTemplateName);
-		QString loadXmlPath = xmlDoc;
-
 		rdf::PageXmlParser parser;
-		if (!parser.read(loadXmlPath)) {
-			qWarning() << "could not xml for creating database" << loadXmlPath;
+		if (!parser.read(xmlPath)) {
+			qWarning() << "could not xml for creating database" << xmlPath;
 			return false;
 		}
 
 		auto pe = parser.page();
-		QSize templSize = pe->imageSize();
-
-		QVector<QSharedPointer<rdf::Region>> regions = rdf::Region::allRegions(pe->rootRegion().data());
-
-		if (pe->rootRegion()->children().size() < 2) {
-			qDebug() << xmlDoc << "not added to the database...";
+		
+		// add your constraints here...
+		if (pe->rootRegion()->children().size() == 0) {
+			qDebug() << xmlPath << "not added to the database...";
 			return false;
 		}
 
-		document["imgName"] = pe->imageFileName();
-		document["xmlName"] = xmlDoc;
-		document["width"] = templSize.width();
-		document["height"] = templSize.height();
+		document["xmlPath"] = xmlPath;
+
+		bool ok = calculateFeatures(pe, document);
+		if (ok)
+			ok = calculateLabels(pe, document);
+		if (ok)
+			ok = calculateDictionary(document);
+
+		return ok;
+	}
+
+	bool PieData::calculateFeatures(QSharedPointer<PageElement> page, QJsonObject & document) {
+		
+		QVector<QSharedPointer<rdf::Region>> regions = rdf::Region::allRegions(page->rootRegion().data());
+
+		document["imgName"] = page->imageFileName();
+		document["width"]	= page->imageSize().width();
+		document["height"]	= page->imageSize().height();
 
 		QJsonArray jsonRegions;
-
 		QString txtFromRegions;
 		QString txtFromLines;
 
@@ -203,12 +207,43 @@ namespace rdf {
 			content = txtFromLines;
 
 		if (!regions.isEmpty())		document["regions"] = jsonRegions;
-		if (!content.isEmpty())		document["content"] = content;
+		if (!content.isEmpty())
+			document["content"] = content;
+		else
+			qDebug() << "no content written...";
+		//document["seps"] = separatorRegions;
+
+		return true;
+	}
+
+	bool PieData::calculateLabels(QSharedPointer<PageElement> page, QJsonObject & document) {
+		
+		QString path = document["xmlPath"].toString();
+		
+		if (path.isEmpty())
+			return false;
+
+		QStringList entries = path.split("/"); 
+
+		if (entries.size() >= 3) {
+			document["document"] = entries[entries.size() - 3];
+		}
+		if (entries.size() >= 4) {
+			document["collection"] = entries[entries.size() - 4];
+		}
+		
+		return true;
+	}
+
+	bool PieData::calculateDictionary(const QJsonObject & document) {
+		
+		QString content = document["content"].toString();
+
 		if (!content.isEmpty()) {
 			QMap<QString, int> dict = createDictionary(content);
 			//QVariantMap vDict;
 			if (!dict.isEmpty()) {
-				
+
 				for (const auto w : dict.keys()) {
 					//vDict.insert(w, dict.value(w));
 					//mWords << w;
@@ -218,9 +253,7 @@ namespace rdf {
 				//document["dictionary"] = dictionary;
 			}
 		}
-		//document["seps"] = separatorRegions;
-
-
+		
 		return true;
 	}
 
