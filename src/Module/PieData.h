@@ -2,7 +2,6 @@
  ReadFramework is the basis for modules developed at CVL/TU Wien for the EU project READ. 
   
  Copyright (C) 2016 Markus Diem <diem@caa.tuwien.ac.at>
- Copyright (C) 2016 Stefan Fiel <fiel@caa.tuwien.ac.at>
  Copyright (C) 2016 Florian Kleber <kleber@caa.tuwien.ac.at>
 
  This file is part of ReadFramework.
@@ -34,6 +33,7 @@
 
 #include "Elements.h"
 #include "PageParser.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QObject>
@@ -80,27 +80,5 @@ namespace rdf {
 		int mFilterDict = 2;
 
 	};
-
-
-	//don't care
-	//QtJson::JsonObject document;
-	//document["name"] = "page1.png"
-	//
-	//QtJson::JsonArray imgRegions;
-	//QtJson::JsonObject image1, image2;
-	//image1["size"] = 20;
-	//image2["size"] = 40;
-	//imgRegions.append(image1);
-	//imgRegions.append(image2);
-
-	//QtJson::JsonArray txtRegions;
-	//QtJson::JsonObject text1, text2;
-	//text1["size"] = 20;
-	//text2["size"] = 40;
-	//imgRegions.append(text1);
-	//imgRegions.append(text2);
-	//	
-	//document["images"] = imgRegions;
-	//document["text"] = txtRegions;
 
 }
