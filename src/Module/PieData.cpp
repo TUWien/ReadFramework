@@ -85,13 +85,62 @@ namespace rdf {
 
 		//QDir xmlRootDir(mXmlDir);
 		QJsonArray databaseImgs;
+		QMap<QString, QJsonArray> documents;
+
 		QDirIterator it(mXmlDir, QStringList() << "*.xml", QDir::Files, QDirIterator::Subdirectories);
 		while (it.hasNext()) {
 			QFileInfo f(it.next());
-			QJsonObject currentXmlDoc;
-			if (collect(currentXmlDoc, f.absoluteFilePath()))
-				databaseImgs.append(currentXmlDoc);
+			
+			QJsonObject page;
+			if (collect(page, f.absoluteFilePath())) {
+
+				QString identifier = page["collection"].toString() + "|" + page["document"].toString();	// | is not allows in paths
+				QJsonArray da = documents.value(identifier);
+				da << page;
+				documents.insert(identifier, da);
+			}
 		}
+		
+		// -------------------------------------------------------------------- recreate hierarchy 
+		// here we get the documents
+		QMap<QString, QJsonArray> collections;
+		QMap<QString, QJsonArray>::const_iterator di = documents.constBegin();
+		while (di != documents.constEnd()) {
+			
+			QStringList id = di.key().split("|");
+
+			if (id.size() != 2) {
+				di++;
+				continue;
+			}
+
+			QJsonArray pages = di.value();
+			QJsonObject dob;
+			dob["name"] = id[1];
+			dob["pages"] = pages;
+			
+			QJsonArray da = collections.value(id[0]);
+			da << dob;
+			collections.insert(id[0], da);
+
+			di++;	// == dr ; )
+		}
+
+		// and now we put them together int o collections
+		QJsonArray colArray;
+		QMap<QString, QJsonArray>::const_iterator ci = collections.constBegin();
+		while (ci != collections.constEnd()) {
+
+			QJsonObject dob;
+			dob["name"] = ci.key();
+			dob["documents"] = ci.value();
+
+			colArray << dob;
+
+			ci++;	// == dr ; )
+		}
+
+		xmlDatabaseObj["collections"] = colArray;
 
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
