@@ -27,11 +27,15 @@ No license for thw files are specified at the repository.
 #include <iostream>
 #include <iterator>
 
+#include "Image.h"
+
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
 #include <QObject>
 #include <QMap>
 #include <QVector>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QString>
 #include <QVariantMap>
 #pragma warning(pop)
@@ -252,25 +256,48 @@ public:
 		}
 	}
 
-	void saveVectorsMap(QVariantMap& vecMap) {
+	void saveVectorsMap(QJsonObject& word2vec) {
 		printInfo(1, "save word vectors to json...");
+		
+		//QJsonArray words;
 		//out << net0_.size() << " " << net0_[0].size() << std::endl;
+
+		cv::Mat vectors((int)net0_.size(), (int)net0_[0].size(), CV_32FC1);
+		QString words;
 		for (size_t i = 0; i < words_.size(); ++i) {
-			// "word freq"
 
-			QVector<real> vec = QVector<real>::fromStdVector(net0_[i]);
-			QString vecStr;
-			for (auto v : vec) {
-				vecStr += QString::number((double)v);
-				vecStr += " ";
-			}
-			vecMap.insert(QString::fromStdString(words_[i]->text_), vecStr);
+			QVector<float> vec = QVector<float>::fromStdVector(net0_[i]);
+			cv::Mat vecMat = rdf::Image::qVector2Mat(vec);
+			cv::Mat tmpMat = vectors.row((int)i);
+			vecMat.copyTo(tmpMat);
 
+			words += QString::fromStdString(words_[i]->text_);
+			words += " ";
+
+			//// "word freq"
+			//QJsonObject word;
+			//word["word"] = QString::fromStdString(words_[i]->text_);
+			//word["cnt"] = (int)words_[i]->count_;
+			//QVector<float> vec = QVector<float>::fromStdVector(net0_[i]);
+			//cv::Mat vecMat = rdf::Image::qVector2Mat(vec);
+			//word["vec"] = rdf::Image::matToJson(vecMat);
+			//words.push_back(word);
+
+			//QString vecStr;
+			//for (auto v : vec) {
+			//	vecStr += QString::number((double)v);
+			//	vecStr += " ";
+			//}
+			//vecMap.insert(QString::fromStdString(words_[i]->text_), vecStr);
+			//----------- old -------------------------------------------------------------------
 			//out << words_[i]->text_ << " " << words_[i]->count_ << std::endl;
 			// vector
 			//std::copy(net0_[i].begin(), net0_[i].end(), std::ostream_iterator<real>(out, " "));
 			//out << std::endl;
 		}
+		
+		word2vec["dict"] = words;
+		word2vec["vectors"] = rdf::Image::matToJson(vectors);
 	}
 
 private:

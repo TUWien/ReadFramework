@@ -121,9 +121,10 @@ namespace rdf {
 				if (mSaveWordVecToFile) {
 					word2vec.saveVectors(vector_file.toStdString());
 				} else {
-					QVariantMap vectors;
+					//QVariantMap vectors;
+					QJsonObject vectors;
 					word2vec.saveVectorsMap(vectors);
-					xmlDatabaseObj["wordVectors"] = QJsonObject::fromVariantMap(vectors);
+					xmlDatabaseObj["word2Vec"] = vectors;
 				}
 			}
 		}
