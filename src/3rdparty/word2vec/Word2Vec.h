@@ -38,6 +38,8 @@ No license for thw files are specified at the repository.
 #include <QJsonArray>
 #include <QString>
 #include <QVariantMap>
+
+#include <opencv2/imgproc/imgproc_c.h>
 #pragma warning(pop)
 
 
@@ -256,48 +258,32 @@ public:
 		}
 	}
 
-	void saveVectorsMap(QJsonObject& word2vec) {
+	void saveVectorsMap(QJsonArray& word2vec) {
 		printInfo(1, "save word vectors to json...");
 		
-		//QJsonArray words;
-		//out << net0_.size() << " " << net0_[0].size() << std::endl;
-
 		cv::Mat vectors((int)net0_.size(), (int)net0_[0].size(), CV_32FC1);
-		QString words;
+		
+		for (size_t idx = 0; idx < words_.size(); idx++) {
+			QVector<float> vec = QVector<float>::fromStdVector(net0_[idx]);
+			cv::Mat vecMat = rdf::Image::qVector2Mat(vec);
+			vecMat.copyTo(vectors.row((int)idx));
+		}
+
+		// quantize
+		cv::normalize(vectors, vectors, 0, 1, cv::NORM_MINMAX);
+		vectors.convertTo(vectors, CV_8UC1, 255);
+
 		for (size_t i = 0; i < words_.size(); ++i) {
 
-			QVector<float> vec = QVector<float>::fromStdVector(net0_[i]);
-			cv::Mat vecMat = rdf::Image::qVector2Mat(vec);
-			cv::Mat tmpMat = vectors.row((int)i);
-			vecMat.copyTo(tmpMat);
+			// "word freq"
+			QJsonObject word;
+			word["word"] = QString::fromStdString(words_[i]->text_);
+			word["cnt"] = (int)words_[i]->count_;	
 
-			words += QString::fromStdString(words_[i]->text_);
-			words += " ";
-
-			//// "word freq"
-			//QJsonObject word;
-			//word["word"] = QString::fromStdString(words_[i]->text_);
-			//word["cnt"] = (int)words_[i]->count_;
-			//QVector<float> vec = QVector<float>::fromStdVector(net0_[i]);
-			//cv::Mat vecMat = rdf::Image::qVector2Mat(vec);
-			//word["vec"] = rdf::Image::matToJson(vecMat);
-			//words.push_back(word);
-
-			//QString vecStr;
-			//for (auto v : vec) {
-			//	vecStr += QString::number((double)v);
-			//	vecStr += " ";
-			//}
-			//vecMap.insert(QString::fromStdString(words_[i]->text_), vecStr);
-			//----------- old -------------------------------------------------------------------
-			//out << words_[i]->text_ << " " << words_[i]->count_ << std::endl;
-			// vector
-			//std::copy(net0_[i].begin(), net0_[i].end(), std::ostream_iterator<real>(out, " "));
-			//out << std::endl;
+			cv::Mat vm(vectors.row((int)i));
+			word["vec"] = rdf::Image::matToJson(vm);
+			word2vec << word;
 		}
-		
-		word2vec["dict"] = words;
-		word2vec["vectors"] = rdf::Image::matToJson(vectors);
 	}
 
 private:
@@ -480,7 +466,7 @@ private:
 		for (int word_pos = 0; word_pos < sentenc_len; ++word_pos) {
 			size_t curr_word_index = words_index_[sentence[word_pos]];
 			const Word* curr_word = words_[curr_word_index];
-			Vector& curr_word_vector = net0_[curr_word_index];
+			//Vector& curr_word_vector = net0_[curr_word_index];
 			// window for context
 			int reduce_window_size = distribution(eng) % window_size_;
 			int min_pos = std::max(0, word_pos - window_size_ + reduce_window_size);

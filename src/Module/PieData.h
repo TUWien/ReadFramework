@@ -80,8 +80,8 @@ namespace rdf {
 		QString mJsonFile = "C:\\tmp\\read-database\\database.json";
 		QMap<QString,int> mDictionary;
 		int mFilterDict = 2;
-		bool mWord2Vec = false;
-		bool mSaveWordVecToFile = true;
+		bool mWord2Vec = true;
+		bool mSaveWordVecToFile = false;
 
 	};
 

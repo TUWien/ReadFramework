@@ -105,6 +105,8 @@ namespace rdf {
 		// here we get the documents
 		QJsonArray jDocs;
 		QMap<QString, QJsonArray>::const_iterator di = documents.constBegin();
+
+		int idx = 0;
 		while (di != documents.constEnd()) {
 			
 			QJsonArray pages = di.value();
@@ -114,7 +116,12 @@ namespace rdf {
 			
 			jDocs << dob;
 			di++;	// == dr ; )
+
+			idx++;
+			if (idx % 20 == 0)
+				std::cout << ". " << std::endl;
 		}
+		std::cout << "\n" << std::endl;
 
 		xmlDatabaseObj["documents"] = jDocs;
 
@@ -123,6 +130,7 @@ namespace rdf {
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
 			for (const auto w : mDictionary.keys()) {
+				
 				if (mDictionary.value(w) > mFilterDict) {
 					vDict.insert(w, mDictionary.value(w));
 					words.push_back(w.toStdString());
@@ -147,7 +155,7 @@ namespace rdf {
 					word2vec.saveVectors(vector_file.toStdString());
 				} else {
 					//QVariantMap vectors;
-					QJsonObject vectors;
+					QJsonArray vectors;
 					word2vec.saveVectorsMap(vectors);
 					xmlDatabaseObj["word2Vec"] = vectors;
 				}
@@ -167,8 +175,6 @@ namespace rdf {
 		//for (auto& x : result2) {
 		//	cout << x.text_ << ":        " << x.distance_ << endl;
 		//}
-
-		xmlDatabaseObj["imgs"] = databaseImgs;
 
 		QFile saveFile(mJsonFile);
 		if (!saveFile.open(QIODevice::WriteOnly)) {
@@ -192,8 +198,8 @@ namespace rdf {
 		}
 
 		rdf::PageXmlParser parser;
-		if (!parser.read(xmlPath)) {
-			qWarning() << "could not xml for creating database" << xmlPath;
+		if (!parser.read(xmlPath, false, true)) {
+			qWarning() << "could not load" << xmlPath;
 			return false;
 		}
 
@@ -201,9 +207,10 @@ namespace rdf {
 		
 		// add your constraints here...
 		if (pe->rootRegion()->children().size() == 0) {
-			qDebug() << xmlPath << "not added to the database...";
+			//qDebug() << xmlPath << "not added to the database...";
 			return false;
 		}
+
 
 		document["xmlPath"] = xmlPath;
 
@@ -278,8 +285,8 @@ namespace rdf {
 		if (!regions.isEmpty())		document["regions"] = jsonRegions;
 		if (!content.isEmpty())
 			document["content"] = content;
-		else
-			qDebug() << "no content written...";
+		//else
+		//	qDebug() << "no content written...";
 		//document["seps"] = separatorRegions;
 
 		return true;

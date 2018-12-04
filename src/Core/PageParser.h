@@ -93,7 +93,7 @@ public:
 		status_end
 	};
 
-	bool read(const QString& xmlPath, bool ignoreLayers = false);
+	bool read(const QString& xmlPath, bool ignoreLayers = false, bool silent = false);
 	void write(const QString& xmlPath, const QSharedPointer<PageElement> pageElement);
 
 	LoadStatus loadStatus() const;

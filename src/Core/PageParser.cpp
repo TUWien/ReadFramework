@@ -52,7 +52,7 @@ PageXmlParser::PageXmlParser() {
 
 }
 
-bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
+bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers, bool silent) {
 
 	QByteArray ba;
 	bool ok = true;
@@ -97,7 +97,7 @@ bool PageXmlParser::read(const QString & xmlPath, bool ignoreLayers) {
 		mPage = mPage.create();
 		return false;
 	}
-	else
+	else if (!silent)
 		qInfo() << QFileInfo(xmlPath).fileName() << "loaded - #children:" << mPage->rootRegion()->children().size();
 
 	return ok;
