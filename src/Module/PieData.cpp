@@ -127,6 +127,20 @@ namespace rdf {
 				}
 			}
 		}
+		//// test of word2vec
+		//WordAnalyse sim;
+		//sim.loadVectors(vector_file);
+		//std::vector<WordAnalyse::NearestWord> result1, result2;
+		//sim.getNNWords("man", result1);
+		//cout << "nearest of word 'man' is------------" << endl;
+		//for (auto& x : result1) {
+		//	cout << x.text_ << ":        " << x.distance_ << endl;
+		//}
+		//cout << "'man' - 'woman' = 'king' - '?'------------" << endl;
+		//sim.wordAnalogy("man", "woman", "king", result2);
+		//for (auto& x : result2) {
+		//	cout << x.text_ << ":        " << x.distance_ << endl;
+		//}
 
 		xmlDatabaseObj["imgs"] = databaseImgs;
 
