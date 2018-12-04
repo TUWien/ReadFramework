@@ -118,15 +118,55 @@ namespace rdf {
 
 		xmlDatabaseObj["documents"] = jDocs;
 
+		std::vector<std::string> words;
+
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
 			for (const auto w : mDictionary.keys()) {
-				if (mDictionary.value(w) > mFilterDict)
+				if (mDictionary.value(w) > mFilterDict) {
 					vDict.insert(w, mDictionary.value(w));
+					words.push_back(w.toStdString());
+				}
 			}
 			QJsonObject dictionary = QJsonObject::fromVariantMap(vDict);
 			xmlDatabaseObj["dictionary"] = dictionary;
 		}
+
+		if (mWord2Vec) {
+			QDir vectorF(mXmlDir);
+			QString vector_file = vectorF.absoluteFilePath("wordVec.txt");
+			// train
+			Word2Vec word2vec;
+			if (!mDictionary.isEmpty()) {
+				size_t vocab_size = word2vec.buildVocabFromVocab(mDictionary);
+				qDebug() << vocab_size;
+				word2vec.initNet();
+				word2vec.readTrainWords(words);
+				word2vec.train();
+				if (mSaveWordVecToFile) {
+					word2vec.saveVectors(vector_file.toStdString());
+				} else {
+					//QVariantMap vectors;
+					QJsonObject vectors;
+					word2vec.saveVectorsMap(vectors);
+					xmlDatabaseObj["word2Vec"] = vectors;
+				}
+			}
+		}
+		//// test of word2vec
+		//WordAnalyse sim;
+		//sim.loadVectors(vector_file);
+		//std::vector<WordAnalyse::NearestWord> result1, result2;
+		//sim.getNNWords("man", result1);
+		//cout << "nearest of word 'man' is------------" << endl;
+		//for (auto& x : result1) {
+		//	cout << x.text_ << ":        " << x.distance_ << endl;
+		//}
+		//cout << "'man' - 'woman' = 'king' - '?'------------" << endl;
+		//sim.wordAnalogy("man", "woman", "king", result2);
+		//for (auto& x : result2) {
+		//	cout << x.text_ << ":        " << x.distance_ << endl;
+		//}
 
 		xmlDatabaseObj["imgs"] = databaseImgs;
 
@@ -139,6 +179,10 @@ namespace rdf {
 		QJsonDocument saveDatabase(xmlDatabaseObj);
 		saveFile.write(saveDatabase.toJson());
 
+	}
+
+	void PieData::setWord2Vec(bool w) {
+		mWord2Vec = w;
 	}
 
 	bool PieData::collect(QJsonObject &document, const QString& xmlPath) {

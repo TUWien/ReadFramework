@@ -95,6 +95,10 @@ file(GLOB LSD_SOURCES "src/3rdparty/lsd/*.cpp")
 file(GLOB LSD_HEADERS "src/3rdparty/lsd/*.h")
 
 # external headers
+file(GLOB WV_SOURCES "src/3rdparty/word2vec/*.cpp")
+file(GLOB WV_HEADERS "src/3rdparty/word2vec/*.h")
+
+# external headers
 file(GLOB MC_SOURCES "src/3rdparty/maxclique/*.cpp")
 file(GLOB MC_HEADERS "src/3rdparty/maxclique/*.h")
 
