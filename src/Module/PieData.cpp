@@ -94,7 +94,7 @@ namespace rdf {
 			QJsonObject page;
 			if (collect(page, f.absoluteFilePath())) {
 
-				QString identifier = page["collection"].toString() + "|" + page["document"].toString();	// | is not allows in paths
+				QString identifier = page["document"].toString();	// | is not allows in paths
 				QJsonArray da = documents.value(identifier);
 				da << page;
 				documents.insert(identifier, da);
@@ -103,44 +103,20 @@ namespace rdf {
 		
 		// -------------------------------------------------------------------- recreate hierarchy 
 		// here we get the documents
-		QMap<QString, QJsonArray> collections;
+		QJsonArray jDocs;
 		QMap<QString, QJsonArray>::const_iterator di = documents.constBegin();
 		while (di != documents.constEnd()) {
 			
-			QStringList id = di.key().split("|");
-
-			if (id.size() != 2) {
-				di++;
-				continue;
-			}
-
 			QJsonArray pages = di.value();
 			QJsonObject dob;
-			dob["name"] = id[1];
+			dob["name"] = di.key();
 			dob["pages"] = pages;
 			
-			QJsonArray da = collections.value(id[0]);
-			da << dob;
-			collections.insert(id[0], da);
-
+			jDocs << dob;
 			di++;	// == dr ; )
 		}
 
-		// and now we put them together int o collections
-		QJsonArray colArray;
-		QMap<QString, QJsonArray>::const_iterator ci = collections.constBegin();
-		while (ci != collections.constEnd()) {
-
-			QJsonObject dob;
-			dob["name"] = ci.key();
-			dob["documents"] = ci.value();
-
-			colArray << dob;
-
-			ci++;	// == dr ; )
-		}
-
-		xmlDatabaseObj["collections"] = colArray;
+		xmlDatabaseObj["documents"] = jDocs;
 
 		if (!mDictionary.isEmpty()) {
 			QVariantMap vDict;
