@@ -33,6 +33,7 @@
 
 #include "Elements.h"
 #include "PageParser.h"
+#include "word2vec/Word2Vec.h"
 
 #pragma warning(push, 0)	// no warnings from includes
 // Qt Includes
@@ -64,6 +65,7 @@ namespace rdf {
 		QJsonObject getImgObject(const QString& xmlDoc = QString());
 		QMap<QString, int> createDictionary(const QString &txt, const int ignoreSize = 3) const;
 		void saveJsonDatabase();
+		void setWord2Vec(bool w=false);
 
 
 	protected:
@@ -78,6 +80,8 @@ namespace rdf {
 		QString mJsonFile = "C:\\tmp\\read-database\\database.json";
 		QMap<QString,int> mDictionary;
 		int mFilterDict = 2;
+		bool mWord2Vec = false;
+		bool mSaveWordVecToFile = true;
 
 	};
 
