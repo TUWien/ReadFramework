@@ -193,6 +193,13 @@ int main(int argc, char** argv) {
 			tableproc.setTableConfig(fc);
 			tableproc.match();
 		}
+		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "atable") {
+			qDebug() << "applying table ...";
+			//TODO table
+			rdf::TableProcessing tableproc(dc);
+			tableproc.setTableConfig(fc);
+			tableproc.apply();
+		}
 		else if (parser.isSet(modeOpt) && parser.value(modeOpt) == "pie") {
 
 			QString jsonPath;

@@ -2330,6 +2330,43 @@ bool FormFeatures::matchTemplate() {
 	return true;
 }
 
+bool FormFeatures::applyTemplate() {
+
+	if (mTemplateForm.isNull()) {
+		qWarning() << "no template provided in matchTemplate";
+		return false;
+	}
+
+	QVector<QSharedPointer<rdf::TableCell>> cells = mTemplateForm->cells();
+	QSharedPointer<rdf::TableRegion> region = mTemplateForm->tableRegion();
+
+	QPolygonF imgP;
+	float w = (float)mSizeSrc.width;
+	float h = (float)mSizeSrc.height;
+
+	imgP << QPointF(0.0, 0.0) << QPointF(w, 0.0) << QPointF(w, h) << QPointF(0.0, h);
+
+	//check and crop coordinates:
+	QPolygonF regP = region->polygon().polygon();
+	regP = imgP.intersected(regP);
+	rdf::Polygon tmpReg(regP);
+	region->setPolygon(tmpReg);
+
+	//check and crop coordinates:
+	for (auto c : cells) {
+		QPolygonF p = c->polygon().polygon();
+		p = imgP.intersected(p);
+		rdf::Polygon tmpP(p);
+		c->setPolygon(tmpP);
+	}
+
+	mRegion = region;
+	mCells.clear();
+	mCells = cells;
+
+	return true;
+}
+
 //rdf::Line FormFeatures::findLine(rdf::Line l, double distThreshold, bool &found, bool horizontal) {
 //
 //	int index = -1;

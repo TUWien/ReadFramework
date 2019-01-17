@@ -377,6 +377,95 @@ namespace rdf {
 		return true;
 	}
 
+	bool TableProcessing::apply() const {
+		cv::Mat imgForm;
+		rdf::PageXmlParser parser;
+
+		if (!load(imgForm)) {
+			qWarning() << "could not load image for table processing ... ";
+			return false;
+		}
+
+		cv::Mat imgFormG = imgForm;
+
+		if (imgForm.channels() != 1)
+			cv::cvtColor(imgForm, imgFormG, CV_RGB2GRAY);
+		else {
+			cv::cvtColor(imgForm, imgForm, CV_GRAY2RGB);
+		}
+
+		//cv::Mat maskTempl = rdf::Algorithms::estimateMask(imgTemplG);
+
+		rdf::FormFeatures formF(imgFormG);
+		QFileInfo tableFile = QFileInfo(mConfig.imagePath());
+		formF.setFormName(tableFile.fileName());
+		formF.setSize(imgFormG.size());
+
+		if (mConfig.tableTemplate().isEmpty()) {
+			qWarning() << "no table template is set - please specify a template with --t ... ";
+			return false;
+		}
+
+		//TODO check if tableTemplate is correct
+		//QFileInfo templateInfo(mConfig.tableTemplate());
+		formF.setTemplateName(mConfig.tableTemplate());
+
+		QSharedPointer<rdf::FormFeaturesConfig> tmpConfig(new rdf::FormFeaturesConfig());
+		//(*tmpConfig) = mFormConfig;
+		tmpConfig->setTemplDatabase(mConfig.tableTemplate());
+		tmpConfig->setVariationThrLower(mFormConfig.variationThrLower());
+		tmpConfig->setVariationThrUpper(mFormConfig.variationThrUpper());
+		tmpConfig->setSaveChilds(mFormConfig.saveChilds());
+		formF.setConfig(tmpConfig);
+
+		//rdf::FormFeatures formTemplate;
+		QSharedPointer<rdf::FormFeatures> formTemplate(new rdf::FormFeatures());
+		if (!formF.readTemplate(formTemplate)) {
+			qWarning() << "could not read form template";
+			qInfo() << "please provide a correct table template with --t";
+			return false;
+		}
+
+		qDebug() << "applying template...";
+		if (!formF.applyTemplate()) {
+			qWarning() << "could not apply template " << mConfig.imagePath();
+			qInfo() << "could not apply template";
+			return false;
+		}
+
+		//Save output to xml
+		QString loadXmlPath = rdf::PageXmlParser::imagePathToXmlPath(mConfig.imagePath());
+
+		if (QFileInfo(mConfig.xmlPath()).exists())
+			loadXmlPath = mConfig.xmlPath();
+
+		rdf::PageXmlParser parserOut;
+		bool newXML = parserOut.read(loadXmlPath);
+		auto pe = parserOut.page();
+
+		if (!newXML) {
+			//xml is newly created
+			cv::Size imgSize = imgFormG.size();
+			QSize imgQtSize;
+			imgQtSize.setWidth(imgFormG.cols);
+			imgQtSize.setHeight(imgFormG.rows);
+
+			pe->setImageFileName(tableFile.fileName());
+			pe->setImageSize(imgQtSize);
+			pe->setCreator("CVL");
+			pe->setDateCreated(QDateTime::currentDateTime());
+		}
+
+		QSharedPointer<rdf::TableRegion> t = formF.tableRegion();
+		pe->rootRegion()->addUniqueChild(t);
+		formF.setSeparators(pe->rootRegion());
+
+		//save pageXml
+		parserOut.write(loadXmlPath, pe);
+
+		return true;
+	}
+
 	void TableProcessing::setTableConfig(const rdf::FormFeaturesConfig & tableConfig) 	{
 		mFormConfig = tableConfig;
 	}

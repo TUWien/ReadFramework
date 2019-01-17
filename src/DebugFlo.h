@@ -76,6 +76,7 @@ public:
 	TableProcessing(const DebugConfig& config = DebugConfig());
 
 	bool match() const;
+	bool apply() const;
 	void setTableConfig(const rdf::FormFeaturesConfig& tableConfig);
 
 protected:
