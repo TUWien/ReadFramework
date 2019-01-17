@@ -669,11 +669,11 @@ cv::Mat FormFeatures::drawMatchedForm(cv::Mat img, float t) {
 
 	if (!img.empty()) {
 		cv::Mat tmp = img.clone();
-		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(128,128,128), cv::Scalar(128, 128, 128));
 		return tmp;
 	} else {
 		cv::Mat tmp = mSrcImg.clone();
-		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(255,255,255), cv::Scalar(255,255,255));
+		rdf::LineTrace::generateLineImage(hLines, vLines, tmp, cv::Scalar(128, 128, 128), cv::Scalar(128, 128, 128));
 		return tmp;
 	}
 

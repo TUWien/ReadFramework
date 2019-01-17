@@ -839,6 +839,9 @@ Line Line::gapLine(const Line& l) const {
 	int minIdx = minIdxP.x;
 
 	float thickness = mThickness < l.thickness() ? mThickness : l.thickness();
+	if (thickness <= 0)
+		thickness = 1.0;
+
 	Line gapLine;
 
 	switch (minIdx) {
