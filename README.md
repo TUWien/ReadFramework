@@ -108,7 +108,7 @@ sudo make install
 - Florian Kleber
 
 ### Links:
-- [1] http://www.caa.tuwien.ac.at/cvl/
+- [1] https://cvl.tuwien.ac.at/
 - [2] https://transkribus.eu/Transkribus/
 - [3] https://github.com/TUWien/
 - [4] http://nomacs.org
