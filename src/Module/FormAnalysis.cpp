@@ -381,7 +381,7 @@ namespace rdf {
 	//}
 
 
-bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) {
+bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm, bool calcScaling) {
 	
 	if (mTemplateName.isEmpty()) {
 		return false;
@@ -415,6 +415,11 @@ bool FormFeatures::readTemplate(QSharedPointer<rdf::FormFeatures> templateForm) 
 	}
 	if (scaleFactor >= 3) {
 		qWarning() << "ScaleFactor is <= 3... set to 1.0";
+		scaleFactor = 1.0;
+	}
+
+	//if no Scaling -> reset Scaling factor
+	if (!calcScaling) {
 		scaleFactor = 1.0;
 	}
 
@@ -2346,19 +2351,19 @@ bool FormFeatures::applyTemplate() {
 
 	imgP << QPointF(0.0, 0.0) << QPointF(w, 0.0) << QPointF(w, h) << QPointF(0.0, h);
 
-	//check and crop coordinates:
-	QPolygonF regP = region->polygon().polygon();
-	regP = imgP.intersected(regP);
-	rdf::Polygon tmpReg(regP);
-	region->setPolygon(tmpReg);
+	////check and crop coordinates:
+	//QPolygonF regP = region->polygon().polygon();
+	//regP = imgP.intersected(regP);
+	//rdf::Polygon tmpReg(regP);
+	//region->setPolygon(tmpReg);
 
-	//check and crop coordinates:
-	for (auto c : cells) {
-		QPolygonF p = c->polygon().polygon();
-		p = imgP.intersected(p);
-		rdf::Polygon tmpP(p);
-		c->setPolygon(tmpP);
-	}
+	////check and crop coordinates:
+	//for (auto c : cells) {
+	//	QPolygonF p = c->polygon().polygon();
+	//	p = imgP.intersected(p);
+	//	rdf::Polygon tmpP(p);
+	//	c->setPolygon(tmpP);
+	//}
 
 	mRegion = region;
 	mCells.clear();

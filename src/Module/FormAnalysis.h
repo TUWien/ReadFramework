@@ -267,7 +267,7 @@ namespace rdf {
 		//cv::Mat getMatchedLineImg(const cv::Mat& srcImg, const Vector2D& offset = Vector2D(0, 0)) const;
 		//QVector<rdf::Line> horLinesMatched() const;
 		//QVector<rdf::Line> verLinesMatched() const;
-		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm);
+		bool readTemplate(QSharedPointer<rdf::FormFeatures> templateForm, bool calcScaling = true);
 		bool estimateRoughAlignment(bool useBinaryImg = false);
 		cv::Mat drawAlignment(cv::Mat img = cv::Mat());
 		cv::Mat drawMatchedForm(cv::Mat img = cv::Mat(), float t = 10.0);
